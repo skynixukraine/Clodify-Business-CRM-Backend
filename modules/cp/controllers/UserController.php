@@ -38,7 +38,7 @@ class UserController extends Controller {
                     [
                         'actions' => [ 'find', 'index', 'invite', 'delete'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN ],
                     ]
                 ],
             ],

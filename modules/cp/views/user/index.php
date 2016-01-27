@@ -38,6 +38,6 @@ $this->params['menu'] = [
             deleteUrl   : '<?=Url::to(['user/delete'])?>',
             findUrl     : '<?=Url::to(['user/find'])?>'
         })
-    })
+    });
 
 </script>

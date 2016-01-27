@@ -101,6 +101,20 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getReports()
     {
-        return $this->hasMany(Reports::className(), ['project_id' => 'id']);
+        return $this->hasMany(Report::className(), ['project_id' => 'id']);
+    }
+
+    public static function getDeveloperProjects($userId)
+    {
+        return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
+            ' projects.status
+            FROM projects
+            LEFT JOIN project_developers ON projects.id=project_developers.project_id
+            LEFT JOIN users ON project_developers.user_id=users.id AND users.role=:role
+            WHERE users.id=:userId
+            GROUP by projects.id', [
+            ':role'     => User::ROLE_DEV,
+            ':userId'   => $userId
+        ])->all();
     }
 }

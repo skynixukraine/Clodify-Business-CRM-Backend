@@ -7,6 +7,7 @@
  */
 
 namespace app\modules\cp\controllers;
+use app\models\Report;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -31,14 +32,14 @@ class IndexController extends Controller
                     [
                         'actions' => [ 'index' ],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM ],
                     ]
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'      => ['get'],
+                    'index'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -46,7 +47,21 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        return $this->render("index");
-    }
+        $model = new Report();
+        if ( $model->load(Yii::$app->request->post())){
 
+            $model->user_id = Yii::$app->user->id;
+            if( $model->validate()) {
+
+             //  $model->date_added      = date('Y-m-d H:i:s');
+             //   $model->date_report     = date('Y-m-d H:i:s');
+             //   $model->reporter_name   = Yii::$app->user->getIdentity()->first_name . ' ' .
+             //                               Yii::$app->user->getIdentity()->last_name;
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
+                return $this->refresh();
+            }
+        }
+        return $this->render('index',['model' => $model]);
+    }
 }
