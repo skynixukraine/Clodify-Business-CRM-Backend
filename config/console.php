@@ -5,7 +5,7 @@ Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 
-return [
+$config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gii'],
@@ -29,3 +29,10 @@ return [
     ],
     'params' => $params,
 ];
+if ( file_exists(__DIR__ . '/local.php') ) {
+
+    $localConfig    = include( __DIR__ . '/local.php');
+    $config         = array_replace_recursive($config, $localConfig);
+
+}
+return $config;
