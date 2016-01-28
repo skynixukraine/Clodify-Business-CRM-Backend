@@ -16,6 +16,11 @@ use yii\helpers\Html;
 <body>
     <?php $this->beginBody() ?>
     <?= $content ?>
+
+    <div>
+        Kind Regards<br>
+        Skynix
+    </div>
     <?php $this->endBody() ?>
 </body>
 </html>

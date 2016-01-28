@@ -16,6 +16,18 @@ return [
             'dsn' => 'mysql:host=localhost;dbname=in.skynix',
             'username' => 'root',
             'password' => 'root'
-        ]
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => '',//your google email
+                'password' => '', //your google password
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
+        ],
     ]
 ];

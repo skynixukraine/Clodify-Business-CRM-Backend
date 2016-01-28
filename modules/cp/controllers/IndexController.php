@@ -30,7 +30,7 @@ class IndexController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index' ],
+                        'actions' => [ 'index', 'test' ],
                         'allow' => true,
                         'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ],
                     ],
@@ -43,6 +43,17 @@ class IndexController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionTest()
+    {
+        Yii::$app->mailer->compose('test',
+            ['username' => "Oleksii"])
+            ->setTo( "alekseyyp@gmail.com" )
+            ->setFrom( Yii::$app->params['adminEmail'])
+            ->setSubject( "This is a subject of the test email" )
+            ->send();
+        Yii::$app->end();
     }
 
     public function actionIndex()
