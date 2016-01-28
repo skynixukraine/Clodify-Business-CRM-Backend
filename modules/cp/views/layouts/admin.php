@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use yii\web\View;
+use app\models\User;
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/bootstrap.min.css');
 $this->registerCssFile('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
@@ -112,36 +113,48 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="header"><?=Yii::t('app', 'MAIN NAVIGATION')?></li>
+                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "index" || Yii::$app->controller->id == "index" ? " active" : "")?>">
                     <a href="<?=Url::to(['index/index']);?>">
                         <i class="fa fa-home"></i> <span><?=Yii::t('app', "My Report")?></span>
                     </a>
                 </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['user/index']);?>">
                         <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Users')?></span>
                     </a>
                 </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
                     <a href="<?=Url::to(['project/index']);?>">
                         <i class="fa fa-edit"></i> <span><?=Yii::t('app', 'Manage Projects')?></span>
                     </a>
                 </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "report" ? " active" : "")?>">
                     <a href="<?=Url::to(['report/index']);?>">
                         <i class="fa fa-puzzle-piece"></i> <span>Reports</span>
                     </a>
                 </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "setting" ? " active" : "")?>">
                     <a href="<?=Url::to(['setting/index']);?>">
                         <i class="fa fa-gears"></i> <span>Settings</span>
                     </a>
                 </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "invoice" ? " active" : "")?>">
                     <a href="<?=Url::to(['invoice/index']);?>">
                         <i class="fa fa-money"></i> <span>Invoices</span>
                     </a>
                 </li>
+                <?php endif;?>
             </ul>
         </section>
         <!-- /.sidebar -->

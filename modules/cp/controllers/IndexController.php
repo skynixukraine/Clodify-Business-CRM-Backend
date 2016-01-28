@@ -32,8 +32,8 @@ class IndexController extends Controller
                     [
                         'actions' => [ 'index' ],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM ],
-                    ]
+                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -52,11 +52,12 @@ class IndexController extends Controller
 
             $model->user_id = Yii::$app->user->id;
             if( $model->validate()) {
+            //$roles = \app\models\User::hasPermission( Yii::$app->getAuthManager()->getRoles();
 
-             //  $model->date_added      = date('Y-m-d H:i:s');
-             //   $model->date_report     = date('Y-m-d H:i:s');
-             //   $model->reporter_name   = Yii::$app->user->getIdentity()->first_name . ' ' .
-             //                               Yii::$app->user->getIdentity()->last_name;
+            //  $model->date_added      = date('Y-m-d H:i:s');
+            //   $model->date_report     = date('Y-m-d H:i:s');
+            //   $model->reporter_name   = Yii::$app->user->getIdentity()->first_name . ' ' .
+            //                               Yii::$app->user->getIdentity()->last_name;
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
                 return $this->refresh();

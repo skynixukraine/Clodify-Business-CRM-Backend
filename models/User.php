@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\cp\controllers\IndexController;
 use Yii;
 use yii\web\IdentityInterface;
 
@@ -230,5 +231,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === md5($password);
+    }
+
+
+    public static function hasPermission( $roles )
+    {
+
+        $role = Yii::$app->user->identity->role;
+
+        if(in_array($role,$roles)){
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
     }
 }
