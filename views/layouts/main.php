@@ -55,6 +55,26 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+        <?php if (\Yii::$app->getSession()->hasFlash("success") ) : ?>
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i><?=Yii::t("app", "Alert")?>!</h4>
+                <?=Yii::$app->getSession()->getFlash("success");?>
+                <script>
+                    setTimeout(function(){$(".alert.alert-success").slideUp()}, 5000);
+                </script>
+            </div>
+        <?php endif; ?>
+        <?php if (\Yii::$app->getSession()->hasFlash("error") ) : ?>
+            <div class="alert alert-warning alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i><?=Yii::t("app", "Alert")?>!</h4>
+                <?=Yii::$app->getSession()->getFlash("error");?>
+                <script>
+                    setTimeout(function(){$(".alert.alert-warning").slideUp()}, 5000);
+                </script>
+            </div>
+        <?php endif; ?>
         <?= $content ?>
     </div>
 </div>

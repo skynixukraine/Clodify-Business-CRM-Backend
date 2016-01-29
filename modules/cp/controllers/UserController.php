@@ -152,4 +152,24 @@ class UserController extends Controller {
         Yii::$app->end();
 
     }
+
+    public function actionInvite()
+    {
+        /** @var  $model User */
+        $model = new User();
+        if ( $model->load(Yii::$app->request->post())){
+
+            if( $model->validate()) {
+
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                return $this->refresh();
+
+            }else{
+
+                //var_dump($model->getErrors());
+            }
+        }
+        return $this->render('invite',['model' => $model]);
+    }
 }

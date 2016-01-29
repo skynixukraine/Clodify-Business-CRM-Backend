@@ -54,10 +54,17 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        if ( ( $email = Yii::$app->request->get('email') ) ) {
+
+            $model->email = $email;
+
+        }
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
             return $this->redirect(['cp/index']);
+
         }
+
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -86,5 +93,27 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionInvite( $hash )
+    {
+        /** @var  $model User  */
+        if( ($model      = User::find()
+                ->where('invite_hash=:hash',
+                    [
+                        ':hash' => $hash
+                    ])->one())) {
+
+            $model->is_active = 1;
+            $model->invite_hash=null;
+            $model->save();
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You user"));
+            return $this->redirect(['/site/login', 'email'=>$model->email]);
+
+        }
+        Yii::$app->getSession()->setFlash('error', Yii::t("app", "sorry"));
+        return $this->redirect(['/']);
+
+
     }
 }

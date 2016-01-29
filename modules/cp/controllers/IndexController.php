@@ -49,7 +49,7 @@ class IndexController extends Controller
     {
         Yii::$app->mailer->compose('test',
             ['username' => "Oleksii"])
-            ->setTo( "alekseyyp@gmail.com" )
+            ->setTo( "olha@webais.company" )
             ->setFrom( Yii::$app->params['adminEmail'])
             ->setSubject( "This is a subject of the test email" )
             ->send();
@@ -63,12 +63,8 @@ class IndexController extends Controller
 
             $model->user_id = Yii::$app->user->id;
             if( $model->validate()) {
-            //$roles = \app\models\User::hasPermission( Yii::$app->getAuthManager()->getRoles();
 
-            //  $model->date_added      = date('Y-m-d H:i:s');
-            //   $model->date_report     = date('Y-m-d H:i:s');
-            //   $model->reporter_name   = Yii::$app->user->getIdentity()->first_name . ' ' .
-            //                               Yii::$app->user->getIdentity()->last_name;
+                Yii::$app->user->getIdentity()->last_name;
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
                 return $this->refresh();
