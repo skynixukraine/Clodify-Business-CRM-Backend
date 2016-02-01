@@ -81,13 +81,24 @@ class UserController extends Controller {
 
     public function actionDelete()
     {
-        if (( $id = Yii::$app->request->post("id")) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) == Yii::$app->user->getIdentity()->role) {
 
-            /** @var  $model User */
-            $model  = User::findOne( $id );
-            $model->is_active = 0;
-            $model->save(false, ['is_active']);
-            return json_encode(array("success" => true));
+            if (( $id = Yii::$app->request->post("id") ) ) {
+
+                /** @var  $model User */
+                $model  = User::findOne( $id );
+                $model->is_delete = 1;
+                $model->save(true, ['is_delete']);
+                return json_encode([
+                    "message"   => Yii::t("app", "You delete user " . $id),
+                    "success"   => true
+                ]);
+
+            }
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
 
         }
 
@@ -124,6 +135,8 @@ class UserController extends Controller {
 
             $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
+        $dataTable->setFilter('is_delete=0');
+
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\User */
@@ -136,7 +149,8 @@ class UserController extends Controller {
                 $model->phone,
                 $model->date_login,
                 $model->date_signup,
-                $model->is_active
+                $model->is_active,
+                $model->is_delete
             );
 
         }
@@ -165,9 +179,6 @@ class UserController extends Controller {
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
                 return $this->refresh();
 
-            }else{
-
-                //var_dump($model->getErrors());
             }
         }
         return $this->render('invite',['model' => $model]);

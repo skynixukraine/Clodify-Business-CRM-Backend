@@ -6,7 +6,8 @@ var userModule = (function() {
     var cfg = {
             editUrl     : '',
             deleteUrl   : '',
-            findUrl     : ''
+            findUrl     : '',
+            canDelete   : null
         },
         dataTable,
         dataFilter = {
@@ -31,6 +32,19 @@ var userModule = (function() {
                 type    : 'DELETE',
                 success : function ( response ) {
 
+                    if ( response.message ) {
+
+                        var win = new ModalBootstrap({
+                            title: 'Message',
+                            body: response.message,
+                            buttons: [
+                                {class: 'btn-default confirm', text: 'Ok'}
+                            ]
+
+
+                        });
+                        win.show();
+                    }
                     dataTable.api().ajax.reload();
 
                 }
@@ -99,7 +113,11 @@ var userModule = (function() {
 
                             var icons = [];
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                            icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png">');
+                            if ( cfg.canDelete ) {
+
+                                icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png">');
+
+                            }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 

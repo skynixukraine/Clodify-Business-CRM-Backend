@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -25,7 +26,9 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Login Date')?></th>
         <th class="date-col"><?=Yii::t('app', 'Signup Date')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
         <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+        <?php endif;?>
     </tr>
     </thead>
 </table>
@@ -36,7 +39,8 @@ $this->params['menu'] = [
         userModule.init({
             editUrl     : '<?=Url::to(['user/update'])?>',
             deleteUrl   : '<?=Url::to(['user/delete'])?>',
-            findUrl     : '<?=Url::to(['user/find'])?>'
+            findUrl     : '<?=Url::to(['user/find'])?>',
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 
