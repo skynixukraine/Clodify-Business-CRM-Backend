@@ -3,16 +3,16 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160201_122315_users_email_is_unique extends Migration
+class m160203_093008_projects_add_is_deleted extends Migration
 {
     public function up()
     {
-        $this->createIndex('email', 'users', 'email', $unique=true);
+        $this->addColumn( 'projects', 'is_delete', 'tinyint(1) DEFAULT 0');
     }
 
     public function down()
     {
-        echo "m160201_122315_users_email_is_unique cannot be reverted.\n";
+        echo "m160203_093008_projects_add_is_deleted cannot be reverted.\n";
 
         return false;
     }

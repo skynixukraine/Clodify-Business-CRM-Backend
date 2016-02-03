@@ -29,9 +29,9 @@ $this->params['menu'] = [
         'options' => [
 
         ]
-    ])->textInput( array( 'class'   => 'form-control',
+    ])->textInput( [ 'class'   => 'form-control',
                             'id'    => 'exampleInputEmail1',
-                    'placeholder'   => 'First name')
+                    'placeholder'   => 'First name']
     ) -> label( 'First name' );?>
 
     <?php echo $form->field( $model, 'last_name', [
@@ -39,9 +39,9 @@ $this->params['menu'] = [
         'options' => [
 
         ]
-    ])->textInput( array( 'class'   => 'form-control',
+    ])->textInput( ['class'   => 'form-control',
                             'id'    => 'exampleInputEmail1',
-                    'placeholder'   => 'Last name')
+                    'placeholder'   => 'Last name']
     ) -> label( 'Last name' );?>
 
     <?php echo $form->field( $model, 'email', [
@@ -49,10 +49,10 @@ $this->params['menu'] = [
         'options' => [
 
         ]
-    ])->textInput( array( 'class'   => 'form-control',
+    ])->textInput( ['class'   => 'form-control',
                             'id'    => 'exampleInputEmail1',
                     'placeholder'   => 'Enter email',
-                            'type'  => 'email')
+                            'type'  => 'email']
     ) -> label( 'Email' );?>
 
     <div class="container-fluid">
@@ -63,9 +63,9 @@ $this->params['menu'] = [
                 'options' => [
 
                 ]
-            ])->textInput( array( 'class'   => 'form-control',
+            ])->textInput( [ 'class'   => 'form-control',
                                      'id'   => 'exampleInputPassword1',
-                            'placeholder'   => 'Password')
+                            'placeholder'   => 'Password']
             ) -> label( 'Password' );?>
             </div>
             <div class="col-lg-3">

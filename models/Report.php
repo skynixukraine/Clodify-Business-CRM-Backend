@@ -126,8 +126,8 @@ class Report extends \yii\db\ActiveRecord
 
             if( !$this->reporter_name ) {
 
-                $this->reporter_name = Yii::$app->user->getIdentity()->first_name . ' ' .
-                    Yii::$app->user->getIdentity()->last_name;
+                $this->reporter_name =   Yii::$app->user->getIdentity()->first_name . ' ' .
+                                         Yii::$app->user->getIdentity()->last_name;
             }
         }else
             $this->modified = new CDbExpression('NOW()');

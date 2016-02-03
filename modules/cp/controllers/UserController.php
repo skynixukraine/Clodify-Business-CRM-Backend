@@ -81,7 +81,7 @@ class UserController extends Controller {
 
     public function actionDelete()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN] ) == Yii::$app->user->getIdentity()->role) {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
             if (( $id = Yii::$app->request->post("id") ) ) {
 

@@ -52,7 +52,7 @@ class ProjectCustomer extends \yii\db\ActiveRecord
      */
     public function getProject()
     {
-        return $this->hasOne(Projects::className(), ['id' => 'project_id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
 
     /**
@@ -60,6 +60,6 @@ class ProjectCustomer extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

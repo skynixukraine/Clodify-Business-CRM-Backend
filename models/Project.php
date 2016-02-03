@@ -69,15 +69,15 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getProjectCustomers()
     {
-        return $this->hasMany(ProjectCustomers::className(), ['project_id' => 'id']);
+        return $this->hasMany(ProjectCustomer::className(), ['project_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
+    public function getCustomers()
     {
-        return $this->hasMany(Users::className(), ['id' => 'user_id'])->viaTable('project_customers', ['project_id' => 'id']);
+        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('project_customers', ['project_id' => 'id']);
     }
 
     /**
@@ -85,15 +85,15 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getProjectDevelopers()
     {
-        return $this->hasMany(ProjectDevelopers::className(), ['project_id' => 'id']);
+        return $this->hasMany(ProjectDeveloper::className(), ['project_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers0()
+    public function getDevelopers()
     {
-        return $this->hasMany(Users::className(), ['id' => 'user_id'])->viaTable('project_developers', ['project_id' => 'id']);
+        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('project_developers', ['project_id' => 'id']);
     }
 
     /**
@@ -117,4 +117,33 @@ class Project extends \yii\db\ActiveRecord
             ':userId'   => $userId
         ])->all();
     }
+
+    /*public static function allProjects($userRole, $userId)
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) == $userRole ){
+
+            return self::find()
+                ->all();
+        }
+        if( User::hasPermission( [User::ROLE_CLIENT] ) == $userRole ){
+
+            return self::find()
+                ->leftJoin  ( 'project_customers', 'projects.id=project_customers.project_id', [])
+                ->leftJoin  ( 'users', 'project_customers.user_id=users.id', [])
+                ->where     ( 'users.id=:userId', [':userId'   => $userId])
+                ->groupBy   ( 'projects.id')
+                ->all();
+        }
+
+        if( User::hasPermission( [User::ROLE_PM] ) == $userRole ){
+
+            return self::find()
+                ->leftJoin  ( 'project_customers', 'projects.id=project_customers.project_id', [])
+                ->leftJoin  ( 'users', 'project_customers.user_id=users.id AND users.role=:role', [':role' => $userRole,])
+                ->where     ( 'users.id=:userId', [':userId'   => $userId])
+                ->groupBy   ( 'projects.id')
+                ->all();
+        }
+    }*/
+
 }

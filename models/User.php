@@ -124,9 +124,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjects()
+    public function getCustomers()
     {
-        return $this->hasMany(Projects::className(), ['id' => 'project_id'])->viaTable('project_customers', ['user_id' => 'id']);
+        return $this->hasMany(Project::className(), ['id' => 'project_id'])->viaTable('project_customers', ['user_id' => 'id']);
     }
 
     /**
@@ -140,9 +140,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjects0()
+    public function getDevelopers()
     {
-        return $this->hasMany(Projects::className(), ['id' => 'project_id'])->viaTable('project_developers', ['user_id' => 'id']);
+        return $this->hasMany(Project::className(), ['id' => 'project_id'])->viaTable('project_developers', ['user_id' => 'id']);
     }
 
     /**
@@ -319,4 +319,29 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $password;
 
     }
+
+    public static function allCustomers()
+    {
+        return self::find('last_name', 'first_name', 'users.id')
+            ->from('users, project_customers')
+            ->where('project_customers.user_id = users.id')
+            ->groupBy('project_customers.user_id')
+            ->all();
+        /*return self::findBySql('SELECT last_name, first_name,users.id
+                                FROM project_customers
+                                LEFT JOIN users ON project_customers.user_id = users.id
+                                GROUP BY project_customers.user_id'
+        )->all();*/
+    }
+
+    public static function allDevelopers()
+    {
+        return self::find('last_name', 'first_name', 'users.id')
+            ->from('users, project_developers')
+            ->where('project_developers.user_id = users.id')
+            ->groupBy('project_developers.user_id')
+            ->all();
+
+    }
+
 }
