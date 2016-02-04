@@ -322,24 +322,21 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public static function allCustomers()
     {
-        return self::find('last_name', 'first_name', 'users.id')
-            ->from('users, project_customers')
-            ->where('project_customers.user_id = users.id')
-            ->groupBy('project_customers.user_id')
+        return self::find()
+            //->from('project_customers')
+            //->leftJoin('users ON users.id=project_customers.user_id')
+            ->from(User::tableName())
+            ->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
+            ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
-        /*return self::findBySql('SELECT last_name, first_name,users.id
-                                FROM project_customers
-                                LEFT JOIN users ON project_customers.user_id = users.id
-                                GROUP BY project_customers.user_id'
-        )->all();*/
     }
 
     public static function allDevelopers()
     {
-        return self::find('last_name', 'first_name', 'users.id')
-            ->from('users, project_developers')
-            ->where('project_developers.user_id = users.id')
-            ->groupBy('project_developers.user_id')
+        return self::find()
+            ->from(User::tableName())
+            ->rightJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
+            ->groupBy(ProjectDeveloper::tableName() . ".user_id")
             ->all();
 
     }

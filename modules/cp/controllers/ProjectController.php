@@ -58,7 +58,8 @@ class ProjectController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'     =>['get', 'post']
+                    'index'     =>['get', 'post'],
+                    'create'    =>['get', 'post']
                 ],
             ],
         ];
@@ -66,18 +67,6 @@ class ProjectController extends Controller
 
     public function actionIndex()
     {
-
-       /* $model = new Project();
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-
-                $model->save();
-               Yii::$app->getSession()->setFlash('success', Yii::t("app", "You create project"));
-                return $this->refresh();
-
-            }
-        }*/
         return $this->render('index');
     }
 
@@ -125,13 +114,10 @@ class ProjectController extends Controller
             $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
-
            $dataTable->setFilter('is_delete=0');
 
-
-
         $activeRecordsData = $dataTable->getData();
-        $list = array();
+        $list = [];
         /* @var $model \app\models\Project */
         foreach ( $activeRecordsData as $model ) {
 
@@ -164,12 +150,12 @@ class ProjectController extends Controller
             ];
         }
 
-        $data = array(
+        $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
             "data" => $list
-        );
+        ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
@@ -204,13 +190,16 @@ class ProjectController extends Controller
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
             $model = new Project();
+
+            $model->scenario = "admin";
+
             if ($model->load(Yii::$app->request->post())) {
 
                 if ($model->validate()) {
 
                     $model->save();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You create project"));
-                    return $this->refresh();
+                    return $this->redirect(['index']);
 
                 }
             }
@@ -224,7 +213,25 @@ class ProjectController extends Controller
 
     public function actionEdit()
     {
-        return $this->render('create');
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
+
+           $model = new Project();
+           if( $id = Yii::$app->request->get('id') ) {
+
+               $project  = Project::find( )
+                            ->where("id=:iD",
+                            [
+                                ':iD' => $id
+                            ]);
+               var_dump($project);
+
+           }
+            return $this->render('create', ['model' => $model]);
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
+        }
 
     }
 

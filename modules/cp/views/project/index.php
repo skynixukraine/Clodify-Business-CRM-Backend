@@ -47,8 +47,12 @@ $this->params['menu'] = [
     $(function(){
 
         projectModule.init({
-            editUrl     : '<?=Url::to(['project/create'])?>',
+            editUrl     : '<?=Url::to(['project/edit'])?>',
+            createUrl   : '<?=Url::to(['project/create'])?>',
             deleteUrl   : '<?=Url::to(['project/delete'])?>',
+            activateUrl : '<?=Url::to(['project/index'])?>',
+            suspendUrl  : '<?=Url::to(['project/index'])?>',
+            updateUrl   : '<?=Url::to(['project/index'])?>',
             findUrl     : '<?=Url::to(['project/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,

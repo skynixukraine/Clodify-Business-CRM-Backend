@@ -20,7 +20,7 @@ $this->registerCssFile(Yii::$app->request->baseUrl.'/css/bootstrap.css');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/bootstrap.min.css');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/datepicker.css');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/project.js');
-$this->title                    = Yii::t("app", "Create Projects");
+$this->title                    = Yii::t("app", "Projects");
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [
@@ -28,109 +28,98 @@ $this->params['menu'] = [
 ];
 ?>
 
-<?php $form = ActiveForm::begin();?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-3">
-            <?php echo $form->field( $model, 'name', [
+<?php $form = ActiveForm::begin([
+    'options' => [
+        'class' => 'horizontal'
+    ]
+]);?>
+    <div class="form-group">
+        <?php echo $form->field( $model, 'name', [
 
-                'options' => [
+            'options' => [
 
-                ]
-            ])->textInput()->label( 'Name project' );?>
-        </div>
-        <div class="col-lg-2">
-            <?php echo $form->field( $model, 'jira_code', [
-
-                'options' => [
-
-                ]
-            ])->textInput()->label( 'Jira code' );?>
-        </div>
-        <div class="col-lg-2">
-            <div class="input-prepend date" id="dp3" data-date=<?php date("Y-m-d H:i:s")?> data-date-format="dd.mm.yyyy" style="display: inline-block">
-                <div class="input-group date">
-                    <?php echo $form->field( $model, 'date_start', [
-
-                        'options' => [
-
-                        ]
-                    ])->textInput( ['class'=>'form-control pull-right active',
-                        'id'=>'reservation',
-                        'type'=>'text']);?>
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2">
-            <div class="input-prepend date" id="dp2" data-date=<?php date("Y-m-d H:i:s")?> data-date-format="dd.mm.yyyy" style="display: inline-block">
-                <div class="input-group date">
-                    <?php echo $form->field( $model, 'date_end', [
-
-                        'options' => [
-
-                        ]
-                    ])->textInput( ['class'=>'form-control pull-right active',
-                        'id'=>'reservation',
-                        'type'=>'text']);?>
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div>
-                <?php echo $form->field($model, 'status')->dropDownList([
-                    '1'    => 'NEW',
-                    '2'    => 'ONHOLD',
-                    '3'    => 'INPROGRESS',
-                    '4'    => 'DONE',
-                    '5'    => 'CANCELED'
-                ],
-                    ['prompt' => 'Choose...']
-                );?>
-            </div>
-        </div>
-
+            ]
+        ])->textInput(["class" => "form-control"])->label( 'Project name' );?>
     </div>
+    <div class="form-group">
+        <?php echo $form->field( $model, 'jira_code', [
 
-    <div class="row">
-        <div class="col-lg-6">
-            <?php $modelUser = new User();
-            $customers = User::allCustomers();
-            $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
-            echo $form->field( $modelUser, 'id' )
-                ->listBox($listCustomers,
-                    [
-                        'multiple'=>"",
-                        'class'=>"form-control"
-                    ]);
-            ?>
-        </div>
-        <div class="col-lg-6">
-            <?php
-            $developers = User::allDevelopers();
-            $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
-            echo $form->field( $modelUser, 'id' )
-                ->listBox($listDevelopers,
-                    [
-                        'multiple'=>"",
-                        'class'=>"form-control"
-                    ]);
-            ?>
+            'options' => [
+
+            ]
+        ])->textInput(["class" => "form-control"])->label( 'Jira code' );?>
+    </div>
+    <div class="form-group">
+        <?php echo $form->field( $model, 'date_start', [
+
+            'template' => '{label} ' .
+                '  <div class="input-group date">{input}' .
+                ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                ' {error}'
+
+        ])->textInput( ['class'=>'form-control pull-right active',
+            'type'=>'text']);?>
+    </div>
+    <div class="form-group">
+        <?php echo $form->field( $model, 'date_end', [
+
+            'template' => '{label} ' .
+                '  <div class="input-group date">{input}' .
+                ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                ' {error}'
+
+        ])->textInput( ['class'=>'form-control pull-right active',
+            'type'=>'text']);?>
+    </div>
+    <div class="form-group">
+        <div>
+            <?php echo $form->field($model, 'status')->dropDownList([
+
+                Project::STATUS_NEW         => 'NEW',
+                Project::STATUS_ONHOLD      => 'ONHOLD',
+                Project::STATUS_INPROGRESS  => 'INPROGRESS',
+                Project::STATUS_DONE        => 'DONE',
+                Project::STATUS_CANCELED    => 'CANCELED'
+            ],
+                ['prompt' => 'Choose...']
+            );?>
         </div>
     </div>
-</div>
-<div>
-    <?= Html::submitButton( Yii::t('app', 'Create/Edit'), ['class' => 'btn btn-primary']) ?>
-</div>
-
+    <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
+    <div class="form-group">
+        <?php
+        $customers = User::allCustomers();
+        $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
+        echo $form->field( $model, 'customers' )
+            ->listBox($listCustomers,
+                [
+                    'multiple'  => "true",
+                    'class'     => "form-control"
+                ]);
+        ?>
+    </div>
+    <div class="form-group">
+        <?php
+        $developers = User::allDevelopers();
+        $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
+        echo $form->field( $model, 'developers' )
+            ->listBox($listDevelopers,
+                [
+                    'multiple'  => "true",
+                    'class'     => "form-control"
+                ]);
+        ?>
+    </div>
+    <?php endif;?>
+    <div>
+        <?= Html::submitButton( Yii::t('app', 'Create/Edit'), ['class' => 'btn btn-primary']) ?>
+    </div>
 <?php ActiveForm::end();?>
 
 <script>
     $(function(){
-        $('#dp3').datepicker();
-    });
-    $(function(){
-        $('#dp2').datepicker();
+        $('.date').datepicker({
+            format : 'dd/mm/yyyy'
+        });
     });
 </script>

@@ -5,7 +5,11 @@ var projectModule = (function() {
 
     var cfg = {
             editUrl     : '',
+            createUrl   : '',
             deleteUrl   : '',
+            activateUrl : '',
+            suspendUrl  : '',
+            updateUrl   : '',
             findUrl     : '',
             canDelete   : null,
             canEdit     : null,
@@ -24,6 +28,10 @@ var projectModule = (function() {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
 
+    function actionCreate( )
+    {
+        document.location.href = cfg.createUrl;
+    }
 
     function actionDelete( id, name, dataTable )
     {
@@ -146,7 +154,7 @@ var projectModule = (function() {
                             }
                             if ( cfg.canCreate ) {
 
-                                icons.push('<i class="fa fa-plus-square"></i>');
+                                icons.push('<i class="fa fa-plus-square create"></i>');
 
                             }
                             if ( cfg.canActivate ) {
@@ -201,6 +209,12 @@ var projectModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+
+                });
+                dataTable.find("i[class*=create]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionCreate( );
 
                 });
 

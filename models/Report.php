@@ -121,7 +121,7 @@ class Report extends \yii\db\ActiveRecord
 
             if( !$this->date_report ){
 
-                $this->date_report = date('Y-m-d H:i;s');
+                $this->date_report = date('Y-m-d H:i:s');
             }
 
             if( !$this->reporter_name ) {

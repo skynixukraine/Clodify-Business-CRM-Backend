@@ -24,6 +24,14 @@ class ProjectCustomer extends \yii\db\ActiveRecord
         return 'project_customers';
     }
 
+    public static function primaryKey()
+    {
+
+
+        return static::getTableSchema()->primaryKey;
+    }
+
+
     /**
      * @inheritdoc
      */
