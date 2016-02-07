@@ -12,12 +12,11 @@ namespace app\modules\cp\controllers;
 use app\modules\cp\models\EmailTesterForm;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\models\User;
 
-class ToolController extends Controller {
+class ToolController extends DefaultController {
 
     public $enableCsrfValidation = false;
     public $layout = "admin";

@@ -11,6 +11,15 @@ use app\components\AccessRule;
 class DefaultController extends Controller
 {
 
+    public function beforeAction( $action )
+    {
+
+        Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
+        Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
+        Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
+        return parent::beforeAction( $action );
+    }
+
    public function behaviors()
     {
         return [

@@ -11,7 +11,6 @@ use app\models\SiteUser;
 use app\models\Visit;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\components\DataTable;
 use app\components\AccessRule;
@@ -21,7 +20,7 @@ use app\models\Photo;
 use app\models\User;
 use app\models\Language;
 
-class UserController extends Controller {
+class UserController extends DefaultController {
 
     public $enableCsrfValidation = false;
     public $layout = "admin";

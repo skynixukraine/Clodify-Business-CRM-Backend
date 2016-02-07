@@ -11,11 +11,10 @@ use app\models\Report;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
 
-class IndexController extends Controller
+class IndexController extends DefaultController
 {
     public $enableCsrfValidation = false;
     public $layout = "admin";
@@ -59,7 +58,7 @@ class IndexController extends Controller
     public function actionIndex()
     {
         $model = new Report();
-        if ( $model->load(Yii::$app->request->post())){
+        if ( $model->load(Yii::$app->request->post()) ) {
 
             $model->user_id = Yii::$app->user->id;
             if( $model->validate()) {
