@@ -12,6 +12,7 @@ use app\models\Report;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -22,46 +23,40 @@ $this->params['menu'] = [
 
 <?php $i = 1;?>
 <div class = "box">
-    <div class = "box-header">
-        <h3 class = "box-title">Reports of this day</h3>
-    </div>
-    <!-- /.box-header -->
     <div class = "box-body no-padding">
-    <table class = "table">
-        <thead>
-        <tr>
-            <th style = "width: 30px">#</th>
-            <th><?= Yii::t('app', 'Project name')?></th>
-            <th><?= Yii::t('app', 'Task')?></th>
-            <th><?= Yii::t('app', 'Hours')?></th>
-            <th></th>
-
-        </tr>
-        </thead>
-        <?php $reports = Report::getToDaysReports(Yii::$app->user->id);
-        /** @var  $report Report */
-        foreach($reports as $report):?>
-        <tbody>
-        <tr>
-            <td><?= Html::encode($i++)?></td>
-            <td><?= Html::encode($report->getProject()->one()->name)?></td>
-            <td><?= Html::encode($report->task)?></td>
-            <td><?= Html::encode($report->hours)?></td>
-            <td>
-                <?= Yii::t('app', 'Edit')?>
-                <?= Yii::t('app', 'Delete')?>
-
-            </td>
-
-        </tr>
-        </tbody>
-        <?php endforeach;?>
-    </table>
-        <!-- /.box-body -->
+        <table class = "table">
+            <?php $reports = Report::getToDaysReports(Yii::$app->user->id);
+            /** @var  $report Report */
+            foreach($reports as $report):?>
+            <tbody>
+            <tr>
+                <td><?= Html::encode($i++)?></td>
+                <td><?= Html::encode($report->getProject()->one()->name)?></td>
+                <td><?= Html::encode($report->task)?></td>
+                <td><?= Html::encode($report->hours)?></td>
+                <td>
+                    <?= Yii::t('app', '<i class="fa fa-times delete" style="cursor: pointer"></i>')?>
+                    <?= Yii::t('app', '<i class="fa fa-edit edit" style="cursor: pointer"></i>')?>
+                </td>
+            </tr>
+            </tbody>
+            <?php endforeach;?>
+        </table>
     </div>
 </div>
 
-<h4 class = "box-title">Add new report</h4>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+        </div>
+        <div class="col-lg-4">
+            <label>Total: X hours</label>
+        </div>
+    </div>
+
+</div>
+
+<h4 class = "box-title" style="text-align: center">NEW REPORT</h4>
 
 <?php $form = ActiveForm::begin();?>
     <div class="container-fluid">
@@ -76,7 +71,7 @@ $this->params['menu'] = [
                         'options' => [
 
                     ]
-                ])->dropDownList( $listReport, ['prompt' => 'Choose...'] );?>
+                ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Project');?>
             </div>
 
             <div class="col-lg-7">
@@ -96,10 +91,11 @@ $this->params['menu'] = [
                         ]
                 ])->textInput();?>
             </div>
-
-            <div class="col-lg-2">
-                <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
+            <div class="col-lg-1" style="top: 24px">
+                    <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
             </div>
         </div>
     </div>
 <?php ActiveForm::end();?>
+
+

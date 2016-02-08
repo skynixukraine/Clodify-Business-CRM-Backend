@@ -110,7 +110,7 @@ class UserController extends DefaultController {
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         $query          = User::find();
 
-        $columns        = array(
+        $columns        = [
             'id',
             'first_name',
             'email',
@@ -118,7 +118,7 @@ class UserController extends DefaultController {
             'date_login',
             'date_signup',
             'is_active',
-        );
+        ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -140,7 +140,7 @@ class UserController extends DefaultController {
         /* @var $model \app\models\User */
         foreach ( $activeRecordsData as $model ) {
 
-            $list[] = array(
+            $list[] = [
                 $model->id,
                 $model->first_name . " " . $model->last_name,
                 $model->email,
@@ -149,16 +149,16 @@ class UserController extends DefaultController {
                 $model->date_signup,
                 $model->is_active,
                 $model->is_delete
-            );
+            ];
 
         }
 
-        $data = array(
+        $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
             "data" => $list
-        );
+        ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();

@@ -53,7 +53,7 @@ $this->params['menu'] = [
         <?php echo $form->field( $model, 'date_start', [
 
             'template' => '{label} ' .
-                '  <div class="input-group date">{input}' .
+                ' <div class="input-group date">{input}' .
                 ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                 ' {error}'
 
@@ -64,7 +64,7 @@ $this->params['menu'] = [
         <?php echo $form->field( $model, 'date_end', [
 
             'template' => '{label} ' .
-                '  <div class="input-group date">{input}' .
+                ' <div class="input-group date">{input}' .
                 ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                 ' {error}'
 

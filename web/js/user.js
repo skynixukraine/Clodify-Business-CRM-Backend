@@ -115,7 +115,7 @@ var userModule = (function() {
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
 
-                                icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png">');
+                                icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png" style="cursor: pointer">');
 
                             }
 

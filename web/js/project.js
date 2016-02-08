@@ -154,32 +154,32 @@ var projectModule = (function() {
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
 
-                                icons.push('<i class="fa fa-times delete"></i>');
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer"></i>');
 
                             }
                             if ( cfg.canEdit ) {
 
-                                icons.push('<i class="fa fa-edit edit"></i>');
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer"></i>');
 
                             }
                             if ( cfg.canCreate ) {
 
-                                icons.push('<i class="fa fa-plus-square create"></i>');
+                                icons.push('<i class="fa fa-plus-square create" style="cursor: pointer"></i>');
 
                             }
                             if ( cfg.canActivate ) {
 
-                                icons.push('<i class="fa fa-check-square-o activate"></i>');
+                                icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer"></i>');
 
                             }
                             if ( cfg.canSuspend ) {
 
-                                icons.push('<i class="fa fa-clock-o suspend"></i>');
+                                icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer"></i>');
 
                             }
                             if ( cfg.canUpdate ) {
 
-                                icons.push('<i class="fa fa-refresh"></i>');
+                                icons.push('<i class="fa fa-refresh" style="cursor: pointer"></i>');
 
                             }
 
