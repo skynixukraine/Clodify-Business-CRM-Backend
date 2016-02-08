@@ -127,7 +127,7 @@ class Project extends \yii\db\ActiveRecord
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
             LEFT JOIN users ON project_developers.user_id=users.id AND users.role=:role
-            WHERE users.id=:userId
+            WHERE users.id=:userId AND projects.is_delete = 0;
             GROUP by projects.id', [
             ':role'     => User::ROLE_DEV,
             ':userId'   => $userId

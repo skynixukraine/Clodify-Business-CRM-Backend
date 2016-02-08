@@ -100,7 +100,7 @@ class Report extends \yii\db\ActiveRecord
     {
        // var_dump($this->user_id);
        // var_dump($this->project_id);
-        $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]) ;
+        $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]);
        // var_dump($r);
        // exit;
         if( !$r ) {
@@ -137,7 +137,8 @@ class Report extends \yii\db\ActiveRecord
     public static function getToDaysReports($userId)
     {
         return self::find()
-                    ->where('user_id=:userId AND date_added=CURDATE()',
+                    ->leftJoin( Project::tableName(), Project::tableName() . ".id=project_id")
+                    ->where('user_id=:userId AND date_added=CURDATE() AND projects.is_delete=0',
                         [
                             ':userId' => $userId
                         ])->all();

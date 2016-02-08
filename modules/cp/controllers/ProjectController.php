@@ -200,7 +200,7 @@ class ProjectController extends DefaultController
                 if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You create project"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You create project " . $model->id));
                     return $this->redirect(['index']);
 
                 }
@@ -234,7 +234,7 @@ class ProjectController extends DefaultController
                    if ($model->validate()) {
 
                        $model->save();
-                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edit project"));
+                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edit project " . $id));
                        return $this->redirect(['index']);
 
                    }
@@ -272,11 +272,20 @@ class ProjectController extends DefaultController
 
     public function actionActivate()
     {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
+
+        }
+
 
     }
 
     public function actionSuspend()
     {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
+
+        }
+
+
 
     }
 
