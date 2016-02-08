@@ -33,6 +33,16 @@ var projectModule = (function() {
         document.location.href = cfg.createUrl;
     }
 
+    function actionActivate( id )
+    {
+        document.location.href = cfg.activateUrl + "?id=" + id;
+    }
+
+    function actionSuspend( id )
+    {
+        document.location.href = cfg.suspendUrl + "?id=" + id;
+    }
+
     function actionDelete( id, name, dataTable )
     {
 
@@ -159,12 +169,12 @@ var projectModule = (function() {
                             }
                             if ( cfg.canActivate ) {
 
-                                icons.push('<i class="fa fa-check-square-o"></i>');
+                                icons.push('<i class="fa fa-check-square-o activate"></i>');
 
                             }
                             if ( cfg.canSuspend ) {
 
-                                icons.push('<i class="fa fa-clock-o"></i>');
+                                icons.push('<i class="fa fa-clock-o suspend"></i>');
 
                             }
                             if ( cfg.canUpdate ) {
@@ -215,6 +225,20 @@ var projectModule = (function() {
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
                     actionCreate( );
+
+                });
+
+                dataTable.find("i[class*=activate]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionActivate( id );
+
+                });
+
+                dataTable.find("i[class*=suspend]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionSuspend( id );
 
                 });
 

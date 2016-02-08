@@ -175,7 +175,7 @@ class ProjectController extends DefaultController
                 $model->is_delete = 1;
                 $model->save(true, ['is_delete']);
                 return json_encode([
-                    "message"   => Yii::t("app", "You delete project " . $id),
+                    "message"   => Yii::t("app", "You deleted project " . $id),
                     "success"   => true
                 ]);
             }
@@ -200,7 +200,7 @@ class ProjectController extends DefaultController
                 if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You create project " . $model->id));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
 
                 }
@@ -234,7 +234,7 @@ class ProjectController extends DefaultController
                    if ($model->validate()) {
 
                        $model->save();
-                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edit project " . $id));
+                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
                        return $this->redirect(['index']);
 
                    }
@@ -274,19 +274,67 @@ class ProjectController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
 
+            if( $id = Yii::$app->request->get('id') ) {
+
+                $model  = Project::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $id
+                        ])
+                    ->one();
+                if( $model->status != Project::STATUS_INPROGRESS ) {
+
+                    $model->status = Project::STATUS_INPROGRESS;
+                    $model->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activated project " . $id));
+
+                }else{
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "This project is already active"));
+
+                }
+
+            }
+            return $this->render('index', ['model' => $model]);
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
         }
-
-
     }
 
     public function actionSuspend()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
 
+            if ($id = Yii::$app->request->get('id')) {
+
+                $model = Project::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $id
+                        ])
+                    ->one();
+                if ($model->status != Project::STATUS_ONHOLD) {
+
+                    $model->status = Project::STATUS_ONHOLD;
+                    $model->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "This project is already suspend"));
+
+                }
+                return $this->render('index', ['model' => $model]);
+
+            } else {
+
+                throw new \Exception('Ooops, you do not have priviledes for this action');
+
+            }
         }
-
-
-
     }
 
 }
