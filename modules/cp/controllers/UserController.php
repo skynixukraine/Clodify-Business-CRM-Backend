@@ -92,7 +92,6 @@ class UserController extends DefaultController {
                     "message"   => Yii::t("app", "You delete user " . $id),
                     "success"   => true
                 ]);
-
             }
 
         }else{

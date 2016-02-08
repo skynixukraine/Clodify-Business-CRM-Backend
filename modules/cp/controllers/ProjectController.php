@@ -6,6 +6,7 @@
  * Time: 14:46
  */
 namespace app\modules\cp\controllers;
+use app\components\DateUtil;
 use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
@@ -38,27 +39,29 @@ class ProjectController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'find'],
-                        'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'actions'   => [ 'index', 'find'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
                     [
-                        'actions' => [ 'create', 'edit', 'delete', 'activate', 'suspend', 'update'],
-                        'allow' => true,
-                        'roles' => [User::ROLE_ADMIN],
+                        'actions'   => [ 'create', 'edit', 'delete', 'activate', 'suspend', 'update'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN],
                     ],
                     [
-                        'actions' => [ 'edit', 'activate', 'suspend', 'update'],
-                        'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_CLIENT],
+                        'actions'   => [ 'edit', 'activate', 'suspend', 'update'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_CLIENT],
                     ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'     =>['get', 'post'],
-                    'create'    =>['get', 'post']
+                    'index'     => ['get', 'post'],
+                    'create'    => ['get', 'post'],
+                    'find'      => ['get'],
+                    'delete'    => ['delete'],
                 ],
             ],
         ];
@@ -214,18 +217,49 @@ class ProjectController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
 
-           $model = new Project();
+
            if( $id = Yii::$app->request->get('id') ) {
 
-               $project  = Project::find( )
+               $model  = Project::find()
                             ->where("id=:iD",
                             [
                                 ':iD' => $id
-                            ]);
-               var_dump($project);
+                            ])
+                   ->one();
+               $model->date_start = DateUtil::reConvertData($model->date_start);
+               $model->date_end = DateUtil::reConvertData($model->date_end);
+
+               if ($model->load(Yii::$app->request->post())) {
+
+                   if ($model->validate()) {
+
+                       $model->save();
+                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edit project"));
+                       return $this->redirect(['index']);
+
+                   }
+               }else{
+
+                   $customers = $model->getProjectCustomers()
+                                        ->all();
+                   $model->customers = [];
+                   foreach($customers as $customer){
+
+                       $model->customers[] = $customer->user_id;
+                   }
+
+                   $developers = $model->getProjectDevelopers()
+                       ->all();
+                   $model->developers = [];
+                   foreach($developers as $developer){
+
+                       $model->developers[] = $developer->user_id;
+                   }
+               }
 
            }
             return $this->render('create', ['model' => $model]);
+
         }else{
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
