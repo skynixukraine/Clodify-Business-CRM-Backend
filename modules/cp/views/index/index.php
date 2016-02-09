@@ -12,7 +12,6 @@ use app\models\Report;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -35,8 +34,8 @@ $this->params['menu'] = [
                 <td><?= Html::encode($report->task)?></td>
                 <td><?= Html::encode($report->hours)?></td>
                 <td>
-                    <?= Yii::t('app', '<i class="fa fa-times delete" style="cursor: pointer"></i>')?>
-                    <?= Yii::t('app', '<i class="fa fa-edit edit" style="cursor: pointer"></i>')?>
+                    <a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a>
+                    <i class="fa fa-edit edit" style="cursor: pointer"></i>
                 </td>
             </tr>
             </tbody>
@@ -47,9 +46,9 @@ $this->params['menu'] = [
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-7">
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <label>Total: X hours</label>
         </div>
     </div>

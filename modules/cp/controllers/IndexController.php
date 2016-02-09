@@ -7,13 +7,13 @@
  */
 
 namespace app\modules\cp\controllers;
+use app\models\Project;
 use app\models\Report;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
-
 class IndexController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -29,7 +29,7 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'test' ],
+                        'actions' => [ 'index', 'test', 'delete' ],
                         'allow' => true,
                         'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ],
                     ],
@@ -39,6 +39,7 @@ class IndexController extends DefaultController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'index'      => ['get', 'post'],
+                    'delete'     => ['get', 'post'],
                 ],
             ],
         ];
@@ -70,5 +71,34 @@ class IndexController extends DefaultController
             }
         }
         return $this->render('index',['model' => $model]);
+    }
+
+    public function actionDelete()
+    {
+        if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
+
+            if( ( $id =  Yii::$app->request->get("id") ) ){
+
+                /** @var  $model  Report*/
+                $model = Report::findOne( $id );
+                if($model->invoice_id == null) {
+
+                    $model->is_delete = 1;
+                    $model->save(true, ['is_delete']);
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You deleted report"));
+                    return $this->redirect(['index']);
+                }else{
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You do not delete report," .
+                                                                        " invoice is not null"));
+                    return $this->redirect(['index']);
+                }
+            }
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
+        }
+        return $this->render(['index/index']);
     }
 }

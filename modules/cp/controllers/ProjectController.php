@@ -168,7 +168,7 @@ class ProjectController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
-            if (( $id = Yii::$app->request->post("id") ) ) {
+            if ( ( $id = Yii::$app->request->post("id") ) ) {
 
                 /** @var  $model Project */
                 $model  = Project::findOne( $id );
