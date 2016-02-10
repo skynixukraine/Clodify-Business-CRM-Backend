@@ -20,7 +20,6 @@ $this->params['menu'] = [
 ];
 ?>
 
-<?php $i = 1;?>
 <div class = "box">
     <div class = "box-body no-padding">
         <table class = "table">
@@ -29,13 +28,13 @@ $this->params['menu'] = [
             foreach($reports as $report):?>
             <tbody>
             <tr>
-                <td><?= Html::encode($i++)?></td>
+                <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td><?= Html::encode($report->task)?></td>
                 <td><?= Html::encode($report->hours)?></td>
                 <td>
                     <a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a>
-                    <i class="fa fa-edit edit" style="cursor: pointer"></i>
+                    <a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -63,7 +62,6 @@ $this->params['menu'] = [
             <div class="col-lg-2">
 
                 <?php $projects = \app\models\Project::getDeveloperProjects( Yii::$app->user->id );
-                //var_dump($projects);
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
                 echo $form->field( $model, 'project_id', [
 

@@ -29,7 +29,7 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'test', 'delete' ],
+                        'actions' => [ 'index', 'test', 'delete', 'save' ],
                         'allow' => true,
                         'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ],
                     ],
@@ -40,6 +40,7 @@ class IndexController extends DefaultController
                 'actions' => [
                     'index'      => ['get', 'post'],
                     'delete'     => ['get', 'post'],
+                    'save'       => ['get', 'post'],
                 ],
             ],
         ];
@@ -99,6 +100,44 @@ class IndexController extends DefaultController
             throw new \Exception('Ooops, you do not have priviledes for this action');
 
         }
-        return $this->render(['index/index']);
+        Yii::$app->end();
     }
+
+    public function actionSave()
+    {
+        if( ( Yii::$app->request->isAjax &&
+              Yii::$app->request->isPost &&
+            ( $reportId = Yii::$app->request->post('id') ) &&
+            ( $task = Yii::$app->request->post('task') ) &&
+            ( $hours = Yii::$app->request->post('hours') ) ) || true ){
+
+            $model = Report::getToDaysReports(Yii::$app->user->id);
+
+            foreach ( $model as $models ) {
+
+                if( $models->id == $reportId ) {
+
+                    /** @var $model Report */
+                    $models->id = $reportId;
+                    $models->task = $task;
+                    $models->hours = $hours;
+
+                    if( $models->save(true, ['id', 'task', 'hours']) ){
+
+                        echo json_encode([
+                            "success"   => true
+                        ]);
+                    }else{
+
+                        echo json_encode([
+                            "success"   => false
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+
+
+
 }
