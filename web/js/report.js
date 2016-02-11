@@ -1,7 +1,7 @@
 /**
  * Created by Oleksii on 09.06.2015.
  */
-var userModule = (function() {
+var reportModule = (function() {
 
     var cfg = {
             editUrl     : '',
@@ -10,6 +10,9 @@ var userModule = (function() {
             canDelete   : null
         },
         dataTable,
+        filterProjectsSelect = "select[name=project]",
+        filterDateStartSelect = "#project-date_start",
+        filterDateEndSelect = "#project-date_end",
         dataFilter = {
         },
         deleteModal;
@@ -56,7 +59,7 @@ var userModule = (function() {
 
         deleteModal = new ModalBootstrap({
             title       : 'Delete ' + name + "?",
-            body        : 'All data related to this user will be deleted.',
+            body        : 'All data related to this report will be deleted.',
             winAttrs    : { class : 'modal delete'}
         });
         deleteModal.show();
@@ -69,9 +72,49 @@ var userModule = (function() {
 
         init: function( config ){
 
-
             cfg = $.extend(cfg, config);
-            dataTable = $('#user-table').dataTable({
+            filterProjectsSelect = $( filterProjectsSelect );
+
+            filterProjectsSelect.change(function(){
+
+                var id = $(this).val();
+
+                dataFilter['project_id'] = id;
+                dataTable.api().ajax.reload();
+
+
+            });
+
+            filterDateStartSelect = $( filterDateStartSelect );
+            filterDateStartSelect.datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true
+            }).on("hide", function( event ){
+
+                var startDate = filterDateStartSelect.val();
+                //console.log("test");
+                console.log(startDate);
+                dataFilter['date_start'] = startDate;
+                dataTable.api().ajax.reload();
+
+            });
+
+            filterDateEndSelect = $( filterDateEndSelect );
+            filterDateEndSelect.datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true
+            }).on("hide", function( event ){
+
+                var endDate = filterDateEndSelect.val();
+                //console.log("test");
+                console.log(endDate);
+                dataFilter['date_end'] = endDate;
+                dataTable.api().ajax.reload();
+
+            });
+
+
+            dataTable = $('#report-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
                 "bFilter": true,
@@ -117,11 +160,11 @@ var userModule = (function() {
 
                             var icons = [];
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                            if ( cfg.canDelete ) {
+                            /*if ( cfg.canDelete ) {
 
                                 icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png" style="cursor: pointer">');
 
-                            }
+                            }*/
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 

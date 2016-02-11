@@ -113,6 +113,7 @@ class UserController extends DefaultController {
         $columns        = [
             'id',
             'first_name',
+            'role',
             'email',
             'phone',
             'date_login',
@@ -131,7 +132,7 @@ class UserController extends DefaultController {
                 ['like', 'email', $keyword]
             ]);
 
-            $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+        $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter('is_delete=0');
 
@@ -143,6 +144,7 @@ class UserController extends DefaultController {
             $list[] = [
                 $model->id,
                 $model->first_name . " " . $model->last_name,
+                $model->role,
                 $model->email,
                 $model->phone,
                 $model->date_login,

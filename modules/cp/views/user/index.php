@@ -22,6 +22,7 @@ $this->params['menu'] = [
     <tr>
         <th class="id-col"><?=Yii::t('app', 'ID')?></th>
         <th><?=Yii::t('app', 'Name')?></th>
+        <th><?=Yii::t('app', 'Role')?></th>
         <th><?=Yii::t('app', 'Email')?></th>
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Login Date')?></th>
