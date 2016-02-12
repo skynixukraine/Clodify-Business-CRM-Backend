@@ -52,6 +52,7 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    /** New or invited user login  */
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -75,6 +76,7 @@ class SiteController extends Controller
         ]);
     }
 
+    /** Log out user*/
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -100,9 +102,10 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    /** Invited user activated */
     public function actionInvite( $hash )
     {
-        /** @var  $model User  */
+        /** @var  $model User */
         if( ($model      = User::find()
                 ->where('invite_hash=:hash',
                     [

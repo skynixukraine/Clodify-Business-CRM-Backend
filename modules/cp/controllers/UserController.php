@@ -78,6 +78,7 @@ class UserController extends DefaultController {
         ));
     }*/
 
+    /** Delete user from Manage Users */
     public function actionDelete()
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
@@ -102,6 +103,7 @@ class UserController extends DefaultController {
 
     }
 
+    /** Value table (Manage Users) fields, filters, search */
     public function actionFind()
     {
 
@@ -167,6 +169,7 @@ class UserController extends DefaultController {
 
     }
 
+    /** Invited users add to database */
     public function actionInvite()
     {
         /** @var  $model User */

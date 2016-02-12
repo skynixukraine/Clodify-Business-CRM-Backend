@@ -11,6 +11,8 @@ namespace app\components;
 
 class DateUtil
 {
+
+    /** Convert date from format dd/mm/yyyy to format Y-m-d */
     public static function convertData( $date )
     {
         if( $date ) {
@@ -24,6 +26,7 @@ class DateUtil
         return $date;
     }
 
+    /** Convert date from format Y-m-d to format dd/mm/yyyy */
     public static function  reConvertData($date)
     {
         if($date){

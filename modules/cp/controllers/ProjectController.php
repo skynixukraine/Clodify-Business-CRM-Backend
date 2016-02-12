@@ -72,6 +72,7 @@ class ProjectController extends DefaultController
         return $this->render('index');
     }
 
+    /** Value table (Manage Projects) fields, filters, search */
     public function actionFind()
     {
 
@@ -164,6 +165,7 @@ class ProjectController extends DefaultController
 
     }
 
+    /** Delete project */
     public function actionDelete()
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
@@ -187,6 +189,7 @@ class ProjectController extends DefaultController
         }
     }
 
+    /** Add new project */
     public function actionCreate()
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
@@ -213,6 +216,7 @@ class ProjectController extends DefaultController
         }
     }
 
+    /** Edit project */
     public function actionEdit()
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
@@ -269,7 +273,7 @@ class ProjectController extends DefaultController
     }
 
 
-
+    /** Project's status change on IN PROGRESS  */
     public function actionActivate()
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
@@ -304,6 +308,7 @@ class ProjectController extends DefaultController
         }
     }
 
+    /** Project's status change on ONHOLD  */
     public function actionSuspend()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {

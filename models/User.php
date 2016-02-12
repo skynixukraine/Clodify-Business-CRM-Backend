@@ -241,6 +241,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
 
+    /** Permission on the role of the current user */
     public static function hasPermission( $roles )
     {
 
@@ -258,6 +259,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
         if( $this->isNewRecord ){
@@ -320,17 +322,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    /** Find all customers from database */
     public static function allCustomers()
     {
         return self::find()
-            //->from('project_customers')
-            //->leftJoin('users ON users.id=project_customers.user_id')
             ->from(User::tableName())
             ->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }
 
+    /** Find all developers from database */
     public static function allDevelopers()
     {
         return self::find()
@@ -338,7 +340,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->rightJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
             ->groupBy(ProjectDeveloper::tableName() . ".user_id")
             ->all();
-
     }
 
 }

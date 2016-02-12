@@ -52,6 +52,7 @@ class ReportController extends DefaultController
         return $this->render('index');
     }
 
+    /** Value table (Reports) fields, filters, search */
     public function actionFind()
     {
 

@@ -46,6 +46,7 @@ class IndexController extends DefaultController
         ];
     }
 
+    /** Testing email */
     public function actionTest()
     {
         Yii::$app->mailer->compose('test',
@@ -74,6 +75,7 @@ class IndexController extends DefaultController
         return $this->render('index',['model' => $model]);
     }
 
+    /** Delete developer`s report */
     public function actionDelete()
     {
         if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
@@ -103,6 +105,7 @@ class IndexController extends DefaultController
         Yii::$app->end();
     }
 
+    /** Add new report */
     public function actionSave()
     {
         if( ( Yii::$app->request->isAjax &&

@@ -120,6 +120,7 @@ class Project extends \yii\db\ActiveRecord
         return $this->hasMany(Report::className(), ['project_id' => 'id']);
     }
 
+    /** Projects where role: DEV, user: current projects.is_delete = 0  */
     public static function getDeveloperProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
@@ -134,6 +135,7 @@ class Project extends \yii\db\ActiveRecord
         ])->all();
     }
 
+    /** Save the  field’s value in the database */
     public function beforeSave($insert)
     {
 
