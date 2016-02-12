@@ -12,6 +12,7 @@ use app\models\Report;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -31,10 +32,11 @@ $this->params['menu'] = [
                 <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td><?= Html::encode($report->task)?></td>
-                <td><?= Html::encode($report->hours)?></td>
+                <td class="hour"><?= Html::encode($report->hours)?></td>
                 <td>
                     <a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a>
-                    <a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a>
+                    <!--a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a-->
+                    <i class="fa fa-edit edit" style="cursor: pointer"></i>
                 </td>
             </tr>
             </tbody>
@@ -45,10 +47,10 @@ $this->params['menu'] = [
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-8">
         </div>
-        <div class="col-lg-5">
-            <label>Total: X hours</label>
+        <div class="col-lg-4">
+            <label id="totalHours"></label>
         </div>
     </div>
 
@@ -94,5 +96,8 @@ $this->params['menu'] = [
         </div>
     </div>
 <?php ActiveForm::end();?>
+<script>
+    $(function(){reportModule.init()})
+</script>
 
 
