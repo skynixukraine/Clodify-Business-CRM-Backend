@@ -11,10 +11,11 @@ use app\models\User;
 use app\models\Project;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\components\DateUtil;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/admin-reports.js');
 $this->title                    = Yii::t("app", "Reports");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -36,7 +37,7 @@ $this->params['menu'] = [
         <div class="col-lg-4">
             <?php echo Html::label('From date:');?>
             <div class="input-group date">
-                <?php echo Html::textInput( 'date', null, ['id'=>"project-date_start", 'class'=>"form-control pull-right active"])?>
+                <?php echo Html::textInput( 'date', DateUtil::reConvertData( date('Y-m-d') ), ['id'=>"project-date_start", 'class'=>"form-control pull-right active"])?>
                <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </span>
@@ -74,7 +75,7 @@ $this->params['menu'] = [
 
     $(function(){
 
-        reportModule.init({
+        adminReportModule.init({
             editUrl     : '<?=Url::to(['report/index'])?>',
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',

@@ -93,6 +93,9 @@ class ReportController extends DefaultController
 
            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
 
+        }else{
+
+            $dataTable->setFilter('date_report >= "' . date('Y-m-d') . '"');
         }
 
         if($dateEnd && $dateEnd != null){
