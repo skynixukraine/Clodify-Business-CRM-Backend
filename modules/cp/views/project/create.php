@@ -15,11 +15,14 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/project.js');
-$this->title                    = Yii::t("app", "Projects");
+$this->title                    = Yii::t("app", $title );
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [
-
+    [
+        'label' => Yii::t('app', 'Manage Projects'),
+        'url'   => Url::to(['project/index'])
+    ]
 ];
 ?>
 
@@ -44,6 +47,7 @@ $this->params['menu'] = [
             ]
         ])->textInput(["class" => "form-control"])->label( 'Jira code' );?>
     </div>
+
     <div class="form-group">
         <?php echo $form->field( $model, 'date_start', [
 
@@ -54,6 +58,8 @@ $this->params['menu'] = [
 
         ])->textInput( ['class'=>'form-control pull-right active',
             'type'=>'text']);?>
+
+
     </div>
     <div class="form-group">
         <?php echo $form->field( $model, 'date_end', [
@@ -107,12 +113,13 @@ $this->params['menu'] = [
     </div>
     <?php endif;?>
     <div>
-        <?= Html::submitButton( Yii::t('app', 'Create/Edit'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
     </div>
 <?php ActiveForm::end();?>
 
 <script>
     $(function(){
+
         $('.date').datepicker({
             format : 'dd/mm/yyyy'
         });

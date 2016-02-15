@@ -16,9 +16,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "Manage Projects");
 $this->params['breadcrumbs'][]  = $this->title;
 
-$this->params['menu'] = [
+User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
+                                            [
+                                                'label' => Yii::t('app', 'Create a Project'),
+                                                'url' => Url::to(['project/create'])
+                                            ]
+                                        ] : $this->params['menu'] = []
 
-];
 ?>
 
 <table class="table table-hover" id="project_table">
@@ -48,18 +52,16 @@ $this->params['menu'] = [
 
         projectModule.init({
             editUrl     : '<?=Url::to(['project/edit'])?>',
-            createUrl   : '<?=Url::to(['project/create'])?>',
             deleteUrl   : '<?=Url::to(['project/delete'])?>',
             activateUrl : '<?=Url::to(['project/activate'])?>',
             suspendUrl  : '<?=Url::to(['project/suspend'])?>',
-            updateUrl   : '<?=Url::to(['project/index'])?>',
             findUrl     : '<?=Url::to(['project/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-            canCreate   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+
             canActivate : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-            canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-            canUpdate   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>
+
+            canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>
         })
     });
 
