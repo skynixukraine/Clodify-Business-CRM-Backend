@@ -12,7 +12,7 @@ use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/user.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/genPass.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "Invite User");
 $this->params['breadcrumbs'][]  = $this->title;
@@ -69,7 +69,7 @@ $this->params['menu'] = [
             ) -> label( 'Password' );?>
             </div>
             <div class="col-lg-3">
-                <?= Html::button( Yii::t('app', 'Generate'), ['class' => 'btn btn-primary']) ?>
+                <?= Html::button( Yii::t('app', 'Generate'), ['class' => 'btn btn-primary generate']) ?>
 
             </div>
         </div>
@@ -89,5 +89,8 @@ $this->params['menu'] = [
         <div>
             <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
         </div>
+        <script>
+            $(function(){inviteModule.init()})
+        </script>
 
 <?php ActiveForm::end();?>

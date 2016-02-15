@@ -27,14 +27,14 @@ $this->params['menu'] = [
 <?php $form = ActiveForm::begin();?>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-2">
             <?php echo Html::label('Report:');
             $projects = Project::find()->all();
             $listReport = ArrayHelper::map( $projects, 'id', 'name' );
             $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-2">
             <?php echo Html::label('From date:');?>
             <div class="input-group date">
                 <?php echo Html::textInput( 'date', DateUtil::reConvertData( date('Y-m-d') ), ['id'=>"project-date_start", 'class'=>"form-control pull-right active"])?>
@@ -43,7 +43,7 @@ $this->params['menu'] = [
                 </span>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-2">
             <?php echo Html::label('To date:');?>
             <div class="input-group date">
                 <?php echo Html::textInput( 'date', null, ['id'=>"project-date_end", 'class'=>"form-control pull-right active"])?>

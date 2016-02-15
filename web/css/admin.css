@@ -4,5 +4,19 @@
 }
 .horizontal{
     max-width: 600px;
-
+}
+.generate{
+    margin-top: 23px;
+}
+#report-table_filter{
+    margin: -34px 0 34px 0;
+}
+#report-table_filter input{
+    width: 200px;
+    height: 33px;
+}
+@media screen and (max-width: 1200px) {
+    #report-table_filter{
+        margin: 24px 0 0 0;
+    }
 }
