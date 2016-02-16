@@ -3,20 +3,24 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Model;
 
 /**
  * This is the model class for table "invoices".
  *
  * @property integer $id
+ * @property integer $user_id
  * @property string $subtotal
  * @property string $discount
  * @property string $total
+ * @property string $date_start
+ * @property string $date_end
  * @property string $date_created
  * @property string $date_paid
  * @property string $date_sent
  * @property string $status
  *
- * @property Reports[] $reports
+ * @property Report[] $reports
  */
 class Invoice extends \yii\db\ActiveRecord
 {
@@ -35,9 +39,9 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
             [['id'], 'required'],
-            [['id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
             [['subtotal', 'discount', 'total'], 'number'],
-            [['date_created', 'date_paid', 'date_sent'], 'safe'],
+            [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent'], 'safe'],
             [['status'], 'string']
         ];
     }
@@ -49,9 +53,12 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'user_id' => 'User ID',
             'subtotal' => 'Subtotal',
             'discount' => 'Discount',
             'total' => 'Total',
+            'date_start' => 'Date Start',
+            'date_end' => 'Date End',
             'date_created' => 'Date Created',
             'date_paid' => 'Date Paid',
             'date_sent' => 'Date Sent',
@@ -64,6 +71,14 @@ class Invoice extends \yii\db\ActiveRecord
      */
     public function getReports()
     {
-        return $this->hasMany(Reports::className(), ['invoice_id' => 'id']);
+        return $this->hasMany(Report::className(), ['invoice_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
