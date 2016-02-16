@@ -56,7 +56,8 @@ var userModule = (function() {
 
         deleteModal = new ModalBootstrap({
             title       : 'Delete ' + name + "?",
-            body        : 'All data related to this user will be deleted.',
+            body        : 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
+                          ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
         deleteModal.show();
@@ -119,7 +120,8 @@ var userModule = (function() {
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
 
-                                icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png" style="cursor: pointer">');
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
 
                             }
 
@@ -153,7 +155,7 @@ var userModule = (function() {
                     actionEdit( id );
 
                 });
-                dataTable.find("img[class*=delete]").click(function(){
+                dataTable.find("i[class*=delete]").click(function(){
 
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();

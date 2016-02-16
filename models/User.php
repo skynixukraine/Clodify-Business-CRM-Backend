@@ -328,6 +328,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->from(User::tableName())
             ->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
+            ->where(User::tableName() . ".is_delete=0")
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }
@@ -338,6 +339,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->from(User::tableName())
             ->rightJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
+            ->where(User::tableName() . ".is_delete=0")
             ->groupBy(ProjectDeveloper::tableName() . ".user_id")
             ->all();
     }
