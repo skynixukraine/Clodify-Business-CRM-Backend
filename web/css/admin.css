@@ -15,8 +15,19 @@
     width: 200px;
     height: 33px;
 }
+#w0{
+    width: 500px;
+}
 @media screen and (max-width: 1200px) {
     #report-table_filter{
         margin: 24px 0 0 0;
+    }
+}
+@media screen and (max-width: 768px) {
+    #report-table_filter{
+        margin: 24px 0 0 0;
+    }
+    #w0{
+        width: 100%;
     }
 }
