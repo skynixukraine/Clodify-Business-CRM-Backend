@@ -5,18 +5,14 @@ var projectModule = (function() {
 
     var cfg = {
             editUrl     : '',
-            createUrl   : '',
             deleteUrl   : '',
             activateUrl : '',
             suspendUrl  : '',
-            updateUrl   : '',
             findUrl     : '',
             canDelete   : null,
             canEdit     : null,
-            canCreate   : null,
             canActivate : null,
             canSuspend  : null,
-            canUpdate   : null
         },
         dataTable,
         dataFilter = {
@@ -26,11 +22,6 @@ var projectModule = (function() {
     function actionEdit( id )
     {
         document.location.href = cfg.editUrl + "?id=" + id;
-    }
-
-    function actionCreate( )
-    {
-        document.location.href = cfg.createUrl;
     }
 
     function actionActivate( id )
@@ -154,35 +145,31 @@ var projectModule = (function() {
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
 
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer"></i>');
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
 
                             }
                             if ( cfg.canEdit ) {
 
-                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer"></i>');
-
-                            }
-                            if ( cfg.canCreate ) {
-
-                                icons.push('<i class="fa fa-plus-square create" style="cursor: pointer"></i>');
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
 
                             }
                             if ( cfg.canActivate ) {
 
-                                icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer"></i>');
+                                icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
 
                             }
                             if ( cfg.canSuspend ) {
 
-                                icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer"></i>');
+                                //$.each($td, function(index) {
+                                 //   console.log($(this).parents("tr").find("td").eq(9).text());
+                                    icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer" ' +
+                                        'data-toggle="tooltip" data-placement="top" title="Suspend"></i>');
+                              //  });
 
                             }
-                            if ( cfg.canUpdate ) {
-
-                                icons.push('<i class="fa fa-refresh" style="cursor: pointer"></i>');
-
-                            }
-
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
@@ -221,20 +208,12 @@ var projectModule = (function() {
                     actionDelete( id, name, dataTable );
 
                 });
-                dataTable.find("i[class*=create]").click(function(){
-
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionCreate( );
-
-                });
-
                 dataTable.find("i[class*=activate]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
                     actionActivate( id );
 
                 });
-
                 dataTable.find("i[class*=suspend]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();

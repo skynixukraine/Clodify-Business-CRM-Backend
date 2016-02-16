@@ -208,7 +208,8 @@ class ProjectController extends DefaultController
 
                 }
             }
-            return $this->render('create', ['model' => $model]);
+            return $this->render('create', ['model' => $model,
+                                            'title' => 'Create a new project']);
         }else{
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
@@ -230,39 +231,48 @@ class ProjectController extends DefaultController
                                 ':iD' => $id
                             ])
                    ->one();
-               $model->date_start = DateUtil::reConvertData($model->date_start);
-               $model->date_end = DateUtil::reConvertData($model->date_end);
+               /** @var $model Project */
+               if( $model->is_delete == 0) {
 
-               if ($model->load(Yii::$app->request->post())) {
+                   $model->date_start = DateUtil::reConvertData($model->date_start);
+                   $model->date_end = DateUtil::reConvertData($model->date_end);
 
-                   if ($model->validate()) {
+                   if ($model->load(Yii::$app->request->post())) {
 
-                       $model->save();
-                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
-                       return $this->redirect(['index']);
+                       if ($model->validate()) {
 
+                           $model->save();
+                           Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
+                           return $this->redirect(['index']);
+
+                       }
+                   } else {
+
+                       $customers = $model->getProjectCustomers()
+                           ->all();
+                       $model->customers = [];
+                       foreach ($customers as $customer) {
+
+                           $model->customers[] = $customer->user_id;
+                       }
+
+                       $developers = $model->getProjectDevelopers()
+                           ->all();
+                       $model->developers = [];
+                       foreach ($developers as $developer) {
+
+                           $model->developers[] = $developer->user_id;
+                       }
                    }
                }else{
 
-                   $customers = $model->getProjectCustomers()
-                                        ->all();
-                   $model->customers = [];
-                   foreach($customers as $customer){
-
-                       $model->customers[] = $customer->user_id;
-                   }
-
-                   $developers = $model->getProjectDevelopers()
-                       ->all();
-                   $model->developers = [];
-                   foreach($developers as $developer){
-
-                       $model->developers[] = $developer->user_id;
-                   }
+                   Yii::$app->getSession()->setFlash('success', Yii::t("app", "Oops, sorry, this project is deleted and can not be accessible anymore"));
+                   return $this->redirect(['index']);
                }
 
            }
-            return $this->render('create', ['model' => $model]);
+            return $this->render('create', ['model' => $model,
+                                            'title' => 'Edit the project #' . $model->id]);
 
         }else{
 
