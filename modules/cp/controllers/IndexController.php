@@ -29,10 +29,16 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
+                        'actions' => [ 'index' ],
+                        'allow' => true,
+                        'roles' => [User::ROLE_PM ],
+                    ],
+                    [
                         'actions' => [ 'index', 'test', 'delete', 'save' ],
                         'allow' => true,
-                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ],
+                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN],
                     ],
+
                 ],
             ],
             'verbs' => [

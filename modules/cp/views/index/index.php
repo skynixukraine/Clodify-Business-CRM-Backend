@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\models\Report;
+use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -33,11 +34,13 @@ $this->params['menu'] = [
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode($report->hours)?></td>
+                <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
                     <a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a>
                     <!--a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a-->
                     <i class="fa fa-edit edit" style="cursor: pointer"></i>
                 </td>
+                <?php endif;?>
             </tr>
             </tbody>
             <?php endforeach;?>
@@ -63,7 +66,7 @@ $this->params['menu'] = [
         <div class="row">
             <div class="col-lg-2">
 
-                <?php $projects = \app\models\Project::getDeveloperProjects( Yii::$app->user->id );
+                <?php $projects = \app\models\Project::getDevOrAdminProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
                 echo $form->field( $model, 'project_id', [
 
