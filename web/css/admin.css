@@ -15,7 +15,7 @@
     width: 200px;
     height: 33px;
 }
-#w0{
+#w0[action="/cp/user/invite"]{
     width: 500px;
 }
 @media screen and (max-width: 1200px) {
