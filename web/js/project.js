@@ -142,6 +142,7 @@ var projectModule = (function() {
                         "render"    : function (data, type, row) {
 
                             var icons = [];
+
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
 
@@ -155,20 +156,24 @@ var projectModule = (function() {
                                     'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
 
                             }
-                            if ( cfg.canActivate ) {
 
-                                icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
+                            if( row[9] == "INPROGRESS") {
 
-                            }
-                            if ( cfg.canSuspend ) {
+                                if ( cfg.canSuspend ) {
 
-                                //$.each($td, function(index) {
-                                 //   console.log($(this).parents("tr").find("td").eq(9).text());
                                     icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer" ' +
                                         'data-toggle="tooltip" data-placement="top" title="Suspend"></i>');
-                              //  });
 
+                                }
+
+                            }else {
+
+                                if (cfg.canActivate) {
+
+                                    icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer" ' +
+                                        'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
+
+                                }
                             }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
