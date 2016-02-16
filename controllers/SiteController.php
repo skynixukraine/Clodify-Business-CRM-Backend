@@ -60,20 +60,24 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ( ( $email = Yii::$app->request->get('email') ) ) {
+        if (($email = Yii::$app->request->get('email'))) {
 
             $model->email = $email;
 
         }
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+        if ($model->load(Yii::$app->request->post()) && $model->getUser()->is_delete == 0 && $model->login() ) {
 
             return $this->redirect(['cp/index']);
 
+        }else {
+
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
+            return $this->render('login', [
+                'model' => $model,
+            ]);
         }
 
-        return $this->render('login', [
-            'model' => $model,
-        ]);
     }
 
     /** Log out user*/
@@ -119,7 +123,7 @@ class SiteController extends Controller
             return $this->redirect(['/site/login', 'email'=>$model->email]);
 
         }
-        Yii::$app->getSession()->setFlash('error', Yii::t("app", "sorry"));
+        Yii::$app->getSession()->setFlash('success', Yii::t("app", "sorry"));
         return $this->redirect(['/']);
 
 
