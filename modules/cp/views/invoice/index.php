@@ -18,6 +18,10 @@ $this->title                    = Yii::t("app", "Invoices");
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [
+    [
+        'label' => Yii::t('app', 'Create an Invoice'),
+        'url' => Url::to(['invoice/create'])
+    ]
                         ];
 ?>
 
@@ -47,7 +51,7 @@ $this->params['menu'] = [
         invoiceModule.init({
             deleteUrl   : '<?=Url::to(['invoice/index'])?>',
             findUrl     : '<?=Url::to(['invoice/find'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 

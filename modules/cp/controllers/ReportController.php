@@ -6,7 +6,9 @@
  * Time: 16:34
  */
 namespace app\modules\cp\controllers;
+use app\models\Invoice;
 use app\models\Project;
+use app\models\ProjectCustomer;
 use app\models\Report;
 use app\models\User;
 use Yii;
@@ -56,13 +58,17 @@ class ReportController extends DefaultController
     public function actionFind()
     {
 
-        $order          = Yii::$app->request->getQueryParam("order");
-        $search         = Yii::$app->request->getQueryParam("search");
-        $projectId      = Yii::$app->request->getQueryParam("project_id");
-        $dateStart      = Yii::$app->request->getQueryParam("date_start");
-        $dateEnd        = Yii::$app->request->getQueryParam("date_end");
-        $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query          = Report::find();
+        $order              = Yii::$app->request->getQueryParam("order");
+        $search             = Yii::$app->request->getQueryParam("search");
+        $projectId          = Yii::$app->request->getQueryParam("project_id");
+        $customerId         = Yii::$app->request->getQueryParam("user_id");
+        $dateStart          = Yii::$app->request->getQueryParam("date_start");
+        $dateEnd            = Yii::$app->request->getQueryParam("date_end");
+        $keyword            = ( !empty($search['value']) ? $search['value'] : null);
+        $query              = Report::find();
+
+
+
         $columns        = [
             'id',
             'task',
@@ -71,6 +77,7 @@ class ReportController extends DefaultController
             'reporter_name',
             'date_report',
             'invoice_id',
+            'hours',
         ];
 
         $dataTable = DataTable::getInstance()
@@ -83,20 +90,40 @@ class ReportController extends DefaultController
                 ['like', 'task', $keyword],
             ]);
 
-        $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+        if( isset( $columns[$order[0]['column']]) ){
+
+            $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+
+        }else{
+
+            $dataTable->setOrder( 'date_report', 'asc');
+        }
+
 
         if($projectId && $projectId != null){
 
             $dataTable->setFilter('project_id=' . $projectId);
         }
 
+        if($customerId && $customerId != null){
+
+            $projectsCustomer = ProjectCustomer::getReportsOfCustomer($customerId);
+            $projectId = [];
+            foreach($projectsCustomer as $project){
+
+                $projectId[] = $project->project_id;
+
+            }
+
+            $dataTable->setFilter('project_id IN (' . implode( ', ', $projectId ) . ")");
+
+        }
+
+
         if($dateStart && $dateStart != null){
 
            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
 
-        }else{
-
-            $dataTable->setFilter('date_report >= "' . date('Y-m-d') . '"');
         }
 
         if($dateEnd && $dateEnd != null){
@@ -120,6 +147,7 @@ class ReportController extends DefaultController
                 $model->reporter_name,
                 $model->date_report,
                 ( $model->invoice_id == null ? "No" : "Yes" ),
+                $model->hours,
             ];
         }
 

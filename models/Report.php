@@ -29,6 +29,12 @@ use yii\base\Model;
 class Report extends \yii\db\ActiveRecord
 {
 
+    const STATUS_NEW        = "NEW";
+    const STATUS_INVOICED   = "INVOICED";
+    const STATUS_DELETED    = "DELETED";
+    const STATUS_PAID       = "PAID";
+    const STATUS_WONTPAID   = "WONTPAID";
+
     /**
      * @inheritdoc
      */

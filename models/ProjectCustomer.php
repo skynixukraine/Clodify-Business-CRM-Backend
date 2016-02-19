@@ -70,4 +70,15 @@ class ProjectCustomer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public static function getReportsOfCustomer($customerId)
+    {
+        return self::find()
+            ->where(ProjectCustomer::tableName() . ".user_id=:cID", [
+
+                ':cID' => $customerId
+            ])
+            ->all();
+
+    }
 }

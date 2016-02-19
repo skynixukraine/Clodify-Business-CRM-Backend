@@ -7,6 +7,7 @@
  */
 namespace app\modules\cp\controllers;
 
+use app\models\Report;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -15,6 +16,8 @@ use app\components\DataTable;
 use app\components\DateUtil;
 use app\models\Invoice;
 use app\models\User;
+use app\models\ProjectCustomer;
+
 class InvoiceController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -30,7 +33,7 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find'],
+                        'actions'   => ['index', 'find', 'create'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -41,6 +44,7 @@ class InvoiceController extends DefaultController
                 'actions' => [
                     'index' => ['get', 'post'],
                     'find'  => ['get', 'post'],
+                    'create'    => ['get', 'post'],
                 ],
             ],
         ];
@@ -51,7 +55,7 @@ class InvoiceController extends DefaultController
         return $this->render('index');
     }
 
-    /** Value table (Invoices) fields, filters, search */
+    /** Value table (Invoices in index) fields, filters, search */
     public function actionFind()
     {
 
@@ -95,7 +99,7 @@ class InvoiceController extends DefaultController
 
             $list[] = [
                 $model->id,
-                $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+                $model->getUser()->one()->first_name,
                 $model->subtotal,
                 $model->discount,
                 $model->total,
@@ -118,6 +122,22 @@ class InvoiceController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
 
+    }
+
+    public function actionCreate()
+    {
+        $model = new Invoice();
+
+        if($model->load(Yii::$app->request->post())){
+
+            if($model->validate()){
+
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));
+            }
+            return $this->redirect('index');
+        }
+        return $this->render('create', ['model' => $model]);
     }
 
 }

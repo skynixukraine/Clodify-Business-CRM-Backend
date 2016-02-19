@@ -63,6 +63,10 @@ var adminReportModule = (function() {
                 dataFilter['project_id'] = id;
                 dataTable.api().ajax.reload();
             });
+
+            var date = new Date();
+            var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
             filterDateStartSelect = $( filterDateStartSelect );
             filterDateStartSelect.datepicker({
                 format : 'dd/mm/yyyy',
@@ -71,7 +75,10 @@ var adminReportModule = (function() {
                 var startDate = filterDateStartSelect.val();
                 dataFilter['date_start'] = startDate;
                 dataTable.api().ajax.reload();
-            });
+            }).datepicker("setDate", currentDay);
+
+            dataFilter['date_start'] = $("#project-date_start").val();
+
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
                 format : 'dd/mm/yyyy',
