@@ -38,7 +38,7 @@ $this->params['menu'] = [
         <div class="col-lg-2">
             <?php echo Html::label('From date:');?>
             <div class="input-group date">
-                <?php echo Html::textInput( 'date', DateUtil::reConvertData( date('Y-m-d') ), ['id'=>"project-date_start", 'class'=>"form-control pull-right active"])?>
+                <?php echo Html::textInput( 'date', null, ['id'=>"project-date_start", 'class'=>"form-control pull-right active"])?>
                <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </span>

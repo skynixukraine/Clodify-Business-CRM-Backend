@@ -29,6 +29,12 @@ use yii\base\Model;
 class Report extends \yii\db\ActiveRecord
 {
 
+    const STATUS_NEW        = "NEW";
+    const STATUS_INVOICED   = "INVOICED";
+    const STATUS_DELETED    = "DELETED";
+    const STATUS_PAID       = "PAID";
+    const STATUS_WONTPAID   = "WONTPAID";
+
     /**
      * @inheritdoc
      */
@@ -79,7 +85,7 @@ class Report extends \yii\db\ActiveRecord
      */
     public function getInvoice()
     {
-        return $this->hasOne(Invoices::className(), ['id' => 'invoice_id']);
+        return $this->hasOne(Invoice::className(), ['id' => 'invoice_id']);
     }
 
     /**
@@ -95,7 +101,7 @@ class Report extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     public  function  validateProjectReport($attribute, $params)
