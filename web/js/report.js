@@ -6,18 +6,38 @@ var reportModule = (function(){
             total += parseFloat($(document).find(n).text());
         }
         $(document).find('#totalHours').html("Total: " + total + " hours");
+        $(document).find('#totalHours').parent().css('text-align', 'center');
     };
+
     return {
         init:function(){
+            var trElem;
             count();
+            var win = new ModalBootstrap({
+                title: 'Message',
+                body: "Are you sure you want to delete this report?"
+            });
+            $('.delete').click(function() {
+                trElem  = $(this).parent().parent();
+                win.show();
+            });
+            win.getWin().find(".confirm").click(function() {
+                var id  = trElem.find('td:eq(0)').text();
+                console.log(id);
+                $.get( "index/delete", {id: id} ).done(function () {
+                    trElem.remove();
+                    console.log("Data Removed");
+                    count();
+                });
+            });
             $('.edit').click( function () {
                 var edit = $(this);
                 var trElem  = edit.parent().parent();
                 var descr   = trElem.find('td:eq(2)').text();
                 var hours   = trElem.find('td:eq(3)').text();
                 var id      = trElem.find('td:eq(0)').text();
-                trElem.find('td:eq(2)').html('<input style="width: 50%; height: 25px;" type="text" value="' + descr + '" class="description">');
-                trElem.find('td:eq(3)').html('<input style="height: 25px;" type="text" value="' + hours + '" class="hours">');
+                trElem.find('td:eq(2)').css('width:', '75%').html('<input style="width: 640px; height: 25px;" type="text" value="' + descr + '" class="description">');
+                trElem.find('td:eq(3)').css('width:', '40px').html('<input style="height: 25px; width: 40px; text-align: center;" type="text" value="' + hours + '" class="hours">');
                 edit.hide();
                 if(edit.parent().find('.save').length == 0){
                     edit.after('<button class="save btn btn-success btn-xs" type="submit">SAVE</button>');

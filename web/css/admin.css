@@ -8,6 +8,9 @@
 .generate{
     margin-top: 23px;
 }
+.hour + td{
+    width: 200px;
+}
 #report-table_filter{
     margin: -34px 0 34px 0;
 }
@@ -21,6 +24,9 @@
 @media screen and (max-width: 1200px) {
     #report-table_filter{
         margin: 24px 0 0 0;
+    }
+    .hour + td{
+        width: 100px;
     }
 }
 @media screen and (max-width: 768px) {

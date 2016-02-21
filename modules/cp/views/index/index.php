@@ -14,6 +14,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -36,7 +37,8 @@ $this->params['menu'] = [
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
-                    <a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a>
+                    <!--a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a-->
+                    <i class="fa fa-times delete" style="cursor: pointer"></i>
                     <!--a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a-->
                     <i class="fa fa-edit edit" style="cursor: pointer"></i>
                 </td>
