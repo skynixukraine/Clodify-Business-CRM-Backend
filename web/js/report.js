@@ -7,10 +7,17 @@ var reportModule = (function(){
         }
         $(document).find('#totalHours').html("Total: " + total + " hours");
         $(document).find('#totalHours').parent().css('text-align', 'center');
-    };
+    },
+        cfg = {
+            deleteUrl: "",
+            saveUrl: ""
+        };
 
     return {
-        init:function(){
+        init:function( config ) {
+
+            cfg = $.extend( cfg, config);
+
             var trElem;
             count();
             var win = new ModalBootstrap({
@@ -24,7 +31,7 @@ var reportModule = (function(){
             win.getWin().find(".confirm").click(function() {
                 var id  = trElem.find('td:eq(0)').text();
                 console.log(id);
-                $.get( "index/delete", {id: id} ).done(function () {
+                $.get( cfg.deleteUrl, {id: id} ).done(function () {
                     trElem.remove();
                     console.log("Data Removed");
                     count();
@@ -49,7 +56,7 @@ var reportModule = (function(){
                             //edit.parent().find('.save').disable(true);
                         }
                         else{
-                            $.post("/cp/index/save", {id: id, task: newDescr, hours: newHours}).done(function (data) {
+                            $.post(cfg.saveUrl, {id: id, task: newDescr, hours: newHours}).done(function (data) {
                                 console.log("Data Loaded: " + data);
                             });
                             trElem.find('td:eq(2)').text(newDescr);

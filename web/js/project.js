@@ -144,19 +144,6 @@ var projectModule = (function() {
                             var icons = [];
 
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                            if ( cfg.canDelete ) {
-
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-
-                            }
-                            if ( cfg.canEdit ) {
-
-                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
-
-                            }
-
                             if( row[9] == "INPROGRESS") {
 
                                 if ( cfg.canSuspend ) {
@@ -175,7 +162,18 @@ var projectModule = (function() {
 
                                 }
                             }
+                            if ( cfg.canEdit ) {
 
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+
+                            }
+                            if ( cfg.canDelete ) {
+
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+
+                            }
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
                         }

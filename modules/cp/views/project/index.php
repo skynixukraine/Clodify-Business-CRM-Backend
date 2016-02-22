@@ -58,9 +58,7 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
             findUrl     : '<?=Url::to(['project/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-
             canActivate : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-
             canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>
         })
     });

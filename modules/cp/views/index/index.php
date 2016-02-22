@@ -37,10 +37,8 @@ $this->params['menu'] = [
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
-                    <!--a href="<?=Url::toRoute(['index/delete', 'id' => $report->id])?>"><i class="fa fa-times delete" style="cursor: pointer"></i></a-->
-                    <i class="fa fa-times delete" style="cursor: pointer"></i>
-                    <!--a href="<?=Url::to(['index/save'])?>"><i class="fa fa-edit edit" style="cursor: pointer"></i></a-->
                     <i class="fa fa-edit edit" style="cursor: pointer"></i>
+                    <i class="fa fa-times delete" style="cursor: pointer"></i>
                 </td>
                 <?php endif;?>
             </tr>
@@ -102,7 +100,12 @@ $this->params['menu'] = [
     </div>
 <?php ActiveForm::end();?>
 <script>
-    $(function(){reportModule.init()})
+    $(function(){
+        reportModule.init({
+            deleteUrl: '<?=Url::toRoute(['index/delete'])?>',
+            saveUrl: '<?=Url::to(['index/save'])?>'
+        })
+    })
 </script>
 
 

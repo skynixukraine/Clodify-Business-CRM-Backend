@@ -33,7 +33,7 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'save'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -42,9 +42,11 @@ class InvoiceController extends DefaultController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index' => ['get', 'post'],
-                    'find'  => ['get', 'post'],
+                    'index'     => ['get', 'post'],
+                    'find'      => ['get', 'post'],
                     'create'    => ['get', 'post'],
+                    'view'      => ['get', 'post'],
+                    'save'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -138,6 +140,76 @@ class InvoiceController extends DefaultController
             return $this->redirect('index');
         }
         return $this->render('create', ['model' => $model]);
+    }
+
+    public function actionView()
+    {
+        if (( $id = Yii::$app->request->get("id") ) ) {
+
+            $model = Invoice::find()
+                ->where("id=:iD",
+                    [
+                        ':iD' => $id
+                    ])
+                ->one();
+        }
+        /** @var $model Invoice */
+        return $this->render('view', ['model' => $model,
+                                      'title' => 'You watch invoice #' . $model->id]);
+    }
+
+    public function actionSave()
+    {
+        if (( $id = Yii::$app->request->get("id") ) ) {
+
+            $model = Invoice::find()
+                ->where("id=:iD",
+                    [
+                        ':iD' => $id
+                    ])
+                ->one();
+        }
+        /** @var $model Invoice */
+        if( $model->status == Invoice::STATUS_NEW && $model->date_sent == null) {
+
+            Yii::$app->mailer->compose('invoice',
+                [
+                    'id' => $model->id,
+                    'nameCustomer' => $model->getUser()->one()->first_name . $model->getUser()->one()->last_name,
+                    'emailCustomer' => $model->getUser()->one()->email,
+                    'date_start' => $model->date_start,
+                    'date_end' => $model->date_end,
+                    'totalHours' => $model->total_hours,
+                    'subtotal' => $model->subtotal,
+                    'discount' => $model->discount,
+                    'total' => $model->total,
+                    'note' => $model->note,
+                    'date_created' => $model->date_created,
+                    'date_sent' => $model->date_sent,
+                    'date_paid' => $model->date_paid,
+                    'status' => $model->status,
+                ])
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo($model->getUser()->one()->email)
+                //->setCc('hrybukolha@gmail.com')
+                ->setCc('olha@webais.company')
+                ->setSubject('Invoice #' . $model->id)
+                ->send();
+
+            $connection = Yii::$app->db;
+            $connection->createCommand()
+                ->update(Invoice::tableName(), [
+
+                    'date_sent' => date('Y-m-d'),
+
+                ], 'id=:Id',
+                    [
+                        ':Id'    => $model->id,
+                    ])
+                ->execute();
+        }
+        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice # " . $model->id));
+        return $this->redirect(['invoice/index']);
     }
 
 }

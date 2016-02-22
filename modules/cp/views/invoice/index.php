@@ -51,7 +51,9 @@ $this->params['menu'] = [
         invoiceModule.init({
             deleteUrl   : '<?=Url::to(['invoice/index'])?>',
             findUrl     : '<?=Url::to(['invoice/find'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            viewUrl     : '<?=Url::to(['invoice/view'])?>',
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
         })
     });
 

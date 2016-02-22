@@ -6,12 +6,19 @@ var invoiceModule = (function() {
     var cfg = {
             deleteUrl   : '',
             findUrl     : '',
+            viewUrl     : '',
             canDelete   : null,
+            canView     : null,
         },
         dataTable,
         dataFilter = {
         },
         deleteModal;
+
+    function actionView( id )
+    {
+        document.location.href = cfg.viewUrl + "?id=" + id;
+    }
 
     function actionDelete( id, name, dataTable )
     {
@@ -127,6 +134,12 @@ var invoiceModule = (function() {
                             var icons = [];
 
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                            if ( cfg.canView ) {
+
+                                icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="View"></i>');
+
+                            }
                             if ( cfg.canDelete ) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
@@ -162,6 +175,13 @@ var invoiceModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+
+                });
+
+                dataTable.find("i[class*=view]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionView( id );
 
                 });
 
