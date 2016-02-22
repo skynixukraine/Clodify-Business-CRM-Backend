@@ -33,7 +33,7 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'save'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -46,7 +46,9 @@ class InvoiceController extends DefaultController
                     'find'      => ['get', 'post'],
                     'create'    => ['get', 'post'],
                     'view'      => ['get', 'post'],
-                    'save'      => ['get', 'post'],
+                    'send'      => ['get', 'post'],
+                    'paid'      => ['get', 'post'],
+                    'canceled'  => ['get', 'post'],
                 ],
             ],
         ];
@@ -158,7 +160,7 @@ class InvoiceController extends DefaultController
                                       'title' => 'You watch invoice #' . $model->id]);
     }
 
-    public function actionSave()
+    public function actionSend()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
 
@@ -174,25 +176,24 @@ class InvoiceController extends DefaultController
 
             Yii::$app->mailer->compose('invoice',
                 [
-                    'id' => $model->id,
-                    'nameCustomer' => $model->getUser()->one()->first_name . $model->getUser()->one()->last_name,
+                    'id'            => $model->id,
+                    'nameCustomer'  => $model->getUser()->one()->first_name . $model->getUser()->one()->last_name,
                     'emailCustomer' => $model->getUser()->one()->email,
-                    'date_start' => $model->date_start,
-                    'date_end' => $model->date_end,
-                    'totalHours' => $model->total_hours,
-                    'subtotal' => $model->subtotal,
-                    'discount' => $model->discount,
-                    'total' => $model->total,
-                    'note' => $model->note,
-                    'date_created' => $model->date_created,
-                    'date_sent' => $model->date_sent,
-                    'date_paid' => $model->date_paid,
-                    'status' => $model->status,
+                    'date_start'    => $model->date_start,
+                    'date_end'      => $model->date_end,
+                    'totalHours'    => $model->total_hours,
+                    'subtotal'      => $model->subtotal,
+                    'discount'      => $model->discount,
+                    'total'         => $model->total,
+                    'note'          => $model->note,
+                    'date_created'  => $model->date_created,
+                    'date_sent'     => $model->date_sent,
+                    'date_paid'     => $model->date_paid,
+                    'status'        => $model->status,
                 ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($model->getUser()->one()->email)
-                //->setCc('hrybukolha@gmail.com')
-                ->setCc('olha@webais.company')
+                ->setCc(Yii::$app->params['adminEmail'])
                 ->setSubject('Invoice #' . $model->id)
                 ->send();
 
@@ -211,5 +212,41 @@ class InvoiceController extends DefaultController
         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice # " . $model->id));
         return $this->redirect(['invoice/index']);
     }
+
+    public function actionPaid()
+    {
+        if (( $id = Yii::$app->request->get("id") ) ) {
+
+            $model = Invoice::find()
+                ->where("id=:iD",
+                    [
+                        ':iD' => $id
+                    ])
+                ->one();
+            $model->status = Invoice::STATUS_PAID;
+            $model->date_paid = date('Y-m-d');
+            $model->save(true, ['status', 'date_paid']);
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You paid invoice " . $id));
+            return $this->redirect(['invoice/index']);
+        }
+    }
+
+    public function actionCanceled()
+    {
+        if (( $id = Yii::$app->request->get("id") ) ) {
+
+            $model = Invoice::find()
+                ->where("id=:iD",
+                    [
+                        ':iD' => $id
+                    ])
+                ->one();
+            $model->status = Invoice::STATUS_CANCELED;
+            $model->save(true, ['status']);
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You canceled invoice " . $id));
+            return $this->redirect(['invoice/index']);
+        }
+    }
+
 
 }

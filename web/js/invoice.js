@@ -4,11 +4,15 @@
 var invoiceModule = (function() {
 
     var cfg = {
+            paidUrl     : '',
+            canceledUrl : '',
             deleteUrl   : '',
             findUrl     : '',
             viewUrl     : '',
             canDelete   : null,
             canView     : null,
+            canPaid     : null,
+            canCanceled : null,
         },
         dataTable,
         dataFilter = {
@@ -18,6 +22,16 @@ var invoiceModule = (function() {
     function actionView( id )
     {
         document.location.href = cfg.viewUrl + "?id=" + id;
+    }
+
+    function actionPaid( id )
+    {
+        document.location.href = cfg.paidUrl + "?id=" + id;
+    }
+
+    function actionCanceled( id )
+    {
+        document.location.href = cfg.canceledUrl + "?id=" + id;
     }
 
     function actionDelete( id, name, dataTable )
@@ -133,7 +147,26 @@ var invoiceModule = (function() {
 
                             var icons = [];
 
-                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                            if( row[10] == "NEW" || row[10] == "CANCELED" ) {
+
+                                if (cfg.canPaid) {
+
+                                    icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
+                                        'data-toggle="tooltip" data-placement="top" title="Paid"></i>');
+
+                                }
+
+                            }
+                            if( row[10] == "NEW" || row[10] == "PAID" ) {
+
+                                if (cfg.canCanceled) {
+
+                                    icons.push('<i class="fa fa-arrows-alt canceled" style="cursor: pointer" ' +
+                                        'data-toggle="tooltip" data-placement="top" title="Canceled"></i>');
+
+                                }
+
+                            }
                             if ( cfg.canView ) {
 
                                 icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
@@ -182,6 +215,18 @@ var invoiceModule = (function() {
 
                     var id     = $(this).parents("tr").find("td").eq(0).text();
                     actionView( id );
+
+                });
+                dataTable.find("i[class*=paid]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionPaid( id );
+
+                });
+                dataTable.find("i[class*=canceled]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionCanceled( id );
 
                 });
 

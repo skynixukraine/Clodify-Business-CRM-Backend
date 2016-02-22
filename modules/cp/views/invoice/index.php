@@ -49,11 +49,17 @@ $this->params['menu'] = [
     $(function(){
 
         invoiceModule.init({
+            paidUrl     : '<?=Url::to(['invoice/paid'])?>',
+            canceledUrl : '<?=Url::to(['invoice/canceled'])?>',
             deleteUrl   : '<?=Url::to(['invoice/index'])?>',
             findUrl     : '<?=Url::to(['invoice/find'])?>',
             viewUrl     : '<?=Url::to(['invoice/view'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+
+
         })
     });
 
