@@ -13,11 +13,14 @@ use Yii;
  * @property integer $is_pm
  * @property string $status
  *
- * @property Projects $project
- * @property Users $user
+ * @property Project $project
+ * @property User $user
  */
 class ProjectDeveloper extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE     = "ACTIVE";
+    const STATUS_INACTIVE   = "INACTIVE";
+    const STATUS_HIDDEN     = "HIDDEN";
     /**
      * @inheritdoc
      */
@@ -57,7 +60,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
      */
     public function getProject()
     {
-        return $this->hasOne(Projects::className(), ['id' => 'project_id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
 
     /**
@@ -65,6 +68,6 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
