@@ -310,10 +310,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function allCustomers()
     {
         return self::find()
-            ->from(User::tableName())
-            ->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
-            ->where(User::tableName() . ".is_delete=0")
-            ->groupBy(ProjectCustomer::tableName() . ".user_id")
+            //->from(User::tableName())
+            //->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                    User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
+            ->groupBy(User::tableName() . ".id")
             ->all();
     }
 
@@ -321,10 +322,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function allDevelopers()
     {
         return self::find()
-            ->from(User::tableName())
-            ->rightJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
-            ->where(User::tableName() . ".is_delete=0")
-            ->groupBy(ProjectDeveloper::tableName() . ".user_id")
+            //->from(User::tableName())
+            //->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
+            ->groupBy(User::tableName() . ".id")
             ->all();
     }
 
