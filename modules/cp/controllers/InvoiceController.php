@@ -17,6 +17,8 @@ use app\components\DateUtil;
 use app\models\Invoice;
 use app\models\User;
 use app\models\ProjectCustomer;
+//use kartik\mpdf\mPDF;
+use mPDF;
 
 class InvoiceController extends DefaultController
 {
@@ -33,7 +35,7 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'file'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -49,6 +51,7 @@ class InvoiceController extends DefaultController
                     'send'      => ['get', 'post'],
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
+                    'file'   => ['get', 'post'],
                 ],
             ],
         ];
@@ -246,6 +249,59 @@ class InvoiceController extends DefaultController
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You canceled invoice " . $id));
             return $this->redirect(['invoice/index']);
         }
+    }
+
+    public function actionFile()
+    {
+        $model = Invoice::find()
+            ->where("id=:iD",
+                [
+                    ':iD' => 4
+                ])
+            ->one();
+        /** @var  $model Invoice */
+        $content = $this->renderPartial('test', [
+            'id'            => $model->id,
+            'nameCustomer'  => $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+            'emailCustomer' => $model->getUser()->one()->email,
+            'date_start'    => $model->date_start,
+            'date_end'      => $model->date_end,
+            'totalHours'    => $model->total_hours,
+            'subtotal'      => $model->subtotal,
+            'discount'      => $model->discount,
+            'total'         => $model->total,
+            'note'          => $model->note,
+            'date_created'  => $model->date_created,
+            'date_sent'     => $model->date_sent,
+            'date_paid'     => $model->date_paid,
+            'status'        => $model->status,
+        ]);
+        $stylesheet = $this->renderPartial('style.css');
+
+        $pdf =  new mPDF();
+        $pdf->showImageErrors = true;
+        $pdf->SetHeader('Document Title|Center Text|{PAGENO}');
+        $pdf->SetFooter('Document Footer|Center Text|{PAGENO}');
+        $pdf->WriteHTML($stylesheet,1);
+        $pdf->WriteHTML($content);
+        $pdf->current_filename = 'TestPdfFile';
+        $pdf->AddPage();
+
+        return $pdf->Output();
+
+        /*$pdf =  new Pdf([
+            'mode'      => Pdf::MODE_UTF8,
+            'format'    => Pdf::FORMAT_A4,
+            'content'   => $content,
+            'methods'   => [
+                'SetHeader' => ['Document Title|Center Text|{PAGENO}'],
+                'SetFooter' => ['Document Footer|Center Text|{PAGENO}'],
+            ],
+            'orientation' => Pdf::ORIENT_LANDSCAPE,
+            'filename'    => 'TestPdfFile',
+
+        ]);
+        return $pdf->Output();*/
     }
 
 

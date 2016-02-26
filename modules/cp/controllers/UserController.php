@@ -172,16 +172,40 @@ class UserController extends DefaultController {
     /** Invited users add to database */
     public function actionInvite()
     {
-        /** @var  $model User */
         $model = new User();
-        if ( $model->load(Yii::$app->request->post())){
 
-            if( $model->validate()) {
+        if ( $model->load( Yii::$app->request->post() ) ) {
 
-                $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
-                return $this->refresh();
+            $userEmailes = User::find()
+                                ->where('email=:Email', [
+                                    ':Email' => $model->email
+                                ])->one();
 
+            /** @var $userEmailes User */
+            if( !empty( $userEmailes ) && $userEmailes->is_delete == 1) {
+
+                $userEmailes->is_delete = 0;
+                $userEmailes->is_active = 0;
+                $userEmailes->invite_hash = md5(time());
+                $userEmailes->first_name = $model->first_name;
+                $userEmailes->last_name = $model->last_name;
+                $userEmailes->role = $model->role;
+                $userEmailes->password = $model->password;
+                $userEmailes->rawPassword = $model->password;
+                $userEmailes->password = md5($model->password);
+                $userEmailes->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
+                return $this->redirect('index');
+
+            }else {
+
+                if( $model->validate()) {
+
+                    $model->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    return $this->redirect('index');
+
+                }
             }
         }
         return $this->render('invite',['model' => $model]);

@@ -66,16 +66,22 @@ class SiteController extends Controller
 
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->getUser()->is_delete == 0 && $model->login() ) {
+        if ( $model->load(Yii::$app->request->post()) && $model->getUser()->is_delete == 0 ) {
 
-            return $this->redirect(['cp/index']);
+            if( $model->login() ){
+
+                return $this->redirect(['cp/index']);
+
+            }else {
+
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
+                return $this->render('login', ['model' => $model]);
+            }
 
         }else {
 
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Enter your email and passwors"));
+            return $this->render('login', ['model' => $model]);
         }
 
     }
@@ -122,9 +128,11 @@ class SiteController extends Controller
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You user"));
             return $this->redirect(['/site/login', 'email'=>$model->email]);
 
+        }else {
+
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "sorry"));
+            return $this->redirect(['/']);
         }
-        Yii::$app->getSession()->setFlash('success', Yii::t("app", "sorry"));
-        return $this->redirect(['/']);
 
 
     }

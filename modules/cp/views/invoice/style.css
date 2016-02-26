@@ -1,0 +1,11 @@
+#one th, #one td  {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: left;
+}
+.two {
+    background-color:aliceblue;
+    color: #1b6d85;
+    padding:20px;"
+}
