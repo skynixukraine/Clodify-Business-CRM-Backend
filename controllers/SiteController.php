@@ -70,6 +70,15 @@ class SiteController extends Controller
 
             if( $model->login() ){
 
+                $modelUserLogins = User::find()
+                                    ->where('email=:Email',
+                                        [
+                                            ':Email' => $model->getUser()->email
+                                        ])
+                                    ->one();
+                /** @var $modelUserLogins User */
+                $modelUserLogins->date_login = date('Y-m-d');
+                $modelUserLogins->save(true ,['date_login']);
                 return $this->redirect(['cp/index']);
 
             }else {
@@ -116,14 +125,15 @@ class SiteController extends Controller
     public function actionInvite( $hash )
     {
         /** @var  $model User */
-        if( ($model      = User::find()
+        if( ($model = User::find()
                 ->where('invite_hash=:hash',
                     [
                         ':hash' => $hash
                     ])->one())) {
 
             $model->is_active = 1;
-            $model->invite_hash=null;
+            $model->invite_hash = null;
+            $model->date_signup = date('Y-m-d');
             $model->save();
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You user"));
             return $this->redirect(['/site/login', 'email'=>$model->email]);

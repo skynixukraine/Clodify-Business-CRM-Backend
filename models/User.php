@@ -279,6 +279,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->rawPassword = $this->password;
                 $this->password = md5($this->password);
             }
+
+            $this->date_signup = null;
+            $this->date_login = null;
         }
         /*else
             $this->modified = new Expression('NOW()');*/
