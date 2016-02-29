@@ -60,6 +60,7 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        /** Put the user's mail input if mail is not empty */
         if (($email = Yii::$app->request->get('email'))) {
 
             $model->email = $email;
@@ -70,6 +71,7 @@ class SiteController extends Controller
 
             if( $model->login() ){
 
+                /** Save date login when user login */
                 $modelUserLogins = User::find()
                                     ->where('email=:Email',
                                         [

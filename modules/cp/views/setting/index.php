@@ -22,16 +22,13 @@ $this->params['menu'] = [
 
 ];
 ?>
-
-<ul>
-    <?php  $currentUser = User::find()->where('id=:ID', [':ID' => Yii::$app->user->id])->one();
-    //var_dump($currentUser);
-   // exit();
-    /** @var $currentUser \app\models\User */?>
-    <li>First Name: <?php echo $currentUser->first_name?></li>
-    <li>Last Name: <?php echo $currentUser->last_name?></li>
-    <li>Email: <?php echo $currentUser->email?></li>
-</ul>
+<?php $form = ActiveForm::begin();?>
+    <?php /** @var $model User */?>
+    <?php echo $form->field( $model, 'first_name' )->textInput();?>
+    <?php echo $form->field( $model, 'last_name' )->textInput();?>
+    <?php echo $form->field( $model, 'email' )->textInput();?>
+    <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+<?php ActiveForm::end();?>
 
 <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])):?>
 <div class="box-body">

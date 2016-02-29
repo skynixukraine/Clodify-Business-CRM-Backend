@@ -51,7 +51,7 @@ class InvoiceController extends DefaultController
                     'send'      => ['get', 'post'],
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
-                    'file'   => ['get', 'post'],
+                    'file'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -282,12 +282,16 @@ class InvoiceController extends DefaultController
         $pdf->showImageErrors = true;
         $pdf->SetHeader('Document Title|Center Text|{PAGENO}');
         $pdf->SetFooter('Document Footer|Center Text|{PAGENO}');
+        $pdf->SetTitle('My first Pdf document');
+        $pdf->SetSubject('Learn how to create PDF document');
+        $pdf->Bookmark('Section 1', 0);
+        $pdf->SetAuthor('My Name');
         $pdf->WriteHTML($stylesheet,1);
         $pdf->WriteHTML($content);
         $pdf->current_filename = 'TestPdfFile';
         $pdf->AddPage();
 
-        return $pdf->Output();
+        return $pdf->Output('TestPdfFile.pdf', 'I');
 
         /*$pdf =  new Pdf([
             'mode'      => Pdf::MODE_UTF8,

@@ -98,9 +98,7 @@ class UserController extends DefaultController {
         }else{
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
-
         }
-
     }
 
     /** Value table (Manage Users) fields, filters, search */
@@ -182,6 +180,7 @@ class UserController extends DefaultController {
                                 ])->one();
 
             /** @var $userEmailes User */
+            /** Invite user that was deleted again */
             if( !empty( $userEmailes ) && $userEmailes->is_delete == 1) {
 
                 $userEmailes->is_delete = 0;
@@ -198,12 +197,12 @@ class UserController extends DefaultController {
                 return $this->redirect('index');
 
             }else {
-
+                /** Invite new user*/
                 if( $model->validate()) {
 
-                    $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
-                    return $this->redirect('index');
+                        $model->save();
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                        return $this->redirect('index');
 
                 }
             }

@@ -13,7 +13,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
-use yii\web\User;
+//use yii\web\User;
+use app\models\User;
 use app\models\Project;
 
 
@@ -34,6 +35,7 @@ class SettingController extends DefaultController
                     [
                         'actions'   => ['index', 'suspend', 'activate'],
                         'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
                 ],
             ],
@@ -43,7 +45,6 @@ class SettingController extends DefaultController
                     'index'     => ['get', 'post'],
                     'suspend'   => ['get', 'post'],
                     'activate'  => ['get', 'post'],
-
                 ],
             ],
         ];
@@ -51,8 +52,23 @@ class SettingController extends DefaultController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = User::find()
+            ->where('id=:ID', [
+                ':ID' => Yii::$app->user->id
+            ])->one();
+
+        if($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited yours data"));
+                return $this->redirect(['index']);
+            }
+        }
+        return $this->render("index", ['model' => $model]);
     }
+
     public function actionSuspend()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
@@ -65,10 +81,10 @@ class SettingController extends DefaultController
             $model->status = ProjectDeveloper::STATUS_INACTIVE;
             $model->save(true, ['status']);
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
-            return $this->redirect(['setting/index']);
         }
-
+        return $this->redirect(['setting/index']);
     }
+
     public function actionActivate()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
@@ -80,9 +96,8 @@ class SettingController extends DefaultController
             $model->status = ProjectDeveloper::STATUS_ACTIVE;
             $model->save(true, ['status']);
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));
-            return $this->redirect(['setting/index']);
         }
-
+        return $this->redirect(['setting/index']);
     }
 
 }
