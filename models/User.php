@@ -34,6 +34,7 @@ use yii\db\Expression;
  * @property integer $total_paid_hours
  * @property string $invite_hash
  * @property integer $is_delete
+
  *
  * @property ProjectCustomers[] $projectCustomers
  * @property Projects[] $projects

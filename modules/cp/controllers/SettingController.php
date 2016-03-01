@@ -69,6 +69,7 @@ class SettingController extends DefaultController
         return $this->render("index", ['model' => $model]);
     }
 
+
     public function actionSuspend()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {

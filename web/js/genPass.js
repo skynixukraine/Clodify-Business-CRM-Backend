@@ -24,7 +24,7 @@ var inviteModule = (function(){
             $('.generate').click(function(){
                 pass = generateRandomId();
                 console.log(pass);
-                $('#exampleInputPassword1').val(pass);
+                $('input[type="password"]').val(pass);
             })
 
         }

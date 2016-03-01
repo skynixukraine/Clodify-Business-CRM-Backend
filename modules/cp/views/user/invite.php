@@ -49,28 +49,26 @@ $this->params['menu'] = [
         'options' => [
 
         ]
-    ])->textInput( ['class'   => 'form-control',
-                            'id'    => 'exampleInputEmail1',
+    ])->textInput( ['class'         => 'form-control',
+                    'id'            => 'exampleInputEmail1',
                     'placeholder'   => 'Enter email',
-                            'type'  => 'email']
-    ) -> label( 'Email' );?>
+    ]) -> label( 'Email' );?>
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-9">
-            <?php echo $form->field( $model, 'password', [
+            <?php echo $form->field( $model, 'password',  [
 
-                'options' => [
+                'template' =>   '{label} ' .
+                                '<input class="form-control" placeholder="Enter password" style="display:none">' .
+                                '{input}' . '{error}'
 
-                ]
-            ])->textInput( [ 'class'   => 'form-control',
-                                     'id'   => 'exampleInputPassword1',
-                            'placeholder'   => 'Password']
-            ) -> label( 'Password' );?>
+            ])->input('password',['class' => 'form-control','placeholder' => 'Enter password'
+            ])->label('Password');?>
+
             </div>
             <div class="col-lg-3">
                 <?= Html::button( Yii::t('app', 'Generate'), ['class' => 'btn btn-primary generate']) ?>
-
             </div>
         </div>
     </div>
@@ -90,7 +88,7 @@ $this->params['menu'] = [
             <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
         </div>
         <script>
-            $(function(){inviteModule.init()})
+            $(function(){inviteModule.init();})
         </script>
 
 <?php ActiveForm::end();?>
