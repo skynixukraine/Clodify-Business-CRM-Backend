@@ -27,6 +27,7 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Login Date')?></th>
         <th class="date-col"><?=Yii::t('app', 'Signup Date')?></th>
+        <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
         <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
         <?php endif;?>

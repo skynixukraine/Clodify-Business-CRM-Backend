@@ -113,6 +113,10 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 7,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 8,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
 
