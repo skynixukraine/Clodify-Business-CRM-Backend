@@ -222,7 +222,6 @@ class ProjectController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT] ) ){
 
-
            if( $id = Yii::$app->request->get('id') ) {
 
                $model  = Project::find()
@@ -253,6 +252,7 @@ class ProjectController extends DefaultController
                        $model->customers = [];
                        foreach ($customers as $customer) {
 
+                           /** @var $customer ProjectCustomer */
                            $model->customers[] = $customer->user_id;
                        }
 

@@ -46,7 +46,6 @@ $this->params['menu'] = [
         <li>Status:          <?php echo $model->status;?></li>
     </ul>
 </div>
-
 <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
     <?= Html::a('SEND', ['invoice/send', 'id' => $model->id], ['class' => 'btn btn-primary'])?>
 <?php endif;?>

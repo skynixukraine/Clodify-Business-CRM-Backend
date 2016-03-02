@@ -24,6 +24,9 @@ use app\components\DateUtil;
  * @property string $date_sent
  * @property string $status
  * @property string $total_hours
+ * @property integer $contract_number
+ * @property integer $act_of_work
+
  *
  * @property Report[] $reports
  */
@@ -48,7 +51,7 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
 
-            [['id', 'user_id'], 'integer'],
+            [['id', 'user_id', 'contract_number', 'act_of_work'], 'integer'],
             [['subtotal', 'discount', 'total', 'total_hours'], 'number'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent'], 'safe'],
             [['status', 'note'], 'string']
@@ -74,6 +77,8 @@ class Invoice extends \yii\db\ActiveRecord
             'date_sent' => 'Date Sent',
             'status' => 'Status',
             'total_hours' => 'Total Hours',
+            'contract_number' => 'Contract Number',
+            'act_of_work' => 'Act of Work',
         ];
     }
 

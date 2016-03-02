@@ -17,7 +17,7 @@ use app\components\DateUtil;
 use app\models\Invoice;
 use app\models\User;
 use app\models\ProjectCustomer;
-//use kartik\mpdf\mPDF;
+use app\models\PaymentMethod;
 use mPDF;
 
 class InvoiceController extends DefaultController
@@ -35,7 +35,7 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'file'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -51,7 +51,6 @@ class InvoiceController extends DefaultController
                     'send'      => ['get', 'post'],
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
-                    'file'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -177,27 +176,34 @@ class InvoiceController extends DefaultController
         /** @var $model Invoice */
         if( $model->status == Invoice::STATUS_NEW && $model->date_sent == null) {
 
-            Yii::$app->mailer->compose('invoice',
-                [
-                    'id'            => $model->id,
-                    'nameCustomer'  => $model->getUser()->one()->first_name . $model->getUser()->one()->last_name,
-                    'emailCustomer' => $model->getUser()->one()->email,
-                    'date_start'    => $model->date_start,
-                    'date_end'      => $model->date_end,
-                    'totalHours'    => $model->total_hours,
-                    'subtotal'      => $model->subtotal,
-                    'discount'      => $model->discount,
-                    'total'         => $model->total,
-                    'note'          => $model->note,
-                    'date_created'  => $model->date_created,
-                    'date_sent'     => $model->date_sent,
-                    'date_paid'     => $model->date_paid,
-                    'status'        => $model->status,
-                ])
+            $method = PaymentMethod::find()->where('name = "bank_transfer"')->one();
+            $html = $this->renderPartial('invoicePDF', [
+                'id'            => $model->id,
+                'nameCustomer'  => $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+                'total'         => $model->total,
+                'numberContract'=> $model->contract_number,
+                'actWork'       => $model->act_of_work,
+                'dataFrom'      => date('j F', strtotime($model->date_start)),
+                'dataTo'        => date('j F', strtotime($model->date_end)),
+                'dataFromUkr'   => date('d.m.Y', strtotime($model->date_start)),
+                'dataToUkr'     => date('d.m.Y', strtotime($model->date_end)),
+                'paymentMethod' => $method->description,
+                'idCustomer'    => $model->getUser()->one()->id,
+            ]);
+
+            $pdf = new mPDF();
+            $pdf->WriteHTML($html);
+            $content = $pdf->Output('', 'S');
+
+            Yii::$app->mailer->compose('invoice', [
+                'id'            => $model->id,
+                'nameCustomer'  => $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+            ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($model->getUser()->one()->email)
-                ->setCc(Yii::$app->params['adminEmail'])
+                //->setCc(Yii::$app->params['adminEmail'])
                 ->setSubject('Invoice #' . $model->id)
+                ->attachContent($content, ['fileName' => 'Invoice.pdf'])
                 ->send();
 
             $connection = Yii::$app->db;
@@ -250,63 +256,5 @@ class InvoiceController extends DefaultController
             return $this->redirect(['invoice/index']);
         }
     }
-
-    public function actionFile()
-    {
-        $model = Invoice::find()
-            ->where("id=:iD",
-                [
-                    ':iD' => 4
-                ])
-            ->one();
-        /** @var  $model Invoice */
-        $content = $this->renderPartial('test', [
-            'id'            => $model->id,
-            'nameCustomer'  => $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
-            'emailCustomer' => $model->getUser()->one()->email,
-            'date_start'    => $model->date_start,
-            'date_end'      => $model->date_end,
-            'totalHours'    => $model->total_hours,
-            'subtotal'      => $model->subtotal,
-            'discount'      => $model->discount,
-            'total'         => $model->total,
-            'note'          => $model->note,
-            'date_created'  => $model->date_created,
-            'date_sent'     => $model->date_sent,
-            'date_paid'     => $model->date_paid,
-            'status'        => $model->status,
-        ]);
-        $stylesheet = $this->renderPartial('style.css');
-
-        $pdf =  new mPDF();
-        $pdf->showImageErrors = true;
-        $pdf->SetHeader('Document Title|Center Text|{PAGENO}');
-        $pdf->SetFooter('Document Footer|Center Text|{PAGENO}');
-        $pdf->SetTitle('My first Pdf document');
-        $pdf->SetSubject('Learn how to create PDF document');
-        $pdf->Bookmark('Section 1', 0);
-        $pdf->SetAuthor('My Name');
-        $pdf->WriteHTML($stylesheet,1);
-        $pdf->WriteHTML($content);
-        $pdf->current_filename = 'TestPdfFile';
-        $pdf->AddPage();
-
-        return $pdf->Output('TestPdfFile.pdf', 'I');
-
-        /*$pdf =  new Pdf([
-            'mode'      => Pdf::MODE_UTF8,
-            'format'    => Pdf::FORMAT_A4,
-            'content'   => $content,
-            'methods'   => [
-                'SetHeader' => ['Document Title|Center Text|{PAGENO}'],
-                'SetFooter' => ['Document Footer|Center Text|{PAGENO}'],
-            ],
-            'orientation' => Pdf::ORIENT_LANDSCAPE,
-            'filename'    => 'TestPdfFile',
-
-        ]);
-        return $pdf->Output();*/
-    }
-
 
 }
