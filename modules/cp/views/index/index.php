@@ -37,8 +37,10 @@ $this->params['menu'] = [
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
-                    <i class="fa fa-edit edit" style="cursor: pointer"></i>
-                    <i class="fa fa-times delete" style="cursor: pointer"></i>
+                    <?php if($report->invoice_id == null):?>
+                    <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                    <?php endif;?>
+                    <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                 </td>
                 <?php endif;?>
             </tr>

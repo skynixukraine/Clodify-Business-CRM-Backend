@@ -8,10 +8,9 @@
 use yii\helpers\Url;
 use app\models\Invoice;
 use app\models\Report;
+use app\models\PaymentMethod;
 use yii\helpers\Html;
-
-
-
+use yii\widgets\ActiveForm;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -46,6 +45,25 @@ $this->params['menu'] = [
         <li>Status:          <?php echo $model->status;?></li>
     </ul>
 </div>
+<label style="display: none"></label>
 <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
-    <?= Html::a('SEND', ['invoice/send', 'id' => $model->id], ['class' => 'btn btn-primary'])?>
+    <?php $form = ActiveForm::begin([
+                                    'action' =>['invoice/send'],
+                                    'options' => [
+                                        'class' => 'horizontal'
+                                    ]
+    ]);?>
+        <?php echo $form->field($model, 'id')
+                        ->textInput(['style' => 'display: none'])
+                        ->label(null,['style' => 'display: none']);?>
+
+        <?php $payMethods = PaymentMethod::find()->all();
+        $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name' );
+
+        echo $form->field( $model, 'method')
+                  ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
+                  ->label('Pay Methods');?>
+
+        <?= Html::submitButton( Yii::t('app', 'SEND'), ['class' => 'btn btn-primary']) ?>
+    <?php ActiveForm::end();?>
 <?php endif;?>
