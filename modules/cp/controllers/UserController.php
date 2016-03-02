@@ -149,7 +149,7 @@ class UserController extends DefaultController {
                 $model->phone,
                 $model->date_login,
                 $model->date_signup,
-                ( $model->is_active == 1 ? "Active " : "No Active" ),
+                ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
             ];
 

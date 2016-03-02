@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use app\models\User;
 use app\models\ProjectCustomer;
+use app\models\PaymentMethod;
 use app\components\DateUtil;
 
 /**
@@ -36,6 +37,7 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_CANCELED   = "CANCELED";
     const STATUS_PAID       = "PAID";
 
+    public $method;
     /**
      * @inheritdoc
      */
@@ -53,7 +55,7 @@ class Invoice extends \yii\db\ActiveRecord
 
             [['id', 'user_id', 'contract_number', 'act_of_work'], 'integer'],
             [['subtotal', 'discount', 'total', 'total_hours'], 'number'],
-            [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent'], 'safe'],
+            [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
             [['status', 'note'], 'string']
         ];
     }
