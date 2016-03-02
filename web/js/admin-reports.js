@@ -126,7 +126,7 @@ var adminReportModule = (function() {
                         "targets"   : 6,
                         "orderable" : true
                     },
-                    {
+                   /* {
                         "targets"   : 7,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
@@ -135,9 +135,9 @@ var adminReportModule = (function() {
                             /*if ( cfg.canDelete ) {
                              icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png" style="cursor: pointer">');
                              }*/
-                            return '<div class="actions">' + icons.join(" ") + '</div>';
+                    /*        return '<div class="actions">' + icons.join(" ") + '</div>';
                         }
-                    }
+                    }*/
                 ],
                 "ajax": {
                     "url"   :  cfg.findUrl,
