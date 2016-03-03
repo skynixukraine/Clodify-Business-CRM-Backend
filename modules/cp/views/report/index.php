@@ -67,7 +67,7 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Reporter name')?></th>
         <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
         <th><?=Yii::t('app', 'Is invoiced')?></th>
-        <th><?=Yii::t('app', 'Actions')?></th>
+        <!--th><//?=Yii::t('app', 'Actions')?></th-->
     </tr>
     </thead>
 </table>

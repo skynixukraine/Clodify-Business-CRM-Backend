@@ -26,6 +26,15 @@ $this->params['menu'] = [
 <div class = "box">
     <div class = "box-body no-padding">
         <table class = "table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Project</th>
+                <th>Name of Report</th>
+                <th>Hours</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
             <?php $reports = Report::getToDaysReports(Yii::$app->user->id);
             /** @var  $report Report */
             foreach($reports as $report):?>
