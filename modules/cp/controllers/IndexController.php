@@ -103,7 +103,7 @@ class IndexController extends DefaultController
 
                     $model->is_delete = 1;
                     $model->save(true, ['is_delete']);
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You deleted report"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been deleted"));
                     return $this->redirect(['index']);
                 }else{
 
