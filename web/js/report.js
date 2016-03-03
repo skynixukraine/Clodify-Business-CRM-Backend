@@ -3,7 +3,9 @@ var reportModule = (function(){
             var total = 0;
             for(var i = 0; i<$(document).find('.hour').length; i++ ){
                 var n = '.hour:eq('+ i +')';
-                total += parseFloat($(document).find(n).text());
+                if( ($(document).find(n).text()) != '' ) {
+                    total += parseFloat($(document).find(n).text());
+                }
             }
             $(document).find('#totalHours').html("Total: " + total + " hours");
             $(document).find('#totalHours').parent().css('text-align', 'center');
