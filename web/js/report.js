@@ -48,10 +48,16 @@ var reportModule = (function(){
                 edit.hide();
                 if(edit.parent().find('.save').length == 0){
                     edit.after('<button class="save btn btn-success btn-xs" type="submit">SAVE</button>');
+
+                    $('.hours').keypress(function(e) {
+                        if (!(e.which==8 || e.which==44 ||e.which==45 ||e.which==46 ||(e.which>47 && e.which<58))) return false;
+                    });
+
                     edit.parent().find('.save').click(function() {
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
-                        if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || ( newHours > 10 || newHours < 0 ) ) {
+
+                        if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || ( newHours > 10 || newHours <= 0 ) ) {
                             alert( "Please, enter correct data!" );
                             //edit.parent().find('.save').disable(true);
                         }
@@ -61,9 +67,9 @@ var reportModule = (function(){
                             });
                             trElem.find('td:eq(2)').text(newDescr);
                             trElem.find('td:eq(3)').text(newHours);
-                            count();
                             edit.show();
                             edit.parent().find('.save').hide();
+                            count();
                         }
                     })
                 }
