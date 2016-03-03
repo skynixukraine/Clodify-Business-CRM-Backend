@@ -141,7 +141,8 @@ class IndexController extends DefaultController
                     $models->task = $task;
                     $models->hours = $hours;
                     $total = $total + $hours;
-                    if( $total <= 12 ) {
+
+                    if( $total < 13 ) {
 
                         if ($models->save(true, ['id', 'task', 'hours'])) {
 

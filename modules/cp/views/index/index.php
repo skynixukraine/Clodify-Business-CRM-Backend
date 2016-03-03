@@ -30,7 +30,7 @@ $this->params['menu'] = [
             <tr>
                 <th>ID</th>
                 <th>Project</th>
-                <th>Name of Report</th>
+                <th>Task</th>
                 <th>Hours</th>
                 <th>Actions</th>
             </tr>
@@ -42,7 +42,7 @@ $this->params['menu'] = [
             <tr>
                 <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
-                <td><?= Html::encode($report->task)?></td>
+                <td  style="max-width: 900px"><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
