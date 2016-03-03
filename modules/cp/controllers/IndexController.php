@@ -98,8 +98,8 @@ class IndexController extends DefaultController
                     return $this->redirect(['index']);
                 }else{
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You do not delete report," .
-                                                                        " invoice is not null"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can't delete this report as
+                                                                                invoice has been generated"));
                     return $this->redirect(['index']);
                 }
             }
