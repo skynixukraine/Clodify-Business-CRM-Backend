@@ -78,7 +78,7 @@ class IndexController extends DefaultController
 
                     Yii::$app->user->getIdentity()->last_name;
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
                     return $this->refresh();
                 }else{
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
