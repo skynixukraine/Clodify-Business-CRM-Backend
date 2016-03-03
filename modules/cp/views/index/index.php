@@ -42,7 +42,7 @@ $this->params['menu'] = [
             <tr>
                 <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
-                <td  style="max-width: 900px"><?= Html::encode($report->task)?></td>
+                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
