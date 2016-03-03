@@ -7,6 +7,8 @@ var reportModule = (function(){
             }
             $(document).find('#totalHours').html("Total: " + total + " hours");
             $(document).find('#totalHours').parent().css('text-align', 'center');
+            $("#total").val(total);
+        //console.log(total);
         },
         cfg = {
             deleteUrl: "",
@@ -43,6 +45,7 @@ var reportModule = (function(){
                 var descr   = trElem.find('td:eq(2)').text();
                 var hours   = trElem.find('td:eq(3)').text();
                 var id      = trElem.find('td:eq(0)').text();
+                var total   = $("#total").val();
                 trElem.find('td:eq(2)').css('width:', '75%').html('<input style="width: 640px; height: 25px;" type="text" value="' + descr + '" class="description">');
                 trElem.find('td:eq(3)').css('width:', '40px').html('<input style="height: 25px; width: 40px; text-align: center;" type="text" value="' + hours + '" class="hours">');
                 edit.hide();
@@ -62,7 +65,7 @@ var reportModule = (function(){
                             //edit.parent().find('.save').disable(true);
                         }
                         else{
-                            $.post(cfg.saveUrl, {id: id, task: newDescr, hours: newHours}).done(function (data) {
+                            $.post(cfg.saveUrl, {id: id, task: newDescr, hours: newHours, total: total-hours}).done(function (data) {
                                 console.log("Data Loaded: " + data);
                             });
                             trElem.find('td:eq(2)').text(newDescr);

@@ -70,12 +70,21 @@ class IndexController extends DefaultController
         if ( $model->load(Yii::$app->request->post()) ) {
 
             $model->user_id = Yii::$app->user->id;
-            if( $model->validate()) {
+            if( $model->validate() ) {
 
-                Yii::$app->user->getIdentity()->last_name;
-                $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
-                return $this->refresh();
+                $model->total = $model->total + $model->hours;
+
+                if( $model->total <= 12 ) {
+
+                    Yii::$app->user->getIdentity()->last_name;
+                    $model->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You report has been added"));
+                    return $this->refresh();
+                }else{
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
+                                                                                Maximum total hours is 12"));
+                    return $this->render('index',['model' => $model]);
+                }
             }
         }
         return $this->render('index',['model' => $model]);
@@ -118,7 +127,8 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
             ( $reportId = Yii::$app->request->post('id') ) &&
             ( $task = Yii::$app->request->post('task') ) &&
-            ( $hours = Yii::$app->request->post('hours') ) ) || true ){
+            ( $hours = Yii::$app->request->post('hours') ) &&
+            ( $total = Yii::$app->request->post('total') )) || true ){
 
             $model = Report::getToDaysReports(Yii::$app->user->id);
 
@@ -130,21 +140,29 @@ class IndexController extends DefaultController
                     $models->id = $reportId;
                     $models->task = $task;
                     $models->hours = $hours;
+                    $total = $total + $hours;
+                    if( $total <= 12 ) {
 
-                    if( $models->save(true, ['id', 'task', 'hours']) ){
+                        if ($models->save(true, ['id', 'task', 'hours'])) {
 
-                        echo json_encode([
-                            "success"   => true
-                        ]);
+                            echo json_encode([
+                                "success" => true
+                            ]);
+                        } else {
+
+                            echo json_encode([
+                                "success" => false
+                            ]);
+                        }
                     }else{
-
-                        echo json_encode([
-                            "success"   => false
-                        ]);
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
+                                                                                Maximum total hours is 12"));
+                        return $this->redirect(['index']);
                     }
                 }
             }
         }
+        return $this->redirect(['index']);
     }
 
 

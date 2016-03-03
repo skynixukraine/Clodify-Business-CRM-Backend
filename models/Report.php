@@ -28,6 +28,7 @@ use yii\base\Model;
  */
 class Report extends \yii\db\ActiveRecord
 {
+    public $total;
 
     const STATUS_NEW        = "NEW";
     const STATUS_INVOICED   = "INVOICED";
@@ -54,7 +55,7 @@ class Report extends \yii\db\ActiveRecord
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
             [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
-            [['date_added', 'date_paid', 'date_report'], 'safe'],
+            [['date_added', 'date_paid', 'date_report', 'total'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
             [['task'], 'string', 'max' => 500]
@@ -121,6 +122,8 @@ class Report extends \yii\db\ActiveRecord
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
+       // var_dump($this->total);
+       // exit();
         if( $this->isNewRecord ){
 
             if( !$this->date_added ){

@@ -72,7 +72,9 @@ $this->params['menu'] = [
 
 <h4 class = "box-title" style="text-align: center">NEW REPORT</h4>
 
-<?php $form = ActiveForm::begin();?>
+<?php $form = ActiveForm::begin();
+/** @var $model Report */?>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2">
@@ -103,6 +105,11 @@ $this->params['menu'] = [
 
                         ]
                 ])->textInput();?>
+
+                <?php echo $form->field($model, 'total')
+                    ->textInput(['style' => 'display: none',
+                                 'id' => 'total'])
+                    ->label(null,['style' => 'display: none']);?>
             </div>
             <div class="col-lg-1" style="top: 24px">
                     <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
