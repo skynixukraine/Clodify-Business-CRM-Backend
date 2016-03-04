@@ -58,6 +58,13 @@ var reportModule = (function(){
                         if (!(e.which==8 || e.which==44 ||e.which==45 ||e.which==46 ||(e.which>47 && e.which<58))) return false;
                     });
 
+                    var enter = $('html').keydown(function(eventObject){
+                        if (event.keyCode == 13) {
+                           
+                           edit.parent().find('.save').click();
+                        }
+                    });
+
                     edit.parent().find('.save').click(function() {
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
