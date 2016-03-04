@@ -122,17 +122,18 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
-    public static function getDevOrAdminProjects($userId)
+    public static function getDevOrAdminOrPmProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
             ' projects.status
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
-            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA )
+            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP )
             WHERE users.id=:userId AND projects.is_delete = 0;
             GROUP by projects.id', [
             ':role'     => User::ROLE_DEV,
             ':roleA'     => User::ROLE_ADMIN,
+            ':roleP'     => User::ROLE_PM,
             ':userId'   => $userId
         ])->all();
     }
