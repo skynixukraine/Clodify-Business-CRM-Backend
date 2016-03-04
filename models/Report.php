@@ -29,6 +29,7 @@ use yii\base\Model;
 class Report extends \yii\db\ActiveRecord
 {
     public $total;
+    public $dateFilter;
 
     const STATUS_NEW        = "NEW";
     const STATUS_INVOICED   = "INVOICED";

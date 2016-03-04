@@ -7,10 +7,11 @@ var reportModule = (function(){
                     total += parseFloat($(document).find(n).text());
                 }
             }
+            total = total.toFixed(1);
             $(document).find('#totalHours').html("Total: " + total + " hours");
             $(document).find('#totalHours').parent().css('text-align', 'center');
             $("#total").val(total);
-        //console.log(total);
+            console.log(total);
         },
         cfg = {
             deleteUrl: "",
@@ -60,7 +61,7 @@ var reportModule = (function(){
 
                     var enter = $('html').keydown(function(eventObject){
                         if (event.keyCode == 13) {
-                           
+
                            edit.parent().find('.save').click();
                         }
                     });

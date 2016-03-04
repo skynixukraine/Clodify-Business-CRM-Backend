@@ -29,7 +29,7 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index' ],
+                        'actions' => [ 'index', 'delete', 'save' ],
                         'allow' => true,
                         'roles' => [User::ROLE_PM ],
                     ],
@@ -93,7 +93,7 @@ class IndexController extends DefaultController
     /** Delete developer`s report */
     public function actionDelete()
     {
-        if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
+        //if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
 
             if( ( $id =  Yii::$app->request->get("id") ) ){
 
@@ -112,12 +112,12 @@ class IndexController extends DefaultController
                     return $this->redirect(['index']);
                 }
             }
-        }else{
+        //}else{
 
-            throw new \Exception('Ooops, you do not have priviledes for this action');
+        //    throw new \Exception('Ooops, you do not have priviledes for this action');
 
-        }
-        Yii::$app->end();
+       // }
+        return $this->redirect(['index']);
     }
 
     /** Add new report */
