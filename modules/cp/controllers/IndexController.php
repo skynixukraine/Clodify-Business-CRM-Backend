@@ -67,6 +67,7 @@ class IndexController extends DefaultController
     public function actionIndex()
     {
         $model = new Report();
+        $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
         if ( $model->load(Yii::$app->request->post()) ) {
 
             $model->user_id = Yii::$app->user->id;
@@ -87,7 +88,7 @@ class IndexController extends DefaultController
                 }
             }
         }
-        return $this->render('index',['model' => $model]);
+        return $this->render('index' ,['model' => $model]);
     }
 
     /** Delete developer`s report */

@@ -22,13 +22,29 @@ $this->params['menu'] = [
 
 ];
 ?>
-    <?//php echo Html::label('Date filter :');
+<?php $form = ActiveForm::begin(['options' => [
+                                                'class' => 'horizontal'
+                                            ]]);
+/** @var $model Report */?>
+    <?php echo $form->field( $model, 'dateFilter', [
 
-   // echo Html::dropDownList('project', null, [ ], ['class'=>"form-control"]) ?>
+            'options' => [
 
+            ]
+        ])->dropDownList( [
+                            '1' => 'Today`s Reports',
+                            '2' => 'This week reports',
+                            '3' => 'This month reports',
+                            '4' => 'Last month reports',
+                        ], ['class'=>"form-control", 'id'=>'dateFilter', 'selected' => 1] )->label('Date filter :');?>
+
+
+<?php ActiveForm::end();?>
+
+<label>Reports</label>
 <div class = "box">
     <div class = "box-body no-padding">
-        <table class = "table">
+        <table class = "table load">
             <thead>
             <tr>
                 <th>ID</th>
@@ -38,23 +54,24 @@ $this->params['menu'] = [
                 <th>Actions</th>
             </tr>
             </thead>
-            <?php $reports = Report::getToDaysReports(Yii::$app->user->id);
+            <?php $reports = Report::getReports(Yii::$app->user->id, $model->dateFilter);
             /** @var  $report Report */
-            foreach($reports as $report):?>
+
+            foreach($reports->each() as $report):
+                //var_dump($report);
+                //exit();?>
             <tbody>
             <tr>
                 <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode($report->hours)?></td>
-                <?//php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) : ?>
                 <td>
                     <?php if($report->invoice_id == null):?>
                     <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
                     <?php endif;?>
                     <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                 </td>
-                <?//php endif;?>
             </tr>
             </tbody>
             <?php endforeach;?>
@@ -124,7 +141,8 @@ $this->params['menu'] = [
     $(function(){
         reportModule.init({
             deleteUrl: '<?=Url::toRoute(['index/delete'])?>',
-            saveUrl: '<?=Url::to(['index/save'])?>'
+            saveUrl: '<?=Url::to(['index/save'])?>',
+            indexUrl: '<?=Url::to(['index/index'])?>'
         })
     })
 </script>

@@ -11,12 +11,20 @@ var reportModule = (function(){
             $(document).find('#totalHours').html("Total: " + total + " hours");
             $(document).find('#totalHours').parent().css('text-align', 'center');
             $("#total").val(total);
-            console.log(total);
         },
         cfg = {
             deleteUrl: "",
-            saveUrl: ""
+            saveUrl: "",
+            indexUrl: "",
         };
+
+    $(document).find("#dateFilter").change(function() {
+        var filter = $(this).val();
+        //$.post(cfg.indexUrl, {dateFilter: filter});
+        document.location.href = cfg.indexUrl + "?dateFilter=" + filter;
+        console.log(filter);
+    });
+
 
     return {
         init:function( config ) {
@@ -60,7 +68,7 @@ var reportModule = (function(){
                     });
 
                     var enter = $('html').keydown(function(eventObject){
-                        if (event.keyCode == 13) {
+                        if (event.keyCode == 13 || event.keyCode == 0x0D) {
 
                            edit.parent().find('.save').click();
                         }
