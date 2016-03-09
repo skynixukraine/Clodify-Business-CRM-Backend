@@ -8,13 +8,14 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/user.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "Manage Users");
 $this->params['breadcrumbs'][]  = $this->title;
-
-$this->params['menu'] = [
-    [
-        'label' => Yii::t('app', 'Invite User'),
-        'url'   => Url::to(['user/invite'])
-    ]
-];
+if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ] ) ) {
+    $this->params['menu'] = [
+        [
+            'label' => Yii::t('app', 'Invite User'),
+            'url' => Url::to(['user/invite'])
+        ]
+    ];
+}
 
 ?>
 <table id="user-table" class="table table-hover">

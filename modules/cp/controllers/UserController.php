@@ -37,8 +37,13 @@ class UserController extends DefaultController {
                     [
                         'actions' => [ 'find', 'index', 'invite', 'delete'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN ],
-                    ]
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ],
+                    ],
+                    [
+                        'actions' => [ 'find', 'index', 'delete'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_PM],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -171,42 +176,46 @@ class UserController extends DefaultController {
     /** Invited users add to database */
     public function actionInvite()
     {
-        $model = new User();
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ] ) ) {
+            $model = new User();
 
-        if ( $model->load( Yii::$app->request->post() ) ) {
+            if ($model->load(Yii::$app->request->post())) {
 
-            $userEmailes = User::find()
-                                ->where('email=:Email', [
-                                    ':Email' => $model->email
-                                ])->one();
+                $userEmailes = User::find()
+                    ->where('email=:Email', [
+                        ':Email' => $model->email
+                    ])->one();
 
-            /** @var $userEmailes User */
-            /** Invite user that was deleted again */
-            if( !empty( $userEmailes ) && $userEmailes->is_delete == 1) {
+                /** @var $userEmailes User */
+                /** Invite user that was deleted again */
+                if (!empty($userEmailes) && $userEmailes->is_delete == 1) {
 
-                $userEmailes->is_delete = 0;
-                $userEmailes->is_active = 0;
-                $userEmailes->invite_hash = md5(time());
-                $userEmailes->first_name = $model->first_name;
-                $userEmailes->last_name = $model->last_name;
-                $userEmailes->role = $model->role;
-                $userEmailes->password = $model->password;
-                $userEmailes->rawPassword = $model->password;
-                $userEmailes->password = md5($model->password);
-                $userEmailes->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
-                return $this->redirect('index');
+                    $userEmailes->is_delete = 0;
+                    $userEmailes->is_active = 0;
+                    $userEmailes->invite_hash = md5(time());
+                    $userEmailes->first_name = $model->first_name;
+                    $userEmailes->last_name = $model->last_name;
+                    $userEmailes->role = $model->role;
+                    $userEmailes->password = $model->password;
+                    $userEmailes->rawPassword = $model->password;
+                    $userEmailes->password = md5($model->password);
+                    $userEmailes->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
+                    return $this->redirect('index');
 
-            }else {
-                /** Invite new user*/
-                if( $model->validate()) {
+                } else {
+                    /** Invite new user*/
+                    if ($model->validate()) {
 
                         $model->save();
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
                         return $this->redirect('index');
 
+                    }
                 }
             }
+        } else{
+            throw new \Exception('Ooops, you do not have priviledes for this action');
         }
         return $this->render('invite',['model' => $model]);
     }

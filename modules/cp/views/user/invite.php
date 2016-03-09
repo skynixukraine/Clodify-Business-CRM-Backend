@@ -22,8 +22,8 @@ $this->params['menu'] = [
 ];
 ?>
 
-<?php $form = ActiveForm::begin();?>
-
+<?php $form = ActiveForm::begin();
+/** @var $model User */ ?>
     <?php echo $form->field( $model, 'first_name', [
 
         'options' => [
