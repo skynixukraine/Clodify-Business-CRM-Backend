@@ -22,10 +22,9 @@ var invoiceCreateModule = (function() {
             filterProjectsSelect = $( filterProjectsSelect );
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
-                console.log(id);
                 dataFilter['user_id'] = id;
-                console.log(dataFilter['user_id']);
                 dataTable.api().ajax.reload();
+                console.log(id);
             });
 
 
@@ -73,26 +72,31 @@ var invoiceCreateModule = (function() {
                 "columnDefs": [
                     {
                         "targets"   : 0,
-                        "data"      : 4,
+                        "data"      : 0,
                         "orderable" : true
                     },
                     {
                         "targets"   : 1,
-                        "data"      : 3,
+                        "data"      : 4,
                         "orderable" : true
                     },
                     {
                         "targets"   : 2,
-                        "data"      : 5,
+                        "data"      : 3,
                         "orderable" : true
                     },
                     {
                         "targets"   : 3,
-                        "data"      : 1,
+                        "data"      : 5,
                         "orderable" : true
                     },
                     {
                         "targets"   : 4,
+                        "data"      : 1,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
                         "data"      : 7,
                         "orderable" : true
                     },

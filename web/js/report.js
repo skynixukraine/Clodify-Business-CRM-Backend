@@ -75,7 +75,6 @@ var reportModule = (function(){
                            edit.parent().find('.save').click();
                         }
                     });
-
                     edit.parent().find('.save').click(function() {
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
@@ -88,6 +87,7 @@ var reportModule = (function(){
                             $.post(cfg.saveUrl, {id: id, task: newDescr, hours: newHours, total: total-hours}).done(function (data) {
                                 console.log("Data Loaded: " + data);
                             });
+                            console.log(total);
                             trElem.find('td:eq(2)').text(newDescr);
                             trElem.find('td:eq(3)').text(newHours);
                             edit.show();

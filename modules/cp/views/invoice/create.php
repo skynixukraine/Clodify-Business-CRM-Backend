@@ -77,6 +77,7 @@ $this->params['menu'] = [
     <table class = "table" id="invoice-create-table">
         <thead>
         <tr>
+            <th><?=Yii::t('app', 'ID Report')?> </th>
             <th><?=Yii::t('app', 'Dev Name')?> </th>
             <th><?=Yii::t('app', 'Project Name')?></th>
             <th><?=Yii::t('app', 'Reported')?></th>

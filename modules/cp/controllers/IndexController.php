@@ -129,35 +129,33 @@ class IndexController extends DefaultController
             ( $hours = Yii::$app->request->post('hours') ) &&
             ( $total = Yii::$app->request->post('total') )) || true ){
 
-            $model = Report::getToDaysReports(Yii::$app->user->id);
+            $model = Report::findOne( $reportId );
+            $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
 
-            foreach ( $model as $models ) {
+            if( $model->id == $reportId ) {
 
-                if( $models->id == $reportId ) {
+                /** @var $model Report */
+                $model->id = $reportId;
+                $model->task = $task;
+                $model->hours = $hours;
 
-                    /** @var $model Report */
-                    $models->id = $reportId;
-                    $models->task = $task;
-                    $models->hours = $hours;
+                if( $total + $hours < 13 ) {
 
-                    if( $total + $hours < 13 ) {
+                    if ($model->save(true, ['id', 'task', 'hours'])) {
 
-                        if ($models->save(true, ['id', 'task', 'hours'])) {
+                        echo json_encode([
+                            "success" => true
+                        ]);
+                    } else {
 
-                            echo json_encode([
-                                "success" => true
-                            ]);
-                        } else {
-
-                            echo json_encode([
-                                "success" => false
-                            ]);
-                        }
-                    }else{
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
-                                                                                Maximum total hours is 12"));
-                        return $this->redirect(['index']);
+                        echo json_encode([
+                            "success" => false
+                        ]);
                     }
+                }else{
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
+                                                                            Maximum total hours is 12"));
+                    return $this->redirect(['index']);
                 }
             }
         }
