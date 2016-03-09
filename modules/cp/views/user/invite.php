@@ -26,12 +26,13 @@ $this->params['menu'] = [
 /** @var $model User */ ?>
     <?php echo $form->field( $model, 'first_name', [
 
-        'options' => [
+        'options' => []
 
         ]
-    ])->textInput( [ 'class'   => 'form-control',
-                            'id'    => 'exampleInputEmail1',
-                    'placeholder'   => 'First name']
+   )->textInput( [ 'class'        => 'form-control',
+                     //'id'           => 'exampleInputEmail1',
+                     'placeholder'  => 'First name',
+           ]
     ) -> label( 'First name' );?>
 
     <?php echo $form->field( $model, 'last_name', [
@@ -40,18 +41,19 @@ $this->params['menu'] = [
 
         ]
     ])->textInput( ['class'   => 'form-control',
-                            'id'    => 'exampleInputEmail1',
+                       //     'id'    => 'exampleInputEmail1',
                     'placeholder'   => 'Last name']
     ) -> label( 'Last name' );?>
 
     <?php echo $form->field( $model, 'email', [
 
-        'options' => [
+        'options' => [ 'unique'=>true]
 
-        ]
-    ])->textInput( ['class'         => 'form-control',
+    ]
+    )->textInput( ['class'         => 'form-control',
                     'id'            => 'exampleInputEmail1',
                     'placeholder'   => 'Enter email',
+                    'type'          => 'email'
     ]) -> label( 'Email' );?>
 
     <div class="container-fluid">

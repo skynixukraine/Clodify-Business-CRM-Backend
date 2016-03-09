@@ -96,7 +96,7 @@ class UserController extends DefaultController {
                 $model->save(true, ['is_delete']);
 
                 return json_encode([
-                    "message"   => Yii::t("app", "User #" . $id ." has been deleted "),
+                    "message"   => Yii::t("app", "User # " . $id ." has been deleted "),
                     //"success"   => true
                 ]);
             }
@@ -179,7 +179,7 @@ class UserController extends DefaultController {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ] ) ) {
             $model = new User();
 
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
                 $userEmailes = User::find()
                     ->where('email=:Email', [
@@ -190,6 +190,7 @@ class UserController extends DefaultController {
                 /** Invite user that was deleted again */
                 if (!empty($userEmailes) && $userEmailes->is_delete == 1) {
 
+
                     $userEmailes->is_delete = 0;
                     $userEmailes->is_active = 0;
                     $userEmailes->invite_hash = md5(time());
@@ -199,17 +200,21 @@ class UserController extends DefaultController {
                     $userEmailes->password = $model->password;
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
-                    $userEmailes->save();
+                    if ($model->validate()) {
+
+                        $userEmailes->save();
+                    }
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
                     return $this->redirect('index');
+
 
                 } else {
                     /** Invite new user*/
                     if ($model->validate()) {
 
-                        $model->save();
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
-                        return $this->redirect('index');
+                    $model->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    return $this->redirect('index');
 
                     }
                 }
