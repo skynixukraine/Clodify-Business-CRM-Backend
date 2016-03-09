@@ -60,7 +60,7 @@ class Report extends \yii\db\ActiveRecord
             [['date_added', 'date_paid', 'date_report', 'total'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
-            [['task'], 'string', 'min' => 30, 'max' => 500]
+            [['task'], 'string', 'min' => 30, 'max' => 500 ]
         ];
     }
 

@@ -89,9 +89,10 @@ class UserController extends DefaultController {
                 $model  = User::findOne( $id );
                 $model->is_delete = 1;
                 $model->save(true, ['is_delete']);
+
                 return json_encode([
-                    "message"   => Yii::t("app", "You delete user " . $id),
-                    "success"   => true
+                    "message"   => Yii::t("app", "User #" . $id ." has been deleted "),
+                    //"success"   => true
                 ]);
             }
 

@@ -115,7 +115,9 @@ $this->params['menu'] = [
                         'options' => [
 
                     ]
-                ])->textInput()->label( 'Text field with task description' );?>
+                ])->textInput([
+                    'pattern' => '^(\S+\s{0,1})+$'
+                ])->label( 'Text field with task description' );?>
             </div>
 
             <div class="col-lg-1">
