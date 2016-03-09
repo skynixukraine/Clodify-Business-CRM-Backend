@@ -73,9 +73,7 @@ class IndexController extends DefaultController
             $model->user_id = Yii::$app->user->id;
             if( $model->validate() ) {
 
-                $model->total = $model->total + $model->hours;
-
-                if( $model->total <= 12 ) {
+                if( $model->total + $model->hours <= 12 ) {
 
                     Yii::$app->user->getIdentity()->last_name;
                     $model->save();
@@ -141,9 +139,8 @@ class IndexController extends DefaultController
                     $models->id = $reportId;
                     $models->task = $task;
                     $models->hours = $hours;
-                    $total = $total + $hours;
 
-                    if( $total < 13 ) {
+                    if( $total + $hours < 13 ) {
 
                         if ($models->save(true, ['id', 'task', 'hours'])) {
 

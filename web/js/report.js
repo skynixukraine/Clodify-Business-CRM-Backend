@@ -9,8 +9,10 @@ var reportModule = (function(){
             }
             total = total.toFixed(1);
             $(document).find('#totalHours').html("Total: " + total + " hours");
+
             $(document).find('#totalHours').parent().css('text-align', 'center');
             $("#total").val(total);
+            console.log(total);
         },
         cfg = {
             deleteUrl: "",
