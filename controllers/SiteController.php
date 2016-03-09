@@ -66,43 +66,32 @@ class SiteController extends Controller
             $model->email = $email;
 
         }
+        if ( $model->load(Yii::$app->request->post()) ) {
 
-        if ( $model->load(Yii::$app->request->post()) && $model->getUser()->is_delete == 0 ) {
+            if ($model->login()) {
 
-            if( $model->getUser()->is_active == 1){
+                /** Save date login when user login */
+                $modelUserLogins = User::find()
+                    ->where('email=:Email',
+                        [
+                            ':Email' => $model->getUser()->email
+                        ])
+                    ->one();
+                /** @var $modelUserLogins User */
+                $modelUserLogins->date_login = date('Y-m-d');
+                $modelUserLogins->save(true, ['date_login']);
+                return $this->redirect(['cp/index']);
 
-                if ($model->login()) {
+            } else {
 
-                    /** Save date login when user login */
-                    $modelUserLogins = User::find()
-                        ->where('email=:Email',
-                            [
-                                ':Email' => $model->getUser()->email
-                            ])
-                        ->one();
-                    /** @var $modelUserLogins User */
-                    $modelUserLogins->date_login = date('Y-m-d');
-                    $modelUserLogins->save(true, ['date_login']);
-                    return $this->redirect(['cp/index']);
-
-                } else {
-
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
-                    return $this->render('login', ['model' => $model]);
-                }
-            }else{
-
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Activate your login by email"));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
                 return $this->render('login', ['model' => $model]);
-
             }
-
         }else {
 
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Enter your email and passwors"));
             return $this->render('login', ['model' => $model]);
         }
-
     }
 
     /** Log out user*/
