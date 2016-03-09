@@ -26,7 +26,7 @@ $this->params['menu'] = [
     <?php /** @var $model User */?>
     <?php echo $form->field( $model, 'first_name' )->textInput();?>
     <?php echo $form->field( $model, 'last_name' )->textInput();?>
-    <?php echo $form->field( $model, 'email' )->textInput();?>
+    <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
     <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end();?>
 
