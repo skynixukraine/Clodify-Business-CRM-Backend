@@ -52,7 +52,7 @@ class Invoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-
+            [['user_id', 'date_start', 'date_end', 'total'], 'required'],
             [['id', 'user_id', 'contract_number', 'act_of_work'], 'integer'],
             [['subtotal', 'discount', 'total', 'total_hours'], 'number'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
