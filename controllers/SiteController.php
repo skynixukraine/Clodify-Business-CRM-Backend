@@ -80,7 +80,14 @@ class SiteController extends Controller
                 /** @var $modelUserLogins User */
                 $modelUserLogins->date_login = date('Y-m-d');
                 $modelUserLogins->save(true, ['date_login']);
-                return $this->redirect(['cp/index']);
+                if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
+
+                    return $this->redirect(['cp/index']);
+                }
+                if ( User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])){
+
+                    return $this->redirect(['cp/user/index']);
+                }
 
             } else {
 
