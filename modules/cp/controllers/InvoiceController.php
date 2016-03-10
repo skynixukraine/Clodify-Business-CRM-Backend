@@ -37,7 +37,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT],
                     ],
                 ],
             ],

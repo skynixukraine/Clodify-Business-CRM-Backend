@@ -148,7 +148,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "invoice" ? " active" : "")?>">
                     <a href="<?=Url::to(['invoice/index']);?>">
                         <i class="fa fa-money"></i> <span>Invoices</span>
