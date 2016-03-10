@@ -170,6 +170,7 @@ class Project extends \yii\db\ActiveRecord
                     ->insert(ProjectCustomer::tableName(), [
                         'project_id' => $this->id,
                         'user_id' => $customer,
+                       // 'receive_invoices' => 1,//when add project to some user receive_invoices from project_customers = 1
                     ])->execute();
             }
         }

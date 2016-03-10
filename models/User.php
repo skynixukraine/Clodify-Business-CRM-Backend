@@ -287,6 +287,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             $this->date_signup = null;
             $this->date_login = null;
+            //$this->getCustomers()->one()->receive_invoices = 1;
         }
         /*else
             $this->modified = new Expression('NOW()');*/

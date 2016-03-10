@@ -179,7 +179,7 @@ class UserController extends DefaultController {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ] ) ) {
             $model = new User();
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->load(Yii::$app->request->post())) {
 
                 $userEmailes = User::find()
                     ->where('email=:Email', [
@@ -200,10 +200,7 @@ class UserController extends DefaultController {
                     $userEmailes->password = $model->password;
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
-                    if ($model->validate()) {
-
-                        $userEmailes->save();
-                    }
+                    $userEmailes->save();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
                     return $this->redirect('index');
 
