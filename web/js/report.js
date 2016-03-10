@@ -66,13 +66,15 @@ var reportModule = (function(){
                     edit.after('<button class="save btn btn-success btn-xs" type="submit">SAVE</button>');
 
                     $('.hours').keypress(function(e) {
-                        if (!(e.which==8 || e.which==44 ||e.which==45 ||e.which==46 ||(e.which>47 && e.which<58))) return false;
+                        if (!(e.which==8 || e.which==44 ||e.which==45 ||e.which==46 ||(e.which>47 && e.which<58) || e.which==13)) return false;
                     });
 
-                    var enter = $('html').keydown(function(eventObject){
-                        if (event.keyCode == 13 || event.keyCode == 0x0D) {
+                    var enter = $(document).keypress(function(ev){
+                        if (ev.keyCode == 13 ) {
 
-                           edit.parent().find('.save').click();
+                            console.log('yes');
+
+                            edit.parent().find('.save').click();
                         }
                     });
                     edit.parent().find('.save').click(function() {
