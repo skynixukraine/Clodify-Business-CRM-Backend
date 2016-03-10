@@ -14,6 +14,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
+use DateTime;
 class IndexController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -68,6 +69,25 @@ class IndexController extends DefaultController
     {
         $model = new Report();
         $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
+        $date = new DateTime;
+
+        if( $model->dateFilter == 2 ) {
+
+            $model->dateStartReport = $date->modify("last Monday")->format('d/m/Y');
+            $model->dateEndReport = $date->modify("next Sunday")->format('d/m/Y');
+        }
+        if( $model->dateFilter == 3 ) {
+
+            $model->dateStartReport = $date->modify("first day of this month")->format('d/m/Y');
+            $model->dateEndReport = $date->modify("last day of this month")->format('d/m/Y');
+        }
+        if( $model->dateFilter == 4 ) {
+
+            $model->dateEndReport = $date->modify("last day of previous month")->format('d/m/Y');
+            $model->dateStartReport = $date->modify("first day of this month")->format('d/m/Y');
+
+        }
+
         if ( $model->load(Yii::$app->request->post()) ) {
 
             $model->user_id = Yii::$app->user->id;

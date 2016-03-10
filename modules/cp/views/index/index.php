@@ -29,8 +29,10 @@ $this->params['menu'] = [
     <?php echo $form->field( $model, 'dateFilter', [
 
             'options' => [
-
-            ]
+                           'style' => [
+                                        'width'=>"170px"
+                                      ]
+                         ]
         ])->dropDownList( [
                             '1' => 'Today`s Reports',
                             '2' => 'This week reports',
@@ -38,7 +40,11 @@ $this->params['menu'] = [
                             '4' => 'Last month reports',
                         ], ['class'=>"form-control", 'id'=>'dateFilter', 'selected' => 1] )->label('Date filter :');?>
 
-
+    <?php if($model->dateFilter == 1):?>
+        <label style="visibility: hidden"></label>
+    <?php else:?>
+        <label>Your reports from <?php echo $model->dateStartReport?> to <?php echo $model->dateEndReport?></label>
+    <?php endif;?>
 <?php ActiveForm::end();?>
 
 <label>Reports</label>

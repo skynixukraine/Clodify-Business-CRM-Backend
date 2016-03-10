@@ -31,6 +31,8 @@ class Report extends \yii\db\ActiveRecord
 {
     public $total;
     public $dateFilter;
+    public $dateStartReport;
+    public $dateEndReport;
 
     const STATUS_NEW        = "NEW";
     const STATUS_INVOICED   = "INVOICED";
