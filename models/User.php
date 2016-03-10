@@ -71,6 +71,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['role'], 'string'],
             [['password', 'email', 'first_name', 'last_name'], 'required'],
             [['email'], 'unique'],
+            ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete'], 'integer'],
             [['phone'], 'string', 'max' => 25],
@@ -79,8 +80,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['tags'], 'string', 'max' => 500],
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^[A-Za-z]*$/i'],
-            ['email', 'match', 'pattern' => '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$'],
-            ['password', 'match', 'pattern' => '/^[A-Za-z0-9]*$/i'],
+            ['password', 'match', 'pattern' => '/^\S*$/i'],
 
         ];
     }
