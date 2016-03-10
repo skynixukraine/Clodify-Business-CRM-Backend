@@ -37,7 +37,12 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                    ],
+                    [
+                        'actions'   => ['index', 'find', 'view'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_CLIENT],
                     ],
                 ],
             ],
@@ -134,9 +139,9 @@ class InvoiceController extends DefaultController
     {
         $model = new Invoice();
 
-        if($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
 
-            if($model->validate()){
+            if ($model->validate()) {
 
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));

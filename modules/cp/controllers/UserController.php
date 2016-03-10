@@ -201,7 +201,7 @@ class UserController extends DefaultController {
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
                     $userEmailes->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite the deleted user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
                     return $this->redirect('index');
 
 

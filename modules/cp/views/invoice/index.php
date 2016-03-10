@@ -15,14 +15,16 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/invoice.js');
 $this->title                    = Yii::t("app", "Invoices");
-$this->params['breadcrumbs'][]  = $this->title;
+if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
+    $this->params['breadcrumbs'][] = $this->title;
 
-$this->params['menu'] = [
-    [
-        'label' => Yii::t('app', 'Create an Invoice'),
-        'url' => Url::to(['invoice/create'])
-    ]
-                        ];
+    $this->params['menu'] = [
+        [
+            'label' => Yii::t('app', 'Create an Invoice'),
+            'url' => Url::to(['invoice/create'])
+        ]
+    ];
+}
 ?>
 
 <table class="table table-hover" id="invoice_table">
