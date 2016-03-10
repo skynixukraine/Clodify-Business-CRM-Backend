@@ -26,19 +26,21 @@ $this->params['menu'] = [
 /** @var $model User */ ?>
     <?php echo $form->field( $model, 'first_name')
         ->textInput( [ 'class'        => 'form-control',
-                     'placeholder'  => 'First name',
+                       'placeholder'  => 'First name',
+                       'pattern'      => '^[a-zA-Z]*$',
         ])-> label( 'First name' );?>
 
     <?php echo $form->field( $model, 'last_name')
         ->textInput( ['class'   => 'form-control',
-                    'placeholder'   => 'Last name'
+                      'placeholder'   => 'Last name',
+                      'pattern'       => '^[a-zA-Z]*$',
         ])-> label( 'Last name' );?>
 
     <?php echo $form->field( $model, 'email')
-        ->textInput( ['class'         => 'form-control',
-                    'placeholder'   => 'Enter email',
-                    'type'          => 'email',
-                    'pattern'       => '^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$',
+        ->textInput( ['class'       => 'form-control',
+                      'placeholder'   => 'Enter email',
+                      'type'          => 'email',
+                      'pattern'       => '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$',
         ])-> label( 'Email' );?>
 
     <div class="container-fluid">
