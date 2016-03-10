@@ -96,7 +96,7 @@ class SiteController extends Controller
             }
         }else {
 
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Enter your email and passwors"));
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Enter your email and password"));
             return $this->render('login', ['model' => $model]);
         }
     }
