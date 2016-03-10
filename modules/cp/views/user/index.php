@@ -8,7 +8,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/user.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "Manage Users");
 $this->params['breadcrumbs'][]  = $this->title;
-if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN ] ) ) {
+if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'Invite User'),
