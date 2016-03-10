@@ -74,9 +74,14 @@ $this->params['menu'] = [
                 <td class="hour"><?= Html::encode($report->hours)?></td>
                 <td>
                     <?php if($report->invoice_id == null):?>
-                    <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                        <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
-                    <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                    <?php if($report->invoice_id != null):?>
+                        <i class="fa fa-edit edit" style="cursor: pointer; visibility: hidden" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                    <?php endif;?>
+
                 </td>
             </tr>
             </tbody>
