@@ -53,7 +53,7 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_start",] );?>
+            ])->textInput( ['required', 'class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_start"] );?>
 
             <?php echo $form->field( $model, 'date_end', [
 
@@ -62,7 +62,7 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
+            ])->textInput( ['required','class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
 
             <?php echo $form->field( $model, 'discount')->textInput();?>
 

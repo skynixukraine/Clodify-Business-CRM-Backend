@@ -36,27 +36,29 @@ var invoiceCreateModule = (function() {
             filterDateStartSelect = $( filterDateStartSelect );
             filterDateStartSelect.datepicker({
                 format : 'dd/mm/yyyy',
-                autoclose: true
+                autoclose: true,
+                defaultViewDate: firstDayOfCurrMonth
             }).on("hide", function( event ){
                 var startDate = filterDateStartSelect.val();
                 dataFilter['date_start'] = startDate;
                 dataTable.api().ajax.reload();
             }).datepicker("setDate", firstDayOfCurrMonth);
 
-            dataFilter['date_start'] = $("#date_start").val();
+            //dataFilter['date_start'] = $("#date_start").val();
 
 
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
                 format : 'dd/mm/yyyy',
-                autoclose: true
+                autoclose: true,
+                defaultViewDate: currentDay
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['date_end'] = endDate;
                 dataTable.api().ajax.reload();
             }).datepicker("setDate", currentDay);
 
-            dataFilter['date_end'] = $("#date_end").val();
+            //dataFilter['date_end'] = $("#date_end").val();
 
 
             dataTable = $('#invoice-create-table').dataTable({
