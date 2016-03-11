@@ -119,7 +119,6 @@ var userModule = (function() {
                         "targets"   : 8,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
-
                             var icons = [];
                             //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canDelete ) {
@@ -151,7 +150,24 @@ var userModule = (function() {
                 "serverSide": true
             });
 
+            var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {
+
+                dataTable.find("td").click(function(){
+
+                    dataTable.find("tr[class*=active]").removeClass( "active" );
+                    $(this).parents("tr").addClass("active");
+                    id = $(this).parents("tr").find("td").eq(0).text();
+                    name   = $(this).parents("tr").find("td").eq(1).text();
+
+                });
+                $(document).keydown(function(e){
+                    if (e.keyCode == 46) {
+
+                        //console.log(id);
+                        actionDelete( id, name, dataTable );
+                    }
+                });
 
                 dataTable.find("img[class*=edit]").click(function(){
 
