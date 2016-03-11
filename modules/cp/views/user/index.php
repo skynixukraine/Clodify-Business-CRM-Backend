@@ -36,7 +36,6 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     </thead>
 </table>
 <script>
-
     $(function(){
 
         userModule.init({

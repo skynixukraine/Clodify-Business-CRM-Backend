@@ -114,8 +114,16 @@ class UserController extends DefaultController {
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query          = User::find();
 
+        if( User::hasPermission([User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN])) {
+
+            $query = User::find();
+        }
+
+        if( User::hasPermission([User::ROLE_CLIENT])){
+
+            $query = User::allClientWorkers(Yii::$app->user->id);
+        }
         $columns        = [
             'id',
             'first_name',

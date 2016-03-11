@@ -320,8 +320,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function allCustomers()
     {
         return self::find()
-            //->from(User::tableName())
-            //->rightJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id")
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                     User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
             ->groupBy(User::tableName() . ".id")
@@ -332,8 +330,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function allDevelopers()
     {
         return self::find()
-            //->from(User::tableName())
-            //->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".user_id=id")
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                     User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
             ->groupBy(User::tableName() . ".id")
@@ -350,5 +346,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }
+
+    /** Find all users who work on Client`s project*/
+    public static function allClientWorkers($clientId)
+    {
+        return self::find()
+            ->from(User::tableName())
+            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.user_id=' . User::tableName() .
+                '.id AND ' . User::tableName() . '.id=:clientId', [':clientId' => $clientId])
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
+                ProjectCustomer::tableName() . '.project_id')
+           ->groupBy(ProjectDeveloper::tableName() . '.user_id');
+    }
+
 
 }
