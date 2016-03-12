@@ -45,7 +45,7 @@ $this->params['menu'] = [
             'options' => [
 
             ]
-        ])->textInput(["class" => "form-control"])->label( 'Jira code' );?>
+        ])->textInput(["class" => "form-control"])->label( 'JIRA' );?>
     </div>
 
     <div class="form-group">
@@ -96,7 +96,8 @@ $this->params['menu'] = [
                 [
                     'multiple'  => "true",
                     'class'     => "form-control"
-                ]);
+                ])
+            ->label('Clients');
         ?>
     </div>
     <div class="form-group">
