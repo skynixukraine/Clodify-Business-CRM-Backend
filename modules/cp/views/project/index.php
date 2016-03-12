@@ -30,9 +30,9 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
     <tr>
         <th><?=Yii::t('app', 'ID')?> </th>
         <th><?=Yii::t('app', 'Name')?></th>
-        <th><?=Yii::t('app', 'Jira Code')?></th>
+        <th><?=Yii::t('app', 'JIRA')?></th>
         <th><?=Yii::t('app', 'Total Logged, h')?></th>
-        <th><?=Yii::t('app', 'Total Paid, h')?></th>
+        <th id="role"><?=Yii::t('app', 'Total Paid, h')?></th>
         <th><?=Yii::t('app', 'Date Start')?></th>
         <th><?=Yii::t('app', 'Date End')?></th>
         <th><?=Yii::t('app', 'Developers')?></th>
@@ -43,9 +43,9 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
         <?php endif;?>
     </tr>
     </thead>
-
 </table>
 
+<input id="user_role" style="visibility: hidden" value='<?php echo User::findOne(Yii::$app->user->id)->role;?>' title="role">
 <script>
 
     $(function(){
