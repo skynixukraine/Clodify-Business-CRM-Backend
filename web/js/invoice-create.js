@@ -13,6 +13,8 @@ var invoiceCreateModule = (function() {
         dataFilter = {
         },
         deleteModal;
+    document.getElementById("date_start").required = true;
+    document.getElementById("date_end").required = true;
 
     return {
         init: function( config ){
