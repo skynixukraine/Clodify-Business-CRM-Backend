@@ -81,4 +81,16 @@ class ProjectCustomer extends \yii\db\ActiveRecord
             ->all();
 
     }
+
+    /** Find all users who work on Client`s project*/
+    public static function allClientWorkers($clientId)
+    {
+        return self::find()
+            ->select(ProjectDeveloper::tableName() . '.user_id')
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
+                ProjectCustomer::tableName() . '.project_id')
+            ->where(ProjectCustomer::tableName() . '.user_id=:clientId', [':clientId' => $clientId])
+            ->groupBy(ProjectDeveloper::tableName() . '.user_id')
+            ->all();
+    }
 }

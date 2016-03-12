@@ -149,10 +149,10 @@ class SiteController extends Controller
             return $this->redirect(['/site/login', 'email'=>$model->email]);
 
         }else {
-
             if( Yii::$app->user->id != null ){
 
                 Yii::$app->user->logout();
+
             }
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Sorry, but this link is expired.
             Please contact administrator if you wish to activate your account"));

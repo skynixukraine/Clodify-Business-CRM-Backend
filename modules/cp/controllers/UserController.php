@@ -122,7 +122,13 @@ class UserController extends DefaultController {
 
         if( User::hasPermission([User::ROLE_CLIENT])){
 
-            $query = User::allClientWorkers(Yii::$app->user->id);
+            $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+            $arrayWorkers = [];
+            foreach($workers as $worker){
+                $arrayWorkers[]= $worker->user_id;
+            }
+            $query = User::find()
+            ->where(User::tableName() . '.id IN (' . implode( ', ', $arrayWorkers ) . ')') ;
         }
         $columns        = [
             'id',

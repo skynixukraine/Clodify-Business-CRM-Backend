@@ -347,17 +347,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
     }
 
-    /** Find all users who work on Client`s project*/
-    public static function allClientWorkers($clientId)
-    {
-        return self::find()
-            ->from(User::tableName())
-            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.user_id=' . User::tableName() .
-                '.id AND ' . User::tableName() . '.id=:clientId', [':clientId' => $clientId])
-            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
-                ProjectCustomer::tableName() . '.project_id')
-           ->groupBy(ProjectDeveloper::tableName() . '.user_id');
-    }
-
-
 }
