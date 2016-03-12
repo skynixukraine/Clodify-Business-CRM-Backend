@@ -55,7 +55,7 @@ class Report extends \yii\db\ActiveRecord
         public function rules()
     {
         return [
-            [['project_id', 'user_id', 'task'], 'required'],
+            [['project_id', 'user_id', 'task', 'hours'], 'required'],
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
             [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
