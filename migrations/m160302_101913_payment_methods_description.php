@@ -6,7 +6,7 @@ class m160302_101913_payment_methods_description extends Migration
 {
     public function up()
     {
-        $this->alterColumn('payment_methods', 'description', 'MEDIUMTEXT');
+
     }
 
     public function down()

@@ -6,6 +6,7 @@ class m160302_101023_payment_methods_insert_bank_transfer extends Migration
 {
     public function up()
     {
+        $this->alterColumn('payment_methods', 'description', 'MEDIUMTEXT');
         $this->insert('payment_methods', [
             'name' => 'bank_transfer',
             'description' => '
