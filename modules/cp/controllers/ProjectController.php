@@ -266,7 +266,7 @@ class ProjectController extends DefaultController
                    }
                }else{
 
-                   Yii::$app->getSession()->setFlash('success', Yii::t("app", "Oops, sorry, this project is deleted and can not be accessible anymore"));
+                   Yii::$app->getSession()->setFlash('error', Yii::t("app", "Oops, sorry, this project is deleted and can not be accessible anymore"));
                    return $this->redirect(['index']);
                }
 
@@ -304,7 +304,7 @@ class ProjectController extends DefaultController
 
                 }else{
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "This project is already active"));
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "This project is already active"));
 
                 }
 
@@ -339,7 +339,7 @@ class ProjectController extends DefaultController
 
                 } else {
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "This project is already suspend"));
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "This project is already suspend"));
 
                 }
                 return $this->render('index', ['model' => $model]);

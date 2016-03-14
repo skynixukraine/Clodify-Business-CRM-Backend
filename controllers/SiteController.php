@@ -91,14 +91,11 @@ class SiteController extends Controller
 
             } else {
 
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "No user is registered on this email"));
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
                 return $this->render('login', ['model' => $model]);
             }
-        }else {
-
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Enter your email and password"));
-            return $this->render('login', ['model' => $model]);
         }
+        return $this->render('login', ['model' => $model]);
     }
 
     /** Log out user*/
@@ -154,7 +151,7 @@ class SiteController extends Controller
                 Yii::$app->user->logout();
 
             }
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Sorry, but this link is expired.
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this link is expired.
             Please contact administrator if you wish to activate your account"));
         }
         return $this->redirect(['/']);

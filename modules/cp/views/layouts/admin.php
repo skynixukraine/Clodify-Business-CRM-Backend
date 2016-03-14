@@ -197,7 +197,16 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </script>
             </div>
             <?php endif; ?>
-
+            <?php if (\Yii::$app->getSession()->hasFlash("error") ) : ?>
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i><?=Yii::t("app", "Alert")?>!</h4>
+                    <?=Yii::$app->getSession()->getFlash("error");?>
+                    <script>
+                        setTimeout(function(){$(".alert.alert-warning").slideUp()}, 5000);
+                    </script>
+                </div>
+            <?php endif; ?>
             <?=$content?>
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->

@@ -232,7 +232,7 @@ class InvoiceController extends DefaultController
                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
             }else {
 
-               Yii::$app->getSession()->setFlash('success', Yii::t("app", "You DONT sent information about invoice.
+               Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
                                                                         Choose the pay method!"));
            }
         }

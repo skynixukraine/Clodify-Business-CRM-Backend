@@ -100,7 +100,7 @@ class IndexController extends DefaultController
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
                     return $this->refresh();
                 }else{
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
                                                                                 Maximum total hours is 12"));
                     return $this->render('index',['model' => $model]);
                 }
@@ -126,7 +126,7 @@ class IndexController extends DefaultController
                     return $this->redirect(['index']);
                 }else{
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can't delete this report as
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this report as
                                                                                 invoice has been generated"));
                     return $this->redirect(['index']);
                 }
@@ -173,7 +173,7 @@ class IndexController extends DefaultController
                         ]);
                     }
                 }else{
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You can not add this report.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
                                                                             Maximum total hours is 12"));
                     return $this->redirect(['index']);
                 }
