@@ -52,7 +52,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'status', 'jira_code'], 'required'],
+            [['name', 'status'], 'required'],
             [['customers', 'developers'], 'required', 'on' => 'admin'],
             [['total_logged_hours', 'total_paid_hours', 'is_delete'], 'integer'],
             [['status'], 'string'],
