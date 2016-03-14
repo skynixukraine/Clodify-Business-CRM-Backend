@@ -142,7 +142,6 @@ class SiteController extends Controller
 
                 Yii::$app->user->logout();
             }
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You user"));
             return $this->redirect(['/site/login', 'email'=>$model->email]);
 
         }else {

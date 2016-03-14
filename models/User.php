@@ -347,4 +347,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
     }
 
+    public static function generatePassword()
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789';
+        $numChars = strlen($chars);
+        $string = '';
+        for ($i = 0; $i < 8; $i++) {
+            $string .= substr($chars, rand(1, $numChars) - 1, 1);
+        }
+        return $string;
+    }
+
 }

@@ -40,25 +40,6 @@ $this->params['menu'] = [
                       'type'          => 'email',
         ])-> label( 'Email' );?>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-9">
-            <?php echo $form->field( $model, 'password',  [
-
-                'template' =>   '{label} ' .
-                                '<input class="form-control" placeholder="Enter password" style="display:none">' .
-                                '{input}' . '{error}'
-
-            ])->input('password',['class' => 'form-control','placeholder' => 'Enter password'
-            ])->label('Password');?>
-
-            </div>
-            <div class="col-lg-3">
-                <?= Html::button( Yii::t('app', 'Generate'), ['class' => 'btn btn-primary generate']) ?>
-            </div>
-        </div>
-    </div>
-
     <div>
         <?php echo $form->field($model, 'role')->dropDownList([
             User::ROLE_ADMIN    => 'ADMIN',
@@ -70,11 +51,7 @@ $this->params['menu'] = [
           ['prompt' => 'Choose...']
         );?>
     </div>
-        <div>
-            <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
-        </div>
-        <script>
-            $(function(){inviteModule.init();})
-        </script>
-
+    <div>
+        <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
+    </div>
 <?php ActiveForm::end();?>

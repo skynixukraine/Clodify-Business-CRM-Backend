@@ -200,10 +200,10 @@ class UserController extends DefaultController {
                         ':Email' => $model->email
                     ])->one();
 
+                $model->password = User::generatePassword();
                 /** @var $userEmailes User */
                 /** Invite user that was deleted again */
                 if (!empty($userEmailes) && $userEmailes->is_delete == 1) {
-
 
                     $userEmailes->is_delete = 0;
                     $userEmailes->is_active = 0;
@@ -217,7 +217,6 @@ class UserController extends DefaultController {
                     $userEmailes->save();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
                     return $this->redirect('index');
-
 
                 } else {
                     /** Invite new user*/
