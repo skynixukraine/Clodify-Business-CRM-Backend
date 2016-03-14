@@ -87,10 +87,10 @@ class ProjectController extends DefaultController
             'name',
             'jira_code',
             'total_logged_hours',];
-        //if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
 
             $columns[] = 'total_paid_hours';
-        //}
+        }
         array_push($columns, 'date_start',
                              'date_end',
                              'first_name',
@@ -146,10 +146,10 @@ class ProjectController extends DefaultController
                 '; ' . $model->jira_code .
                 '; ' . $model->total_logged_hours;
 
-           // if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
 
                 $row = $row .  '; ' . $model->total_paid_hours;
-            //}
+            }
             $row = $row . '; ' . $model->date_start .
                 '; ' . $model->date_end .
                 '; ' . implode(", ", $developersNames) .
