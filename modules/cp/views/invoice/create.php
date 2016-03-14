@@ -53,7 +53,7 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['required', 'class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_start"] );?>
+            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_start"] );?>
 
             <?php echo $form->field( $model, 'date_end', [
 
@@ -62,7 +62,7 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['required','class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
+            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
 
             <?php echo $form->field( $model, 'discount')->textInput();?>
 
@@ -73,7 +73,6 @@ $this->params['menu'] = [
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
 
 <?php ActiveForm::end();?>
-
     <table class = "table" id="invoice-create-table">
         <thead>
         <tr>
@@ -85,13 +84,12 @@ $this->params['menu'] = [
             <th><?=Yii::t('app', 'Hours')?></th>
         </tr>
         </thead>
-
   </table>
 <script>
     $(function(){
 
         invoiceCreateModule.init({
-            findUrl     : '<?=Url::to(['report/find'])?>',
+            findUrl     : '<?=Url::to(['report/find'])?>'
         })
     });
 </script>

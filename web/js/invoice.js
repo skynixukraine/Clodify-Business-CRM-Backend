@@ -12,7 +12,7 @@ var invoiceModule = (function() {
             canDelete   : null,
             canView     : null,
             canPaid     : null,
-            canCanceled : null,
+            canCanceled : null
         },
         dataTable,
         dataFilter = {

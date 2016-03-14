@@ -105,7 +105,7 @@ class InvoiceController extends DefaultController
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
-            /* @var $model \app\models\Invoice */
+        /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
 
             $list[] = [

@@ -4,7 +4,7 @@
 
 var invoiceCreateModule = (function() {
     var cfg = {
-            findUrl     : '',
+            findUrl     : ''
         },
         dataTable,
         filterProjectsSelect = "#invoice-user_id",
@@ -47,7 +47,6 @@ var invoiceCreateModule = (function() {
             }).datepicker("setDate", firstDayOfCurrMonth);
 
             //dataFilter['date_start'] = $("#date_start").val();
-
 
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
@@ -103,7 +102,7 @@ var invoiceCreateModule = (function() {
                         "targets"   : 5,
                         "data"      : 7,
                         "orderable" : true
-                    },
+                    }
                 ],
                 "ajax": {
                     "url"   :  cfg.findUrl,

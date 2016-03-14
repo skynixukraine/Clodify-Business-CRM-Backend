@@ -86,14 +86,16 @@ class ProjectController extends DefaultController
             'id',
             'name',
             'jira_code',
-            'total_logged_hours',
-            'total_paid_hours',
-            'date_start',
-            'date_end',
-            'first_name',
-            'first_name',
-            'status'
-        ];
+            'total_logged_hours',];
+        //if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+
+            $columns[] = 'total_paid_hours';
+        //}
+        array_push($columns, 'date_start',
+                             'date_end',
+                             'first_name',
+                             'first_name',
+                             'status');
 
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -139,18 +141,22 @@ class ProjectController extends DefaultController
                 $customersNames[] = $customer->first_name;
             }
             /* @var $model \app\models\Project */
-            $list[] = [
-                $model->id,
-                $model->name,
-                $model->jira_code,
-                $model->total_logged_hours,
-                ( User::hasPermission( [User::ROLE_PM] ) ? " - Not Available - " : $model->total_paid_hours ),
-                $model->date_start,
-                $model->date_end,
-                implode(', ', $developersNames),
-                implode(', ', $customersNames),
-                $model->status
-            ];
+            $row = '' . $model->id .
+                '; ' . $model->name .
+                '; ' . $model->jira_code .
+                '; ' . $model->total_logged_hours;
+
+           // if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+
+                $row = $row .  '; ' . $model->total_paid_hours;
+            //}
+            $row = $row . '; ' . $model->date_start .
+                '; ' . $model->date_end .
+                '; ' . implode(", ", $developersNames) .
+                '; ' . implode(", ", $customersNames) .
+                '; ' . $model->status;
+
+            $list[] =   explode("; ", $row);
         }
 
         $data = [

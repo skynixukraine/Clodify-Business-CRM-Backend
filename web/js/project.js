@@ -13,6 +13,7 @@ var projectModule = (function() {
             canEdit     : null,
             canActivate : null,
             canSuspend  : null,
+            canSeeHours : null
         },
         dataTable,
         dataFilter = {
@@ -83,8 +84,102 @@ var projectModule = (function() {
 
         init: function( config ){
 
-
             cfg = $.extend(cfg, config);
+            var columns = [
+
+                {
+                    "targets"   : 0,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 1,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 2,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 3,
+                    "orderable" : true
+                }
+            ], index = 3;
+
+            if( cfg.canSeeHours){
+                index++;
+                columns.push({
+                        "targets"   : index,
+                        "orderable" : true
+                    });
+            }
+            index++;
+            columns.push(
+                {
+                    "targets"   : index,
+                    "orderable" : false
+                },
+                {
+                    "targets"   : index,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : index,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : index,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : index,
+                    "orderable" : true
+                }
+            );
+
+            if(cfg.canActivate || cfg.canSuspend || cfg.canDelete || cfg.canEdit || cfg.canPaid)
+            columns.push(
+                {
+                    "targets"   : 10,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+
+                        var icons = [];
+
+                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                        if( row[9] == "INPROGRESS") {
+
+                            if ( cfg.canSuspend ) {
+
+                                icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Suspend"></i>');
+
+                            }
+
+                        }else {
+
+                            if (cfg.canActivate) {
+
+                                icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
+
+                            }
+                        }
+                        if ( cfg.canEdit ) {
+
+                            icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+
+                        }
+                        if ( cfg.canDelete ) {
+
+                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+
+                        }
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                    }
+                });
             dataTable = $('#project_table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -94,92 +189,7 @@ var projectModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-                "columnDefs": [
-
-                    {
-                        "targets"   : 0,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 1,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 2,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 5,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 6,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 7,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 8,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 9,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 10,
-                        "orderable" : false,
-                        "render"    : function (data, type, row) {
-
-                            var icons = [];
-
-                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                            if( row[9] == "INPROGRESS") {
-
-                                if ( cfg.canSuspend ) {
-
-                                    icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Suspend"></i>');
-
-                                }
-
-                            }else {
-
-                                if (cfg.canActivate) {
-
-                                    icons.push('<i class="fa fa-check-square-o activate" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
-
-                                }
-                            }
-                            if ( cfg.canEdit ) {
-
-                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
-
-                            }
-                            if ( cfg.canDelete ) {
-
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-
-                            }
-                            return '<div class="actions">' + icons.join(" ") + '</div>';
-
-                        }
-                    }
-
-                ],
+                "columnDefs": columns,
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {

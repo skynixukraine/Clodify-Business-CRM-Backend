@@ -26,7 +26,6 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     ];
 }
 ?>
-
 <table class="table table-hover" id="invoice_table">
     <thead>
     <tr>

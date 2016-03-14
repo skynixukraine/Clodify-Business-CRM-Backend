@@ -24,7 +24,6 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
                                         ] : $this->params['menu'] = []
 
 ?>
-
 <table class="table table-hover" id="project_table">
     <thead>
     <tr>
@@ -32,7 +31,9 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
         <th><?=Yii::t('app', 'Name')?></th>
         <th><?=Yii::t('app', 'JIRA')?></th>
         <th><?=Yii::t('app', 'Total Logged, h')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
         <th id="role"><?=Yii::t('app', 'Total Paid, h')?></th>
+        <?php endif;?>
         <th><?=Yii::t('app', 'Date Start')?></th>
         <th><?=Yii::t('app', 'Date End')?></th>
         <th><?=Yii::t('app', 'Developers')?></th>
@@ -44,8 +45,6 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
     </tr>
     </thead>
 </table>
-
-<input id="user_role" style="visibility: hidden" value='<?php echo User::findOne(Yii::$app->user->id)->role;?>' title="role">
 <script>
 
     $(function(){
@@ -59,7 +58,8 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
             canActivate : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-            canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>
+            canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
+            canSeeHours : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN]) ? 'true' : 'false')?>
         })
     });
 
