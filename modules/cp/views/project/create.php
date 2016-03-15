@@ -37,7 +37,7 @@ $this->params['menu'] = [
             'options' => [
 
             ]
-        ])->textInput(["class" => "form-control"])->label( 'Project name' );?>
+        ])->textInput(["class" => "form-control", "autocomplete"=>"off"])->label( 'Project name' );?>
     </div>
     <div class="form-group">
         <?php echo $form->field( $model, 'jira_code', [
@@ -120,7 +120,6 @@ $this->params['menu'] = [
         <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
     </div>
 <?php ActiveForm::end();?>
-
 <script>
     $(function(){
 

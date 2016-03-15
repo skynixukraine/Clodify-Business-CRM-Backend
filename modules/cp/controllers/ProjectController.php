@@ -23,7 +23,6 @@ use app\models\Story;
 use app\models\Photo;
 use app\models\User;
 use app\models\Language;
-
 class ProjectController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -245,14 +244,20 @@ class ProjectController extends DefaultController
 
                    if ($model->load(Yii::$app->request->post())) {
 
-                       if ($model->validate()) {
+                           if ($model->validate()) {
 
-                           $model->save();
-                           Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
-                           return $this->redirect(['index']);
+                               if( DateUtil::compareDates($model->date_start, $model->date_end) ) {
 
-                       }
-                   } else {
+                                   $model->save();
+                                   Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
+                                   return $this->redirect(['index']);
+
+                               }else{
+
+                                   Yii::$app->getSession()->setFlash('error', Yii::t("app", "Start date must be less than end date"));
+                               }
+                           }
+                   }else{
 
                        $customers = $model->getProjectCustomers()
                            ->all();
