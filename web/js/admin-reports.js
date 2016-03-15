@@ -7,7 +7,7 @@ var adminReportModule = (function() {
             deleteUrl   : '',
             findUrl     : '',
             canDelete   : null,
-            canSeeColumns   : null
+            canSeeHours : null
         },
         dataTable,
         filterProjectsSelect = "select[name=project]",
@@ -101,7 +101,7 @@ var adminReportModule = (function() {
                     "orderable" : true
                 }
             ], index=1;
-            if( cfg.canSeeColumns){
+            if( cfg.canSeeHours){
                 index++;
                 console.log(index);
                 columns.push(
@@ -121,30 +121,30 @@ var adminReportModule = (function() {
                     "render"    : function (data, type, row) {
                         return row[2];
                     }
-                }, index++,
+                },
                 {
-                    "targets"   : index,
+                    "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         return row[3];
                     }
-                }, index++,
+                },
                 {
-                    "targets"   : index,
+                    "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         return row[4];
                     }
-                }, index++,
+                },
                 {
-                    "targets"   : index,
+                    "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         return row[5];
                     }
-                }, index++,
+                },
                 {
-                    "targets"   : index,
+                    "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         return row[6];

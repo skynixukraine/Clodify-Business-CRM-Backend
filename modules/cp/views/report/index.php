@@ -83,7 +83,7 @@ $this->params['menu'] = [
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeColumns: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 
