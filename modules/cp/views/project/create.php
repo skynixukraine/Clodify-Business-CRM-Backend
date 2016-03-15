@@ -72,20 +72,23 @@ $this->params['menu'] = [
         ])->textInput( ['class'=>'form-control pull-right active',
             'type'=>'text']);?>
     </div>
-    <div class="form-group">
-        <div>
-            <?php echo $form->field($model, 'status')->dropDownList([
 
-                Project::STATUS_NEW         => 'NEW',
-                Project::STATUS_ONHOLD      => 'ONHOLD',
-                Project::STATUS_INPROGRESS  => 'INPROGRESS',
-                Project::STATUS_DONE        => 'DONE',
-                Project::STATUS_CANCELED    => 'CANCELED'
-            ],
-                ['prompt' => 'Choose...']
-            );?>
+    <?php if( $model->status != null ):?>
+        <div class="form-group">
+            <div>
+                <?php echo $form->field($model, 'status')->dropDownList([
+
+                    Project::STATUS_ONHOLD      => 'ONHOLD',
+                    Project::STATUS_INPROGRESS  => 'INPROGRESS',
+                    Project::STATUS_DONE        => 'DONE',
+                    Project::STATUS_CANCELED    => 'CANCELED'
+                ],
+                    ['prompt' => 'Choose...']
+                );?>
+            </div>
         </div>
-    </div>
+    <?php endif;?>
+
     <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
     <div class="form-group">
         <?php

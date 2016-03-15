@@ -203,6 +203,7 @@ class ProjectController extends DefaultController
             $model = new Project();
 
             $model->scenario = "admin";
+            $model->status = Project::STATUS_NEW;
 
             if ($model->load(Yii::$app->request->post())) {
 
