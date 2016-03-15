@@ -62,12 +62,14 @@ $this->params['menu'] = [
     <tr>
         <th class="id-col"><?=Yii::t('app', 'Report ID')?></th>
         <th><?=Yii::t('app', 'Task')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
+            <th id="role"><?=Yii::t('app', 'Hours')?></th>
+        <?php endif;?>
         <th class="date-col"><?=Yii::t('app', 'Date added')?></th>
         <th><?=Yii::t('app', 'Project')?></th>
         <th><?=Yii::t('app', 'Reporter name')?></th>
         <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
         <th><?=Yii::t('app', 'Is invoiced')?></th>
-        <!--th><//?=Yii::t('app', 'Actions')?></th-->
     </tr>
     </thead>
 </table>
@@ -80,7 +82,8 @@ $this->params['menu'] = [
             editUrl     : '<?=Url::to(['report/index'])?>',
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canSeeColumns: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 

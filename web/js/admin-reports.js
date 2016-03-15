@@ -6,7 +6,8 @@ var adminReportModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             findUrl     : '',
-            canDelete   : null
+            canDelete   : null,
+            canSeeColumns   : null
         },
         dataTable,
         filterProjectsSelect = "select[name=project]",
@@ -88,6 +89,70 @@ var adminReportModule = (function() {
                 dataFilter['date_end'] = endDate;
                 dataTable.api().ajax.reload();
             });
+
+            cfg = $.extend(cfg, config);
+            var columns = [
+                {
+                    "targets"   : 0,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 1,
+                    "orderable" : true
+                }
+            ], index=1;
+            if( cfg.canSeeColumns){
+                index++;
+                console.log(index);
+                columns.push(
+                {
+                    "targets"   : 2,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[7];
+                    }
+                });
+            }
+            index++;
+            columns.push(
+                {
+                    "targets"   : index,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[2];
+                    }
+                }, index++,
+                {
+                    "targets"   : index,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[3];
+                    }
+                }, index++,
+                {
+                    "targets"   : index,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[4];
+                    }
+                }, index++,
+                {
+                    "targets"   : index,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[5];
+                    }
+                }, index++,
+                {
+                    "targets"   : index,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[6];
+                    }
+                }
+            );
+
+
             dataTable = $('#report-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -97,48 +162,7 @@ var adminReportModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-                "columnDefs": [
-                    {
-                        "targets"   : 0,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 1,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 2,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 5,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 6,
-                        "orderable" : true
-                    },
-                   /* {
-                        "targets"   : 7,
-                        "orderable" : false,
-                        "render"    : function (data, type, row) {
-                            var icons = [];
-                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                            /*if ( cfg.canDelete ) {
-                             icons.push('<img class="action-icon delete" src="/img/icons/deleteicon.png" style="cursor: pointer">');
-                             }*/
-                    /*        return '<div class="actions">' + icons.join(" ") + '</div>';
-                        }
-                    }*/
-                ],
+                "columnDefs": columns ,
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {

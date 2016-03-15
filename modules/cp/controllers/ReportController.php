@@ -77,8 +77,17 @@ class ReportController extends DefaultController
             'reporter_name',
             'date_report',
             'invoice_id',
-            'hours',
+            'hours'
         ];
+        /*if(User::hasPermission([User::ROLE_ADMIN])){
+
+            $columns[] =   'hours';
+        }
+        array_push($columns, 'date_added',
+            'name',
+            'reporter_name',
+            'date_report',
+            'invoice_id');*/
 
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -139,6 +148,18 @@ class ReportController extends DefaultController
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
 
+         /*   $row = '' . $model->id .
+                '; ' . $model->task;
+            if(User::hasPermission([User::ROLE_ADMIN])){
+
+                $row = $row .  '; ' . $model->hours;
+            }
+            $row = $row .  '; ' . $model->date_added .
+                '; ' . $model->getProject()->one()->name .
+                '; ' . $model->reporter_name .
+                '; ' . $model->date_report .
+                '; ' . ( $model->invoice_id == null ? "No" : "Yes" );
+            $list[] =   explode("; ", $row);*/
             $list[] = [
                 $model->id,
                 $model->task,
@@ -147,7 +168,7 @@ class ReportController extends DefaultController
                 $model->reporter_name,
                 $model->date_report,
                 ( $model->invoice_id == null ? "No" : "Yes" ),
-                $model->hours,
+                $model->hours
             ];
         }
 
