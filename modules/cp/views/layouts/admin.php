@@ -120,6 +120,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
+
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['user/index']);?>">
@@ -127,6 +128,21 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
+                <!--
+                <?php //if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <li class="treeview<?//=( Yii::$app->controller->id == "user" ? " active" : "")?>">
+                    <a href="<?//=Url::to(['user/index']);?>">
+                        <i class="fa fa-users"></i> <span><?//=Yii::t('app', 'Manage Teams ')?></span>
+                    </a>
+                </li>
+                <?php// endif;?>
+                <?php //if ( User::hasPermission([ User::ROLE_PM, User::ROLE_DEV])) : ?>
+                    <li class="treeview<?//=( Yii::$app->controller->id == "user" ? " active" : "")?>">
+                        <a href="<?//=Url::to(['user/index']);?>">
+                            <i class="fa fa-users"></i> <span><?//=Yii::t('app', 'My Team')?></span>
+                        </a>
+                    </li>
+                <?php //endif;?>-->
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
                     <a href="<?=Url::to(['project/index']);?>">
