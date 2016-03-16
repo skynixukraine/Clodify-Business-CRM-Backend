@@ -7,6 +7,8 @@
  */
 
 namespace app\modules\cp\controllers;
+use app\components\DateUtil;
+use app\models\Invoice;
 use app\models\Project;
 use app\models\Report;
 use app\models\User;
@@ -91,20 +93,32 @@ class IndexController extends DefaultController
         if ( $model->load(Yii::$app->request->post()) ) {
 
             $model->user_id = Yii::$app->user->id;
-            if( $model->validate() ) {
+            $model->date_report = DateUtil::convertData( $model->date_report );
+            $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
 
-                if( $model->total + $model->hours <= 12 ) {
+            if(DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))){
 
-                    Yii::$app->user->getIdentity()->last_name;
-                    $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
-                    return $this->refresh();
-                }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
+                if ($model->validate()) {
+
+                    if ($model->total + $model->hours <= 12) {
+
+                        Yii::$app->user->getIdentity()->last_name;
+                        $model->save();
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
+                        return $this->refresh();
+                    } else {
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
                                                                                 Maximum total hours is 12"));
-                    return $this->render('index',['model' => $model]);
+                        return $this->render('index', ['model' => $model]);
+                    }
                 }
+            }else{
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add report with this date,
+                                                                    because the invoice is create at this time"));
+                return $this->render('index', ['model' => $model]);
             }
+
         }
         return $this->render('index' ,['model' => $model]);
     }

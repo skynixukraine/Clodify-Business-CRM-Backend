@@ -108,7 +108,7 @@ $this->params['menu'] = [
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-2" style="padding-right: 30px;">
 
                 <?php $projects = \app\models\Project::getDevOrAdminOrPmProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
@@ -120,7 +120,19 @@ $this->params['menu'] = [
                 ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Project');?>
             </div>
 
-            <div class="col-lg-7">
+            <div class="col-lg-1" style="padding-left: 0; padding-right: 5px;">
+                    <?php echo $form->field( $model, 'date_report', [
+
+                        'template' => '{label} ' .
+                            ' <div class="input-group date">{input}' .
+                            ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                            ' {error}'
+
+                    ])->textInput( ['class'=>'form-control pull-right active',
+                                    'type'=>'text', 'id'=>"date_report"]);?>
+            </div>
+
+            <div class="col-lg-6" style="padding-left: 30px;">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [

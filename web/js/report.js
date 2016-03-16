@@ -17,7 +17,7 @@ var reportModule = (function(){
         cfg = {
             deleteUrl: "",
             saveUrl: "",
-            indexUrl: "",
+            indexUrl: ""
         };
 
     $(document).find("#dateFilter").change(function() {
@@ -32,6 +32,15 @@ var reportModule = (function(){
         init:function( config ) {
 
             cfg = $.extend( cfg, config);
+
+            var date = new Date();
+            var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('#date_report').datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true,
+                defaultViewDate: currentDay,
+                endDate : currentDay
+            }).datepicker("setDate", currentDay);
 
             var trElem;
             count();

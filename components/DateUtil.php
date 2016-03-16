@@ -41,10 +41,10 @@ class DateUtil
 
     }
 
+    /** if $date1<$date2 return true */
     public static function compareDates($date1, $date2)
     {
         if( $date1 && $date2 ) {
-
             if( ( $date_start = explode("/", $date1) ) && ( $date_end = explode("/", $date2) )
                 && count($date_start) == 3 && count($date_end) == 3 ) {
 
@@ -58,7 +58,7 @@ class DateUtil
                     }
                     if($date_start[1] == $date_end[1]){
 
-                        if($date_start[0] <= $date_end[0]){
+                        if($date_start[0] < $date_end[0]){
                             return true;
 
                         }else{
