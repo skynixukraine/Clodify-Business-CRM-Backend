@@ -78,7 +78,7 @@ class SiteController extends Controller
                         ])
                     ->one();
                 /** @var $modelUserLogins User */
-                $modelUserLogins->date_login = date('Y-m-d');
+                $modelUserLogins->date_login = date('Y-m-d H:i:s');
                 $modelUserLogins->save(true, ['date_login']);
                 if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
 
@@ -136,7 +136,7 @@ class SiteController extends Controller
 
             $model->is_active = 1;
             $model->invite_hash = null;
-            $model->date_signup = date('Y-m-d');
+            $model->date_signup = date('Y-m-d H:i:s');
             $model->save();
             if( Yii::$app->user->id != null ){
 

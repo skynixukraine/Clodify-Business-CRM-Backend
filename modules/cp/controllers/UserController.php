@@ -167,11 +167,12 @@ class UserController extends DefaultController {
                 $model->role,
                 $model->email,
                 $model->phone,
-                $model->date_login,
-                $model->date_signup,
+                $model->date_login = date('d/m/Y H:i'),
+                $model->date_signup = date('d/m/Y H:i'),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
             ];
+
 
         }
 
