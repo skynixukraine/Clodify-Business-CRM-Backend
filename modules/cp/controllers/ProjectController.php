@@ -202,9 +202,10 @@ class ProjectController extends DefaultController
             $model = new Project();
 
             $model->scenario = "admin";
-            $model->status = Project::STATUS_NEW;
 
             if ($model->load(Yii::$app->request->post())) {
+
+                $model->status = Project::STATUS_NEW;
 
                 if ($model->validate()) {
 
@@ -257,7 +258,7 @@ class ProjectController extends DefaultController
                                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Start date must be less than end date"));
                                }
                            }
-                   }else{
+                   }else {
 
                        $customers = $model->getProjectCustomers()
                            ->all();
