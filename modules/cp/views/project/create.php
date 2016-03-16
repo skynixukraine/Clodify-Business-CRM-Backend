@@ -15,6 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/project.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/check-form.js');
 $this->title                    = Yii::t("app", $title );
 $this->params['breadcrumbs'][]  = $this->title;
 
