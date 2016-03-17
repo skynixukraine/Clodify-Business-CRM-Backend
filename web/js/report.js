@@ -89,8 +89,8 @@ var reportModule = (function(){
                     edit.parent().find('.save').click(function() {
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
-
-                        if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || ( newHours > 10 || newHours <= 0 ) ) {
+console.log(newDescr.length);
+                        if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || ( newHours > 10 || newHours <= 0 ) || ( newDescr.length < 20 ) ) {
                             alert( "Please, enter correct data!" );
                             //edit.parent().find('.save').disable(true);
                         }
