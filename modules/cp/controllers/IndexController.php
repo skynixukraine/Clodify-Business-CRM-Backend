@@ -97,7 +97,7 @@ class IndexController extends DefaultController
             $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
 
             if($date_end == null ||
-            DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($date_end))){
+            DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))){
 
                 if ($model->validate()) {
 
