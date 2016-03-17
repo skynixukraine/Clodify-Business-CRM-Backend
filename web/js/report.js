@@ -35,7 +35,7 @@ var reportModule = (function(){
 
             var date = new Date();
             var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            $('#date_report').datepicker({
+            $('.date').datepicker({
                 format : 'dd/mm/yyyy',
                 autoclose: true,
                 defaultViewDate: currentDay,

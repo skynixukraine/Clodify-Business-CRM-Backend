@@ -125,7 +125,7 @@ $this->params['menu'] = [
 
                         'template' => '{label} ' .
                             ' <div class="input-group date">{input}' .
-                            ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                            ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span></div> ' .
                             ' {error}'
 
                     ])->textInput( ['class'=>'form-control pull-right active',
