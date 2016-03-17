@@ -144,6 +144,8 @@ class SiteController extends Controller
 
                 Yii::$app->user->logout();
             }
+            Yii::$app->getSession()->setFlash('success',
+            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
             return $this->redirect(['/site/login', 'email'=>$model->email]);
 
         }else {
