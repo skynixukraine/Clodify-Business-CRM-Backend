@@ -237,6 +237,8 @@ class ProjectController extends DefaultController
                                 ':iD' => $id
                             ])
                    ->one();
+               var_dump($model->date_start);
+               var_dump($model->date_end);
                /** @var $model Project */
                if( $model->is_delete == 0) {
 
@@ -247,18 +249,23 @@ class ProjectController extends DefaultController
 
                            if ($model->validate()) {
 
-                               if( DateUtil::compareDates($model->date_start, $model->date_end) ) {
+
+                               if( $model->date_start == null ||
+                                   $model->date_end == null ||
+                                   DateUtil::compareDates($model->date_start, $model->date_end) ) {
 
                                    $model->save();
                                    if(Yii::$app->request->post('updated')) {
 
-                                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
+                                       Yii::$app->getSession()->setFlash('success',
+                                       Yii::t("app", "You edited project " . $id));
                                    }
                                    return $this->redirect(['index']);
 
                                }else{
 
-                                   Yii::$app->getSession()->setFlash('error', Yii::t("app", "Start date must be less than end date"));
+                                   Yii::$app->getSession()->setFlash('error',
+                                   Yii::t("app", "Start date must be less than end date"));
                                }
                            }
                    }else {
