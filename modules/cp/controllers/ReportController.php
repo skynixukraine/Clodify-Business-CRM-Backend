@@ -79,15 +79,6 @@ class ReportController extends DefaultController
             'invoice_id',
             'hours'
         ];
-        /*if(User::hasPermission([User::ROLE_ADMIN])){
-
-            $columns[] =   'hours';
-        }
-        array_push($columns, 'date_added',
-            'name',
-            'reporter_name',
-            'date_report',
-            'invoice_id');*/
 
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -123,11 +114,15 @@ class ReportController extends DefaultController
                 $projectId[] = $project->project_id;
 
             }
+            if($projectId && $projectId != null) {
 
-            $dataTable->setFilter('project_id IN (' . implode( ', ', $projectId ) . ")");
+                $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+            }else{
+
+                $dataTable->setFilter('project_id IN (null) ');
+            }
 
         }
-
 
         if($dateStart && $dateStart != null){
 
@@ -148,18 +143,6 @@ class ReportController extends DefaultController
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
 
-         /*   $row = '' . $model->id .
-                '; ' . $model->task;
-            if(User::hasPermission([User::ROLE_ADMIN])){
-
-                $row = $row .  '; ' . $model->hours;
-            }
-            $row = $row .  '; ' . $model->date_added .
-                '; ' . $model->getProject()->one()->name .
-                '; ' . $model->reporter_name .
-                '; ' . $model->date_report .
-                '; ' . ( $model->invoice_id == null ? "No" : "Yes" );
-            $list[] =   explode("; ", $row);*/
             $list[] = [
                 $model->id,
                 $model->task,
