@@ -2,5 +2,5 @@
 
 return [
     'adminEmail'        => 'admin@skynix.co',
-    'applicationName'   => 'Skynix System'
+    'applicationName'   => 'Skynix System',
 ];

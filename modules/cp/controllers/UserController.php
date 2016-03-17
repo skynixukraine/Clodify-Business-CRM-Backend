@@ -59,6 +59,8 @@ class UserController extends DefaultController {
 
     public function actionIndex()
     {
+
+
         return $this->render("index");
     }
 
@@ -206,6 +208,7 @@ class UserController extends DefaultController {
                     ])->one();
 
                 $model->password = User::generatePassword();
+
                 /** @var $userEmailes User */
                 /** Invite user that was deleted again */
                 if (!empty($userEmailes) && $userEmailes->is_delete == 1) {

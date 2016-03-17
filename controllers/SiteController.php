@@ -79,6 +79,8 @@ class SiteController extends Controller
                     ->one();
                 /** @var $modelUserLogins User */
                 $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                /*var_dump($modelUserLogins->date_login);
+                exit();*/
                 $modelUserLogins->save(true, ['date_login']);
                 if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
 
