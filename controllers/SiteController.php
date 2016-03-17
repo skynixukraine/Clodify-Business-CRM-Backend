@@ -70,6 +70,7 @@ class SiteController extends Controller
 
             if ($model->login()) {
 
+
                 /** Save date login when user login */
                 $modelUserLogins = User::find()
                     ->where('email=:Email',
@@ -78,6 +79,9 @@ class SiteController extends Controller
                         ])
                     ->one();
                 /** @var $modelUserLogins User */
+                var_dump($modelUserLogins->date_login);
+                //var_dump($modelUserLogins->date_singup);
+                //exit();
                 $modelUserLogins->date_login = date('Y-m-d H:i:s');
                 /*var_dump($modelUserLogins->date_login);
                 exit();*/
