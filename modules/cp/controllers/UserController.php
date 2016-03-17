@@ -113,6 +113,7 @@ class UserController extends DefaultController {
     public function actionFind()
     {
 
+
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
@@ -169,11 +170,17 @@ class UserController extends DefaultController {
                 $model->role,
                 $model->email,
                 $model->phone,
-                (Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y HH:mm')),
-                (Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y HH:mm')),
+                Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y HH:mm'),
+                Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y HH:mm'),
+
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
             ];
+
+
+
+
+
         }
 
         $data = [
