@@ -52,7 +52,8 @@ var invoiceCreateModule = (function() {
             filterDateEndSelect.datepicker({
                 format : 'dd/mm/yyyy',
                 autoclose: true,
-                defaultViewDate: currentDay
+                defaultViewDate: currentDay,
+                endDate : currentDay
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['date_end'] = endDate;

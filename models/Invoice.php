@@ -170,7 +170,8 @@ class Invoice extends \yii\db\ActiveRecord
         return self::find()
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.user_id=' .
                 Invoice::tableName() .'.user_id')
-            ->where(ProjectCustomer::tableName() . '.project_id=:projectID', [':projectID'=>$project_id])
+            ->where(ProjectCustomer::tableName() . '.project_id=:projectID AND ' . Invoice::tableName() . '.is_delete=0',
+                [':projectID'=>$project_id])
             ->max(Invoice::tableName() . '.date_end');
     }
 

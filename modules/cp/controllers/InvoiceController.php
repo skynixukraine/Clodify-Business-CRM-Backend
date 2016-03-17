@@ -44,6 +44,11 @@ class InvoiceController extends DefaultController
                         'allow'     => true,
                         'roles'     => [User::ROLE_CLIENT],
                     ],
+                    [
+                        'actions'   => ['delete'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -56,6 +61,7 @@ class InvoiceController extends DefaultController
                     'send'      => ['get', 'post'],
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
+                    'delete'    => ['delete'],
                 ],
             ],
         ];
@@ -100,7 +106,7 @@ class InvoiceController extends DefaultController
 
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-       // $dataTable->setFilter('is_delete=0');
+        $dataTable->setFilter('is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -271,6 +277,29 @@ class InvoiceController extends DefaultController
             $model->save(true, ['status']);
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You canceled invoice " . $id));
             return $this->redirect(['invoice/index']);
+        }
+    }
+
+    public function actionDelete()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+
+            if (( $id = Yii::$app->request->post("id") ) ) {
+
+                /** @var  $model User */
+                $model  = Invoice::findOne( $id );
+                $model->is_delete = 1;
+                $model->save(true, ['is_delete']);
+
+                return json_encode([
+                    "message"   => Yii::t("app", "Invoice # " . $id ." has been deleted "),
+                    //"success"   => true
+                ]);
+            }
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
         }
     }
 
