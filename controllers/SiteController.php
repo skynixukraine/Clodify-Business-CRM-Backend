@@ -161,6 +161,6 @@ class SiteController extends Controller
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this link is expired.
             Please contact administrator if you wish to activate your account"));
         }
-        return $this->redirect(['/']);
+        return $this->redirect(['/site/login']);
     }
 }
