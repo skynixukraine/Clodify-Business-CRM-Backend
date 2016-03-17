@@ -169,17 +169,11 @@ class UserController extends DefaultController {
                 $model->role,
                 $model->email,
                 $model->phone,
-                Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y HH:mm'),
-                Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y HH:mm'),
-
+                (Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y HH:mm')),
+                (Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y HH:mm')),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
             ];
-
-
-
-
-
         }
 
         $data = [

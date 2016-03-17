@@ -342,7 +342,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->from(User::tableName())
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id AND receive_invoices=1")
-            ->where(User::tableName() . ".is_delete=0")
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1")
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }

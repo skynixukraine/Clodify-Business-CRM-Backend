@@ -250,7 +250,10 @@ class ProjectController extends DefaultController
                                if( DateUtil::compareDates($model->date_start, $model->date_end) ) {
 
                                    $model->save();
-                                   Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
+                                   if(Yii::$app->request->post('updated')) {
+
+                                       Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited project " . $id));
+                                   }
                                    return $this->redirect(['index']);
 
                                }else{
