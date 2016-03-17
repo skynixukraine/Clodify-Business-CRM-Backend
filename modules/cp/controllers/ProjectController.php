@@ -249,7 +249,6 @@ class ProjectController extends DefaultController
 
                            if ($model->validate()) {
 
-
                                if( $model->date_start == null ||
                                    $model->date_end == null ||
                                    DateUtil::compareDates($model->date_start, $model->date_end) ) {
