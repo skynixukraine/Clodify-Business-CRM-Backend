@@ -79,7 +79,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password', 'first_name', 'last_name', 'middle_name', 'invite_hash'], 'string', 'max' => 45],
             [['tags'], 'string', 'max' => 500],
             [['about'], 'string', 'max' => 1000],
-            [['first_name', 'last_name'], 'match', 'pattern' => '/^[A-Za-z]*$/i'],
+            [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             ['password', 'match', 'pattern' => '/^\S*$/i'],
 
         ];

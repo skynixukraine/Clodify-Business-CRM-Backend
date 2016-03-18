@@ -89,7 +89,7 @@ var reportModule = (function(){
                     edit.parent().find('.save').click(function() {
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
-console.log(newDescr.length);
+
                         if(  ( newHours > 10 || newHours <= 0 ) ) {
                             alert( "Please, enter correct data!" );
                             //edit.parent().find('.save').disable(true);
