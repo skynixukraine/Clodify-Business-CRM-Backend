@@ -29,7 +29,6 @@ use yii\db\ActiveQuery;
  */
 class Report extends \yii\db\ActiveRecord
 {
-    public $total;
     public $dateFilter;
     public $dateStartReport;
     public $dateEndReport;
@@ -59,7 +58,7 @@ class Report extends \yii\db\ActiveRecord
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
             [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
-            [['date_added', 'date_paid', 'date_report', 'total'], 'safe'],
+            [['date_added', 'date_paid', 'date_report'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
             [['task'], 'string', 'min' => 20, 'max' => 500 ]
@@ -188,6 +187,13 @@ class Report extends \yii\db\ActiveRecord
         }
         $query->all();
         return $query;
+    }
+
+    public static function sumHoursReportsOfThisDay()
+    {
+        return self::find()
+            ->where(Report::tableName() . '.date_added = CURDATE()')
+            ->sum(Report::tableName() . '.hours');
     }
 
 }

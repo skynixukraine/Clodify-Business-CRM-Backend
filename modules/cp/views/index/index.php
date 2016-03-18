@@ -57,21 +57,20 @@ $this->params['menu'] = [
                 <th>Project</th>
                 <th>Task</th>
                 <th>Hours</th>
+                <th>Date Report</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <?php $reports = Report::getReports(Yii::$app->user->id, $model->dateFilter);
             /** @var  $report Report */
-
-            foreach($reports->each() as $report):
-                //var_dump($report);
-                //exit();?>
+            foreach($reports->each() as $report):?>
             <tbody>
             <tr>
                 <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode($report->hours)?></td>
+                <td><?= Html::encode($report->date_report)?></td>
                 <td>
                     <?php if($report->invoice_id == null):?>
                         <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
@@ -81,7 +80,6 @@ $this->params['menu'] = [
                         <i class="fa fa-edit edit" style="cursor: pointer; visibility: hidden" data-toggle="tooltip" data-placement="top" title="Edit"></i>
                         <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
-
                 </td>
             </tr>
             </tbody>
@@ -150,12 +148,6 @@ $this->params['menu'] = [
 
                         ]
                 ])->textInput();?>
-
-                <?php echo $form->field($model, 'total')
-                    ->textInput(['style' => 'display: none',
-                                 'id' => 'total'])
-                    ->label(null,['style' => 'display: none']);?>
-            </div>
             <div class="col-lg-1" style="top: 24px">
                     <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
             </div>
