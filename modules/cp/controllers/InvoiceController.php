@@ -178,69 +178,76 @@ class InvoiceController extends DefaultController
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
 
-           if ( !empty( $model->id ) && !empty($model->method) ) {
+            if ($model->validate()) {
 
-                $dataPdf = Invoice::find()
-                    ->where("id=:iD",
-                        [
-                            ':iD' => $model->id,
+                if (!empty($model->id) && !empty($model->method)) {
+
+                    $dataPdf = Invoice::find()
+                        ->where("id=:iD",
+                            [
+                                ':iD' => $model->id,
+                            ])
+                        ->one();
+
+                    /** @var $dataPdf Invoice */
+                    if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
+
+                        $html = $this->renderPartial('invoicePDF', [
+
+                            'id' => $dataPdf->id,
+                            'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+                                              $dataPdf->getUser()->one()->last_name,
+                            'total' => $dataPdf->total,
+                            'numberContract' => $dataPdf->contract_number,
+                            'actWork' => $dataPdf->act_of_work,
+                            'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
+                            'dataTo' => date('j F', strtotime($dataPdf->date_end)),
+                            'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
+                            'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
+                            'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
+                            'idCustomer' => $dataPdf->getUser()->one()->id,
+
+                        ]);
+
+                        $pdf = new mPDF();
+                        $pdf->WriteHTML($html);
+                        $content = $pdf->Output('', 'S');
+
+                        Yii::$app->mailer->compose('invoice', [
+
+                            'id' => $dataPdf->id,
+                            'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+                                              $dataPdf->getUser()->one()->last_name,
+
                         ])
-                    ->one();
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo($dataPdf->getUser()->one()->email)
+                            ->setCc(Yii::$app->params['adminEmail'])
+                            ->attachContent($content, ['fileName' => 'Invoice.pdf'])
+                            ->send();
 
-                /** @var $dataPdf Invoice */
-                if( $dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
+                        $connection = Yii::$app->db;
+                        $connection->createCommand()
+                            ->update(Invoice::tableName(), [
 
+                                'date_sent' => date('Y-m-d'),
 
-                    $html = $this->renderPartial('invoicePDF', [
+                            ], 'id=:Id',
+                                [
+                                    ':Id' => $dataPdf->id,
+                                ])
+                            ->execute();
+                    }
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
+                } else {
 
-                        'id'            => $dataPdf->id,
-                        'nameCustomer'  => $dataPdf->getUser()->one()->first_name . ' ' . $dataPdf->getUser()->one()->last_name,
-                        'total'         => $dataPdf->total,
-                        'numberContract'=> $dataPdf->contract_number,
-                        'actWork'       => $dataPdf->act_of_work,
-                        'dataFrom'      => date('j F', strtotime($dataPdf->date_start)),
-                        'dataTo'        => date('j F', strtotime($dataPdf->date_end)),
-                        'dataFromUkr'   => date('d.m.Y', strtotime($dataPdf->date_start)),
-                        'dataToUkr'     => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
-                        'idCustomer'    => $dataPdf->getUser()->one()->id,
-
-                    ]);
-
-                    $pdf = new mPDF();
-                    $pdf->WriteHTML($html);
-                    $content = $pdf->Output('', 'S');
-
-                    Yii::$app->mailer->compose('invoice', [
-
-                        'id'            => $dataPdf->id,
-                        'nameCustomer'  => $dataPdf->getUser()->one()->first_name . ' ' . $dataPdf->getUser()->one()->last_name,
-
-                    ])
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($dataPdf->getUser()->one()->email)
-                    ->setCc(Yii::$app->params['adminEmail'])
-                    ->attachContent($content, ['fileName' => 'Invoice.pdf'])
-                    ->send();
-
-                    $connection = Yii::$app->db;
-                    $connection->createCommand()
-                                ->update(Invoice::tableName(), [
-
-                                    'date_sent' => date('Y-m-d'),
-
-                                ], 'id=:Id',
-                                    [
-                                        ':Id'    => $dataPdf->id,
-                                    ])
-                                ->execute();
-                }
-               Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
-            }else {
-
-               Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
                                                                         Choose the pay method!"));
-           }
+                }
+            }else{
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Can't send!! Client have incorrect data!!"));
+
+            }
         }
         return $this->redirect(['invoice/index']);
     }
