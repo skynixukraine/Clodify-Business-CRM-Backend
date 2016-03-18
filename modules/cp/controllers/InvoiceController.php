@@ -178,25 +178,25 @@ class InvoiceController extends DefaultController
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
 
-            if ($model->validate()) {
+            if (!empty($model->id) && !empty($model->method)) {
 
-                if (!empty($model->id) && !empty($model->method)) {
+                $dataPdf = Invoice::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $model->id,
+                        ])
+                    ->one();
 
-                    $dataPdf = Invoice::find()
-                        ->where("id=:iD",
-                            [
-                                ':iD' => $model->id,
-                            ])
-                        ->one();
+                /** @var $dataPdf Invoice */
+                if( !empty( $dataPdf->getUser()->one()->email ) ){
 
-                    /** @var $dataPdf Invoice */
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
                         $html = $this->renderPartial('invoicePDF', [
 
                             'id' => $dataPdf->id,
                             'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
-                                              $dataPdf->getUser()->one()->last_name,
+                                $dataPdf->getUser()->one()->last_name,
                             'total' => $dataPdf->total,
                             'numberContract' => $dataPdf->contract_number,
                             'actWork' => $dataPdf->act_of_work,
@@ -217,7 +217,7 @@ class InvoiceController extends DefaultController
 
                             'id' => $dataPdf->id,
                             'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
-                                              $dataPdf->getUser()->one()->last_name,
+                                $dataPdf->getUser()->one()->last_name,
 
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
@@ -239,15 +239,15 @@ class InvoiceController extends DefaultController
                             ->execute();
                     }
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
-                } else {
+                }else{
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Client has not email!!"));
 
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
-                                                                        Choose the pay method!"));
-                }
-            }else{
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Can't send!! Client have incorrect data!!"));
+                    }
+            } else {
 
-            }
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
+                                                                    Choose the pay method!"));
+            }            
         }
         return $this->redirect(['invoice/index']);
     }
