@@ -90,20 +90,30 @@ var reportModule = (function(){
                         var newDescr = trElem.find('.description').val();
                         var newHours = trElem.find('.hours').val();
 console.log(newDescr.length);
-                        if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || ( newHours > 10 || newHours <= 0 ) || ( newDescr.length < 20 ) ) {
+                        if(  ( newHours > 10 || newHours <= 0 ) ) {
                             alert( "Please, enter correct data!" );
                             //edit.parent().find('.save').disable(true);
                         }
                         else{
-                            $.post(cfg.saveUrl, {id: id, task: newDescr, hours: newHours, total: total-hours}).done(function (data) {
-                                console.log("Data Loaded: " + data);
-                            });
-                            console.log(total);
-                            trElem.find('td:eq(2)').text(newDescr);
-                            trElem.find('td:eq(3)').text(newHours);
-                            edit.show();
-                            edit.parent().find('.save').hide();
-                            count();
+                            if( ( $.type( newDescr ) != 'string' ) || newDescr == "" || newDescr == " " || newDescr.length < 20 ) {
+                                alert( "Length of task must be not less than 20 characters!" );
+                            }
+                            else {
+                                $.post(cfg.saveUrl, {
+                                    id: id,
+                                    task: newDescr,
+                                    hours: newHours,
+                                    total: total - hours
+                                }).done(function (data) {
+                                    console.log("Data Loaded: " + data);
+                                });
+                                console.log(total);
+                                trElem.find('td:eq(2)').text(newDescr);
+                                trElem.find('td:eq(3)').text(newHours);
+                                edit.show();
+                                edit.parent().find('.save').hide();
+                                count();
+                            }
                         }
                     })
                 }
