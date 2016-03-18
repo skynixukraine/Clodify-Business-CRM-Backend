@@ -220,6 +220,7 @@ class InvoiceController extends DefaultController
                                 $dataPdf->getUser()->one()->last_name,
 
                         ])
+                            ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo($dataPdf->getUser()->one()->email)
                             ->setCc(Yii::$app->params['adminEmail'])
@@ -247,7 +248,7 @@ class InvoiceController extends DefaultController
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
                                                                     Choose the pay method!"));
-            }            
+            }
         }
         return $this->redirect(['invoice/index']);
     }
