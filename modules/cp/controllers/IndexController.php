@@ -116,8 +116,8 @@ class IndexController extends DefaultController
                 }
             }else{
 
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add report with this date,
-                                                                    because the invoice is create at this time"));
+                Yii::$app->getSession()->setFlash('error',
+                Yii::t("app", "Report can't be added as invoice has been created on this project"));
                 return $this->render('index', ['model' => $model]);
             }
 

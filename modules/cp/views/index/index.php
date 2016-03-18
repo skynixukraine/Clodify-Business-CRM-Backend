@@ -90,9 +90,9 @@ $this->params['menu'] = [
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-6">
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <label id="totalHours"></label>
         </div>
     </div>
@@ -130,7 +130,7 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-lg-6" style="padding-left: 30px;">
+            <div class="col-lg-7" style="padding-left: 30px;">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [
@@ -149,7 +149,6 @@ $this->params['menu'] = [
                         ]
                 ])->textInput();?>
             </div>
-
             <div class="col-lg-1" style="top: 24px">
                     <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
             </div>
