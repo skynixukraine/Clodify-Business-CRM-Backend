@@ -130,10 +130,17 @@ class UserController extends DefaultController {
             foreach($users as $user){
                 $projectId[]= $user->project_id;
             }
+            $projectPm = '';
+            if(!empty($projectId)) {
+                $projectPm = implode(', ' , $projectId);
+            }
+            else{
+                $projectPm = 'null';
+            }
 
             $query = User::find()
                 ->leftJoin(ProjectDeveloper::tableName(), User::tableName() . '.id = ' . ProjectDeveloper::tableName() . '.user_id' )
-                ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . implode( ', ' , $projectId) . ')');
+                ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . $projectPm . ')');
 
 
         }
