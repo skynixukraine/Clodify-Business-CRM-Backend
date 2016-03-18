@@ -7,6 +7,7 @@
  */
 
 namespace app\modules\cp\controllers;
+use app\models\ProjectDeveloper;
 use app\models\SiteUser;
 use app\models\Visit;
 use Yii;
@@ -118,9 +119,23 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $query = User::find();
+        }
+
+        if( User::hasPermission([User::ROLE_PM])) {
+            $users = \app\models\ProjectDeveloper::allPmUsers(Yii::$app->user->id);
+            $projectId=[];
+            foreach($users as $user){
+                $projectId[]= $user->project_id;
+            }
+
+            $query = User::find()
+                ->leftJoin(ProjectDeveloper::tableName(), User::tableName() . '.id = ' . ProjectDeveloper::tableName() . '.user_id' )
+                ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . implode( ', ' , $projectId) . ')');
+
+
         }
 
         if( User::hasPermission([User::ROLE_CLIENT])){

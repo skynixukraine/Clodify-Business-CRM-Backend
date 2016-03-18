@@ -40,6 +40,14 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
             [['status'], 'string']
         ];
     }
+    public static function allPmUsers($pmId)
+    {
+        return self::find()
+
+            ->where (ProjectDeveloper::tableName() . '.user_id=:userId AND '. ProjectDeveloper::tableName() .'.is_pm=1 ', [':userId' => $pmId])
+            ->all();
+    }
+
 
     /**
      * @inheritdoc
