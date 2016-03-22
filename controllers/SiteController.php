@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+use app\components\Language;
 
 class SiteController extends Controller
 {
@@ -79,7 +80,7 @@ class SiteController extends Controller
                         ])
                     ->one();
                 /** @var $modelUserLogins User */
-                var_dump($modelUserLogins->date_login);
+                //var_dump($modelUserLogins->date_login);
                 //var_dump($modelUserLogins->date_singup);
                 //exit();
                 $modelUserLogins->date_login = date('Y-m-d H:i:s');
@@ -109,7 +110,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return Language::getUrl();
     }
 
     public function actionContact()

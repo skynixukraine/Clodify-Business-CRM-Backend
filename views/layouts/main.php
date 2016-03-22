@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\components\Language;
 
 AppAsset::register($this);
 ?>
@@ -28,7 +29,7 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->params['applicationName'],
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl' => Language::getUrl(),
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -36,11 +37,10 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Home', 'url' => Language::getUrl() . '/site/index'],
+            ['label' => 'Contact', 'url' => Language::getUrl() . '/site/contact'],
             Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
+                ['label' => 'Login', 'url' =>  Yii::$app->params['in_site'] .'/site/login' ] :
                 [
                     'label' => 'Logout (' . Yii::$app->user->identity->first_name . ')',
                     'url' => ['/site/logout'],
@@ -81,7 +81,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Skynix Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Skynix <?= date('Y') ?></p>
     </div>
 </footer>
 
