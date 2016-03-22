@@ -30,7 +30,8 @@ $this->params['menu'] = [
     <ul>
         <?php /** @var $model Invoice */?>
         <li>Invoice #        <?php echo $model->id;?></li>
-        <li>Customer Name:   <?php echo $model->getUser()->one()->first_name . $model->getUser()->one()->last_name;?></li>
+        <li>Customer Name:   <?php echo $model->getUser()->one()->first_name . ' ' .
+                                        $model->getUser()->one()->last_name;?></li>
         <li>Customer Email:  <?php echo $model->getUser()->one()->email;?></li>
         <li>Start Date:      <?php echo $model->date_start;?></li>
         <li>End Date:        <?php echo $model->date_end;?></li>
