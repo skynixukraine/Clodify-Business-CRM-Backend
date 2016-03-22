@@ -11,5 +11,18 @@ $this->params['breadcrumbs'][]  = $this->title;
 
     ];
 ?>
-
+<table id="user-table" class="table table-hover">
+<thead>
+<tr>
+    <th class="id-col"><?=Yii::t('app', 'Team ID')?></th>
+    <th><?=Yii::t('app', 'Name')?></th>
+    <th><?=Yii::t('app', 'Team Leader')?></th>
+    <th><?=Yii::t('app', 'Number of Teammates')?></th>
+    <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>
+    <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+        <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+    <?php endif;?>
+</tr>
+</thead>
+</table>
 
