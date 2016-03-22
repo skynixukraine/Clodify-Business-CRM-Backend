@@ -72,7 +72,7 @@ class IndexController extends DefaultController
         $model = new Report();
         $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
         $date = new DateTime;
-        $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay();
+        $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id);
 
         if( $model->dateFilter == 2 ) {
 
@@ -102,6 +102,10 @@ class IndexController extends DefaultController
 
                 if ($model->validate()) {
 
+                    var_dump($totalHoursOfThisDay);
+                    var_dump($model->hours);
+
+                    //exit();
                     if ($totalHoursOfThisDay + $model->hours <= 12) {
 
                         Yii::$app->user->getIdentity()->last_name;
@@ -162,11 +166,14 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
             ( $reportId = Yii::$app->request->post('id') ) &&
             ( $task = Yii::$app->request->post('task') ) &&
-            ( $hours = Yii::$app->request->post('hours') ) ) || true ){
+            ( $hours = Yii::$app->request->post('hours') ) &&
+            ( $lastH = Yii::$app->request->post('lastH') )) || true ){
 
             $model = Report::findOne( $reportId );
             $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
-            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay();
+            /** @var  $model Report */
+            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id);
+            $totalHoursOfThisDay = $totalHoursOfThisDay - $lastH;
 
             if( $model->id == $reportId ) {
 
@@ -175,7 +182,7 @@ class IndexController extends DefaultController
                 $model->task = $task;
                 $model->hours = $hours;
 
-                if( $totalHoursOfThisDay + $hours < 13 ) {
+                if( $totalHoursOfThisDay + $hours <= 12 ) {
 
                     if ($model->save(true, ['id', 'task', 'hours'])) {
 
