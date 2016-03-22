@@ -102,10 +102,6 @@ class IndexController extends DefaultController
 
                 if ($model->validate()) {
 
-                    var_dump($totalHoursOfThisDay);
-                    var_dump($model->hours);
-
-                    //exit();
                     if ($totalHoursOfThisDay + $model->hours <= 12) {
 
                         Yii::$app->user->getIdentity()->last_name;
