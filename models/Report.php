@@ -192,11 +192,12 @@ class Report extends \yii\db\ActiveRecord
     public static function sumHoursReportsOfThisDay($currUser, $dateReport)
     {
         return self::find()
-            ->where(Report::tableName() . '.date_report = "' . $dateReport . '" AND ' .
+            ->where(Report::tableName() . '.date_report =:DateReport AND ' .
                     Report::tableName() . '.user_id=:userId AND ' .
                     Report::tableName() . '.is_delete=0',
                 [
                     ':userId' => $currUser,
+                    ':DateReport' => $dateReport,
                 ])
             ->sum(Report::tableName() . '.hours');
     }
