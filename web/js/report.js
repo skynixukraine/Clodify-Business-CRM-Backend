@@ -99,7 +99,8 @@ var reportModule = (function(){
                                 $.post(cfg.saveUrl, {
                                     id: id,
                                     task: newDescr,
-                                    hours: newHours
+                                    hours: newHours,
+                                    lastH: hours
                                 }).done(function (data) {
                                     console.log("Data Loaded: " + data);
                                 });
