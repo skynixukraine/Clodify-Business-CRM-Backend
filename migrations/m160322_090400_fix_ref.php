@@ -7,9 +7,9 @@ class m160322_090400_fix_ref extends Migration
 {
     public function up()
     {
-        $this->getDb()->createCommand('DROP VIEW `excluded`;')->execute();
+/*        $this->getDb()->createCommand('DROP VIEW `excluded`;')->execute();
         $this->getDb()->createCommand('DROP VIEW `included`;')->execute();
-
+*/
         $this->dropForeignKey('fk_monthly_reports_users1', 'monthly_reports');
         $this->addForeignKey('fk_monthly_reports_users1', 'monthly_reports', 'user_id', 'users', 'id');
 
