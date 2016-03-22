@@ -72,7 +72,6 @@ class IndexController extends DefaultController
         $model = new Report();
         $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
         $date = new DateTime;
-        $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id);
 
         if( $model->dateFilter == 2 ) {
 
@@ -92,6 +91,8 @@ class IndexController extends DefaultController
         }
 
         if ( $model->load(Yii::$app->request->post()) ) {
+
+            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, DateUtil::convertData($model->date_report));
 
             $model->user_id = Yii::$app->user->id;
             $model->date_report = DateUtil::convertData( $model->date_report );
@@ -163,20 +164,23 @@ class IndexController extends DefaultController
             ( $reportId = Yii::$app->request->post('id') ) &&
             ( $task = Yii::$app->request->post('task') ) &&
             ( $hours = Yii::$app->request->post('hours') ) &&
-            ( $lastH = Yii::$app->request->post('lastH') )) || true ){
+            ( $lastH = Yii::$app->request->post('lastH') ) &&
+            ( $date = Yii::$app->request->post('date') )) || true ){
 
             $model = Report::findOne( $reportId );
             $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
             /** @var  $model Report */
-            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id);
+            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $date);
             $totalHoursOfThisDay = $totalHoursOfThisDay - $lastH;
-
+            
             if( $model->id == $reportId ) {
 
                 /** @var $model Report */
                 $model->id = $reportId;
                 $model->task = $task;
                 $model->hours = $hours;
+
+
 
                 if( $totalHoursOfThisDay + $hours <= 12 ) {
 
