@@ -30,7 +30,7 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     <thead>
     <tr>
         <th><?=Yii::t('app', 'ID')?> </th>
-        <th><?=Yii::t('app', 'First Name')?></th>
+        <th><?=Yii::t('app', 'Client Name')?></th>
         <th><?=Yii::t('app', 'Discount')?></th>
         <th><?=Yii::t('app', 'Subtotal')?></th>
         <th><?=Yii::t('app', 'Total')?></th>
