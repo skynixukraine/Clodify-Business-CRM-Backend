@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "teammates".
  *
@@ -41,4 +42,16 @@ class Teammate extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
         ];
     }
+    public static function teammateUser ($teamId)
+    {
+        return self::find()
+            ->where(\app\models\Teammate::tableName() . '.team_id=:idTeam',
+                [
+                    ':idTeam' => $teamId
+                ])
+            ->count(\app\models\Teammate::tableName() . '.user_id');
+
+    }
+
+
 }

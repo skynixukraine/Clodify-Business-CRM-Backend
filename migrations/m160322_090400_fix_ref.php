@@ -11,7 +11,7 @@ class m160322_090400_fix_ref extends Migration
 /*        $this->getDb()->createCommand('DROP VIEW `excluded`;')->execute();
         $this->getDb()->createCommand('DROP VIEW `included`;')->execute();
 */
-=======
+
         //$this->getDb()->createCommand('DROP VIEW `excluded`;')->execute();
         //$this->getDb()->createCommand('DROP VIEW `included`;')->execute();
 
