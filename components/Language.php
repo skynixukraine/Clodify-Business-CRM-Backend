@@ -42,7 +42,7 @@ class Language
     public static function getRedirectUrl()
     {
         if ( ( $domain      = Yii::$app->getRequest()->serverName ) &&
-                ( $siteDomain = str_replace(array("http://", "https://"), "", Yii::$app->params['in_site']) ) &&
+                ( $siteDomain = str_replace(array("http://", "https://", ":" . Yii::$app->params['port']), "", Yii::$app->params['in_site']) ) &&
             ( $domain == $siteDomain ) ) {
 
             return self::getUrl();
@@ -52,7 +52,7 @@ class Language
     public static function getCpRedirectUrl()
     {
         if ( ( $domain      = Yii::$app->getRequest()->serverName ) &&
-            ( $siteDomain = str_replace(array("http://", "https://"), "", Yii::$app->params['in_site']) ) &&
+            ( $siteDomain = str_replace(array("http://", "https://", ":" . Yii::$app->params['port']), "", Yii::$app->params['in_site']) ) &&
             ( $domain != $siteDomain ) ) {
 
             return Yii::$app->params['in_site'];
