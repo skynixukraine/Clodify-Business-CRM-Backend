@@ -64,10 +64,12 @@ var reportModule = (function(){
                 var trElem  = edit.parent().parent();
                 var descr   = trElem.find('td:eq(2)').text();
                 var hours   = trElem.find('td:eq(3)').text();
+                var date    = trElem.find('td:eq(4)').text();
                 var id      = trElem.find('td:eq(0)').text();
                 trElem.find('td:eq(2)').css('width:', '75%').html('<input style="width: 640px; height: 25px;" type="text" value="' + descr + '" class="description">');
                 trElem.find('td:eq(3)').css('width:', '40px').html('<input style="height: 25px; width: 40px; text-align: center;" type="text" value="' + hours + '" class="hours">');
                 edit.hide();
+                console.log(date);
                 if(edit.parent().find('.save').length == 0){
                     edit.after('<button class="save btn btn-success btn-xs" type="submit">SAVE</button>');
 
@@ -100,7 +102,8 @@ var reportModule = (function(){
                                     id: id,
                                     task: newDescr,
                                     hours: newHours,
-                                    lastH: hours
+                                    lastH: hours,
+                                    date: date
                                 }).done(function (data) {
                                     console.log("Data Loaded: " + data);
                                 });
