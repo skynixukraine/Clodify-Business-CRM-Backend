@@ -140,12 +140,12 @@ class IndexController extends DefaultController
                     $model->is_delete = 1;
                     $model->save(true, ['is_delete']);
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been deleted"));
-                    return $this->redirect(['index']);
+                    return $this->render('index' ,['model' => $model]);
                 }else{
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this report as
                                                                                 invoice has been generated"));
-                    return $this->redirect(['index']);
+                    return $this->render('index' ,['model' => $model]);
                 }
             }
         //}else{
