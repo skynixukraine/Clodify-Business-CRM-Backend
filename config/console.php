@@ -32,6 +32,15 @@ $config = [
 if ( file_exists(__DIR__ . '/local.php') ) {
 
     $localConfig    = include( __DIR__ . '/local.php');
+    if ( isset($localConfig['components']['user']) ) {
+
+        unset($localConfig['components']['user']);
+    }
+    if ( isset($localConfig['components']['session']) ) {
+
+        unset($localConfig['components']['session']);
+    }
+
     $config         = array_replace_recursive($config, $localConfig);
 
 }
