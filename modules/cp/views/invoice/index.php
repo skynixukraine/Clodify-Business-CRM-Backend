@@ -31,8 +31,8 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     <tr>
         <th><?=Yii::t('app', 'ID')?> </th>
         <th><?=Yii::t('app', 'Client Name')?></th>
-        <th><?=Yii::t('app', 'Discount')?></th>
         <th><?=Yii::t('app', 'Subtotal')?></th>
+        <th><?=Yii::t('app', 'Discount')?></th>
         <th><?=Yii::t('app', 'Total')?></th>
         <th><?=Yii::t('app', 'Date Start')?></th>
         <th><?=Yii::t('app', 'Date End')?></th>
