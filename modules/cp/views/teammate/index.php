@@ -32,6 +32,8 @@ $this->params['breadcrumbs'][]  = $this->title;
         managerTeamsModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
             findUrl     : '<?=Url::to(['teammate/find'])?>',
+            viewUrl     : '<?=Url::to(['invoice/view'])?>',
+            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>
 
