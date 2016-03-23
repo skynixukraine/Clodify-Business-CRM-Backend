@@ -25,6 +25,11 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => 'skynix',
+                'domain' => '.skynix.company',
+                'path' => '/',
+            ]
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -56,6 +61,12 @@ $config = [
         ],
         'formatter' => [
             'timeZone' => 'Europe/Kiev',
+        ],
+        'session' => [
+            'cookieParams' => [
+                'path' => '/',
+                'domain' => '.skynix.company'
+            ],
         ],
         'db' => require(__DIR__ . '/db.php'),
     ],
