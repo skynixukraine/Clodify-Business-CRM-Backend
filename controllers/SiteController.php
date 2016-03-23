@@ -42,6 +42,15 @@ class SiteController extends Controller
             ],
         ];
     }
+    public function beforeAction($action)
+    {
+        if ( ( $url = Language::getRedirectUrl() ) ) {
+
+            return $this->redirect($url);
+
+        }
+        return parent::beforeAction($action);
+    }
 
     public function actionIndex()
     {
@@ -89,11 +98,11 @@ class SiteController extends Controller
                 $modelUserLogins->save(true, ['date_login']);
                 if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
 
-                    return $this->redirect(['cp/index']);
+                    return $this->redirect( Language::getDefaultUrl() . '/cp/index');
                 }
                 if ( User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])){
 
-                    return $this->redirect(['cp/user/index']);
+                    return $this->redirect( Language::getDefaultUrl() . '/cp/user/index');
                 }
 
             } else {
@@ -110,7 +119,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return Language::getUrl();
+        return $this->redirect( Language::getUrl() );
     }
 
     public function actionContact()

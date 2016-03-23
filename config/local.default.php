@@ -29,5 +29,21 @@ return [
                 'encryption' => 'tls',
             ],
         ],
-    ]
+        'user' => [
+            'identityCookie' => [
+                'domain' => '.skynix.local',
+            ]
+        ],
+        'session' => [
+            'cookieParams' => [
+                'path' => '/',
+                'domain' => '.skynix.local'
+            ],
+        ],
+    ],
+    'params' => array(
+        'ua_site'           => 'http://ua.skynix.local',
+        'en_site'           => 'http://skynix.local',
+        'in_site'           => 'http://in.skynix.local'
+    )
 ];

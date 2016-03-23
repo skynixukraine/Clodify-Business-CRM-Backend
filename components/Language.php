@@ -13,8 +13,7 @@ class Language
 {
     public static function getUrl()
     {
-        if ( ( $domain = Yii::$app->getRequest()->serverName) &&
-             strstr( Yii::$app->params['in_site'], $domain) === false ) {
+        if ( ( $domain = Yii::$app->getRequest()->serverName) ) {
 
             if( count( Yii::$app->getRequest()->acceptableLanguages ) ) {
 
@@ -36,5 +35,31 @@ class Language
 
         }
         return Yii::$app->params['en_site'];
+    }
+
+    public static function getRedirectUrl()
+    {
+        if ( ( $domain      = Yii::$app->getRequest()->serverName ) &&
+                ( $siteDomain = str_replace(array("http://", "https://"), "", Yii::$app->params['in_site']) ) &&
+            ( $domain == $siteDomain ) ) {
+
+            return self::getUrl();
+
+        }
+    }
+    public static function getCpRedirectUrl()
+    {
+        if ( ( $domain      = Yii::$app->getRequest()->serverName ) &&
+            ( $siteDomain = str_replace(array("http://", "https://"), "", Yii::$app->params['in_site']) ) &&
+            ( $domain != $siteDomain ) ) {
+
+            return Yii::$app->params['in_site'];
+
+        }
+    }
+
+    public static function getDefaultUrl()
+    {
+        return Yii::$app->params['in_site'];
     }
 }
