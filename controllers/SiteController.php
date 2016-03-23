@@ -59,7 +59,7 @@ class SiteController extends Controller
             return $this->redirect(['cp/index']);
 
         }
-        return $this->render('index');
+        return $this->render('index_' . Language::getLanguage() );
     }
 
     /** New or invited user login  */
@@ -111,7 +111,7 @@ class SiteController extends Controller
                 return $this->render('login', ['model' => $model]);
             }
         }
-        return $this->render('login', ['model' => $model]);
+        return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
     }
 
     /** Log out user*/
@@ -130,14 +130,14 @@ class SiteController extends Controller
 
             return $this->refresh();
         }
-        return $this->render('contact', [
+        return $this->render('contact_' . Language::getLanguage() , [
             'model' => $model,
         ]);
     }
 
-    public function actionAbout()
+    public function actionCareer()
     {
-        return $this->render('about');
+        return $this->render('career_' . Language::getLanguage());
     }
 
     /** Invited user activated */
@@ -160,7 +160,7 @@ class SiteController extends Controller
             }
             Yii::$app->getSession()->setFlash('success',
             Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-            return $this->redirect(['/site/login', 'email'=>$model->email]);
+            return $this->redirect(['site/login', 'email'=>$model->email]);
 
         }else {
             if( Yii::$app->user->id != null ){
@@ -171,6 +171,6 @@ class SiteController extends Controller
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this link is expired.
             Please contact administrator if you wish to activate your account"));
         }
-        return $this->redirect(['/site/index']);
+        return $this->redirect(['site/index']);
     }
 }

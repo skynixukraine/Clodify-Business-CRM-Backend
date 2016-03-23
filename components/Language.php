@@ -11,6 +11,8 @@ use Yii;
 
 class Language
 {
+    private static $language;
+
     public static function getUrl()
     {
         if ( ( $domain = Yii::$app->getRequest()->serverName) ) {
@@ -61,5 +63,24 @@ class Language
     public static function getDefaultUrl()
     {
         return Yii::$app->params['in_site'];
+    }
+
+    public static function getLanguage()
+    {
+        if ( !self::$language ) {
+
+            if ( ( $domain      = Yii::$app->getRequest()->serverName ) &&
+                ( strstr($domain, "ua.") !== false ) ) {
+
+                self::$language = 'ua';
+
+            } else {
+
+                self::$language = 'en';
+
+            }
+
+        }
+        return self::$language;
     }
 }
