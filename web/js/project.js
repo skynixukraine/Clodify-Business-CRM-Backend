@@ -116,7 +116,7 @@ var projectModule = (function() {
             columns.push(
                 {
                     "targets"   : index,
-                    "orderable" : false
+                    "orderable" : true
                 },
                 {
                     "targets"   : index,

@@ -79,7 +79,8 @@ class ProjectController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         $query          = Project::find()
-                            ->leftJoin( ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=id");
+                            ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id");
 
         $columns        = [
             'id',
@@ -118,7 +119,7 @@ class ProjectController extends DefaultController
             $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
-           $dataTable->setFilter('is_delete=0');
+           $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
