@@ -29,7 +29,7 @@ $this->params['menu'] = [
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-2">
-            <?php echo Html::label('Report:');
+            <?php echo Html::label('Projects:');
             $projects = Project::find()->all();
             $listReport = ArrayHelper::map( $projects, 'id', 'name' );
             $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
