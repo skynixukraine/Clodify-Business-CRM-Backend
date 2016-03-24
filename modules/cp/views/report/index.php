@@ -69,7 +69,9 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Project')?></th>
         <th><?=Yii::t('app', 'Reporter name')?></th>
         <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
-        <th><?=Yii::t('app', 'Is invoiced')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
+            <th><?=Yii::t('app', 'Is invoiced')?></th>
+        <?php endif;?>
     </tr>
     </thead>
 </table>
@@ -83,7 +85,8 @@ $this->params['menu'] = [
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN]) ? 'true' : 'false')?>
         })
     });
 

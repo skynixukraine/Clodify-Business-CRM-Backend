@@ -7,7 +7,8 @@ var adminReportModule = (function() {
             deleteUrl   : '',
             findUrl     : '',
             canDelete   : null,
-            canSeeHours : null
+            canSeeHours : null,
+            canSeeInvoice : null
         },
         dataTable,
         filterProjectsSelect = "select[name=project]",
@@ -142,17 +143,20 @@ var adminReportModule = (function() {
                     "render"    : function (data, type, row) {
                         return row[5];
                     }
-                },
-                {
-                    "targets"   : ++index,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        return row[6];
-                    }
                 }
+
             );
-
-
+            if( cfg.canSeeInvoice){
+                console.log(index);
+                columns.push(
+                    {
+                        "targets": ++index,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            return row[6];
+                        }
+                    });
+            }
             dataTable = $('#report-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
