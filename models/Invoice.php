@@ -38,6 +38,7 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_PAID       = "PAID";
 
     public $method;
+
     /**
      * @inheritdoc
      */

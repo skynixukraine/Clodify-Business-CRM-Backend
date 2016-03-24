@@ -79,7 +79,7 @@ class InvoiceController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query          = Invoice::find();
+        $query          = Invoice::find()->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' );
 
         $columns        = [
             'id',
@@ -106,12 +106,13 @@ class InvoiceController extends DefaultController
 
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-        $dataTable->setFilter('is_delete=0');
+        $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
         /** @var  $model Invoice*/
+
         foreach ( $activeRecordsData as $model ) {
 
             $list[] = [
