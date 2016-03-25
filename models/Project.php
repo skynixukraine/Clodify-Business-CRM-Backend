@@ -208,4 +208,12 @@ class Project extends \yii\db\ActiveRecord
                     ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
             ->all();
     }
+
+    public static function projectsName($userId)
+    {
+        return self::find()
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id')
+            ->where(ProjectDeveloper::tableName() . '.user_id=:ID', [':ID' => $userId])
+            ->all();
+    }
 }

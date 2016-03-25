@@ -7,6 +7,9 @@
  */
 namespace app\modules\cp\controllers;
 use app\components\DateUtil;
+use app\models\Project;
+use app\models\ProjectCustomer;
+use app\models\ProjectDeveloper;
 use app\models\Team;
 use app\models\Teammate;
 use app\models\User;
@@ -16,7 +19,7 @@ use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\components\DataTable;
 
-class TeammateController extends DefaultController
+class TeamsController extends DefaultController
 {
     public $enableCsrfValidation = false;
     public $layout = "admin";
@@ -33,7 +36,7 @@ class TeammateController extends DefaultController
                     [
                         'actions'   => [ 'index', 'find'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_DEV, User::ROLE_PM],
                     ],
                 ],
             ],
@@ -60,15 +63,15 @@ class TeammateController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-            $query = Team::find()->leftJoin(Teammate::tableName(), Team::tableName() . '.id=' . Teammate::tableName() . '.team_id');
+        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id');
 
         $columns        = [
-            'id',
-            'name',
             'user_id',
-            'team_id',
-            'date_created',
-
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'project_id',
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -88,12 +91,19 @@ class TeammateController extends DefaultController
         /* @var $model \app\models\Team */
         foreach ( $activeRecordsData as $model ) {
 
+            $projects = Project::projectsName($model->user_id);
+            $project = [];
+            foreach ($projects as $item) {
+                $project[] = $item->name;
+            }
+
             $list[] = [
-                $model->id,
-                $model->name,
-                $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
-                Teammate::teammateUser($model->id),
-                $model->date_created,
+                $model->user_id,
+                $model->getUser()->one()->first_name,
+                $model->getUser()->one()->last_name,
+                $model->getUser()->one()->email,
+                $model->getUser()->one()->phone,
+                implode(', ', $project),
             ];
         }
 

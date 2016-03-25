@@ -45,11 +45,11 @@ class Teammate extends \yii\db\ActiveRecord
     public static function teammateUser ($teamId)
     {
         return self::find()
-            ->where(\app\models\Teammate::tableName() . '.team_id=:idTeam',
+            ->where(Teammate::tableName() . '.team_id=:idTeam',
                 [
                     ':idTeam' => $teamId
                 ])
-            ->count(\app\models\Teammate::tableName() . '.user_id');
+            ->count(Teammate::tableName() . '.user_id');
 
     }
 
