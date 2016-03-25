@@ -48,6 +48,7 @@ AppAsset::register($this);
                 ],
         ],
     ]);
+    <a href="#">I</a>
     NavBar::end();
     ?>
 
