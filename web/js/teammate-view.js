@@ -1,14 +1,13 @@
 /**
  * Created by lera on 25.03.16.
  */
-var TeamsModule = (function() {
+var TeammateModule = (function() {
 
     var cfg = {
             deleteUrl   : '',
             findUrl     : '',
             canDelete   : null,
-            canAction   : null,
-            canView     : null
+            canAction   : null
         },
         dataTable,
         dataFilter = {
@@ -119,6 +118,25 @@ var TeamsModule = (function() {
                 "processing": true,
                 "serverSide": true
             });
+                if( cfg.canAction){
+                columns.push({
+                    "targets"   : 6,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        var icons = [];
+                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                        if ( cfg.canDelete ) {
+
+                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+
+                        }
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                    }
+                });
+            }
+
 
             var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {

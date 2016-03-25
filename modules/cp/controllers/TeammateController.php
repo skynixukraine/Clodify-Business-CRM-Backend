@@ -31,7 +31,7 @@ class TeammateController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index', 'find'],
+                        'actions'   => [ 'index', 'find', 'view'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -42,6 +42,7 @@ class TeammateController extends DefaultController
                 'actions' => [
                     'index'     => ['get'],
                     'find'      => ['get'],
+                    'view'      => ['get', 'post']
 
                 ],
             ],
@@ -107,6 +108,21 @@ class TeammateController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
 
+    }
+    public function actionView()
+    {
+        if (( $teamId = Yii::$app->request->get("id") ) ) {
+
+            $model = Teammate::find()
+                ->where("team_id=:teamiD",
+                    [
+                        ':teamiD' => $teamId
+                    ])
+                ->one();
+        }
+        /** @var $model Teammate */
+        return $this->render('view', ['model' => $model,
+            'title' => 'List of Teammates  #' . $model->team_id]);
     }
 
 }

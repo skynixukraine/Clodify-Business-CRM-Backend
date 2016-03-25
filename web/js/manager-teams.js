@@ -6,6 +6,7 @@ var managerTeamsModule = (function() {
     var cfg = {
             deleteUrl   : '',
             findUrl     : '',
+            viewUrl     : '',
             canDelete   : null,
             canAction   : null,
             canView     :null
@@ -14,6 +15,11 @@ var managerTeamsModule = (function() {
         dataFilter = {
         },
         deleteModal;
+
+    function actionView( id )
+    {
+        document.location.href = cfg.viewUrl + "?id=" + id;
+    }
 
     function actionDelete( id, name, dataTable )
     {
@@ -152,12 +158,11 @@ var managerTeamsModule = (function() {
                     name   = $(this).parents("tr").find("td").eq(1).text();
 
                 });
-                $(document).keydown(function(e){
-                    if (e.keyCode == 46) {
+                dataTable.find("i[class*=view]").click(function(){
 
-                        //console.log(id);
-                        actionDelete( id, name, dataTable );
-                    }
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionView( id );
+
                 });
 
                 dataTable.find("img[class*=edit]").click(function(){
