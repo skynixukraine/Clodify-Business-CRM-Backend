@@ -37,7 +37,6 @@ class Team extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -51,7 +50,6 @@ class Team extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted',
         ];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */

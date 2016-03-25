@@ -15,10 +15,6 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/teams.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "My Teams");
 $this->params['breadcrumbs'][]  = $this->title;
-
-
-
-
 ?>
 <table id="team-table" class="table table-hover">
     <thead>
@@ -29,16 +25,11 @@ $this->params['breadcrumbs'][]  = $this->title;
         <th><?=Yii::t('app', 'Email')?></th>
         <th><?=Yii::t('app', 'Phone')?></th>
         <th><?=Yii::t('app', 'Project')?></th>
-        <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-            <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
-        <?php endif;?>
     </tr>
     </thead>
 </table>
 <script>
     $(function(){
-
         TeamsModule.init({
             editUrl     : '<?=Url::to(['teams/update'])?>',
             deleteUrl   : '<?=Url::to(['teams/delete'])?>',
@@ -46,5 +37,4 @@ $this->params['breadcrumbs'][]  = $this->title;
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
-
 </script>

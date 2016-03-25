@@ -67,58 +67,7 @@ var TeamsModule = (function() {
 
 
             cfg = $.extend(cfg, config);
-            var columns =[
 
-                {
-                    "targets"   : 0,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 1,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 2,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 3,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 4,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 5,
-                    "orderable" : true
-                }
-
-            ];
-            if( cfg.canAction){
-                columns.push({
-                    "targets"   : 6,
-                    "orderable" : false,
-                    "render"    : function (data, type, row) {
-                        var icons = [];
-                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                        if ( cfg.canView ) {
-
-                            icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
-                                'data-toggle="tooltip" data-placement="top" title="View"></i>');
-
-                        }
-                        if ( cfg.canDelete ) {
-
-                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-
-                        }
-                        return '<div class="actions">' + icons.join(" ") + '</div>';
-
-                    }
-                });
-            }
             dataTable = $('#team-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -128,7 +77,34 @@ var TeamsModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-                "columnDefs": columns,
+                "columnDefs": [
+
+                    {
+                        "targets"   : 0,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 1,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 2,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 3,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : true
+                    }
+
+                ],
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {
