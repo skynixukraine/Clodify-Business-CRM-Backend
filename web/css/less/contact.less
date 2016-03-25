@@ -1,0 +1,185 @@
+
+
+    #contact{
+        margin: 238px auto 0 auto;
+
+        h1{
+            font-family: 'Raleway-Bold', sans-serif;
+            font-size: 55px;
+            text-align: center;
+        }
+        .contact-txt{
+            padding:  11px 21% 55px 21%;;
+            font-family: 'Raleway Light', sans-serif;
+            font-size: 18.4px;
+            text-align: center;
+        }
+        form{
+            width: 99%;
+            margin: 0 auto;
+            padding: 0 21% 0 0;
+        }
+        label:not([for="remember"]){
+            //width: 95px;
+            padding: 7px 8px 0 0;
+            font-size: 18px;
+            font-family: 'Raleway-Bold', sans-serif;
+            text-align: right;
+
+        }
+        label[for="remember"]{
+            font-family: 'Raleway-Regular', sans-serif;
+            font-size: 14px;
+
+        }
+        input:not([type="checkbox"]){
+            //width: 515px;
+            height: 40px;
+            border-radius: 0;
+            float: right;
+        }
+        textarea{
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+        }
+        .margin-b{
+            margin-bottom: 42px;
+        }
+        .btn-login,
+        .btn-submit{
+            font-size: 26px;
+            font-family: 'Raleway-Medium', sans-serif;
+            background: #70c0e1;
+            float: right;
+            color: @color-white1;
+
+            &:hover{
+            background: rgba(112,192,225,0.80);
+            }
+        }
+        .btn-login {
+            padding: 2px 58px;
+        }
+        .btn-submit{
+            padding: 2px 18px;
+        }
+        .box-txt-form{
+            padding: 12px 15px;
+            font-family: 'Raleway-Regular', sans-serif;
+            font-size: 16px;
+        }
+        .img-captcha{
+            img{
+                float: right;
+            }
+        }
+
+
+    }
+
+    @media (max-width: 949px ) {
+
+        #contact{
+            margin: 205px 0 0 0;
+        }
+
+    }
+    @media (max-width: 768px ) {
+
+        #contact{
+            margin: 145px 0 0 0;
+
+            .contact-txt {
+                padding: 11px 15% 55px 15%;
+            }
+
+            form {
+                width: 90%;
+                margin: 0 auto;
+                padding: 0 10% 0 0;
+
+                .img-captcha,
+                .input-captcha{
+                    width: 49%!important;
+                    margin: 0!important;
+                }
+                .input-captcha{
+                    padding: 0;
+                }
+            }
+        }
+
+
+    }
+    @media (max-width: 600px ) {
+
+        #contact{
+
+            h1 {
+                font-size: 40px;
+            }
+            form {
+                padding: 0 5% 0 0;
+            }
+            .contact-txt {
+                padding: 11px 11% 55px 11%
+            }
+
+        }
+
+        .chec-box{
+            margin-left: 0!important;
+        }
+        .btn-box{
+            float: right;
+        }
+    }
+    @media (max-width: 480px ) {
+
+        label{
+            width: 100%!important;
+            display: block;
+            float: none!important;
+            text-align: left!important;
+        }
+        /*input:not([type="checkbox"]){
+            width: 100%!important;
+        }*/
+        #contact {
+            margin: 75px 0 30px 0;
+
+            .margin-b {
+                margin-bottom: 0;
+            }
+        }
+        .box-email,
+        .box-password,
+        .chec-box,
+        .btn-box,
+        .box-name,
+        .box-subject,
+        .box-body,
+        .box-txt-form{
+            width: 100%!important;
+            margin: 0;
+        }
+
+        .chec-box{
+            margin: 0 0 30px 0;
+        }
+        .btn-box{
+            float: right;
+
+            .btn-login,
+            .btn-submit{
+                margin: 20px auto;
+                display: block;
+                float: none!important;
+            }
+            .btn-submit{
+
+            }
+        }
+
+    }

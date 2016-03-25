@@ -1,0 +1,882 @@
+@import "base.less";
+//@import "login.less";
+@import "contact.less";
+
+
+
+html,
+body{
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+a,
+a:hover,
+a:active,
+a:focus{
+    outline: 0;
+
+}
+
+a.active{
+    cursor: default;
+}
+
+
+
+.wrap{
+
+        .navbar-brand{
+            width: 100%;
+            height: auto;
+            max-width: 181px;
+            max-height: 50px;
+            padding: 0;
+
+            &:hover{
+                filter: alpha(opacity=80);
+                opacity: .8;
+            }
+        }
+        .box-header-menu{
+            width: 100%;
+            height: 156px;
+            padding: 55px 0 0 0;
+            background: #ffffff;
+            border: none;
+            border-radius: 0;
+            position: fixed;
+            top: 0;
+            box-shadow: 0 2px 8px rgba(100, 192, 239, 0.37);
+            z-index: 1000;
+
+            .navbar-toggle {
+                border: none;
+
+                span.icon-bar {
+                    width: 32px;
+                    margin: 9px 0;
+                    background-color: #70c0e1!important;
+                }
+
+                &:hover,
+                &:active,
+                &:focus,
+                &:visited{
+                    background-color: transparent;
+                }
+                &:hover{
+
+                    span.icon-bar {
+                        background-color: #00a2d8!important;
+                    }
+                }
+            }
+
+            .navbar-toggle{
+                margin: 0 79px 0 50px;
+                float: left;
+            }
+            .menu{
+                float: right;
+
+                a{
+                    padding: 6px 20px;
+                    margin-top: 1px;
+                    font-size: 23px;
+                    font-family: 'Raleway Light', sans-serif;
+                    text-transform: uppercase;
+                    color: @color-black;
+
+                    &:hover,
+                    &:focus{
+                        text-decoration: none;
+                        color: #3da8da;
+                    }
+
+                }
+                li.active{
+
+                    a{
+                        box-shadow: none;
+                        -webkit-box-shadow: none;
+                        background: transparent;
+                        cursor: default;
+                        color: #3da8da;
+                    }
+
+                }
+            }
+            .top-right-icon{
+                float: right;
+
+                li{
+                    padding: 2px 16px;
+                    float: left;
+                    display: block;
+
+                    a{
+                        height: 32px;
+                        padding: 0;
+
+                        &:hover:before{
+                            filter: alpha(opacity=80);
+                            opacity: .8;
+                        }
+                    }
+                }
+                a:before{
+                    height: 32px;
+                    display: block;
+                    float: left;
+                    content: "";
+                }
+                a.ico-facebook:before{
+                    width: 16px;
+                    background: url(../img/icon.png) no-repeat 0 0;
+                }
+                a.ico-twitter:before{
+                    width: 40px;
+                    background: url(../img/icon.png) no-repeat -17px 0;
+                }
+                a.ico-in:before{
+                    width: 30px;
+                    background: url(../img/icon.png) no-repeat -59px 0;
+                }
+                a.ico-search:before{
+                    width: 35px;
+                    background: url(../img/icon.png) no-repeat -91px 0;
+                }
+                li:nth-child(3){
+                    padding: 2px 36px 0 16px;
+                }
+                li:last-child{
+                    padding: 2px 16px 0 35px;
+                    border-left: 1px solid #bababa;
+                }
+            }
+        }
+    }
+
+    #about_skynix{
+        width: 100%;
+        height: 573px;
+        margin: 157px 0 0 0;
+        position: relative;
+        z-index: 200;
+        text-align: center;
+
+        h1{
+            padding: 172px 0 7px 0;
+            font-size: 60px;
+            font-family: Raleway-Medium, sans-serif;
+            text-align: center;
+            color: @color-white1;
+        }
+        .about-txt1{
+            padding: 0 80px;
+            font-size: 28px;
+            line-height: 1.1;
+            font-family: Raleway-Regular, sans-serif;
+            text-align: center;
+            color: @color-black;
+
+        }
+        .about-txt2{
+            padding: 19px 0 0 0;
+            font-size: 24.66px;
+            font-family: Raleway-SemiBold, sans-serif;
+            text-align: center;
+            color: @color-white1;
+        }
+    }
+    #working_fields{
+        font-size: 23px;
+        line-height: 1;
+        text-align: center;
+        font-family: Raleway-Medium, sans-serif;
+
+        .web-network,
+        .hi,
+        .phonegap,
+        .ecommerce,
+        .email,
+        .support{
+
+            div{
+                width: 295px;
+                height: 295px;
+                display: table-cell;
+                vertical-align: bottom;
+            }
+            div:before{
+                margin: 51px auto 16px auto;
+                display: block;
+                content: "";
+                transform: scale(0.82,0.82);
+                -webkit-transform: scale(0.82,0.82);
+                -ms-transform: scale(0.82,0.82);
+                -o-transform: scale(0.82,0.82);
+
+                -webkit-transition: -webkit-transform 1s linear;
+                -ms-transition: -ms-transform 1s linear;
+                -o-transition: -o-transform 1s linear;
+                transition: transform 1s linear;
+
+            }
+
+            @media (min-width: 600px ){
+
+                &:hover{
+
+                    div:before{
+                        transform: scale(1,1);
+                        -webkit-transform: scale(1,1);
+                        -ms-transform: scale(1,1);
+                        -o-transform: scale(1,1);
+
+                        -webkit-transition: -webkit-transform 1s linear;
+                        -ms-transition: -ms-transform 1s linear;
+                        -o-transition: -o-transform 1s linear;
+                        transition: transform 1s linear;
+                    }
+                }
+            }
+        }
+
+
+        .web-network{
+
+            div:before{
+                width: 220px;
+                height: 164px;
+                background: url(../img/web-network.jpg) no-repeat 0 0;
+            }
+        }
+        .hi{
+
+            div:before{
+                width: 220px;
+                height: 164px;
+                background: url(../img/hi.jpg) no-repeat 0 0;
+            }
+        }
+        .phonegap{
+
+            div:before{
+                width: 220px;
+                height: 168px;
+                background: url(../img/phonegap.jpg) no-repeat 0 0;
+            }
+        }
+        .ecommerce{
+
+            div:before{
+                width: 220px;
+                height: 170px;
+                background: url(../img/ecommerce.jpg) no-repeat 0 0;
+            }
+        }
+        .email{
+
+            div:before{
+                width: 262px;
+                height: 129px;
+                background: url(../img/email.jpg) no-repeat 0 0;
+            }
+        }
+        .support{
+
+            div:before{
+                width: 220px;
+                height: 166px;
+                background: url(../img/support.jpg) no-repeat 0 0;
+            }
+        }
+    }
+    #technology{
+        padding-top: 43px;
+        text-align: center;
+
+        h3{
+            font-size: 28px;
+            font-family: 'Raleway Light', sans-serif;
+        }
+        .brand-name{
+            color: #64a2cb;
+        }
+        .technology-txt{
+            padding: 24px 15px 0 15px;
+            font-size: 21px;
+            font-family: 'Raleway Light', sans-serif;
+        }
+        .scheme{
+            padding: 53px 0 0 0;
+        }
+        .backend,
+        .frontend{
+            width: 340px;
+            padding: 47px 0 42px 0;
+            font-size: 24px;
+            font-family: 'Raleway-SemiBold', sans-serif;
+            color: @color-blue-dark;
+
+            strong{
+                color: @color-black;
+            }
+            ul{
+                list-style: none;
+                padding: 33px 0 0 0;
+            }
+        }
+        .backend{
+            text-align: right;
+            float: left;
+        }
+        .frontend{
+            text-align: left;
+            float: right;
+        }
+        .arrow-box{
+            position: absolute;
+            top: 0;
+            left: 380px;
+            right: 380px;
+            display: block;
+
+            .arrow-left,
+            .arrow-right{
+                width: 42%;
+                height: 196px;
+                position: absolute;
+                top: 0;
+                border-bottom: 3px dotted #6e9acc;
+
+                .dot{
+                    width: 0;
+                    height: 0;
+                    position: absolute;
+                    top: -2px;
+                    border: 4px solid #6e9acc;
+                    border-radius: 4px;
+                }
+                .angle{
+                    width: 14px;
+                    height: 14px;
+                    border-bottom: 3px solid #6e9acc;
+                    border-right: 3px solid #6e9acc;
+                    position: absolute;
+                    bottom: -8px;
+                }
+            }
+            .arrow-left{
+                left: 0;
+                border-right: 3px dotted #6e9acc;
+
+                .dot{
+                    right: -5px;
+                }
+                .angle{
+                    left: -1px;
+                    transform: rotate(135deg);
+                    -webkit-transform: rotate(135deg);
+                    -ms-transform: rotate(135deg);
+                    -o-transform: rotate(135deg);
+                }
+            }
+            .arrow-right{
+                border-left: 3px dotted #6e9acc;
+                right: 0;
+
+                .dot{
+                    left: -5px;
+                }
+                .angle{
+                    right: -1px;
+                    transform: rotate(-45deg);
+                    -webkit-transform: rotate(-45deg);
+                    -ms-transform: rotate(-45deg);
+                    -o-transform: rotate(-45deg);
+                }
+            }
+        }
+    }
+    #evaluation{
+        height: 134px;
+        padding-top: 34px;
+        border-top: 1px solid #df4720;
+        border-bottom: 1px solid #df4720;
+        background: url(../img/bg-evaluation.png) repeat;
+
+        .box-evaluation{
+            max-width: 1170px;
+            margin: 0 auto;
+
+            .evaluation-txt{
+                padding: 0;
+
+                p{
+                    padding: 3px 0 0 0;
+                    font-size: 32px;
+                    font-family: Raleway-Medium;
+                    white-space: nowrap;
+                    color: @color-white;
+                }
+            }
+        }
+        a{
+            width: 435px;
+            padding: 9px 35px 10px 35px;
+            border: 2px solid #000000;
+            display: block;
+            font-size: 24px;
+            font-family: Raleway-Bold, sans-serif;
+            text-align: center;
+            color: @color-black;
+
+            &:hover,
+            &:active{
+                text-decoration: none;
+            }
+            &:hover{
+                background: rgba(255, 104, 21, 0.51);
+            }
+        }
+    }
+    @media (min-width: 950px ){
+
+        #about_skynix{
+
+            background: url(../img/bg-top-desktop.jpg) no-repeat;
+        }
+    }
+    @media (max-width: 950px ) and (min-width: 480px ){
+
+        #about_skynix{
+
+            background: url(../img/bg-top-tablet.jpg) no-repeat;
+        }
+    }
+    footer{
+        height: 66px;
+        padding: 18px 28px 0 0;
+
+        .footer-txt{
+            font-size: 14px;
+            font-family: 'Raleway Light', sans-serif;
+            text-align: center;
+            color: @color-blue-light;
+        }
+        .link{
+            padding: 0;
+            text-align: right;
+
+            a{
+                font-size: 12.33px;
+                font-family: 'Raleway Light', sans-serif;
+                text-decoration: underline;
+                color: @color-black;
+
+                &:hover{
+                    color: @color-a-hover
+                }
+            }
+        }
+    }
+    @media (max-width: 1200px ) {
+
+        .wrap{
+
+            nav>.container {
+                width: 98%!important;
+                position: relative;
+            }
+            .box-header-menu {
+
+                .top-right-icon {
+                    margin: 0;
+                }
+                .menu{
+
+                    a {
+                        padding: 6px 18px;
+                    }
+                }
+            }
+        }
+        #evaluation{
+            height: 202px;
+            padding-top: 28px;
+            text-align: center;
+
+            .box-evaluation{
+
+                .evaluation-txt{
+
+                    p{
+                        white-space: normal;
+                    }
+                }
+            }
+            a{
+                margin: 22px auto 0 auto;
+            }
+        }
+    }
+    @media (max-width: 1096px ) {
+
+        .wrap{
+
+            .box-header-menu{
+
+                .menu{
+                    padding: 0 5px;
+
+                    a {
+                        padding: 6px 7px;
+                    }
+                }
+                .top-right-icon{
+
+                    li {
+                        padding: 2px 5px;
+                        float: left;
+                        display: block;
+                    }
+                    li:last-child {
+                        padding: 2px 10px 0 20px;
+                        border-left: 1px solid #bababa;
+                    }
+                }
+            }
+        }
+    }
+    @media (max-width: 992px ) {
+
+        #technology{
+            width: 100%;
+        }
+
+    }
+    @media (max-width: 949px ) {
+
+        .wrap{
+
+            .box-header-menu {
+                height: 126px;
+                padding: 0;
+                margin: 0;
+
+                nav>.container {
+                    width: 100% !important;
+                }
+                .navbar-brand {
+                    margin: 34px 0 0 0;
+                }
+                .navbar-toggle {
+                    height: 126px;//*************
+                    margin: 0 64px 0 32px;
+                }
+                .navbar-toggle[aria-expanded="true"]{//*******
+                    height: 126px;//*******************
+                    padding: 0 53px 0 53px;
+                    margin: 0 19px 0 -9px;
+                    background: #84c9e9;
+                    border-radius: 0;
+
+                    span.icon-bar {
+                        background-color: #ffffff!important;
+                    }
+                }
+
+                .top-right-icon{
+                    margin: -83px 0 0 0;
+                }
+                .menu {
+                    width: 40%;
+                    padding: 0;
+                    position: absolute;
+                    top: 126px;
+                    left: -9px;
+                    border: none;
+                    box-shadow: none;
+                    z-index: 1000;
+                    overflow:  hidden;
+
+                    li{
+                        width: 100%;
+                        border-left: 1px solid #ffffff;
+                        border-right: 1px solid #ffffff;
+                        border-bottom: 1px solid #ffffff;
+
+                        &.active{
+
+                            a{
+                                background: #54b0e2;
+                                color: @color-white1;
+                            }
+                        }
+
+                    }
+
+                    a{
+                        width: 100%;
+                        height: 46px;
+                        padding: 0 20px;
+                        margin: 0!important;
+                        line-height: 2;
+                        display: block;
+                        border-radius: 0;
+                        float: left;
+                        text-align: left;
+                        background: #8ac6e0;
+                        color: @color-white1;
+
+
+
+                        &:hover{
+                            background: #8ac6e0;
+                            color: #0D657C;
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        #about_skynix{
+            margin: 127px 0 0 0;
+
+            h1 {
+                padding: 142px 0 11px 0;
+            }
+            .about-txt2 {
+                padding: 14px 0 0 0;
+            }
+        }
+        footer{
+
+            .link{
+                text-align: center;
+            }
+        }
+
+    }
+    @media (max-width: 880px ) {
+
+        #about_skynix{
+
+            .about-txt1 {
+                padding: 0 30px;
+            }
+        }
+        #technology{
+
+            .backend,
+            .frontend {
+                width: 220px;
+            }
+            .arrow-box {
+                left: 260px;
+                right: 260px;
+            }
+            .arrow-box .arrow-left,
+            .arrow-box .arrow-right {
+                height: 303px;
+            }
+        }
+
+    }
+    @media (max-width: 768px ) {
+
+        .wrap{
+
+            .box-header-menu {
+                height: 64px;
+                padding: 0;
+
+
+
+                .navbar-brand,
+                .top-right-icon{
+                    transform: scale(0.5, 0.5);
+                    -webkit-transform: scale(0.5, 0.5);
+                    -ms-transform: scale(0.5, 0.5);
+                    -o-transform: scale(0.5, 0.5);
+                }
+                .navbar-brand {
+                    margin: 7px 0 0 -44px;
+                }
+                .navbar-toggle {
+                    height: 64px;
+                    margin: 0 17px 0 6px;
+
+                    span.icon-bar {
+                        width: 18px;
+                        height: 1px;
+                        margin: 5px 0;
+                    }
+                }
+                .navbar-toggle[aria-expanded="true"]{
+                    height: 64px;
+                    padding: 0 20px 0 22px;
+                    margin: 0 7px 0 -6px;
+                }
+                .top-right-icon {
+                    margin: -45px -65px 0 0;
+
+                    li{
+                        padding: 2px 8px;
+
+                        a{
+                            padding: 0 2px;
+                        }
+                    }
+                }
+                .menu {
+                    width: 100%;
+                    top: 64px;
+
+                    a{
+                        text-align: center;
+                    }
+                }
+            }
+        }
+
+        #about_skynix{
+            margin: 65px 0 0 0;
+
+            h1 {
+                padding: 112px 0 11px 0;
+            }
+        }
+        #evaluation{
+
+            .box-evaluation{
+
+                .evaluation-txt{
+
+                    p{
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+
+    }
+    @media (max-width: 600px ) {
+
+        #about_skynix{
+
+            h1 {
+                padding: 128px 0 11px 0;
+                font-size: 45px;
+            }
+            .about-txt1 {
+                font-size: 24px;
+            }
+            .about-txt2 {
+                font-size: 20px;
+            }
+        }
+        #working_fields {
+
+            .web-network,
+            .hi,
+            .phonegap,
+            .ecommerce,
+            .email,
+            .support {
+
+                width: 100%!important;
+
+                div {
+                    width: 275px;
+                    height: auto;
+                    margin: auto;
+                    display: block;
+
+                    &:before {
+                        margin: 46px auto 28px auto;
+                        transform: scale(1,1);
+                        -webkit-transform: scale(1,1);
+                        -ms-transform: scale(1,1);
+                        -o-transform: scale(1,1);
+                    }
+                }
+            }
+        }
+        #technology {
+
+            .backend,
+            .frontend {
+                width: 100%;
+                text-align: center;
+            }
+            .arrow-box {
+                display: none!important;
+            }
+        }
+        #evaluation{
+            height: 193px;
+            padding-top: 16px;
+
+            .box-evaluation{
+
+                >div{
+                    padding: 0;
+                }
+                .evaluation-txt{
+
+                    p{
+                        padding: 0 15px;
+                    }
+                }
+            }
+            a{
+                width: 300px;
+                padding: 5px;
+                font-size: 17.6px;
+            }
+        }
+
+    }
+    @media (max-width: 480px ) {
+
+        #about_skynix{
+            margin: 64px 0 0 0;
+            background: url(../img/bg-top-mobile.jpg) no-repeat;
+        }
+
+        #about_skynix{
+            height: 324px;
+
+            h1 {
+                padding: 15px 0 4px 0;
+                margin: 16px 0 10px 0;
+                font-size: 40px;
+            }
+            .about-txt1 {
+                padding: 0;
+                font-size: 18.8px;
+                line-height: 1.11;
+            }
+            .about-txt2 {
+                font-size: 16.6px;
+            }
+        }
+        #evaluation{
+
+            a{
+                width: 265px;
+            }
+        }
+
+    }
+
+
+
+

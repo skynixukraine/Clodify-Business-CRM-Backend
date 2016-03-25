@@ -10,10 +10,32 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Login UA';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+<div class="container site-login" id="contact">
+
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <!--<h1>Login</h1>-->
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <!--<div class="col-lg-12 col-xs-12 contact-txt">
+            Please fill out the following fields to login:
+        </div>-->
+        <div class="col-lg-12 col-xs-12 contact-txt">
+            Будь ласка, заповніть наступні поля для входу:
+        </div>
+    </div>
+
+
+
+
+
+
+
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
@@ -26,6 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'email') ?>
 
+
+
         <?= $form->field($model, 'password')->passwordInput() ?>
 
         <?= $form->field($model, 'rememberMe')->checkbox([
@@ -34,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::submitButton('Login', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
             </div>
         </div>
 
@@ -43,4 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-offset-1" style="color:#999;">
         You may login with your email address and password.
     </div>
+
 </div>
+

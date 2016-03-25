@@ -27,31 +27,28 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->params['applicationName'],
+        'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],
     ]);
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' => 'collapse navbar-collapse navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
-                [
-                    'label' => 'Logout (' . Yii::$app->user->identity->first_name . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ],
+            ['label' => 'КОНТАКТИ', 'url' => ['/site/index']],
+            ['label' => 'КАР\'ЄРА', 'url' => ['/site/login']],
+            ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => ['/site/contact']],
+
         ],
     ]);
     NavBar::end();
     ?>
 
-    <div class="container">
+
+
+    <div>
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
@@ -79,11 +76,18 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; Skynix Company <?= date('Y') ?></p>
+
+<footer class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-10 footer-txt">
+            <?= date('Y') ?> Усі права захищені. Skynix ltd.
+        </div>
+        <div class="col-lg-2 col-xs-2 link">
+            <a href="login.html">УВІЙТИ</a>
+        </div>
     </div>
 </footer>
+
 
 <?php $this->endBody() ?>
 </body>
