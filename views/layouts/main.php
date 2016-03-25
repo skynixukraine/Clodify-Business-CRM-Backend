@@ -48,7 +48,6 @@ AppAsset::register($this);
                 ],
         ],
     ]);
-    echo '<a href="#">I</a>';
     NavBar::end();
     ?>
 
