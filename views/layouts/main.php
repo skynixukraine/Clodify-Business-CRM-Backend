@@ -35,11 +35,11 @@ AppAsset::register($this);
     ]);
 
     echo Nav::widget([
-        'options' => ['class' => 'collapse navbar-collapse navbar-nav navbar-right nav menu'],
+        'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'КОНТАКТИ', 'url' => ['/site/index']],
+            ['label' => 'КОНТАКТИ', 'url' => ['/site/contact']],
             ['label' => 'КАР\'ЄРА', 'url' => ['/site/login']],
-            ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => ['/site/contact']],
+            ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => ['/site/index']],
 
         ],
     ]);
@@ -83,7 +83,7 @@ AppAsset::register($this);
             <?= date('Y') ?> Усі права захищені. Skynix ltd.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <a href="login.html">УВІЙТИ</a>
+            <a href="/site/login">УВІЙТИ</a>
         </div>
     </div>
 </footer>

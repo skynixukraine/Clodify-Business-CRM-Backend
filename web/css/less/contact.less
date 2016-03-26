@@ -1,6 +1,6 @@
 
 
-    #contact{
+    .contact{
         margin: 238px auto 0 auto;
 
         h1{
@@ -15,9 +15,9 @@
             text-align: center;
         }
         form{
-            width: 99%;
+            width: 95%;
             margin: 0 auto;
-            padding: 0 21% 0 0;
+            padding: 0;
         }
         label:not([for="remember"]){
             //width: 95px;
@@ -77,17 +77,44 @@
 
 
     }
+    #contact-form {
+        width: 79%;
+        padding: 0 125px 0 0;
+        margin: 0 auto;
 
+        input,
+        textarea{
+            width: 83%;
+            float: right;
+        }
+        p,
+        .field-contactform-verifycode{
+            padding: 0 0 0 17%;
+        }
+    }
+    @media (max-width: 992px ) {
+
+        #contact-form {
+            width: 100%!important;
+            padding: 0 75px 0 0!important;
+
+        }
+
+    }
     @media (max-width: 949px ) {
 
-        #contact{
+        .contact{
             margin: 205px 0 0 0;
+        }
+        #contact-form{
+            width: 85%!important;
+            padding: 0!important;
         }
 
     }
     @media (max-width: 768px ) {
 
-        #contact{
+        .contact{
             margin: 145px 0 0 0;
 
             .contact-txt {
@@ -103,18 +130,24 @@
                 .input-captcha{
                     width: 49%!important;
                     margin: 0!important;
+
+                    img {
+                        float: left;
+                    }
                 }
                 .input-captcha{
-                    padding: 0;
+                    padding: 0 5px 0 0;
                 }
             }
+
         }
+
 
 
     }
     @media (max-width: 600px ) {
 
-        #contact{
+        .contact{
 
             h1 {
                 font-size: 40px;
@@ -126,6 +159,14 @@
                 padding: 11px 11% 55px 11%
             }
 
+        }
+        #contact-form{
+
+            label{
+                width: 100%;
+                padding: 0 0 0 17%;
+                text-align: left;
+            }
         }
 
         .chec-box{
@@ -146,11 +187,23 @@
         /*input:not([type="checkbox"]){
             width: 100%!important;
         }*/
-        #contact {
+        .contact {
             margin: 75px 0 30px 0;
 
             .margin-b {
                 margin-bottom: 0;
+            }
+        }
+        #contact-form{
+
+            input,
+            textarea {
+                width: 100%!important;
+                float: right;
+            }
+            label,
+            .field-contactform-verifycode{
+                padding: 0;
             }
         }
         .box-email,
