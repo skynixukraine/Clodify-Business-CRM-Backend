@@ -39,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'login-form',
         'options' => ['class' => 'form-horizontal'],
         'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-6\">{input}</div>\n<div class=\"col-lg-9 col-lg-offset-3\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-3 control-label'],
+            'template' => "{label}\n<div class=\"col-lg-8 col-md-8\">{input}</div>\n<div class=\"col-lg-9 col-lg-offset-3 col-md-9 col-md-offset-3 col-sm-9 col-sm-offset-3 col-xs-offset-4\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-3 col-md-3 col-sm-3 control-label'],
         ],
     ]); ?>
 
@@ -51,11 +51,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'password')->passwordInput() ?>
 
         <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+            'template' => "<div class=\"col-lg-offset-3 col-lg-3 col-md-offset-3 col-md-4 col-sm-offset-2 col-sm-6 \">{input} {label}</div>\n
+
+
+
+
+<div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
         ]) ?>
 
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
+        <div class="form-group box-login-btn">
+            <div class="col-lg-offset-6 col-lg-5 col-md-offset-6 col-md-5">
                 <?= Html::submitButton('Ввійти', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
             </div>
         </div>
