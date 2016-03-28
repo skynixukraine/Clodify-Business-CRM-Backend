@@ -13,7 +13,6 @@ use app\models\PaymentMethod;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/teams.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/teammate-view.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -28,7 +27,7 @@ $this->params['menu'] = [
     ]
 ];
 ?>
-<table id="team-table" class="table table-hover">
+<table id="teammates-table" class="table table-hover">
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
@@ -43,9 +42,8 @@ $this->params['menu'] = [
 </table>
 <script>
     $(function(){
-        TeamsModule.init({
-            editUrl     : '<?=Url::to(['teams/update'])?>',
-            deleteUrl   : '<?=Url::to(['teams/delete'])?>',
+        TeammateModule.init({
+            deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
             findUrl     : '<?=Url::to(['teams/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })

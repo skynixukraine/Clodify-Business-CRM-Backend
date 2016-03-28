@@ -6,8 +6,7 @@ var TeammateModule = (function() {
     var cfg = {
             deleteUrl   : '',
             findUrl     : '',
-            canDelete   : null,
-            canAction   : null
+            canDelete   : null
         },
         dataTable,
         dataFilter = {
@@ -66,7 +65,7 @@ var TeammateModule = (function() {
 
 
             cfg = $.extend(cfg, config);
-            dataTable = $('#team-table').dataTable({
+            dataTable = $('#teammates-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
                 "bFilter": true,
@@ -100,6 +99,22 @@ var TeammateModule = (function() {
                     {
                         "targets"   : 5,
                         "orderable" : true
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : false,
+                        "render"    : function (data, type, row) {
+                            var icons = [];
+                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                            if ( cfg.canDelete ) {
+
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+
+                            }
+                            return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                        }
                     }
 
                 ],
@@ -118,44 +133,13 @@ var TeammateModule = (function() {
                 "processing": true,
                 "serverSide": true
             });
-                if( cfg.canAction){
-                columns.push({
-                    "targets"   : 6,
-                    "orderable" : false,
-                    "render"    : function (data, type, row) {
-                        var icons = [];
-                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                        if ( cfg.canDelete ) {
 
-                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
 
-                        }
-                        return '<div class="actions">' + icons.join(" ") + '</div>';
-
-                    }
-                });
-            }
 
 
             var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                dataTable.find("td").click(function(){
-
-                    dataTable.find("tr[class*=active]").removeClass( "active" );
-                    $(this).parents("tr").addClass("active");
-                    id = $(this).parents("tr").find("td").eq(0).text();
-                    name   = $(this).parents("tr").find("td").eq(1).text();
-
-                });
-                $(document).keydown(function(e){
-                    if (e.keyCode == 46) {
-
-                        //console.log(id);
-                        actionDelete( id, name, dataTable );
-                    }
-                });
 
                 dataTable.find("img[class*=edit]").click(function(){
 

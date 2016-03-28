@@ -34,9 +34,14 @@ class TeamsController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index', 'find'],
+                        'actions'   => [ 'index'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM],
+                    ],
+                    [
+                        'actions'   => [ 'find'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
                 ],
             ],
@@ -63,6 +68,7 @@ class TeamsController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
+
         $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id');
 
         $columns        = [
@@ -83,6 +89,10 @@ class TeamsController extends DefaultController
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+
+        if ( $teamId = Yii::$app->request->get("id") ){
+            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
+        }
 
         $dataTable->setFilter('is_deleted=0');
 
