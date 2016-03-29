@@ -20,12 +20,10 @@
         margin: 0 auto;
     }
     label{
-        //width: 95px;
         padding: 7px 8px 0 55px;
         font-size: 18px;
         font-family: 'Raleway-Bold', sans-serif;
         text-align: right;
-
     }
     label[for="contactform-subject"]{
         padding: 7px 8px 0 39px;
@@ -75,10 +73,12 @@
         }
     }
     .btn-login {
+        width: 200px;
         padding: 2px 58px;
         margin: -45px 0 0 0;
     }
     .btn-submit{
+        width: 181px;
         padding: 2px 18px;
     }
     .box-txt-form{
@@ -97,7 +97,6 @@
         margin: 30px 14px 0 0;
         float: left;
     }
-
 }
 
 #login-form{
@@ -113,11 +112,10 @@
         width: 83%;
         float: right;
     }
-    p,
+    .help-block-error,
     .field-contactform-verifycode{
         padding: 0 0 0 17%;
     }
-
 }
 @media (max-width: 1200px ) {
 
@@ -128,42 +126,41 @@
             width: 80%;
         }
         label[for="contactform-verifycode"] {
-            padding: 7px 8px 0 4% !important;
+            padding: 7px 8px 0 4%;
+        }
+        .help-block-error{
+            padding: 0 0 0 20%;
         }
     }
-
-
 }
 @media (max-width: 992px ) {
 
     #contact-form {
-        width: 100%!important;
-        padding: 0 75px 0 0!important;
-
+        width: 100%;
+        padding: 0 75px 0 0;
     }
     #login-form{
-        width: 90%;
-        padding: 0 50px 0 0;
+        width: 88%;
+        padding: 0 100px 0 0;
 
         .btn-login {
-            margin: 27px 0 0 0;
+            margin: -35px 0 0 0;
         }
-
         input.form-control{
-            width: 76%;
+            width: 100%;
         }
-        .field-loginform-rememberme{
-
-            >div{
-                padding: 0 0 0 55px;
-            }
+        .help-block-error{
+        }
+        input[type="checkbox"] {
+            margin: 37px 14px 0 0;
+        }
+        label.control-label{
+            padding: 7px 0 0 0;
+        }
+        label[for="loginform-rememberme"] {
+            padding: 36px 8px 0 0;
         }
     }
-    input[type="checkbox"] {
-        margin: 40px 14px 0 0;
-
-    }
-
 }
 
 @media (max-width: 949px ) {
@@ -172,11 +169,19 @@
         margin: 205px 0 0 0;
     }
     #contact-form{
-        width: 85%!important;
-        padding: 0!important;
+        width: 85%;
+        padding: 0;
     }
+    #login-form{
 
+        .box-login-btn {
+            margin: -48px -15px 0 0;
 
+            .btn-login {
+                margin: -33px 0 0 0;
+            }
+        }
+    }
 }
 
 @media (max-width: 768px ) {
@@ -187,7 +192,6 @@
         .contact-txt {
             padding: 11px 15% 55px 15%;
         }
-
         form {
             width: 90%;
             margin: 0 auto;
@@ -206,7 +210,7 @@
     }
 
     #contact-form {
-        width: 83% !important;
+        width: 83%;
         margin: 0 0 0 2%;
 
         input,
@@ -214,19 +218,22 @@
             width: 73%;
         }
         label[for="contactform-verifycode"] {
-            padding: 7px 8px 0 12% !important;
+            padding: 7px 8px 0 12%;
+        }
+        .help-block-error{
+            padding: 0 0 0 27%;
         }
     }
 
     #login-form{
+        width: 84%;
+        padding: 0 40px 0 0;
 
-        input.form-control {
-                width: 70%;
+        .field-loginform-rememberme{
 
-
-        }
-        .field-loginform-rememberme > div {
-            padding: 0 0 0 36px;
+            >div{
+                margin-left: 15%!important;
+            }
         }
 
     }
@@ -247,34 +254,25 @@
             padding: 11px 11% 55px 11%
         }
 
-
-
-        label:not([for="loginform-rememberme"]),
-        label:not(label[for="contactform-verifycode"]) {
+        label{
             width: 80px;
-            margin: 0 0 0 -20px;
-        }
 
+        }
 
 
     }
     #contact-form{
 
-        label:not(label[for="contactform-verifycode"]){
-            width: 100%;
+        label{
             padding: 0 0 0 17%;
             text-align: left;
         }
         .img-captcha,
         .input-captcha{
             width: 49%!important;
-            margin: 0!important;
-
         }
         .btn-box {
             width: 100% !important;
-            //float: none;
-            //margin: auto;
 
             .btn-submit{
                 margin: 30px auto;
@@ -282,23 +280,54 @@
                 float: none;
             }
         }
-        label[for="contactform-subject"] {
-            padding: 7px 8px 0 15px!important;
-        }
-        label:not([for="loginform-rememberme"]),
-        label:not([for="contactform-verifycode"]) {
+
+        label {
             padding: 7px 8px 0 32px;
         }
-        label[for="contactform-body"] {
-            padding: 7px 8px 0 37px!important;
+        label[for="contactform-subject"] {
+            padding: 7px 8px 0 15px;
         }
-    }
+        label[for="contactform-body"] {
+            padding: 7px 8px 0 37px;
+        }
+        label[for="contactform-verifycode"]{
+            width: 100%;
+        }
 
-    .chec-box{
-        margin-left: 0!important;
     }
-    .btn-box{
-        float: right;
+    #login-form{
+        padding: 0;
+
+        input.form-control {
+            width: 95%;
+        }
+        .box-login-btn {
+            margin: 0;
+
+            .btn-login {
+                margin: 30px auto;
+                display: block;
+                float: none;
+            }
+        }
+        .help-block-error{
+            padding: 0 0 0 6%;
+        }
+        input[type="checkbox"] {
+            margin: 37px 14px 0 17px;
+        }
+        .field-loginform-rememberme{
+
+            >div{
+                margin-left: 25%!important;
+            }
+        }
+
+        label[for="loginform-rememberme"]{
+            width: 150px;
+            text-align: left;
+        }
+
     }
 
 }
@@ -306,7 +335,6 @@
 @media (max-width: 480px ) {
 
     label{
-        width: 100%!important;
         display: block;
         float: none!important;
         text-align: left!important;
@@ -324,7 +352,7 @@
 
         input,
         textarea {
-            width: 100%!important;
+            width: 100%;
             float: right;
         }
         label,
@@ -332,40 +360,37 @@
             padding: 0!important;
             text-align: left;
         }
-        label[for="contactform-subject"] {
-            padding: 0!important;
-        }
-        label[for="contactform-body"] {
-            padding: 0!important;
-        }
-        label[for="contactform-verifycode"] {
-            padding: 0!important;
+        .help-block-error{
+            padding: 0;
         }
     }
-    .box-email,
-    .box-password,
-    .chec-box,
-    .btn-box,
-    .box-name,
-    .box-subject,
-    .box-body,
-    .box-txt-form{
-        width: 100%!important;
-        margin: 0;
-    }
+    #login-form{
 
-    .chec-box{
-        margin: 0 0 30px 0;
-    }
-    .btn-box{
-        float: right;
-
-        .btn-login{
-            margin: 20px auto;
-            display: block;
-            float: none!important;
+        .form-group {
+            margin-bottom: 0;
         }
+        .field-loginform-email,
+        .field-loginform-password,
+        .field-loginform-rememberme{
 
+            >div{
+                width: 100%!important;
+                float: left;
+                margin-left: 0!important;
+            }
+        }
+        .help-block-error{
+            padding: 0;
+        }
+        label.control-label{
+            padding: 7px 0 0 15px;
+        }
+        input.form-control {
+            width: 100%;
+        }
+        input[type="checkbox"] {
+            margin: 37px 14px 0 0;
+        }
     }
 
 }

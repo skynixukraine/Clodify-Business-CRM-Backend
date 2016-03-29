@@ -42,13 +42,14 @@
     width: 58.33333333%!important;
   }
   .col-sm-8 {
-    width: 33.33333333%!important;
+    width: 66.66666667% !important;
   }
   .col-sm-9 {
     width: 75%!important;
   }
   .col-sm-10 {
     width: 83.33333333%!important;
+    float: left;
   }
   .col-sm-11 {
     width: 91.66666667%!important;
@@ -89,7 +90,7 @@
     width: 58.33333333% !important;
   }
   .col-xs-8 {
-    width: 33.33333333% !important;
+    width: 66.66666667% !important;
   }
   .col-xs-9 {
     width: 75% !important;
@@ -102,6 +103,12 @@
   }
   .col-xs-12 {
     width: 100% !important;
+  }
+  .col-xs-offset-2 {
+    margin-left: 16.66666667%!important;
+  }
+  .col-xs-offset-3 {
+    margin-left: 25%!important;
   }
   .col-xs-offset-4 {
     margin-left: 33.33333333%!important;
@@ -145,7 +152,7 @@
   background-color: transparent;
 }
 .box-header-menu .navbar-toggle:hover span.icon-bar {
-  background-color: #00a2d8!important;
+  background-color: #00a2d8;
 }
 .box-header-menu .navbar-toggle {
   margin: 0 79px 0 50px;
@@ -297,7 +304,7 @@ footer .link a:hover {
     margin: 0 64px 0 32px;
   }
   .box-header-menu .navbar-toggle[aria-expanded="true"] {
-    height: 126px;
+    height: 127px;
     padding: 0 53px 0 53px;
     margin: 0 19px 0 -9px;
     background: #84c9e9;
@@ -324,13 +331,15 @@ footer .link a:hover {
   .box-header-menu .menu li {
     width: 100%;
     height: 47px;
-    border-left: 1px solid #ffffff;
-    border-right: 1px solid #ffffff;
+    border-right: 1px solid #6FACD0;
     border-bottom: 1px solid #ffffff;
   }
   .box-header-menu .menu li.active a {
     background: #54b0e2!important;
     color: #ffffff !important;
+  }
+  .box-header-menu .menu li:last-of-type {
+    border-bottom: 1px solid #6FACD0;
   }
   .box-header-menu .menu a {
     width: 100%;
@@ -342,7 +351,7 @@ footer .link a:hover {
     border-radius: 0;
     float: left;
     text-align: center;
-    background: #8ac6e0;
+    background: #84c9e9;
     color: #ffffff !important;
   }
   .box-header-menu .menu a:hover {
@@ -381,7 +390,7 @@ footer .link a:hover {
     margin: 5px 0;
   }
   .box-header-menu .navbar-toggle[aria-expanded="true"] {
-    height: 64px;
+    height: 65px;
     padding: 0 20px 0 22px;
     margin: 0 7px 0 -6px;
   }
@@ -408,7 +417,7 @@ footer .link a:hover {
   }
   nav > .container .navbar-collapse {
     width: 100%;
-    left: 14px;
+    left: 15px;
   }
 }
 #about_skynix {
@@ -896,10 +905,12 @@ footer .link a:hover {
   background: rgba(112, 192, 225, 0.8);
 }
 .contact .btn-login {
+  width: 200px;
   padding: 2px 58px;
   margin: -45px 0 0 0;
 }
 .contact .btn-submit {
+  width: 181px;
   padding: 2px 18px;
 }
 .contact .box-txt-form {
@@ -924,7 +935,7 @@ footer .link a:hover {
   width: 83%;
   float: right;
 }
-#contact-form p,
+#contact-form .help-block-error,
 #contact-form .field-contactform-verifycode {
   padding: 0 0 0 17%;
 }
@@ -934,29 +945,35 @@ footer .link a:hover {
     width: 80%;
   }
   #contact-form label[for="contactform-verifycode"] {
-    padding: 7px 8px 0 4% !important;
+    padding: 7px 8px 0 4%;
+  }
+  #contact-form .help-block-error {
+    padding: 0 0 0 20%;
   }
 }
 @media (max-width: 992px) {
   #contact-form {
-    width: 100%!important;
-    padding: 0 75px 0 0!important;
+    width: 100%;
+    padding: 0 75px 0 0;
   }
   #login-form {
-    width: 90%;
-    padding: 0 50px 0 0;
+    width: 88%;
+    padding: 0 100px 0 0;
   }
   #login-form .btn-login {
-    margin: 27px 0 0 0;
+    margin: -35px 0 0 0;
   }
   #login-form input.form-control {
-    width: 76%;
+    width: 100%;
   }
-  #login-form .field-loginform-rememberme > div {
-    padding: 0 0 0 55px;
+  #login-form input[type="checkbox"] {
+    margin: 37px 14px 0 0;
   }
-  input[type="checkbox"] {
-    margin: 40px 14px 0 0;
+  #login-form label.control-label {
+    padding: 7px 0 0 0;
+  }
+  #login-form label[for="loginform-rememberme"] {
+    padding: 36px 8px 0 0;
   }
 }
 @media (max-width: 949px) {
@@ -964,8 +981,14 @@ footer .link a:hover {
     margin: 205px 0 0 0;
   }
   #contact-form {
-    width: 85%!important;
-    padding: 0!important;
+    width: 85%;
+    padding: 0;
+  }
+  #login-form .box-login-btn {
+    margin: -48px -15px 0 0;
+  }
+  #login-form .box-login-btn .btn-login {
+    margin: -33px 0 0 0;
   }
 }
 @media (max-width: 768px) {
@@ -987,7 +1010,7 @@ footer .link a:hover {
     padding: 0 5px 0 14px;
   }
   #contact-form {
-    width: 83% !important;
+    width: 83%;
     margin: 0 0 0 2%;
   }
   #contact-form input,
@@ -995,13 +1018,17 @@ footer .link a:hover {
     width: 73%;
   }
   #contact-form label[for="contactform-verifycode"] {
-    padding: 7px 8px 0 12% !important;
+    padding: 7px 8px 0 12%;
   }
-  #login-form input.form-control {
-    width: 70%;
+  #contact-form .help-block-error {
+    padding: 0 0 0 27%;
+  }
+  #login-form {
+    width: 84%;
+    padding: 0 40px 0 0;
   }
   #login-form .field-loginform-rememberme > div {
-    padding: 0 0 0 36px;
+    margin-left: 15%!important;
   }
 }
 @media (max-width: 600px) {
@@ -1014,20 +1041,16 @@ footer .link a:hover {
   .contact .contact-txt {
     padding: 11px 11% 55px 11%;
   }
-  .contact label:not([for="loginform-rememberme"]),
-  .contact label:not(label[for="contactform-verifycode"]) {
+  .contact label {
     width: 80px;
-    margin: 0 0 0 -20px;
   }
-  #contact-form label:not(label[for="contactform-verifycode"]) {
-    width: 100%;
+  #contact-form label {
     padding: 0 0 0 17%;
     text-align: left;
   }
   #contact-form .img-captcha,
   #contact-form .input-captcha {
     width: 49%!important;
-    margin: 0!important;
   }
   #contact-form .btn-box {
     width: 100% !important;
@@ -1037,26 +1060,48 @@ footer .link a:hover {
     display: block;
     float: none;
   }
-  #contact-form label[for="contactform-subject"] {
-    padding: 7px 8px 0 15px!important;
-  }
-  #contact-form label:not([for="loginform-rememberme"]),
-  #contact-form label:not([for="contactform-verifycode"]) {
+  #contact-form label {
     padding: 7px 8px 0 32px;
   }
+  #contact-form label[for="contactform-subject"] {
+    padding: 7px 8px 0 15px;
+  }
   #contact-form label[for="contactform-body"] {
-    padding: 7px 8px 0 37px!important;
+    padding: 7px 8px 0 37px;
   }
-  .chec-box {
-    margin-left: 0!important;
+  #contact-form label[for="contactform-verifycode"] {
+    width: 100%;
   }
-  .btn-box {
-    float: right;
+  #login-form {
+    padding: 0;
+  }
+  #login-form input.form-control {
+    width: 95%;
+  }
+  #login-form .box-login-btn {
+    margin: 0;
+  }
+  #login-form .box-login-btn .btn-login {
+    margin: 30px auto;
+    display: block;
+    float: none;
+  }
+  #login-form .help-block-error {
+    padding: 0 0 0 6%;
+  }
+  #login-form input[type="checkbox"] {
+    margin: 37px 14px 0 17px;
+  }
+  #login-form .field-loginform-rememberme > div {
+    margin-left: 25%!important;
+  }
+  #login-form label[for="loginform-rememberme"] {
+    width: 150px;
+    text-align: left;
   }
 }
 @media (max-width: 480px) {
   label {
-    width: 100%!important;
     display: block;
     float: none!important;
     text-align: left!important;
@@ -1072,7 +1117,7 @@ footer .link a:hover {
   }
   #contact-form input,
   #contact-form textarea {
-    width: 100%!important;
+    width: 100%;
     float: right;
   }
   #contact-form label,
@@ -1080,36 +1125,30 @@ footer .link a:hover {
     padding: 0!important;
     text-align: left;
   }
-  #contact-form label[for="contactform-subject"] {
-    padding: 0!important;
+  #contact-form .help-block-error {
+    padding: 0;
   }
-  #contact-form label[for="contactform-body"] {
-    padding: 0!important;
+  #login-form .form-group {
+    margin-bottom: 0;
   }
-  #contact-form label[for="contactform-verifycode"] {
-    padding: 0!important;
-  }
-  .box-email,
-  .box-password,
-  .chec-box,
-  .btn-box,
-  .box-name,
-  .box-subject,
-  .box-body,
-  .box-txt-form {
+  #login-form .field-loginform-email > div,
+  #login-form .field-loginform-password > div,
+  #login-form .field-loginform-rememberme > div {
     width: 100%!important;
-    margin: 0;
+    float: left;
+    margin-left: 0!important;
   }
-  .chec-box {
-    margin: 0 0 30px 0;
+  #login-form .help-block-error {
+    padding: 0;
   }
-  .btn-box {
-    float: right;
+  #login-form label.control-label {
+    padding: 7px 0 0 15px;
   }
-  .btn-box .btn-login {
-    margin: 20px auto;
-    display: block;
-    float: none!important;
+  #login-form input.form-control {
+    width: 100%;
+  }
+  #login-form input[type="checkbox"] {
+    margin: 37px 14px 0 0;
   }
 }
 html,
