@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use app\components\SkynixNavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -26,9 +26,10 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
+    SkynixNavBar::begin([
         'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
+        'skynixLinks' => 'Some HTML here',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],
@@ -43,7 +44,7 @@ AppAsset::register($this);
 
         ],
     ]);
-    NavBar::end();
+    SkynixNavBar::end();
     ?>
 
 
