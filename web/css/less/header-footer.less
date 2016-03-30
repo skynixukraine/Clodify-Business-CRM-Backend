@@ -50,7 +50,7 @@
         float: left;
     }
     .menu{
-        float: right;
+        padding: 8px 0 0 0;
 
         a{
             padding: 6px 20px;
@@ -74,11 +74,15 @@
                 background: transparent!important;
                 cursor: default;
                 color: #3da8da!important;
+                text-shadow: 0 0 4px rgba(1, 167, 219, 0.52);
             }
         }
     }
+    .navbar-collapse{
+        margin: 0 300px 0 0;
+    }
     .top-right-icon{
-        float: right;
+        margin: -43px 0 0 0;
 
         li{
             padding: 2px 16px;
@@ -126,6 +130,10 @@
         }
     }
 }
+.fix-height{
+    height: 78px;
+    padding: 13px 0 0 0;
+}
 
 footer{
     height: 66px;
@@ -162,9 +170,6 @@ footer{
     }
     .box-header-menu {
 
-        .top-right-icon {
-            margin: 0;
-        }
         .menu{
 
             a {
@@ -182,11 +187,14 @@ footer{
     .box-header-menu{
 
         .menu{
-            padding: 0 5px;
+            padding: 8px 5px 0 0;
 
             a {
                 padding: 6px 7px;
             }
+        }
+        .navbar-collapse {
+            margin: 0 240px 0 0;
         }
         .top-right-icon{
 
@@ -203,7 +211,15 @@ footer{
     }
 
 }
+@media (max-width: 992px ){
 
+    .box-header-menu{
+
+        .menu a {
+            font-size: 22px;
+        }
+    }
+}
 @media (max-width: 949px ) {
 
     .box-header-menu {
@@ -243,6 +259,7 @@ footer{
         }
         .top-right-icon{
             margin: -83px 0 0 0;
+            float: right;
         }
         .menu {
             width: 100%;
@@ -293,6 +310,27 @@ footer{
             }
         }
     }
+
+    .fix-height{
+        height: 63px;
+
+        .navbar-toggle {
+            height: 63px
+        }
+        .navbar-toggle[aria-expanded="true"] {
+            height: 63px;
+        }
+        .navbar-brand {
+            margin: 6px 0 0 0;
+        }
+        .top-right-icon {
+            margin: -50px 0 0 0;
+        }
+        .navbar-collapse {
+            top: 63px;
+        }
+    }
+
     footer{
 
         .link{
@@ -334,10 +372,10 @@ footer{
         .navbar-toggle[aria-expanded="true"]{
             height: 65px;
             padding: 0 20px 0 22px;
-            margin: 0 7px 0 -6px;
+            margin: 0 7px 0 -7px;
         }
         .top-right-icon {
-            margin: -45px -65px 0 0;
+            margin: -50px -65px 0 0;
 
             li{
                 padding: 2px 8px;
@@ -366,7 +404,7 @@ footer{
 
         .navbar-collapse{
             width: 100%;
-            left: 15px;
+            left: 0;
         }
     }
 

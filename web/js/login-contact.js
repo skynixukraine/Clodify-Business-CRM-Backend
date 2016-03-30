@@ -10,10 +10,12 @@ var LoginPage = (function(){
 
         init: function(){
 
+            var header = $('.box-header-menu'),
+                scrollY;
+
             function correctionPage(){
 
-                var header = $('.box-header-menu'),
-                    heightW = $('.wrap').height(),
+                    var heightW = $('.wrap').height(),
                     heightH = $('html').height();
 
                 if(heightW<heightH){
@@ -26,6 +28,24 @@ var LoginPage = (function(){
                 }
 
             }
+
+            function headerScroll(){
+
+                $(document).scroll(function() {
+
+                    scrollY = $(document).scrollTop();
+
+                    if(scrollY > 100){
+
+                        header.addClass('fix-height');
+                    }else{
+                        header.removeClass('fix-height');
+                    }
+
+                    console.log(scrollY);
+                });
+            }
+            headerScroll();
 
             correctionPage();
 

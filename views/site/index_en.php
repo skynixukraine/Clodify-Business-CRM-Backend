@@ -12,7 +12,7 @@ $this->title = 'My Yii Application';
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
 
-                        <h1>ABOUT SKYNIX</h1>
+                        <h1 class="en">ABOUT SKYNIX</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
                         Skynix is a company that believes in making distinctive, lasting and substantial improvements

@@ -29,11 +29,39 @@ AppAsset::register($this);
     SkynixNavBar::begin([
         'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
-        'skynixLinks' => '<a href="#">Twitter Icon</a><a href="#">Facebook Icon</a>',
+        'skynixLinks' => '
+                        <ul class="nav navbar-nav navbar-right top-right-icon">
+                            <li>
+                                <a href="#" class="ico-facebook"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="ico-twitter"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="ico-in"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="ico-search"></a>
+                            </li>
+                        </ul>
+                        ',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],
     ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
