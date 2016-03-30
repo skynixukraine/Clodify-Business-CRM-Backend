@@ -648,15 +648,23 @@ footer .link a:hover {
   max-width: 1170px;
   margin: 0 auto;
 }
-#evaluation .box-evaluation .evaluation-txt {
+#evaluation .box-evaluation .evaluation-txt,
+#evaluation .box-evaluation .evaluation-txt-en {
   padding: 0;
+}
+#evaluation .box-evaluation .evaluation-txt p,
+#evaluation .box-evaluation .evaluation-txt-en p {
+  font-family: Raleway-Medium;
+  white-space: nowrap;
+  color: #fefefe;
 }
 #evaluation .box-evaluation .evaluation-txt p {
   padding: 3px 0 0 0;
   font-size: 32px;
-  font-family: Raleway-Medium;
-  white-space: nowrap;
-  color: #fefefe;
+}
+#evaluation .box-evaluation .evaluation-txt-en p {
+  padding: 6px 0 0 0;
+  font-size: 27px;
 }
 #evaluation a {
   width: 435px;
@@ -691,7 +699,8 @@ footer .link a:hover {
     padding-top: 28px;
     text-align: center;
   }
-  #evaluation .box-evaluation .evaluation-txt p {
+  #evaluation .box-evaluation .evaluation-txt p,
+  #evaluation .box-evaluation .evaluation-txt-en p {
     white-space: normal;
   }
   #evaluation a {
@@ -740,6 +749,9 @@ footer .link a:hover {
   }
   #evaluation .box-evaluation .evaluation-txt p {
     font-size: 24px;
+  }
+  #evaluation .box-evaluation .evaluation-txt-en p {
+    font-size: 20px;
   }
 }
 @media (max-width: 600px) {
@@ -799,7 +811,8 @@ footer .link a:hover {
   #evaluation .box-evaluation > div {
     padding: 0;
   }
-  #evaluation .box-evaluation .evaluation-txt p {
+  #evaluation .box-evaluation .evaluation-txt p,
+  #evaluation .box-evaluation .evaluation-txt-en p {
     padding: 0 15px;
   }
   #evaluation a {
