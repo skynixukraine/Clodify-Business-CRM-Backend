@@ -38,7 +38,7 @@ $this->title = 'My Yii Application';
                 <div>Корпоративні<br>веб-сайти</div>
             </div>
             <div class="col-lg-4 col-sm-4 col-xs-6 hi">
-                <div>Блоги,форуми,<br>Соціальні мережі</div>
+                <div>Блоги, форуми,<br>Соціальні мережі</div>
             </div>
             <div class="col-lg-4 col-sm-4 col-xs-6 phonegap">
                 <div>Мобільні iOS & Android<br>Phonegap додатки</div>

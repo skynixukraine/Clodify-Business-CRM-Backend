@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<div class="container contact">
+<div class="container contact site-contact">
 
 
 
@@ -41,14 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-
-
-
-
-
-
-
-
     <div class="row">
             <div class="col-lg-12">
 
@@ -63,7 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($model, 'body')->textArea(['rows' => 6]) ?>
 
                     <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                        'template' => '<div class="row"><div class="col-md-2 col-sm-3 col-md-offset-1 col-xs-3 img-captcha">{image}</div><div class="col-md-4 col-sm-4 col-xs-3 input-captcha">{input}',
+                        'template' => '<div class="row"><div class="col-md-2 col-sm-3 col-md-offset-1 col-xs-3 img-captcha">{image}</div>
+                        <div class="col-md-4 col-sm-4 col-xs-3 input-captcha">{input}',
                     ]) ?>
 
                 <div class="col-md-5 col-sm-5 col-xs-6 btn-box">

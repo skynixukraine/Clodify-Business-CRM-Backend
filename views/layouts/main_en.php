@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use app\components\SkynixNavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -26,9 +26,10 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
+    SkynixNavBar::begin([
         'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
+        'skynixLinks' => 'Some HTML here',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],
@@ -37,13 +38,13 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'КОНТАКТИ', 'url' => ['/site/contact']],
-            ['label' => 'КАР\'ЄРА', 'url' => ['/site/login']],
+            ['label' => 'CONTACT US', 'url' => ['/site/contact']],
+            ['label' => 'CAREER', 'url' => ['/site/login']],
             ['label' => 'Solutions Store', 'url' => 'http://skynix.solutions'],
 
         ],
     ]);
-    NavBar::end();
+    SkynixNavBar::end();
     ?>
 
 
@@ -80,10 +81,10 @@ AppAsset::register($this);
 <footer class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-10 footer-txt">
-            <?= date('Y') ?> Усі права захищені. Skynix ltd.
+            <?= date('Y') ?> All rights reserved. Skynix ltd.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <a href="/site/login">УВІЙТИ</a>
+            <a href="/site/login">ENTER</a>
         </div>
     </div>
 </footer>
