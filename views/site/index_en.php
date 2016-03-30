@@ -14,12 +14,14 @@ $this->title = 'My Yii Application';
 
                         <h1>ABOUT SKYNIX</h1>
                     </div>
-                    <div class="col-lg-12 col-xs-12 about-txt1">
-                        Skynix Company is developing, strengthening and improving the software.
-                        The main goal of the company is to promote change and development of IT technologies.
+                    <div class="col-lg-12 col-xs-12 about-txt1-en">
+                        Skynix is a company that believes in making distinctive, lasting and substantial improvements
+                        in IT World. We hawe only one goal in mind-to develop, excite and foster changes through our
+                        solutions. Our professional team always takes into account the wishes and opinions of customers
+                        and leverage on latest technology practices to deliver high quality and cost-effective solutions.
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt2">
-                        We create innovative software solutions for businesses running.
+                        Our company develops innovative businesses software solutions that work.
                     </div>
                 </div>
             </div>
@@ -30,26 +32,26 @@ $this->title = 'My Yii Application';
 <section class="container" id="working_fields">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <h2>WE WORK IN THE FOLLOWING AREAS:</h2>
+            <h2>WE OPERATE IN THE FOLLOWING AREAS:</h2>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 web-network">
-            <div>Corporate<br>websites</div>
+            <div>Corporate<br>Websites</div>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 hi">
-            <div>Blogs, forums, <br>Social Networking</div>
+            <div>Blogs, Forums, <br>Social networking</div>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 phonegap">
-            <div>Mobile iOS and Android <br> Phonegap applications</div>
+            <div>Mobile iOS & Android <br> Phonegap Applications</div>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 ecommerce">
-            <div>eCommerce<br>solution</div>
+            <div>eCommerce<br>Solutions</div>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 email">
-            <div>Themes and Templates<br>Email</div>
+            <div>Themes & Email<br>Templates</div>
 
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 support">
-            <div>Technical<br>support</div>
+            <div>Maintenance<br>and Support</div>
 
         </div>
     </div>
@@ -59,12 +61,12 @@ $this->title = 'My Yii Application';
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <h3>
-                <span class="brand-name">SKYNIX</span>seeks to enrich, diversify and simplify your life
-                with the best technology.
+                <span class="brand-name">SKYNIX</span>strives to enrich and challenge your life with the
+                <span class="brand-name">BEST</span> of <span class="brand-name">TECHNOLOGY</span>.<br>
             </h3>
         </div>
         <div class="col-lg-12 col-xs-12 technology-txt">
-            We support a wide range of programming languages and represent some of our everyday technologies:
+            We support a range of programming languages and some of our everyday programming languages  are:
         </div>
     </div>
     <div class="row scheme">
@@ -110,11 +112,11 @@ $this->title = 'My Yii Application';
             <div class="box-evaluation">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-7 col-md-12 evaluation-txt-en">
-                            <p>You need to estimate the cost of the project or idea?</p>
+                        <div class="col-lg-8 col-md-12 evaluation-txt">
+                            <p>Do you need to get a quote of your project or idea?</p>
                         </div>
-                        <div class="col-lg-5 col-md-12">
-                            <a href="#">Free evaluation of the project</a>
+                        <div class="col-lg-4 col-md-12">
+                            <a href="#" class="en-btn">REQUEST A QUOTE</a>
                         </div>
                     </div>
                 </div>

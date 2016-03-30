@@ -8,20 +8,26 @@
     text-align: center;
 
     h1{
-        padding: 172px 0 7px 0;
+        padding: 152px 0 7px 0;
         font-size: 60px;
         font-family: Raleway-Medium, sans-serif;
         text-align: center;
         color: @color-white1;
     }
-    .about-txt1{
-        padding: 0 80px;
-        font-size: 28px;
+    .about-txt1,
+    .about-txt1-en{
         line-height: 1.1;
         font-family: Raleway-Regular, sans-serif;
         text-align: center;
         color: @color-black;
-
+    }
+    .about-txt1{
+        padding: 0 80px;
+        font-size: 28px;
+    }
+    .about-txt1-en{
+        padding: 0 60px;
+        font-size: 24px;
     }
     .about-txt2{
         padding: 19px 0 0 0;
@@ -254,30 +260,18 @@
         max-width: 1170px;
         margin: 0 auto;
 
-        .evaluation-txt,
-        .evaluation-txt-en{
+        .evaluation-txt{
             padding: 0;
 
             p{
+                padding: 3px 0 0 0;
+                font-size: 32px;
                 font-family: Raleway-Medium;
                 white-space: nowrap;
                 color: @color-white;
             }
         }
-        .evaluation-txt{
 
-            p{
-                padding: 3px 0 0 0;
-                font-size: 32px;
-            }
-        }
-        .evaluation-txt-en{
-
-            p{
-                padding: 6px 0 0 0;
-                font-size: 27px;
-            }
-        }
     }
     a{
         width: 435px;
@@ -296,6 +290,9 @@
         &:hover{
             background: rgba(255, 104, 21, 0.51);
         }
+    }
+    a.en-btn{
+        width: 300px;
     }
 }
 
@@ -324,15 +321,15 @@
 
         .box-evaluation{
 
-            .evaluation-txt,
-            .evaluation-txt-en{
+            .evaluation-txt{
 
                 p{
                     white-space: normal;
                 }
             }
         }
-        a{
+        a,
+        a.en-btn{
             margin: 22px auto 0 auto;
         }
     }
@@ -407,12 +404,7 @@
                     font-size: 24px;
                 }
             }
-            .evaluation-txt-en{
 
-                p{
-                    font-size: 20px;
-                }
-            }
         }
     }
 
@@ -480,15 +472,15 @@
             >div{
                 padding: 0;
             }
-            .evaluation-txt,
-            .evaluation-txt-en{
+            .evaluation-txt{
 
                 p{
                     padding: 0 15px;
                 }
             }
         }
-        a{
+        a,
+        a.en-btn{
             width: 300px;
             padding: 5px;
             font-size: 17.6px;
@@ -523,7 +515,8 @@
     }
     #evaluation{
 
-        a{
+        a,
+        a.en-btn{
             width: 265px;
         }
     }
