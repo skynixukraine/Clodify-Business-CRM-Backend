@@ -11,10 +11,7 @@ $this->title = 'Ввійти';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="container contact">
-
-
-
+<div class="container contact site-login">
 
     <div class="row">
         <div class="col-lg-12">
@@ -29,12 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
-
-
-
-
-
-
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
         'options' => ['class' => 'form-horizontal'],
@@ -45,19 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
         <?= $form->field($model, 'email') ?>
-
-
-
         <?= $form->field($model, 'password')->passwordInput() ?>
-
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-3 col-lg-3 col-md-offset-3 col-md-4 col-sm-offset-2 col-sm-6 col-xs-offset-3 col-xs-8 \">{input} {label}</div>\n
-
-
-
-
-<div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
+    <div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
         ]) ?>
+
 
         <div class="form-group box-login-btn">
             <div class="col-lg-offset-6 col-lg-5 col-md-offset-6 col-md-5 col-xs-12">
