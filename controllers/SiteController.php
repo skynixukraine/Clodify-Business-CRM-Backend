@@ -49,6 +49,8 @@ class SiteController extends Controller
             return $this->redirect($url);
 
         }
+        $this->layout = "main_" . Language::getLanguage();
+        //var_dump( $this->layout); exit;
         return parent::beforeAction($action);
     }
 

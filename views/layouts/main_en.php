@@ -39,7 +39,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'КОНТАКТИ', 'url' => ['/site/contact']],
             ['label' => 'КАР\'ЄРА', 'url' => ['/site/login']],
-            ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => ['/site/index']],
+            ['label' => 'Solutions Store', 'url' => 'http://skynix.solutions'],
 
         ],
     ]);
