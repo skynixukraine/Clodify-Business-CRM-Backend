@@ -29,7 +29,7 @@ AppAsset::register($this);
     SkynixNavBar::begin([
         'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
-        'skynixLinks' => 'Some HTML here',
+        'skynixLinks' => '<a href="#">Twitter Icon</a><a href="#">Facebook Icon</a>',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],

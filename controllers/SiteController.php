@@ -44,11 +44,13 @@ class SiteController extends Controller
     }
     public function beforeAction($action)
     {
+
         if ( ( $url = Language::getRedirectUrl() ) ) {
 
-            return $this->redirect($url);
+            $this->redirect($url);
 
         }
+
         $this->layout = "main_" . Language::getLanguage();
         //var_dump( $this->layout); exit;
         return parent::beforeAction($action);
