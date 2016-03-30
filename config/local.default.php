@@ -44,6 +44,7 @@ return [
     'params' => array(
         'ua_site'           => 'http://ua.skynix.local',
         'en_site'           => 'http://skynix.local',
-        'in_site'           => 'http://in.skynix.local'
+        'in_site'           => 'http://in.skynix.local',
+        'port'		        => ''
     )
 ];
