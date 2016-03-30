@@ -1,19 +1,22 @@
 /**
  * Created by lera on 25.03.16.
  */
-var TeamsModule = (function() {
+
+var TeamModule = (function() {
 
     var cfg = {
-            deleteUrl   : '',
             findUrl     : '',
-            canDelete   : null,
-            canAction   : null,
-            canView     : null
+            viewUrl     : '',
+            canView     :null
         },
         dataTable,
         dataFilter = {
         },
         deleteModal;
+    function actionView( id )
+    {
+        document.location.href = cfg.viewUrl + "?id=" + id;
+    }
 
     function actionDelete( id, name, dataTable )
     {
@@ -67,8 +70,8 @@ var TeamsModule = (function() {
 
 
             cfg = $.extend(cfg, config);
-            dataTable = $('#team-table').dataTable({
-                "bPaginate": true,
+            dataTable = $('#teams-table').dataTable({
+                "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": true,
                 "bSort": true,
@@ -76,34 +79,63 @@ var TeamsModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
+
                 "columnDefs": [
 
                     {
                         "targets"   : 0,
-                        "orderable" : true
+                        data:   "active",
+                        "orderable" : false,
+                        "render"     :function (data, type, row){
+                            if ( type === 'display' ){
+                                return '<input type = "checkbox" class = "editor-active">';
+                            }
+                            return data;
+                        }
                     },
+                    /* $(document).ready(function (){
+                     var table = $('#teams-table').DataTable({ 'ajax': { 'url': '/lab/articles/jquery-datatables-how-to-add-a-checkbox-column/ids-arrays.txt' },
+                     'columnDefs': [{ 'targets': 0,
+                     'searchable': false,
+                     'orderable': false,
+                     'className': 'dt-body-center',
+                     'render': function (data, type, full, meta){
+                     return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">'; } }], 'order': [[1, 'asc']] });
+                     }),*/
+
+
+
                     {
                         "targets"   : 1,
+                        "data"  :   6,
                         "orderable" : true
                     },
                     {
                         "targets"   : 2,
+                        "data"  :   7,
                         "orderable" : true
                     },
                     {
                         "targets"   : 3,
+                        "data"  :   8,
                         "orderable" : true
                     },
                     {
                         "targets"   : 4,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 5,
+                        "data"  :   9,
                         "orderable" : true
                     }
 
                 ],
+                /*select: {
+                 style: 'os',
+                 selector: 'td:not(:first-child)'
+                 },
+                 "rowCallback": function ( row, data ) {
+
+                 $('input.editor-active', row).prop( 'checked', data.active == 1 );
+                 },*/
+
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {
@@ -114,7 +146,76 @@ var TeamsModule = (function() {
 
                         }
 
+                    },
+
+                },
+                "processing": true,
+                "serverSide": true
+            });
+            dataTable = $('#teams-show-table').dataTable({
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": true,
+                "pageLength": 25,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "order": [[ 0, "desc" ]],
+
+                "columnDefs": [
+
+                    {
+                        "targets"   : 0,
+                        "orderable" : true
+
+                    },
+
+                    {
+                        "targets"   : 1,
+                        "data"  :   7,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 2,
+                        "data"  :   8,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 3,
+                        "data"  :   10,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : false,
+                        "render"    : function (data, type, row) {
+                            var icons = [];
+                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                            if ( cfg.canView ) {
+
+                                icons.push('<i class="fa fa-list view" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="List of teammates"></i>');
+
+                            }
+                            return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                        }
                     }
+
+                ],
+
+                "ajax": {
+                    "url"   :  cfg.findUrl,
+                    "data"  : function( data, settings ) {
+
+                        for (var i in dataFilter) {
+
+                            data[i] = dataFilter[i];
+
+                        }
+
+                    },
+
                 },
                 "processing": true,
                 "serverSide": true
@@ -123,26 +224,10 @@ var TeamsModule = (function() {
             var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                dataTable.find("td").click(function(){
-
-                    dataTable.find("tr[class*=active]").removeClass( "active" );
-                    $(this).parents("tr").addClass("active");
-                    id = $(this).parents("tr").find("td").eq(0).text();
-                    name   = $(this).parents("tr").find("td").eq(1).text();
-
-                });
-                $(document).keydown(function(e){
-                    if (e.keyCode == 46) {
-
-                        //console.log(id);
-                        actionDelete( id, name, dataTable );
-                    }
-                });
-
-                dataTable.find("img[class*=edit]").click(function(){
+                dataTable.find("i[class*=view]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
+                    actionView( id );
 
                 });
                 dataTable.find("i[class*=delete]").click(function(){

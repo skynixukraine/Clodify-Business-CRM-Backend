@@ -34,22 +34,18 @@ class TeamsController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index'],
+                        'actions'   => [ 'index', 'find', 'view'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM],
-                    ],
-                    [
-                        'actions'   => [ 'find'],
-                        'allow'     => true,
-                        'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'     => ['get'],
+                    'index'     => ['get', 'post'],
                     'find'      => ['get'],
+                    'view'      => ['get', 'post'],
 
                 ],
             ],
@@ -78,6 +74,12 @@ class TeamsController extends DefaultController
             'email',
             'phone',
             'project_id',
+            'id',
+            'name',
+            'user_id',
+            'team_id',
+            'date_create',
+
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -95,6 +97,9 @@ class TeamsController extends DefaultController
         }
 
         $dataTable->setFilter('is_deleted=0');
+
+        $dataTable->setFilter(Team::tableName() . '.user_id=' . Yii::$app->user->id);
+
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -114,6 +119,11 @@ class TeamsController extends DefaultController
                 $model->getUser()->one()->email,
                 $model->getUser()->one()->phone,
                 implode(', ', $project),
+                $model->id,
+                $model->name,
+                $model->getUser()->one()->first_name . " " . $model->getUser()->one()->last_name,
+                Teammate::teammateUser($model->id),
+                $model->date_created,
             ];
         }
 
@@ -127,6 +137,21 @@ class TeamsController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
 
+    }
+    public function actionView()
+    {
+        if (( $teamId = Yii::$app->request->get("id") ) ) {
+
+            $model = Teammate::find()
+                ->where("team_id=:teamiD",
+                    [
+                        ':teamiD' => $teamId
+                    ])
+                ->one();
+        }
+        /** @var $model Teammate */
+        return $this->render('view', ['model' => $model,
+            'title' => 'List of Teammates  #' . $model->team_id]);
     }
 
 }
