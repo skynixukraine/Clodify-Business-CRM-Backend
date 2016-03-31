@@ -34,7 +34,7 @@ class TeamsController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index', 'find', 'view'],
+                        'actions'   => [ 'index', 'find', 'view', 'find2'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM],
                     ],
@@ -45,6 +45,7 @@ class TeamsController extends DefaultController
                 'actions' => [
                     'index'     => ['get', 'post'],
                     'find'      => ['get'],
+                    'find2'      => ['get'],
                     'view'      => ['get', 'post'],
 
                 ],
@@ -63,9 +64,11 @@ class TeamsController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
+        $team         = Yii::$app->request->getQueryParam("team_id");
 
 
-        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id');
+        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id')
+                    ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . ".id");
 
         $columns        = [
             'user_id',
@@ -98,7 +101,96 @@ class TeamsController extends DefaultController
 
         $dataTable->setFilter('is_deleted=0');
 
-        $dataTable->setFilter(Team::tableName() . '.user_id=' . Yii::$app->user->id);
+        $dataTable->setFilter(Team::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' .
+                            Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
+
+
+        $activeRecordsData = $dataTable->getData();
+        $list = array();
+        /* @var $model \app\models\Team */
+        foreach ( $activeRecordsData as $model ) {
+
+            $projects = Project::projectsName($model->user_id);
+            $project = [];
+            foreach ($projects as $item) {
+                $project[] = $item->name;
+            }
+
+            $list[] = [
+                $model->user_id,
+                $model->getUser()->one()->first_name,
+                $model->getUser()->one()->last_name,
+                $model->getUser()->one()->email,
+                $model->getUser()->one()->phone,
+                implode(', ', $project),
+                $model->id,
+                $model->name,
+                $model->getUser()->one()->first_name . " " . $model->getUser()->one()->last_name,
+                Teammate::teammateUser($model->id),
+                $model->date_created,
+            ];
+        }
+
+        $data = [
+            "draw"              => DataTable::getInstance()->getDraw(),
+            "recordsTotal"      => DataTable::getInstance()->getTotal(),
+            "recordsFiltered"   => DataTable::getInstance()->getTotal(),
+            "data" => $list
+        ];
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->content = json_encode($data);
+        Yii::$app->end();
+
+    }
+    public function actionFind2()
+    {
+        $order          = Yii::$app->request->getQueryParam("order");
+        $search         = Yii::$app->request->getQueryParam("search");
+        $keyword        = ( !empty($search['value']) ? $search['value'] : null);
+        $team = Yii::$app->request->getQueryParam("id");
+
+
+        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id')
+            ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . '.id');// AND ' .
+               // Team::tableName() . '.id=:ID', [':ID' => $teamId]);
+
+        $columns        = [
+            'user_id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'project_id',
+            'id',
+            'name',
+            'user_id',
+            'team_id',
+            'date_create',
+
+        ];
+        $dataTable = DataTable::getInstance()
+            ->setQuery( $query )
+            ->setLimit( Yii::$app->request->getQueryParam("length") )
+            ->setStart( Yii::$app->request->getQueryParam("start") )
+            ->setSearchValue( $keyword ) //$search['value']
+            ->setSearchParams([ 'or',
+                ['like', 'id', $keyword],
+            ]);
+
+        $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+
+        /*if ( $teamId = Yii::$app->request->get("id") ){
+            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
+        }*/
+
+        $dataTable->setFilter('is_deleted=0');
+
+        if($team) {
+            $dataTable->setFilter(Team::tableName() . '.id=' . $team);
+        }
+        if ( $team = Yii::$app->request->get("id") ){
+            $dataTable->setFilter(Team::tableName() . '.id=' . $team);
+        }
 
 
         $activeRecordsData = $dataTable->getData();

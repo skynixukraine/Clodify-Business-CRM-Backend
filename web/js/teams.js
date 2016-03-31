@@ -7,9 +7,11 @@ var TeamModule = (function() {
     var cfg = {
             findUrl     : '',
             viewUrl     : '',
+            findTeamUrl     : '',
             canView     :null
         },
         dataTable,
+        dataShowTable,
         dataFilter = {
         },
         deleteModal;
@@ -68,7 +70,6 @@ var TeamModule = (function() {
 
         init: function( config ){
 
-
             cfg = $.extend(cfg, config);
             dataTable = $('#teams-table').dataTable({
                 "bPaginate": false,
@@ -79,32 +80,20 @@ var TeamModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-
                 "columnDefs": [
-
                     {
                         "targets"   : 0,
-                        data:   "active",
                         "orderable" : false,
                         "render"     :function (data, type, row){
-                            if ( type === 'display' ){
-                                return '<input type = "checkbox" class = "editor-active">';
-                            }
-                            return data;
+                            $(document).find('#teams-table').eq(0).find('tr').find('input').eq(0).attr("checked",false);
+
+                            var icons = [];
+
+                            icons.push( '<input type = "checkbox" class = "editor-active" >');
+
+                            return '<div class="actions">' + icons.join(" ") + '</div>';
                         }
                     },
-                    /* $(document).ready(function (){
-                     var table = $('#teams-table').DataTable({ 'ajax': { 'url': '/lab/articles/jquery-datatables-how-to-add-a-checkbox-column/ids-arrays.txt' },
-                     'columnDefs': [{ 'targets': 0,
-                     'searchable': false,
-                     'orderable': false,
-                     'className': 'dt-body-center',
-                     'render': function (data, type, full, meta){
-                     return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">'; } }], 'order': [[1, 'asc']] });
-                     }),*/
-
-
-
                     {
                         "targets"   : 1,
                         "data"  :   6,
@@ -112,7 +101,7 @@ var TeamModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "data"  :   7,
+                        "data"  :   5,
                         "orderable" : true
                     },
                     {
@@ -125,17 +114,7 @@ var TeamModule = (function() {
                         "data"  :   9,
                         "orderable" : true
                     }
-
                 ],
-                /*select: {
-                 style: 'os',
-                 selector: 'td:not(:first-child)'
-                 },
-                 "rowCallback": function ( row, data ) {
-
-                 $('input.editor-active', row).prop( 'checked', data.active == 1 );
-                 },*/
-
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {
@@ -145,14 +124,14 @@ var TeamModule = (function() {
                             data[i] = dataFilter[i];
 
                         }
-
-                    },
-
+                    }
                 },
+
                 "processing": true,
                 "serverSide": true
             });
-            dataTable = $('#teams-show-table').dataTable({
+
+            dataShowTable = $('#teams-show-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
                 "bFilter": false,
@@ -161,15 +140,13 @@ var TeamModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-
                 "columnDefs": [
-
                     {
                         "targets"   : 0,
+                        "data"      : 6,
                         "orderable" : true
 
                     },
-
                     {
                         "targets"   : 1,
                         "data"  :   7,
@@ -190,22 +167,17 @@ var TeamModule = (function() {
                         "orderable" : false,
                         "render"    : function (data, type, row) {
                             var icons = [];
-                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
                             if ( cfg.canView ) {
 
                                 icons.push('<i class="fa fa-list view" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="List of teammates"></i>');
-
                             }
                             return '<div class="actions">' + icons.join(" ") + '</div>';
-
                         }
                     }
-
                 ],
-
                 "ajax": {
-                    "url"   :  cfg.findUrl,
+                    "url"   :  cfg.findTeamUrl,
                     "data"  : function( data, settings ) {
 
                         for (var i in dataFilter) {
@@ -213,33 +185,33 @@ var TeamModule = (function() {
                             data[i] = dataFilter[i];
 
                         }
-
-                    },
-
+                    }
                 },
                 "processing": true,
                 "serverSide": true
             });
 
-            var id="", name, a = [];
+            var team_id=$(document).find('#teams-table').eq(0).find('tr').find('input').eq(0).text(), name, a = [];
+
+
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                dataTable.find("i[class*=view]").click(function(){
-
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionView( id );
-
+                $('td input[type="checkbox"]').eq(0).attr("checked",true);
+                dataTable.find('td input[type="checkbox"]').click(function() {
+                    dataTable.find('tr input[checked="checked"]').attr("checked",false);
+                    $(this).attr("checked",true);
                 });
-                dataTable.find("i[class*=delete]").click(function(){
 
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
+                dataTable.find("input[class*=editor-active]").click(function(){
+                    var team_id = $(this).parents("tr").find("td").eq(1).text();
+                    console.log(team_id);
 
+                    dataShowTable.api().ajax.reload();
                 });
 
             });
-
+            dataShowTable.on( 'draw.dt', function (e, settings, data) {});
+            console.log(team_id);
         }
     };
 

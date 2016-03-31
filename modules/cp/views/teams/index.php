@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][]  = $this->title;
         TeamModule.init({
             findUrl     : '<?=Url::to(['teams/find'])?>',
             viewUrl     : '<?=Url::to(['teams/view'])?>',
+            findTeamUrl : '<?=Url::to(['teams/find2'])?>',
             canView   : <?=( User::hasPermission([User::ROLE_PM, User::ROLE_DEV]) ? 'true' : 'false')?>
         })
     });
