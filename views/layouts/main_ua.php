@@ -106,6 +106,7 @@ AppAsset::register($this);
 
 
 <?php $this->endBody() ?>
+<?php $this->registerJsFile('/js/layouts.js'); ?>
 </body>
 </html>
 <?php $this->endPage() ?>
