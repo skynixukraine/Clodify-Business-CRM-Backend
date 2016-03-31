@@ -18,7 +18,8 @@ $this->title = 'My Yii Application';
                         Skynix is a company that believes in making distinctive, lasting and substantial improvements
                         in IT World. We hawe only one goal in mind-to develop, excite and foster changes through our
                         solutions. Our professional team always takes into account the wishes and opinions of customers
-                        and leverage on latest technology practices to deliver high quality and cost-effective solutions.
+                        and leverage on latest technology practices to deliver high quality and <span>cost-effective
+                        solutions.</span>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt2">
                         Our company develops innovative businesses software solutions that work.
@@ -61,7 +62,7 @@ $this->title = 'My Yii Application';
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <h3>
-                <span class="brand-name">SKYNIX</span>strives to enrich and challenge your life with the
+                <span class="brand-name">SKYNIX</span> strives to enrich and challenge your life with the
                 <span class="brand-name">BEST</span> of <span class="brand-name">TECHNOLOGY</span>.<br>
             </h3>
         </div>

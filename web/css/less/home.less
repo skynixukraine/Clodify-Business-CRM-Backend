@@ -23,9 +23,14 @@
     .about-txt1-en{
         line-height: 1.1;
         font-family: Raleway-Regular, sans-serif;
-        text-align: center;
+        text-align: justify;
         color: @color-black;
         text-shadow: 0 0 6px #3B8FA5;
+
+        span{
+            white-space:nowrap;
+
+        }
     }
     .about-txt1{
         padding: 0 80px;
@@ -530,12 +535,16 @@
             padding: 0;
             font-size: 33px;
         }
-        .about-txt1{
+        .about-txt1,
+        .about-txt1-en{
             padding: 0;
+            text-align: center;
+
+        }
+        .about-txt1{
             font-size: 18.8px;
         }
         .about-txt1-en {
-            padding: 0;
             font-size: 15px;
         }
         .about-txt2 {

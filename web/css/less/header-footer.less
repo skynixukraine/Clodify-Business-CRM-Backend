@@ -199,7 +199,7 @@ footer{
         .top-right-icon{
 
             li {
-                padding: 2px 5px;
+                padding: 2px 10px;
                 float: left;
                 display: block;
             }
@@ -243,7 +243,7 @@ footer{
             margin: 34px 0 0 0;
         }
         .navbar-toggle {
-            height: 126px;
+            height: 127px;
             margin: 0 64px 0 32px;
         }
         .navbar-toggle[aria-expanded="true"]{
@@ -347,6 +347,7 @@ footer{
         padding: 0;
 
         .navbar-collapse{
+            height: 110px;
             top: 64px;
         }
         .navbar-brand,
@@ -361,7 +362,8 @@ footer{
         }
         .navbar-toggle {
             height: 64px;
-            margin: 0 17px 0 6px;
+            padding: 0 20px 0 22px;
+            margin: 0 7px 0 -7px;
 
             span.icon-bar {
                 width: 18px;
@@ -370,12 +372,12 @@ footer{
             }
         }
         .navbar-toggle[aria-expanded="true"]{
-            height: 65px;
+            height: 64px;
             padding: 0 20px 0 22px;
             margin: 0 7px 0 -7px;
         }
         .top-right-icon {
-            margin: -50px -65px 0 0;
+            margin: -50px -55px 0 0;
 
             li{
                 padding: 2px 8px;
@@ -389,9 +391,40 @@ footer{
             width: 100%;
             display: block;
 
+            li{
+                height: 36px;
+            }
+
             a{
+                height: 35px;
+                font-size: 19px;
+                line-height: 1.8;
                 text-align: center;
             }
+
+        }
+    }
+    .fix-height{
+        height: 32px;
+        min-height: 32px;
+
+        .navbar-toggle {
+            height: 32px;
+            padding: 0 20px 0 22px;
+            margin: 0 7px 0 -7px;
+        }
+        .navbar-toggle[aria-expanded="true"] {
+            height: 32px;
+        }
+        .navbar-brand {
+            height: 32px;
+            margin: -5px 0 0 -44px;
+        }
+        .top-right-icon {
+            margin: -31px -55px 0 0;
+        }
+        .navbar-collapse {
+            top: 32px;
         }
     }
 

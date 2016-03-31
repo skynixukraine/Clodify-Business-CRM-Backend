@@ -277,7 +277,7 @@ footer .link a:hover {
     margin: 0 240px 0 0;
   }
   .box-header-menu .top-right-icon li {
-    padding: 2px 5px;
+    padding: 2px 10px;
     float: left;
     display: block;
   }
@@ -313,7 +313,7 @@ footer .link a:hover {
     margin: 34px 0 0 0;
   }
   .box-header-menu .navbar-toggle {
-    height: 126px;
+    height: 127px;
     margin: 0 64px 0 32px;
   }
   .box-header-menu .navbar-toggle[aria-expanded="true"] {
@@ -400,6 +400,7 @@ footer .link a:hover {
     padding: 0;
   }
   .box-header-menu .navbar-collapse {
+    height: 110px;
     top: 64px;
   }
   .box-header-menu .navbar-brand,
@@ -414,7 +415,8 @@ footer .link a:hover {
   }
   .box-header-menu .navbar-toggle {
     height: 64px;
-    margin: 0 17px 0 6px;
+    padding: 0 20px 0 22px;
+    margin: 0 7px 0 -7px;
   }
   .box-header-menu .navbar-toggle span.icon-bar {
     width: 18px;
@@ -422,12 +424,12 @@ footer .link a:hover {
     margin: 5px 0;
   }
   .box-header-menu .navbar-toggle[aria-expanded="true"] {
-    height: 65px;
+    height: 64px;
     padding: 0 20px 0 22px;
     margin: 0 7px 0 -7px;
   }
   .box-header-menu .top-right-icon {
-    margin: -50px -65px 0 0;
+    margin: -50px -55px 0 0;
   }
   .box-header-menu .top-right-icon li {
     padding: 2px 8px;
@@ -439,8 +441,36 @@ footer .link a:hover {
     width: 100%;
     display: block;
   }
+  .box-header-menu .menu li {
+    height: 36px;
+  }
   .box-header-menu .menu a {
+    height: 35px;
+    font-size: 19px;
+    line-height: 1.8;
     text-align: center;
+  }
+  .fix-height {
+    height: 32px;
+    min-height: 32px;
+  }
+  .fix-height .navbar-toggle {
+    height: 32px;
+    padding: 0 20px 0 22px;
+    margin: 0 7px 0 -7px;
+  }
+  .fix-height .navbar-toggle[aria-expanded="true"] {
+    height: 32px;
+  }
+  .fix-height .navbar-brand {
+    height: 32px;
+    margin: -5px 0 0 -44px;
+  }
+  .fix-height .top-right-icon {
+    margin: -31px -55px 0 0;
+  }
+  .fix-height .navbar-collapse {
+    top: 32px;
   }
 }
 @media (max-width: 480px) {
@@ -475,9 +505,13 @@ footer .link a:hover {
 #about_skynix .about-txt1-en {
   line-height: 1.1;
   font-family: Raleway-Regular, sans-serif;
-  text-align: center;
+  text-align: justify;
   color: #000000;
   text-shadow: 0 0 6px #3B8FA5;
+}
+#about_skynix .about-txt1 span,
+#about_skynix .about-txt1-en span {
+  white-space: nowrap;
 }
 #about_skynix .about-txt1 {
   padding: 0 80px;
@@ -889,12 +923,15 @@ footer .link a:hover {
     padding: 0;
     font-size: 33px;
   }
-  #about_skynix .about-txt1 {
+  #about_skynix .about-txt1,
+  #about_skynix .about-txt1-en {
     padding: 0;
+    text-align: center;
+  }
+  #about_skynix .about-txt1 {
     font-size: 18.8px;
   }
   #about_skynix .about-txt1-en {
-    padding: 0;
     font-size: 15px;
   }
   #about_skynix .about-txt2 {
