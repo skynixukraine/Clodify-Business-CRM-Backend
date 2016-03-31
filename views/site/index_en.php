@@ -16,7 +16,7 @@ $this->title = 'My Yii Application';
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
                         Skynix is a company that believes in making distinctive, lasting and substantial improvements
-                        in IT World. We hawe only one goal in mind-to develop, excite and foster changes through our
+                        in IT World. We have only one goal in mind-to develop, excite and foster changes through our
                         solutions. Our professional team always takes into account the wishes and opinions of customers
                         and leverage on latest technology practices to deliver high quality and <span>cost-effective
                         solutions.</span>
