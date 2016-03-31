@@ -32,14 +32,14 @@ AppAsset::register($this);
         'skynixLinks' => '
                         <ul class="nav navbar-nav navbar-right top-right-icon">
                             <li>
-                                <a href="#" class="ico-facebook"></a>
+                                <a href="https://www.facebook.com/skynix.solutions/" target="_blank" class="ico-facebook"></a>
                             </li>
                             <li>
-                                <a href="#" class="ico-twitter"></a>
+                                <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                            <li>
+                            <!--<li>
                                 <a href="#" class="ico-in"></a>
-                            </li>
+                            </li>-->
                             <li>
                                 <a href="#" class="ico-search"></a>
                             </li>
