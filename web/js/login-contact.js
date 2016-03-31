@@ -42,7 +42,6 @@ var LoginPage = (function(){
                         header.removeClass('fix-height');
                     }
 
-                    console.log(scrollY);
                 });
             }
             headerScroll();
