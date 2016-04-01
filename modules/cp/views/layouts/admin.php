@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use yii\web\View;
 use app\models\User;
+use app\models\Team;
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/bootstrap.min.css');
 $this->registerCssFile('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
@@ -137,7 +138,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM]) && Team::hasTeam(Yii::$app->user->id) ) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teams" ? " active" : "")?>">
                         <a href="<?=Url::to(['teams/index']);?>">
                             <i class="fa fa-users"></i> <span><?=Yii::t('app', 'My Team')?></span>

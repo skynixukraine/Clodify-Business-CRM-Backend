@@ -12,8 +12,8 @@ var TeamModule = (function() {
         },
         dataTable,
         dataShowTable,
-        dataFilter = {
-        },
+        dataFilter = {},
+        dataGroupFilter = {},
         deleteModal;
     function actionView( id )
     {
@@ -85,11 +85,11 @@ var TeamModule = (function() {
                         "targets"   : 0,
                         "orderable" : false,
                         "render"     :function (data, type, row){
-                            $(document).find('#teams-table').eq(0).find('tr').find('input').eq(0).attr("checked",false);
+                            //$(document).find('#teams-table').eq(0).find('tr').find('input').eq(0).attr("checked",false);
 
                             var icons = [];
 
-                            icons.push( '<input type = "checkbox" class = "editor-active" >');
+                            icons.push( '<input type = "radio" name="team_id" class = "editor-active" >');
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
                         }
@@ -101,7 +101,7 @@ var TeamModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "data"  :   5,
+                        "data"  :   7,
                         "orderable" : true
                     },
                     {
@@ -112,6 +112,11 @@ var TeamModule = (function() {
                     {
                         "targets"   : 4,
                         "data"  :   9,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "data"  :   10,
                         "orderable" : true
                     }
                 ],
@@ -143,46 +148,45 @@ var TeamModule = (function() {
                 "columnDefs": [
                     {
                         "targets"   : 0,
-                        "data"      : 6,
+                        "data"      : 0,
                         "orderable" : true
 
                     },
                     {
                         "targets"   : 1,
-                        "data"  :   7,
+                        "data"  :   1,
                         "orderable" : true
                     },
                     {
                         "targets"   : 2,
-                        "data"  :   8,
+                        "data"  :   2,
                         "orderable" : true
                     },
                     {
                         "targets"   : 3,
-                        "data"  :   10,
+                        "data"  :   3,
                         "orderable" : true
                     },
                     {
                         "targets"   : 4,
-                        "orderable" : false,
-                        "render"    : function (data, type, row) {
-                            var icons = [];
-                            if ( cfg.canView ) {
+                        "data"      :4,
+                        "orderable" : true
 
-                                icons.push('<i class="fa fa-list view" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="List of teammates"></i>');
-                            }
-                            return '<div class="actions">' + icons.join(" ") + '</div>';
-                        }
+                    },
+                    {
+                        "targets"   : 5,
+                        "data"      :7,
+                        "orderable" : true
+
                     }
                 ],
                 "ajax": {
                     "url"   :  cfg.findTeamUrl,
                     "data"  : function( data, settings ) {
 
-                        for (var i in dataFilter) {
+                        for (var i in dataGroupFilter) {
 
-                            data[i] = dataFilter[i];
+                            data[i] = dataGroupFilter[i];
 
                         }
                     }
@@ -196,18 +200,19 @@ var TeamModule = (function() {
 
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                $('td input[type="checkbox"]').eq(0).attr("checked",true);
-                dataTable.find('td input[type="checkbox"]').click(function() {
-                    dataTable.find('tr input[checked="checked"]').attr("checked",false);
-                    $(this).attr("checked",true);
-                });
-
                 dataTable.find("input[class*=editor-active]").click(function(){
                     var team_id = $(this).parents("tr").find("td").eq(1).text();
                     console.log(team_id);
-
+                    dataGroupFilter['team_id'] = team_id;
                     dataShowTable.api().ajax.reload();
                 });
+                dataTable.find("i[class*=view]").click(function(){
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionView( id );
+
+                });
+                console.log("click");
+                $(dataTable.find("input[class*=editor-active]").get(0)).trigger("click");
 
             });
             dataShowTable.on( 'draw.dt', function (e, settings, data) {});

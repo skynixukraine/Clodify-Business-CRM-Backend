@@ -24,22 +24,24 @@ $this->params['breadcrumbs'][]  = $this->title;
         <th><?=Yii::t('app', 'Name')?></th>
         <th><?=Yii::t('app', 'Team Leader')?></th>
         <th><?=Yii::t('app', 'Number of Teammates')?></th>
-       <!-- <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>-->
+        <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>
         <!--<th><?=Yii::t('app', 'List of teammates')?></th>-->
     </tr>
     </thead>
 </table>
-<div style="margin-top: 10%;">
-<table id="teams-show-table" class="table table-hover display">
-    <thead>
-    <tr>
-        <th class="id-col"><?=Yii::t('app', 'ID')?></th>
-        <th><?=Yii::t('app', 'Team Name')?></th>
-        <th><?=Yii::t('app', 'Team Leader')?></th>
-        <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>
-        <th><?=Yii::t('app', 'List of teammates')?></th>
-    </tr>
-    </thead>
+<div style="margin-top: 5%;">
+    <h3>List of Teammates </h3>
+    <table id="teams-show-table" class="table table-hover display">
+        <thead>
+        <tr>
+            <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
+            <th><?=Yii::t('app', 'First Name')?></th>
+            <th><?=Yii::t('app', 'Last Name')?></th>
+            <th><?=Yii::t('app', 'Email')?></th>
+            <th><?=Yii::t('app', 'Phone')?></th>
+            <th><?=Yii::t('app', 'Project')?></th>
+        </tr>
+        </thead>
 </table>
     </div>
 <script>

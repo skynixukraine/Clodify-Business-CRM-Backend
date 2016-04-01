@@ -36,7 +36,17 @@ class Team extends \yii\db\ActiveRecord
             [['date_created'], 'safe'],
             [['name'], 'string', 'max' => 150]
         ];
+
+
     }
+    /**
+     * @inheritdoc
+     */
+    /*public static function isUserHasPermission($userId)
+    {
+        return self::find()->andWhere(['user_id'=>$userId])->count();
+
+    }*/
     /**
      * @inheritdoc
      */
@@ -57,4 +67,26 @@ class Team extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    public static function hasTeam($currentUserId)
+    {
+        $users_id = Team::find()
+            ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=id')
+            ->where(Team::tableName() . '.is_deleted=0')
+            ->all();
+        $userId = [];
+        foreach($users_id as $id){
+            $userId[] = $id->user_id;
+        }
+        if(in_array($currentUserId,$userId)){
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
 }

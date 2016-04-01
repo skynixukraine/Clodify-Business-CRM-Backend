@@ -18,7 +18,6 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\components\DataTable;
-
 class TeamsController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -34,9 +33,16 @@ class TeamsController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index', 'find', 'view', 'find2'],
+                        'actions'   => [ 'index', 'view', 'find2'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM],
+
+                    ],
+                    [
+                        'actions'   => [ 'find'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN],
+
                     ],
                 ],
             ],
@@ -55,8 +61,22 @@ class TeamsController extends DefaultController
 
     public function actionIndex()
     {
+        /*if (!Team::find()->andWhere(['user_id'=>Yii::$app->user->id])->count())
+        {
+            throw new \yii\web\ForbiddenHttpException;
+        }*/
         return $this->render('index');
     }
+    /*public function actionFilter($filtr)
+    {
+        $query = Team::find()->andWhere([Team::tableName() . '.user_id'=>Yii::$app->user->id])->count();
+
+        if (!Yii::$app->user->id){
+            throw new \yii\web\ForbiddenHttpException;
+        }
+        return $filtr;
+    }*/
+
     public function actionFind()
     {
 
@@ -142,13 +162,13 @@ class TeamsController extends DefaultController
         Yii::$app->end();
 
     }
+
     public function actionFind2()
     {
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $team = Yii::$app->request->getQueryParam("id");
-
+        $teamId         = Yii::$app->request->getQueryParam('team_id');
 
         $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id')
             ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . '.id');// AND ' .
@@ -179,17 +199,13 @@ class TeamsController extends DefaultController
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
-        /*if ( $teamId = Yii::$app->request->get("id") ){
-            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
-        }*/
-
         $dataTable->setFilter('is_deleted=0');
 
-        if($team) {
-            $dataTable->setFilter(Team::tableName() . '.id=' . $team);
+        if($teamId) {
+            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
         }
-        if ( $team = Yii::$app->request->get("id") ){
-            $dataTable->setFilter(Team::tableName() . '.id=' . $team);
+        if ( $teamId = Yii::$app->request->get("id") ){
+            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
         }
 
 
@@ -200,8 +216,8 @@ class TeamsController extends DefaultController
 
             $projects = Project::projectsName($model->user_id);
             $project = [];
-            foreach ($projects as $item) {
-                $project[] = $item->name;
+            foreach ($projects as $itemId) {
+                $project[] = $itemId->name;
             }
 
             $list[] = [
