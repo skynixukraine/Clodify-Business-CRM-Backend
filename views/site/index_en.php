@@ -148,7 +148,7 @@ $this->title = 'My Yii Application';
                         <label for="active">Active site/application</label>
                     </div>
 
-                    <div class="option-group">
+                    <div class="option-group right-radio">
                         <input type="radio" value="Only technical specification" name="your_website" id="technical">
                         <label for="technical">Only technical specification</label>
                     </div>
@@ -158,7 +158,7 @@ $this->title = 'My Yii Application';
                         <label for="concept">Only concept</label>
                     </div>
 
-                    <div class="option-group">
+                    <div class="option-group right-radio">
                         <input type="radio" value="In development" name="your_website" id="development">
                         <label for="development">In development</label>
                     </div>

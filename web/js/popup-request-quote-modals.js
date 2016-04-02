@@ -15,8 +15,7 @@ var requestQuoteModals = (function(){
         var heightP = boxPopup.height() + parseFloat(boxPopup.css("padding-top")) + parseFloat(boxPopup.css("padding-bottom")),
             widthP = boxPopup.width() + parseFloat(boxPopup.css("padding-right"))*2,
             widthHtml = html.width(),
-            heightHtml = html.height(),
-            marginUp;
+            heightHtml = html.height();
 
         if(widthHtml > 949){
 
@@ -81,7 +80,7 @@ return{
 
 
         $(window).resize(alignment);
-        alignment();
+
 
         popup.find(".close").click(function () {
 
@@ -92,8 +91,10 @@ return{
 
         $(".box-evaluation .en-btn").click(function () {//btn REQUEST A QUOTE
 
+
             popup.fadeIn(300);
             boxPopup.slideDown(1000);
+            alignment();
 
         });
 
