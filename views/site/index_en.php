@@ -144,22 +144,22 @@ $this->title = 'My Yii Application';
                     <div class="question">What is your website/application state?</div>
 
                     <div class="option-group">
-                        <input type="radio" value="Active site/application" name="active_site_application" id="active">
+                        <input type="radio" value="Active site/application" name="your_website" id="active">
                         <label for="active">Active site/application</label>
                     </div>
 
                     <div class="option-group">
-                        <input type="radio" value="Only technical specification" name="prog_lang" id="technical">
+                        <input type="radio" value="Only technical specification" name="your_website" id="technical">
                         <label for="technical">Only technical specification</label>
                     </div>
 
                     <div class="option-group">
-                        <input type="radio" value="Only concept" name="prog_lang" id="concept">
+                        <input type="radio" value="Only concept" name="your_website" id="concept">
                         <label for="concept">Only concept</label>
                     </div>
 
                     <div class="option-group">
-                        <input type="radio" value="In development" name="prog_lang" id="development">
+                        <input type="radio" value="In development" name="your_website" id="development">
                         <label for="development">In development</label>
                     </div>
 
