@@ -126,3 +126,85 @@ $this->title = 'My Yii Application';
         </div>
     </div>
 </section>
+
+<!--****   Popup REQUEST a QUOTE modals   ****-->
+
+<div id="request-quote-modals">
+
+    <div class="box-popup">
+        <div class="close"></div>
+        <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
+
+
+        <form action="api.php" class="container-fluid" method="post">
+
+
+            <div class="row body-popap">
+                <div class = "col-lg-12 step1">
+                    <div class="question">What is your website/application state?</div>
+
+                    <div class="option-group">
+                        <input type="radio" value="Active site/application" name="active_site_application" id="active">
+                        <label for="active">Active site/application</label>
+                    </div>
+
+                    <div class="option-group">
+                        <input type="radio" value="Only technical specification" name="prog_lang" id="technical">
+                        <label for="technical">Only technical specification</label>
+                    </div>
+
+                    <div class="option-group">
+                        <input type="radio" value="Only concept" name="prog_lang" id="concept">
+                        <label for="concept">Only concept</label>
+                    </div>
+
+                    <div class="option-group">
+                        <input type="radio" value="In development" name="prog_lang" id="development">
+                        <label for="development">In development</label>
+                    </div>
+
+                </div>
+                <div class = "col-lg-12 step2">
+                    <div class="question">What is your platform?</div>
+                </div>
+                <div class = "col-lg-12 step3">
+                    <div class="question">What is your prefered frontend platform?</div>
+                </div>
+                <div class = "col-lg-12 step4">
+                    <div class="question"> When are you looking to start?</div>
+                </div>
+                <div class = "col-lg-12 step5">
+
+                </div>
+                <div class = "col-lg-12 step6">
+
+                </div>
+
+            </div>
+
+            <div class="row footer-popap">
+                <div class = "col-lg-12">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class = "col-lg-2 col-xs-2">
+                    <button class="btn btn-link back">&lt; BACK</button>
+                </div>
+                <div class = "col-lg-10 col-xs-10">
+                    <button class="btn btn btn-primary next">NEXT</button>
+                    <button class="btn btn btn-primary quotes">GET MY QUOTES</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+
+
+<!--****   End Popup REQUEST a QUOTE modals   ****-->
+<?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>
