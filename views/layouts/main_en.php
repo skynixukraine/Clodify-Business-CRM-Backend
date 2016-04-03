@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use app\components\SkynixNavBar;
@@ -19,6 +20,8 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+
     <?php $this->head() ?>
 </head>
 <body>
@@ -34,14 +37,14 @@ AppAsset::register($this);
                             <li>
                                 <a href="https://www.facebook.com/skynix.solutions/" target="_blank" class="ico-facebook"></a>
                             </li>
-                            <li>
+                            <!--<li>
                                 <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                            <!--<li>
+                            <li>
                                 <a href="#" class="ico-in"></a>
                             </li>-->
                             <li>
-                                <a href="#" class="ico-search"></a>
+                                <a href="http://skynix.solutions" class="ico-search"></a>
                             </li>
                         </ul>
                         ',
@@ -50,24 +53,11 @@ AppAsset::register($this);
         ],
     ]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'CONTACT US', 'url' => ['/site/contact']],
-            ['label' => 'CAREER', 'url' => ['/site/login']],
+            ['label' => 'CONTACT US', 'url' => ['site/contact']],
+            ['label' => 'CAREERS', 'url' => ['site/career']],
             ['label' => 'Solutions Store', 'url' => 'http://skynix.solutions'],
 
         ],
@@ -112,7 +102,7 @@ AppAsset::register($this);
             <?= date('Y') ?> All Rights Reserved. Skynix ltd.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <a href="/site/login">LOGIN</a>
+            <a href="<?=Url::to(['site/login'])?>">log in</a>
         </div>
     </div>
 </footer>
@@ -120,6 +110,16 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-73439606-5', 'auto');
+    ga('send', 'pageview');
+
+</script>
 </body>
 </html>
 <?php $this->endPage() ?>

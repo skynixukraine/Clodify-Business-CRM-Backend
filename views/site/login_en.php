@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div class="col-lg-12 col-xs-12 contact-txt">
-            Please fill out the following fields to login:
+            Please fill out the following fields to log in:
         </div>
     </div>
 
@@ -40,13 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'password')->passwordInput() ?>
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-3 col-lg-3 col-md-offset-3 col-md-4 col-sm-offset-2 col-sm-6 col-xs-offset-3 col-xs-8 \">{input} {label}</div>\n
-<div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
+                            <div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
         ]) ?>
 
 
         <div class="form-group box-login-btn">
             <div class="col-lg-offset-6 col-lg-5 col-md-offset-6 col-md-5 col-xs-12">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
+                <?= Html::submitButton('Log in', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
             </div>
         </div>
 
