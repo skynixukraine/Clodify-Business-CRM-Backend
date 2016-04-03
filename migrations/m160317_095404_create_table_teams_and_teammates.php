@@ -4,7 +4,7 @@ use yii\db\Migration;
 
 class m160317_095404_create_table_teams_and_teammates extends Migration
 {
-    public function up()
+    public function safeUp()
     {
         $this->createTable('teams', [
             'id' => $this->primaryKey()->notNull() . ' AUTO_INCREMENT',
@@ -22,6 +22,7 @@ class m160317_095404_create_table_teams_and_teammates extends Migration
 
     public function down()
     {
-        $this->dropTable('table_teams_and_teammates');
+        $this->dropTable('teams');
+        $this->dropTable('teammates');
     }
 }
