@@ -58,11 +58,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        if ( !Yii::$app->user->isGuest ) {
+        /*if ( !Yii::$app->user->isGuest ) {
 
             return $this->redirect(['cp/index']);
 
-        }
+        }*/
         return $this->render('index_' . Language::getLanguage() );
     }
 
@@ -142,6 +142,11 @@ class SiteController extends Controller
     public function actionCareer()
     {
         return $this->render('career_' . Language::getLanguage());
+    }
+
+    public function actionPrivacy()
+    {
+        return $this->render('privacy_' . Language::getLanguage());
     }
 
     /** Invited user activated */

@@ -3,7 +3,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View
  */
 
-$this->title = 'My Yii Application';
+$this->title = 'Welcome to the Skynix - software development company';
 ?>
 <section class="container-fluid" id="about_skynix">
     <div class="row">
@@ -16,7 +16,7 @@ $this->title = 'My Yii Application';
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
                         Skynix is a company that believes in making distinctive, lasting and substantial improvements
-                        in IT World. We have only one goal in mind-to develop, excite and foster changes through our
+                        in IT World. We have only one goal in mind - to develop, excite and foster changes through our
                         solutions. Our professional team always takes into account the wishes and opinions of customers
                         and leverage on latest technology practices to deliver high quality and <span>cost-effective
                         solutions.</span>
@@ -117,7 +117,7 @@ $this->title = 'My Yii Application';
                             <p>Do you need to get a quote of your project or idea?</p>
                         </div>
                         <div class="col-lg-4 col-md-12">
-                            <a href="#" class="en-btn">REQUEST A QUOTE</a>
+                            <a href="<?=Url::to(["site/contact"])?>" class="en-btn">REQUEST A QUOTE</a>
                         </div>
                     </div>
                 </div>
