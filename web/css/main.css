@@ -948,67 +948,84 @@ footer .link a:hover {
     width: 265px;
   }
 }
-.contact {
-  margin: 238px auto 0 auto;
+.contact,
+.login {
+  padding: 118px 15px 0 15px;
 }
-.contact h1 {
+.contact h1,
+.login h1 {
   font-family: 'Raleway-Bold', sans-serif;
   font-size: 55px;
   text-align: center;
 }
-.contact .contact-txt {
+.contact .contact-txt,
+.login .contact-txt {
   padding: 11px 21% 55px 21%;
   font-family: 'Raleway Light', sans-serif;
   font-size: 18.4px;
   text-align: center;
 }
-.contact form {
+.contact form,
+.login form {
   width: 79%;
   padding: 0 125px 0 0;
   margin: 0 auto;
 }
-.contact label {
+.contact label,
+.login label {
   padding: 7px 8px 0 55px;
   font-size: 18px;
   font-family: 'Raleway-Bold', sans-serif;
   text-align: right;
 }
-.contact label[for="contactform-subject"] {
+.contact label[for="contactform-subject"],
+.login label[for="contactform-subject"] {
   padding: 7px 8px 0 39px;
 }
-.contact label[for="contactform-body"] {
+.contact label[for="contactform-body"],
+.login label[for="contactform-body"] {
   padding: 7px 8px 0 61px;
 }
-.contact label[for="contactform-verifycode"] {
+.contact label[for="contactform-verifycode"],
+.login label[for="contactform-verifycode"] {
   padding: 7px 8px 0 0 ;
 }
 .contact label[for="loginform-rememberme"],
-.contact label[for="contactform-verifycode"] {
+.login label[for="loginform-rememberme"],
+.contact label[for="contactform-verifycode"],
+.login label[for="contactform-verifycode"] {
   font-family: 'Raleway-Regular', sans-serif;
   font-size: 14px;
 }
-.contact label[for="loginform-rememberme"] {
+.contact label[for="loginform-rememberme"],
+.login label[for="loginform-rememberme"] {
   padding: 28px 8px 0 0;
 }
-.contact input:not([type="checkbox"]) {
+.contact input:not([type="checkbox"]),
+.login input:not([type="checkbox"]) {
   height: 40px;
   border-radius: 0;
   float: right;
 }
-.contact textarea {
+.contact textarea,
+.login textarea {
   width: 100%;
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-radius: 0;
 }
-.contact .margin-b {
+.contact .margin-b,
+.login .margin-b {
   margin-bottom: 42px;
 }
-.contact .box-login-btn {
+.contact .box-login-btn,
+.login .box-login-btn {
   margin: -72px -15px 0 0;
 }
 .contact .btn-login,
-.contact .btn-submit {
+.login .btn-login,
+.contact .btn-submit,
+.login .btn-submit {
   font-size: 26px;
   font-family: 'Raleway-Medium', sans-serif;
   background: #70c0e1;
@@ -1016,27 +1033,34 @@ footer .link a:hover {
   color: #ffffff;
 }
 .contact .btn-login:hover,
-.contact .btn-submit:hover {
+.login .btn-login:hover,
+.contact .btn-submit:hover,
+.login .btn-submit:hover {
   background: rgba(112, 192, 225, 0.8);
 }
-.contact .btn-login {
+.contact .btn-login,
+.login .btn-login {
   width: 200px;
   padding: 2px 58px;
   margin: -45px 0 0 0;
 }
-.contact .btn-submit {
+.contact .btn-submit,
+.login .btn-submit {
   width: 181px;
   padding: 2px 18px;
 }
-.contact .box-txt-form {
+.contact .box-txt-form,
+.login .box-txt-form {
   padding: 12px 15px;
   font-family: 'Raleway-Regular', sans-serif;
   font-size: 16px;
 }
-.contact .img-captcha img {
+.contact .img-captcha img,
+.login .img-captcha img {
   float: right;
 }
-.contact input[type="checkbox"] {
+.contact input[type="checkbox"],
+.login input[type="checkbox"] {
   width: 18px;
   height: 18px;
   margin: 30px 14px 0 0;
@@ -1092,9 +1116,6 @@ footer .link a:hover {
   }
 }
 @media (max-width: 949px) {
-  .contact {
-    margin: 205px 0 0 0;
-  }
   #contact-form {
     width: 85%;
     padding: 0;
@@ -1107,21 +1128,22 @@ footer .link a:hover {
   }
 }
 @media (max-width: 768px) {
-  .contact {
-    margin: 145px 0 0 0;
-  }
-  .contact .contact-txt {
+  .contact .contact-txt,
+  .login .contact-txt {
     padding: 11px 15% 55px 15%;
   }
-  .contact form {
+  .contact form,
+  .login form {
     width: 90%;
     margin: 0 auto;
     padding: 0 10% 0 0;
   }
-  .contact form .img-captcha img {
+  .contact form .img-captcha img,
+  .login form .img-captcha img {
     float: left;
   }
-  .contact form .input-captcha {
+  .contact form .input-captcha,
+  .login form .input-captcha {
     padding: 0 5px 0 14px;
   }
   #contact-form {
@@ -1147,16 +1169,20 @@ footer .link a:hover {
   }
 }
 @media (max-width: 600px) {
-  .contact h1 {
+  .contact h1,
+  .login h1 {
     font-size: 40px;
   }
-  .contact form {
+  .contact form,
+  .login form {
     padding: 0 5% 0 0;
   }
-  .contact .contact-txt {
+  .contact .contact-txt,
+  .login .contact-txt {
     padding: 11px 11% 55px 11%;
   }
-  .contact label {
+  .contact label,
+  .login label {
     width: 80px;
   }
   #contact-form label {
@@ -1221,10 +1247,12 @@ footer .link a:hover {
     float: none!important;
     text-align: left!important;
   }
-  .contact {
+  .contact,
+  .login {
     margin: 75px 0 30px 0;
   }
-  .contact .margin-b {
+  .contact .margin-b,
+  .login .margin-b {
     margin-bottom: 0;
   }
   #contact-form {
@@ -1268,18 +1296,20 @@ footer .link a:hover {
 }
 #request-quote-modals {
   width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.24);
   display: none;
-  z-index: 200;
+  z-index: 2000;
 }
-#request-quote-modals .box-popup {
+#request-quote-modals .popup {
   width: 690px;
   min-height: 610px;
   padding: 48px 80px 50px 80px;
   position: fixed;
+  left: calc(25%);
   background: #ffffff;
   z-index: 200;
   display: none;
@@ -1421,7 +1451,7 @@ footer .link a:hover {
 #request-quote-modals .footer-popap .quotes {
   width: 242px;
   height: 54px;
-  background: #ffc39e;
+  background: rgba(247, 102, 12, 0.85);
   border: none;
   border-radius: 0;
   float: right;
@@ -1454,4 +1484,17 @@ button:focus {
 }
 a.active {
   cursor: default;
+}
+.page {
+  margin: 120px auto 0 auto;
+}
+@media (max-width: 949px) {
+  .page {
+    margin: 90px auto 0 auto;
+  }
+}
+@media (max-width: 768px) {
+  .page {
+    margin: 28px auto 0 auto;
+  }
 }

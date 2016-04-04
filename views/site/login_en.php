@@ -10,7 +10,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="container contact site-login">
+<section class="container page login">
 
     <div class="row">
         <div class="col-lg-12">
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'password')->passwordInput() ?>
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-3 col-lg-3 col-md-offset-3 col-md-4 col-sm-offset-2 col-sm-6 col-xs-offset-3 col-xs-8 \">{input} {label}</div>\n
-<div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
+        <div class=\"col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 \">{error}</div>",
         ]) ?>
 
 
@@ -53,4 +53,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php ActiveForm::end(); ?>
 
 
-</div>
+
+</section>

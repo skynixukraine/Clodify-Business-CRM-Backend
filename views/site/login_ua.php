@@ -11,7 +11,7 @@ $this->title = 'Ввійти';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="container contact site-login">
+<div class="container page login">
 
     <div class="row">
         <div class="col-lg-12">
@@ -53,5 +53,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-</div>
+</section>
 

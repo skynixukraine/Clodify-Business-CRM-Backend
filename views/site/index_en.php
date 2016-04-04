@@ -131,7 +131,7 @@ $this->title = 'My Yii Application';
 
 <div id="request-quote-modals">
 
-    <div class="box-popup">
+    <div class="popup">
         <div class="close"></div>
         <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
 
@@ -173,12 +173,8 @@ $this->title = 'My Yii Application';
                 <div class = "col-lg-12 step4">
                     <div class="question"> When are you looking to start?</div>
                 </div>
-                <div class = "col-lg-12 step5">
-
-                </div>
-                <div class = "col-lg-12 step6">
-
-                </div>
+                <div class = "col-lg-12 step5"></div>
+                <div class = "col-lg-12 step6"></div>
 
             </div>
 

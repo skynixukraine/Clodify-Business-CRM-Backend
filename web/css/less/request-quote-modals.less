@@ -1,17 +1,19 @@
 #request-quote-modals{
     width: 100%;
+    height: 100%;
     position: fixed;
     top: 0;
     left: 0;
     background: rgba(0,0,0,0.24);
     display: none;
-    z-index: 200;
+    z-index: 2000;
 
-    .box-popup{
+    .popup{
         width: 690px;
         min-height: 610px;
         padding: 48px 80px 50px 80px;
         position: fixed;
+        left: calc(25%);
         background: #ffffff;
         z-index: 200;
         display: none;
@@ -169,7 +171,7 @@
         .quotes{
             width: 242px;
             height: 54px;
-            background: #ffc39e;
+            background: rgba(247, 102, 12, 0.85);
             border: none;
             border-radius: 0;
             float: right;
