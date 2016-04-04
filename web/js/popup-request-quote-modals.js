@@ -6,7 +6,6 @@ var requestQuoteModals = (function(){
 
     var bgForPopup,
         popup,
-        html,
         progressBar,
         step,
         factor = 100/ 5,
@@ -17,27 +16,7 @@ var requestQuoteModals = (function(){
         next,
         quotes;
 
-    function alignment(){
 
-        var heightP = popup.height() + parseFloat(popup.css("padding-top")) + parseFloat(popup.css("padding-bottom")),
-            widthP = popup.width() + parseFloat(popup.css("padding-right"))*2,
-            widthHtml = html.width(),
-            heightHtml = html.height();
-
-        if(widthHtml > 949){
-
-            marginUp = 30;
-
-        }else{
-
-            marginUp = 0;
-        }
-
-
-        popup.css('top', (heightHtml - heightP)/2 + marginUp);
-        //popup.css('left', (widthHtml - widthP)/2);
-
-    }
 
     function progress(step){
 
@@ -52,7 +31,6 @@ return{
 
         bgForPopup = $('#request-quote-modals');
         popup = bgForPopup.find(".popup");
-        html = $('html');
         progressBar = $(".progress-bar");
         bodyPopap = popup.find('.body-popap');
         elemStep = bodyPopap.find('> div');
@@ -61,7 +39,6 @@ return{
         quotes = $(".quotes");
 
 
-        $(window).resize(alignment);
 
 
         bgForPopup.find(".close").click(function () {
@@ -73,10 +50,11 @@ return{
 
         $(".box-evaluation .en-btn").click(function () {//btn REQUEST A QUOTE
 
-
+            event.preventDefault();
             bgForPopup.fadeIn(300);
             popup.slideDown(1000);
             alignment();
+            return false;
 
         });
 

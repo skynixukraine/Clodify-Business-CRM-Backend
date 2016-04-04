@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     background: rgba(0,0,0,0.24);
-    display: none;
+    //display: none;
     z-index: 2000;
 
     .popup{
@@ -13,10 +13,12 @@
         min-height: 610px;
         padding: 48px 80px 50px 80px;
         position: fixed;
-        left: calc(25%);
+        left: 25%;
+        left: ~"calc((100% - 690px)/2)";
+        top: 50px;
         background: #ffffff;
         z-index: 200;
-        display: none;
+        //display: none;
         box-shadow: 0 0 7px 3px  rgba(100, 192, 239, 0.368);//rgba(37, 115, 134, 0.5)
         -webkit-box-shadow: 0 0 7px 3px  rgba(37, 115, 134, 0.5);
     }

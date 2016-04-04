@@ -429,7 +429,7 @@ footer .link a:hover {
     margin: 0 7px 0 -7px;
   }
   .box-header-menu .top-right-icon {
-    margin: -50px -55px 0 0;
+    margin: -50px -30px 0 0;
   }
   .box-header-menu .top-right-icon li {
     padding: 2px 8px;
@@ -1293,7 +1293,6 @@ footer .link a:hover {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.24);
-  display: none;
   z-index: 2000;
 }
 #request-quote-modals .popup {
@@ -1301,10 +1300,11 @@ footer .link a:hover {
   min-height: 610px;
   padding: 48px 80px 50px 80px;
   position: fixed;
-  left: calc(25%);
+  left: 25%;
+  left: calc((100% - 690px)/2);
+  top: 50px;
   background: #ffffff;
   z-index: 200;
-  display: none;
   box-shadow: 0 0 7px 3px rgba(100, 192, 239, 0.368);
   -webkit-box-shadow: 0 0 7px 3px rgba(37, 115, 134, 0.5);
 }
