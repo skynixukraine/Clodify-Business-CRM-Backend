@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-$this->title = Yii::t('app', 'Careers in Skynix');
+$this->title = Yii::t('app', 'The Skynix Privacy Policy');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">
@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-12">
             <br><br><br><br><br>
-            <h1><?=Yii::t('app', 'Careers')?></h1>
+            <h1><?=Yii::t('app', 'Welcome to the Skynix Privacy Policy')?></h1>
 
             <p>The page is under construction</p>
 

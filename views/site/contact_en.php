@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = 'Contact';
+$this->title = 'Contact Skynix & Request a quote';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-12">
 
 
-            <h1><?= Html::encode($this->title) ?></h1>
+            <h1>Contact Skynix</h1>
 
             <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 

@@ -164,5 +164,3 @@ $this->params['menu'] = [
         })
     })
 </script>
-
-

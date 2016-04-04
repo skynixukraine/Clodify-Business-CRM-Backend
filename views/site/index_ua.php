@@ -3,7 +3,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View
  */
 
-$this->title = 'My Yii Application';
+$this->title = 'Вітаємо у Скайнікс - компанія з розробки програмного забезпечення';
 ?>
 
 
@@ -14,10 +14,10 @@ $this->title = 'My Yii Application';
                     <div class="row">
                         <div class="col-lg-12 col-xs-12">
 
-                            <h1>ПРО SKYNIX </h1>
+                            <h1>ПРО СКАЙНІКС </h1>
                         </div>
                         <div class="col-lg-12 col-xs-12 about-txt1">
-                            Компанія Skynix займається створенням, зміцненням та поліпшенням програмного забезпечення.
+                            Компанія Скайнікс займається створенням, зміцненням та поліпшенням програмного забезпечення.
                             Головною метою компанії є сприяння змінам та розвитку ІТ технологій.
                         </div>
                         <div class="col-lg-12 col-xs-12 about-txt2">
@@ -44,7 +44,7 @@ $this->title = 'My Yii Application';
                 <div>Мобільні iOS & Android<br>Phonegap додатки</div>
             </div>
             <div class="col-lg-4 col-sm-4 col-xs-6 ecommerce">
-                <div>eCommerce<br>рішення</div>
+                <div>Рішення<br>Електронної комерції</div>
             </div>
             <div class="col-lg-4 col-sm-4 col-xs-6 email">
                 <div>Теми та імейл<br>шаблони</div>
@@ -59,7 +59,7 @@ $this->title = 'My Yii Application';
         <div class="row">
             <div class="col-lg-12 col-xs-12">
                 <h3>
-                    <span class="brand-name">SKYNIX</span> прагне збагатити, урізноманітнити та спростити ваше життя
+                    <span class="brand-name">СКАЙНІКС</span> прагне збагатити, урізноманітнити та спростити ваше життя
                     за допомогою найкращих технологій.
                 </h3>
             </div>
@@ -70,7 +70,7 @@ $this->title = 'My Yii Application';
         <div class="row scheme">
             <div class="col-lg-12 col-xs-12 ">
                 <div class="backend">
-                    <strong>BACKEND DEVELOPMENT</strong><br>
+                    <strong>РОЗРОБКА ХАРД РІШЕНЬ</strong><br>
                     <ul>
                         <li>PHP5</li>
                         <li>Yii Framework 2</li>
@@ -90,7 +90,7 @@ $this->title = 'My Yii Application';
                     </div>
                 </div>
                 <div class="frontend">
-                    <strong>FRONTEND DEVELOPMENT</strong><br>
+                    <strong>РОЗРОБКА ІНТЕРФЕЙСІВ</strong><br>
                     <ul>
                         <li>HTML5</li>
                         <li>CSS3</li>
@@ -114,7 +114,7 @@ $this->title = 'My Yii Application';
                                 <p>Потрібно оцінити вартість проекту або ідеї?</p>
                             </div>
                             <div class="col-lg-5 col-md-12">
-                                <a href="#">Безкоштовна оцінка проекту</a>
+                                <a href="<?=Url::to(['site/contact'])?>">Безкоштовна оцінка проекту</a>
                             </div>
                         </div>
                     </div>

@@ -4,10 +4,18 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Career';
+$this->title = "РљР°СЂ'С”СЂР° РІ РєРѕРјРїР°РЅС–С— РЎРєР°Р№РЅС–РєСЃ";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container">
 
+    <div class="row">
+        <div class="col-lg-12">
+            <br><br><br><br><br>
+            <h1>РљР°СЂ'С”СЂР°</h1>
+
+            <p>РЎС‚РѕСЂС–РЅРєР° РЅР° СЃС‚Р°РґС–С— СЂРѕР·СЂРѕР±РєРё</p>
+
+        </div>
+    </div>
 </div>

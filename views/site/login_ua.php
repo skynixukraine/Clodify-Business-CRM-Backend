@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Ввійти';
+$this->title = 'Увійти';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="form-group box-login-btn">
             <div class="col-lg-offset-6 col-lg-5 col-md-offset-6 col-md-5 col-xs-12">
-                <?= Html::submitButton('Ввійти', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
+                <?= Html::submitButton('Увійти', ['class' => 'btn btn-login', 'name' => 'login-button']) ?>
             </div>
         </div>
 
