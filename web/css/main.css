@@ -485,7 +485,6 @@ footer .link a:hover {
 #about_skynix {
   width: 100%;
   height: 573px;
-  margin: 157px 0 0 0;
   position: relative;
   z-index: 200;
   text-align: center;
@@ -794,9 +793,6 @@ footer .link a:hover {
   }
 }
 @media (max-width: 949px) {
-  #about_skynix {
-    margin: 127px 0 0 0;
-  }
   #about_skynix h1 {
     padding: 142px 0 11px 0;
   }
@@ -826,9 +822,6 @@ footer .link a:hover {
   }
 }
 @media (max-width: 768px) {
-  #about_skynix {
-    margin: 65px 0 0 0;
-  }
   #about_skynix h1 {
     padding: 112px 0 11px 0;
   }
@@ -915,7 +908,6 @@ footer .link a:hover {
 }
 @media (max-width: 480px) {
   #about_skynix {
-    margin: 64px 0 0 0;
     background: url(../img/bg-top-mobile.jpg) no-repeat;
   }
   #about_skynix {
@@ -1249,7 +1241,7 @@ footer .link a:hover {
   }
   .contact,
   .login {
-    margin: 75px 0 30px 0;
+    padding: 60px 0 30px 0;
   }
   .contact .margin-b,
   .login .margin-b {
@@ -1486,15 +1478,29 @@ a.active {
   cursor: default;
 }
 .page {
-  margin: 120px auto 0 auto;
+  margin: 157px auto 0 auto;
+}
+.fix-height .page {
+  margin: 78px auto 0 auto;
 }
 @media (max-width: 949px) {
   .page {
-    margin: 90px auto 0 auto;
+    margin: 127px auto 0 auto;
+  }
+  .fix-height .page {
+    margin: 63px auto 0 auto;
   }
 }
 @media (max-width: 768px) {
   .page {
-    margin: 28px auto 0 auto;
+    margin: 65px auto 0 auto;
+  }
+  .fix-height .page {
+    margin: 32px auto 0 auto;
+  }
+}
+@media (max-width: 480px) {
+  #about_skynix {
+    margin: 64px 0 0 0;
   }
 }

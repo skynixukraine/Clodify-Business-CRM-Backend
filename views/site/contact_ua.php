@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<section class="container page contact">
+<section class="container contact">
 
 
 

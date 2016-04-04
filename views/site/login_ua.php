@@ -11,7 +11,7 @@ $this->title = 'Ввійти';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="container page login">
+<div class="container login">
 
     <div class="row">
         <div class="col-lg-12">
