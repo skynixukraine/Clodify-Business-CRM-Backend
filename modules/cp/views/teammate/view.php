@@ -27,6 +27,16 @@ $this->params['menu'] = [
     ]
 ];
 ?>
+<?php $form =  ActiveForm::begin();?>
+<?php /** @var $model \app\models\Team*/ ?>
+<ul>
+<li>ID: <?php echo $model->id; ?></li>
+<li>Team Name: <?php echo $model->name; ?></li>
+<li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
+<li> Date of Creation: <?php echo $model->date_created ?></li>
+</ul>
+
+<?php  ActiveForm::end();?>
 <table id="teammates-table" class="table table-hover">
     <thead>
     <tr>

@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use app\models\User;
+use yii\widgets\ActiveForm;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -16,12 +17,7 @@ $this->params['breadcrumbs'][]  = $this->title;
 
     ];
 ?>
-<ul>
-    <li><?=Yii::t('app', 'ID')?></li>
-    <li><?=Yii::t('app', 'Team Name')?></li>
-    <li><?=Yii::t('app', 'Team Leader')?></li>
-    <li><?=Yii::t('app', 'Date of Creation')?></li>
-</ul>
+
 <table id="teams-table" class="table table-hover">
 <thead>
 <tr>

@@ -119,8 +119,8 @@ class TeammateController extends DefaultController
     {
         if (( $teamId = Yii::$app->request->get("id") ) ) {
 
-            $model = Teammate::find()
-                ->where("team_id=:teamiD",
+            $model = Team::find()
+                ->where("id=:teamiD",
                     [
                         ':teamiD' => $teamId
                     ])
@@ -128,7 +128,7 @@ class TeammateController extends DefaultController
         }
         /** @var $model Teammate */
         return $this->render('view', ['model' => $model,
-            'title' => 'List of Teammates  #' . $model->team_id]);
+            'title' => 'List of Teammates  #' . $model->id]);
     }
 
 }
