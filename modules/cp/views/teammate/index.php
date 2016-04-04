@@ -9,9 +9,19 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/manager-teams.js');
 $this->title                    = Yii::t("app", "Manage Teams");
 $this->params['breadcrumbs'][]  = $this->title;
     $this->params['menu'] = [
+        [
+            'label' => Yii::t('app', 'APPEND'),
+            'url' => Url::to(['user/invite'])
+        ]
 
     ];
 ?>
+<ul>
+    <li><?=Yii::t('app', 'ID')?></li>
+    <li><?=Yii::t('app', 'Team Name')?></li>
+    <li><?=Yii::t('app', 'Team Leader')?></li>
+    <li><?=Yii::t('app', 'Date of Creation')?></li>
+</ul>
 <table id="teams-table" class="table table-hover">
 <thead>
 <tr>

@@ -130,10 +130,10 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
                     <a href="<?=Url::to(['teammate/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Teams ')?></span>
+                        <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
                     </a>
                 </li>
                 <?php endif;?>
