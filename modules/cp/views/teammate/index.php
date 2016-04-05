@@ -7,8 +7,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/manager-teams.js');
-$this->title                    = Yii::t("app", "Manage Teams");
+$this->title                    = Yii::t("app", "Company Teams");
 $this->params['breadcrumbs'][]  = $this->title;
+/*if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'APPEND'),
@@ -16,6 +17,8 @@ $this->params['breadcrumbs'][]  = $this->title;
         ]
 
     ];
+}*/
+
 ?>
 
 <table id="teams-table" class="table table-hover">
@@ -34,7 +37,6 @@ $this->params['breadcrumbs'][]  = $this->title;
 </table>
 <script>
     $(function(){
-
         managerTeamsModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
             findUrl     : '<?=Url::to(['teammate/find'])?>',

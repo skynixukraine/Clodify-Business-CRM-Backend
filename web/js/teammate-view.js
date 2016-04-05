@@ -62,7 +62,9 @@ var TeammateModule = (function() {
     return {
 
         init: function( config ){
-
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            });
 
             cfg = $.extend(cfg, config);
             dataTable = $('#teammates-table').dataTable({

@@ -21,12 +21,10 @@ $this->title                    = Yii::t("app", $title);
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [
-    [
-        'label' => Yii::t('app', 'Teammate'),
-        'url' => Url::to(['teammate/index'])
-    ]
+
 ];
 ?>
+
 <?php $form =  ActiveForm::begin();?>
 <?php /** @var $model \app\models\Team*/ ?>
 <ul>
@@ -35,6 +33,39 @@ $this->params['menu'] = [
 <li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
 <li> Date of Creation: <?php echo $model->date_created ?></li>
 </ul>
+<?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        APPEND
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Append a new teammate to the team: <?php echo $model->name; ?></h4>
+                </div>
+                <div class="modal-body">
+                    <?php $teammates = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                        User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
+                    $listReport = \yii\helpers\ArrayHelper::map( $teammates, 'id', 'first_name' );
+                    //var_dump($listReport);
+                    //exit();
+                    echo $form->field( $model, 'teammate', [
+
+                        'options' => [
+
+                        ]
+                    ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Teammate');?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif;?>
 
 <?php  ActiveForm::end();?>
 <table id="teammates-table" class="table table-hover">
@@ -46,11 +77,14 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Email')?></th>
         <th><?=Yii::t('app', 'Phone')?></th>
         <th><?=Yii::t('app', 'Projects')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
         <th><?=Yii::t('app', 'Actions')?></th>
+        <?php endif;?>
     </tr>
     </thead>
 </table>
 <script>
+
     $(function(){
         TeammateModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',

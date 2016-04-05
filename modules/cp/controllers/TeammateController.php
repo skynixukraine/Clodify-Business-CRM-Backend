@@ -90,6 +90,7 @@ class TeammateController extends DefaultController
 
         $dataTable->setFilter('is_deleted=0');
 
+
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\Team */
@@ -113,7 +114,6 @@ class TeammateController extends DefaultController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
-
     }
     public function actionView()
     {
@@ -125,7 +125,25 @@ class TeammateController extends DefaultController
                         ':teamiD' => $teamId
                     ])
                 ->one();
+
+     /*   if ( $model->load(Yii::$app->request->post()) ) {
+            var_dump($model->teammate);
+            exit();
+            $model1 = Teammate::find()
+                ->where("team_id=:teamId",[
+                    ':teamId' => $teamId
+                ])
+                ->one();
+            $model1->user_id = $model->user_id;
+            //var_dump($model1);
+            //exit();
+            if ($model1->validate()) {
+                $model1->save();
+            }
+        }*/
         }
+        /*return $this->render('view', ['model' => $model]);*/
+
         /** @var $model Teammate */
         return $this->render('view', ['model' => $model,
             'title' => 'List of Teammates  #' . $model->id]);

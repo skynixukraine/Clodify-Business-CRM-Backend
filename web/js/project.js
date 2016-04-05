@@ -106,35 +106,54 @@ var projectModule = (function() {
             ], index = 3;
 
             if( cfg.canSeeHours){
-                index++;
                 columns.push({
-                        "targets"   : index,
+                        "targets"   : 3,
                         "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 7,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 8,
+                        "orderable" : false
                     });
             }
-            index++;
-            columns.push(
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                }
-            );
+            if( !cfg.canSeeHours){
+                columns.push(
+                    {
+                        "targets"   : 3,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 7,
+                        "orderable" : false
+                    });
+            }
 
             if(cfg.canActivate || cfg.canSuspend || cfg.canDelete || cfg.canEdit || cfg.canPaid)
             columns.push(

@@ -17,6 +17,7 @@ use Yii;
  */
 class Team extends \yii\db\ActiveRecord
 {
+    public $teammate;
     /**
      * @inheritdoc
      */

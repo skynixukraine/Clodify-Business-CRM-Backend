@@ -13,6 +13,8 @@ use Yii;
  */
 class Teammate extends \yii\db\ActiveRecord
 {
+
+
     /**
      * @inheritdoc
      */

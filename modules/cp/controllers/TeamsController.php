@@ -41,7 +41,7 @@ class TeamsController extends DefaultController
                     [
                         'actions'   => [ 'find'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN],
+                        'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN],
 
                     ],
                 ],
