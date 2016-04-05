@@ -48,17 +48,19 @@ return{
         bgForPopup.find(".close").click(function () {
 
             bgForPopup.fadeOut(1000);
-            popup.slideUp(200);
+            popup.fadeOut(1000);
+            popup.slideUp(500);
 
         });
 
         $(".box-evaluation .en-btn").click(function () {//btn REQUEST A QUOTE
 
             event.preventDefault();
-            bgForPopup.fadeIn(300);
-            popup.slideDown(1000);
+            bgForPopup.fadeIn(500);
+            popup.fadeIn(1000);
+            popup.slideDown(500);
 
-            alignment();
+
 
             return false;
 
