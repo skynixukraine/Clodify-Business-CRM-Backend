@@ -140,41 +140,153 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
             <div class="row body-popap">
+
                 <div class = "col-lg-12 step1">
                     <div class="question">What is your website/application state?</div>
-
                     <div class="option-group">
-                        <input type="radio" value="Active site/application" name="your_website" id="active">
+                        <input type="radio" value="Active site/application" name="your_website" id="active" checked="checked" >
                         <label for="active">Active site/application</label>
                     </div>
 
-                    <div class="option-group right-radio">
-                        <input type="radio" value="Only technical specification" name="your_website" id="technical">
+                    <div class="option-group right-elem">
+                        <input type="radio" value="Only technical specification" name="your_website" id="technical"  >
                         <label for="technical">Only technical specification</label>
                     </div>
 
                     <div class="option-group">
-                        <input type="radio" value="Only concept" name="your_website" id="concept">
+                        <input type="radio" value="Only concept" name="your_website" id="concept"  >
                         <label for="concept">Only concept</label>
                     </div>
 
-                    <div class="option-group right-radio">
-                        <input type="radio" value="In development" name="your_website" id="development">
+                    <div class="option-group right-elem">
+                        <input type="radio" value="In development" name="your_website" id="development"  >
                         <label for="development">In development</label>
                     </div>
-
                 </div>
+
                 <div class = "col-lg-12 step2">
                     <div class="question">What is your platform?</div>
+                    <div class="input-group-btn select">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="your_platform">
+                            Magento 1.x <span class="caret1">&or;</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Magento 1.x</a></li>
+                            <li><a href="#">Magento 2.x</a></li>
+                            <li><a href="#">Wordpress</a></li>
+                            <li><a href="#">Yii 1, Yii 2</a></li>
+                            <li><a href="#">ZF 1, ZF2</a></li>
+                            <li><a href="#">HTML/CSS/Javascript</a></li>
+                            <li><a href="#">Other</a></li>
+                        </ul>
+                    </div>
+                    <div class="question margin-text">What kind of services do you need?</div>
+                    <div class="option-group">
+                        <input type="checkbox" value="New module, plugin, extension" name="module_plugin" id="module_plugin" checked="checked">
+                        <label for="module_plugin">New module,<br> plugin, extension</label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Existing code adjustments" name="code_adjustments" id="code_adjustments">
+                        <label for="code_adjustments">Existing code<br> adjustments</label>
+                    </div>
+                    <div class="option-group">
+                        <input type="checkbox" value="New graphic design" name="graphic_design" id="graphic_design">
+                        <label for="graphic_design">New<br> graphic design</label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Optimization" name="optimization" id="optimization">
+                        <label for="optimization">Optimization</label>
+                    </div>
+                    <div class="option-group">
+                        <input type="checkbox" value="Redesign" name="redesign" id="redesign">
+                        <label for="redesign">Redesign</label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Server Administration" name="server_administration" id="server_administration" checked="checked">
+                        <label for="server_administration">Server<br> Administration</label>
+                    </div>
                 </div>
+
                 <div class = "col-lg-12 step3">
-                    <div class="question">What is your prefered frontend platform?</div>
+                    <div class="question">What is your prefered backend platform?</div>
+                    <div class="input-group-btn select">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="prefered_backend_platform">
+                            Magento 1.x <span class="caret1">&or;</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Magento 1.x</a></li>
+                            <li><a href="#">Magento 2.x</a></li>
+                            <li><a href="#">Wordpress</a></li>
+                            <li><a href="#">Yii 2</a></li>
+                            <li><a href="#">Zend Framework 2</a></li>
+                            <li><a href="#">HTML/CSS/Javascript</a></li>
+                            <li><a href="#">No need for a backend</a></li>
+                        </ul>
+                    </div>
+                    <div class="question margin-text">What is your prefered frontend platform?</div>
+                    <div class="input-group-btn select">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Twitter Bootstrap template" name="prefered_frontend_platform">
+                            Twitter Bootstrap template<span class="caret1">&or;</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Twitter Bootstrap template</a></li>
+                            <li><a href="#">HTML5, CSS3 template</a></li>
+                            <li><a href="#">jQuery application</a></li>
+                            <li><a href="#">AngularJS application</a></li>
+                            <li><a href="#">No need for a frontend</a></li>
+                        </ul>
+                    </div>
                 </div>
+
                 <div class = "col-lg-12 step4">
                     <div class="question"> When are you looking to start?</div>
+                    <div class="input-group-btn select">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Immediately" name="looking_start">
+                            Immediately<span class="caret1">&or;</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Immediately</a></li>
+                            <li><a href="#">1-2 weeks</a></li>
+                            <li><a href="#">3-4 weeks</a></li>
+                            <li><a href="#">in 1-2 months</a></li>
+                        </ul>
+
+
+
+                    </div>
+                    <div class="question margin-text">What is your budget?</div>
+                    <div class="input-group-btn select">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="$1000 - $5000" name="your_budget">
+                            $1000 - $5000<span class="caret1">&or;</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">&lt; $300</a></li>
+                            <li><a href="#">$300 - $1000</a></li>
+                            <li><a href="#">$1000 - $5000</a></li>
+                            <li><a href="#">&gt; $5000</a></li>
+
+                        </ul>
+                    </div>
+
+
+
                 </div>
-                <div class = "col-lg-12 step5"></div>
-                <div class = "col-lg-12 step6"></div>
+                <div class = "col-lg-12 step5">
+                    <textarea rows="8" cols="45" name="project_description" placeholder="project description..."></textarea>
+
+                    <label class="file_upload">
+                        <span class="button">UPLOAD FILE</span>
+                        <input type="file" id="file" name="file" multiple>
+                    </label>
+
+
+                </div>
+                <div class = "col-lg-12 step6">
+                    <input type="text" placeholder="Name" name="name" autocomplete="on" required >
+                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" required >
+                    <input type="text" placeholder="Company" name="company" autocomplete="on">
+                    <input type="text" placeholder="Country" name="country" autocomplete="on">
+                </div>
 
             </div>
 
@@ -187,7 +299,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                 </div>
                 <div class = "col-lg-2 col-xs-2">
-                    <button class="btn btn-link back">&lt; BACK</button>
+                    <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
                 </div>
                 <div class = "col-lg-10 col-xs-10">
                     <button class="btn btn btn-primary next">NEXT</button>

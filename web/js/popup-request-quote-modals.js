@@ -14,8 +14,11 @@ var requestQuoteModals = (function(){
         elem,
         back,
         next,
-        quotes;
-
+        quotes,
+        select,
+        parentElem,
+        step1,
+        checkedElemStep1;
 
 
     function progress(step){
@@ -29,14 +32,15 @@ return{
 
     init: function(){
 
-        bgForPopup = $('#request-quote-modals');
-        popup = bgForPopup.find(".popup");
-        progressBar = $(".progress-bar");
-        bodyPopap = popup.find('.body-popap');
-        elemStep = bodyPopap.find('> div');
-        back = $(".back");
-        next =  $(".next");
-        quotes = $(".quotes");
+        bgForPopup      = $('#request-quote-modals');
+        popup           = bgForPopup.find(".popup");
+        progressBar     = $(".progress-bar");
+        bodyPopap       = popup.find('.body-popap');
+        elemStep        = bodyPopap.find('> div');
+        back            = $(".back");
+        next            =  $(".next");
+        quotes          = $(".quotes");
+        step1           = $('.step1 .option-group');
 
 
 
@@ -53,12 +57,12 @@ return{
             event.preventDefault();
             bgForPopup.fadeIn(300);
             popup.slideDown(1000);
+
             alignment();
+
             return false;
 
         });
-
-
 
         elemStep.hide().attr("aria-hidden", true);
         elemStep.eq(0).show().attr("aria-hidden", false);
@@ -68,15 +72,27 @@ return{
             elemStep.eq(i).data("data-step", i);
         }
 
-        next.click(function(event){
+        next.click(function(event){//button next
             event.preventDefault();
-
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') + 1;
+
+
+            if(step == 1){//skip step 2
+
+                checkedElemStep1 = step1.find(":checked");
+
+                if(checkedElemStep1.val().indexOf("Active site/application") != 0 &&
+                    checkedElemStep1.val().indexOf("In development") != 0){
+
+                    step += 1;
+                }
+
+             }
+
             elemStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
             back.css('display' , 'block');
-
 
             if(step == 5){
 
@@ -86,12 +102,27 @@ return{
 
             progress(step);
 
+            return false;
+
         });
-        back.click(function(event){
+        back.click(function(event){//button back
             event.preventDefault();
 
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
+
+
+            if(step == 1){//skip step 2
+
+                checkedElemStep1 = step1.find(":checked");
+
+                if(checkedElemStep1.val().indexOf("Active site/application") != 0 &&
+                    checkedElemStep1.val().indexOf("In development") != 0){
+
+                    step -= 1;
+                }
+
+            }
             elemStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
 
@@ -100,15 +131,35 @@ return{
                 back.css('display' , 'none');
             }
 
-                next.css('display' , 'block');
-                quotes.css('display' , 'none');
+            next.css('display' , 'block');
+            quotes.css('display' , 'none');
 
             progress(step);
 
+            return false;
+
         });
-        quotes.click(function(event){
+        quotes.click(function(event){//button 'GET MY QUOTES'
             event.preventDefault();
+
+            return false;
         });
+
+        $(".dropdown-menu li").click(function(event) {//dropdown selected
+
+            event.preventDefault();
+            var el = $(this),
+                value = el.text();
+            select = el.closest(".input-group-btn.select");
+            parentElem = select.find(".dropdown-toggle");
+
+            parentElem.html(value + '<span class="caret1">&or;</span>');
+            parentElem.attr('value', value);
+
+
+        });
+
+
 
     }
 }
