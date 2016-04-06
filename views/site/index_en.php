@@ -136,38 +136,38 @@ $this->title = 'Welcome to the Skynix - software development company';
         <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
 
 
-        <form action="api.php" class="container-fluid" method="post">
+        <form action="request.php" class="container-fluid" method="post">
 
 
             <div class="row body-popap">
 
-                <div class = "col-lg-12 step1">
+                <div class = "col-lg-12 step step1">
                     <div class="question">What is your website/application state?</div>
                     <div class="option-group">
-                        <input type="radio" value="Active site/application" name="your_website" id="active" checked="checked" >
+                        <input type="radio" value="Active site application" name="website_state" id="active" checked="checked" >
                         <label for="active">Active site/application</label>
                     </div>
 
                     <div class="option-group right-elem">
-                        <input type="radio" value="Only technical specification" name="your_website" id="technical"  >
+                        <input type="radio" value="Only technical specification" name="website_state" id="technical"  >
                         <label for="technical">Only technical specification</label>
                     </div>
 
                     <div class="option-group">
-                        <input type="radio" value="Only concept" name="your_website" id="concept"  >
+                        <input type="radio" value="Only concept" name="website_state" id="concept"  >
                         <label for="concept">Only concept</label>
                     </div>
 
                     <div class="option-group right-elem">
-                        <input type="radio" value="In development" name="your_website" id="development"  >
+                        <input type="radio" value="In development" name="website_state" id="development"  >
                         <label for="development">In development</label>
                     </div>
                 </div>
 
-                <div class = "col-lg-12 step2">
+                <div class = "col-lg-12 step step2">
                     <div class="question">What is your platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="your_platform">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="platform" >
                             Magento 1.x <span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu">
@@ -182,35 +182,35 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                     <div class="question margin-text">What kind of services do you need?</div>
                     <div class="option-group">
-                        <input type="checkbox" value="New module, plugin, extension" name="module_plugin" id="module_plugin" checked="checked">
-                        <label for="module_plugin">New module,<br> plugin, extension</label>
+                        <input type="checkbox" value="New module, plugin, extension" name="services[]" id="module_plugin" checked="checked">
+                        <label for="module_plugin"><span class="hidden-xs">New module,<br> plugin, extension</span><span class="visible-xs">New module, plugin, extension</span></label>
                     </div>
                     <div class="option-group right-elem">
-                        <input type="checkbox" value="Existing code adjustments" name="code_adjustments" id="code_adjustments">
-                        <label for="code_adjustments">Existing code<br> adjustments</label>
+                        <input type="checkbox" value="Existing code adjustments" name="services[]" id="code_adjustments">
+                        <label for="code_adjustments"><span class="hidden-xs">Existing code<br> adjustments</span><span class="visible-xs">Existing code adjustments</span></label>
                     </div>
                     <div class="option-group">
-                        <input type="checkbox" value="New graphic design" name="graphic_design" id="graphic_design">
-                        <label for="graphic_design">New<br> graphic design</label>
+                        <input type="checkbox" value="New graphic design" name="services[]" id="graphic_design">
+                        <label for="graphic_design"><span class="hidden-xs">New<br> graphic design</span><span class="visible-xs">New graphic design</span></label>
                     </div>
                     <div class="option-group right-elem">
-                        <input type="checkbox" value="Optimization" name="optimization" id="optimization">
+                        <input type="checkbox" value="Optimization" name="services[]" id="optimization">
                         <label for="optimization">Optimization</label>
                     </div>
                     <div class="option-group">
-                        <input type="checkbox" value="Redesign" name="redesign" id="redesign">
+                        <input type="checkbox" value="Redesign" name="services[]" id="redesign">
                         <label for="redesign">Redesign</label>
                     </div>
                     <div class="option-group right-elem">
-                        <input type="checkbox" value="Server Administration" name="server_administration" id="server_administration" checked="checked">
-                        <label for="server_administration">Server<br> Administration</label>
+                        <input type="checkbox" value="Server Administration" name="services[]" id="server_administration" checked="checked">
+                        <label for="server_administration"><span class="hidden-xs">Server<br> Administration</span><span class="visible-xs">Server Administration</span></label>
                     </div>
                 </div>
 
-                <div class = "col-lg-12 step3">
+                <div class = "col-lg-12 step step3">
                     <div class="question">What is your prefered backend platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="prefered_backend_platform">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="backend_platform">
                             Magento 1.x <span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu">
@@ -225,7 +225,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                     <div class="question margin-text">What is your prefered frontend platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Twitter Bootstrap template" name="prefered_frontend_platform">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Twitter Bootstrap template" name="frontend_platform">
                             Twitter Bootstrap template<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu">
@@ -238,10 +238,10 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                 </div>
 
-                <div class = "col-lg-12 step4">
+                <div class = "col-lg-12 step step4">
                     <div class="question"> When are you looking to start?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Immediately" name="looking_start">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Immediately" name="when_start">
                             Immediately<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu">
@@ -256,7 +256,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                     <div class="question margin-text">What is your budget?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="$1000 - $5000" name="your_budget">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="$1000 - $5000" name="budget">
                             $1000 - $5000<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu">
@@ -271,8 +271,8 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
                 </div>
-                <div class = "col-lg-12 step5">
-                    <textarea rows="8" cols="45" name="project_description" placeholder="project description..."></textarea>
+                <div class = "col-lg-12 step step5">
+                    <textarea rows="8" cols="45" name="description" placeholder="project description..."></textarea>
 
                     <label class="file_upload">
                         <span class="button">UPLOAD FILE</span>
@@ -281,7 +281,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
                 </div>
-                <div class = "col-lg-12 step6">
+                <div class = "col-lg-12 step step6">
                     <input type="text" placeholder="Name" name="name" autocomplete="on" required >
                     <input type="email" placeholder="Email Address" name="email" autocomplete="on" required >
                     <input type="text" placeholder="Company" name="company" autocomplete="on">
@@ -298,10 +298,10 @@ $this->title = 'Welcome to the Skynix - software development company';
                         </div>
                     </div>
                 </div>
-                <div class = "col-lg-2 col-xs-2">
+                <div class = "col-lg-2 col-sm-2 col-xs-4">
                     <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
                 </div>
-                <div class = "col-lg-10 col-xs-10">
+                <div class = "col-lg-10 col-sm-10 col-xs-8">
                     <button class="btn btn btn-primary next">NEXT</button>
                     <button class="btn btn btn-primary quotes">GET MY QUOTES</button>
                 </div>

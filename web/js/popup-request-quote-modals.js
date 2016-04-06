@@ -17,8 +17,12 @@ var requestQuoteModals = (function(){
         quotes,
         select,
         parentElem,
-        step1,
-        checkedElemStep1;
+        elemChecked = [],
+        checkedElemStep,
+
+
+        formData;
+
 
 
     function progress(step){
@@ -26,6 +30,7 @@ var requestQuoteModals = (function(){
         progressBar.css('width' , factor * step + '%');
 
     }
+
 
 
 return{
@@ -38,11 +43,9 @@ return{
         bodyPopap       = popup.find('.body-popap');
         elemStep        = bodyPopap.find('> div');
         back            = $(".back");
-        next            =  $(".next");
+        next            = $(".next");
         quotes          = $(".quotes");
-        step1           = $('.step1 .option-group');
-
-
+        formData = new FormData();
 
 
         bgForPopup.find(".close").click(function () {
@@ -80,17 +83,55 @@ return{
             step = elem.data('data-step') + 1;
 
 
-            if(step == 1){//skip step 2
+            if(step == 1){
 
-                checkedElemStep1 = step1.find(":checked");
+                checkedElemStep = elem.find("input:checked");
 
-                if(checkedElemStep1.val().indexOf("Active site/application") != 0 &&
-                    checkedElemStep1.val().indexOf("In development") != 0){
+                if(checkedElemStep.val().indexOf("Active site application") != 0 &&//skip step 2
+                    checkedElemStep.val().indexOf("In development") != 0){
 
                     step += 1;
                 }
 
+
+                formData.append('website_state', checkedElemStep.val());
+
+                console.log(formData);
+                console.log(checkedElemStep.val());
              }
+            if(step == 2){
+
+
+                checkedElemStep = elem.find("input:checked");
+
+
+                for(var i=0; i < checkedElemStep.length; i++){
+
+                    elemChecked.push( checkedElemStep.eq(i).val());
+                }
+
+                formData.append('platform', elem.find("[name]").eq(0).val());
+                formData.append('services', elemChecked);
+
+
+            }
+            if(step == 3){
+
+                formData.append('backend_platform',  elem.find("[name]").eq(0).val());
+                formData.append('frontend_platform', elem.find("[name]").eq(1).val());
+
+            }
+            if(step == 4){
+
+                formData.append('when_start',  elem.find("[name]").eq(0).val());
+                formData.append('budget',      elem.find("[name]").eq(1).val());
+            }
+            if(step == 5){
+
+                formData.append('description', elem.find("[name]").eq(0).val());
+                formData.append('file',        elem.find("[name]").eq(1).val());
+
+            }
 
             elemStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
@@ -101,6 +142,7 @@ return{
                 next.css('display' , 'none');
                 quotes.css('display' , 'block');
             }
+
 
             progress(step);
 
@@ -113,13 +155,12 @@ return{
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
 
+            if(step == 1){
 
-            if(step == 1){//skip step 2
+                checkedElemStep = elemStep.eq(0).find(":checked");
 
-                checkedElemStep1 = step1.find(":checked");
-
-                if(checkedElemStep1.val().indexOf("Active site/application") != 0 &&
-                    checkedElemStep1.val().indexOf("In development") != 0){
+                if(checkedElemStep.val().indexOf("Active site application") != 0 &&//skip step 2
+                    checkedElemStep.val().indexOf("In development") != 0){
 
                     step -= 1;
                 }
@@ -143,6 +184,31 @@ return{
         });
         quotes.click(function(event){//button 'GET MY QUOTES'
             event.preventDefault();
+            elem = bodyPopap.find("[aria-hidden=false]");
+            step = elem.data('data-step') + 1;
+
+            json = {step: step, name: elem.find("[name]").eq(0).val(), email: elem.find("[name]").eq(1).val(), company: elem.find("[name]").eq(2).val(), country: elem.find("[name]").eq(3).val()};
+
+
+            formData.append('name', elem.find("[name]").eq(0).val());
+            formData.append('email', elem.find("[name]").eq(1).val());
+            formData.append('company', elem.find("[name]").eq(2).val());
+            formData.append('country', elem.find("[name]").eq(3).val());
+
+            console.log(formData);
+
+
+            $.ajax({
+                url : popup.find('form').attr("action"),
+                type : 'POST',
+                data : formData,
+                processData: false,
+                contentType: false,
+                success : function(data) {
+                    console.log(data);
+                    alert(data);
+                }
+            });
 
             return false;
         });
@@ -165,9 +231,6 @@ return{
 
     }
 }
-
-
-
 
 
 
