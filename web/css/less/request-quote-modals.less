@@ -123,8 +123,8 @@
             margin:  48px 0 0 0;
         }
         .option-group:not(#foo) input:checked + label,
-        .dropdown-menu > li > a:focus,
-        .dropdown-menu > li > a:hover{
+        .dropdown-menu a:focus,
+        .dropdown-menu a:hover{
             background-color: #006eb4;
             color: @color-white1;
         }
@@ -267,4 +267,27 @@
             display: none;
         }
     }
+}
+@media (max-width: 768px ) {
+
+    #request-quote-modals{
+
+        .popup {
+            width: 90%;
+            padding: 30px 20px 25px 20px;
+            left: 5%;
+        }
+        .option-group,
+        label{
+            width: 100%!important;
+
+
+        }
+        .right-elem{
+            text-align: left!important;
+        }
+
+    }
+
+
 }

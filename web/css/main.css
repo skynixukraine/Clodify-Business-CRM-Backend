@@ -1479,18 +1479,18 @@ footer .link a:hover {
 #request-quote-modals .step4 .option-group:not(#foo) input:checked + label,
 #request-quote-modals .step5 .option-group:not(#foo) input:checked + label,
 #request-quote-modals .step6 .option-group:not(#foo) input:checked + label,
-#request-quote-modals .step1 .dropdown-menu > li > a:focus,
-#request-quote-modals .step2 .dropdown-menu > li > a:focus,
-#request-quote-modals .step3 .dropdown-menu > li > a:focus,
-#request-quote-modals .step4 .dropdown-menu > li > a:focus,
-#request-quote-modals .step5 .dropdown-menu > li > a:focus,
-#request-quote-modals .step6 .dropdown-menu > li > a:focus,
-#request-quote-modals .step1 .dropdown-menu > li > a:hover,
-#request-quote-modals .step2 .dropdown-menu > li > a:hover,
-#request-quote-modals .step3 .dropdown-menu > li > a:hover,
-#request-quote-modals .step4 .dropdown-menu > li > a:hover,
-#request-quote-modals .step5 .dropdown-menu > li > a:hover,
-#request-quote-modals .step6 .dropdown-menu > li > a:hover {
+#request-quote-modals .step1 .dropdown-menu a:focus,
+#request-quote-modals .step2 .dropdown-menu a:focus,
+#request-quote-modals .step3 .dropdown-menu a:focus,
+#request-quote-modals .step4 .dropdown-menu a:focus,
+#request-quote-modals .step5 .dropdown-menu a:focus,
+#request-quote-modals .step6 .dropdown-menu a:focus,
+#request-quote-modals .step1 .dropdown-menu a:hover,
+#request-quote-modals .step2 .dropdown-menu a:hover,
+#request-quote-modals .step3 .dropdown-menu a:hover,
+#request-quote-modals .step4 .dropdown-menu a:hover,
+#request-quote-modals .step5 .dropdown-menu a:hover,
+#request-quote-modals .step6 .dropdown-menu a:hover {
   background-color: #006eb4;
   color: #ffffff;
 }
@@ -1622,6 +1622,20 @@ footer .link a:hover {
 }
 #request-quote-modals .footer-popap .quotes {
   display: none;
+}
+@media (max-width: 768px) {
+  #request-quote-modals .popup {
+    width: 90%;
+    padding: 30px 20px 25px 20px;
+    left: 5%;
+  }
+  #request-quote-modals .option-group,
+  #request-quote-modals label {
+    width: 100%!important;
+  }
+  #request-quote-modals .right-elem {
+    text-align: left!important;
+  }
 }
 html,
 body {
