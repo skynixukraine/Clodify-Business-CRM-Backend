@@ -33,13 +33,13 @@ class TeamsController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'index', 'view', 'find2'],
+                        'actions'   => [ 'index', 'view', 'find'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM],
 
                     ],
                     [
-                        'actions'   => [ 'find'],
+                        'actions'   => [ 'find2'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN],
 
@@ -168,11 +168,11 @@ class TeamsController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
+        /**accepts a parameter 'team_id' in teammate_view.js*/
         $teamId         = Yii::$app->request->getQueryParam('team_id');
 
-        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id')
-            ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . '.id');// AND ' .
-               // Team::tableName() . '.id=:ID', [':ID' => $teamId]);
+        $query = Teammate::find();
+            //->leftJoin(User::tableName(), Teammate::tableName() . '.user_id=' . User::tableName() . '.id');
 
         $columns        = [
             'user_id',
@@ -181,11 +181,6 @@ class TeamsController extends DefaultController
             'email',
             'phone',
             'project_id',
-            'id',
-            'name',
-            'user_id',
-            'team_id',
-            'date_create',
 
         ];
         $dataTable = DataTable::getInstance()
@@ -199,19 +194,19 @@ class TeamsController extends DefaultController
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
-        $dataTable->setFilter('is_deleted=0');
+        //$dataTable->setFilter('is_deleted=0');
 
         if($teamId) {
-            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
+            $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $teamId);
         }
-        if ( $teamId = Yii::$app->request->get("id") ){
-            $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
-        }
+        /*if ( $team = Yii::$app->request->get("id") ){
+            $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $team);
+        }*/
 
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
-        /* @var $model \app\models\Team */
+        /* @var $model \app\models\Teammate */
         foreach ( $activeRecordsData as $model ) {
 
             $projects = Project::projectsName($model->user_id);
@@ -221,20 +216,15 @@ class TeamsController extends DefaultController
             }
 
             $list[] = [
-                $model->user_id,
-                $model->getUser()->one()->first_name,
-                $model->getUser()->one()->last_name,
-                $model->getUser()->one()->email,
-                $model->getUser()->one()->phone,
-                implode(', ', $project),
-                $model->id,
-                $model->name,
-                $model->getUser()->one()->first_name . " " . $model->getUser()->one()->last_name,
-                Teammate::teammateUser($model->id),
-                $model->date_created,
+                 $model->user_id,
+                 $model->getUse($model->user_id)->first_name,
+                 $model->getUse($model->user_id)->last_name,
+                 $model->getUse($model->user_id)->email,
+                 $model->getUse($model->user_id)->phone,
+                 implode(', ', $project),
+
             ];
         }
-
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),

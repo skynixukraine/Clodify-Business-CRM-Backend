@@ -358,4 +358,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $string;
     }
 
+    public static function temmateUser($userId)
+    {
+        $r = self::find()
+            ->from(User::tableName())
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND id=:userId",[
+                ":userId" => $userId
+            ])
+            ->one();
+        return $r;
+    }
+
 }

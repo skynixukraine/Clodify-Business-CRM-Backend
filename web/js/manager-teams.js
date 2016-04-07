@@ -161,6 +161,7 @@ var managerTeamsModule = (function() {
                 dataTable.find("i[class*=view]").click(function(){
 
                     var id     = $(this).parents("tr").find("td").eq(0).text();
+                    dataFilter['team_id'] = id;
                     actionView( id );
 
                 });

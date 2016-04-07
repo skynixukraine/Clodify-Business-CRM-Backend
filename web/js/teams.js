@@ -175,7 +175,7 @@ var TeamModule = (function() {
                     },
                     {
                         "targets"   : 5,
-                        "data"      :7,
+                        "data"      :5,
                         "orderable" : true
 
                     }

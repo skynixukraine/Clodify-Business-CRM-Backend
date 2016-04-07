@@ -44,7 +44,8 @@ class Teammate extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
         ];
     }
-    public static function teammateUser ($teamId)
+
+    public static function teammateUser($teamId)
     {
         return self::find()
             ->where(Teammate::tableName() . '.team_id=:idTeam',
@@ -53,7 +54,15 @@ class Teammate extends \yii\db\ActiveRecord
                 ])
             ->count(Teammate::tableName() . '.user_id');
 
+
     }
-
-
+    public function getUse($userId)
+    {
+        return  User::find()
+            ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.user_id=' . User::tableName() . '.id')
+            ->where(User::tableName() . '.id=:usId',[
+                ':usId'=>$userId
+            ])
+            ->one();
+    }
 }

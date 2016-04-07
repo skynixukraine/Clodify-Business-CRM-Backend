@@ -68,6 +68,7 @@ class Team extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
     public static function hasTeam($currentUserId)
     {
         $users_id = Team::find()

@@ -88,7 +88,7 @@ $this->params['menu'] = [
     $(function(){
         TeammateModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
-            findUrl     : '<?=Url::to(['teams/find'])?>',
+            findUrl     : '<?=Url::to(['teams/find2'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });

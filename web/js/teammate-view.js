@@ -59,9 +59,28 @@ var TeammateModule = (function() {
         });
 
     }
+
+
     return {
 
         init: function( config ){
+            /**get the parameter from the address bar*/
+            function parseGetParams()
+            {
+                var $_GET = {};
+                var __GET = window.location.search.substring(1).split("&");
+                for(var i=0; i<__GET.length; i++) {
+                    var getVar = __GET[i].split("=");
+                    $_GET[getVar[0]] = typeof(getVar[1])=="undefined" ? "" : getVar[1];
+                }
+                return $_GET;
+            }
+            var team_id = parseGetParams();
+            /***/
+            for( var i in team_id ) {
+                team_id = team_id[i];
+            }
+
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
             });
@@ -121,7 +140,7 @@ var TeammateModule = (function() {
 
                 ],
                 "ajax": {
-                    "url"   :  cfg.findUrl,
+                    "url"   :  cfg.findUrl + "?id=" + team_id,
                     "data"  : function( data, settings ) {
 
                         for (var i in dataFilter) {
@@ -136,28 +155,27 @@ var TeammateModule = (function() {
                 "serverSide": true
             });
 
-
-
-
             var id="", name, a = [];
+
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
+            /**pass option 'team_id' in TeamsController */
+            dataFilter['team_id'] = team_id;
+            dataTable.find("img[class*=edit]").click(function(){
 
-                dataTable.find("img[class*=edit]").click(function(){
-
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
-
-                });
-                dataTable.find("i[class*=delete]").click(function(){
-
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
-
-                });
+                var id = $(this).parents("tr").find("td").eq(0).text();
+                actionEdit( id );
 
             });
+            dataTable.find("i[class*=delete]").click(function(){
+
+                var id     = $(this).parents("tr").find("td").eq(0).text(),
+                    name   = $(this).parents("tr").find("td").eq(1).text();
+                actionDelete( id, name, dataTable );
+
+            });
+
+             });
 
         }
     };
