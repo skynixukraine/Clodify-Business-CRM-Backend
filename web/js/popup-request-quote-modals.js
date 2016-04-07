@@ -6,22 +6,20 @@ var requestQuoteModals = (function(){
 
     var bgForPopup,
         popup,
-        progressBar,
-        step,
-        factor = 100/ 5,
         bodyPopap,
-        elemStep,
+        progressBar,
+        factor = 100/ 5,
+        step,
+        formStep,
         elem,
+        checkedElemStep,
         back,
         next,
         quotes,
-        select,
-        parentElem,
-        elemChecked = [],
-        checkedElemStep,
-
-
-        formData;
+        dropdown,
+        formData,
+        files= {},
+        arrayFiles =[];
 
 
 
@@ -41,99 +39,60 @@ return{
         popup           = bgForPopup.find(".popup");
         progressBar     = $(".progress-bar");
         bodyPopap       = popup.find('.body-popap');
-        elemStep        = bodyPopap.find('> div');
+        formStep        = bodyPopap.find('> div');
+        dropdown        = formStep.find("[data-toggle=dropdown]");
         back            = $(".back");
         next            = $(".next");
         quotes          = $(".quotes");
-        formData = new FormData();
 
 
-        bgForPopup.find(".close").click(function () {
 
-            bgForPopup.fadeOut(1000);
-            popup.fadeOut(1000);
-            popup.slideUp(500);
+        formStep.hide().attr("aria-hidden", true);
+        formStep.eq(0).show().attr("aria-hidden", false);
 
-        });
+        for(var i=0; i < formStep.length; i++){
 
-        $(".box-evaluation .en-btn").click(function () {//btn REQUEST A QUOTE
+            formStep.eq(i).data("data-step", i);
+        }
+
+
+        $(".box-evaluation .en-btn").click(function () {//button open REQUEST A QUOTE
 
             event.preventDefault();
             bgForPopup.fadeIn(500);
             popup.fadeIn(1000);
             popup.slideDown(500);
 
-
-
             return false;
 
         });
+        bgForPopup.find(".close").click(function () {// button close popup
 
-        elemStep.hide().attr("aria-hidden", true);
-        elemStep.eq(0).show().attr("aria-hidden", false);
+            bgForPopup.fadeOut(1000);
+            popup.fadeOut(1000);
+            popup.slideUp(500);
 
-        for(var i=0; i < elemStep.length; i++){
-
-            elemStep.eq(i).data("data-step", i);
-        }
-
-        next.click(function(event){//button next
+        });
+        next.click(function(event){//button next formStep
             event.preventDefault();
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') + 1;
 
 
-            if(step == 1){
+            if(step == 1){//skip step 2
 
                 checkedElemStep = elem.find("input:checked");
 
-                if(checkedElemStep.val().indexOf("Active site application") != 0 &&//skip step 2
+                if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
                     step += 1;
                 }
 
-
-                formData.append('website_state', checkedElemStep.val());
-
-                console.log(formData);
-                console.log(checkedElemStep.val());
-             }
-            if(step == 2){
-
-
-                checkedElemStep = elem.find("input:checked");
-
-
-                for(var i=0; i < checkedElemStep.length; i++){
-
-                    elemChecked.push( checkedElemStep.eq(i).val());
-                }
-
-                formData.append('platform', elem.find("[name]").eq(0).val());
-                formData.append('services', elemChecked);
-
-
-            }
-            if(step == 3){
-
-                formData.append('backend_platform',  elem.find("[name]").eq(0).val());
-                formData.append('frontend_platform', elem.find("[name]").eq(1).val());
-
-            }
-            if(step == 4){
-
-                formData.append('when_start',  elem.find("[name]").eq(0).val());
-                formData.append('budget',      elem.find("[name]").eq(1).val());
-            }
-            if(step == 5){
-
-                formData.append('description', elem.find("[name]").eq(0).val());
-                formData.append('file',        elem.find("[name]").eq(1).val());
-
             }
 
-            elemStep.eq(step).show().attr("aria-hidden", false);
+
+            formStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
             back.css('display' , 'block');
 
@@ -149,51 +108,69 @@ return{
             return false;
 
         });
-        back.click(function(event){//button back
+        back.click(function(event){//button back formStep
             event.preventDefault();
 
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
 
-            if(step == 1){
+            if(step == 1){//skip step 2
 
-                checkedElemStep = elemStep.eq(0).find(":checked");
+                checkedElemStep = formStep.eq(0).find(":checked");
 
-                if(checkedElemStep.val().indexOf("Active site application") != 0 &&//skip step 2
+                if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
                     step -= 1;
                 }
 
             }
-            elemStep.eq(step).show().attr("aria-hidden", false);
+            formStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
 
             if(step == 0){
 
                 back.css('display' , 'none');
             }
-
-            next.css('display' , 'block');
-            quotes.css('display' , 'none');
-
+            console.log(step);
+            if(step == 4) {
+                next.css('display', 'block');
+                quotes.css('display', 'none');
+            }
             progress(step);
 
             return false;
 
         });
+
+
+
         quotes.click(function(event){//button 'GET MY QUOTES'
             event.preventDefault();
-            elem = bodyPopap.find("[aria-hidden=false]");
-            step = elem.data('data-step') + 1;
-
-            json = {step: step, name: elem.find("[name]").eq(0).val(), email: elem.find("[name]").eq(1).val(), company: elem.find("[name]").eq(2).val(), country: elem.find("[name]").eq(3).val()};
 
 
-            formData.append('name', elem.find("[name]").eq(0).val());
-            formData.append('email', elem.find("[name]").eq(1).val());
-            formData.append('company', elem.find("[name]").eq(2).val());
-            formData.append('country', elem.find("[name]").eq(3).val());
+            formData = popup.find('form').serializeArray();
+
+            for(var i = 0; i < dropdown.length; i++) {
+
+                formData.push({
+                    name: dropdown.eq(i).attr('name'),
+                    value: dropdown.eq(i).val()
+                });
+
+            }
+            if(files.value){
+
+                formData.push(files);
+            }else{
+
+                formData.push({
+                    name: "file",
+                    value: ""
+                });
+            }
+
+
 
             console.log(formData);
 
@@ -213,16 +190,26 @@ return{
             return false;
         });
 
+        formStep.find("#file").change(function(e){//create an object with attached files
+
+            arrayFiles.push(e.target.value);
+            files.value = arrayFiles;
+            files.name = $(this).attr('name');
+
+
+            return false;
+        });
+
         $(".dropdown-menu li").click(function(event) {//dropdown selected
 
             event.preventDefault();
             var el = $(this),
                 value = el.text();
-            select = el.closest(".input-group-btn.select");
-            parentElem = select.find(".dropdown-toggle");
 
-            parentElem.html(value + '<span class="caret1">&or;</span>');
-            parentElem.attr('value', value);
+            elem = el.closest(".input-group-btn.select").find(".dropdown-toggle");
+
+            elem.html(value + '<span class="caret1">&or;</span>');
+            elem.attr('value', value);
 
 
         });
