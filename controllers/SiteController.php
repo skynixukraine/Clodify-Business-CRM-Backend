@@ -221,8 +221,7 @@ class SiteController extends Controller
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
-/*                    ->setTo($this->email)*/
-                    ->setTo('valeriya@skynix.co')
+                    ->setTo($this->email)
                     ->setSubject('email')
                     ->send();
 

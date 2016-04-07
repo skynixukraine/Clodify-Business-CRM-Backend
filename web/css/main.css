@@ -1306,6 +1306,7 @@ footer .link a:hover {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.24);
+  display: none;
   z-index: 2000;
 }
 #request-quote-modals .popup {
@@ -1318,6 +1319,7 @@ footer .link a:hover {
   top: 50px;
   background: #ffffff;
   z-index: 200;
+  display: none;
   box-shadow: 0 0 7px 3px rgba(100, 192, 239, 0.368);
   -webkit-box-shadow: 0 0 7px 3px rgba(37, 115, 134, 0.5);
 }
@@ -1567,9 +1569,79 @@ footer .link a:hover {
   }
 }
 @media (max-width: 480px) {
+  #request-quote-modals .popup {
+    min-height: auto;
+    top: 20px;
+  }
   #request-quote-modals .header-popap {
     padding: 0 0 10px 0;
     font-size: 20px;
+  }
+  #request-quote-modals .body-popap {
+    margin: 15px -30px 20px -30px;
+  }
+  #request-quote-modals .step .option-group:not(#foo) label,
+  #request-quote-modals .step textarea,
+  #request-quote-modals .step .file_upload,
+  #request-quote-modals .step input {
+    line-height: 2.2;
+    font-size: 15px !important;
+  }
+  #request-quote-modals .step .dropdown-toggle {
+    height: 40px;
+    line-height: 2;
+    font-size: 15px !important;
+  }
+  #request-quote-modals .step .option-group:not(#foo) label {
+    height: 45px;
+    margin: 3px 0;
+    line-height: 1.5;
+  }
+  #request-quote-modals .step .caret1 {
+    margin: 0;
+  }
+  #request-quote-modals .step textarea {
+    height: 150px;
+    line-height: 1.5;
+  }
+  #request-quote-modals .step .file_upload {
+    height: 40px;
+    padding: 4px 0;
+    margin-top: 10px;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label {
+    background-position: 11px 13px;
+    background-size: 22px;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
+    background-position: 11px -25px;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"],
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] {
+    padding: 1px 10px;
+    line-height: 1.4;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"] .hidden-xs,
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] .hidden-xs {
+    display: block!important;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"] .visible-xs,
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] .visible-xs {
+    display: none!important;
+  }
+  #request-quote-modals .step6 input {
+    height: 40px;
+    padding: 0 0 0 15px;
+    margin: 0 0 10px 0;
+  }
+  #request-quote-modals .footer-popap .next,
+  #request-quote-modals .footer-popap .quotes {
+    padding: 6px;
+    font-size: 14px;
+  }
+  #request-quote-modals .footer-popap .back {
+    padding: 11px 6px;
+    font-size: 14px;
   }
 }
 html,
