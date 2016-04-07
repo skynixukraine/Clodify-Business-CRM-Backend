@@ -190,19 +190,19 @@ class SiteController extends Controller
         if ( Yii::$app->request->isAjax &&
               Yii::$app->request->isPost )
         {
-            ($websiteState = Yii::$app->request->post('website_state') &&
-            ( $platform = Yii::$app->request->post('platform') ) &&
-            ( $services = Yii::$app->request->post('services') ) &&
-            ( $frontendPlatform= Yii::$app->request->post('frontend_platform') ) &&
-            ( $backendPlatform = Yii::$app->request->post('backend_platform') ) &&
-            ( $whenStart = Yii::$app->request->post('when_start') ) &&
-            ( $budget = Yii::$app->request->post('budget') ) &&
-            ( $description = Yii::$app->request->post('description') ) &&
-            ( $file= Yii::$app->request->post('file') ) &&
-            ( $name = Yii::$app->request->post('name') ) &&
-            ( $email = Yii::$app->request->post('email') ) &&
-            ( $company = Yii::$app->request->post('company') ) &&
-            ( $country = Yii::$app->request->post('country') ) || true) ;
+            $websiteState = Yii::$app->request->post('website_state');
+            $platform = Yii::$app->request->post('platform');
+            $services = Yii::$app->request->post('services');
+            $frontendPlatform= Yii::$app->request->post('frontend_platform');
+            $backendPlatform = Yii::$app->request->post('backend_platform');
+            $whenStart = Yii::$app->request->post('when_start');
+            $budget = Yii::$app->request->post('budget');
+            $description = Yii::$app->request->post('description');
+            $file= Yii::$app->request->post('file');
+            $name = Yii::$app->request->post('name');
+            $email = Yii::$app->request->post('email');
+            $company = Yii::$app->request->post('company');
+            $country = Yii::$app->request->post('country')  || true ;
 
                 Yii::$app->mail->compose('request', [
                     'name' => $name,
