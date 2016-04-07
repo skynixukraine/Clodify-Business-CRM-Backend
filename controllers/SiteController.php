@@ -22,7 +22,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -204,7 +204,7 @@ class SiteController extends Controller
             $company = Yii::$app->request->post('company');
             $country = Yii::$app->request->post('country')  || true ;
 
-                Yii::$app->mail->compose('request', [
+                Yii::$app->mailer->compose('request', [
                     'name' => $name,
                     'websiteState' => $websiteState,
                     'platform' => $platform,
@@ -221,7 +221,8 @@ class SiteController extends Controller
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($this->email)
+/*                    ->setTo($this->email)*/
+                    ->setTo('valeriya@skynix.co')
                     ->setSubject('email')
                     ->send();
 
