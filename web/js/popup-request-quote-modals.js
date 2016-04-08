@@ -185,7 +185,7 @@ return{
                 formData.append( 'file', file );
             }
 
-            
+
 
             $.ajax({
                 url : popup.find('form').attr("action"),
