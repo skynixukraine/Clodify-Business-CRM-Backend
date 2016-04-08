@@ -30,9 +30,9 @@ class Upload extends Model
 
         if ($this->validate()) {
             var_dump($this->file);
-            exit();
+            //exit();
             //$this->file->saveAs('uploads/' . $this->file->baseName . '.' . $this->file->extension);
-            $this->fileName = date('Y-m-d') . "_" . $this->file->baseName . '.' . $this->file->extension;
+            $this->fileName = time() . "_" . $this->file->baseName . '.' . $this->file->extension;
             $this->file->saveAs( getcwd() . '/data/documents/' . $this->fileName);
             return true;
         } else {
