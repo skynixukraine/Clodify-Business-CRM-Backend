@@ -9,9 +9,15 @@ use Yii;
  *
  * @property integer $team_id
  * @property integer $user_id
+ *  @property string $status
  */
 class Teammate extends \yii\db\ActiveRecord
 {
+<<<<<<< Updated upstream
+=======
+    const STATUS_NEW        = "NEW";
+
+>>>>>>> Stashed changes
     /**
      * @inheritdoc
      */

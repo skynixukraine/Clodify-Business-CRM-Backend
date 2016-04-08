@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-$this->title = "Кар'єра в компанії Скайнікс";
+$this->title = "РљР°СЂ'С”СЂР° РІ РєРѕРјРїР°РЅС–С— РЎРєР°Р№РЅС–РєСЃ";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">
@@ -12,9 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-12">
             <br><br><br><br><br>
-            <h1>Кар'єра</h1>
+            <h1>РљР°СЂ'С”СЂР°</h1>
 
-            <p>Сторінка на стадії розробки</p>
+            <p>РЎС‚РѕСЂС–РЅРєР° РЅР° СЃС‚Р°РґС–С— СЂРѕР·СЂРѕР±РєРё</p>
 
         </div>
     </div>

@@ -3,6 +3,8 @@
 @import "header-footer.less";
 @import "home.less";
 @import "contact-form.less";
+@import "request-quote-modals.less";
+
 
 
 html,
@@ -14,15 +16,62 @@ body{
 a,
 a:hover,
 a:active,
-a:focus{
-    outline: 0;
+a:focus,
+button,
+button:hover,
+button:active,
+button:focus,
+input
+input:hover,
+input:active,
+input:focus,
+textarea,
+textarea:hover,
+textarea:active,
+textarea:focus{
+    outline: 0!important;
 }
 
 a.active{
     cursor: default;
 }
+.page{
 
+    //margin: 120px auto 0 auto;
+    margin: 157px auto 0 auto;
+}
+.fix-height .page{
 
+    margin: 78px auto 0 auto;
+}
+@media (max-width: 949px ) {
+
+    .page{
+
+        margin: 127px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 63px auto 0 auto;
+    }
+}
+@media (max-width: 768px){
+
+    .page{
+
+        margin: 65px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 32px auto 0 auto;
+    }
+}
+@media (max-width: 480px ) {
+
+    #about_skynix {
+        margin: 64px 0 0 0;
+    }
+}
 
 
 

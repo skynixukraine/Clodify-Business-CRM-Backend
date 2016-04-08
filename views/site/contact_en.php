@@ -12,7 +12,7 @@ $this->title = 'Contact Skynix & Request a quote';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="container contact site-contact">
+<section class="container contact">
 
     <div class="row">
         <div class="col-lg-12">
@@ -72,4 +72,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php endif; ?>
 
-</div>
+</section>
