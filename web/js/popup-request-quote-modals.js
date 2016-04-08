@@ -20,7 +20,7 @@ var requestQuoteModals = (function(){
         formData,
         params,
         files,
-        mask;
+        frontMask;
 
 
 
@@ -45,7 +45,7 @@ return{
         back            = $(".back");
         next            = $(".next");
         quotes          = $(".quotes");
-        mask            = bgForPopup.find('.mask');
+        frontMask            = bgForPopup.find('.front-mask');
 
 
         formStep.hide().attr("aria-hidden", true);
@@ -57,13 +57,14 @@ return{
         }
 
 
-        $(".box-evaluation .en-btn").click(function () {//button open REQUEST A QUOTE
+        $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
             event.preventDefault();
             bgForPopup.fadeIn(500);
             popup.fadeIn(1000);
             popup.slideDown(500);
 
+            $('body,html').animate({scrollTop:0},500);
             return false;
 
         });
@@ -81,6 +82,26 @@ return{
             step = elem.data('data-step') + 1;
 
 
+
+
+
+            if(step == 2){
+
+
+                checkedElemStep = elem.find("input[name='services[]']:checked");
+
+
+                if(checkedElemStep.length == 0){
+
+                    console.log("Please make a choose to go ahead");
+                    popup.find('.answer-ajax-error').html("Please make a choose to go ahead");
+                    step = 2;
+                }else{
+                    popup.find('.answer-ajax-error').html("");
+                    ariaHiddenElem();
+                }
+
+            }
             if(step == 1){//skip step 2
 
                 checkedElemStep = elem.find("input:checked");
@@ -89,13 +110,13 @@ return{
                     checkedElemStep.val().indexOf("In development") != 0){
 
                     step += 1;
+                    ariaHiddenElem();
                 }
 
             }
 
 
-            formStep.eq(step).show().attr("aria-hidden", false);
-            elem.hide() .attr("aria-hidden", true);
+
             back.css('display' , 'block');
 
             if(step == 5){
@@ -103,9 +124,21 @@ return{
                 next.css('display' , 'none');
                 quotes.css('display' , 'block');
             }
+            if(step != 2){
+
+                ariaHiddenElem();
+
+            }
+            function ariaHiddenElem(){
+
+                formStep.eq(step).show().attr("aria-hidden", false);
+                elem.hide() .attr("aria-hidden", true);
+                progress(step);
+            }
 
 
-            progress(step);
+
+
 
             return false;
 
@@ -113,6 +146,7 @@ return{
         back.click(function(event){//button back formStep
             event.preventDefault();
 
+            popup.find('.answer-ajax-error').html("");
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
 
@@ -147,9 +181,10 @@ return{
 
 
         quotes.click(function(event){//button 'GET MY QUOTES'
-            event.preventDefault();
 
-            mask.css('display', 'block' );
+            event.preventDefault();
+            popup.find('.answer-ajax-error').html("");
+            frontMask.css('display', 'block' );
             params = popup.find('form').serializeArray();
 
             formData = new FormData();
@@ -198,7 +233,7 @@ return{
 
                     if (data.success) {
 
-                        mask.css('display', 'none' );
+                        frontMask.css('display', 'none' );
                         console.log("Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes.");
                         popup.find('form').css('display', 'none' );
                         popup.find('.answer-ajax').css('display', 'table-cell');
@@ -206,9 +241,9 @@ return{
 
                     } else {
 
-                        mask.css('display', 'none' );
+                        frontMask.css('display', 'none' );
                         console.log("Sorry, but we were not able to get your quote. Please check your information and try agian.");
-                        popup.find('.answer-ajax-error').css('display', 'block');
+                        popup.find('.answer-ajax-error').html("1Sorry, but we were not able to get your quote. Please check your information and try agian.");
                     }
 
 
@@ -226,7 +261,7 @@ return{
             return false;
         });
 
-        $(".dropdown-menu li").click(function(event) {//dropdown selected
+        /*$(".dropdown-menu li").click(function(event) {//dropdown selected
 
             event.preventDefault();
             var el = $(this),
@@ -238,7 +273,7 @@ return{
             elem.attr('value', value);
 
 
-        });
+        });*/
 
 
 

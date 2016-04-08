@@ -130,7 +130,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 <!--****   Popup REQUEST a QUOTE modals   ****-->
 
 <div id="request-quote-modals">
-
+<div class="masks-back"></div>
     <div class="popup">
         <div class="close"></div>
         <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
@@ -167,7 +167,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                 <div class = "col-lg-12 step step2">
                     <div class="question">What is your platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="platform" id="platform">
+
+                        <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="platform" id="platform">
                             Magento 1.x <span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="platform">
@@ -178,11 +179,23 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">ZF 1, ZF2</a></li>
                             <li><a href="#">HTML/CSS/Javascript</a></li>
                             <li><a href="#">Other</a></li>
-                        </ul>
+                        </ul>-->
+                        <select class="dropdown-toggle form-control">
+                            <option>Magento 1.x</option>
+                            <option>Magento 2.x</option>
+                            <option>Wordpress</option>
+                            <option>Yii 1, Yii 2</option>
+                            <option>ZF 1, ZF2</option>
+                            <option>HTML/CSS/Javascript</option>
+                            <option>Other</option>
+                        </select>
+
+
+
                     </div>
                     <div class="question margin-text">What kind of services do you need?</div>
                     <div class="option-group">
-                        <input type="checkbox" value="New module, plugin, extension" name="services[]" id="module_plugin" checked="checked">
+                        <input type="checkbox" value="New module, plugin, extension" name="services[]" id="module_plugin">
                         <label for="module_plugin"><span class="hidden-xs">New module,<br> plugin, extension</span><span class="visible-xs">New module, plugin, extension</span></label>
                     </div>
                     <div class="option-group right-elem">
@@ -202,7 +215,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <label for="redesign">Redesign</label>
                     </div>
                     <div class="option-group right-elem">
-                        <input type="checkbox" value="Server Administration" name="services[]" id="server_administration" checked="checked">
+                        <input type="checkbox" value="Server Administration" name="services[]" id="server_administration">
                         <label for="server_administration"><span class="hidden-xs">Server<br> Administration</span><span class="visible-xs">Server Administration</span></label>
                     </div>
                 </div>
@@ -210,7 +223,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                 <div class = "col-lg-12 step step3">
                     <div class="question">What is your prefered backend platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="backend_platform" id="backend_platform">
+                        <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Magento 1.x" name="backend_platform" id="backend_platform">
                             Magento 1.x <span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="backend_platform">
@@ -221,11 +234,21 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">Zend Framework 2</a></li>
                             <li><a href="#">HTML/CSS/Javascript</a></li>
                             <li><a href="#">No need for a backend</a></li>
-                        </ul>
+                        </ul>-->
+
+                        <select class="dropdown-toggle form-control">
+                            <option>Magento 1.x</option>
+                            <option>Magento 2.x</option>
+                            <option>Wordpress</option>
+                            <option>Yii 2</option>
+                            <option>Zend Framework 2</option>
+                            <option>HTML/CSS/Javascript</option>
+                            <option>No need for a backend</option>
+                        </select>
                     </div>
                     <div class="question margin-text">What is your prefered frontend platform?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Twitter Bootstrap template" name="frontend_platform" id="frontend_platform">
+                        <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Twitter Bootstrap template" name="frontend_platform" id="frontend_platform">
                             Twitter Bootstrap template<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="frontend_platform">
@@ -234,14 +257,22 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">jQuery application</a></li>
                             <li><a href="#">AngularJS application</a></li>
                             <li><a href="#">No need for a frontend</a></li>
-                        </ul>
+                        </ul>-->
+
+                        <select class="dropdown-toggle form-control">
+                            <option>Twitter Bootstrap template</option>
+                            <option>HTML5, CSS3 template</option>
+                            <option>jQuery application</option>
+                            <option>AngularJS application</option>
+                            <option>No need for a frontend</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class = "col-lg-12 step step4">
                     <div class="question"> When are you looking to start?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Immediately" name="when_start" id="when_start">
+                        <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Immediately" name="when_start" id="when_start">
                             Immediately<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="when_start">
@@ -249,14 +280,20 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">1-2 weeks</a></li>
                             <li><a href="#">3-4 weeks</a></li>
                             <li><a href="#">in 1-2 months</a></li>
-                        </ul>
+                        </ul>-->
 
+                        <select class="dropdown-toggle form-control">
+                            <option>Immediately</option>
+                            <option>1-2 weeks</option>
+                            <option>3-4 weeks</option>
+                            <option>in 1-2 months</option>
+                        </select>
 
 
                     </div>
                     <div class="question margin-text">What is your budget?</div>
                     <div class="input-group-btn select">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="$1000 - $5000" name="budget" id="budget">
+                        <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="$1000 - $5000" name="budget" id="budget">
                             $1000 - $5000<span class="caret1">&or;</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="budget">
@@ -264,8 +301,14 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">$300 - $1000</a></li>
                             <li><a href="#">$1000 - $5000</a></li>
                             <li><a href="#">&gt; $5000</a></li>
+                        </ul>-->
 
-                        </ul>
+                        <select class="dropdown-toggle form-control">
+                            <option>&lt; $300</option>
+                            <option>$300 - $1000</option>
+                            <option>$1000 - $5000</option>
+                            <option>&gt; $5000</option>
+                        </select>
                     </div>
 
 
@@ -299,7 +342,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </div>
                 </div>
                 <div class = "col-lg-12">
-                    <p class="answer-ajax-error">Sorry, but we were not able to get your quote. Please check your information and try agian.</p>
+                    <p class="answer-ajax-error"></p>
                 </div>
                 <div class = "col-lg-2 col-sm-2 col-xs-4">
                     <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
@@ -316,7 +359,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         </div>
     </div>
-    <div class="mask"></div>
+    <div class="front-mask"></div>
 
 
 </div>
