@@ -308,7 +308,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </div>
         </form>
     </div>
-
+<div class="mask"></div>
 
 </div>
 

@@ -18,8 +18,9 @@ var requestQuoteModals = (function(){
         quotes,
         dropdown,
         formData,
-        files= {},
-        arrayFiles =[];
+        params,
+        files,
+        mask;
 
 
 
@@ -44,7 +45,7 @@ return{
         back            = $(".back");
         next            = $(".next");
         quotes          = $(".quotes");
-
+        mask            = bgForPopup.find('.mask');
 
 
         formStep.hide().attr("aria-hidden", true);
@@ -144,13 +145,19 @@ return{
         });
 
 
-
         quotes.click(function(event){//button 'GET MY QUOTES'
             event.preventDefault();
 
+            mask.css('display', 'block' );
+            params = popup.find('form').serializeArray();
 
-            formData = popup.find('form').serializeArray();
+            formData = new FormData();
 
+
+            console.log("formData = ", formData);
+
+
+/************
             for(var i = 0; i < dropdown.length; i++) {
 
                 formData.push({
@@ -169,10 +176,15 @@ return{
                     value: ""
                 });
             }
+*************/
+            for (var i = 0; i < params.length; i++) {
+                formData.append( params[i]['name'], params[i]['value']);
+            }
+            if ( file ) {
+                formData.append( 'file', file );
+            }
 
 
-
-            console.log(formData);
 
 
             $.ajax({
@@ -181,9 +193,20 @@ return{
                 data : formData,
                 processData: false,
                 contentType: false,
+                dataType: 'json',
                 success : function(data) {
-                    console.log(data);
-                    alert(data);
+
+                    if (data.success) {
+
+                        mask.css('display', 'none' );
+                        console.log("Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes.");
+                    } else {
+
+                        mask.css('display', 'none' );
+                        console.log("Sorry, but we were not able to get your quote. Please check your information and try agian.");
+                    }
+
+
                 }
             });
 
@@ -192,9 +215,7 @@ return{
 
         formStep.find("#file").change(function(e){//create an object with attached files
 
-            arrayFiles.push(e.target.value);
-            files.value = arrayFiles;
-            files.name = $(this).attr('name');
+            file = event.target.files[0];
 
 
             return false;
