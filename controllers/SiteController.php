@@ -226,6 +226,7 @@ class SiteController extends Controller
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
+<<<<<<< HEAD
 /*                    ->setTo($this->email)*/
                     ->setTo('valeriya@skynix.co')
                     ->setSubject('email');
@@ -235,6 +236,11 @@ class SiteController extends Controller
 
                     }
                     $message->send();
+=======
+                    ->setTo($this->email)
+                    ->setSubject('email')
+                    ->send();
+>>>>>>> 20dbd22faa59e52d0ce041f96222bc22861c8642
 
                  $response = Yii::$app->response;
                  $response->getHeaders()->set('Vary', 'Accept');

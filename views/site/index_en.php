@@ -298,6 +298,9 @@ $this->title = 'Welcome to the Skynix - software development company';
                         </div>
                     </div>
                 </div>
+                <div class = "col-lg-12">
+                    <p class="answer-ajax-error">Sorry, but we were not able to get your quote. Please check your information and try agian.</p>
+                </div>
                 <div class = "col-lg-2 col-sm-2 col-xs-4">
                     <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
                 </div>
@@ -307,7 +310,13 @@ $this->title = 'Welcome to the Skynix - software development company';
                 </div>
             </div>
         </form>
+        <div class="answer-ajax">
+            <p>Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes</p>
+            <button class="btn btn btn-primary close-popap close">CLOSE</button>
+
+        </div>
     </div>
+    <div class="mask"></div>
 
 
 </div>
