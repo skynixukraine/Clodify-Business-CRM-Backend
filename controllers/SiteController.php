@@ -11,6 +11,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\components\Language;
+use app\models\Upload;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -186,6 +188,8 @@ class SiteController extends Controller
     /* pass the post option, and send a letter request */
     public function actionRequest()
     {
+        $model = new Upload();
+
 
         if ( Yii::$app->request->isAjax &&
               Yii::$app->request->isPost )
@@ -202,9 +206,10 @@ class SiteController extends Controller
             $name = Yii::$app->request->post('name');
             $email = Yii::$app->request->post('email');
             $company = Yii::$app->request->post('company');
-            $country = Yii::$app->request->post('country')  || true ;
+            $country = Yii::$app->request->post('country');
+            $model->file = UploadedFile::getInstanceByName($file);
 
-                Yii::$app->mailer->compose('request', [
+                $message = Yii::$app->mailer->compose('request', [
                     'name' => $name,
                     'websiteState' => $websiteState,
                     'platform' => $platform,
@@ -221,16 +226,34 @@ class SiteController extends Controller
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
+<<<<<<< HEAD
+/*                    ->setTo($this->email)*/
+                    ->setTo('valeriya@skynix.co')
+                    ->setSubject('email');
+
+                    if ($model->upload()) {
+                        $message->attach( getcwd() . '/data/documents/' . $model->fileName );
+
+                    }
+                    $message->send();
+=======
                     ->setTo($this->email)
                     ->setSubject('email')
                     ->send();
+>>>>>>> 20dbd22faa59e52d0ce041f96222bc22861c8642
 
                  $response = Yii::$app->response;
                  $response->getHeaders()->set('Vary', 'Accept');
                  $response->format = Response::FORMAT_JSON;
+
+                echo json_encode([
+                    "success" => true
+                ]);
+            }else{
+
+                echo json_encode([
+                    "success" => false
+                ]);
         }
-
-
-        return ['status' => 'success'];
     }
 }
