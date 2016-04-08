@@ -74,6 +74,7 @@ return{
             popup.slideUp(500);
 
         });
+
         next.click(function(event){//button next formStep
             event.preventDefault();
             elem = bodyPopap.find("[aria-hidden=false]");
@@ -184,8 +185,7 @@ return{
                 formData.append( 'file', file );
             }
 
-
-
+            
 
             $.ajax({
                 url : popup.find('form').attr("action"),
@@ -200,10 +200,15 @@ return{
 
                         mask.css('display', 'none' );
                         console.log("Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes.");
+                        popup.find('form').css('display', 'none' );
+                        popup.find('.answer-ajax').css('display', 'table-cell');
+
+
                     } else {
 
                         mask.css('display', 'none' );
                         console.log("Sorry, but we were not able to get your quote. Please check your information and try agian.");
+                        popup.find('.answer-ajax-error').css('display', 'block');
                     }
 
 
