@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<div class="container contact site-contact">
+<section class="container contact">
 
 
 
@@ -71,5 +71,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     <?php endif; ?>
-</div>
+</section>
 

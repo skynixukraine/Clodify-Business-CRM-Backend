@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
@@ -21,7 +22,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -181,5 +182,55 @@ class SiteController extends Controller
             Please contact administrator if you wish to activate your account"));
         }
         return $this->redirect(['site/index']);
+    }
+    /* pass the post option, and send a letter request */
+    public function actionRequest()
+    {
+
+        if ( Yii::$app->request->isAjax &&
+              Yii::$app->request->isPost )
+        {
+            $websiteState = Yii::$app->request->post('website_state');
+            $platform = Yii::$app->request->post('platform');
+            $services = Yii::$app->request->post('services');
+            $frontendPlatform= Yii::$app->request->post('frontend_platform');
+            $backendPlatform = Yii::$app->request->post('backend_platform');
+            $whenStart = Yii::$app->request->post('when_start');
+            $budget = Yii::$app->request->post('budget');
+            $description = Yii::$app->request->post('description');
+            $file= Yii::$app->request->post('file');
+            $name = Yii::$app->request->post('name');
+            $email = Yii::$app->request->post('email');
+            $company = Yii::$app->request->post('company');
+            $country = Yii::$app->request->post('country')  || true ;
+
+                Yii::$app->mailer->compose('request', [
+                    'name' => $name,
+                    'websiteState' => $websiteState,
+                    'platform' => $platform,
+                    'services' => $services,
+                    'frontendPlatform' => $frontendPlatform,
+                    'backendPlatform' => $backendPlatform,
+                    'whenStart' => $whenStart,
+                    'budget' => $budget,
+                    'description' => $description,
+                    'file' => $file,
+                    'email' => $email,
+                    'company' => $company,
+                    'country' => $country
+
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($this->email)
+                    ->setSubject('email')
+                    ->send();
+
+                 $response = Yii::$app->response;
+                 $response->getHeaders()->set('Vary', 'Accept');
+                 $response->format = Response::FORMAT_JSON;
+        }
+
+
+        return ['status' => 'success'];
     }
 }

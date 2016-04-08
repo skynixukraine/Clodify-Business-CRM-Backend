@@ -67,10 +67,10 @@ AppAsset::register($this);
 
 
 
-    <div>
-        <?= Breadcrumbs::widget([
+    <div class="page">
+        <!--<?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        ]) ?>-->
         <?php if (\Yii::$app->getSession()->hasFlash("success") ) : ?>
             <div class="alert alert-success alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -110,6 +110,7 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
+<?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
 
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
