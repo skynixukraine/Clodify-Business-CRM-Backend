@@ -136,7 +136,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
 
 
-        <form action="request.php" class="container-fluid" method="post">
+        <form action="site/request" class="container-fluid" method="post">
 
 
             <div class="row body-popap">
