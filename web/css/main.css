@@ -1328,7 +1328,6 @@ footer .link a:hover {
 }
 #request-quote-modals .popup {
   width: 690px;
-  min-height: 610px;
   padding: 48px 80px 50px 80px;
   position: absolute;
   left: 25%;
@@ -1612,7 +1611,6 @@ footer .link a:hover {
 }
 @media (max-width: 480px) {
   #request-quote-modals .popup {
-    min-height: auto;
     top: 20px;
   }
   #request-quote-modals .header-popap {

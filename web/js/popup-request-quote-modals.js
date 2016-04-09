@@ -4,7 +4,12 @@
 
 var requestQuoteModals = (function(){
 
-    var bgForPopup,
+    var htmlPage,
+        htmlwidth,
+        paddingPage,
+        htmlHeight,
+        popupHeight,
+        bgForPopup,
         popup,
         bodyPopap,
         progressBar,
@@ -27,15 +32,43 @@ var requestQuoteModals = (function(){
     function progress(step){
 
         progressBar.css('width' , factor * step + '%');
-
+        overflowPageY();
     }
 
+    function overflowPageY(){
+
+        htmlwidth = htmlPage.width();
+
+
+        if(htmlwidth > 768){
+
+            popupHeight     = popup.height();
+            paddingPage     = popup.outerHeight();
+            
+            if((paddingPage) > htmlHeight){
+
+                popup.css('height', htmlHeight - parseInt(popup.css('top'))-10);
+                popup.css('overflow-y', 'scroll');
+
+            }else{
+
+                popup.css('overflow-y', 'auto');
+                popup.css('height', 'auto');
+            }
+
+        }else{
+
+            htmlPage.animate({scrollTop:0},500);
+        }
+
+
+    }
 
 
 return{
 
     init: function(){
-
+        htmlPage        = $('body,html');
         bgForPopup      = $('#request-quote-modals');
         popup           = bgForPopup.find(".popup");
         progressBar     = $(".progress-bar");
@@ -45,7 +78,9 @@ return{
         back            = $(".back");
         next            = $(".next");
         quotes          = $(".quotes");
-        frontMask            = bgForPopup.find('.front-mask');
+        frontMask       = bgForPopup.find('.front-mask');
+        htmlHeight      = htmlPage.height();
+
 
 
         formStep.hide().attr("aria-hidden", true);
@@ -60,11 +95,15 @@ return{
         $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
             event.preventDefault();
+
             bgForPopup.fadeIn(500);
             popup.fadeIn(1000);
-            popup.slideDown(500);
+            //popup.slideDown(500);
 
-            $('body,html').animate({scrollTop:0},500);
+            overflowPageY();
+
+            htmlPage.animate({scrollTop:0},500);
+
             return false;
 
         });
@@ -72,7 +111,7 @@ return{
 
             bgForPopup.fadeOut(1000);
             popup.fadeOut(1000);
-            popup.slideUp(500);
+            //popup.slideUp(500);
 
         });
 
@@ -146,6 +185,7 @@ return{
         back.click(function(event){//button back formStep
             event.preventDefault();
 
+
             popup.find('.answer-ajax-error').html("");
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
@@ -174,6 +214,7 @@ return{
                 quotes.css('display', 'none');
             }
             progress(step);
+
 
             return false;
 
