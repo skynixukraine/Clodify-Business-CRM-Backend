@@ -6,9 +6,7 @@ var requestQuoteModals = (function(){
 
     var htmlPage,
         htmlwidth,
-        paddingPage,
         htmlHeight,
-        popupHeight,
         bgForPopup,
         popup,
         bodyPopap,
@@ -25,6 +23,7 @@ var requestQuoteModals = (function(){
         formData,
         params,
         files,
+        file,
         frontMask,
         message,
         error,
@@ -34,47 +33,26 @@ var requestQuoteModals = (function(){
 
     function progress(step){
 
-        progressBar.css('width' , factor * step + '%');
-        overflowPageY();
-    }
-
-    function overflowPageY(){
-
         htmlwidth = htmlPage.width();
-
-        if(htmlwidth > 768){
-
-            popupHeight     = popup.height();
-            paddingPage     = popup.outerHeight();
-
-            console.log('popup.outerHeight()', paddingPage);
-            console.log('htmlPage.height()', htmlHeight);
+        progressBar.css('width' , factor * step + '%');
 
 
-            if(paddingPage > htmlHeight){
-
-                popup.css('height', htmlHeight - parseInt(popup.css('top'))-10);
-                popup.css('overflow-y', 'scroll');
-
-            }else{
-
-                popup.css('overflow-y', 'auto');
-                popup.css('height', 'auto');
-            }
-
-        }else{
+        if(htmlwidth < 768){
 
             htmlPage.animate({scrollTop:0},500);
+
         }
-
-
     }
+
+
+
+
 
 
 return{
 
     init: function(){
-        htmlPage        = $('body,html');
+        htmlPage        = $('body, html');
         bgForPopup      = $('#request-quote-modals');
         popup           = bgForPopup.find(".popup");
         progressBar     = $(".progress-bar");
@@ -94,6 +72,15 @@ return{
         formStep.hide().attr("aria-hidden", true);
         formStep.eq(0).show().attr("aria-hidden", false);
 
+        if(htmlHeight < 900){
+
+            bgForPopup.css('position', 'absolute');
+
+        }else{
+
+            bgForPopup.css('position', 'fixed');
+        }
+
 
         for(var i=0; i < formStep.length; i++){
 
@@ -106,9 +93,8 @@ return{
 
             bgForPopup.fadeIn(500);
             popup.fadeIn(1000);
-            //popup.slideDown(500);
+            popup.slideDown(500);
 
-            overflowPageY();
 
             htmlPage.animate({scrollTop:0},500);
 
@@ -120,7 +106,7 @@ return{
 
             bgForPopup.fadeOut(1000);
             popup.fadeOut(1000);
-            //popup.slideUp(500);
+            popup.slideUp(500);
 
         });
         formStep.find("#file").change(function(e){//create an object with attached files
@@ -179,9 +165,7 @@ return{
             }
             if(step == 1){
 
-
                 checkedElemStep = elem.find("input[name='services[]']:checked");
-
 
                 if(required.length > 0 || checkedElemStep.length == 0){
 
@@ -195,7 +179,6 @@ return{
 
                 }
             }
-
 
             step = elem.data('data-step') + 1;
             back.css('display' , 'block');
