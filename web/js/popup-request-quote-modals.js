@@ -14,7 +14,7 @@ var requestQuoteModals = (function(){
         bodyPopap,
         progressBar,
         factor = 100/ 5,
-        step,
+        step = 0,
         formStep,
         elem,
         checkedElemStep,
@@ -25,7 +25,10 @@ var requestQuoteModals = (function(){
         formData,
         params,
         files,
-        frontMask;
+        frontMask,
+        message,
+        error,
+        required;
 
 
 
@@ -44,7 +47,7 @@ var requestQuoteModals = (function(){
 
             popupHeight     = popup.height();
             paddingPage     = popup.outerHeight();
-            
+
             if((paddingPage) > htmlHeight){
 
                 popup.css('height', htmlHeight - parseInt(popup.css('top'))-10);
@@ -80,16 +83,21 @@ return{
         quotes          = $(".quotes");
         frontMask       = bgForPopup.find('.front-mask');
         htmlHeight      = htmlPage.height();
+        message         = popup.find('.message');
+        error           = popup.find('.answer-ajax-error');
+        required        = formStep.find('[required]');
 
-
+        required.attr('data-required', 'null');
 
         formStep.hide().attr("aria-hidden", true);
         formStep.eq(0).show().attr("aria-hidden", false);
+
 
         for(var i=0; i < formStep.length; i++){
 
             formStep.eq(i).data("data-step", i);
         }
+
 
 
         $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
@@ -107,6 +115,7 @@ return{
             return false;
 
         });
+
         bgForPopup.find(".close").click(function () {// button close popup
 
             bgForPopup.fadeOut(1000);
@@ -115,47 +124,75 @@ return{
 
         });
 
-        next.click(function(event){//button next formStep
-            event.preventDefault();
-            elem = bodyPopap.find("[aria-hidden=false]");
-            step = elem.data('data-step') + 1;
+        $( "[required]" ).change(function() {
 
+            $(this).attr('data-required', 'required');
 
-
-
-
-            if(step == 2){
-
-
-                checkedElemStep = elem.find("input[name='services[]']:checked");
-
-
-                if(checkedElemStep.length == 0){
-
-                    console.log("Please make a choose to go ahead");
-                    popup.find('.answer-ajax-error').html("Please make a choose to go ahead");
-                    step = 2;
-                }else{
-                    popup.find('.answer-ajax-error').html("");
-                    ariaHiddenElem();
-                }
+            if($(this).attr('type') == "radio" || $(this).attr('type') == "checkbox"){
+                
+                $(this).closest(".step").find(".option-group input").attr('data-required', 'required');
 
             }
-            if(step == 1){//skip step 2
+
+        });
+        next.click(function(event){//button next formStep
+            event.preventDefault();
+
+            elem = bodyPopap.find("[aria-hidden=false]");
+            required = elem.find("[data-required=null]");
+            message.html("");
+            console.log("step  ", step);
+
+
+            if(required.length > 0){
+
+                console.log("Please make a choose to go ahead");
+                error.html("Please make a choose to go ahead");
+                return false
+
+            }else{
+
+                error.html("");
+
+            }
+
+
+            if(step == 0){
 
                 checkedElemStep = elem.find("input:checked");
 
                 if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
-                    step += 1;
+                    step = 2;
+                    back.css('display' , 'block');
                     ariaHiddenElem();
+                    return false
                 }
 
+            }
+            if(step == 1){
+
+
+                checkedElemStep = elem.find("input[name='services[]']:checked");
+
+
+                if(required.length > 0 || checkedElemStep.length == 0){
+
+                    console.log("Please make a choose to go ahead");
+                    error.html("Please make a choose to go ahead");
+                    return false
+
+                }else{
+
+                    error.html("");
+
+                }
             }
 
 
 
+            step = elem.data('data-step') + 1;
             back.css('display' , 'block');
 
             if(step == 5){
@@ -163,11 +200,8 @@ return{
                 next.css('display' , 'none');
                 quotes.css('display' , 'block');
             }
-            if(step != 2){
 
-                ariaHiddenElem();
-
-            }
+            ariaHiddenElem();
             function ariaHiddenElem(){
 
                 formStep.eq(step).show().attr("aria-hidden", false);
@@ -185,7 +219,7 @@ return{
         back.click(function(event){//button back formStep
             event.preventDefault();
 
-
+            message.html("");
             popup.find('.answer-ajax-error').html("");
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
@@ -225,6 +259,36 @@ return{
 
             event.preventDefault();
             popup.find('.answer-ajax-error').html("");
+            elem = bodyPopap.find("[aria-hidden=false]");
+            required = elem.find("[data-required=null]");
+
+            if(required.length > 0){
+
+                console.log("Please make a choose to go ahead");
+                error.html("Please make a choose to go ahead");
+                return false
+
+            }else{
+
+                error.html("");
+
+            }
+
+            if(required.length > 0){
+
+                console.log("Please make a choose to go ahead");
+                error.html("Please make a choose to go ahead");
+                return false
+
+            }else{
+
+                error.html("");
+
+            }
+
+
+
+
             frontMask.css('display', 'block' );
             params = popup.find('form').serializeArray();
 
@@ -297,7 +361,7 @@ return{
         formStep.find("#file").change(function(e){//create an object with attached files
 
             file = event.target.files[0];
-
+            message.html("The attachment has been successfully attached!");
 
             return false;
         });
@@ -315,6 +379,8 @@ return{
 
 
         });*/
+
+
 
 
 

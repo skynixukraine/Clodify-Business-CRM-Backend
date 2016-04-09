@@ -1346,10 +1346,17 @@ footer .link a:hover {
   font-size: 30px;
   text-align: center;
   font-family: 'Raleway Light', sans-serif;
+}
+#request-quote-modals .popup .answer-ajax,
+#request-quote-modals .popup .message {
   color: #468849;
 }
 #request-quote-modals .popup .answer-ajax-error {
   color: #961917;
+}
+#request-quote-modals .popup .message,
+#request-quote-modals .popup .answer-ajax-error {
+  height: 15px;
 }
 #request-quote-modals .close {
   width: 16px;
@@ -1506,7 +1513,7 @@ footer .link a:hover {
 }
 #request-quote-modals .footer-popap .progress {
   height: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   border-radius: 6px;
   background-color: #c1c0c0;
 }
