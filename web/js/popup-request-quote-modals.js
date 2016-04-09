@@ -4,12 +4,17 @@
 
 var requestQuoteModals = (function(){
 
-    var bgForPopup,
+    var htmlPage,
+        htmlwidth,
+        paddingPage,
+        htmlHeight,
+        popupHeight,
+        bgForPopup,
         popup,
         bodyPopap,
         progressBar,
         factor = 100/ 5,
-        step,
+        step = 0,
         formStep,
         elem,
         checkedElemStep,
@@ -18,23 +23,58 @@ var requestQuoteModals = (function(){
         quotes,
         dropdown,
         formData,
-        files= {},
-        arrayFiles =[];
+        params,
+        files,
+        frontMask,
+        message,
+        error,
+        required;
 
 
 
     function progress(step){
 
         progressBar.css('width' , factor * step + '%');
-
+        overflowPageY();
     }
 
+    function overflowPageY(){
+
+        htmlwidth = htmlPage.width();
+
+        if(htmlwidth > 768){
+
+            popupHeight     = popup.height();
+            paddingPage     = popup.outerHeight();
+
+            console.log('popup.outerHeight()', paddingPage);
+            console.log('htmlPage.height()', htmlHeight);
+
+
+            if(paddingPage > htmlHeight){
+
+                popup.css('height', htmlHeight - parseInt(popup.css('top'))-10);
+                popup.css('overflow-y', 'scroll');
+
+            }else{
+
+                popup.css('overflow-y', 'auto');
+                popup.css('height', 'auto');
+            }
+
+        }else{
+
+            htmlPage.animate({scrollTop:0},500);
+        }
+
+
+    }
 
 
 return{
 
     init: function(){
-
+        htmlPage        = $('body,html');
         bgForPopup      = $('#request-quote-modals');
         popup           = bgForPopup.find(".popup");
         progressBar     = $(".progress-bar");
@@ -44,56 +84,120 @@ return{
         back            = $(".back");
         next            = $(".next");
         quotes          = $(".quotes");
+        frontMask       = bgForPopup.find('.front-mask');
+        htmlHeight      = htmlPage.height();
+        message         = popup.find('.message');
+        error           = popup.find('.answer-ajax-error');
+        required        = formStep.find('[required]');
 
-
-
+        required.attr('data-required', 'null');//The default fields is not filled
         formStep.hide().attr("aria-hidden", true);
         formStep.eq(0).show().attr("aria-hidden", false);
+
 
         for(var i=0; i < formStep.length; i++){
 
             formStep.eq(i).data("data-step", i);
         }
 
-
-        $(".box-evaluation .en-btn").click(function () {//button open REQUEST A QUOTE
+        $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
             event.preventDefault();
+
             bgForPopup.fadeIn(500);
             popup.fadeIn(1000);
-            popup.slideDown(500);
+            //popup.slideDown(500);
+
+            overflowPageY();
+
+            htmlPage.animate({scrollTop:0},500);
 
             return false;
 
         });
+
         bgForPopup.find(".close").click(function () {// button close popup
 
             bgForPopup.fadeOut(1000);
             popup.fadeOut(1000);
-            popup.slideUp(500);
+            //popup.slideUp(500);
+
+        });
+        formStep.find("#file").change(function(e){//create an object with attached files
+
+            file = event.target.files[0];
+            message.html("The attachment has been successfully attached!");
+
+            return false;
+        });
+
+        $( "[required]" ).change(function() {
+
+            $(this).attr('data-required', 'required');
+
+            if($(this).attr('type') == "radio" || $(this).attr('type') == "checkbox"){
+
+                $(this).closest(".step").find(".option-group input").attr('data-required', 'required');
+            }
 
         });
         next.click(function(event){//button next formStep
             event.preventDefault();
+
             elem = bodyPopap.find("[aria-hidden=false]");
-            step = elem.data('data-step') + 1;
+            required = elem.find("[data-required=null]");
+            message.html("");
+            console.log("step  ", step);
 
 
-            if(step == 1){//skip step 2
+            if(required.length > 0){
+
+                console.log("Please make a choose to go ahead");
+                error.html("Please make a choose to go ahead");
+                return false
+
+            }else{
+
+                error.html("");
+
+            }
+
+
+            if(step == 0){
 
                 checkedElemStep = elem.find("input:checked");
 
                 if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
-                    step += 1;
+                    step = 2;
+                    back.css('display' , 'block');
+                    ariaHiddenElem();
+                    return false
                 }
 
             }
+            if(step == 1){
 
 
-            formStep.eq(step).show().attr("aria-hidden", false);
-            elem.hide() .attr("aria-hidden", true);
+                checkedElemStep = elem.find("input[name='services[]']:checked");
+
+
+                if(required.length > 0 || checkedElemStep.length == 0){
+
+                    console.log("Please make a choose to go ahead");
+                    error.html("Please make a choose to go ahead");
+                    return false
+
+                }else{
+
+                    error.html("");
+
+                }
+            }
+
+
+            step = elem.data('data-step') + 1;
             back.css('display' , 'block');
 
             if(step == 5){
@@ -102,15 +206,23 @@ return{
                 quotes.css('display' , 'block');
             }
 
+            ariaHiddenElem();
+            function ariaHiddenElem(){
 
-            progress(step);
+                formStep.eq(step).show().attr("aria-hidden", false);
+                elem.hide() .attr("aria-hidden", true);
+                progress(step);
+            }
 
             return false;
 
         });
+
         back.click(function(event){//button back formStep
             event.preventDefault();
 
+            message.html("");
+            popup.find('.answer-ajax-error').html("");
             elem = bodyPopap.find("[aria-hidden=false]");
             step = elem.data('data-step') -1;
 
@@ -139,40 +251,43 @@ return{
             }
             progress(step);
 
+
             return false;
 
         });
 
 
-
         quotes.click(function(event){//button 'GET MY QUOTES'
+
             event.preventDefault();
 
+            elem = bodyPopap.find("[aria-hidden=false]");
+            required = elem.find("[data-required=null]");
 
-            formData = popup.find('form').serializeArray();
+            if(required.length > 0){
 
-            for(var i = 0; i < dropdown.length; i++) {
+                console.log("Please make a choose to go ahead");
+                error.html("Please make a choose to go ahead");
+                return false
 
-                formData.push({
-                    name: dropdown.eq(i).attr('name'),
-                    value: dropdown.eq(i).val()
-                });
-
-            }
-            if(files.value){
-
-                formData.push(files);
             }else{
 
-                formData.push({
-                    name: "file",
-                    value: ""
-                });
+                error.html("");
+
             }
 
+            frontMask.css('display', 'block' );
+            params = popup.find('form').serializeArray();
+
+            formData = new FormData();
 
 
-            console.log(formData);
+            for (var i = 0; i < params.length; i++) {
+                formData.append( params[i]['name'], params[i]['value']);
+            }
+            if ( file ) {
+                formData.append( 'file', file );
+            }
 
 
             $.ajax({
@@ -181,39 +296,28 @@ return{
                 data : formData,
                 processData: false,
                 contentType: false,
+                dataType: 'json',
                 success : function(data) {
-                    console.log(data);
-                    alert(data);
+
+                    if (data.success) {
+
+                        frontMask.css('display', 'none' );
+                        popup.find('form').css('display', 'none' );
+                        popup.find('.answer-ajax').css('display', 'table-cell');
+
+
+                    } else {
+
+                        frontMask.css('display', 'none' );
+                        error.html("1Sorry, but we were not able to get your quote. Please check your information and try agian.");
+                    }
+
+
                 }
             });
 
             return false;
         });
-
-        formStep.find("#file").change(function(e){//create an object with attached files
-
-            arrayFiles.push(e.target.value);
-            files.value = arrayFiles;
-            files.name = $(this).attr('name');
-
-
-            return false;
-        });
-
-        $(".dropdown-menu li").click(function(event) {//dropdown selected
-
-            event.preventDefault();
-            var el = $(this),
-                value = el.text();
-
-            elem = el.closest(".input-group-btn.select").find(".dropdown-toggle");
-
-            elem.html(value + '<span class="caret1">&or;</span>');
-            elem.attr('value', value);
-
-
-        });
-
 
 
     }

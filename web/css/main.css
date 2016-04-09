@@ -956,12 +956,6 @@ footer .link a:hover {
 .login {
   padding: 118px 15px 0 15px;
 }
-.contact h1,
-.login h1 {
-  font-family: 'Raleway-Bold', sans-serif;
-  font-size: 55px;
-  text-align: center;
-}
 .contact .contact-txt,
 .login .contact-txt {
   padding: 11px 21% 55px 21%;
@@ -1173,10 +1167,6 @@ footer .link a:hover {
   }
 }
 @media (max-width: 600px) {
-  .contact h1,
-  .login h1 {
-    font-size: 40px;
-  }
   .contact form,
   .login form {
     padding: 0 5% 0 0;
@@ -1305,15 +1295,41 @@ footer .link a:hover {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.24);
   display: none;
   z-index: 2000;
 }
+#request-quote-modals .masks-back {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.24);
+}
+#request-quote-modals .front-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 20000;
+}
+#request-quote-modals .front-mask:before {
+  width: 64px;
+  height: 64px;
+  margin: auto;
+  position: relative;
+  top: 35%;
+  content: "";
+  background: url(../img/ajax-loader100_2.gif) no-repeat 0 0;
+  display: block;
+}
 #request-quote-modals .popup {
   width: 690px;
-  min-height: 610px;
   padding: 48px 80px 50px 80px;
-  position: fixed;
+  position: absolute;
   left: 25%;
   left: calc((100% - 690px)/2);
   top: 50px;
@@ -1322,6 +1338,25 @@ footer .link a:hover {
   display: none;
   box-shadow: 0 0 7px 3px rgba(100, 192, 239, 0.368);
   -webkit-box-shadow: 0 0 7px 3px rgba(37, 115, 134, 0.5);
+}
+#request-quote-modals .popup .answer-ajax {
+  height: 350px;
+  display: none;
+  vertical-align: middle;
+  font-size: 30px;
+  text-align: center;
+  font-family: 'Raleway Light', sans-serif;
+}
+#request-quote-modals .popup .answer-ajax,
+#request-quote-modals .popup .message {
+  color: #468849;
+}
+#request-quote-modals .popup .answer-ajax-error {
+  color: #961917;
+}
+#request-quote-modals .popup .message,
+#request-quote-modals .popup .answer-ajax-error {
+  height: 15px;
 }
 #request-quote-modals .close {
   width: 16px;
@@ -1350,6 +1385,14 @@ footer .link a:hover {
 }
 #request-quote-modals .step {
   width: 100%;
+  /*.caret1{
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            //float: right;
+            //margin: 0 10px 0 0;
+            color:  #5f5f5f;
+        }*/
 }
 #request-quote-modals .step .question {
   padding: 0 0 25px 0;
@@ -1374,17 +1417,18 @@ footer .link a:hover {
 #request-quote-modals .step .dropdown-toggle {
   width: 100%;
   height: 56px;
+  position: relative;
   text-align: left;
+  /*&:hover{
+                background-color: #9fcae5;
+                border: 1px solid #878787;
+                color: @color-white1;
+
+                .caret1{
+                    color:  @color-white1;
+                }
+            }*/
 }
-#request-quote-modals .step .dropdown-toggle:hover {
-  background-color: #9fcae5;
-  border: 1px solid #878787;
-  color: #ffffff;
-}
-#request-quote-modals .step .dropdown-toggle:hover .caret1 {
-  color: #ffffff;
-}
-#request-quote-modals .step .dropdown-menu,
 #request-quote-modals .step .file_upload {
   width: 100%;
 }
@@ -1400,17 +1444,11 @@ footer .link a:hover {
   border: 1px solid #878787;
   color: #ffffff;
 }
-#request-quote-modals .step .caret1 {
-  float: right;
-  margin: 0 10px 0 0;
-  color: #5f5f5f;
-}
 #request-quote-modals .step .margin-text {
   margin: 48px 0 0 0;
 }
 #request-quote-modals .step .option-group:not(#foo) input:checked + label,
-#request-quote-modals .step .dropdown-menu a:focus,
-#request-quote-modals .step .dropdown-menu a:hover {
+#request-quote-modals .step option:hover {
   background-color: #006eb4;
   color: #ffffff;
 }
@@ -1456,12 +1494,12 @@ footer .link a:hover {
 #request-quote-modals .step2 .option-group:not(#foo) label {
   height: 62px;
   padding: 7px 10px 10px 10px;
-  background: url('../img/check.png') transparent no-repeat;
-  background-position: 22px 19px;
   line-height: 1.3;
 }
 #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
+  background: url('../img/check.png') transparent no-repeat;
   background-position: 22px -45px;
+  background-color: #006eb4;
 }
 #request-quote-modals .step2 .option-group:not(#foo) label[for='optimization'],
 #request-quote-modals .step2 .option-group:not(#foo) label[for='redesign'] {
@@ -1475,7 +1513,7 @@ footer .link a:hover {
 }
 #request-quote-modals .footer-popap .progress {
   height: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   border-radius: 6px;
   background-color: #c1c0c0;
 }
@@ -1510,8 +1548,12 @@ footer .link a:hover {
 #request-quote-modals .footer-popap .back:active {
   text-decoration: none;
 }
-#request-quote-modals .footer-popap .next,
 #request-quote-modals .footer-popap .quotes {
+  display: none;
+}
+#request-quote-modals .next,
+#request-quote-modals .quotes,
+#request-quote-modals .close-popap {
   width: 242px;
   height: 54px;
   background: rgba(247, 102, 12, 0.85);
@@ -1522,14 +1564,22 @@ footer .link a:hover {
   font-family: 'Raleway-SemiBold', sans-serif;
   color: #fffefe;
 }
-#request-quote-modals .footer-popap .next:hover,
-#request-quote-modals .footer-popap .quotes:hover {
+#request-quote-modals .next:hover,
+#request-quote-modals .quotes:hover,
+#request-quote-modals .close-popap:hover {
   background: #F7660C;
 }
-#request-quote-modals .footer-popap .quotes {
-  display: none;
+#request-quote-modals .close-popap {
+  margin: 15px auto!important;
+  float: none;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  position: initial;
 }
 @media (max-width: 768px) {
+  #request-quote-modals {
+    position: absolute;
+  }
   #request-quote-modals .popup {
     width: 90%;
     padding: 30px 20px 25px 20px;
@@ -1556,21 +1606,18 @@ footer .link a:hover {
     height: 50px;
     line-height: 1.45;
   }
-  #request-quote-modals .step2 .option-group:not(#foo) label {
-    background-position: 22px 11px;
-  }
   #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
     background-position: 22px -51px;
   }
-  #request-quote-modals .footer-popap .next,
-  #request-quote-modals .footer-popap .quotes {
+  #request-quote-modals .next,
+  #request-quote-modals .quotes,
+  #request-quote-modals .close-popap {
     width: 100%;
     height: 45px;
   }
 }
 @media (max-width: 480px) {
   #request-quote-modals .popup {
-    min-height: auto;
     top: 20px;
   }
   #request-quote-modals .header-popap {
@@ -1598,7 +1645,7 @@ footer .link a:hover {
     line-height: 1.5;
   }
   #request-quote-modals .step .caret1 {
-    margin: 0;
+    top: 5px;
   }
   #request-quote-modals .step textarea {
     height: 150px;
@@ -1609,12 +1656,8 @@ footer .link a:hover {
     padding: 4px 0;
     margin-top: 10px;
   }
-  #request-quote-modals .step2 .option-group:not(#foo) label {
-    background-position: 11px 13px;
-    background-size: 22px;
-  }
   #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
-    background-position: 11px -25px;
+    background-position: 11px -51px;
   }
   #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"],
   #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] {
@@ -1634,12 +1677,13 @@ footer .link a:hover {
     padding: 0 0 0 15px;
     margin: 0 0 10px 0;
   }
-  #request-quote-modals .footer-popap .next,
-  #request-quote-modals .footer-popap .quotes {
+  #request-quote-modals .next,
+  #request-quote-modals .quotes,
+  #request-quote-modals .close-popap {
     padding: 6px;
     font-size: 14px;
   }
-  #request-quote-modals .footer-popap .back {
+  #request-quote-modals .back {
     padding: 11px 6px;
     font-size: 14px;
   }
@@ -1649,6 +1693,11 @@ body {
   margin: 0;
   padding: 0;
   background: #ffffff;
+}
+h1 {
+  font-family: 'Raleway-Bold', sans-serif;
+  font-size: 55px;
+  text-align: center;
 }
 a,
 a:hover,
@@ -1690,6 +1739,11 @@ a.active {
   }
   .fix-height .page {
     margin: 32px auto 0 auto;
+  }
+}
+@media (max-width: 600px) {
+  h1 {
+    font-size: 40px;
   }
 }
 @media (max-width: 480px) {

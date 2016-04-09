@@ -37,10 +37,10 @@ AppAsset::register($this);
                             <li>
                                 <a href="https://www.facebook.com/skynix.solutions/" target="_blank" class="ico-facebook"></a>
                             </li>
-                            <!--<li>
+                            <li>
                                 <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                            <li>
+                            <!--<li>
                                 <a href="#" class="ico-in"></a>
                             </li>-->
                             <li>
