@@ -144,7 +144,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                 <div class = "col-lg-12 step step1">
                     <div class="question">What is your website/application state?</div>
                     <div class="option-group">
-                        <input type="radio" value="Active site application" name="website_state" id="active" checked="checked" >
+                        <input type="radio" value="Active site application" name="website_state" id="active" >
                         <label for="active">Active site/application</label>
                     </div>
 
@@ -180,7 +180,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">HTML/CSS/Javascript</a></li>
                             <li><a href="#">Other</a></li>
                         </ul>-->
-                        <select class="dropdown-toggle form-control">
+                        <select class="dropdown-toggle form-control" name="platform">
+                            <option>Select ...</option>
                             <option>Magento 1.x</option>
                             <option>Magento 2.x</option>
                             <option>Wordpress</option>
@@ -236,7 +237,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">No need for a backend</a></li>
                         </ul>-->
 
-                        <select class="dropdown-toggle form-control">
+                        <select class="dropdown-toggle form-control" name="backend_platform">
+                            <option>Select ...</option>
                             <option>Magento 1.x</option>
                             <option>Magento 2.x</option>
                             <option>Wordpress</option>
@@ -259,7 +261,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">No need for a frontend</a></li>
                         </ul>-->
 
-                        <select class="dropdown-toggle form-control">
+                        <select class="dropdown-toggle form-control" name="frontend_platform">
+                            <option>Select ...</option>
                             <option>Twitter Bootstrap template</option>
                             <option>HTML5, CSS3 template</option>
                             <option>jQuery application</option>
@@ -282,7 +285,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">in 1-2 months</a></li>
                         </ul>-->
 
-                        <select class="dropdown-toggle form-control">
+                        <select class="dropdown-toggle form-control" name="when_start">
+                            <option>Select ...</option>
                             <option>Immediately</option>
                             <option>1-2 weeks</option>
                             <option>3-4 weeks</option>
@@ -303,7 +307,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><a href="#">&gt; $5000</a></li>
                         </ul>-->
 
-                        <select class="dropdown-toggle form-control">
+                        <select class="dropdown-toggle form-control" name="budget">
+                            <option>Select ...</option>
                             <option>&lt; $300</option>
                             <option>$300 - $1000</option>
                             <option>$1000 - $5000</option>
