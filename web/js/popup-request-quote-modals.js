@@ -42,13 +42,16 @@ var requestQuoteModals = (function(){
 
         htmlwidth = htmlPage.width();
 
-
         if(htmlwidth > 768){
 
             popupHeight     = popup.height();
             paddingPage     = popup.outerHeight();
 
-            if((paddingPage) > htmlHeight){
+            console.log('popup.outerHeight()', paddingPage);
+            console.log('htmlPage.height()', htmlHeight);
+
+
+            if(paddingPage > htmlHeight){
 
                 popup.css('height', htmlHeight - parseInt(popup.css('top'))-10);
                 popup.css('overflow-y', 'scroll');
@@ -87,8 +90,7 @@ return{
         error           = popup.find('.answer-ajax-error');
         required        = formStep.find('[required]');
 
-        required.attr('data-required', 'null');
-
+        required.attr('data-required', 'null');//The default fields is not filled
         formStep.hide().attr("aria-hidden", true);
         formStep.eq(0).show().attr("aria-hidden", false);
 
@@ -97,8 +99,6 @@ return{
 
             formStep.eq(i).data("data-step", i);
         }
-
-
 
         $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
@@ -123,15 +123,21 @@ return{
             //popup.slideUp(500);
 
         });
+        formStep.find("#file").change(function(e){//create an object with attached files
+
+            file = event.target.files[0];
+            message.html("The attachment has been successfully attached!");
+
+            return false;
+        });
 
         $( "[required]" ).change(function() {
 
             $(this).attr('data-required', 'required');
 
             if($(this).attr('type') == "radio" || $(this).attr('type') == "checkbox"){
-                
-                $(this).closest(".step").find(".option-group input").attr('data-required', 'required');
 
+                $(this).closest(".step").find(".option-group input").attr('data-required', 'required');
             }
 
         });
@@ -191,7 +197,6 @@ return{
             }
 
 
-
             step = elem.data('data-step') + 1;
             back.css('display' , 'block');
 
@@ -209,13 +214,10 @@ return{
                 progress(step);
             }
 
-
-
-
-
             return false;
 
         });
+
         back.click(function(event){//button back formStep
             event.preventDefault();
 
@@ -258,7 +260,7 @@ return{
         quotes.click(function(event){//button 'GET MY QUOTES'
 
             event.preventDefault();
-            popup.find('.answer-ajax-error').html("");
+
             elem = bodyPopap.find("[aria-hidden=false]");
             required = elem.find("[data-required=null]");
 
@@ -274,57 +276,18 @@ return{
 
             }
 
-            if(required.length > 0){
-
-                console.log("Please make a choose to go ahead");
-                error.html("Please make a choose to go ahead");
-                return false
-
-            }else{
-
-                error.html("");
-
-            }
-
-
-
-
             frontMask.css('display', 'block' );
             params = popup.find('form').serializeArray();
 
             formData = new FormData();
 
 
-            console.log("formData = ", formData);
-
-
-/************
-            for(var i = 0; i < dropdown.length; i++) {
-
-                formData.push({
-                    name: dropdown.eq(i).attr('name'),
-                    value: dropdown.eq(i).val()
-                });
-
-            }
-            if(files.value){
-
-                formData.push(files);
-            }else{
-
-                formData.push({
-                    name: "file",
-                    value: ""
-                });
-            }
-*************/
             for (var i = 0; i < params.length; i++) {
                 formData.append( params[i]['name'], params[i]['value']);
             }
             if ( file ) {
                 formData.append( 'file', file );
             }
-
 
 
             $.ajax({
@@ -339,7 +302,6 @@ return{
                     if (data.success) {
 
                         frontMask.css('display', 'none' );
-                        console.log("Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes.");
                         popup.find('form').css('display', 'none' );
                         popup.find('.answer-ajax').css('display', 'table-cell');
 
@@ -347,8 +309,7 @@ return{
                     } else {
 
                         frontMask.css('display', 'none' );
-                        console.log("Sorry, but we were not able to get your quote. Please check your information and try agian.");
-                        popup.find('.answer-ajax-error').html("1Sorry, but we were not able to get your quote. Please check your information and try agian.");
+                        error.html("1Sorry, but we were not able to get your quote. Please check your information and try agian.");
                     }
 
 
@@ -357,31 +318,6 @@ return{
 
             return false;
         });
-
-        formStep.find("#file").change(function(e){//create an object with attached files
-
-            file = event.target.files[0];
-            message.html("The attachment has been successfully attached!");
-
-            return false;
-        });
-
-        /*$(".dropdown-menu li").click(function(event) {//dropdown selected
-
-            event.preventDefault();
-            var el = $(this),
-                value = el.text();
-
-            elem = el.closest(".input-group-btn.select").find(".dropdown-toggle");
-
-            elem.html(value + '<span class="caret1">&or;</span>');
-            elem.attr('value', value);
-
-
-        });*/
-
-
-
 
 
     }
