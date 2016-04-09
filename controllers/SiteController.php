@@ -192,63 +192,61 @@ class SiteController extends Controller
 
 
         if ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost )
-        {
-            $websiteState = Yii::$app->request->post('website_state');
-            $platform = Yii::$app->request->post('platform');
-            $services = Yii::$app->request->post('services');
-            $frontendPlatform= Yii::$app->request->post('frontend_platform');
-            $backendPlatform = Yii::$app->request->post('backend_platform');
-            $whenStart = Yii::$app->request->post('when_start');
-            $budget = Yii::$app->request->post('budget');
-            $description = Yii::$app->request->post('description');
-            $file= Yii::$app->request->post('file');
-            $name = Yii::$app->request->post('name');
-            $email = Yii::$app->request->post('email');
-            $company = Yii::$app->request->post('company');
-            $country = Yii::$app->request->post('country');
-            $model->file = UploadedFile::getInstanceByName($file);
+              Yii::$app->request->isPost ) {
 
-                $message = Yii::$app->mailer->compose('request', [
-                    'name' => $name,
-                    'websiteState' => $websiteState,
-                    'platform' => $platform,
-                    'services' => $services,
-                    'frontendPlatform' => $frontendPlatform,
-                    'backendPlatform' => $backendPlatform,
-                    'whenStart' => $whenStart,
-                    'budget' => $budget,
-                    'description' => $description,
-                    'file' => $file,
-                    'email' => $email,
-                    'company' => $company,
-                    'country' => $country
+            $websiteState   = Yii::$app->request->post('website_state');
+            $platform       = Yii::$app->request->post('platform');
+            $services       = Yii::$app->request->post('services');
+            $frontendPlatform   = Yii::$app->request->post('frontend_platform');
+            $backendPlatform    = Yii::$app->request->post('backend_platform');
+            $whenStart      = Yii::$app->request->post('when_start');
+            $budget         = Yii::$app->request->post('budget');
+            $description    = Yii::$app->request->post('description');
+            $name           = Yii::$app->request->post('name');
+            $email          = Yii::$app->request->post('email');
+            $company        = Yii::$app->request->post('company');
+            $country        = Yii::$app->request->post('country');
+            $model->file    = UploadedFile::getInstanceByName('file');
 
-                ])
-                    ->setFrom(Yii::$app->params['adminEmail'])
+            $message = Yii::$app->mailer->compose('request', [
+                'name'          => $name,
+                'websiteState'  => $websiteState,
+                'platform'      => $platform,
+                'services'      => $services,
+                'frontendPlatform'  => $frontendPlatform,
+                'backendPlatform'   => $backendPlatform,
+                'whenStart'         => $whenStart,
+                'budget'            => $budget,
+                'description'       => $description,
+                'email'             => $email,
+                'company'           => $company,
+                'country'           => $country
 
-/*                    ->setTo($this->email)*/
-                    ->setTo('valeriya@skynix.co')
-                    ->setSubject('email');
+            ])->setFrom(Yii::$app->params['adminEmail'])
 
-                    if ($model->upload()) {
-                        $message->attach( getcwd() . '/data/documents/' . $model->fileName );
+                ->setTo( Yii::$app->params['adminEmail'] )
+                ->setReplyTo( [ $email => $name ] )
+                ->setSubject('Skynix - New quote. Requested by ' . $name);
 
-                    }
-                    $message->send();
+                if ($model->upload()) {
 
-                 $response = Yii::$app->response;
-                 $response->getHeaders()->set('Vary', 'Accept');
-                 $response->format = Response::FORMAT_JSON;
+                    $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
 
-                echo json_encode([
-                    "success" => true
-                ]);
-            }else{
+                }
+                $message->send();
 
-                echo json_encode([
-                    "success" => false
-                ]);
+             $response = Yii::$app->response;
+             $response->getHeaders()->set('Vary', 'Accept');
+             $response->format = Response::FORMAT_JSON;
+
+            echo json_encode([
+                "success" => true
+            ]);
+        } else {
+
+            echo json_encode([
+                "success" => false
+            ]);
         }
     }
 }

@@ -7,6 +7,7 @@
  */
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -21,7 +22,7 @@ class Upload extends Model
     public function rules()
     {
         return [
-            [['file'], 'file', 'skipOnEmpty' => true],
+            [['file'], 'file', 'skipOnEmpty' => false],
         ];
     }
 
@@ -29,14 +30,22 @@ class Upload extends Model
     {
 
         if ($this->validate()) {
-            var_dump($this->file);
-            //exit();
-            //$this->file->saveAs('uploads/' . $this->file->baseName . '.' . $this->file->extension);
+
             $this->fileName = time() . "_" . $this->file->baseName . '.' . $this->file->extension;
-            $this->file->saveAs( getcwd() . '/data/documents/' . $this->fileName);
+            $path = Yii::getAlias('@app/data/documents/');
+            if ( !file_exists( $path ) ) {
+
+                mkdir( $path, 0775);
+                chmod( $path, 0775);
+
+            }
+            $this->file->saveAs( $path . $this->fileName );
             return true;
+
         } else {
+
             return false;
+
         }
     }
 }
