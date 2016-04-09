@@ -1,0 +1,111 @@
+
+.career{
+
+    h2{
+        margin: 6px 0 0 0;
+        padding: 22px 0 0 0;
+        border-top: 1px solid @color-blue-light1;
+        font-size: 24px;
+        text-transform: uppercase;
+        text-align: center;
+        color: #9fcae5;
+    }
+    h3{
+        margin: 20px 0 37px 0;
+        font-size: 17px;
+        font-family: 'Raleway-Bold', sans-serif;
+        text-transform: uppercase;
+        text-align: left;
+        color: @color-black;
+
+    }
+    p{
+        font-family: 'Raleway-Regular', sans-serif;
+        font-size: 16px;
+        color: @color-black;
+    }
+    .apply{
+        width: 100%;
+        color: @color-black;
+    }
+
+    .right-panel,
+    .left-panel{
+
+        >div,
+        article{
+            margin: 12px 0;
+            padding: 15px 27px;
+            border: 1px solid @color-blue-light1;
+
+            &.hiden{
+                height: 225px;
+                padding: 15px  27px 65px  27px;
+                overflow: hidden;
+
+
+
+                .read-more,
+                .shadow-bottom{
+                    display: block;
+                }
+            }
+            &.disclosed{
+
+                .read-more,
+                .shadow-bottom{
+                    display: none;
+                }
+            }
+        }
+
+       /* ul{
+            list-style: none;
+        }*/
+        li{
+            font-size: 16px;
+            font-family: 'Raleway-Regular', sans-serif;
+            color: @color-black;
+        }
+    }
+    .right-panel{
+        position: fixed;
+        top: 323px;
+        right: 20px;
+    }
+    .left-panel{
+
+        article{
+            position: relative;
+
+            .read-more{
+                width: 50%;
+                left: 25%;
+                border: 1px solid #F7660C;
+                border-radius: 0;
+                background: #ffffff;
+                position: absolute;
+                bottom: 10px;
+                font-family: 'Raleway-Medium', sans-serif;
+                font-size: 20px;
+                color: #F7660C;
+                z-index: 100;
+
+                &:hover{
+                    background: #e8f6ff;
+                }
+
+            }
+            .shadow-bottom{
+                width: 100%;
+                height: 61px;
+                margin: 0 0 0 -27px;
+                position: absolute;
+                bottom: 0;
+                z-index: 90;
+                background-image: linear-gradient(to bottom, rgba(255,255,255,0.6), white);
+                background-image: -webkit-linear-gradient(to, rgba(255,255,255,0.6), white);
+            }
+        }
+    }
+}
