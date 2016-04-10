@@ -169,14 +169,14 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <div class="input-group-btn select">
 
                         <select class="dropdown-toggle form-control" name="platform" required>
-                            <option>Select ...</option>
-                            <option>Magento 1.x</option>
-                            <option>Magento 2.x</option>
-                            <option>Wordpress</option>
-                            <option>Yii 1, Yii 2</option>
-                            <option>ZF 1, ZF2</option>
-                            <option>HTML/CSS/Javascript</option>
-                            <option>Other</option>
+                            <option value="">Select ...</option>
+                            <option value="Magento 1.x">Magento 1.x</option>
+                            <option value="Magento 2.x">Magento 2.x</option>
+                            <option value="Wordpress">Wordpress</option>
+                            <option value="Yii 1, Yii 2">Yii 1, Yii 2</option>
+                            <option value="ZF 1, ZF2">ZF 1, ZF2</option>
+                            <option value="HTML/CSS/Javascript">HTML/CSS/Javascript</option>
+                            <option value="Other">Other</option>
                         </select>
 
                     </div>
@@ -212,26 +212,26 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <div class="input-group-btn select">
 
                         <select class="dropdown-toggle form-control" name="backend_platform" required>
-                            <option>Select ...</option>
-                            <option>Magento 1.x</option>
-                            <option>Magento 2.x</option>
-                            <option>Wordpress</option>
-                            <option>Yii 2</option>
-                            <option>Zend Framework 2</option>
-                            <option>HTML/CSS/Javascript</option>
-                            <option>No need for a backend</option>
+                            <option value="">Select ...</option>
+                            <option value="Magento 1.x">Magento 1.x</option>
+                            <option value="Magento 2.x">Magento 2.x</option>
+                            <option value="Wordpress">Wordpress</option>
+                            <option value="Yii 2">Yii 2</option>
+                            <option value="Zend Framework 2">Zend Framework 2</option>
+                            <option value="HTML/CSS/Javascript">HTML/CSS/Javascript</option>
+                            <option value="No need for a backend">No need for a backend</option>
                         </select>
                     </div>
                     <div class="question margin-text">What is your prefered frontend platform?</div>
                     <div class="input-group-btn select">
 
                         <select class="dropdown-toggle form-control" name="frontend_platform" required>
-                            <option>Select ...</option>
-                            <option>Twitter Bootstrap template</option>
-                            <option>HTML5, CSS3 template</option>
-                            <option>jQuery application</option>
-                            <option>AngularJS application</option>
-                            <option>No need for a frontend</option>
+                            <option value="">Select ...</option>
+                            <option value="Twitter Bootstrap template">Twitter Bootstrap template</option>
+                            <option value="HTML5, CSS3 template">HTML5, CSS3 template</option>
+                            <option value="jQuery application">jQuery application</option>
+                            <option value="AngularJS application">AngularJS application</option>
+                            <option value="No need for a frontend">No need for a frontend</option>
                         </select>
                     </div>
                 </div>
@@ -241,11 +241,11 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <div class="input-group-btn select">
 
                         <select class="dropdown-toggle form-control" name="when_start" required>
-                            <option>Select ...</option>
-                            <option>Immediately</option>
-                            <option>1-2 weeks</option>
-                            <option>3-4 weeks</option>
-                            <option>in 1-2 months</option>
+                            <option value="">Select ...</option>
+                            <option value="Immediately">Immediately</option>
+                            <option value="1-2 weeks">1-2 weeks</option>
+                            <option value="3-4 weeks">3-4 weeks</option>
+                            <option value="in 1-2 months">in 1-2 months</option>
                         </select>
 
 
@@ -254,11 +254,11 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <div class="input-group-btn select">
 
                         <select class="dropdown-toggle form-control" name="budget" required>
-                            <option>Select ...</option>
-                            <option>&lt; $300</option>
-                            <option>$300 - $1000</option>
-                            <option>$1000 - $5000</option>
-                            <option>&gt; $5000</option>
+                            <option value="">Select ...</option>
+                            <option value="&lt; $300">&lt; $300</option>
+                            <option value="$300 - $1000">$300 - $1000</option>
+                            <option value="$1000 - $5000">$1000 - $5000</option>
+                            <option value="&gt; $5000">&gt; $5000</option>
                         </select>
                     </div>
 
@@ -301,14 +301,14 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
                 </div>
                 <div class = "col-lg-10 col-sm-10 col-xs-8">
-                    <button class="btn btn btn-primary next">NEXT</button>
-                    <button class="btn btn btn-primary quotes">GET MY QUOTES</button>
+                    <button class="btn btn-primary next">NEXT</button>
+                    <button class="btn btn-primary quotes">GET MY QUOTES</button>
                 </div>
             </div>
         </form>
         <div class="answer-ajax">
             <p>Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes</p>
-            <button class="btn btn btn-primary close-popap close">CLOSE</button>
+            <button class="btn btn-primary close-popap close">CLOSE</button>
 
         </div>
     </div>
