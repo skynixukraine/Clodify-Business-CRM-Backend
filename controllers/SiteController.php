@@ -225,8 +225,8 @@ class SiteController extends Controller
                     'country'           => $country
 
                 ])
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo('valeriya@skynix.co' )
+                    ->setFrom(Yii::$app->params['adminEmail'] )
+                    ->setTo( Yii::$app->params['adminEmail'] )
                     ->setReplyTo( [ $email => $name ] )
                     ->setSubject('Skynix - New quote. Requested by ' . $name);
 
