@@ -133,8 +133,6 @@ return{
             elem = bodyPopap.find("[aria-hidden=false]");
             required = elem.find("[data-required=null]");
             message.html("");
-            console.log("step  ", step);
-
 
             if(required.length > 0){
 
@@ -148,11 +146,11 @@ return{
 
             }
 
-
             if(step == 0){
 
                 checkedElemStep = elem.find("input:checked");
 
+                //skip step 2
                 if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
@@ -165,8 +163,18 @@ return{
             }
             if(step == 1){
 
-                checkedElemStep = elem.find("input[name='services[]']:checked");
+                //skip step 3
+                checkedElemStep = formStep.eq(0).find(":checked");
+                if(checkedElemStep.val().indexOf("Active site application") == 0 ||
+                    checkedElemStep.val().indexOf("In development") == 0){
 
+
+                    step = 3;
+                    ariaHiddenElem();
+                    return false
+
+                }
+                checkedElemStep = elem.find("input[name='services[]']:checked");
                 if(required.length > 0 || checkedElemStep.length == 0){
 
                     console.log("Please make a choose to go ahead");
@@ -216,10 +224,25 @@ return{
                 if(checkedElemStep.val().indexOf("Active site application") != 0 &&
                     checkedElemStep.val().indexOf("In development") != 0){
 
-                    step -= 1;
+                    step = 0;
+
+
                 }
 
             }
+            console.log("step = " + step);
+            if(step == 2){//skip step 3
+
+                if(checkedElemStep.val().indexOf("Active site application") == 0 ||
+                    checkedElemStep.val().indexOf("In development") == 0){
+
+                    step = 1;
+
+
+                }
+            }
+
+
             formStep.eq(step).show().attr("aria-hidden", false);
             elem.hide() .attr("aria-hidden", true);
 
@@ -232,6 +255,8 @@ return{
                 next.css('display', 'block');
                 quotes.css('display', 'none');
             }
+
+
             progress(step);
 
 

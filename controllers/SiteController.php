@@ -192,7 +192,7 @@ class SiteController extends Controller
 
 
         if ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost ) {
+             Yii::$app->request->isPost ) {
 
             $websiteState   = Yii::$app->request->post('website_state');
             $platform       = Yii::$app->request->post('platform');
@@ -202,51 +202,57 @@ class SiteController extends Controller
             $whenStart      = Yii::$app->request->post('when_start');
             $budget         = Yii::$app->request->post('budget');
             $description    = Yii::$app->request->post('description');
+            $file           = Yii::$app->request->post('file');
             $name           = Yii::$app->request->post('name');
             $email          = Yii::$app->request->post('email');
             $company        = Yii::$app->request->post('company');
             $country        = Yii::$app->request->post('country');
-            $model->file    = UploadedFile::getInstanceByName('file');
+            $model->file    = UploadedFile::getInstance($model, 'file');
 
-            $message = Yii::$app->mailer->compose('request', [
-                'name'          => $name,
-                'websiteState'  => $websiteState,
-                'platform'      => $platform,
-                'services'      => $services,
-                'frontendPlatform'  => $frontendPlatform,
-                'backendPlatform'   => $backendPlatform,
-                'whenStart'         => $whenStart,
-                'budget'            => $budget,
-                'description'       => $description,
-                'email'             => $email,
-                'company'           => $company,
-                'country'           => $country
+                $message = Yii::$app->mailer->compose('request', [
+                    'name'          => $name,
+                    'websiteState'  => $websiteState,
+                    'platform'      => $platform,
+                    'services'      => $services,
+                    'frontendPlatform'  => $frontendPlatform,
+                    'backendPlatform'   => $backendPlatform,
+                    'whenStart'         => $whenStart,
+                    'budget'            => $budget,
+                    'description'       => $description,
+                    'file'              => $file,
+                    'email'             => $email,
+                    'company'           => $company,
+                    'country'           => $country
 
-            ])->setFrom(Yii::$app->params['adminEmail'])
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'] )
+                    ->setTo( Yii::$app->params['adminEmail'] )
+                    ->setReplyTo( [ $email => $name ] )
+                    ->setSubject('Skynix - New quote. Requested by ' . $name);
 
-                ->setTo( Yii::$app->params['adminEmail'] )
-                ->setReplyTo( [ $email => $name ] )
-                ->setSubject('Skynix - New quote. Requested by ' . $name);
+                    if ($model->upload()) {
 
-                if ($model->upload()) {
+                         $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
 
-                    $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
+                    }
+                    $message->send();
 
-                }
-                $message->send();
+                 $response = Yii::$app->response;
+                 $response->getHeaders()->set('Vary', 'Accept');
+                 $response->format = Response::FORMAT_JSON;
 
-             $response = Yii::$app->response;
-             $response->getHeaders()->set('Vary', 'Accept');
-             $response->format = Response::FORMAT_JSON;
+                echo json_encode([
+                    "success" => true
+                ]);
+            }
 
-            echo json_encode([
-                "success" => true
-            ]);
-        } else {
+        else{
 
-            echo json_encode([
-                "success" => false
-            ]);
+                echo json_encode([
+                    "success" => false
+                ]);
         }
+
+
     }
 }
