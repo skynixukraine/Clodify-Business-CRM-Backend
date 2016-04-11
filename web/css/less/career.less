@@ -17,6 +17,7 @@
         text-transform: uppercase;
         text-align: left;
         color: @color-black;
+        position: relative;
 
     }
     p{
@@ -32,31 +33,16 @@
     .right-panel,
     .left-panel{
 
+        >div{
+            padding: 15px 27px;
+        }
         >div,
         article{
             margin: 12px 0;
-            padding: 15px 27px;
             border: 1px solid @color-blue-light1;
 
-            &.hiden{
-                height: 225px;
-                padding: 15px  27px 65px  27px;
-                overflow: hidden;
 
 
-
-                .read-more,
-                .shadow-bottom{
-                    display: block;
-                }
-            }
-            &.disclosed{
-
-                .read-more,
-                .shadow-bottom{
-                    display: none;
-                }
-            }
         }
 
        /* ul{
@@ -69,14 +55,34 @@
         }
     }
     .right-panel{
-        position: fixed;
+        position: absolute;
         top: 323px;
         right: 20px;
+
+        &.fix-rightPanel{
+
+            position: fixed;
+            top: 85px;
+        }
     }
     .left-panel{
+        margin: 21px 0 0 0;
+        position: relative;
 
         article{
+
+            height: 225px;
+            padding: 15px  27px 65px  27px;
             position: relative;
+            overflow: hidden;
+
+
+
+            .read-more,
+            .shadow-bottom{
+                display: block;
+            }
+
 
             .read-more{
                 width: 50%;
@@ -92,7 +98,7 @@
                 z-index: 100;
 
                 &:hover{
-                    background: #e8f6ff;
+                    background: rgb(255, 250, 246);
                 }
 
             }
@@ -105,6 +111,17 @@
                 z-index: 90;
                 background-image: linear-gradient(to bottom, rgba(255,255,255,0.6), white);
                 background-image: -webkit-linear-gradient(to, rgba(255,255,255,0.6), white);
+            }
+
+
+            &.show-text{
+                height: 100%;
+                padding: 15px 27px;
+
+                .read-more,
+                .shadow-bottom{
+                    display: none;
+                }
             }
         }
     }

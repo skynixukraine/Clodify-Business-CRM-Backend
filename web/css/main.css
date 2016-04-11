@@ -1693,6 +1693,7 @@ footer .link a:hover {
   text-transform: uppercase;
   text-align: left;
   color: #000000;
+  position: relative;
 }
 .career p {
   font-family: 'Raleway-Regular', sans-serif;
@@ -1710,40 +1711,15 @@ footer .link a:hover {
         }*/
 }
 .career .right-panel > div,
+.career .left-panel > div {
+  padding: 15px 27px;
+}
+.career .right-panel > div,
 .career .left-panel > div,
 .career .right-panel article,
 .career .left-panel article {
   margin: 12px 0;
-  padding: 15px 27px;
   border: 1px solid #b7d4ee;
-}
-.career .right-panel > div.hiden,
-.career .left-panel > div.hiden,
-.career .right-panel article.hiden,
-.career .left-panel article.hiden {
-  height: 225px;
-  padding: 15px  27px 65px  27px;
-  overflow: hidden;
-}
-.career .right-panel > div.hiden .read-more,
-.career .left-panel > div.hiden .read-more,
-.career .right-panel article.hiden .read-more,
-.career .left-panel article.hiden .read-more,
-.career .right-panel > div.hiden .shadow-bottom,
-.career .left-panel > div.hiden .shadow-bottom,
-.career .right-panel article.hiden .shadow-bottom,
-.career .left-panel article.hiden .shadow-bottom {
-  display: block;
-}
-.career .right-panel > div.disclosed .read-more,
-.career .left-panel > div.disclosed .read-more,
-.career .right-panel article.disclosed .read-more,
-.career .left-panel article.disclosed .read-more,
-.career .right-panel > div.disclosed .shadow-bottom,
-.career .left-panel > div.disclosed .shadow-bottom,
-.career .right-panel article.disclosed .shadow-bottom,
-.career .left-panel article.disclosed .shadow-bottom {
-  display: none;
 }
 .career .right-panel li,
 .career .left-panel li {
@@ -1752,12 +1728,27 @@ footer .link a:hover {
   color: #000000;
 }
 .career .right-panel {
-  position: fixed;
+  position: absolute;
   top: 323px;
   right: 20px;
 }
-.career .left-panel article {
+.career .right-panel.fix-rightPanel {
+  position: fixed;
+  top: 85px;
+}
+.career .left-panel {
+  margin: 21px 0 0 0;
   position: relative;
+}
+.career .left-panel article {
+  height: 225px;
+  padding: 15px  27px 65px  27px;
+  position: relative;
+  overflow: hidden;
+}
+.career .left-panel article .read-more,
+.career .left-panel article .shadow-bottom {
+  display: block;
 }
 .career .left-panel article .read-more {
   width: 50%;
@@ -1773,7 +1764,7 @@ footer .link a:hover {
   z-index: 100;
 }
 .career .left-panel article .read-more:hover {
-  background: #e8f6ff;
+  background: #fffaf6;
 }
 .career .left-panel article .shadow-bottom {
   width: 100%;
@@ -1784,6 +1775,14 @@ footer .link a:hover {
   z-index: 90;
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), white);
   background-image: -webkit-linear-gradient(to, rgba(255, 255, 255, 0.6), white);
+}
+.career .left-panel article.show-text {
+  height: 100%;
+  padding: 15px 27px;
+}
+.career .left-panel article.show-text .read-more,
+.career .left-panel article.show-text .shadow-bottom {
+  display: none;
 }
 html,
 body {
