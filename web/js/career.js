@@ -7,16 +7,13 @@ var career = (function(){
     var BtnReadMore,
         articleShow,
         htmlPage,
-        elem,
-        scrollRightPanel,
-        rightPanel;
+        elem;
 
     return{
 
         init: function(){
             htmlPage        = $('body, html');
-            BtnReadMore = $('.read-more');
-            rightPanel = $(".right-panel");
+            BtnReadMore     = $('.read-more');
 
             BtnReadMore.click(function(event) {
 
@@ -48,22 +45,7 @@ var career = (function(){
                 }
 
             });
-
-            $(document).scroll(function() {
-
-                scrollRightPanel = $(document).scrollTop();
-
-                console.log(scrollRightPanel);
-                if(scrollRightPanel > 240){
-
-                    rightPanel.addClass('fix-rightPanel');
-                }else{
-                    rightPanel.removeClass('fix-rightPanel');
-                }
-
-            });
-
-
+            
         }
     }
 })();

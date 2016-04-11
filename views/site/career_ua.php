@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         </div>
         <div class="col-lg-12 col-xs-12"><h2>Ми завжди відкриті для нових талантів!</h2></div>
-        <div class="col-lg-8 col-xs-8 left-panel">
+        <div class="col-lg-8 col-sm-8 col-xs-12 left-panel">
             <article >
                 <h3>Запрошуємо вас обійняти посаду Продакт Менеджера.</h3>
                 <p>
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <ul>
                     <li>Визначення продуктової стратегії та тактичного плану заходів;</li>
                     <li>Збір та пріоритезація вимог до продуктів, створення відповідної документації;</li>
-                    <li>Розробка заходів щодо просування продуктів на ринок ;</li>
+                    <li>Розробка заходів щодо просування продуктів на ринок;</li>
                     <li>Формуваня інформаційно-аналітичної бази даних;</li>
                     <li>Створення, оновлення та підтримка контенту продуктів;</li>
                     <li>Контроль процесу розробки продукту;</li>
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </article>
 
         </div>
-        <div class="col-lg-4 col-xs-4 right-panel">
+        <div class="col-lg-4 col-sm-4 col-xs-12 right-panel">
             <div class="offer">
                 <h3>Компанія пропонує:</h3>
                 <ul>
