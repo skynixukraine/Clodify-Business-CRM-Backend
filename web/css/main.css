@@ -956,12 +956,6 @@ footer .link a:hover {
 .login {
   padding: 118px 15px 0 15px;
 }
-.contact h1,
-.login h1 {
-  font-family: 'Raleway-Bold', sans-serif;
-  font-size: 55px;
-  text-align: center;
-}
 .contact .contact-txt,
 .login .contact-txt {
   padding: 11px 21% 55px 21%;
@@ -1173,10 +1167,6 @@ footer .link a:hover {
   }
 }
 @media (max-width: 600px) {
-  .contact h1,
-  .login h1 {
-    font-size: 40px;
-  }
   .contact form,
   .login form {
     padding: 0 5% 0 0;
@@ -1305,11 +1295,18 @@ footer .link a:hover {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.24);
   display: none;
   z-index: 2000;
 }
-#request-quote-modals .mask {
+#request-quote-modals .masks-back {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.24);
+}
+#request-quote-modals .front-mask {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -1319,21 +1316,20 @@ footer .link a:hover {
   background: rgba(0, 0, 0, 0.5);
   z-index: 20000;
 }
-#request-quote-modals .mask:before {
-  width: 100px;
-  height: 100px;
+#request-quote-modals .front-mask:before {
+  width: 64px;
+  height: 64px;
   margin: auto;
   position: relative;
   top: 35%;
   content: "";
-  background: url(../img/ajax-loader100.gif) no-repeat 0 0;
+  background: url(../img/ajax-loader100_2.gif) no-repeat 0 0;
   display: block;
 }
 #request-quote-modals .popup {
   width: 690px;
-  min-height: 610px;
   padding: 48px 80px 50px 80px;
-  position: fixed;
+  position: absolute;
   left: 25%;
   left: calc((100% - 690px)/2);
   top: 50px;
@@ -1350,11 +1346,17 @@ footer .link a:hover {
   font-size: 30px;
   text-align: center;
   font-family: 'Raleway Light', sans-serif;
+}
+#request-quote-modals .popup .answer-ajax,
+#request-quote-modals .popup .message {
   color: #468849;
 }
 #request-quote-modals .popup .answer-ajax-error {
   color: #961917;
-  display: none;
+}
+#request-quote-modals .popup .message,
+#request-quote-modals .popup .answer-ajax-error {
+  height: 15px;
 }
 #request-quote-modals .close {
   width: 16px;
@@ -1383,6 +1385,14 @@ footer .link a:hover {
 }
 #request-quote-modals .step {
   width: 100%;
+  /*.caret1{
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            //float: right;
+            //margin: 0 10px 0 0;
+            color:  #5f5f5f;
+        }*/
 }
 #request-quote-modals .step .question {
   padding: 0 0 25px 0;
@@ -1407,17 +1417,18 @@ footer .link a:hover {
 #request-quote-modals .step .dropdown-toggle {
   width: 100%;
   height: 56px;
+  position: relative;
   text-align: left;
+  /*&:hover{
+                background-color: #9fcae5;
+                border: 1px solid #878787;
+                color: @color-white1;
+
+                .caret1{
+                    color:  @color-white1;
+                }
+            }*/
 }
-#request-quote-modals .step .dropdown-toggle:hover {
-  background-color: #9fcae5;
-  border: 1px solid #878787;
-  color: #ffffff;
-}
-#request-quote-modals .step .dropdown-toggle:hover .caret1 {
-  color: #ffffff;
-}
-#request-quote-modals .step .dropdown-menu,
 #request-quote-modals .step .file_upload {
   width: 100%;
 }
@@ -1433,17 +1444,11 @@ footer .link a:hover {
   border: 1px solid #878787;
   color: #ffffff;
 }
-#request-quote-modals .step .caret1 {
-  float: right;
-  margin: 0 10px 0 0;
-  color: #5f5f5f;
-}
 #request-quote-modals .step .margin-text {
   margin: 48px 0 0 0;
 }
 #request-quote-modals .step .option-group:not(#foo) input:checked + label,
-#request-quote-modals .step .dropdown-menu a:focus,
-#request-quote-modals .step .dropdown-menu a:hover {
+#request-quote-modals .step option:hover {
   background-color: #006eb4;
   color: #ffffff;
 }
@@ -1489,12 +1494,12 @@ footer .link a:hover {
 #request-quote-modals .step2 .option-group:not(#foo) label {
   height: 62px;
   padding: 7px 10px 10px 10px;
-  background: url('../img/check.png') transparent no-repeat;
-  background-position: 22px 19px;
   line-height: 1.3;
 }
 #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
+  background: url('../img/check.png') transparent no-repeat;
   background-position: 22px -45px;
+  background-color: #006eb4;
 }
 #request-quote-modals .step2 .option-group:not(#foo) label[for='optimization'],
 #request-quote-modals .step2 .option-group:not(#foo) label[for='redesign'] {
@@ -1508,7 +1513,7 @@ footer .link a:hover {
 }
 #request-quote-modals .footer-popap .progress {
   height: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   border-radius: 6px;
   background-color: #c1c0c0;
 }
@@ -1551,18 +1556,7 @@ footer .link a:hover {
 #request-quote-modals .close-popap {
   width: 242px;
   height: 54px;
-  background: rgba(247, 102, 12, 0.85);
-  border: none;
-  border-radius: 0;
-  float: right;
-  font-size: 23px;
-  font-family: 'Raleway-SemiBold', sans-serif;
   color: #fffefe;
-}
-#request-quote-modals .next:hover,
-#request-quote-modals .quotes:hover,
-#request-quote-modals .close-popap:hover {
-  background: #F7660C;
 }
 #request-quote-modals .close-popap {
   margin: 15px auto!important;
@@ -1572,6 +1566,9 @@ footer .link a:hover {
   position: initial;
 }
 @media (max-width: 768px) {
+  #request-quote-modals {
+    position: absolute;
+  }
   #request-quote-modals .popup {
     width: 90%;
     padding: 30px 20px 25px 20px;
@@ -1598,9 +1595,6 @@ footer .link a:hover {
     height: 50px;
     line-height: 1.45;
   }
-  #request-quote-modals .step2 .option-group:not(#foo) label {
-    background-position: 22px 11px;
-  }
   #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
     background-position: 22px -51px;
   }
@@ -1613,7 +1607,6 @@ footer .link a:hover {
 }
 @media (max-width: 480px) {
   #request-quote-modals .popup {
-    min-height: auto;
     top: 20px;
   }
   #request-quote-modals .header-popap {
@@ -1641,7 +1634,7 @@ footer .link a:hover {
     line-height: 1.5;
   }
   #request-quote-modals .step .caret1 {
-    margin: 0;
+    top: 5px;
   }
   #request-quote-modals .step textarea {
     height: 150px;
@@ -1652,12 +1645,8 @@ footer .link a:hover {
     padding: 4px 0;
     margin-top: 10px;
   }
-  #request-quote-modals .step2 .option-group:not(#foo) label {
-    background-position: 11px 13px;
-    background-size: 22px;
-  }
   #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
-    background-position: 11px -25px;
+    background-position: 11px -51px;
   }
   #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"],
   #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] {
@@ -1683,16 +1672,129 @@ footer .link a:hover {
     padding: 6px;
     font-size: 14px;
   }
-  #request-quote-modals .back {
-    padding: 11px 6px;
+  #request-quote-modals .footer-popap .back {
+    padding: 11px 6px 11px 0;
     font-size: 14px;
   }
+}
+.career h2 {
+  margin: 6px 0 0 0;
+  padding: 22px 0 0 0;
+  border-top: 1px solid #b7d4ee;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #9fcae5;
+}
+.career h3 {
+  margin: 20px 0 37px 0;
+  font-size: 17px;
+  font-family: 'Raleway-Bold', sans-serif;
+  text-transform: uppercase;
+  text-align: left;
+  color: #000000;
+}
+.career p {
+  font-family: 'Raleway-Regular', sans-serif;
+  font-size: 16px;
+  color: #000000;
+}
+.career .apply {
+  width: 100%;
+  color: #000000;
+}
+.career .right-panel,
+.career .left-panel {
+  /* ul{
+            list-style: none;
+        }*/
+}
+.career .right-panel > div,
+.career .left-panel > div,
+.career .right-panel article,
+.career .left-panel article {
+  margin: 12px 0;
+  padding: 15px 27px;
+  border: 1px solid #b7d4ee;
+}
+.career .right-panel > div.hiden,
+.career .left-panel > div.hiden,
+.career .right-panel article.hiden,
+.career .left-panel article.hiden {
+  height: 225px;
+  padding: 15px  27px 65px  27px;
+  overflow: hidden;
+}
+.career .right-panel > div.hiden .read-more,
+.career .left-panel > div.hiden .read-more,
+.career .right-panel article.hiden .read-more,
+.career .left-panel article.hiden .read-more,
+.career .right-panel > div.hiden .shadow-bottom,
+.career .left-panel > div.hiden .shadow-bottom,
+.career .right-panel article.hiden .shadow-bottom,
+.career .left-panel article.hiden .shadow-bottom {
+  display: block;
+}
+.career .right-panel > div.disclosed .read-more,
+.career .left-panel > div.disclosed .read-more,
+.career .right-panel article.disclosed .read-more,
+.career .left-panel article.disclosed .read-more,
+.career .right-panel > div.disclosed .shadow-bottom,
+.career .left-panel > div.disclosed .shadow-bottom,
+.career .right-panel article.disclosed .shadow-bottom,
+.career .left-panel article.disclosed .shadow-bottom {
+  display: none;
+}
+.career .right-panel li,
+.career .left-panel li {
+  font-size: 16px;
+  font-family: 'Raleway-Regular', sans-serif;
+  color: #000000;
+}
+.career .right-panel {
+  position: fixed;
+  top: 323px;
+  right: 20px;
+}
+.career .left-panel article {
+  position: relative;
+}
+.career .left-panel article .read-more {
+  width: 50%;
+  left: 25%;
+  border: 1px solid #F7660C;
+  border-radius: 0;
+  background: #ffffff;
+  position: absolute;
+  bottom: 10px;
+  font-family: 'Raleway-Medium', sans-serif;
+  font-size: 20px;
+  color: #F7660C;
+  z-index: 100;
+}
+.career .left-panel article .read-more:hover {
+  background: #e8f6ff;
+}
+.career .left-panel article .shadow-bottom {
+  width: 100%;
+  height: 61px;
+  margin: 0 0 0 -27px;
+  position: absolute;
+  bottom: 0;
+  z-index: 90;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), white);
+  background-image: -webkit-linear-gradient(to, rgba(255, 255, 255, 0.6), white);
 }
 html,
 body {
   margin: 0;
   padding: 0;
   background: #ffffff;
+}
+h1 {
+  font-family: 'Raleway-Bold', sans-serif;
+  font-size: 55px;
+  text-align: center;
 }
 a,
 a:hover,
@@ -1717,6 +1819,18 @@ a.active {
 .page {
   margin: 157px auto 0 auto;
 }
+.btn-primary {
+  background: rgba(247, 102, 12, 0.85);
+  border: none;
+  border-radius: 0;
+  float: right;
+  font-size: 23px;
+  font-family: 'Raleway-SemiBold', sans-serif;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #F7660C!important;
+}
 .fix-height .page {
   margin: 78px auto 0 auto;
 }
@@ -1734,6 +1848,11 @@ a.active {
   }
   .fix-height .page {
     margin: 32px auto 0 auto;
+  }
+}
+@media (max-width: 600px) {
+  h1 {
+    font-size: 40px;
   }
 }
 @media (max-width: 480px) {

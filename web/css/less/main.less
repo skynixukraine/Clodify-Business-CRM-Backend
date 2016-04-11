@@ -4,6 +4,8 @@
 @import "home.less";
 @import "contact-form.less";
 @import "request-quote-modals.less";
+@import "career.less";
+
 
 
 
@@ -12,6 +14,11 @@ body{
     margin: 0;
     padding: 0;
     background: #ffffff;
+}
+h1{
+    font-family: 'Raleway-Bold', sans-serif;
+    font-size: 55px;
+    text-align: center;
 }
 a,
 a:hover,
@@ -40,6 +47,23 @@ a.active{
     //margin: 120px auto 0 auto;
     margin: 157px auto 0 auto;
 }
+.btn-primary{
+    background: rgba(247, 102, 12, 0.85);
+    border: none;
+    border-radius: 0;
+    float: right;
+    font-size: 23px;
+    font-family: 'Raleway-SemiBold', sans-serif;
+
+
+    &:hover,
+    &:focus{
+        background: #F7660C!important;
+    }
+}
+
+
+
 .fix-height .page{
 
     margin: 78px auto 0 auto;
@@ -66,6 +90,17 @@ a.active{
         margin: 32px auto 0 auto;
     }
 }
+
+
+@media (max-width: 600px ) {
+
+    h1 {
+        font-size: 40px;
+    }
+}
+
+
+
 @media (max-width: 480px ) {
 
     #about_skynix {

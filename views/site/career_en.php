@@ -14,8 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <br><br><br><br><br>
             <h1><?=Yii::t('app', 'Careers')?></h1>
 
-            <p>The page is under construction</p>
-
         </div>
+        <div class="col-lg-12"></div>
+        <div class="col-lg-8 left-panel"></div>
+        <div class="col-lg-4 right-panel"></div>
     </div>
 </div>

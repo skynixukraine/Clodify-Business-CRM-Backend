@@ -207,50 +207,48 @@ class SiteController extends Controller
             $email          = Yii::$app->request->post('email');
             $company        = Yii::$app->request->post('company');
             $country        = Yii::$app->request->post('country');
-            $model->file    = UploadedFile::getInstance($model, 'file');
 
-                $message = Yii::$app->mailer->compose('request', [
-                    'name'          => $name,
-                    'websiteState'  => $websiteState,
-                    'platform'      => $platform,
-                    'services'      => $services,
-                    'frontendPlatform'  => $frontendPlatform,
-                    'backendPlatform'   => $backendPlatform,
-                    'whenStart'         => $whenStart,
-                    'budget'            => $budget,
-                    'description'       => $description,
-                    'file'              => $file,
-                    'email'             => $email,
-                    'company'           => $company,
-                    'country'           => $country
+            $model->file    = UploadedFile::getInstanceByName('file');
 
-                ])
-                    ->setFrom(Yii::$app->params['adminEmail'])
+            $message = Yii::$app->mailer->compose('request', [
+                'name'          => $name,
+                'websiteState'  => $websiteState,
+                'platform'      => $platform,
+                'services'      => $services,
+                'frontendPlatform'  => $frontendPlatform,
+                'backendPlatform'   => $backendPlatform,
+                'whenStart'         => $whenStart,
+                'budget'            => $budget,
+                'description'       => $description,
+                'email'             => $email,
+                'company'           => $company,
+                'country'           => $country
 
-/*                    ->setTo($this->email)*/
-                    ->setTo('valeriya@skynix.co')
-                    ->setSubject('email');
+            ])->setFrom(Yii::$app->params['adminEmail'])
 
-                    if ($model->upload()) {
-                        $message->attach( dirname(__DIR__) . '/data/documents/' . $model->fileName );
+                ->setTo( Yii::$app->params['adminEmail'] )
+                ->setReplyTo( [ $email => $name ] )
+                ->setSubject('Skynix - New quote. Requested by ' . $name);
 
-                    }
-                    $message->send();
+                if ($model->upload()) {
 
-                 $response = Yii::$app->response;
-                 $response->getHeaders()->set('Vary', 'Accept');
-                 $response->format = Response::FORMAT_JSON;
+                    $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
 
-                echo json_encode([
-                    "success" => true
-                ]);
-            }
+                }
+                $message->send();
 
-        else{
+             $response = Yii::$app->response;
+             $response->getHeaders()->set('Vary', 'Accept');
+             $response->format = Response::FORMAT_JSON;
 
-                echo json_encode([
-                    "success" => false
-                ]);
+            echo json_encode([
+                "success" => true
+            ]);
+        } else {
+
+            echo json_encode([
+                "success" => false
+            ]);
         }
 
 
