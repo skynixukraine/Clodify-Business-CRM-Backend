@@ -11,7 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\components\Language;
-use app\models\Upload;
+use app\models\UploadForm;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller
@@ -188,11 +188,11 @@ class SiteController extends Controller
     /* pass the post option, and send a letter request */
     public function actionRequest()
     {
-        $model = new Upload();
+        $model = new UploadForm();
 
 
         if ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost ) {
+             Yii::$app->request->isPost ) {
 
             $websiteState   = Yii::$app->request->post('website_state');
             $platform       = Yii::$app->request->post('platform');
@@ -202,10 +202,12 @@ class SiteController extends Controller
             $whenStart      = Yii::$app->request->post('when_start');
             $budget         = Yii::$app->request->post('budget');
             $description    = Yii::$app->request->post('description');
+            $file           = Yii::$app->request->post('file');
             $name           = Yii::$app->request->post('name');
             $email          = Yii::$app->request->post('email');
             $company        = Yii::$app->request->post('company');
             $country        = Yii::$app->request->post('country');
+
             $model->file    = UploadedFile::getInstanceByName('file');
 
             $message = Yii::$app->mailer->compose('request', [
@@ -248,5 +250,7 @@ class SiteController extends Controller
                 "success" => false
             ]);
         }
+
+
     }
 }

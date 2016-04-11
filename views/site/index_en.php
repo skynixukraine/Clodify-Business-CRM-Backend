@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+use app\models\UploadForm;
 /* @var $this yii\web\View
  */
 
@@ -136,7 +138,8 @@ $this->title = 'Welcome to the Skynix - software development company';
         <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
 
 
-        <form action="site/request" class="container-fluid" method="post">
+       <!-- <form action="site/request" class="container-fluid" method="post">-->
+        <?php $form = ActiveForm::begin(['action' => "site/request", 'options' => ['enctype' => 'multipart/form-data', 'class' => "container-fluid", 'method' => "post"]]) ?>
 
 
             <div class="row body-popap">
@@ -270,7 +273,10 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                     <label class="file_upload">
                         <span class="button">UPLOAD FILE</span>
-                        <input type="file" id="file" name="file">
+                        <!--<input type="file" id="file" name="file" multiple>-->
+                        <?php /** @var $model UploadForm */
+                        echo $form->field($model, 'file')->fileInput(['type' => "file", 'id' => "file", 'name' => "file"]);?>
+                        <!--<input type="file" id="file" name="file">-->
                     </label>
                     <p class="message"></p>
 
@@ -305,7 +311,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <button class="btn btn-primary quotes">GET MY QUOTES</button>
                 </div>
             </div>
-        </form>
+       <!-- </form>-->
+        <?php ActiveForm::end() ?>
         <div class="answer-ajax">
             <p>Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes</p>
             <button class="btn btn-primary close-popap close">CLOSE</button>
