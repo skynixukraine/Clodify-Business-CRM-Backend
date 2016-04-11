@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         </div>
-        <div class="col-lg-12"><h2>Ми завжди відкриті для нових талантів!</h2></div>
+        <div class="col-lg-12 col-xs-12"><h2>Ми завжди відкриті для нових талантів!</h2></div>
         <div class="col-lg-8 col-xs-8 left-panel">
             <article >
                 <h3>Запрошуємо вас обійняти посаду Продакт Менеджера.</h3>
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <li>Виконати тестове завдання</li>
                 </ul>
             </div>
-            <button class="btn btn-primary apply">надiслати резюме</button>
+            <button class="btn btn-primary apply">НАДІСЛАТИ РЕЗЮМЕ</button>
         </div>
     </div>
 </div>

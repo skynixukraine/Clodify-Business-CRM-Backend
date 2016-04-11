@@ -1704,12 +1704,6 @@ footer .link a:hover {
   width: 100%;
   color: #000000;
 }
-.career .right-panel,
-.career .left-panel {
-  /* ul{
-            list-style: none;
-        }*/
-}
 .career .right-panel > div,
 .career .left-panel > div {
   padding: 15px 27px;
@@ -1720,6 +1714,10 @@ footer .link a:hover {
 .career .left-panel article {
   margin: 12px 0;
   border: 1px solid #b7d4ee;
+}
+.career .right-panel ul,
+.career .left-panel ul {
+  padding: 0 0 0 18px;
 }
 .career .right-panel li,
 .career .left-panel li {
@@ -1766,6 +1764,10 @@ footer .link a:hover {
 .career .left-panel article .read-more:hover {
   background: #fffaf6;
 }
+.career .left-panel article .read-more:active {
+  webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
+}
 .career .left-panel article .shadow-bottom {
   width: 100%;
   height: 61px;
@@ -1783,6 +1785,34 @@ footer .link a:hover {
 .career .left-panel article.show-text .read-more,
 .career .left-panel article.show-text .shadow-bottom {
   display: none;
+}
+@media (max-width: 950px) {
+  .career .right-panel {
+    top: 293px;
+  }
+  .career .right-panel.fix-rightPanel {
+    top: 65px;
+  }
+  .career .right-panel .btn-primary {
+    font-size: 21px;
+  }
+}
+@media (max-width: 767px) {
+  .career .left-panel article {
+    padding: 10px 10px 65px 10px;
+  }
+  .career .right-panel {
+    top: 232px;
+  }
+  .career .right-panel.fix-rightPanel {
+    top: 35px;
+  }
+  .career .right-panel > div {
+    padding: 10px;
+  }
+  .career .right-panel .btn-primary {
+    font-size: 18px;
+  }
 }
 html,
 body {
