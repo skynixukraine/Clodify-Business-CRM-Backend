@@ -11,7 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\components\Language;
-use app\models\UploadForm;
+use app\models\Upload;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller
@@ -188,7 +188,7 @@ class SiteController extends Controller
     /* pass the post option, and send a letter request */
     public function actionRequest()
     {
-        $model = new UploadForm();
+        $model = new Upload();
 
 
         if ( Yii::$app->request->isAjax &&
@@ -207,48 +207,50 @@ class SiteController extends Controller
             $email          = Yii::$app->request->post('email');
             $company        = Yii::$app->request->post('company');
             $country        = Yii::$app->request->post('country');
+            $model->file    = UploadedFile::getInstance($model, 'file');
 
-            $model->file    = UploadedFile::getInstanceByName('file');
+                $message = Yii::$app->mailer->compose('request', [
+                    'name'          => $name,
+                    'websiteState'  => $websiteState,
+                    'platform'      => $platform,
+                    'services'      => $services,
+                    'frontendPlatform'  => $frontendPlatform,
+                    'backendPlatform'   => $backendPlatform,
+                    'whenStart'         => $whenStart,
+                    'budget'            => $budget,
+                    'description'       => $description,
+                    'file'              => $file,
+                    'email'             => $email,
+                    'company'           => $company,
+                    'country'           => $country
 
-            $message = Yii::$app->mailer->compose('request', [
-                'name'          => $name,
-                'websiteState'  => $websiteState,
-                'platform'      => $platform,
-                'services'      => $services,
-                'frontendPlatform'  => $frontendPlatform,
-                'backendPlatform'   => $backendPlatform,
-                'whenStart'         => $whenStart,
-                'budget'            => $budget,
-                'description'       => $description,
-                'email'             => $email,
-                'company'           => $company,
-                'country'           => $country
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo('valeriya@skynix.co' )
+                    ->setReplyTo( [ $email => $name ] )
+                    ->setSubject('Skynix - New quote. Requested by ' . $name);
 
-            ])->setFrom(Yii::$app->params['adminEmail'])
+                    if ($model->upload()) {
 
-                ->setTo( Yii::$app->params['adminEmail'] )
-                ->setReplyTo( [ $email => $name ] )
-                ->setSubject('Skynix - New quote. Requested by ' . $name);
+                         $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
 
-                if ($model->upload()) {
+                    }
+                    $message->send();
 
-                    $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
+                 $response = Yii::$app->response;
+                 $response->getHeaders()->set('Vary', 'Accept');
+                 $response->format = Response::FORMAT_JSON;
 
-                }
-                $message->send();
+                echo json_encode([
+                    "success" => true
+                ]);
+            }
 
-             $response = Yii::$app->response;
-             $response->getHeaders()->set('Vary', 'Accept');
-             $response->format = Response::FORMAT_JSON;
+        else{
 
-            echo json_encode([
-                "success" => true
-            ]);
-        } else {
-
-            echo json_encode([
-                "success" => false
-            ]);
+                echo json_encode([
+                    "success" => false
+                ]);
         }
 
 

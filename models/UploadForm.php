@@ -5,23 +5,24 @@
  * Date: 08.04.16
  * Time: 11:48
  */
-namespace app\models;
+/*namespace app\models;
 
+use Yii;
 use yii\base\Model;
-use yii\web\UploadedFile;
+use yii\web\UploadedFile;*/
 
-class UploadForm extends Model
+/*class UploadForm extends Model
 {
     /**
      * @var UploadedFile file attribute
      */
-    public $file;
+    /*public $file;
     public $fileName;
 
     public function rules()
     {
         return [
-            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'doc, odt, txt'],
+            [['file'], 'file', 'skipOnEmpty' => false],
         ];
     }
 
@@ -30,12 +31,28 @@ class UploadForm extends Model
 
 
         if ($this->validate()) {
-            foreach ($this->files as $file) {
-                $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
+            $this->fileName = time() . "_" . $this->file->baseName . '.' . $this->file->extension;
+            $path = Yii::getAlias('@app/data/documents/');
+
+            if ( !file_exists( $path ) ) {
+
+                mkdir( $path, 0775);
+                chmod( $path, 0775);
+
             }
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
+
+            $this->file->saveAs( $path . $this->fileName );
+             return true;
+
+
+         } else {
+
+
+             return false;
+
+
+         }
+
+    }*/
+
+//}
