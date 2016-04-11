@@ -11,7 +11,7 @@
 <ul>
    <li> Website State : <?php echo $websiteState;?></li>
    <li>Platform : <?php echo $platform;?></li>
-   <li>Services : <?php echo $services;?></li>
+   <!--<li>Services : <?php /*echo $services;*/?></li>-->
    <li>Frontend Platform : <?php echo $frontendPlatform;?>
    <li>Backend Platform : <?php echo $backendPlatform;?>
    <li>When Start : <?php echo $whenStart;?>

@@ -11,7 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\components\Language;
-use app\models\Upload;
+use app\models\UploadForm;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller
@@ -188,41 +188,41 @@ class SiteController extends Controller
     /* pass the post option, and send a letter request */
     public function actionRequest()
     {
-        $model = new Upload();
+        $model = new UploadForm();
 
 
         if ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost )
-        {
-            $websiteState = Yii::$app->request->post('website_state');
-            $platform = Yii::$app->request->post('platform');
-            $services = Yii::$app->request->post('services');
-            $frontendPlatform= Yii::$app->request->post('frontend_platform');
-            $backendPlatform = Yii::$app->request->post('backend_platform');
-            $whenStart = Yii::$app->request->post('when_start');
-            $budget = Yii::$app->request->post('budget');
-            $description = Yii::$app->request->post('description');
-            $file= Yii::$app->request->post('file');
-            $name = Yii::$app->request->post('name');
-            $email = Yii::$app->request->post('email');
-            $company = Yii::$app->request->post('company');
-            $country = Yii::$app->request->post('country');
-            $model->file = UploadedFile::getInstanceByName($file);
+             Yii::$app->request->isPost ) {
+
+            $websiteState   = Yii::$app->request->post('website_state');
+            $platform       = Yii::$app->request->post('platform');
+            $services       = Yii::$app->request->post('services');
+            $frontendPlatform   = Yii::$app->request->post('frontend_platform');
+            $backendPlatform    = Yii::$app->request->post('backend_platform');
+            $whenStart      = Yii::$app->request->post('when_start');
+            $budget         = Yii::$app->request->post('budget');
+            $description    = Yii::$app->request->post('description');
+            $file           = Yii::$app->request->post('file');
+            $name           = Yii::$app->request->post('name');
+            $email          = Yii::$app->request->post('email');
+            $company        = Yii::$app->request->post('company');
+            $country        = Yii::$app->request->post('country');
+            $model->file    = UploadedFile::getInstance($model, 'file');
 
                 $message = Yii::$app->mailer->compose('request', [
-                    'name' => $name,
-                    'websiteState' => $websiteState,
-                    'platform' => $platform,
-                    'services' => $services,
-                    'frontendPlatform' => $frontendPlatform,
-                    'backendPlatform' => $backendPlatform,
-                    'whenStart' => $whenStart,
-                    'budget' => $budget,
-                    'description' => $description,
-                    'file' => $file,
-                    'email' => $email,
-                    'company' => $company,
-                    'country' => $country
+                    'name'          => $name,
+                    'websiteState'  => $websiteState,
+                    'platform'      => $platform,
+                    'services'      => $services,
+                    'frontendPlatform'  => $frontendPlatform,
+                    'backendPlatform'   => $backendPlatform,
+                    'whenStart'         => $whenStart,
+                    'budget'            => $budget,
+                    'description'       => $description,
+                    'file'              => $file,
+                    'email'             => $email,
+                    'company'           => $company,
+                    'country'           => $country
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
@@ -232,7 +232,7 @@ class SiteController extends Controller
                     ->setSubject('email');
 
                     if ($model->upload()) {
-                        $message->attach( getcwd() . '/data/documents/' . $model->fileName );
+                        $message->attach( dirname(__DIR__) . '/data/documents/' . $model->fileName );
 
                     }
                     $message->send();
@@ -244,11 +244,15 @@ class SiteController extends Controller
                 echo json_encode([
                     "success" => true
                 ]);
-            }else{
+            }
+
+        else{
 
                 echo json_encode([
                     "success" => false
                 ]);
         }
+
+
     }
 }
