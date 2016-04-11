@@ -1797,7 +1797,7 @@ footer .link a:hover {
     font-size: 21px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .career .left-panel article {
     padding: 10px 10px 65px 10px;
   }

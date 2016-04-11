@@ -53,8 +53,9 @@ var career = (function(){
 
             $(document).scroll(function() {
 
-                if(htmlwidth > 767){
+                if(htmlwidth > 768){
 
+                    console.log("ddddddd");
                     scrollRightPanel = $(document).scrollTop();
 
                     console.log(scrollRightPanel);
