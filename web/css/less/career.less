@@ -159,15 +159,25 @@
 
             article {
                 padding: 10px 10px 65px 10px;
+
+                .shadow-bottom {
+
+                    margin: 0 0 0 -10px;
+                }
             }
         }
         .right-panel {
-            top: 232px;
+            /*top: 232px;
 
             &.fix-rightPanel{
 
                 top: 35px;
-            }
+            }*/
+            margin: 0 0 50px 0;
+            position: relative;
+            top: 20px;
+            right: 0;
+
             > div {
                 padding: 10px;
             }
@@ -183,4 +193,23 @@
 
 
 }
+@media (max-width: 480px ) {
+
+    .career{
+
+        .left-panel{
+
+            article{
+
+                .read-more {
+                    width: 66%;
+                    left: 17%;
+                }
+            }
+        }
+    }
+
+
+}
+
 

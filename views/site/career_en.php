@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="col-lg-12 col-xs-12"><h2>We are always open for new talent!</h2></div>
-        <div class="col-lg-8 col-xs-8 left-panel">
+        <div class="col-lg-8 col-sm-8 col-xs-12 left-panel">
             <article >
                 <h3>You are welcome to obtain a Product Manager position.</h3>
                 <p>
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         </div>
-        <div class="col-lg-4 col-xs-4 right-panel">
+        <div class="col-lg-4 col-sm-4 col-xs-12 right-panel">
             <div class="offer">
                 <h3>WE OFFER:</h3>
                 <ul>

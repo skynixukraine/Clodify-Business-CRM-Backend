@@ -7,6 +7,7 @@ var career = (function(){
     var BtnReadMore,
         articleShow,
         htmlPage,
+        htmlwidth,
         elem,
         scrollRightPanel,
         rightPanel;
@@ -15,8 +16,9 @@ var career = (function(){
 
         init: function(){
             htmlPage        = $('body, html');
-            BtnReadMore = $('.read-more');
-            rightPanel = $(".right-panel");
+            BtnReadMore     = $('.read-more');
+            rightPanel      = $(".right-panel");
+            htmlwidth       = htmlPage.width();
 
             BtnReadMore.click(function(event) {
 
@@ -51,14 +53,17 @@ var career = (function(){
 
             $(document).scroll(function() {
 
-                scrollRightPanel = $(document).scrollTop();
+                if(htmlwidth > 767){
 
-                console.log(scrollRightPanel);
-                if(scrollRightPanel > 240){
+                    scrollRightPanel = $(document).scrollTop();
 
-                    rightPanel.addClass('fix-rightPanel');
-                }else{
-                    rightPanel.removeClass('fix-rightPanel');
+                    console.log(scrollRightPanel);
+                    if(scrollRightPanel > 240){
+
+                        rightPanel.addClass('fix-rightPanel');
+                    }else{
+                        rightPanel.removeClass('fix-rightPanel');
+                    }
                 }
 
             });
