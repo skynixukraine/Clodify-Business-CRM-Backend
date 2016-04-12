@@ -9,7 +9,8 @@ var career = (function(){
         popupBox,
         popup,
         txtPopup,
-        close;
+        close,
+        htmlPage;
 
     /*var BtnReadMore,
         articleShow,
@@ -24,6 +25,7 @@ var career = (function(){
             popupBox        = $('.popup-box');
             popup           = popupBox.find('.popup-career');
             close           = popupBox.find('.close');
+            htmlPage        = $('body');
 
             BtnReadMore.click(function(event) {
 
@@ -32,9 +34,9 @@ var career = (function(){
                 txtPopup    = elem.closest("article").find(".txt").clone();
                 popupBox.css('display', 'block');
                 popup.find('.body').html(txtPopup);
-                popup.css('top', elem.closest("article").position().top);
 
-
+console.log(htmlPage.scrollTop()+10);
+                popup.css("top", htmlPage.scrollTop()+10);
 
 
                 return false
