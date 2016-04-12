@@ -115,29 +115,7 @@ class TeammateController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
     }
-    /** Add the user to the team */
-    public function actionCreate()
-    {
-        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
-            $model = new Teammate();
-
-            $model->scenario = "admin";
-
-            if ($model->load(Yii::$app->request->post())) {
-
-                $model->status = Teammate::STATUS_NEW;
-
-                if ($model->validate()) {
-
-                    $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created user " . $model->id));
-                    return $this->redirect(['view']);
-
-                }
-            }
-        }
-    }
 
     public function actionView()
     {
