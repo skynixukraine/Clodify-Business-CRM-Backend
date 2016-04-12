@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-        <div class="col-lg-12 col-xs-12"><h2>We are always open for new talent</h2></div>
+        <div class="col-lg-12 col-xs-12"><h2>We are always open for a new talent</h2></div>
         <div class="col-lg-8 col-sm-8 col-xs-12 left-panel">
             <article >
                 <div class="txt">
@@ -33,13 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li>Good knowledge of the digital economy and e-commerce;</li>
                         <li>Flawless written and spoken communication skills;</li>
                         <li>Creative and analytical thinking;</li>
-                        <li>Ability to work in a team</li>
+                        <li>Ability to work in a team;</li>
                     </ul>
                     <h3>will be a plus:</h3>
                     <ul>
                         <li>Fluent english;</li>
                         <li>Work experience in a similar position;</li>
-                        <li>Knowledge of JIRA  and SCRUM</li>
+                        <li>Knowledge of JIRA  and SCRUM;</li>
                     </ul>
                     <h3>job responsibilities:</h3>
                     <ul>
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li>Forming of information-analytical database;</li>
                         <li>Creating, updating and maintenance of content products;</li>
                         <li>Control of the process of product development;</li>
-                        <li>Negotiations with customers and technical support</li>
+                        <li>Negotiations with customers and technical support;</li>
                     </ul>
                 </div>
                 <div class="shadow-bottom"></div>
@@ -58,10 +58,33 @@ $this->params['breadcrumbs'][] = $this->title;
             </article>
             <article >
                 <div class="txt">
-                    <h3>We invite you to obtain af Front-end developer position.</h3>
+                    <h3>We invite you to obtain a Front-end developer position.</h3>
                     <p>
-                        In this role you will primarily create user interfaces, HTML templates  and themes for Magento, Wordpress, and othe systems using Photoshop mockups.
+                        In this role you will primarily create user interfaces, HTML templates  and themes for Magento, Wordpress, and other systems using Photoshop mockups.
                     </p>
+                    <h3>Requirements to a candidate:</h3>
+                    <ul>
+                        <li>Base knowledges of Photoshop;</li>
+                        <li>High level skills of HTML5 and CSS3;</li>
+                        <li>Good knowledges of WEP and HTTP;</li>
+                        <li>Knowledge of english at least at intermediate level;</li>
+                        <li>Creativity;</li>
+                        <li>Ability to work in a team;</li>
+                    </ul>
+                    <h3>will be a plus:</h3>
+                    <ul>
+                        <li>Knowledges of Twitter Bootstrap;</li>
+                        <li>Knowledges of Javascript, jQuery, AngularJS;</li>
+                        <li>Experience on similar position in IT companies;</li>
+                        <li>Knowledge of JIRA  and SCRUM;</li>
+                    </ul>
+                    <h3>job responsibilities:</h3>
+                    <ul>
+                        <li>Coding HTML templates according to PSD mockups;</li>
+                        <li>Creating themes for Magento, Wordpress etc.;</li>
+                        <li>Development of Javascript widgets, plugins and modules;</li>
+                        <li>Integration of different social networks such as Facebook, Linkedin, Twitter;</li>
+                    </ul>
                 </div>
                 <div class="shadow-bottom"></div>
                 <button class="btn read-more">READ MORE &gt; &gt;</button>
