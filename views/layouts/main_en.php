@@ -102,7 +102,12 @@ AppAsset::register($this);
             <?= date('Y') ?> All Rights Reserved. Skynix ltd.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <a href="<?=Url::to(['site/login'])?>">log in</a>
+            <?php if(Yii::$app->user->id != null):?>
+                <a href="<?=Url::to(['site/logout'])?>">log out</a>
+            <?php endif;?>
+            <?php if(Yii::$app->user->id == null):?>
+                <a href="<?=Url::to(['site/login'])?>">log in</a>
+            <?php endif;?>
         </div>
     </div>
 </footer>

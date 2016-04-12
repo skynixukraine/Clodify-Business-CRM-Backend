@@ -69,9 +69,9 @@ class SiteController extends Controller
     /** New or invited user login  */
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+       /* if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
-        }
+        }*/
 
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
