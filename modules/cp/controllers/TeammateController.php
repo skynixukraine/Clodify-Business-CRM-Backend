@@ -47,5 +47,55 @@ class TeammateController extends DefaultController
         return $this->render('index');
     }
 
+<<<<<<< Updated upstream
+=======
+        $dataTable->setFilter('is_deleted=0');
+
+
+        $activeRecordsData = $dataTable->getData();
+        $list = array();
+        /* @var $model \app\models\Team */
+        foreach ( $activeRecordsData as $model ) {
+
+            $list[] = [
+                $model->id,
+                $model->name,
+                $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+                Teammate::teammateUser($model->id),
+                $model->date_created,
+            ];
+        }
+
+        $data = [
+            "draw"              => DataTable::getInstance()->getDraw(),
+            "recordsTotal"      => DataTable::getInstance()->getTotal(),
+            "recordsFiltered"   => DataTable::getInstance()->getTotal(),
+            "data" => $list
+        ];
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->content = json_encode($data);
+        Yii::$app->end();
+    }
+    public function actionView()
+    {
+
+        if (( $teamId = Yii::$app->request->get("id") ) ) {
+
+            $model = Team::find()
+                ->where("id=:teamiD",
+                    [
+                        ':teamiD' => $teamId
+                    ])
+                ->one();
+
+
+        }
+        /*return $this->render('view', ['model' => $model]);*/
+
+        /** @var $model Team */
+        return $this->render('view', ['model' => $model,
+            'title' => 'List of Teammates  #' . $model->id]);
+    }
+>>>>>>> Stashed changes
 
 }

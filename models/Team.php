@@ -59,4 +59,29 @@ class Team extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+<<<<<<< Updated upstream
+=======
+    public static function hasTeam($currentUserId)
+    {
+        $users_id = Team::find()->where(Team::tableName() . '.is_deleted=0')->all();
+        $userId = [];
+        foreach($users_id as $id){
+            $userId[] = $id->user_id;
+        }
+        $user_id = Teammate::find()->all();
+        foreach($user_id as $id){
+            $userId[] = $id->user_id;
+        }
+        if(in_array($currentUserId,$userId)){
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+>>>>>>> Stashed changes
 }

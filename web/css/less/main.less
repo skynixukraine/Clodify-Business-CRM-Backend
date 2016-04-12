@@ -3,6 +3,10 @@
 @import "header-footer.less";
 @import "home.less";
 @import "contact-form.less";
+@import "request-quote-modals.less";
+@import "career.less";
+
+
 
 
 html,
@@ -11,18 +15,114 @@ body{
     padding: 0;
     background: #ffffff;
 }
+h1{
+    font-family: 'Raleway-Bold', sans-serif;
+    font-size: 55px;
+    text-align: center;
+}
 a,
 a:hover,
 a:active,
-a:focus{
-    outline: 0;
+a:focus,
+button,
+button:hover,
+button:active,
+button:focus,
+input
+input:hover,
+input:active,
+input:focus,
+textarea,
+textarea:hover,
+textarea:active,
+textarea:focus{
+    outline: 0!important;
 }
 
 a.active{
     cursor: default;
 }
+.page{
+
+    //margin: 120px auto 0 auto;
+    margin: 157px auto 0 auto;
+}
+.btn-primary{
+    background: rgba(247, 102, 12, 0.85);
+    border: none;
+    border-radius: 0;
+    float: right;
+    font-size: 23px;
+    font-family: 'Raleway-SemiBold', sans-serif;
 
 
+    &:hover,
+    &:focus{
+        background: #F7660C!important;
+    }
+}
+
+
+
+.fix-height .page{
+
+    margin: 78px auto 0 auto;
+}
+.close{
+    width: 16px;
+    height: 15px;
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    background: url(../img/x.png) no-repeat;
+    opacity: .5;
+    filter: alpha(opacity=50);
+
+    &:hover{
+
+        opacity: 1;
+        filter: alpha(opacity=1);
+    }
+}
+@media (max-width: 949px ) {
+
+    .page{
+
+        margin: 127px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 63px auto 0 auto;
+    }
+}
+@media (max-width: 768px){
+
+    .page{
+
+        margin: 65px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 32px auto 0 auto;
+    }
+}
+
+
+@media (max-width: 600px ) {
+
+    h1 {
+        font-size: 40px;
+    }
+}
+
+
+
+@media (max-width: 480px ) {
+
+    #about_skynix {
+        margin: 64px 0 0 0;
+    }
+}
 
 
 
