@@ -91,9 +91,9 @@ return{
 
             event.preventDefault();
 
-            bgForPopup.fadeIn(500);
-            popup.fadeIn(1000);
-            popup.slideDown(500);
+            bgForPopup.fadeIn(200);
+            popup.fadeIn(300);
+            popup.slideDown(200);
 
             popup.css("top", htmlPage.scrollTop()+10);
 

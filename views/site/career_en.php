@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
 
-            <a href="#" class="btn btn-primary apply">APPLY NOW</a>
+            <a href="<?=\yii\helpers\Url::to(['site/contact'])?>" class="btn btn-primary apply">APPLY NOW</a>
         </div>
 
         <div class="col-lg-12 col-xs-12 popup-box">
