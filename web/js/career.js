@@ -5,15 +5,59 @@
 var career = (function(){
 
     var BtnReadMore,
+        elem,
+        popupBox,
+        popup,
+        txtPopup,
+        close;
+
+    /*var BtnReadMore,
         articleShow,
         htmlPage,
-        elem;
+        elem;*/
 
     return{
 
         init: function(){
-            htmlPage        = $('body, html');
+
             BtnReadMore     = $('.read-more');
+            popupBox        = $('.popup-box');
+            popup           = popupBox.find('.popup-career');
+            close           = popupBox.find('.close');
+
+            BtnReadMore.click(function(event) {
+
+                event.preventDefault();
+                elem        = $(this);
+                txtPopup    = elem.closest("article").find(".txt").clone();
+                popupBox.css('display', 'block');
+                popup.find('.body').html(txtPopup);
+                popup.css('top', elem.closest("article").position().top);
+
+
+
+
+                return false
+
+            });
+            close.click(function(event) {
+
+                event.preventDefault();
+                elem        = $(this);
+                popup.find('.body').html("");
+                popupBox.css('display', 'none');
+
+
+                return false
+            });
+
+
+
+            /*htmlPage        = $('body, html');
+            BtnReadMore     = $('.read-more');
+
+
+
 
             BtnReadMore.click(function(event) {
 
@@ -44,7 +88,7 @@ var career = (function(){
 
                 }
 
-            });
+            });*/
             
         }
     }
