@@ -52,7 +52,7 @@ var requestQuoteModals = (function(){
 return{
 
     init: function(){
-        htmlPage        = $('body, html');
+        htmlPage        = $('body');
         bgForPopup      = $('#request-quote-modals');
         popup           = bgForPopup.find(".popup");
         progressBar     = $(".progress-bar");
@@ -72,14 +72,14 @@ return{
         formStep.hide().attr("aria-hidden", true);
         formStep.eq(0).show().attr("aria-hidden", false);
 
-        if(htmlHeight < 900){
+        /*if(htmlHeight < 900){
 
             bgForPopup.css('position', 'absolute');
 
         }else{
 
             bgForPopup.css('position', 'fixed');
-        }
+        }*/
 
 
         for(var i=0; i < formStep.length; i++){
@@ -91,12 +91,14 @@ return{
 
             event.preventDefault();
 
-            bgForPopup.fadeIn(500);
-            popup.fadeIn(1000);
-            popup.slideDown(500);
+            bgForPopup.fadeIn(200);
+            popup.fadeIn(300);
+            popup.slideDown(200);
+
+            popup.css("top", htmlPage.scrollTop()+10);
 
 
-            htmlPage.animate({scrollTop:0},500);
+            //htmlPage.animate({scrollTop:0},500);
 
             return false;
 
@@ -134,9 +136,9 @@ return{
             required = elem.find("[data-required=null]");
             message.html("");
 
+
             if(required.length > 0){
 
-                console.log("Please make a choose to go ahead");
                 error.html("Please make a choose to go ahead");
                 return false
 
@@ -163,6 +165,20 @@ return{
             }
             if(step == 1){
 
+
+
+                checkedElemStep = elem.find("input[name='services[]']:checked");
+
+                if(required.length > 0 || checkedElemStep.length == 0){
+
+                    error.html("Please make a choose to go ahead");
+                    return false
+
+                }else{
+
+                    error.html("");
+
+                }
                 //skip step 3
                 checkedElemStep = formStep.eq(0).find(":checked");
                 if(checkedElemStep.val().indexOf("Active site application") == 0 ||
@@ -172,18 +188,6 @@ return{
                     step = 3;
                     ariaHiddenElem();
                     return false
-
-                }
-                checkedElemStep = elem.find("input[name='services[]']:checked");
-                if(required.length > 0 || checkedElemStep.length == 0){
-
-                    console.log("Please make a choose to go ahead");
-                    error.html("Please make a choose to go ahead");
-                    return false
-
-                }else{
-
-                    error.html("");
 
                 }
             }
