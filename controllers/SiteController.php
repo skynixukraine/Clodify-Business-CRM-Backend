@@ -28,6 +28,7 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+
                 ],
             ]
         ];
@@ -72,9 +73,9 @@ class SiteController extends Controller
     /** New or invited user login  */
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        /*if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
-        }
+        }*/
 
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
@@ -115,7 +116,8 @@ class SiteController extends Controller
             } else {
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
-                return $this->render('login', ['model' => $model]);
+                /*return $this->render('login', ['model' => $model]);*/
+                return $this->refresh();
             }
         }
         return $this->render('login_' . Language::getLanguage() , ['model' => $model]);

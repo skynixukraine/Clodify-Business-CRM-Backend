@@ -102,7 +102,17 @@ AppAsset::register($this);
             <?= date('Y') ?> Усі права захищені. Скайнікс.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <a href="<?=Url::to(['site/login'])?>">увійти</a>
+            <?php
+            if (Yii::$app->user->id != null):?>
+                <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
+                <a href="<?=Url::to(['site/logout'])?>">вийти</a>
+            <?php endif;?>
+            <?php
+            if (Yii::$app->user->id ==null ):?>
+                <a href="<?=Url::to(['site/login'])?>">увійти</a>
+
+            <?php endif;?>
+
         </div>
     </div>
 </footer>
