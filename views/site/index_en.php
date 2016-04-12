@@ -279,7 +279,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                     <label class="file_upload">
                         <span class="button">UPLOAD FILE</span>
-                        <input type="file" id="file" name="file" multiple>
+                        <input type="file" id="file" name="file">
                     </label>
 
 

@@ -202,7 +202,6 @@ class SiteController extends Controller
             $whenStart      = Yii::$app->request->post('when_start');
             $budget         = Yii::$app->request->post('budget');
             $description    = Yii::$app->request->post('description');
-            $file           = Yii::$app->request->post('file');
             $name           = Yii::$app->request->post('name');
             $email          = Yii::$app->request->post('email');
             $company        = Yii::$app->request->post('company');
@@ -219,7 +218,6 @@ class SiteController extends Controller
                     'whenStart'         => $whenStart,
                     'budget'            => $budget,
                     'description'       => $description,
-                    'file'              => $file,
                     'email'             => $email,
                     'company'           => $company,
                     'country'           => $country
