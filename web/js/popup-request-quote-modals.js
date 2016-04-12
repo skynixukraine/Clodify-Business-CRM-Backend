@@ -134,9 +134,9 @@ return{
             required = elem.find("[data-required=null]");
             message.html("");
 
+           
             if(required.length > 0){
 
-                console.log("Please make a choose to go ahead");
                 error.html("Please make a choose to go ahead");
                 return false
 
@@ -163,6 +163,20 @@ return{
             }
             if(step == 1){
 
+
+
+                checkedElemStep = elem.find("input[name='services[]']:checked");
+
+                if(required.length > 0 || checkedElemStep.length == 0){
+
+                    error.html("Please make a choose to go ahead");
+                    return false
+
+                }else{
+
+                    error.html("");
+
+                }
                 //skip step 3
                 checkedElemStep = formStep.eq(0).find(":checked");
                 if(checkedElemStep.val().indexOf("Active site application") == 0 ||
@@ -172,18 +186,6 @@ return{
                     step = 3;
                     ariaHiddenElem();
                     return false
-
-                }
-                checkedElemStep = elem.find("input[name='services[]']:checked");
-                if(required.length > 0 || checkedElemStep.length == 0){
-
-                    console.log("Please make a choose to go ahead");
-                    error.html("Please make a choose to go ahead");
-                    return false
-
-                }else{
-
-                    error.html("");
 
                 }
             }

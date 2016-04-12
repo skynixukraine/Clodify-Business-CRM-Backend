@@ -35,7 +35,7 @@ var career = (function(){
                 popup.css('top', elem.closest("article").position().top);
 
 
-
+console.log(elem.closest("article").position().top);
 
                 return false
 
