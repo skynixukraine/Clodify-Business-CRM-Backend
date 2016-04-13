@@ -160,6 +160,7 @@ class UserController extends DefaultController {
             'first_name',
             'role',
             'email',
+            'company',
             'phone',
             'date_login',
             'date_signup',
@@ -242,6 +243,7 @@ class UserController extends DefaultController {
                     $userEmailes->first_name = $model->first_name;
                     $userEmailes->last_name = $model->last_name;
                     $userEmailes->role = $model->role;
+                    $userEmailes->company = $model->company;
                     $userEmailes->password = $model->password;
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
