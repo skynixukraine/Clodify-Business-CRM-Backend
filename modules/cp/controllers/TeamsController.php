@@ -156,7 +156,7 @@ class TeamsController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         /**accepts a parameter 'team_id' in teammate_view.js*/
-        $team_Id         = Yii::$app->request->getQueryParam('teamId');
+        $team_Id         = Yii::$app->request->getQueryParam('team_id');
 
         $query = Teammate::find();
 

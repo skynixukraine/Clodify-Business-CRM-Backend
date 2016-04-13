@@ -78,7 +78,7 @@ var TeammateModule = (function() {
                 $('#myInput').focus()
             });
 
-            dataFilter['teamId'] = team_id;
+            dataFilter['team_id'] = team_id;
             /*$('.modal').on('click', '.sendForm', function() {
                 var form = $(this).closest('form');
                 $.post(
