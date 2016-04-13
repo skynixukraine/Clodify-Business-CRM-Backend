@@ -93,7 +93,7 @@ class TeammateController extends DefaultController
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
-        /* @var $model \app\models\Team */
+        /** @var $model \app\models\Team */
         foreach ( $activeRecordsData as $model ) {
 
             $list[] = [
@@ -115,9 +115,10 @@ class TeammateController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
     }
+
+
     public function actionView()
     {
-
         if (( $teamId = Yii::$app->request->get("id") ) ) {
 
             $model = Team::find()
@@ -127,14 +128,22 @@ class TeammateController extends DefaultController
                     ])
                 ->one();
 
+        if ( $model->load(Yii::$app->request->post()) ) {
+            $model1 = new Teammate();
 
+            if ($model->validate()) {
+
+                $model1->team_id = $model->id;
+                $model1->user_id = $model->user_id;
+                $model1->save();
+            }
+        }
         }
         /*return $this->render('view', ['model' => $model]);*/
 
-        /** @var $model Team */
+        /** @var $model Teammate */
         return $this->render('view', ['model' => $model,
             'title' => 'List of Teammates  #' . $model->id]);
     }
-
 
 }

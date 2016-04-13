@@ -16,8 +16,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", $title);
-$this->params['breadcrumbs'][]  = $this->title;
-
+$this->params['breadcrumbs']  = [
+    [
+        'label' => Yii::t('app', 'List of invoices'),
+        'url' => Url::to(['invoice/index'])
+    ]
+];
 $this->params['menu'] = [
     [
         'label' => Yii::t('app', 'Invoices'),

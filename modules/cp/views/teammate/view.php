@@ -33,6 +33,8 @@ $this->params['menu'] = [
 <li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
 <li> Date of Creation: <?php echo $model->date_created ?></li>
 </ul>
+<?php  ActiveForm::end();?>
+<?php $form =  ActiveForm::begin();?>
 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
         APPEND
@@ -50,7 +52,7 @@ $this->params['menu'] = [
                         User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
                     $listReport = \yii\helpers\ArrayHelper::map( $teammates, 'id', 'first_name' );
 
-                    echo $form->field( $model, 'teammate', [
+                    echo $form->field( $model, 'user_id', [
 
                         'options' => [
 
@@ -68,7 +70,7 @@ $this->params['menu'] = [
 <?php endif;?>
 
 <?php  ActiveForm::end();?>
-<table id="teammates-table" class="table table-hover">
+<table id="teammates-table" class="table table-hover box">
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'User ID')?></th>

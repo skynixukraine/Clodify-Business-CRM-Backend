@@ -148,6 +148,19 @@ class InvoiceController extends DefaultController
 
         if ($model->load(Yii::$app->request->post())) {
 
+            /** Invoice - total logic */
+            if($model->total != null && $model->discount == null){
+
+                $model->discount = 0;
+                $model->subtotal = $model->total;
+
+            }
+            if($model->total !=null && $model->discount != null){
+
+                $model->subtotal = $model->total;
+                $model->total = ( $model->subtotal - $model->discount );
+
+            }
             if ($model->validate()) {
 
                 $model->save();
