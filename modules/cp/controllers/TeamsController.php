@@ -51,7 +51,7 @@ class TeamsController extends DefaultController
                 'actions' => [
                     'index'     => ['get', 'post'],
                     'find'      => ['get'],
-                    'find2'      => ['get'],
+                    'find2'      => ['get', 'post'],
                     'view'      => ['get', 'post'],
 
                 ],
@@ -61,21 +61,8 @@ class TeamsController extends DefaultController
 
     public function actionIndex()
     {
-        /*if (!Team::find()->andWhere(['user_id'=>Yii::$app->user->id])->count())
-        {
-            throw new \yii\web\ForbiddenHttpException;
-        }*/
         return $this->render('index');
     }
-    /*public function actionFilter($filtr)
-    {
-        $query = Team::find()->andWhere([Team::tableName() . '.user_id'=>Yii::$app->user->id])->count();
-
-        if (!Yii::$app->user->id){
-            throw new \yii\web\ForbiddenHttpException;
-        }
-        return $filtr;
-    }*/
 
     public function actionFind()
     {
@@ -169,10 +156,9 @@ class TeamsController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         /**accepts a parameter 'team_id' in teammate_view.js*/
-        $teamId         = Yii::$app->request->getQueryParam('team_id');
+        $team_Id         = Yii::$app->request->getQueryParam('teamId');
 
         $query = Teammate::find();
-            //->leftJoin(User::tableName(), Teammate::tableName() . '.user_id=' . User::tableName() . '.id');
 
         $columns        = [
             'user_id',
@@ -181,7 +167,6 @@ class TeamsController extends DefaultController
             'email',
             'phone',
             'project_id',
-
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -194,16 +179,10 @@ class TeamsController extends DefaultController
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
-        //$dataTable->setFilter('is_deleted=0');
+        if($team_Id) {
 
-        if($teamId) {
-            $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $teamId);
+            $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $team_Id);
         }
-        /*if ( $team = Yii::$app->request->get("id") ){
-            $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $team);
-        }*/
-
-
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\Teammate */
@@ -212,6 +191,7 @@ class TeamsController extends DefaultController
             $projects = Project::projectsName($model->user_id);
             $project = [];
             foreach ($projects as $itemId) {
+
                 $project[] = $itemId->name;
             }
 
@@ -222,7 +202,6 @@ class TeamsController extends DefaultController
                  $model->getUse($model->user_id)->email,
                  $model->getUse($model->user_id)->phone,
                  implode(', ', $project),
-
             ];
         }
         $data = [
@@ -236,6 +215,7 @@ class TeamsController extends DefaultController
         Yii::$app->end();
 
     }
+
     public function actionView()
     {
         if (( $teamId = Yii::$app->request->get("id") ) ) {
@@ -251,5 +231,4 @@ class TeamsController extends DefaultController
         return $this->render('view', ['model' => $model,
             'title' => 'List of Teammates  #' . $model->team_id]);
     }
-
 }

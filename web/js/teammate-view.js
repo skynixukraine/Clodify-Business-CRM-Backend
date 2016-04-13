@@ -59,6 +59,17 @@ var TeammateModule = (function() {
         });
 
     }
+    function parseGetParams() {
+
+        var __GET = window.location.search.substring(1).split("&");
+        for(var i=0; i<__GET.length; i++) {
+            var getVar = __GET[i].split("=");
+        }
+        return  getVar[1];
+    }
+    var team_id = parseGetParams();
+    console.log(team_id);
+
 
     return {
 
@@ -66,6 +77,8 @@ var TeammateModule = (function() {
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
             });
+
+            dataFilter['teamId'] = team_id;
             /*$('.modal').on('click', '.sendForm', function() {
                 var form = $(this).closest('form');
                 $.post(
@@ -79,8 +92,8 @@ var TeammateModule = (function() {
                 return false;
             });*/
 
-
             cfg = $.extend(cfg, config);
+
             dataTable = $('#teammates-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -156,18 +169,12 @@ var TeammateModule = (function() {
 
 
 
+
             var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
 
-                dataTable.find("img[class*=edit]").click(function(){
-
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
-
-                });
                 dataTable.find("i[class*=delete]").click(function(){
-
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
