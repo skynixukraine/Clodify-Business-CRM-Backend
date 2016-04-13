@@ -57,7 +57,7 @@ $this->params['menu'] = [
 </div>
 <?php ActiveForm::end();?>
 
-<table id="report-table" class="table table-hover">
+<table id="report-table" class="table table-hover ">
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'Report ID')?></th>

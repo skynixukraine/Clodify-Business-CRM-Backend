@@ -24,7 +24,7 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
                                         ] : $this->params['menu'] = []
 
 ?>
-<table class="table table-hover" id="project_table">
+<table class="table table-hover box" id="project_table">
     <thead>
     <tr>
         <th><?=Yii::t('app', 'ID')?> </th>

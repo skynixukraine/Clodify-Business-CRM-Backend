@@ -26,7 +26,7 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     ];
 }
 ?>
-<table class="table table-hover" id="invoice_table">
+<table class="table table-hover box" id="invoice_table">
     <thead>
     <tr>
         <th><?=Yii::t('app', 'ID')?> </th>
