@@ -52,7 +52,7 @@ $this->params['menu'] = [
                         User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
                     $listReport = \yii\helpers\ArrayHelper::map( $teammates, 'id', 'first_name' );
 
-                    echo $form->field( $model, 'teammate', [
+                    echo $form->field( $model, 'user_id', [
 
                         'options' => [
 

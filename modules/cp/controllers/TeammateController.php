@@ -131,21 +131,16 @@ class TeammateController extends DefaultController
                     ])
                 ->one();
 
-     /*   if ( $model->load(Yii::$app->request->post()) ) {
-            var_dump($model->teammate);
-            exit();
-            $model1 = Teammate::find()
-                ->where("team_id=:teamId",[
-                    ':teamId' => $teamId
-                ])
-                ->one();
-            $model1->user_id = $model->user_id;
-            //var_dump($model1);
-            //exit();
-            if ($model1->validate()) {
+        if ( $model->load(Yii::$app->request->post()) ) {
+            $model1 = new Teammate();
+
+            if ($model->validate()) {
+
+                $model1->team_id = $model->id;
+                $model1->user_id = $model->user_id;
                 $model1->save();
             }
-        }*/
+        }
         }
         /*return $this->render('view', ['model' => $model]);*/
 
