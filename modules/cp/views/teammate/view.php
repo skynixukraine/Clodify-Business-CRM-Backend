@@ -33,6 +33,8 @@ $this->params['menu'] = [
 <li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
 <li> Date of Creation: <?php echo $model->date_created ?></li>
 </ul>
+<?php  ActiveForm::end();?>
+<?php $form =  ActiveForm::begin();?>
 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
         APPEND
