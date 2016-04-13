@@ -10,10 +10,12 @@ use Yii;
  *
  * @property integer $team_id
  * @property integer $user_id
+ *  @property string $status
  */
 class Teammate extends \yii\db\ActiveRecord
 {
 
+    const STATUS_NEW        = "NEW";
 
     /**
      * @inheritdoc

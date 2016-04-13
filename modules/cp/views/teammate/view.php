@@ -49,8 +49,7 @@ $this->params['menu'] = [
                     <?php $teammates = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                         User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
                     $listReport = \yii\helpers\ArrayHelper::map( $teammates, 'id', 'first_name' );
-                    //var_dump($listReport);
-                    //exit();
+
                     echo $form->field( $model, 'teammate', [
 
                         'options' => [
@@ -61,6 +60,7 @@ $this->params['menu'] = [
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+
                 </div>
             </div>
         </div>
@@ -89,7 +89,6 @@ $this->params['menu'] = [
         TeammateModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
             findUrl     : '<?=Url::to(['teams/find2'])?>',
-
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });

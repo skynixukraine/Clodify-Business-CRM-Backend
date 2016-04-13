@@ -69,17 +69,29 @@ class Team extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public static function hasTeam($currentUserId)
+
+   /* public static function hasTeam($currentUserId)
     {
         $users_id = Team::find()
             ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=id')
             ->where(Team::tableName() . '.is_deleted=0')
-            ->all();
-        $userId = [];
+            ->all();*/
+
+    public static function hasTeam($currentUserId)
+    {
+        $users_id = Team::find()->where(Team::tableName() . '.is_deleted=0')->all();
+
+        /*$userId = [];
         foreach($users_id as $id){
             $userId[] = $id->user_id;
+        }*/
+
+        $user_id = Teammate::find()->all();
+        foreach ($user_id as $id) {
+            $userId[] = $id->user_id;
         }
-        if(in_array($currentUserId,$userId)){
+
+        if (in_array($currentUserId, $userId)) {
 
             return true;
 
@@ -88,7 +100,5 @@ class Team extends \yii\db\ActiveRecord
             return false;
 
         }
-
     }
-
 }

@@ -6,10 +6,13 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\components\Language;
+use app\models\Upload;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -21,10 +24,11 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+
                 ],
             ]
         ];
@@ -69,9 +73,6 @@ class SiteController extends Controller
     /** New or invited user login  */
     public function actionLogin()
     {
-       /* if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }*/
 
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
@@ -112,7 +113,8 @@ class SiteController extends Controller
             } else {
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
-                return $this->render('login', ['model' => $model]);
+                /*return $this->render('login', ['model' => $model]);*/
+                return $this->refresh();
             }
         }
         return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
@@ -181,5 +183,73 @@ class SiteController extends Controller
             Please contact administrator if you wish to activate your account"));
         }
         return $this->redirect(['site/index']);
+    }
+    /* pass the post option, and send a letter request */
+    public function actionRequest()
+    {
+        $model = new Upload();
+
+
+        if ( Yii::$app->request->isAjax &&
+             Yii::$app->request->isPost ) {
+
+            $websiteState   = Yii::$app->request->post('website_state');
+            $platform       = Yii::$app->request->post('platform');
+            $services       = Yii::$app->request->post('services');
+            $frontendPlatform   = Yii::$app->request->post('frontend_platform');
+            $backendPlatform    = Yii::$app->request->post('backend_platform');
+            $whenStart      = Yii::$app->request->post('when_start');
+            $budget         = Yii::$app->request->post('budget');
+            $description    = Yii::$app->request->post('description');
+            $name           = Yii::$app->request->post('name');
+            $email          = Yii::$app->request->post('email');
+            $company        = Yii::$app->request->post('company');
+            $country        = Yii::$app->request->post('country');
+            $model->file    = UploadedFile::getInstance($model, 'file');
+
+                $message = Yii::$app->mailer->compose('request', [
+                    'name'          => $name,
+                    'websiteState'  => $websiteState,
+                    'platform'      => $platform,
+                    'services'      => $services,
+                    'frontendPlatform'  => $frontendPlatform,
+                    'backendPlatform'   => $backendPlatform,
+                    'whenStart'         => $whenStart,
+                    'budget'            => $budget,
+                    'description'       => $description,
+                    'email'             => $email,
+                    'company'           => $company,
+                    'country'           => $country
+
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'] )
+                    ->setTo( Yii::$app->params['adminEmail'] )
+                    ->setReplyTo( [ $email => $name ] )
+                    ->setSubject('Skynix - New quote. Requested by ' . $name);
+
+                    if ($model->upload()) {
+
+                         $message->attach( Yii::getAlias('@app/data/documents/' . $model->fileName ) );
+
+                    }
+                    $message->send();
+
+                 $response = Yii::$app->response;
+                 $response->getHeaders()->set('Vary', 'Accept');
+                 $response->format = Response::FORMAT_JSON;
+
+                echo json_encode([
+                    "success" => true
+                ]);
+            }
+
+        else{
+
+                echo json_encode([
+                    "success" => false
+                ]);
+        }
+
+
     }
 }

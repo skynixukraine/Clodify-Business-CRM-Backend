@@ -37,10 +37,10 @@ AppAsset::register($this);
                             <li>
                                 <a href="https://www.facebook.com/skynix.solutions/" target="_blank" class="ico-facebook"></a>
                             </li>
-                            <!--<li>
+                            <li>
                                 <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                            <li>
+                           <!-- <li>
                                 <a href="#" class="ico-in"></a>
                             </li>-->
                             <li>
@@ -67,10 +67,10 @@ AppAsset::register($this);
 
 
 
-    <div>
-        <?= Breadcrumbs::widget([
+    <div class="page">
+        <!--<?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        ]) ?>-->
         <?php if (\Yii::$app->getSession()->hasFlash("success") ) : ?>
             <div class="alert alert-success alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -102,12 +102,17 @@ AppAsset::register($this);
             <?= date('Y') ?> All Rights Reserved. Skynix ltd.
         </div>
         <div class="col-lg-2 col-xs-2 link">
-            <?php if(Yii::$app->user->id != null):?>
-                <a href="<?=Url::to(['site/logout'])?>">log out</a>
+            <?php
+                if (Yii::$app->user->id != null):?>
+                    <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
+                    <a href="<?=Url::to(['site/logout'])?>">log out</a>
+                <?php endif;?>
+            <?php
+            if (Yii::$app->user->id ==null ):?>
+                    <a href="<?=Url::to(['site/login'])?>">log in</a>
+
             <?php endif;?>
-            <?php if(Yii::$app->user->id == null):?>
-                <a href="<?=Url::to(['site/login'])?>">log in</a>
-            <?php endif;?>
+
         </div>
     </div>
 </footer>
@@ -115,6 +120,9 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
+<?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
+
+
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

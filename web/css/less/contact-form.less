@@ -1,13 +1,10 @@
 
 
-.contact{
-    margin: 238px auto 0 auto;
+.contact,
+.login{
+    padding: 118px 15px 0 15px;
 
-    h1{
-        font-family: 'Raleway-Bold', sans-serif;
-        font-size: 55px;
-        text-align: center;
-    }
+
     .contact-txt{
         padding:  11px 21% 55px 21%;;
         font-family: 'Raleway Light', sans-serif;
@@ -165,9 +162,6 @@
 
 @media (max-width: 949px ) {
 
-    .contact{
-        margin: 205px 0 0 0;
-    }
     #contact-form{
         width: 85%;
         padding: 0;
@@ -186,8 +180,9 @@
 
 @media (max-width: 768px ) {
 
-    .contact {
-        margin: 145px 0 0 0;
+    .contact,
+    .login {
+
 
         .contact-txt {
             padding: 11px 15% 55px 15%;
@@ -242,11 +237,9 @@
 
 @media (max-width: 600px ) {
 
-    .contact{
+    .contact,
+    .login{
 
-        h1 {
-            font-size: 40px;
-        }
         form {
             padding: 0 5% 0 0;
         }
@@ -334,17 +327,19 @@
 
 @media (max-width: 480px ) {
 
-    label{
-        display: block;
-        float: none!important;
-        text-align: left!important;
-    }
 
-    .contact {
-        margin: 75px 0 30px 0;
+
+    .contact,
+    .login{
+        padding: 60px 0 30px 0;
 
         .margin-b {
             margin-bottom: 0;
+        }
+        label{
+            display: block;
+            float: none!important;
+            text-align: left!important;
         }
     }
     #contact-form{
