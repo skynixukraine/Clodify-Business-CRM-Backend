@@ -252,7 +252,8 @@ class ProjectController extends DefaultController
 
                                if( $model->date_start == null ||
                                    $model->date_end == null ||
-                                   DateUtil::compareDates($model->date_start, $model->date_end) ) {
+                                   DateUtil::compareDates($model->date_start, $model->date_end) ||
+                                   ($model->date_start == null && $model->date_end == null) ) {
 
                                    $model->save();
                                    if(Yii::$app->request->post('updated')) {
