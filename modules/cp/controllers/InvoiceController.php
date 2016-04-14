@@ -354,7 +354,7 @@ class InvoiceController extends DefaultController
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action "));
                 }
         }
-        return $this->redirect(['invoice/view?id=' . $id]);
+        return $this->redirect(['view', 'id' => $id]);
     }
 
 }
