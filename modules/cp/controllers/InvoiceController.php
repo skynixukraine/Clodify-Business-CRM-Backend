@@ -227,7 +227,6 @@ class InvoiceController extends DefaultController
                     $pdf = new mPDF();
                     $pdf->WriteHTML($html);
                     $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
-                    $model->download = $content;
 
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
@@ -329,32 +328,40 @@ class InvoiceController extends DefaultController
         }
     }
 
-    public function actionDownload(){
+    public function actionDownload()
+    {
+        /** @var $model Invoice */
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one() ) ) {
 
-        if (( $id = Yii::$app->request->get("id") ) ) {
-
-            $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one();
-            /** @var $model Invoice */
             if( ( $model->user_id == Yii::$app->user->id &&
-                Yii::$app->user->identity->role == User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT]) ) ||
-                Yii::$app->user->identity->role == User::hasPermission([User::ROLE_ADMIN] ) ){
+                 User::hasPermission([User::ROLE_CLIENT]) ) ||
+                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
                     /*$this->downloadFile($path);*/
-                    if (!empty($path)) {
+
                         header("Content-type:application/pdf"); //for pdf file
                         header('Content-Disposition: attachment; filename="' . basename($path) . '"');
                         header('Content-Length: ' . filesize($path));
                         readfile($path);
                         Yii::$app->end();
-                    }
-                }
-            }else {
 
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action "));
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, this seems like this PDF invoice was deleted."));
+                    return $this->redirect(['view', 'id' => $id]);
                 }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action."));
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        } else {
+
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this page does not exist."));
+            return $this->redirect(['index']);
         }
-        return $this->redirect(['view', 'id' => $id]);
+
     }
 
 }
