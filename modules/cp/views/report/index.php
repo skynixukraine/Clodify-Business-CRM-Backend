@@ -65,8 +65,8 @@ $this->params['menu'] = [
                 <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
                     <th id="role"><?=Yii::t('app', 'Hours')?></th>
                 <?php endif;?>
-                <th class="date-col"><?=Yii::t('app', 'Date added')?></th>
                 <th><?=Yii::t('app', 'Project')?></th>
+                <th class="date-col"><?=Yii::t('app', 'Date added')?></th>
                 <th><?=Yii::t('app', 'Reporter name')?></th>
                 <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
