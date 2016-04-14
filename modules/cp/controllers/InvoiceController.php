@@ -35,17 +35,17 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
-                        'actions'   => ['index', 'find', 'view'],
+                        'actions'   => ['index', 'find', 'view', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_CLIENT],
                     ],
                     [
-                        'actions'   => ['delete'],
+                        'actions'   => ['delete', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
@@ -62,6 +62,7 @@ class InvoiceController extends DefaultController
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
                     'delete'    => ['delete'],
+                    'download'  => ['get', 'post']
                 ],
             ],
         ];
@@ -204,28 +205,31 @@ class InvoiceController extends DefaultController
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
 
+
+
+                    $html = $this->renderPartial('invoicePDF', [
+
+                        'id' => $dataPdf->id,
+                        'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+                            $dataPdf->getUser()->one()->last_name,
+                        'total' => $dataPdf->total,
+                        'numberContract' => $dataPdf->contract_number,
+                        'actWork' => $dataPdf->act_of_work,
+                        'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
+                        'dataTo' => date('j F', strtotime($dataPdf->date_end)),
+                        'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
+                        'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
+                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
+                        'idCustomer' => $dataPdf->getUser()->one()->id,
+
+                    ]);
+
+                    $pdf = new mPDF();
+                    $pdf->WriteHTML($html);
+                    $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
+                    $model->download = $content;
+
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
-
-                        $html = $this->renderPartial('invoicePDF', [
-
-                            'id' => $dataPdf->id,
-                            'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
-                                $dataPdf->getUser()->one()->last_name,
-                            'total' => $dataPdf->total,
-                            'numberContract' => $dataPdf->contract_number,
-                            'actWork' => $dataPdf->act_of_work,
-                            'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
-                            'dataTo' => date('j F', strtotime($dataPdf->date_end)),
-                            'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
-                            'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                            'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
-                            'idCustomer' => $dataPdf->getUser()->one()->id,
-
-                        ]);
-
-                        $pdf = new mPDF();
-                        $pdf->WriteHTML($html);
-                        $content = $pdf->Output('', 'S');
 
                         Yii::$app->mailer->compose('invoice', [
 
@@ -323,6 +327,34 @@ class InvoiceController extends DefaultController
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
+    }
+
+    public function actionDownload(){
+
+        if (( $id = Yii::$app->request->get("id") ) ) {
+
+            $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one();
+            /** @var $model Invoice */
+            if( ( $model->user_id == Yii::$app->user->id &&
+                Yii::$app->user->identity->role == User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT]) ) ||
+                Yii::$app->user->identity->role == User::hasPermission([User::ROLE_ADMIN] ) ){
+
+                if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
+                    /*$this->downloadFile($path);*/
+                    if (!empty($path)) {
+                        header("Content-type:application/pdf"); //for pdf file
+                        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+                        header('Content-Length: ' . filesize($path));
+                        readfile($path);
+                        Yii::$app->end();
+                    }
+                }
+            }else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action "));
+                }
+        }
+        return $this->redirect(['invoice/view?id=' . $id]);
     }
 
 }
