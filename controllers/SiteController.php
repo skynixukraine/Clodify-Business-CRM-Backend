@@ -14,6 +14,7 @@ use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
 
+
 class SiteController extends Controller
 {
     public function behaviors()
@@ -102,11 +103,13 @@ class SiteController extends Controller
                 exit();*/
                 $modelUserLogins->save(true, ['date_login']);
                 if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-
+                    Yii::$app->getSession()->setFlash('success',
+                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                     return $this->redirect( Language::getDefaultUrl() . '/cp/index');
                 }
                 if ( User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])){
-
+                    Yii::$app->getSession()->setFlash('success',
+                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                     return $this->redirect( Language::getDefaultUrl() . '/cp/user/index');
                 }
 
@@ -170,7 +173,7 @@ class SiteController extends Controller
                 Yii::$app->user->logout();
             }
             Yii::$app->getSession()->setFlash('success',
-            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+            Yii::t("app", "Welcome to Skynix, you have successfully activated your account", false));
             return $this->redirect(['site/login', 'email'=>$model->email]);
 
         }else {

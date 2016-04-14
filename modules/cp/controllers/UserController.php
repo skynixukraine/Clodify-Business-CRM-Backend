@@ -152,8 +152,16 @@ class UserController extends DefaultController {
             foreach($workers as $worker){
                 $arrayWorkers[]= $worker->user_id;
             }
+            $devUser = '';
+            if(!empty($arrayWorkers)) {
+                $devUser = implode(', ' , $arrayWorkers);
+            }
+            else{
+                $devUser = 'null';
+            }
+
             $query = User::find()
-            ->where(User::tableName() . '.id IN (' . implode( ', ', $arrayWorkers ) . ')') ;
+            ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
         }
         $columns        = [
             'id',
