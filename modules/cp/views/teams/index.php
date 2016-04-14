@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][]  = $this->title;
         <th><?=Yii::t('app', 'Team Leader')?></th>
         <th><?=Yii::t('app', 'Number of Teammates')?></th>
         <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>
-        <!--<th><?=Yii::t('app', 'List of teammates')?></th>-->
     </tr>
     </thead>
 </table>

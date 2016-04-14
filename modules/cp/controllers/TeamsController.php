@@ -51,7 +51,7 @@ class TeamsController extends DefaultController
                 'actions' => [
                     'index'     => ['get', 'post'],
                     'find'      => ['get'],
-                    'find2'      => ['get', 'post'],
+                    'find2'     => ['get', 'post'],
                     'view'      => ['get', 'post'],
 
                 ],
@@ -71,22 +71,21 @@ class TeamsController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $team         = Yii::$app->request->getQueryParam("team_id");
 
 
-        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.user_id=' . User::tableName() . '.id')
+        $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.team_leader_id=' . User::tableName() . '.id')
                     ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . ".id");
 
         $columns        = [
-            'user_id',
+            'team_leader_id',
             'first_name',
             'last_name',
             'email',
             'phone',
             'project_id',
-            'id',
+            'team_id',
             'name',
-            'user_id',
+            'team_leader_id',
             'team_id',
             'date_create',
 
@@ -97,7 +96,7 @@ class TeamsController extends DefaultController
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
-                ['like', 'id', $keyword],
+                ['like', 'name', $keyword],
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
@@ -106,10 +105,10 @@ class TeamsController extends DefaultController
             $dataTable->setFilter(Team::tableName() . '.id=' . $teamId);
         }
 
-        $dataTable->setFilter('is_deleted=0');
+        $dataTable->setFilter(Team::tableName() . '.is_deleted=0');
+        $dataTable->setFilter(Teammate::tableName() . '.is_deleted=0');
 
-        $dataTable->setFilter(Team::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' .
-                            Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
+        $dataTable->setFilter(Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
 
 
         $activeRecordsData = $dataTable->getData();
@@ -124,7 +123,7 @@ class TeamsController extends DefaultController
             }
 
             $list[] = [
-                $model->user_id,
+                $model->team_leader_id,
                 $model->getUser()->one()->first_name,
                 $model->getUser()->one()->last_name,
                 $model->getUser()->one()->email,
@@ -178,6 +177,8 @@ class TeamsController extends DefaultController
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+
+        $dataTable->setFilter('is_deleted=0');
 
         if($team_Id) {
 

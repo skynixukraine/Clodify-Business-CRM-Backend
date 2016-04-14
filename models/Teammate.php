@@ -50,7 +50,7 @@ class Teammate extends \yii\db\ActiveRecord
     public static function teammateUser($teamId)
     {
         return self::find()
-            ->where(Teammate::tableName() . '.team_id=:idTeam',
+            ->where(Teammate::tableName() . '.team_id=:idTeam AND ' . Teammate::tableName() . '.is_deleted=0',
                 [
                     ':idTeam' => $teamId
                 ])

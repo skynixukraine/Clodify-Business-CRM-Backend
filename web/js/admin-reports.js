@@ -120,14 +120,14 @@ var adminReportModule = (function() {
                     "targets"   : index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
-                        return row[2];
+                        return row[3];
                     }
                 },
                 {
                     "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
-                        return row[3];
+                        return row[2];
                     }
                 },
                 {
