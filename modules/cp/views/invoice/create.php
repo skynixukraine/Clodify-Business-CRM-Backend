@@ -36,6 +36,8 @@ $this->params['menu'] = [
     ]
 ]);
 ?>
+<div class="row">
+    <div class="col-md-6 box box-primary box-body">
             <?php $customers = User::allCustomersWhithReceive();
             $listCustomers = ArrayHelper::map( $customers, 'id', 'first_name' );
             /** @var $model Invoice */
@@ -71,6 +73,8 @@ $this->params['menu'] = [
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
+        </div>
+    </div>
 
 <?php ActiveForm::end();?>
     <table class = "table" id="invoice-create-table">

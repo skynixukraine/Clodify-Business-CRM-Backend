@@ -70,21 +70,23 @@ $this->params['menu'] = [
 <?php endif;?>
 
 <?php  ActiveForm::end();?>
-<table id="teammates-table" class="table table-hover box">
-    <thead>
-    <tr>
-        <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
-        <th><?=Yii::t('app', 'First Name')?></th>
-        <th><?=Yii::t('app', 'Last Name')?></th>
-        <th><?=Yii::t('app', 'Email')?></th>
-        <th><?=Yii::t('app', 'Phone')?></th>
-        <th><?=Yii::t('app', 'Projects')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-        <th><?=Yii::t('app', 'Actions')?></th>
-        <?php endif;?>
-    </tr>
-    </thead>
-</table>
+
+    <table id="teammates-table" class="table table-hover box">
+        <thead>
+            <tr>
+                <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
+                <th><?=Yii::t('app', 'First Name')?></th>
+                <th><?=Yii::t('app', 'Last Name')?></th>
+                <th><?=Yii::t('app', 'Email')?></th>
+                <th><?=Yii::t('app', 'Phone')?></th>
+                <th><?=Yii::t('app', 'Projects')?></th>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                <th><?=Yii::t('app', 'Actions')?></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+    </table>
+
 <script>
 
     $(function(){
