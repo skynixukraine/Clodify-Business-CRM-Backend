@@ -25,7 +25,7 @@ $this->params['menu'] = [
 <?php $form = ActiveForm::begin();
         /** @var $model User */ ?>
     <div class="row">
-        <div class="col-md-6 box box-primary box-body">
+        <div class="col-md-6 box box-primar box-body">
             <?php echo $form->field( $model, 'first_name')
                 ->textInput( [ 'class'        => 'form-control',
                                'placeholder'  => 'First name',

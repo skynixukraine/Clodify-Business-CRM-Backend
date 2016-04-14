@@ -67,9 +67,8 @@ $this->params['menu'] = [
             ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
 
             <?php echo $form->field( $model, 'discount')->textInput();?>
-
             <?php echo $form->field( $model, 'total')->textInput();?>
-
+            <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
