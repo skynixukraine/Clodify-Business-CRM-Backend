@@ -16,7 +16,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", "My Teams");
 $this->params['breadcrumbs'][]  = $this->title;
 ?>
-<table id="teams-table" class="table table-hover display">
+<table id="teams-table" class="table table-hover display box">
     <thead>
     <tr>
         <th><?=Yii::t('app', ' ')?></th>
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][]  = $this->title;
 </table>
 <div style="margin-top: 5%;">
     <h3>List of Teammates </h3>
-    <table id="teams-show-table" class="table table-hover display">
+    <table id="teams-show-table" class="table table-hover display box">
         <thead>
         <tr>
             <th class="id-col"><?=Yii::t('app', 'User ID')?></th>

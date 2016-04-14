@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][]  = $this->title;
 
 ?>
 
-<table id="teams-table" class="table table-hover">
+<table id="teams-table" class="table table-hover box">
 <thead>
 <tr>
     <th class="id-col"><?=Yii::t('app', 'Team ID')?></th>

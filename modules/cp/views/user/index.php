@@ -18,7 +18,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 }
 
 ?>
-<table id="user-table" class="table table-hover">
+<table id="user-table" class="table table-hover box">
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'ID')?></th>

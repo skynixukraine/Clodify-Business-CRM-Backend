@@ -70,7 +70,7 @@ $this->params['menu'] = [
 <?php endif;?>
 
 <?php  ActiveForm::end();?>
-<table id="teammates-table" class="table table-hover">
+<table id="teammates-table" class="table table-hover box">
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
