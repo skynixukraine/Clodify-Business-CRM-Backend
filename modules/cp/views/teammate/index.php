@@ -9,15 +9,14 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/manager-teams.js');
 $this->title                    = Yii::t("app", "Company Teams");
 $this->params['breadcrumbs'][]  = $this->title;
-/*if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     $this->params['menu'] = [
         [
-            'label' => Yii::t('app', 'APPEND'),
-            'url' => Url::to(['user/invite'])
+            'label' => Yii::t('app', 'Create team'),
+            'url' => Url::to(['teammate/create'])
         ]
-
     ];
-}*/
+}
 
 ?>
 

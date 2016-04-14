@@ -40,6 +40,11 @@ class TeammateController extends DefaultController
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV],
                     ],
+                    [
+                        'actions'   => [ 'create'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -48,7 +53,8 @@ class TeammateController extends DefaultController
                     'index'     => ['get'],
                     'find'      => ['get'],
                     'view'      => ['get', 'post'],
-                    'delete'    => ['delete']
+                    'delete'    => ['delete'],
+                    'create'    => ['get', 'post'],
 
                 ],
             ],
@@ -72,7 +78,7 @@ class TeammateController extends DefaultController
         $columns        = [
             'id',
             'name',
-            'user_id',
+            'team_leader_id',
             'team_id',
             'date_created',
 
@@ -88,7 +94,7 @@ class TeammateController extends DefaultController
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
-        $dataTable->setFilter('is_deleted=0');
+        $dataTable->setFilter(Team::tableName() . '.is_deleted=0');
 
 
         $activeRecordsData = $dataTable->getData();
@@ -144,6 +150,67 @@ class TeammateController extends DefaultController
         /** @var $model Teammate */
         return $this->render('view', ['model' => $model,
             'title' => 'List of Teammates  #' . $model->id]);
+    }
+
+    /** Delete teammate */
+    public function actionDelete()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+            /** @var  $model Teammate */
+            if ( ( $team_id = Yii::$app->request->post("team_id") ) &&
+                 ( $user_id = Yii::$app->request->post("user_id") ) &&
+                 ( $model = Teammate::find()->where('user_id=:ID AND team_id=:teamID',
+                    [':ID' => $user_id, ':teamID' => $team_id])->one() ) ) {
+
+                /**  leader of team*/
+                if( ( Team::findOne(['team_leader_id' => $user_id, 'id' => $team_id]) ) == null ) {
+
+                    $model->is_deleted = 1;
+                    $model->save(true, ['is_deleted']);
+                    return json_encode([
+                        "message"   => Yii::t("app", "User " . $user_id . " was deleted."),
+                        "success"   => true
+                    ]);
+
+                } else {
+
+                    return json_encode([
+                        "message"   => Yii::t("app", "This user is leader. You can`t delete his."),
+                        "success"   => true
+                    ]);
+                }
+            }
+
+        } else {
+
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Ooops, you do not have priviledes for this action."));
+            return $this->render('index');
+
+        }
+    }
+
+    public function actionCreate()
+    {
+        $model = new Team();
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->user_id = Yii::$app->user->id;
+            $model->date_created = date('Y-m-d');
+
+            if ($model->validate()) {
+
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new team " . $model->name));
+                return $this->redirect('index');
+
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "The data is nit valid"));
+                return $this->redirect('index');
+            }
+
+        }
+        return $this->render('create',['model' => $model]);
     }
 
 }

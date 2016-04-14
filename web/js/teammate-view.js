@@ -13,14 +13,15 @@ var TeammateModule = (function() {
         },
         deleteModal;
 
-    function actionDelete( id, name, dataTable )
+    function actionDelete( user_id, team_id, dataTable )
     {
 
         function deleteRequest(  )
         {
             var params = {
                 url     : cfg.deleteUrl,
-                data    : {id : id},
+                data    : {user_id : user_id,
+                           team_id : team_id },
                 dataType: 'json',
                 type    : 'DELETE',
                 success : function ( response ) {
@@ -49,7 +50,7 @@ var TeammateModule = (function() {
 
         deleteModal = new ModalBootstrap({
             title       : 'Delete ' + name + "?",
-            body        : 'The teams will be unavailable anymore, but all his data reports and project will be left in the system.' +
+            body        : 'The teammates ' + user_id + ' will be unavailable anymore, but all his data reports and project will be left in the system.' +
             ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
@@ -175,9 +176,10 @@ var TeammateModule = (function() {
 
 
                 dataTable.find("i[class*=delete]").click(function(){
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
+                    var user_id     = $(this).parents("tr").find("td").eq(0).text();
+                    console.log(user_id);
+                    console.log(team_id);
+                    actionDelete( user_id, team_id, dataTable );
 
                 });
 

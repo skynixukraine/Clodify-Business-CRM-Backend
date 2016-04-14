@@ -30,7 +30,7 @@ $this->params['menu'] = [
 <ul>
 <li>ID: <?php echo $model->id; ?></li>
 <li>Team Name: <?php echo $model->name; ?></li>
-<li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
+<li>Team Leader: <?php echo $model->getLeader()->one()->first_name . ' ' . $model->getLeader()->one()->last_name; ?></li>
 <li> Date of Creation: <?php echo $model->date_created ?></li>
 </ul>
 <?php  ActiveForm::end();?>
