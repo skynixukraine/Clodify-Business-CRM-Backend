@@ -110,6 +110,39 @@ $this->title = 'Welcome to the Skynix - software development company';
     </div>
 </section>
 
+<section class="container" id="portfolio">
+    <div class="row">
+        <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
+            <div class="line"></div>
+        </div>
+        <div class="col-lg-6 col-sm-8 col-xs-10 portfolio-header"><h2>PROJECTS WE HAVE DONE</h2></div>
+        <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
+            <div class="line"></div>
+        </div>
+
+
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#"><img src="images/btn-citrix-synergy.jpg" width="289" height="214" /></a>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#"><img src="images/btn-сastles_estate_agents.jpg" width="289" height="214" /></a>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#"><img src="images/btn-fisherman.jpg" width="289" height="214" /></a>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#"><img src="images/btn-marketplace-extension.jpg" width="289" height="214" /></a>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#"><img src="images/btn-handmade-works.jpg" width="289" height="214" /></a>
+        </div>
+
+
+
+    </div>
+</section>
+
 <section class="container-fluid" id="evaluation">
     <div class="row">
         <div class="col-lg-12">
@@ -283,7 +316,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 <div class = "col-lg-12 step step6">
                     <input type="text" placeholder="Name" name="name" autocomplete="on" required >
-                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" required >
+                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" pattern="[^ @]*@[^ @]*" required >
                     <input type="text" placeholder="Company" name="company" autocomplete="on" required>
                     <input type="text" placeholder="Country" name="country" autocomplete="on" required>
                 </div>
@@ -325,8 +358,6 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
 </div>
-
-
 
 <!--****   End Popup REQUEST a QUOTE modals   ****-->
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>

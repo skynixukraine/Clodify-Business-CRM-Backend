@@ -545,10 +545,6 @@ footer .link a:hover {
   text-align: center;
   font-family: Raleway-Medium, sans-serif;
 }
-#working_fields h2 {
-  font-size: 30px;
-  font-family: 'Raleway-Regular', sans-serif;
-}
 #working_fields .web-network div,
 #working_fields .hi div,
 #working_fields .phonegap div,
@@ -1839,6 +1835,28 @@ footer .link a:hover {
     left: 17%;
   }
 }
+#portfolio .portfolio-header {
+  height: 63px;
+  text-align: center;
+}
+#portfolio .portfolio-header .line {
+  width: 100%;
+  position: relative;
+  top: 49%;
+  border: 1px solid #000000;
+}
+#portfolio .portfolio-sample a {
+  width: 90%;
+  height: auto;
+  margin: 15px auto;
+  display: block;
+  position: relative;
+}
+#portfolio .portfolio-sample img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #9D9D9D;
+}
 html,
 body {
   margin: 0;
@@ -1849,6 +1867,10 @@ h1 {
   font-family: 'Raleway-Bold', sans-serif;
   font-size: 55px;
   text-align: center;
+}
+h2 {
+  font-size: 30px;
+  font-family: 'Raleway-Regular', sans-serif;
 }
 a,
 a:hover,

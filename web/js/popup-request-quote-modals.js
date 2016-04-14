@@ -71,14 +71,27 @@ var requestQuoteModals = (function(){
                     error.html("Please make a choose to go ahead");
                     hasErrors = true;
                     return false;
+                }else if(el.prop('type') != 'file' && el.context.validity.valid == false && tagType != 'checkbox' ){
+
+                    error.html("Please make a choose to go ahead");
+                    hasErrors = true;
+                    return false
                 }
 
+
+
             }else if ( el.prop('type') != 'file' && !el.val()){
+
 
                 error.html("Please make a choose to go ahead");
                 hasErrors = true;
                 return false;
             }
+
+
+
+
+
         });
     }
 
@@ -263,8 +276,10 @@ var requestQuoteModals = (function(){
                 elem = bodyPopap.find("[aria-hidden=false]");
                 validateForm(elem);
 
+                console.log(hasErrors);
                 if(hasErrors){
 
+                    console.log("ddddddd");
                     return false
                 }
 
