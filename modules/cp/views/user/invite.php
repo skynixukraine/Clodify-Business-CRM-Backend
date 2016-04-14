@@ -23,39 +23,45 @@ $this->params['menu'] = [
 ?>
 
 <?php $form = ActiveForm::begin();
-/** @var $model User */ ?>
-    <?php echo $form->field( $model, 'first_name')
-        ->textInput( [ 'class'        => 'form-control',
-                       'placeholder'  => 'First name',
-        ])-> label( 'First name' );?>
-    <?php echo $form->field( $model, 'company')
-        ->textInput( [ 'class'        => 'form-control',
-            'placeholder'  => 'Company',
-        ])-> label( 'Company' );?>
+        /** @var $model User */ ?>
+    <div class="row">
+        <div class="col-md-6 box box-primary box-body">
+            <?php echo $form->field( $model, 'first_name')
+                ->textInput( [ 'class'        => 'form-control',
+                               'placeholder'  => 'First name',
+                ])-> label( 'First name' );?>
+            <?php echo $form->field( $model, 'company')
+                ->textInput( [ 'class'        => 'form-control',
+                    'placeholder'  => 'Company',
+                ])-> label( 'Company' );?>
 
-    <?php echo $form->field( $model, 'last_name')
-        ->textInput( ['class'   => 'form-control',
-                      'placeholder'   => 'Last name',
-        ])-> label( 'Last name' );?>
+            <?php echo $form->field( $model, 'last_name')
+                ->textInput( ['class'   => 'form-control',
+                              'placeholder'   => 'Last name',
+                ])-> label( 'Last name' );?>
 
-    <?php echo $form->field( $model, 'email')
-        ->textInput( ['class'       => 'form-control',
-                      'placeholder'   => 'Enter email',
-                      'type'          => 'email',
-        ])-> label( 'Email' );?>
+            <?php echo $form->field( $model, 'email')
+                ->textInput( ['class'       => 'form-control',
+                              'placeholder'   => 'Enter email',
+                              'type'          => 'email',
+                ])-> label( 'Email' );?>
 
-    <div>
-        <?php echo $form->field($model, 'role')->dropDownList([
-            User::ROLE_ADMIN    => 'ADMIN',
-            User::ROLE_DEV      => 'DEV',
-            User::ROLE_FIN      => 'FIN',
-            User::ROLE_CLIENT   => 'CLIENT',
-            User::ROLE_PM       => 'PM'
-        ],
-          ['prompt' => 'Choose...']
-        );?>
+            <div>
+                <?php echo $form->field($model, 'role')->dropDownList([
+                    User::ROLE_ADMIN    => 'ADMIN',
+                    User::ROLE_DEV      => 'DEV',
+                    User::ROLE_FIN      => 'FIN',
+                    User::ROLE_CLIENT   => 'CLIENT',
+                    User::ROLE_PM       => 'PM'
+                ],
+                  ['prompt' => 'Choose...']
+                );?>
+            </div>
+            <div>
+                <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
+            </div>
+        </div>
     </div>
-    <div>
-        <?= Html::submitButton( Yii::t('app', 'Invite'), ['class' => 'btn btn-primary']) ?>
-    </div>
+
 <?php ActiveForm::end();?>
+

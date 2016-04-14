@@ -18,6 +18,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 }
 
 ?>
+
 <table id="user-table" class="table table-hover box">
     <thead>
     <tr>

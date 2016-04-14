@@ -27,100 +27,105 @@ $this->params['menu'] = [
 ];
 ?>
 
-<?php $form = ActiveForm::begin([
-    'options' => [
-        'class' => 'horizontal'
-    ]
-]);?>
-    <div class="form-group">
-        <?php echo $form->field( $model, 'name', [
-
+        <?php $form = ActiveForm::begin([
             'options' => [
-
+                'class' => 'horizontal'
             ]
-        ])->textInput(["class" => "form-control", "autocomplete"=>"off"])->label( 'Project name' );?>
-    </div>
-    <div class="form-group">
-        <?php echo $form->field( $model, 'jira_code', [
+        ]);?>
+<div class="row">
+    <div class="col-md-6 box box-primary box-body">
+            <div class="form-group">
+                <?php echo $form->field( $model, 'name', [
 
-            'options' => [
+                    'options' => [
 
-            ]
-        ])->textInput(["class" => "form-control"])->label( 'JIRA' );?>
-    </div>
-
-    <div class="form-group">
-        <?php echo $form->field( $model, 'date_start', [
-
-            'template' => '{label} ' .
-                ' <div class="input-group date">{input}' .
-                ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
-                ' {error}'
-
-        ])->textInput( ['class'=>'form-control pull-right active',
-            'type'=>'text']);?>
-
-
-    </div>
-    <div class="form-group">
-        <?php echo $form->field( $model, 'date_end', [
-
-            'template' => '{label} ' .
-                ' <div class="input-group date">{input}' .
-                ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
-                ' {error}'
-
-        ])->textInput( ['class'=>'form-control pull-right active',
-            'type'=>'text']);?>
-    </div>
-
-    <?php if( $model->status != null ):?>
-        <div class="form-group">
-            <div>
-                <?php echo $form->field($model, 'status')->dropDownList([
-
-                    Project::STATUS_ONHOLD      => 'ONHOLD',
-                    Project::STATUS_INPROGRESS  => 'INPROGRESS',
-                    Project::STATUS_DONE        => 'DONE',
-                    Project::STATUS_CANCELED    => 'CANCELED'
-                ],
-                    ['prompt' => 'Choose...']
-                );?>
+                    ]
+                ])->textInput(["class" => "form-control", "autocomplete"=>"off"])->label( 'Project name' );?>
             </div>
-        </div>
-    <?php endif;?>
+            <div class="form-group">
+                <?php echo $form->field( $model, 'jira_code', [
 
-    <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
-    <div class="form-group">
-        <?php
-        $customers = User::allCustomers();
-        $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
-        echo $form->field( $model, 'customers' )
-            ->listBox($listCustomers,
-                [
-                    'multiple'  => "true",
-                    'class'     => "form-control"
-                ])
-            ->label('Clients');
-        ?>
+                    'options' => [
+
+                    ]
+                ])->textInput(["class" => "form-control"])->label( 'JIRA' );?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->field( $model, 'date_start', [
+
+                    'template' => '{label} ' .
+                        ' <div class="input-group date">{input}' .
+                        ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                        ' {error}'
+
+                ])->textInput( ['class'=>'form-control pull-right active',
+                    'type'=>'text']);?>
+
+
+            </div>
+            <div class="form-group">
+                <?php echo $form->field( $model, 'date_end', [
+
+                    'template' => '{label} ' .
+                        ' <div class="input-group date">{input}' .
+                        ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
+                        ' {error}'
+
+                ])->textInput( ['class'=>'form-control pull-right active',
+                    'type'=>'text']);?>
+            </div>
+
+            <?php if( $model->status != null ):?>
+                <div class="form-group">
+                    <div>
+                        <?php echo $form->field($model, 'status')->dropDownList([
+
+                            Project::STATUS_ONHOLD      => 'ONHOLD',
+                            Project::STATUS_INPROGRESS  => 'INPROGRESS',
+                            Project::STATUS_DONE        => 'DONE',
+                            Project::STATUS_CANCELED    => 'CANCELED'
+                        ],
+                            ['prompt' => 'Choose...']
+                        );?>
+                    </div>
+                </div>
+            <?php endif;?>
+
+            <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
+            <div class="form-group">
+                <?php
+                $customers = User::allCustomers();
+                $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
+                echo $form->field( $model, 'customers' )
+                    ->listBox($listCustomers,
+                        [
+                            'multiple'  => "true",
+                            'class'     => "form-control"
+                        ])
+                    ->label('Clients');
+                ?>
+            </div>
+            <div class="form-group">
+                <?php
+                $developers = User::allDevelopers();
+                $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
+                echo $form->field( $model, 'developers' )
+                    ->listBox($listDevelopers,
+                        [
+                            'multiple'  => "true",
+                            'class'     => "form-control"
+                        ]);
+                ?>
+            </div>
+            <?php endif;?>
+            <div>
+                <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+            </div>
     </div>
-    <div class="form-group">
-        <?php
-        $developers = User::allDevelopers();
-        $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
-        echo $form->field( $model, 'developers' )
-            ->listBox($listDevelopers,
-                [
-                    'multiple'  => "true",
-                    'class'     => "form-control"
-                ]);
-        ?>
-    </div>
-    <?php endif;?>
-    <div>
-        <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
-    </div>
-<?php ActiveForm::end();?>
+</div>
+        <?php ActiveForm::end();?>
+
 <script>
     $(function(){
 

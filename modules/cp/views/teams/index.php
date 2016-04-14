@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][]  = $this->title;
 </table>
 <div style="margin-top: 5%;">
     <h3>List of Teammates </h3>
+
     <table id="teams-show-table" class="table table-hover display box">
         <thead>
         <tr>
@@ -42,8 +43,9 @@ $this->params['breadcrumbs'][]  = $this->title;
             <th><?=Yii::t('app', 'Project')?></th>
         </tr>
         </thead>
-</table>
-    </div>
+    </table>
+</div>
+
 <script>
     $(function(){
         TeamModule.init({

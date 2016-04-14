@@ -26,24 +26,25 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     ];
 }
 ?>
-<table class="table table-hover box" id="invoice_table">
-    <thead>
-    <tr>
-        <th><?=Yii::t('app', 'ID')?> </th>
-        <th><?=Yii::t('app', 'Client Name')?></th>
-        <th><?=Yii::t('app', 'Subtotal')?></th>
-        <th><?=Yii::t('app', 'Discount')?></th>
-        <th><?=Yii::t('app', 'Total')?></th>
-        <th><?=Yii::t('app', 'Date Start')?></th>
-        <th><?=Yii::t('app', 'Date End')?></th>
-        <th><?=Yii::t('app', 'Date Create')?></th>
-        <th><?=Yii::t('app', 'Date Sent')?></th>
-        <th><?=Yii::t('app', 'Date Paid')?></th>
-        <th><?=Yii::t('app', 'Status')?></th>
-        <th><?=Yii::t('app', 'Actions')?></th>
-    </tr>
-    </thead>
-</table>
+
+    <table class="table table-hover box " id="invoice_table">
+        <thead>
+        <tr>
+            <th><?=Yii::t('app', 'ID')?> </th>
+            <th><?=Yii::t('app', 'Client Name')?></th>
+            <th><?=Yii::t('app', 'Subtotal')?></th>
+            <th><?=Yii::t('app', 'Discount')?></th>
+            <th><?=Yii::t('app', 'Total')?></th>
+            <th><?=Yii::t('app', 'Date Start')?></th>
+            <th><?=Yii::t('app', 'Date End')?></th>
+            <th><?=Yii::t('app', 'Date Create')?></th>
+            <th><?=Yii::t('app', 'Date Sent')?></th>
+            <th><?=Yii::t('app', 'Date Paid')?></th>
+            <th><?=Yii::t('app', 'Status')?></th>
+            <th><?=Yii::t('app', 'Actions')?></th>
+        </tr>
+        </thead>
+    </table>
 
 <script>
 
