@@ -84,36 +84,42 @@ class SiteController extends Controller
         }
         if ( $model->load(Yii::$app->request->post()) ) {
 
-            if ($model->login()) {
+            if( md5($model->password) == User::findOne(['email' => $model->email])->password ){
 
-                /** Save date login when user login */
-                /** @var $modelUserLogins User */
-                $modelUserLogins = User::find()
-                    ->where('email=:Email',
-                        [
-                            ':Email' => $model->getUser()->email
-                        ])
-                    ->one();
+                if ($model->login()) {
 
-                $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                    /** Save date login when user login */
+                    /** @var $modelUserLogins User */
+                    $modelUserLogins = User::find()
+                        ->where('email=:Email',
+                            [
+                                ':Email' => $model->getUser()->email
+                            ])
+                        ->one();
 
-                $modelUserLogins->save(true, ['date_login']);
-                if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                    Yii::$app->getSession()->setFlash('success',
-                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-                    return $this->redirect( Language::getDefaultUrl() . '/cp/index');
+                    $modelUserLogins->date_login = date('Y-m-d H:i:s');
+
+                    $modelUserLogins->save(true, ['date_login']);
+                    if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
+                        Yii::$app->getSession()->setFlash('success',
+                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                    }
+                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+                        Yii::$app->getSession()->setFlash('success',
+                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                    }
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
+                    return $this->refresh();
                 }
-                if ( User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])){
-                    Yii::$app->getSession()->setFlash('success',
-                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-                    return $this->redirect( Language::getDefaultUrl() . '/cp/user/index');
-                }
-
             } else {
 
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
-                /*return $this->render('login', ['model' => $model]);*/
-                return $this->refresh();
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Incorrect password"));
+                    return $this->refresh();
             }
         }
         return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
