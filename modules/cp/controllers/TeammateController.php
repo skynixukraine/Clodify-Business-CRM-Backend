@@ -31,9 +31,14 @@ class TeammateController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'view', 'delete'],
+                        'actions'   => [ 'view', 'delete', 'deleteteam'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                    ],
+                    [
+                        'actions'   => [ 'view'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV],
                     ],
                     [
                         'actions'   => [ 'index', 'find'],
@@ -55,6 +60,7 @@ class TeammateController extends DefaultController
                     'view'      => ['get', 'post'],
                     'delete'    => ['delete'],
                     'create'    => ['get', 'post'],
+                    'deleteteam'    => ['delete'],
 
                 ],
             ],
@@ -105,7 +111,7 @@ class TeammateController extends DefaultController
             $list[] = [
                 $model->id,
                 $model->name,
-                $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+                $model->getLeader()->one()->first_name . ' ' . $model->getLeader()->one()->last_name,
                 Teammate::teammateUser($model->id),
                 $model->date_created,
             ];
@@ -125,31 +131,56 @@ class TeammateController extends DefaultController
 
     public function actionView()
     {
-        if (( $teamId = Yii::$app->request->get("id") ) ) {
-
-            $model = Team::find()
-                ->where("id=:teamiD",
-                    [
-                        ':teamiD' => $teamId
-                    ])
-                ->one();
+        if (( $teamId = Yii::$app->request->get("id") ) && ($model = Team::findOne(['id' => $teamId])) ) {
 
         if ( $model->load(Yii::$app->request->post()) ) {
+
             $model1 = new Teammate();
+            if( Teammate::findOne(['team_id' => $model->id, 'user_id' => $model->user_id]) == null) {
 
-            if ($model->validate()) {
+                if ($model->validate()) {
 
-                $model1->team_id = $model->id;
-                $model1->user_id = $model->user_id;
-                $model1->save();
+                    $model1->team_id = $model->id;
+                    $model1->user_id = $model->user_id;
+                    $model1->save();
+                }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "This user is already exist"));
+                return $this->render('view', ['model' => $model,
+                    'title' => 'List of Teammates  #' . $model->id]);
             }
         }
-        }
-        /*return $this->render('view', ['model' => $model]);*/
+            return $this->render('view', ['model' => $model,
+                'title' => 'List of Teammates  #' . $model->id]);
+        } else {
+            /*return $this->render('view', ['model' => $model]);*/
 
-        /** @var $model Teammate */
-        return $this->render('view', ['model' => $model,
-            'title' => 'List of Teammates  #' . $model->id]);
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "This command is not exist"));
+            return $this->render('index');
+        }
+    }
+    public function actionDeleteteam()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+
+            if ( ( $id = Yii::$app->request->post("id") ) ) {
+
+                /** @var  $model Teammate */
+                $model  = Team::findOne( $id );
+                $model->is_deleted = 1;
+                $model->save(true, ['is_deleted']);
+                return json_encode([
+                    "message"   => Yii::t("app", "You deleted team " . $id),
+                    "success"   => true
+                ]);
+            }
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
+        }
     }
 
     /** Delete teammate */

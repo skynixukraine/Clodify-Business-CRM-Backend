@@ -37,13 +37,16 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     </thead>
 </table>
 <script>
+
     $(function(){
 
         userModule.init({
-            editUrl     : '<?=Url::to(['user/update'])?>',
-            deleteUrl   : '<?=Url::to(['user/delete'])?>',
-            findUrl     : '<?=Url::to(['user/find'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            editUrl         : '<?=Url::to(['user/update'])?>',
+            deleteUrl       : '<?=Url::to(['user/delete'])?>',
+            findUrl         : '<?=Url::to(['user/find'])?>',
+            loginAsUserUrl  : '<?=Url::to(['user/loginas'])?>',
+            canDelete       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canLoginAs      : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 

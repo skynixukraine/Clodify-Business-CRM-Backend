@@ -35,7 +35,7 @@ $this->params['menu'] = [
 </ul>
 <?php  ActiveForm::end();?>
 <?php $form =  ActiveForm::begin();?>
-<?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+<?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
         APPEND
     </button>

@@ -21,7 +21,9 @@ var managerTeamsModule = (function() {
         document.location.href = cfg.viewUrl + "?id=" + id;
     }
 
-    function actionDelete( id, name, dataTable )
+
+
+    function actionDelete( id, dataTable )
     {
 
         function deleteRequest(  )
@@ -172,11 +174,11 @@ var managerTeamsModule = (function() {
                     actionEdit( id );
 
                 });
+
                 dataTable.find("i[class*=delete]").click(function(){
 
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                        actionDelete( id, dataTable );
 
                 });
 

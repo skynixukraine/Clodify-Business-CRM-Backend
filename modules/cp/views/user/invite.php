@@ -30,15 +30,15 @@ $this->params['menu'] = [
                 ->textInput( [ 'class'        => 'form-control',
                                'placeholder'  => 'First name',
                 ])-> label( 'First name' );?>
-            <?php echo $form->field( $model, 'company')
-                ->textInput( [ 'class'        => 'form-control',
-                    'placeholder'  => 'Company',
-                ])-> label( 'Company' );?>
 
             <?php echo $form->field( $model, 'last_name')
                 ->textInput( ['class'   => 'form-control',
                               'placeholder'   => 'Last name',
                 ])-> label( 'Last name' );?>
+            <?php echo $form->field( $model, 'company')
+                ->textInput( [ 'class'        => 'form-control',
+                    'placeholder'  => 'Company',
+                ])-> label( 'Company' );?>
 
             <?php echo $form->field( $model, 'email')
                 ->textInput( ['class'       => 'form-control',

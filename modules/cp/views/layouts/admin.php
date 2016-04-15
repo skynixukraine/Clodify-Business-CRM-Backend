@@ -65,6 +65,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
             <?php endif;?>
 
+            <?php if( Yii::$app->request->cookies['admin'] ):?>
+                <div style="position: absolute; right: 150px; top: 10px;">
+                    <?php echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);?>
+                </div>
+            <?php endif;?>
+
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
 

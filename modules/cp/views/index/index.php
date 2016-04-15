@@ -45,6 +45,7 @@ $this->params['menu'] = [
         ]
     ]);?>
 
+
     <?php if($model->dateFilter == 1):?>
         <label style="visibility: hidden"></label>
     <?php else:?>
