@@ -146,10 +146,15 @@
                 $prev.click(function() {
                     self.move(--slideIndex);
 
+
                     return false;
                 });
 
                 $next.click(function() {
+
+
+
+
                     self.move(++slideIndex);
 
                     return false;
@@ -211,6 +216,10 @@
          * @param {Number}  [index] The slide to move to.
          */
         this.move = function(index) {
+
+
+
+
             slideIndex = isNaN(index) ? self.slideCurrent : index;
             self.slideCurrent = slideIndex % self.slidesTotal;
 
@@ -218,13 +227,16 @@
                 self.slideCurrent = slideIndex = self.slidesTotal - 1;
                 $overview.css(posiLabel, -(self.slidesTotal) * slideSize);
             }
-console.log((self.slidesTotal) * slideSize);
+
+
+
+            console.log("self.slidesTotal ", self.slidesTotal);
 console.log(slideIndex);
-console.log(self.slideCurrent);//+
+console.log("+ self.slideCurrent", self.slideCurrent);//+
 
 
 
-            if(slideIndex > self.slidesTotal) {
+            if(slideIndex >= self.slidesTotal) {
 
 
                 self.slideCurrent = slideIndex = 1;
