@@ -130,31 +130,34 @@ class TeammateController extends DefaultController
 
     public function actionView()
     {
-        if (( $teamId = Yii::$app->request->get("id") ) ) {
-
-            $model = Team::find()
-                ->where("id=:teamiD",
-                    [
-                        ':teamiD' => $teamId
-                    ])
-                ->one();
+        if (( $teamId = Yii::$app->request->get("id") ) && ($model = Team::findOne(['id' => $teamId])) ) {
 
         if ( $model->load(Yii::$app->request->post()) ) {
+
             $model1 = new Teammate();
+            if( Teammate::findOne(['team_id' => $model->id, 'user_id' => $model->user_id]) == null) {
 
-            if ($model->validate()) {
+                if ($model->validate()) {
 
-                $model1->team_id = $model->id;
-                $model1->user_id = $model->user_id;
-                $model1->save();
+                    $model1->team_id = $model->id;
+                    $model1->user_id = $model->user_id;
+                    $model1->save();
+                }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "This user is already exist"));
+                return $this->render('view', ['model' => $model,
+                    'title' => 'List of Teammates  #' . $model->id]);
             }
         }
-        }
-        /*return $this->render('view', ['model' => $model]);*/
+            return $this->render('view', ['model' => $model,
+                'title' => 'List of Teammates  #' . $model->id]);
+        } else {
+            /*return $this->render('view', ['model' => $model]);*/
 
-        /** @var $model Teammate */
-        return $this->render('view', ['model' => $model,
-            'title' => 'List of Teammates  #' . $model->id]);
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "This command is not exist"));
+            return $this->render('index');
+        }
     }
 
     /** Delete teammate */
