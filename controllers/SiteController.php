@@ -86,21 +86,17 @@ class SiteController extends Controller
 
             if ($model->login()) {
 
-
                 /** Save date login when user login */
+                /** @var $modelUserLogins User */
                 $modelUserLogins = User::find()
                     ->where('email=:Email',
                         [
                             ':Email' => $model->getUser()->email
                         ])
                     ->one();
-                /** @var $modelUserLogins User */
-                //var_dump($modelUserLogins->date_login);
-                //var_dump($modelUserLogins->date_singup);
-                //exit();
+
                 $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                /*var_dump($modelUserLogins->date_login);
-                exit();*/
+
                 $modelUserLogins->save(true, ['date_login']);
                 if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
                     Yii::$app->getSession()->setFlash('success',
