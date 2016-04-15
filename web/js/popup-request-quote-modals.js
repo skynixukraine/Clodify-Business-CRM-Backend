@@ -279,7 +279,6 @@ var requestQuoteModals = (function(){
                 console.log(hasErrors);
                 if(hasErrors){
 
-                    console.log("ddddddd");
                     return false
                 }
 

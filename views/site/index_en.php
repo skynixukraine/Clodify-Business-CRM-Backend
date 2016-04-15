@@ -164,7 +164,6 @@ $this->title = 'Welcome to the Skynix - software development company';
 </section>
 
 <!--****   Popup REQUEST a QUOTE modals   ****-->
-
 <div id="request-quote-modals">
     <div class="masks-back"></div>
     <div class="popup">
@@ -358,6 +357,92 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
 </div>
-
 <!--****   End Popup REQUEST a QUOTE modals   ****-->
+
+<!--****   Popup portfolio   ****-->
+<div id="view_portfolio" >
+    <div class="masks-back"></div>
+    <div class="popup">
+        <div class="close"></div>
+        <div class="header-popap">Infinite Beginnings</div>
+        <div class="container-fluid">
+            <div class="row body-popap">
+                <div id="slider_portfolio" class="col-lg-12">
+
+                    <a class="prev" href="javascript:void(0);">
+
+                        <div >
+                            PREV<br>
+                            PROJECT
+                        </div>
+
+                    </a>
+                    <div class="viewport" data-elementLi="1">
+                        <ul class="overview">
+                            <li><img width="300" height="300" src="images/citrix_synergy.jpg"></li>
+                            <li><img width="300" height="300" src="images/fisherman_id.jpg"></li>
+                            <li><img width="300" height="300" src="images/Infinite_beginnings.jpg"></li>
+                            <li><img width="300" height="300" src="images/citrix_synergy.jpg"></li>
+                        </ul>
+                    </div>
+                    <a class="next" href="javascript:void(0);">
+
+                        <div>
+                            NEXT<br>
+                            PROJECT
+                        </div>
+
+                    </a>
+                </div>
+
+
+
+
+                <div class="col-lg-12 info-box">
+
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <p><strong>CATEGORY:</strong> Wordpress Theme</p>
+                                <p><strong>CLIENT:</strong> Web Mission Control Inc.</p><br>
+                                <p><strong>DESCRIPTION:</strong> This theme is compatible with all recent versions of
+                                Wordpress and is based on Twitter Bootstrap (responsive. mobile first project on the web)
+                                    <br>
+                                    As a child theme of the premium <a href="#">Enfold theme</a> this theme has all
+                                    features of Enfold theme + the following custom features:
+                                </p>
+                            </div>
+                            <div class="col-lg-6 col-sm-12">
+<ul>
+    <li></li>
+    <li></li>
+</ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--****   End Popup portfolio   ****-->
+
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>
+<?php $this->registerJsFile('/js/portfolio.js'); ?>
+
+
