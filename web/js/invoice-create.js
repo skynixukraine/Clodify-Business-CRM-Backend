@@ -61,6 +61,8 @@ var invoiceCreateModule = (function() {
             }).datepicker("setDate", currentDay);
 
             //dataFilter['date_end'] = $("#date_end").val();
+            dataFilter['date_start'] = filterDateStartSelect.val();
+            dataFilter['date_end'] = filterDateEndSelect.val();
 
 
             dataTable = $('#invoice-create-table').dataTable({
