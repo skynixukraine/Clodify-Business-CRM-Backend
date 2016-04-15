@@ -88,7 +88,6 @@ $this->params['menu'] = [
         </tr>
         </thead>
   </table>
-<?php var_dump($model->date_start);?>
 <script>
     $(function(){
 
