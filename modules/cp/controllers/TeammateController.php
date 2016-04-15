@@ -31,7 +31,7 @@ class TeammateController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'view', 'delete'],
+                        'actions'   => [ 'view', 'delete', 'deleteteam'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -60,6 +60,7 @@ class TeammateController extends DefaultController
                     'view'      => ['get', 'post'],
                     'delete'    => ['delete'],
                     'create'    => ['get', 'post'],
+                    'deleteteam'    => ['delete'],
 
                 ],
             ],
@@ -157,6 +158,28 @@ class TeammateController extends DefaultController
 
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "This command is not exist"));
             return $this->render('index');
+        }
+    }
+    public function actionDeleteteam()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+
+            if ( ( $id = Yii::$app->request->post("id") ) ) {
+
+                /** @var  $model Teammate */
+                $model  = Team::findOne( $id );
+                $model->is_deleted = 1;
+                $model->save(true, ['is_deleted']);
+                return json_encode([
+                    "message"   => Yii::t("app", "You deleted team " . $id),
+                    "success"   => true
+                ]);
+            }
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
         }
     }
 

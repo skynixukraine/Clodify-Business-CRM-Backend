@@ -38,7 +38,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 <script>
     $(function(){
         managerTeamsModule.init({
-            deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
+            deleteUrl   : '<?=Url::to(['teammate/deleteteam'])?>',
             findUrl     : '<?=Url::to(['teammate/find'])?>',
             viewUrl     : '<?=Url::to(['teammate/view'])?>',
             canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
