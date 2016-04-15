@@ -36,6 +36,11 @@ class TeammateController extends DefaultController
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
+                        'actions'   => [ 'view'],
+                        'allow'     => true,
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV],
+                    ],
+                    [
                         'actions'   => [ 'index', 'find'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV],

@@ -28,7 +28,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
                 <th><?=Yii::t('app', 'Team Leader')?></th>
                 <th><?=Yii::t('app', 'Number of Teammates')?></th>
                 <th class="date-col"><?=Yii::t('app', 'Date of Creation')?></th>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                     <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
                 <?php endif;?>
             </tr>
@@ -41,9 +41,9 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
             findUrl     : '<?=Url::to(['teammate/find'])?>',
             viewUrl     : '<?=Url::to(['teammate/view'])?>',
-            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>
+            canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>
 
             })
     });
