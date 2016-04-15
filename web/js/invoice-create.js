@@ -114,15 +114,24 @@ var invoiceCreateModule = (function() {
             });
             var sum = 0;
             dataTable.on( 'draw.dt', function (e, settings, data) {
+
                 var MyRows = $('#invoice-create-table').find('tr');
                 for (var i = 1; i < MyRows.length; i++){
+
                     var hours = $(MyRows[i]).find('td:eq(5)').html();
                     if(hours != '') {
+
                         sum += parseFloat(hours);
                     }
                 }
                 sum = sum.toFixed(1);
-                $(document).find('#invoice-total_hours').val(sum);
+                if(sum == 'NaN') {
+
+                    $(document).find('#invoice-total_hours').val();
+                } else {
+
+                    $(document).find('#invoice-total_hours').val(sum);
+                }
             });
         }
     };
