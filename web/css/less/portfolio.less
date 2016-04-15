@@ -27,8 +27,6 @@
             border: 1px solid #9D9D9D;
         }
     }
-
-
 }
 #view_portfolio {
     width: 100%;
@@ -41,7 +39,8 @@
 
     .popup {
         width: 80%;
-        padding: 25px 40px 50px 40px;
+        max-width: 1080px;
+        padding: 25px 40px 40px 40px;
         position: absolute;
         left: 10%;
         top: 50px;
@@ -64,9 +63,14 @@
     .info-box{
 
         strong{
-            font-family: 'Raleway-SemiBold', sans-serif;
+            font-family: 'Raleway-Bold', sans-serif;
         }
 
+    }
+    .read-more{
+        width: 175px;
+        margin: 50px auto 0 auto;
+        display: block;
     }
 
 }
@@ -108,8 +112,8 @@
         overflow: hidden;
         position: relative;
     }
-    .prev,
-    .next{
+    .prev-box,
+    .next-box{
         width: 70px;
         height: 400px;
         display: block;
@@ -117,24 +121,30 @@
 
         > div{
             height: 400px;
-            font-size: 15px;
-            color: #919191;
             display: table-cell;
             vertical-align: middle;
-            outline: 0!important;
-            text-decoration: none;
 
-            &:before{
-                width: 45px;
-                height: 45px;
-                margin: 30px 0 25px 10px;
-                content: "";
+            a{
 
                 display: block;
-                border-left: 3px solid #bee3f5;
-                border-bottom: 3px solid #bee3f5;
-            }
+                font-size: 15px;
+                color: #919191;
 
+                outline: 0!important;
+                text-decoration: none;
+
+                &:before{
+                    width: 45px;
+                    height: 45px;
+                    margin: 30px 0 65px 10px;
+                    content: "";
+
+                    display: block;
+                    border-left: 3px solid #bee3f5;
+                    border-bottom: 3px solid #bee3f5;
+                }
+
+            }
         }
 
         &:hover,
@@ -145,41 +155,39 @@
 
     }
 
-    .prev {
+    .prev-box {
         float: left;
 
-        > div {
+        >div{
+            a {
 
-            &:before {
+                &:before {
 
-                transform: rotate(45deg);
-                -webkit-transform: rotate(45deg);
-                -ms-transform: rotate(45deg);
-                -o-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    -o-transform: rotate(45deg);
+                }
             }
         }
-
     }
 
-    .next {
+    .next-box {
         float: right;
 
-        > div {
+        >div{
+            a {
 
-            &:before {
+                &:before {
 
-                transform: rotate(225deg);
-                -webkit-transform: rotate(225deg);
-                -ms-transform: rotate(225deg);
-                -o-transform: rotate(225deg);
+                    transform: rotate(225deg);
+                    -webkit-transform: rotate(225deg);
+                    -ms-transform: rotate(225deg);
+                    -o-transform: rotate(225deg);
+                }
             }
         }
-
     }
-
-
-
-
     .disable {
         visibility: hidden;
     }
@@ -201,12 +209,9 @@
             float: left;
 
             img{
-
                 width: 100%;
                 height: auto;
-
             }
-
         }
     }
 

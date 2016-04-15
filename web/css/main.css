@@ -1736,22 +1736,9 @@ footer .link a:hover {
 .career .left-panel article .read-more {
   width: 50%;
   left: 25%;
-  border: 1px solid #F7660C;
-  border-radius: 0;
-  background: #ffffff;
   position: absolute;
   bottom: 10px;
-  font-family: 'Raleway-Medium', sans-serif;
-  font-size: 20px;
-  color: #F7660C;
   z-index: 100;
-}
-.career .left-panel article .read-more:hover {
-  background: #fffaf6;
-}
-.career .left-panel article .read-more:active {
-  webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
 }
 .career .left-panel article .shadow-bottom {
   width: 100%;
@@ -1851,7 +1838,8 @@ footer .link a:hover {
 }
 #view_portfolio .popup {
   width: 80%;
-  padding: 25px 40px 50px 40px;
+  max-width: 1080px;
+  padding: 25px 40px 40px 40px;
   position: absolute;
   left: 10%;
   top: 50px;
@@ -1870,7 +1858,12 @@ footer .link a:hover {
   text-align: center;
 }
 #view_portfolio .info-box strong {
-  font-family: 'Raleway-SemiBold', sans-serif;
+  font-family: 'Raleway-Bold', sans-serif;
+}
+#view_portfolio .read-more {
+  width: 175px;
+  margin: 50px auto 0 auto;
+  display: block;
 }
 #slider_portfolio {
   width: 100%;
@@ -1896,53 +1889,57 @@ footer .link a:hover {
   overflow: hidden;
   position: relative;
 }
-#slider_portfolio .prev,
-#slider_portfolio .next {
+#slider_portfolio .prev-box,
+#slider_portfolio .next-box {
   width: 70px;
   height: 400px;
   display: block;
 }
-#slider_portfolio .prev > div,
-#slider_portfolio .next > div {
+#slider_portfolio .prev-box > div,
+#slider_portfolio .next-box > div {
   height: 400px;
-  font-size: 15px;
-  color: #919191;
   display: table-cell;
   vertical-align: middle;
+}
+#slider_portfolio .prev-box > div a,
+#slider_portfolio .next-box > div a {
+  display: block;
+  font-size: 15px;
+  color: #919191;
   outline: 0!important;
   text-decoration: none;
 }
-#slider_portfolio .prev > div:before,
-#slider_portfolio .next > div:before {
+#slider_portfolio .prev-box > div a:before,
+#slider_portfolio .next-box > div a:before {
   width: 45px;
   height: 45px;
-  margin: 30px 0 25px 10px;
+  margin: 30px 0 65px 10px;
   content: "";
   display: block;
   border-left: 3px solid #bee3f5;
   border-bottom: 3px solid #bee3f5;
 }
-#slider_portfolio .prev:hover,
-#slider_portfolio .next:hover,
-#slider_portfolio .prev:focus,
-#slider_portfolio .next:focus,
-#slider_portfolio .prev:active,
-#slider_portfolio .next:active {
+#slider_portfolio .prev-box:hover,
+#slider_portfolio .next-box:hover,
+#slider_portfolio .prev-box:focus,
+#slider_portfolio .next-box:focus,
+#slider_portfolio .prev-box:active,
+#slider_portfolio .next-box:active {
   text-decoration: none;
 }
-#slider_portfolio .prev {
+#slider_portfolio .prev-box {
   float: left;
 }
-#slider_portfolio .prev > div:before {
+#slider_portfolio .prev-box > div a:before {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   -o-transform: rotate(45deg);
 }
-#slider_portfolio .next {
+#slider_portfolio .next-box {
   float: right;
 }
-#slider_portfolio .next > div:before {
+#slider_portfolio .next-box > div a:before {
   transform: rotate(225deg);
   -webkit-transform: rotate(225deg);
   -ms-transform: rotate(225deg);
@@ -2020,6 +2017,22 @@ a.active {
 .btn-primary:hover,
 .btn-primary:focus {
   background: #F7660C!important;
+}
+.read-more {
+  border: 1px solid #F7660C;
+  border-radius: 0;
+  background: #ffffff;
+  font-family: 'Raleway-Medium', sans-serif;
+  font-size: 20px;
+  color: #F7660C;
+}
+.read-more:hover {
+  background: #fffaf6;
+  color: #F7660C;
+}
+.read-more:active {
+  webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
 }
 .fix-height .page {
   margin: 78px auto 0 auto;

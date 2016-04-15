@@ -369,14 +369,17 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="row body-popap">
                 <div id="slider_portfolio" class="col-lg-12">
 
-                    <a class="prev" href="javascript:void(0);">
+                    <div class="prev-box">
 
-                        <div >
-                            PREV<br>
-                            PROJECT
+                        <div>
+                            <a class="prev" href="javascript:void(0);">
+                                PREV<br>
+                                PROJECT
+                            </a>
                         </div>
 
-                    </a>
+
+                    </div>
                     <div class="viewport" data-elementLi="1">
                         <ul class="overview">
                             <li><img width="300" height="300" src="images/citrix_synergy.jpg"></li>
@@ -385,14 +388,17 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <li><img width="300" height="300" src="images/citrix_synergy.jpg"></li>
                         </ul>
                     </div>
-                    <a class="next" href="javascript:void(0);">
-
+                    <div class="next-box">
                         <div>
-                            NEXT<br>
-                            PROJECT
+                            <a class="next" href="javascript:void(0);">
+                                NEXT<br>
+                                PROJECT
+                            </a>
                         </div>
 
-                    </a>
+
+
+                    </div>
                 </div>
 
 
@@ -414,10 +420,15 @@ $this->title = 'Welcome to the Skynix - software development company';
                                 </p>
                             </div>
                             <div class="col-lg-6 col-sm-12">
-<ul>
-    <li></li>
-    <li></li>
-</ul>
+                                <ul>
+                                    <li>
+                                        Custom post types and appropriate backend for managing:
+                                    events, services, resources and people;
+                                    </li>
+                                    <li>
+                                        Custom registration form and workflow
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -425,6 +436,12 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
                 </div>
+                <div class="col-lg-12 info-box">
+                    <a href="#" class="btn read-more">VISIT WEBSITE</a>
+                </div>
+
+
+
 
 
 
