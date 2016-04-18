@@ -121,7 +121,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="infinite_beginnings.jpg">
+            <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="infinite_beginnings1.jpg">
                 <img src="images/btn-infinite-beginnings.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Infinite Beginnings</h3>
@@ -548,7 +548,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                 <div class="col-lg-12">
                     <a href="#" class="btn read-more" target = "_ blank">VISIT WEBSITE</a>
                 </div>
-                
+
             </div>
         </div>
 

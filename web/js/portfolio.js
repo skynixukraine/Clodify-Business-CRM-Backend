@@ -177,7 +177,6 @@ var Portfolio  = (function(){
                 stop = true;
                 clearTimeout(timestop);
 
-                //viewport.fadeOut(200);
 
                 el = portfolio.eq(elem);
 
