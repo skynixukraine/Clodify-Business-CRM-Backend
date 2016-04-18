@@ -121,16 +121,16 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="infinite_beginnings1.jpg">
+            <a href="#" data-href="http://infinitebeginnings.com/" data-images="infinite_beginnings1.jpg">
                 <img src="images/btn-infinite-beginnings.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Infinite Beginnings</h3>
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-6 col-sm-12">
-                    <p><strong>CATEGORY:</strong> Wordpress Theme</p>
-                    <p><strong>CLIENT:</strong> Web Mission Control Inc.</p><br>
-                    <p><strong>DESCRIPTION:</strong>This theme is compatible with all recent versions of Wordpress and
+                    <p><strong>CATEGORY: </strong> Wordpress Theme</p>
+                    <p><strong>CLIENT: </strong> Web Mission Control Inc.</p><br>
+                    <p><strong>DESCRIPTION: </strong>This theme is compatible with all recent versions of Wordpress and
                         is based on Twitter Bootstrap (responsive, mobile first project on the web)
                         <br>
                         As a child theme of the premium <a href="#" class="blue-txt">Enfold theme</a>  this theme has
@@ -151,7 +151,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="fisherman_id.jpg">
+            <a href="#" data-href="" data-images="fisherman_id.jpg">
                 <img src="images/btn-fisherman.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Fisherman ID</h3>
@@ -159,9 +159,9 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
-                    <p><strong>CATEGORY:</strong>Mobile App: iOS & Android</p>
-                    <p><strong>CLIENT:</strong>Fisherman UK ltd</p><br>
-                    <p><strong>DESCRIPTION:</strong>This mobile application is intended to help for specific groups of
+                    <p><strong>CATEGORY: </strong>Mobile App: iOS & Android</p>
+                    <p><strong>CLIENT: </strong>Fisherman UK ltd</p><br>
+                    <p><strong>DESCRIPTION: </strong>This mobile application is intended to help for specific groups of
                         people to get their aims. This app contents from a social network and a reporting system.
                         The App has been developed using the most modern technologies:
                     </p>
@@ -187,9 +187,9 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
-                    <p><strong>CATEGORY:</strong>CMS & Web</p>
-                    <p><strong>CLIENT:</strong>Citrix Systems</p><br>
-                    <p><strong>DESCRIPTION:</strong>This informational announcement site for events at Citrix is
+                    <p><strong>CATEGORY: </strong>CMS & Web</p>
+                    <p><strong>CLIENT: </strong>Citrix Systems</p><br>
+                    <p><strong>DESCRIPTION: </strong>This informational announcement site for events at Citrix is
                         developed using flexible CMS Adobe CQ. CMS allows administrators of the site to manage content
                         by multiple admins with different privilege levels. The CMS has been developed using the
                         following technologies:
@@ -221,9 +221,9 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
-                    <p><strong>CATEGORY:</strong>Wordpress Plugin</p>
-                    <p><strong>CLIENT:</strong></p>Castles Estate Agents ltd.<br>
-                    <p><strong>DESCRIPTION:</strong>The plugin was developed for grabbing properties from ExpertAgent
+                    <p><strong>CATEGORY: </strong>Wordpress Plugin</p>
+                    <p><strong>CLIENT: </strong>Castles Estate Agents ltd.</p><br>
+                    <p><strong>DESCRIPTION: </strong>The plugin was developed for grabbing properties from ExpertAgent
                         API and build a catalog of properties with rich featured property details pages..
                     </p>
                 </div>
@@ -239,7 +239,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="m2_marketplace_extension.jpg">
+            <a href="#" data-href="http://marketplace.skynix.solutions/" data-images="m2_marketplace_extension.jpg">
                 <img src="images/btn-marketplace-extension.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">M2 Marketplace Extension</h3>
@@ -256,7 +256,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="handmadeworks.jpg">
+            <a href="#" data-href="http://handmade.works/" data-images="handmadeworks.jpg">
                 <img src="images/btn-handmade-works.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">M2 Marketplace - Handmade Theme</h3>
@@ -546,7 +546,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 </div>
                 <div class="col-lg-12">
-                    <a href="#" class="btn read-more" target = "_ blank">VISIT WEBSITE</a>
+                    <a href="#" class="btn read-more" target = "_ blank" rel="nofollow">VISIT WEBSITE</a>
                 </div>
 
             </div>

@@ -35,9 +35,9 @@ var Portfolio  = (function(){
         headerPopap.html("");
         viewport.html("");
         infoBox.html("");
-        img = [];
+        img             = [];
+        htmlHeight      = htmlPage.height();
         bodyPopap.animate({opacity: 0},0);
-        bodyPopap.animate({opacity: 1},500);
 
 
 
@@ -57,9 +57,9 @@ var Portfolio  = (function(){
 
         }
 
-
-
         viewport.html(img[0]);
+        bodyPopap.animate({opacity: 1},500);
+
         //viewport.fadeIn(500);
         console.log('img.length ', img.length);
         if(img.length > 1){
@@ -70,7 +70,6 @@ var Portfolio  = (function(){
 
 
         }
-
 
 
 
@@ -98,24 +97,33 @@ var Portfolio  = (function(){
         txtPopap = el.find('.info-box-hidden');
         infoBox.html(txtPopap.clone());
 
+
         dataHref = el.find('a').attr('data-href');
-        btnPopupVisit.attr('href', dataHref);
+
+        if(dataHref){
+
+            btnPopupVisit.css('display', "block");
+            btnPopupVisit.attr('href', dataHref);
+
+        }else{
+
+            btnPopupVisit.css('display', 'none');
+        }
 
 
-        htmlHeight      = htmlPage.height();
+
         bgForPopup.fadeIn(200);
         popup.fadeIn(300);
         popup.slideDown(200);
 
 
-
         if(htmlHeight > 900){
 
-            popup.css("top", htmlPage.scrollTop()+(htmlHeight - 850)/2);
+            popup.css('top', htmlPage.scrollTop()+(htmlHeight - 850)/2);
 
         }else{
 
-            popup.css("top", htmlPage.scrollTop()+10);
+            popup.css('top', htmlPage.scrollTop()+10);
         }
 
         if(htmlWidth > 768){
