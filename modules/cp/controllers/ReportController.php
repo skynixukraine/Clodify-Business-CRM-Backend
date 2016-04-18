@@ -67,9 +67,6 @@ class ReportController extends DefaultController
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
         $query              = Report::find();
 
-
-
-
         $columns        = [
             'id',
             'task',
@@ -124,7 +121,6 @@ class ReportController extends DefaultController
             }
 
         }
-
         if(User::hasPermission([User::ROLE_CLIENT])) {
 
             $customer = Yii::$app->user->id;

@@ -174,18 +174,25 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if (( $id = Yii::$app->request->get("id") ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) ) {
+            if (($id = Yii::$app->request->get("id"))) {
 
-            $model = Invoice::find()
-                ->where("id=:iD",
-                    [
-                        ':iD' => $id
-                    ])
-                ->one();
+                $model = Invoice::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $id
+                        ])
+                    ->one();
+            }
+            /** @var $model Invoice */
+            return $this->render('view', ['model' => $model,
+                'title' => 'You watch invoice #' . $model->id]);
+        }else{
+            /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
+            return $this->redirect('index');
+
         }
-        /** @var $model Invoice */
-        return $this->render('view', ['model' => $model,
-                                      'title' => 'You watch invoice #' . $model->id]);
     }
 
     public function actionSend()

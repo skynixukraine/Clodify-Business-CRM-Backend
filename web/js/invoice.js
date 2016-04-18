@@ -69,7 +69,7 @@ var invoiceModule = (function() {
         }
 
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
+            title       : 'Delete Invoice #' + id + "?",
             body        : 'All data related to this invoice will be deleted.',
             winAttrs    : { class : 'modal delete'}
         });
