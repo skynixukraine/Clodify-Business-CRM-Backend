@@ -111,7 +111,7 @@ class TeammateController extends DefaultController
             $list[] = [
                 $model->id,
                 $model->name,
-                $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name,
+                $model->getLeader()->one()->first_name . ' ' . $model->getLeader()->one()->last_name,
                 Teammate::teammateUser($model->id),
                 $model->date_created,
             ];

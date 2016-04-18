@@ -67,8 +67,6 @@ class ReportController extends DefaultController
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
         $query              = Report::find();
 
-
-
         $columns        = [
             'id',
             'task',
