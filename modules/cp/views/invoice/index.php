@@ -41,7 +41,9 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             <th><?=Yii::t('app', 'Date Sent')?></th>
             <th><?=Yii::t('app', 'Date Paid')?></th>
             <th><?=Yii::t('app', 'Status')?></th>
-            <th><?=Yii::t('app', 'Actions')?></th>
+            <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+                <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+            <?php endif;?>
         </tr>
         </thead>
     </table>
@@ -57,7 +59,7 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             findUrl     : '<?=Url::to(['invoice/find'])?>',
             viewUrl     : '<?=Url::to(['invoice/view'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
+            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>
         })
