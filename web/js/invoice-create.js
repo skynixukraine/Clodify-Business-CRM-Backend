@@ -112,9 +112,9 @@ var invoiceCreateModule = (function() {
                 "processing": true,
                 "serverSide": true
             });
-            var sum = 0;
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
+                var sum = 0;
                 var MyRows = $('#invoice-create-table').find('tr');
                 for (var i = 1; i < MyRows.length; i++){
 
@@ -124,10 +124,10 @@ var invoiceCreateModule = (function() {
                         sum += parseFloat(hours);
                     }
                 }
-                sum = sum.toFixed(1);
-                if(sum == 'NaN') {
 
-                    $(document).find('#invoice-total_hours').val();
+                if( isNaN(sum) || sum == null ) {
+
+                    $(document).find('#invoice-total_hours').val('');
                 } else {
 
                     $(document).find('#invoice-total_hours').val(sum);
