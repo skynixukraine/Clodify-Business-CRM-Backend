@@ -120,43 +120,13 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="line"></div>
         </div>
 
-
-
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);"
-               data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
-                <img src="images/btn-citrix-synergy.jpg" width="289" height="214" />
+            <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="infinite_beginnings.jpg">
+                <img src="images/btn-infinite-beginnings.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Infinite Beginnings</h3>
             </a>
-            <div class="info-box-hidden">
-                <div class="col-lg-6 col-sm-12">
-                    <p><strong>CATEGORY:</strong> Wordpress Theme</p>
-                    <p><strong>CLIENT:</strong> Web Mission Control Inc.</p><br>
-                    <p><strong>DESCRIPTION:</strong> This theme is compatible with all recent versions of
-                        Wordpress and is based on Twitter Bootstrap (responsive. mobile first project on the web)
-                        <br>
-                        As a child theme of the premium
-                        <a href="http://themeforest.net/item/enfold-responsive-multipurpose-theme/4519990" class="blue-txt">Enfold theme</a>
-                        this theme has all features of Enfold theme + the following custom features:
-                    </p>
-                </div>
-                <div class="col-lg-6 col-sm-12">
-                    <ul>
-                        <li>
-                            Custom post types and appropriate backend for managing:
-                            events, services, resources and people;
-                        </li>
-                        <li>
-                            Custom registration form and workflow
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
-                <img src="images/btn-сastles_estate_agents.jpg" width="289" height="214" />
-            </a>
-            <div class="info-box-hidden" >
+            <div class="info-box-hidden row" >
                 <div class="col-lg-6 col-sm-12">
                     <p><strong>CATEGORY:</strong> Wordpress Theme</p>
                     <p><strong>CLIENT:</strong> Web Mission Control Inc.</p><br>
@@ -179,11 +149,14 @@ $this->title = 'Welcome to the Skynix - software development company';
                 </div>
             </div>
         </div>
+
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
+            <a href="#" data-href="javascript:void(0);" data-images="fisherman_id.jpg">
                 <img src="images/btn-fisherman.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Fisherman ID</h3>
             </a>
-            <div class="info-box-hidden" >
+            <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
                     <p><strong>CATEGORY:</strong>Mobile App: iOS & Android</p>
@@ -204,11 +177,14 @@ $this->title = 'Welcome to the Skynix - software development company';
 
             </div>
         </div>
+
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="https://www.citrix.com/" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
+            <a href="#" data-href="https://www.citrix.com/" data-images="citrix_cynergy.jpg">
                 <img src="images/btn-citrix-synergy.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Citrix Synergy</h3>
             </a>
-            <div class="info-box-hidden" >
+            <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
                     <p><strong>CATEGORY:</strong>CMS & Web</p>
@@ -235,17 +211,20 @@ $this->title = 'Welcome to the Skynix - software development company';
 
             </div>
         </div>
+
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="http://www.castles.uk.com/" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
-                <img src="images/btn-castles-estate-agents.jpg" width="289" height="214" />
+            <a href="#" data-href="http://www.castles.uk.com/" data-images="castles.jpg">
+                <img src="images/btn-сastles_estate_agents.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Castles - Estate agents</h3>
             </a>
-            <div class="info-box-hidden" >
+            <div class="info-box-hidden row" >
 
                 <div class="col-lg-6 col-sm-12">
                     <p><strong>CATEGORY:</strong>Wordpress Plugin</p>
                     <p><strong>CLIENT:</strong></p>Castles Estate Agents ltd.<br>
                     <p><strong>DESCRIPTION:</strong>The plugin was developed for grabbing properties from ExpertAgent
-                        API and build a catalog of properties with rich featured property details pages.
+                        API and build a catalog of properties with rich featured property details pages..
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -258,13 +237,16 @@ $this->title = 'Welcome to the Skynix - software development company';
 
             </div>
         </div>
-        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
-                <img src="images/btn-marketplace-extension.jpg" width="289" height="214" />
-            </a>
-            <div class="info-box-hidden">
 
-                <div class="col-lg-6 col-sm-12">
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="javascript:void(0);" data-images="m2_marketplace_extension.jpg">
+                <img src="images/btn-marketplace-extension.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">M2 Marketplace Extension</h3>
+            </a>
+            <div class="info-box-hidden row">
+
+                <div class="col-lg-12 col-sm-12">
                     <p>The M2 Marketplace extension intended to create specific markets based on Magento 2 ecommerce.
                         It shares Magento 2 functionality between different vendors and promote their products under one catalog (marketplace).
                         (List of features will be provided later)</p>
@@ -272,13 +254,16 @@ $this->title = 'Welcome to the Skynix - software development company';
 
             </div>
         </div>
-        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="javascript:void(0);" data-images="fisherman1.jpg, fisherman2.jpg, fisherman3.jpg, fisherman4.jpg, fisherman5.jpg, fisherman6.jpg, fisherman7.jpg">
-                <img src="images/btn-handmade-works.jpg" width="289" height="214" />
-            </a>
-            <div class="info-box-hidden" >
 
-                <div class="col-lg-6 col-sm-12">
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="javascript:void(0);" data-images="handmadeworks.jpg">
+                <img src="images/btn-handmade-works.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">M2 Marketplace - Handmade Theme</h3>
+            </a>
+            <div class="info-box-hidden row" >
+
+                <div class="col-lg-12 col-sm-12">
                     <p>
                         The theme for handmade markets is developed for M2 Marketplace extension
                     </p>
@@ -516,68 +501,54 @@ $this->title = 'Welcome to the Skynix - software development company';
         <div class="header-popap">Infinite Beginnings</div>
         <div class="container-fluid">
             <div class="row body-popap">
-                <div id="slider_portfolio" class="col-lg-12">
+                <div class="slider_portfolio col-lg-12">
 
                     <div class="prev-box">
 
                         <div>
                             <a class="prev" href="javascript:void(0);">
-                                PREV<br>
-                                PROJECT
+
+                                <div class="hidden768">
+                                    PREV<br>PROJECT
+                                </div>
+                                <div class="visible768">
+                                    PREV PROJECT
+                                </div>
+
                             </a>
                         </div>
 
-
                     </div>
-                    <div class="viewport" data-elementLi="1">
-                        <ul class="overview">
+                    <div class="viewport">
 
-                        </ul>
                     </div>
                     <div class="next-box">
+
                         <div>
                             <a class="next" href="javascript:void(0);">
-                                NEXT<br>
-                                PROJECT
+
+                                <div class="hidden768">
+                                    NEXT<br>PROJECT
+                                </div>
+                                <div class="visible768">
+                                    NEXT PROJECT
+                                </div>
+
                             </a>
                         </div>
-
-
 
                     </div>
                 </div>
 
-
-
-
                 <div class="col-lg-12">
 
-                    <div class="container-fluid">
-
-                        <div class="row info-box">
-
-
-                        </div>
-                    </div>
-
-
+                    <div class="container-fluid info-box"></div>
 
                 </div>
                 <div class="col-lg-12">
                     <a href="#" class="btn read-more" target = "_ blank">VISIT WEBSITE</a>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
+                
             </div>
         </div>
 
