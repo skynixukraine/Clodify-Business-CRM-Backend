@@ -119,9 +119,9 @@ class InvoiceController extends DefaultController
             $list[] = [
                 $model->id,
                 $model->getUser()->one()->first_name,
-                $model->subtotal,
-                $model->discount,
-                $model->total,
+                '$' . $model->subtotal,
+                '$' . $model->discount,
+                '$' . $model->total,
                 $model->date_start,
                 $model->date_end,
                 $model->date_created,

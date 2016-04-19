@@ -238,8 +238,6 @@ class ProjectController extends DefaultController
                                 ':iD' => $id
                             ])
                    ->one();
-               var_dump($model->date_start);
-               var_dump($model->date_end);
                /** @var $model Project */
                if( $model->is_delete == 0) {
 

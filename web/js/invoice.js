@@ -12,7 +12,8 @@ var invoiceModule = (function() {
             canDelete   : null,
             canView     : null,
             canPaid     : null,
-            canCanceled : null
+            canCanceled : null,
+            canDollar   : null
         },
         dataTable,
         dataFilter = {
@@ -106,7 +107,16 @@ var invoiceModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "orderable" : true
+                        "orderable" : true,
+                        /*"render"    : function (data, type, row) {
+                         /!*var icons = [];
+                            if (cfg.canDollar) {
+
+                                icons.push('<i class="fa fa-dollar dollar"></i>');
+
+                            }*!/
+
+                        }*/
                     },
                     {
                         "targets"   : 3,
