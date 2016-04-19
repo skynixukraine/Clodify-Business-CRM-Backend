@@ -47,6 +47,11 @@ class UserController extends DefaultController {
                         'allow' => true,
                         'roles' => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
+                    [
+                        'actions' => ['loginback'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_DEV],
+                    ],
                 ],
             ],
             'verbs' => [

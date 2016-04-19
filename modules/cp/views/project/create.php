@@ -93,9 +93,35 @@ $this->params['menu'] = [
             <?php endif;?>
 
             <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
-            <div class="form-group">
+        <div class = "box">
+            <div class = "box-body no-padding">
+                <table class = "table load">
+                    <thead>
+                    <tr>
+                        <th>Assign</th>
+                        <th>Invoices Receiver</th>
+                        <th>Customer Name</th>
+                    </tr>
+                    </thead>
+                    <?php $customers = User::allCustomers();
+                    /** @var  $customers User */
+                    foreach($customers as $customer):?>
+                        <tbody>
+                        <tr>
+                            <td><input type="checkbox" title=""></td>
+                            <td><input type="radio" title=""></td>
+                            <td><?= Html::encode($customer->first_name . ' ' . $customer->last_name)?></td>
+
+                        </tr>
+                        </tbody>
+                    <?php endforeach;?>
+                </table>
+            </div>
+        </div>
+
+            <!--<div class="form-group">
                 <?php
-                $customers = User::allCustomers();
+/*                $customers = User::allCustomers();
                 $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
                 echo $form->field( $model, 'customers' )
                     ->listBox($listCustomers,
@@ -104,7 +130,9 @@ $this->params['menu'] = [
                             'class'     => "form-control"
                         ])
                     ->label('Clients');
-                ?>
+                */?>
+            </div>-->
+                    </div>
             </div>
             <div class="form-group">
                 <?php
