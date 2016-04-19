@@ -129,8 +129,8 @@ class InvoiceController extends DefaultController
                 $model->date_paid,
                 $model->status
             ];
-        }
 
+            }
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
@@ -233,7 +233,8 @@ class InvoiceController extends DefaultController
 
                     $pdf = new mPDF();
                     $pdf->WriteHTML($html);
-                    $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
+                    $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
+                    $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
 
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
@@ -246,7 +247,7 @@ class InvoiceController extends DefaultController
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
-                            ->setTo($dataPdf->getUser()->one()->email)
+                            ->setTo/*($dataPdf->getUser()->one()->email)*/('valeriya@skynix.co')
                             ->setCc(Yii::$app->params['adminEmail'])
                             ->attachContent($content, ['fileName' => 'Invoice.pdf'])
                             ->send();

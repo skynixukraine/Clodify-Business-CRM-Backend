@@ -41,9 +41,9 @@ $this->params['menu'] = [
         <li>Start Date:      <?php echo $model->date_start;?></li>
         <li>End Date:        <?php echo $model->date_end;?></li>
         <li>Total hours:     <?php echo $model->total_hours;?></li>
-        <li>Sub total:       <?php echo $model->subtotal;?></li>
-        <li>Discount:        <?php echo $model->discount;?></li>
-        <li>Total:           <?php echo $model->total;?></li>
+        <li>Sub total:       <?php echo '$' . $model->subtotal;?></li>
+        <li>Discount:        <?php echo '$' . $model->discount;?></li>
+        <li>Total:           <?php echo '$' . $model->total;?></li>
         <li>Notes:           <?php echo $model->note;?></li>
         <li>Create date:     <?php echo $model->date_created;?></li>
         <li>Sent date:       <?php echo $model->date_sent;?></li>
