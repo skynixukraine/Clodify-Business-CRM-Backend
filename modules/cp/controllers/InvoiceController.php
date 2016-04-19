@@ -247,7 +247,7 @@ class InvoiceController extends DefaultController
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
-                            ->setTo/*($dataPdf->getUser()->one()->email)*/('valeriya@skynix.co')
+                            ->setTo($dataPdf->getUser()->one()->email)
                             ->setCc(Yii::$app->params['adminEmail'])
                             ->attachContent($content, ['fileName' => 'Invoice.pdf'])
                             ->send();
