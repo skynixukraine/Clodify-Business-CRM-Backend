@@ -106,11 +106,17 @@ $this->params['menu'] = [
                     <?php $customers = User::allCustomers();
                     /** @var  $customers User */
                     foreach($customers as $customer):?>
+
                         <tbody>
                         <tr>
-                            <td><input type="checkbox" title=""></td>
-                            <td><input type="radio" title=""></td>
+                            <td><input type="checkbox" title="" name="Project[customers][]"
+                                <?=($model->isInCustomers($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
+                            </td>
+                            <td><input type="radio" title="" name="Project[invoice_received]"
+                                <?=($model->isInvoiced($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
+                            </td>
                             <td><?= Html::encode($customer->first_name . ' ' . $customer->last_name)?></td>
+
 
                         </tr>
                         </tbody>
@@ -118,6 +124,38 @@ $this->params['menu'] = [
                 </table>
             </div>
         </div>
+                <div class = "box">
+                    <div class = "box-body no-padding">
+                        <table class = "table load">
+                            <thead>
+                            <tr>
+                                <th>Assign</th>
+                                <th>PM</th>
+                                <th>Developer Name</th>
+                            </tr>
+                            </thead>
+                            <?php $developers = User::allDevelopers();
+                            /** @var  $developers User */
+                            foreach($developers as $developer):?>
+
+                                <tbody>
+                                <tr>
+                                    <td><input type="checkbox" title="" name="Project[developers][]"
+                                            <?=($model->isInDevelopers($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                    </td>
+                                    <td><input type="radio" title="" name="Project[is_pm]"
+                                            <?=($model->isPm($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                    </td>
+                                    <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
+
+
+                                </tr>
+                                </tbody>
+                            <?php endforeach;?>
+                        </table>
+                    </div>
+                </div>
+
 
             <!--<div class="form-group">
                 <?php
@@ -132,11 +170,11 @@ $this->params['menu'] = [
                     ->label('Clients');
                 */?>
             </div>-->
-                    </div>
-            </div>
-            <div class="form-group">
+                   <!-- </div>
+            </div>-->
+            <!--<div class="form-group">
                 <?php
-                $developers = User::allDevelopers();
+/*                $developers = User::allDevelopers();
                 $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
                 echo $form->field( $model, 'developers' )
                     ->listBox($listDevelopers,
@@ -144,8 +182,8 @@ $this->params['menu'] = [
                             'multiple'  => "true",
                             'class'     => "form-control"
                         ]);
-                ?>
-            </div>
+                */?>
+            </div>-->
             <?php endif;?>
             <div>
                 <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>

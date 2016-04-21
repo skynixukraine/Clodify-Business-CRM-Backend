@@ -211,9 +211,22 @@ class ProjectController extends DefaultController
                 if ($model->validate()) {
 
                     $model->save();
+                    /*$customers = $model->customers;
+                    if(is_array($customers)){
+                        foreach($customers as $customer){
+                            $projectCustomer = new ProjectCustomer;
+                            $projectCustomer->user_id = $customer;
+                            $projectCustomer->project_id = $model->id;
+                            $projectCustomer->receive_invoices = false;
+                            $projectCustomer->save();
+                        }
+                    }*/
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
 
+                }else{
+                   /* var_dump($model->getErrors());
+                    exit();*/
                 }
             }
             return $this->render('create', ['model' => $model,

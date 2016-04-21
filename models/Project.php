@@ -37,6 +37,8 @@ class Project extends \yii\db\ActiveRecord
 
     public $customers;
     public $developers;
+    public $invoice_received;
+    public $is_pm;
     /**
      * @inheritdoc
      */
@@ -53,7 +55,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'status'], 'required'],
-            [['customers', 'developers'], 'required', 'on' => 'admin'],
+            [['customers', 'developers','invoice_received', 'is_pm'], 'required', 'on' => 'admin'],
             [['total_logged_hours', 'total_paid_hours', 'is_delete'], 'integer'],
             [['status'], 'string'],
             [['date_start', 'date_end'], 'safe'],
@@ -170,7 +172,8 @@ class Project extends \yii\db\ActiveRecord
                     ->insert(ProjectCustomer::tableName(), [
                         'project_id' => $this->id,
                         'user_id' => $customer,
-                        'receive_invoices' => 1,//when add project to some user receive_invoices from project_customers = 1
+                        /*'receive_invoices' => 1,*///when add project to some user receive_invoices from project_customers = 1
+                        'receive_invoices' => ($this->invoice_received==$customer),
                     ])->execute();
             }
         }
@@ -184,13 +187,14 @@ class Project extends \yii\db\ActiveRecord
                 ])
                 ->execute();
 
-            /* Add to ProjectCustomers*/
+            /* Add to ProjectDevelopers*/
             foreach ($this->developers as $developer) {
 
                 $connection->createCommand()
                     ->insert(ProjectDeveloper::tableName(), [
                         'project_id' => $this->id,
                         'user_id' => $developer,
+                        'is_pm' => ($this->is_pm==$developer),
                     ])->execute();
             }
         }
@@ -216,4 +220,42 @@ class Project extends \yii\db\ActiveRecord
             ->where(ProjectDeveloper::tableName() . '.user_id=:ID', [':ID' => $userId])
             ->all();
     }
+    public function isInCustomers($user_id){
+        if(!is_array($this->customers)){
+            return false;
+        }
+
+        return in_array($user_id, $this->customers);
+    }
+    public function isInvoiced($user_id){
+        if(!is_array($this->projectCustomers)){
+            return false;
+        }
+        foreach ($this->projectCustomers as $projectCustomer){
+            if($projectCustomer->receive_invoices && $projectCustomer->user_id == $user_id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isInDevelopers($user_id){
+        if(!is_array($this->developers)){
+            return false;
+        }
+
+        return in_array($user_id, $this->developers);
+    }
+    public function isPm($user_id){
+        if(!is_array($this->projectDevelopers)){
+            return false;
+        }
+        foreach ($this->projectDevelopers as $projectDeveloper){
+            if($projectDeveloper->is_pm && $projectDeveloper->user_id == $user_id){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
