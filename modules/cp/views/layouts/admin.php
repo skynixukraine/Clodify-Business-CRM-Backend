@@ -52,7 +52,11 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-
+            <?php if( Yii::$app->request->cookies['admin'] ):?>
+                <div style="float: right; padding-right: 10px;padding-top: 10px;">
+                    <?php echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);?>
+                </div>
+            <?php endif;?>
 
             <?php if ( isset( $this->params['menu'] ) && count($this->params['menu']) ) :?>
 
@@ -64,12 +68,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </ul>
 
             <?php endif;?>
-
-            <?php if( Yii::$app->request->cookies['admin'] ):?>
-                <div style="position: absolute; right: 150px; top: 10px;">
-                    <?php echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);?>
-                </div>
-            <?php endif;?>
+            
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
