@@ -13,12 +13,33 @@ var projectModule = (function() {
             canEdit     : null,
             canActivate : null,
             canSuspend  : null,
-            canSeeHours : null
+            canSeeHours : null,
+            canFunck    : null
         },
         dataTable,
         dataFilter = {
         },
         deleteModal;
+
+        $(".one input[type='checkbox']").click(function () {
+
+            if ($(".one input[type='checkbox']:checked").length == 1) {
+
+                $(this).parent().parent().find(" input[type='radio']").trigger("click");
+
+            }
+
+        });
+    $(".two input[type='checkbox']").click(function () {
+
+        if ($(".two input[type='checkbox']:checked").length == 1) {
+
+            $(this).parent().parent().find("input[type='radio']").trigger("click");
+
+        }
+
+    });
+
 
     function actionEdit( id )
     {

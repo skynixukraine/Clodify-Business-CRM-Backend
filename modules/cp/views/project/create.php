@@ -95,7 +95,7 @@ $this->params['menu'] = [
             <?php if( User::hasPermission([User::ROLE_ADMIN]) ):?>
         <div class = "box">
             <div class = "box-body no-padding">
-                <table class = "table load">
+                <table class = "table load one">
                     <thead>
                     <tr>
                         <th>Assign</th>
@@ -112,7 +112,7 @@ $this->params['menu'] = [
                             <td><input type="checkbox" title="" name="Project[customers][]"
                                 <?=($model->isInCustomers($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
                             </td>
-                            <td><input type="radio" title="" name="Project[invoice_received]"
+                            <td><input type="radio" title=""  name="Project[invoice_received]"
                                 <?=($model->isInvoiced($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
                             </td>
                             <td><?= Html::encode($customer->first_name . ' ' . $customer->last_name)?></td>
@@ -126,7 +126,7 @@ $this->params['menu'] = [
         </div>
                 <div class = "box">
                     <div class = "box-body no-padding">
-                        <table class = "table load">
+                        <table class = "table load two">
                             <thead>
                             <tr>
                                 <th>Assign</th>
@@ -143,7 +143,7 @@ $this->params['menu'] = [
                                     <td><input type="checkbox" title="" name="Project[developers][]"
                                             <?=($model->isInDevelopers($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
                                     </td>
-                                    <td><input type="radio" title="" name="Project[is_pm]"
+                                    <td><input type="radio" title=""  name="Project[is_pm]"
                                             <?=($model->isPm($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
                                     </td>
                                     <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
