@@ -11,6 +11,7 @@ use Yii;
  * @property integer $team_id
  * @property integer $user_id
  *  @property string $status
+ * @property integer $is_deleted
  */
 class Teammate extends \yii\db\ActiveRecord
 {
