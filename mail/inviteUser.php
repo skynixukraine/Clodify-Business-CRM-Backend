@@ -10,11 +10,7 @@ use app\models\User;
  */
 /** @var  $model User */
 ?>
-<style>
-    td strong > a{
-        color: black !important;
-    }
-</style>
+
 <tr>
     <td width = "29" style="padding: 0; margin: 0;"></td>
     <td colspan = "3"  height="36" style="padding: 0; margin: 0;">

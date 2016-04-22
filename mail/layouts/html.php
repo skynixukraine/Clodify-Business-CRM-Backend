@@ -28,7 +28,9 @@ use yii\helpers\Html;
             color: #000000;
 
         }
-
+         td strong > a{
+             color: black !important;
+         }
 
     </style>
     <!--style="border: solid 1px red"-->
