@@ -243,8 +243,8 @@ class InvoiceController extends DefaultController
                             'id' => $dataPdf->id,
                             'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
                                 $dataPdf->getUser()->one()->last_name,
-                            'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
-                            'dataTo' => date('j F', strtotime($dataPdf->date_end)),
+                            'dataFrom' => date('j F Y', strtotime($dataPdf->date_start)),
+                            'dataTo' => date('j F Y', strtotime($dataPdf->date_end)),
 
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)

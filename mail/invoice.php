@@ -62,19 +62,6 @@
         font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
         THANK YOU FOR YOUR COLLABORATION WE APPRECIATE YOUR BUSINESS </td>
 </tr>
-<tr>
-    <td colspan = "2" width = "237" height="34" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
-
-    <td width = "96"  valign="top" style="padding:0; margin: 0; text-align: center; background-color: #a3d8f0;
-        vertical-align: middle;">
-        <a href="#" title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
-            <img src="http://cdn.skynix.co/skynix/btn-click.png" width="95" height = "34"  border="0"
-                 alt = "CLICK HERE" style="display: block; padding: 0px; margin: 0px; border: none;"/>
-        </a>
-    </td>
-
-    <td colspan = "2" width = "237" height="34" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
-</tr>
 
 <tr>
     <td colspan = "5"  height="13" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>

@@ -228,8 +228,9 @@ class SiteController extends Controller
 
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'] )
-                    ->setTo( Yii::$app->params['adminEmail'] )
-                    ->setReplyTo( [ $email => $name ] )
+                    /*->setTo( Yii::$app->params['adminEmail'] )*/
+                    /*->setReplyTo( [ $email => $name ] )*/
+                        ->setTo('valeriya@skynix.co')
                     ->setSubject('Skynix - New quote. Requested by ' . $name);
 
                     if ($model->upload()) {
