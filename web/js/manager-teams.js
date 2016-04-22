@@ -58,7 +58,7 @@ var managerTeamsModule = (function() {
         }
 
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
+            title       : 'Delete team ' + id + "?",
             body        : 'The teams will be unavailable anymore, but all his data reports and project will be left in the system.' +
                           ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
@@ -66,6 +66,7 @@ var managerTeamsModule = (function() {
         deleteModal.show();
         deleteModal.getWin().find("button[class*=confirm]").click(function () {
             deleteRequest();
+            dataTable.api().ajax.reload();
         });
 
     }
