@@ -60,7 +60,7 @@
 <tr>
     <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
         font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
-        THANK YOU FOR YOUR COLLABORATION WE APPRECIATE YOUR BUSINESS </td>
+        THANK YOU FOR YOUR COLLABORATION <br/> WE APPRECIATE YOUR BUSINESS </td>
 </tr>
 
 <tr>
