@@ -12,10 +12,7 @@ var career = (function(){
         close,
         htmlPage;
 
-    /*var BtnReadMore,
-        articleShow,
-        htmlPage,
-        elem;*/
+
 
     return{
 
@@ -25,7 +22,7 @@ var career = (function(){
             popupBox        = $('.popup-box');
             popup           = popupBox.find('.popup-career');
             close           = popupBox.find('.close');
-            htmlPage        = $('body');
+            htmlPage        = $(window);
 
             BtnReadMore.click(function(event) {
 
@@ -35,7 +32,7 @@ var career = (function(){
                 popupBox.css('display', 'block');
                 popup.find('.body').html(txtPopup);
 
-console.log(htmlPage.scrollTop()+10);
+
                 popup.css("top", htmlPage.scrollTop()+10);
 
 
@@ -53,44 +50,6 @@ console.log(htmlPage.scrollTop()+10);
                 return false
             });
 
-
-
-            /*htmlPage        = $('body, html');
-            BtnReadMore     = $('.read-more');
-
-
-
-
-            BtnReadMore.click(function(event) {
-
-                event.preventDefault();
-                elem = $(this);
-                articleShow = $('.show-text');
-
-                if(articleShow.length != 0) {
-
-                    articleShow.closest("article").animate({height: '225px'}, {
-                        duration: 800
-                    });
-                    articleShow.removeClass('show-text');
-
-                }
-
-                elem.closest("article").animate({height: '100%'},{
-                    duration: 800
-                });
-
-                elem.closest("article").addClass('show-text');
-
-                setTimeout(scrolling, 900);
-
-                function scrolling(){
-
-                    htmlPage.animate({scrollTop: elem.closest("article").position().top},200);
-
-                }
-
-            });*/
             
         }
     }

@@ -13,12 +13,33 @@ var projectModule = (function() {
             canEdit     : null,
             canActivate : null,
             canSuspend  : null,
-            canSeeHours : null
+            canSeeHours : null,
+            canFunck    : null
         },
         dataTable,
         dataFilter = {
         },
         deleteModal;
+
+        $(".one input[type='checkbox']").click(function () {
+
+            if ($(".one input[type='checkbox']:checked").length == 1) {
+
+                $(this).parent().parent().find(" input[type='radio']").trigger("click");
+
+            }
+
+        });
+    $(".two input[type='checkbox']").click(function () {
+
+        if ($(".two input[type='checkbox']:checked").length == 1) {
+
+            $(this).parent().parent().find("input[type='radio']").trigger("click");
+
+        }
+
+    });
+
 
     function actionEdit( id )
     {
@@ -106,35 +127,54 @@ var projectModule = (function() {
             ], index = 3;
 
             if( cfg.canSeeHours){
-                index++;
                 columns.push({
-                        "targets"   : index,
+                        "targets"   : 3,
                         "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 7,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 8,
+                        "orderable" : false
                     });
             }
-            index++;
-            columns.push(
-                {
-                    "targets"   : index,
-                    "orderable" : false
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : index,
-                    "orderable" : true
-                }
-            );
+            if( !cfg.canSeeHours){
+                columns.push(
+                    {
+                        "targets"   : 3,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 7,
+                        "orderable" : false
+                    });
+            }
 
             if(cfg.canActivate || cfg.canSuspend || cfg.canDelete || cfg.canEdit || cfg.canPaid)
             columns.push(

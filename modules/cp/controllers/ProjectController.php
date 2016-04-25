@@ -79,7 +79,8 @@ class ProjectController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         $query          = Project::find()
-                            ->leftJoin( ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=id");
+                            ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id");
 
         $columns        = [
             'id',
@@ -118,7 +119,7 @@ class ProjectController extends DefaultController
             $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
-           $dataTable->setFilter('is_delete=0');
+           $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -210,9 +211,22 @@ class ProjectController extends DefaultController
                 if ($model->validate()) {
 
                     $model->save();
+                    /*$customers = $model->customers;
+                    if(is_array($customers)){
+                        foreach($customers as $customer){
+                            $projectCustomer = new ProjectCustomer;
+                            $projectCustomer->user_id = $customer;
+                            $projectCustomer->project_id = $model->id;
+                            $projectCustomer->receive_invoices = false;
+                            $projectCustomer->save();
+                        }
+                    }*/
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
 
+                }else{
+                   /* var_dump($model->getErrors());
+                    exit();*/
                 }
             }
             return $this->render('create', ['model' => $model,
@@ -237,8 +251,6 @@ class ProjectController extends DefaultController
                                 ':iD' => $id
                             ])
                    ->one();
-               var_dump($model->date_start);
-               var_dump($model->date_end);
                /** @var $model Project */
                if( $model->is_delete == 0) {
 
@@ -251,7 +263,8 @@ class ProjectController extends DefaultController
 
                                if( $model->date_start == null ||
                                    $model->date_end == null ||
-                                   DateUtil::compareDates($model->date_start, $model->date_end) ) {
+                                   DateUtil::compareDates($model->date_start, $model->date_end) ||
+                                   ($model->date_start == null && $model->date_end == null) ) {
 
                                    $model->save();
                                    if(Yii::$app->request->post('updated')) {

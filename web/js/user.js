@@ -7,7 +7,9 @@ var userModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             findUrl     : '',
-            canDelete   : null
+        loginAsUserUrl  : '',
+            canDelete   : null,
+            canLoginAs  : null
         },
         dataTable,
         dataFilter = {
@@ -19,6 +21,10 @@ var userModule = (function() {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
 
+    function actionLogin( email )
+    {
+        document.location.href = cfg.loginAsUserUrl + "?email=" + email;
+    }
 
     function actionDelete( id, name, dataTable )
     {
@@ -120,16 +126,17 @@ var userModule = (function() {
                         "orderable" : false,
                         "render"    : function (data, type, row) {
                             var icons = [];
-                            //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                            if ( cfg.canLoginAs ) {
+
+                                icons.push('<button data-placement="top" title="Login" class = "btn btn-primary">Login as This user</button>');
+                            }
                             if ( cfg.canDelete ) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-
                             }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
-
                         }
                     }
 
@@ -164,15 +171,15 @@ var userModule = (function() {
                 $(document).keydown(function(e){
                     if (e.keyCode == 46) {
 
-                        //console.log(id);
                         actionDelete( id, name, dataTable );
                     }
                 });
 
-                dataTable.find("img[class*=edit]").click(function(){
+                dataTable.find("button[class*=btn]").click(function(){
 
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
+                    var email = $(this).parents("tr").find("td").eq(3).text();
+                    console.log(email);
+                    actionLogin(email);
 
                 });
                 dataTable.find("i[class*=delete]").click(function(){

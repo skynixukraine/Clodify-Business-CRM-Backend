@@ -35,17 +35,17 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
-                        'actions'   => ['index', 'find', 'view'],
+                        'actions'   => ['index', 'find', 'view', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_CLIENT],
                     ],
                     [
-                        'actions'   => ['delete'],
+                        'actions'   => ['delete', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
@@ -62,6 +62,7 @@ class InvoiceController extends DefaultController
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
                     'delete'    => ['delete'],
+                    'download'  => ['get', 'post']
                 ],
             ],
         ];
@@ -79,7 +80,7 @@ class InvoiceController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query          = Invoice::find();
+        $query          = Invoice::find()->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' );
 
         $columns        = [
             'id',
@@ -106,20 +107,21 @@ class InvoiceController extends DefaultController
 
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-        $dataTable->setFilter('is_delete=0');
+        $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
         /** @var  $model Invoice*/
+
         foreach ( $activeRecordsData as $model ) {
 
             $list[] = [
                 $model->id,
                 $model->getUser()->one()->first_name,
-                $model->subtotal,
-                $model->discount,
-                $model->total,
+                '$' . $model->subtotal,
+                '$' . $model->discount,
+                '$' . $model->total,
                 $model->date_start,
                 $model->date_end,
                 $model->date_created,
@@ -127,8 +129,8 @@ class InvoiceController extends DefaultController
                 $model->date_paid,
                 $model->status
             ];
-        }
 
+            }
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
@@ -147,6 +149,19 @@ class InvoiceController extends DefaultController
 
         if ($model->load(Yii::$app->request->post())) {
 
+            /** Invoice - total logic */
+            if($model->total != null && $model->discount == null){
+
+                $model->discount = 0;
+                $model->subtotal = $model->total;
+
+            }
+            if($model->total !=null && $model->discount != null){
+
+                $model->subtotal = $model->total;
+                $model->total = ( $model->subtotal - $model->discount );
+
+            }
             if ($model->validate()) {
 
                 $model->save();
@@ -159,18 +174,25 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if (( $id = Yii::$app->request->get("id") ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) ) {
+            if (($id = Yii::$app->request->get("id"))) {
 
-            $model = Invoice::find()
-                ->where("id=:iD",
-                    [
-                        ':iD' => $id
-                    ])
-                ->one();
+                $model = Invoice::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $id
+                        ])
+                    ->one();
+            }
+            /** @var $model Invoice */
+            return $this->render('view', ['model' => $model,
+                'title' => 'You watch invoice #' . $model->id]);
+        }else{
+            /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
+            return $this->redirect('index');
+
         }
-        /** @var $model Invoice */
-        return $this->render('view', ['model' => $model,
-                                      'title' => 'You watch invoice #' . $model->id]);
     }
 
     public function actionSend()
@@ -190,34 +212,39 @@ class InvoiceController extends DefaultController
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
 
+
+
+                    $html = $this->renderPartial('invoicePDF', [
+
+                        'id' => $dataPdf->id,
+                        'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+                            $dataPdf->getUser()->one()->last_name,
+                        'total' => $dataPdf->total,
+                        'numberContract' => $dataPdf->contract_number,
+                        'actWork' => $dataPdf->act_of_work,
+                        'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
+                        'dataTo' => date('j F', strtotime($dataPdf->date_end)),
+                        'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
+                        'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
+                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
+                        'idCustomer' => $dataPdf->getUser()->one()->id,
+
+                    ]);
+
+                    $pdf = new mPDF();
+                    $pdf->WriteHTML($html);
+                    $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
+                    $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
+
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
-
-                        $html = $this->renderPartial('invoicePDF', [
-
-                            'id' => $dataPdf->id,
-                            'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
-                                $dataPdf->getUser()->one()->last_name,
-                            'total' => $dataPdf->total,
-                            'numberContract' => $dataPdf->contract_number,
-                            'actWork' => $dataPdf->act_of_work,
-                            'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
-                            'dataTo' => date('j F', strtotime($dataPdf->date_end)),
-                            'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
-                            'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                            'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
-                            'idCustomer' => $dataPdf->getUser()->one()->id,
-
-                        ]);
-
-                        $pdf = new mPDF();
-                        $pdf->WriteHTML($html);
-                        $content = $pdf->Output('', 'S');
 
                         Yii::$app->mailer->compose('invoice', [
 
                             'id' => $dataPdf->id,
                             'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
                                 $dataPdf->getUser()->one()->last_name,
+                            'dataFrom' => date('j F Y', strtotime($dataPdf->date_start)),
+                            'dataTo' => date('j F Y', strtotime($dataPdf->date_end)),
 
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
@@ -309,6 +336,42 @@ class InvoiceController extends DefaultController
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
+    }
+
+    public function actionDownload()
+    {
+        /** @var $model Invoice */
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one() ) ) {
+
+            if( ( $model->user_id == Yii::$app->user->id &&
+                 User::hasPermission([User::ROLE_CLIENT]) ) ||
+                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+
+                if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
+                    /*$this->downloadFile($path);*/
+
+                        header("Content-type:application/pdf"); //for pdf file
+                        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+                        header('Content-Length: ' . filesize($path));
+                        readfile($path);
+                        Yii::$app->end();
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, this seems like this PDF invoice was deleted."));
+                    return $this->redirect(['view', 'id' => $id]);
+                }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action."));
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        } else {
+
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this page does not exist."));
+            return $this->redirect(['index']);
+        }
+
     }
 
 }

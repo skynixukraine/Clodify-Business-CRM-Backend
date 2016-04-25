@@ -321,7 +321,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                    User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -331,7 +331,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -356,6 +356,49 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $string .= substr($chars, rand(1, $numChars) - 1, 1);
         }
         return $string;
+    }
+
+    public static function temmateUser($userId)
+    {
+        $r = self::find()
+            ->from(User::tableName())
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND id=:userId",[
+                ":userId" => $userId
+            ])
+            ->one();
+        return $r;
+    }
+
+    /**
+     * @param $userId
+     * @param bool $idsOnly
+     * @return array|Team[]
+     */
+    public static function getUserTeams($userId, $idsOnly = false)
+    {
+        $result = Teammate::find()
+            ->from(Teammate::tableName())
+            ->where(Teammate::tableName() . ".user_id=:userId", [
+                ":userId" => $userId
+            ])
+            ->all();
+        if ($idsOnly) {
+            $result = self::getTeamIds($result);
+        }
+        return $result;
+    }
+
+    /**
+     * @param array|Team[] $userTeams
+     * @return array
+     */
+    protected static function getTeamIds($userTeams)
+    {
+        $result = [];
+        foreach ($userTeams as $team) {
+            $result[] = $team->team_id;
+        }
+        return $result;
     }
 
 }

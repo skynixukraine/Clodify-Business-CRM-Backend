@@ -38,6 +38,7 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_PAID       = "PAID";
 
     public $method;
+
     /**
      * @inheritdoc
      */
@@ -54,7 +55,8 @@ class Invoice extends \yii\db\ActiveRecord
         return [
             [['user_id', 'date_start', 'date_end', 'total'], 'required'],
             [['id', 'user_id', 'contract_number', 'act_of_work'], 'integer'],
-            [['subtotal', 'discount', 'total', 'total_hours'], 'number'],
+            [['subtotal', 'total', 'discount'], 'number'],
+            [['total_hours'], 'double'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
             [['status', 'note'], 'string']
         ];
@@ -69,8 +71,8 @@ class Invoice extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'note' => 'Notes',
-            'subtotal' => 'Subtotal',
             'discount' => 'Discount',
+            'subtotal' => 'Subtotal',
             'total' => 'Total',
             'date_start' => 'Date Start',
             'date_end' => 'Date End',
@@ -144,20 +146,6 @@ class Invoice extends \yii\db\ActiveRecord
                 [
                 ':start'    => DateUtil::convertData($this->date_start),
                 ':end'      => DateUtil::convertData($this->date_end),
-                ])
-            ->execute();
-
-
-        $sum = (new \yii\db\Query())->from('reports')->where('invoice_id='. $this->id)->sum('hours');
-
-        $connection->createCommand()
-            ->update(Invoice::tableName(), [
-
-                'total_hours' => $sum,
-
-            ], 'id=:Id',
-                [
-                    ':Id'    => $this->id,
                 ])
             ->execute();
 

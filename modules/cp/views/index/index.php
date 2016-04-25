@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-$this->title                    = Yii::t("app", "My Report");
+/*$this->title                    = Yii::t("app", "My Report");*/
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [
@@ -28,6 +28,7 @@ $this->params['menu'] = [
 /** @var $model Report */?>
     <?php echo $form->field( $model, 'dateFilter', [
 
+
             'options' => [
                            'style' => [
                                         'width'=>"170px"
@@ -38,7 +39,12 @@ $this->params['menu'] = [
                             '2' => 'This week reports',
                             '3' => 'This month reports',
                             '4' => 'Last month reports',
-                        ], ['class'=>"form-control", 'id'=>'dateFilter', 'selected' => 1] )->label('Date filter :');?>
+                        ], ['class'=>"form-control", 'id'=>'dateFilter', 'selected' => 1] )->label('Date filter :', [
+        'style' => [
+            'display' => 'none'
+        ]
+    ]);?>
+
 
     <?php if($model->dateFilter == 1):?>
         <label style="visibility: hidden"></label>
@@ -47,11 +53,11 @@ $this->params['menu'] = [
     <?php endif;?>
 <?php ActiveForm::end();?>
 
-<label>Reports</label>
+<!--<label>Reports</label>-->
 <div class = "box">
     <div class = "box-body no-padding">
         <table class = "table load">
-            <thead>
+            <!--<thead>
             <tr>
                 <th>ID</th>
                 <th>Project</th>
@@ -60,7 +66,7 @@ $this->params['menu'] = [
                 <th>Date Report</th>
                 <th>Actions</th>
             </tr>
-            </thead>
+            </thead>-->
             <?php $reports = Report::getReports(Yii::$app->user->id, $model->dateFilter);
             /** @var  $report Report */
             foreach($reports->each() as $report):?>
@@ -99,14 +105,14 @@ $this->params['menu'] = [
 
 </div>
 
-<h4 class = "box-title" style="text-align: center">NEW REPORT</h4>
+<!--<h4 class = "box-title" style="text-align: center">NEW REPORT</h4>-->
 
 <?php $form = ActiveForm::begin();
 /** @var $model Report */?>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-2" style="padding-right: 30px;">
+            <div class="col-lg-2" style="padding-right: 10px;">
 
                 <?php $projects = \app\models\Project::getDevOrAdminOrPmProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
@@ -118,7 +124,7 @@ $this->params['menu'] = [
                 ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Project');?>
             </div>
 
-            <div class="col-lg-1" style="padding-left: 0; padding-right: 5px;">
+            <div class="col-lg-2" style="padding-left: 0; padding-right: 1px;">
                     <?php echo $form->field( $model, 'date_report', [
 
                         'template' => '{label} ' .
@@ -130,7 +136,7 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-lg-7" style="padding-left: 30px;">
+            <div class="col-lg-6" style="padding-left: 10px; padding-right: 10px;">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [
@@ -141,7 +147,7 @@ $this->params['menu'] = [
                 ])->label( 'Text field with task description' );?>
             </div>
 
-            <div class="col-lg-1">
+            <div class="col-lg-1" style="padding-left: 1px;">
                 <?php echo $form->field( $model, 'hours', [
 
                         'options' => [
@@ -149,7 +155,7 @@ $this->params['menu'] = [
                         ]
                 ])->textInput();?>
             </div>
-            <div class="col-lg-1" style="top: 24px">
+            <div class="col-lg-1" style="top: 24px; padding-left: 0px;">
                     <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
             </div>
         </div>

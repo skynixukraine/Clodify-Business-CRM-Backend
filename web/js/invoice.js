@@ -12,7 +12,8 @@ var invoiceModule = (function() {
             canDelete   : null,
             canView     : null,
             canPaid     : null,
-            canCanceled : null
+            canCanceled : null,
+            canDollar   : null
         },
         dataTable,
         dataFilter = {
@@ -69,7 +70,7 @@ var invoiceModule = (function() {
         }
 
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
+            title       : 'Delete Invoice #' + id + "?",
             body        : 'All data related to this invoice will be deleted.',
             winAttrs    : { class : 'modal delete'}
         });
@@ -106,7 +107,16 @@ var invoiceModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "orderable" : true
+                        "orderable" : true,
+                        /*"render"    : function (data, type, row) {
+                         /!*var icons = [];
+                            if (cfg.canDollar) {
+
+                                icons.push('<i class="fa fa-dollar dollar"></i>');
+
+                            }*!/
+
+                        }*/
                     },
                     {
                         "targets"   : 3,
@@ -147,38 +157,45 @@ var invoiceModule = (function() {
 
                             var icons = [];
 
-                            if( row[10] == "NEW" || row[10] == "CANCELED" ) {
+                            if( row[10] == "NEW") {
 
                                 if (cfg.canPaid) {
 
                                     icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Paid"></i>');
+                                        'data-toggle="tooltip" data-placement="top" title="Mark Invoice as Paid"></i>');
 
                                 }
 
                             }
-                            if( row[10] == "NEW" || row[10] == "PAID" ) {
+                            if( row[10] == "NEW" ) {
 
-                                if (cfg.canCanceled) {
+                                    if (cfg.canCanceled) {
 
-                                    icons.push('<i class="fa fa-arrows-alt canceled" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Canceled"></i>');
+                                        icons.push('<i class="fa fa-arrows-alt canceled" style="cursor: pointer" ' +
+                                            'data-toggle="tooltip" data-placement="top" title="Cancel the invoice"></i>');
+
+                                    }
+
+                            }
+
+                            if( row[10] == "NEW" || row[10] == "PAID" || row[10] == "CANCELED" ) {
+                                if (cfg.canView) {
+
+                                    icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
+                                        'data-toggle="tooltip" data-placement="top" title="View"></i>');
 
                                 }
-
                             }
-                            if ( cfg.canView ) {
+                            if( row[10] == "NEW" || row[10] == "CANCELED" ){
 
-                                icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="View"></i>');
+                                    if (cfg.canDelete) {
 
-                            }
-                            if ( cfg.canDelete ) {
+                                        icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                            'data-toggle="tooltip" data-placement="top" title="Delete the invoice"></i>');
 
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+                                    }
+                                }
 
-                            }
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
                         }

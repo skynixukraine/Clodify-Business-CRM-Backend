@@ -67,8 +67,6 @@ class ReportController extends DefaultController
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
         $query              = Report::find();
 
-
-
         $columns        = [
             'id',
             'task',
@@ -123,7 +121,29 @@ class ReportController extends DefaultController
             }
 
         }
+        if(User::hasPermission([User::ROLE_CLIENT])) {
 
+            $customer = Yii::$app->user->id;
+
+            if($customer && $customer != null){
+
+                $projectsCustomer = ProjectCustomer::getReportsOfCustomer($customer);
+                $projectId = [];
+                foreach($projectsCustomer as $project){
+
+                    $projectId[] = $project->project_id;
+
+                }
+                if($projectId && $projectId != null) {
+
+                    $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+                }else{
+
+                    $dataTable->setFilter('project_id IN (null) ');
+                }
+
+            }
+        }
         if($dateStart && $dateStart != null){
 
            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');

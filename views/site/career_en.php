@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div class="col-lg-12 col-xs-12 popup-box">
-            <div class="popup-masks-back"></div>
+            <div class="masks-back"></div>
             <div class="popup-career">
                 <div class="close"></div>
                 <div class="body"></div>

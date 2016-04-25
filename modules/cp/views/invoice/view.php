@@ -11,13 +11,18 @@ use app\models\Report;
 use app\models\PaymentMethod;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->title                    = Yii::t("app", $title);
-$this->params['breadcrumbs'][]  = $this->title;
-
+$this->params['breadcrumbs']  = [
+    [
+        'label' => Yii::t('app', 'List of invoices'),
+        'url' => Url::to(['invoice/index'])
+    ]
+];
 $this->params['menu'] = [
     [
         'label' => Yii::t('app', 'Invoices'),
@@ -36,9 +41,9 @@ $this->params['menu'] = [
         <li>Start Date:      <?php echo $model->date_start;?></li>
         <li>End Date:        <?php echo $model->date_end;?></li>
         <li>Total hours:     <?php echo $model->total_hours;?></li>
-        <li>Sub total:       <?php echo $model->subtotal;?></li>
-        <li>Discount:        <?php echo $model->discount;?></li>
-        <li>Total:           <?php echo $model->total;?></li>
+        <li>Sub total:       <?php echo '$' . $model->subtotal;?></li>
+        <li>Discount:        <?php echo '$' . $model->discount;?></li>
+        <li>Total:           <?php echo '$' . $model->total;?></li>
         <li>Notes:           <?php echo $model->note;?></li>
         <li>Create date:     <?php echo $model->date_created;?></li>
         <li>Sent date:       <?php echo $model->date_sent;?></li>
@@ -47,7 +52,7 @@ $this->params['menu'] = [
     </ul>
 </div>
 <label style="display: none"></label>
-<?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
+
     <?php $form = ActiveForm::begin([
                                     'action' =>['invoice/send'],
                                     'options' => [
@@ -58,13 +63,22 @@ $this->params['menu'] = [
                         ->textInput(['style' => 'display: none'])
                         ->label(null,['style' => 'display: none']);?>
 
-        <?php $payMethods = PaymentMethod::find()->all();
-        $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name' );
+        <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
+            <?php $payMethods = PaymentMethod::find()->all();
+            $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name' );
 
-        echo $form->field( $model, 'method')
-                  ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
-                  ->label('Pay Methods');?>
+            echo $form->field( $model, 'method')
+                      ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
+                      ->label('Pay Methods');?>
+            <?= Html::submitButton( Yii::t('app', 'SEND'), ['class' => 'btn btn-primary']) ?>
+        <?php endif;?>
 
-        <?= Html::submitButton( Yii::t('app', 'SEND'), ['class' => 'btn btn-primary']) ?>
+        <?php if($model->date_sent != null &&
+                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) &&
+                file_exists( Yii::getAlias('@app/data/invoices/' . $model->id . '.pdf'))):?>
+                    <?= Html::a('Download PDF Invoice', ['invoice/download?id=' . $model->id]) ?>
+        <?php endif;?>
+
     <?php ActiveForm::end();?>
-<?php endif;?>
+
+
