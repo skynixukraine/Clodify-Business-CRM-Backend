@@ -9,7 +9,9 @@ var managerTeamsModule = (function() {
             viewUrl     : '',
             canDelete   : null,
             canAction   : null,
-            canView     :null
+            canView     : null,
+            userTeams   : [],
+            specView    : null
         },
         dataTable,
         dataFilter = {
@@ -60,7 +62,7 @@ var managerTeamsModule = (function() {
         deleteModal = new ModalBootstrap({
             title       : 'Delete team ' + id + "?",
             body        : 'The teams will be unavailable anymore, but all his data reports and project will be left in the system.' +
-                          ' Are you sure you wish to delete it?',
+            ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
         deleteModal.show();
@@ -78,36 +80,37 @@ var managerTeamsModule = (function() {
             cfg = $.extend(cfg, config);
             var columns =[
 
-                    {
-                        "targets"   : 0,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 1,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 2,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true
-                    }
+                {
+                    "targets"   : 0,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 1,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 2,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 3,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 4,
+                    "orderable" : true
+                }
 
-                ];
+            ];
             if( cfg.canAction){
                 columns.push({
                     "targets"   : 5,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
                         var icons = [];
+                        var viewAccess = cfg.specView && (cfg.userTeams.indexOf(row[0]) >= 0);
                         //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                        if ( cfg.canView ) {
+                        if ( cfg.canView || viewAccess ) {
 
                             icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
                                 'data-toggle="tooltip" data-placement="top" title="View"></i>');
@@ -179,12 +182,11 @@ var managerTeamsModule = (function() {
                 dataTable.find("i[class*=delete]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
-                        actionDelete( id, dataTable );
+                    actionDelete( id, dataTable );
 
                 });
 
             });
-
         }
     };
 

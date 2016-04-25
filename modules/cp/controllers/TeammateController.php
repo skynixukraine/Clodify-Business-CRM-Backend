@@ -15,6 +15,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\components\DataTable;
+use yii\web\ForbiddenHttpException;
 
 class TeammateController extends DefaultController
 {
@@ -79,7 +80,7 @@ class TeammateController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-            $query = Team::find()->leftJoin(Teammate::tableName(), Team::tableName() . '.id=' . Teammate::tableName() . '.team_id');
+        $query = Team::find()->leftJoin(Teammate::tableName(), Team::tableName() . '.id=' . Teammate::tableName() . '.team_id');
 
         $columns        = [
             'id',
@@ -133,24 +134,29 @@ class TeammateController extends DefaultController
     {
         if (( $teamId = Yii::$app->request->get("id") ) && ($model = Team::findOne(['id' => $teamId])) ) {
 
-        if ( $model->load(Yii::$app->request->post()) ) {
-
-            $model1 = new Teammate();
-            if( Teammate::findOne(['team_id' => $model->id, 'user_id' => $model->user_id]) == null) {
-
-                if ($model->validate()) {
-
-                    $model1->team_id = $model->id;
-                    $model1->user_id = $model->user_id;
-                    $model1->save();
-                }
-            } else {
-
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "This user is already exist"));
-                return $this->render('view', ['model' => $model,
-                    'title' => 'List of Teammates  #' . $model->id]);
+            // Add protection against changed in URL team id for roles PM and DEV
+            if (!$this->checkAccess($teamId)) {
+                throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
             }
-        }
+
+            if ( $model->load(Yii::$app->request->post()) ) {
+
+                $model1 = new Teammate();
+                if( Teammate::findOne(['team_id' => $model->id, 'user_id' => $model->user_id]) == null) {
+
+                    if ($model->validate()) {
+
+                        $model1->team_id = $model->id;
+                        $model1->user_id = $model->user_id;
+                        $model1->save();
+                    }
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "This user is already exist"));
+                    return $this->render('view', ['model' => $model,
+                        'title' => 'List of Teammates  #' . $model->id]);
+                }
+            }
             return $this->render('view', ['model' => $model,
                 'title' => 'List of Teammates  #' . $model->id]);
         } else {
@@ -189,8 +195,8 @@ class TeammateController extends DefaultController
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             /** @var  $model Teammate */
             if ( ( $team_id = Yii::$app->request->post("team_id") ) &&
-                 ( $user_id = Yii::$app->request->post("user_id") ) &&
-                 ( $model = Teammate::find()->where('user_id=:ID AND team_id=:teamID',
+                ( $user_id = Yii::$app->request->post("user_id") ) &&
+                ( $model = Teammate::find()->where('user_id=:ID AND team_id=:teamID',
                     [':ID' => $user_id, ':teamID' => $team_id])->one() ) ) {
 
                 /**  leader of team*/
@@ -242,6 +248,19 @@ class TeammateController extends DefaultController
 
         }
         return $this->render('create',['model' => $model]);
+    }
+
+    /**
+     * @param int $teamId
+     * @return bool
+     */
+    protected function checkAccess($teamId)
+    {
+        if ($correctRole = User::hasPermission([User::ROLE_PM, User::ROLE_DEV])) {
+            $isInTeam = in_array($teamId, User::getUserTeams(Yii::$app->user->identity->getId(), true));
+            return $correctRole && $isInTeam;
+        }
+        return true;
     }
 
 }
