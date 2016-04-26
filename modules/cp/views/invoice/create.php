@@ -46,6 +46,7 @@ $this->params['menu'] = [
                           'prompt' => 'Choose...',
                       ] )
                       ->label( 'Customers' );
+
             ?>
 
             <?php echo $form->field( $model, 'date_start', [
@@ -65,6 +66,7 @@ $this->params['menu'] = [
                     ' {error}'
 
             ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
+
 
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>

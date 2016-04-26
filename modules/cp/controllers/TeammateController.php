@@ -258,7 +258,7 @@ class TeammateController extends DefaultController
     {
         if ($correctRole = User::hasPermission([User::ROLE_PM, User::ROLE_DEV])) {
             $isInTeam = in_array($teamId, User::getUserTeams(Yii::$app->user->identity->getId(), true));
-            return $correctRole && $isInTeam;
+            return $isInTeam;
         }
         return true;
     }
