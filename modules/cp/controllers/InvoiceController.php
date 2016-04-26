@@ -238,8 +238,13 @@ class InvoiceController extends DefaultController
                     $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
                     $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
 
+                    $model = Invoice::find()->where("id=:iD", [':iD' => $dataPdf->id])->one();
+
+                    $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
                     $html2 = $this->renderPartial('invoiceReportPDF', [
+                        'model' => $model,
                         'id' => $dataPdf->id,
+                        'r'  => $r,
 
                     ]);
                     $pdf = new mPDF();
