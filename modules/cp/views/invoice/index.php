@@ -58,7 +58,7 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             deleteUrl   : '<?=Url::to(['invoice/delete'])?>',
             findUrl     : '<?=Url::to(['invoice/find'])?>',
             viewUrl     : '<?=Url::to(['invoice/view'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>

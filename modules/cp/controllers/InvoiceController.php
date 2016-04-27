@@ -47,7 +47,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['delete', 'download'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                 ],
             ],
@@ -317,7 +317,7 @@ class InvoiceController extends DefaultController
 
     public function actionDelete()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) ) {
 
             if (( $id = Yii::$app->request->post("id") ) ) {
 
