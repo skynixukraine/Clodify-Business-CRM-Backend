@@ -136,8 +136,24 @@ class Report extends \yii\db\ActiveRecord
 
             if( !$this->reporter_name ) {
 
-                $this->reporter_name =   Yii::$app->user->getIdentity()->first_name . ' ' .
-                                         Yii::$app->user->getIdentity()->last_name;
+                /** @var $pDev ProjectDeveloper */
+                /** @var $aliasUser User */
+                if ( ($pDev = ProjectDeveloper::findOne([
+                                    'user_id'       => Yii::$app->user->id,
+                                    'project_id'    => $this->project_id]) ) &&
+                    $pDev->alias_user_id && ( $aliasUser = User::findOne( $pDev->alias_user_id )) ) {
+
+
+                    $this->reporter_name =  $aliasUser->first_name . ' ' . $aliasUser->last_name;
+
+                } else {
+
+                    $this->reporter_name =   Yii::$app->user->getIdentity()->first_name . ' ' .
+                        Yii::$app->user->getIdentity()->last_name;
+
+                }
+
+
             }
         }/*else
             $this->modified = new CDbExpression('NOW()');*/
