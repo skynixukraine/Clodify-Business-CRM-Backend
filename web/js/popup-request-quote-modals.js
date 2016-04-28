@@ -40,7 +40,7 @@ var requestQuoteModals = (function(){
 
         if(htmlwidth < 768){
 
-            htmlPage.animate({scrollTop:0},500);
+            //htmlPage.animate({scrollTop:0},500);
 
         }
     }

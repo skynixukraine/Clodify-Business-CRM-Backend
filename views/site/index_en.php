@@ -566,3 +566,5 @@ $this->title = 'Welcome to the Skynix - software development company';
 <?php $this->registerJsFile('/js/canvas.js'); ?>
 
 
+
+

@@ -18,11 +18,15 @@ var skynixCanvas = (function(){
                 function(callback){
                     window.setTimeout(callback, 1000/60);//60 - FPS
                 };
-        })();
+        })(),
+        stop = false,
+        canvas = false;
 
     function SizeCanvas (){//Size canvas
 
+        stop = true;
         width = $('html').width();
+
 
         if(width > 480-17){
 
@@ -43,8 +47,21 @@ var skynixCanvas = (function(){
             elem3.get(0).height = height;
         }
 
-    }
+        if((canvas == false) && (width > 768)){
 
+            restart();
+        }
+
+    }
+    function restart(){
+
+        if(width > 768) {
+            canvas = true;
+            BuildCanvas(elem1, elem2, elem3, width, height);
+        }else{
+            canvas = false;
+        }
+    }
     function BuildCanvas(elem1, elem2, elem3, width , height){
 
         var ctx1 = elem1[0].getContext('2d'),
@@ -54,6 +71,7 @@ var skynixCanvas = (function(){
             pointFunction,//=>callback = (layer1(){} || layer2(){} || layer3(){})
             imgPoint = [],
             dt;//time adjustment
+
 
 
         imgPoint[0] = new Image();
@@ -404,7 +422,22 @@ var skynixCanvas = (function(){
             var engineStep = function(callback){
 
                 pointFunction(); //run callback
-                nextGameStep(engineStep);
+
+                if(!stop){
+
+                    nextGameStep(engineStep);
+
+                }
+                if(stop){
+
+                    stop = false;
+                    delete point1;
+                    delete point2;
+                    delete point3;
+                    nextGameStep(restart);
+
+                }
+
             };
             var setPointEngine = function(callback){
 
@@ -549,9 +582,6 @@ var skynixCanvas = (function(){
 
             engineStart(layer1);//run canvas
 
-
-
-
         }
         buildCycle();
 
@@ -596,17 +626,10 @@ var skynixCanvas = (function(){
             elem2 = $('#canvas2');
             elem3 = $('#canvas3');
 
+
             $( window ).resize(SizeCanvas);
 
-
             SizeCanvas ();
-
-            if(width > 768){
-
-                BuildCanvas(elem1, elem2, elem3,  width , height);
-
-            }
-
 
 
         }
@@ -614,4 +637,4 @@ var skynixCanvas = (function(){
 
 })();
 
-addEventListener("load", skynixCanvas.init);
+

@@ -244,6 +244,4 @@ var Portfolio  = (function(){
 
 })();
 
-addEventListener("load", Portfolio.init);
-
 
