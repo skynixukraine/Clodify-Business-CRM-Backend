@@ -8,6 +8,10 @@ use app\models\Upload;
 
 $this->title = 'Welcome to the Skynix - software development company';
 ?>
+<canvas id="canvas1" width="100%"></canvas>
+<canvas id="canvas2" width="100%"></canvas>
+<canvas id="canvas3" width="100%"></canvas>
+
 <section class="container-fluid" id="about_skynix">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
@@ -559,5 +563,6 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>
 <?php $this->registerJsFile('/js/portfolio.js'); ?>
+<?php $this->registerJsFile('/js/canvas.js'); ?>
 
 
