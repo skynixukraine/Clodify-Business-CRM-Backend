@@ -109,6 +109,10 @@ class InvoiceController extends DefaultController
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
+        if(User::hasPermission([User::ROLE_CLIENT])) {
+
+            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
