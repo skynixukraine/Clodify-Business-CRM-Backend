@@ -130,7 +130,7 @@ var requestQuoteModals = (function(){
                 popup.fadeIn(300);
                 popup.slideDown(200);
 
-                //popup.css("top", htmlPage.scrollTop()+10);
+                popup.css("top", htmlPage.scrollTop()+10);
 
 
                 return false;
@@ -330,6 +330,9 @@ var requestQuoteModals = (function(){
 
 })();
 
+$(function(){
 
+    requestQuoteModals.init();
 
-addEventListener("load", requestQuoteModals.init);
+});
+

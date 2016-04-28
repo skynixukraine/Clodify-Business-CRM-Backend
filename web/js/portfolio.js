@@ -245,3 +245,11 @@ var Portfolio  = (function(){
 })();
 
 
+$(function(){
+
+    Portfolio.init();
+
+});
+
+
+

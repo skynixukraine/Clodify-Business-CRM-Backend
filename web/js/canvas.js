@@ -642,3 +642,14 @@ console.log("ddddddd");
 })();
 
 
+$(function(){
+
+    skynixCanvas.init();
+
+});
+
+
+
+
+
+

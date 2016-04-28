@@ -57,7 +57,6 @@ $(function(){
 
     LoginPage.init();
 
-    skynixCanvas.init();
-    Portfolio.init();
+
 
 });

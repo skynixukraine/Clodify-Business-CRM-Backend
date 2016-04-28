@@ -561,9 +561,9 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 <!--****   End Popup portfolio   ****-->
 
-<?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>
-<?php $this->registerJsFile('/js/portfolio.js'); ?>
-<?php $this->registerJsFile('/js/canvas.js'); ?>
+<?php $this->registerJsFile('/js/popup-request-quote-modals.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+<?php $this->registerJsFile('/js/portfolio.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+<?php $this->registerJsFile('/js/canvas.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 
 
 
