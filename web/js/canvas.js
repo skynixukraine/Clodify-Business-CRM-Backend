@@ -72,6 +72,9 @@ var skynixCanvas = (function(){
             imgPoint = [],
             dt;//time adjustment
 
+        ctx1.clearRect(0, 0, elem1.get(0).width, elem1.get(0).height);
+        ctx2.clearRect(0, 0, elem2.get(0).width, elem2.get(0).height);
+        ctx3.clearRect(0, 0, elem3.get(0).width, elem3.get(0).height);
 
 
         imgPoint[0] = new Image();
@@ -429,7 +432,7 @@ var skynixCanvas = (function(){
 
                 }
                 if(stop){
-
+console.log("ddddddd");
                     stop = false;
                     delete point1;
                     delete point2;
@@ -571,6 +574,7 @@ var skynixCanvas = (function(){
                 }
 
                 ctx.clearRect(obj.xclear-size, obj.yclear-size, double, double);
+
 
                 ctx.drawImage(obj.img, obj.x, obj.y);
 
