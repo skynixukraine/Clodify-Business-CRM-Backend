@@ -78,9 +78,18 @@ class ProjectController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query          = Project::find()
+
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])){
+        $query         = Project::find()
+                            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id");
+        }
+        if(User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])){
+        $query         = Project::find()
                             ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id");
+        }
+
 
         $columns        = [
             'id',
@@ -116,7 +125,7 @@ class ProjectController extends DefaultController
 
         if( User::hasPermission([User::ROLE_PM]) ){
 
-            $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
+            $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
            $dataTable->setFilter(Project::tableName() . '.is_delete=0');
