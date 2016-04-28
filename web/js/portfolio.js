@@ -28,7 +28,8 @@ var Portfolio  = (function(){
         numImg = 0,
         viewport,
         timestop,
-        stop = true;
+        stop = true,
+        openProject;//***
 
     function runPopap(el){
 
@@ -41,8 +42,10 @@ var Portfolio  = (function(){
 
 
 
+
         headerPopap.html((el.find('h3')).html());
         dataImages = el.find('a').attr('data-images');
+
         pars = dataImages.split(", ");
 
         for (var i in pars) {
@@ -56,7 +59,7 @@ var Portfolio  = (function(){
             //viewport.append("<img width=\"690\" height=\"380\"src="+ img[i] +">");
 
         }
-
+        openProject = dataImages;
         viewport.html(img[0]);
         bodyPopap.animate({opacity: 1},500);
 
@@ -211,8 +214,9 @@ var Portfolio  = (function(){
                 stop = true;
                 //viewport.fadeOut();
 
-                el = portfolio.eq(elem);
 
+
+                el = portfolio.eq(elem);
 
                 elem = elem + 1;
 
@@ -220,6 +224,17 @@ var Portfolio  = (function(){
 
                     elem = 0;
                 }
+                console.log("el", el);
+
+                if(openProject.indexOf(el.find('a').attr('data-images')) == 0){
+
+                    el = portfolio.eq(elem);
+                    elem = elem + 1;
+
+
+                }
+                console.log("2elem ", elem);
+
 
                 runPopap(el);
 
