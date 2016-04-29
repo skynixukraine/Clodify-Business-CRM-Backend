@@ -48,7 +48,7 @@ class UserController extends DefaultController {
                         'roles' => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
                     [
-                        'actions' => ['loginback', 'index'],
+                        'actions' => ['loginback'],
                         'allow' => true,
                         'roles' => [User::ROLE_DEV],
                     ],
