@@ -116,6 +116,12 @@ var requestQuoteModals = (function(){
                 formStep.eq(i).data("data-step", i);
             }
 
+
+
+
+
+
+
             $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
                 event.preventDefault();

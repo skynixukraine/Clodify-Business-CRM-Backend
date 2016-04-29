@@ -29,18 +29,16 @@ var Portfolio  = (function(){
         viewport,
         timestop,
         stop = true,
-        openProject;//***
+        openProject,
+        frontMask,
+        canBePressed = true;
 
     function runPopap(el){
 
-        headerPopap.html("");
-        viewport.html("");
-        infoBox.html("");
+        frontMask.css('display', 'block' );
         img             = [];
         htmlHeight      = htmlPage.height();
-        bodyPopap.animate({opacity: 0},0);
-
-
+        canBePressed = false;
 
 
         headerPopap.html((el.find('h3')).html());
@@ -51,28 +49,89 @@ var Portfolio  = (function(){
         for (var i in pars) {
 
             img[i] = new Image();
-            img[i].src = 'images/' + pars[i];
-
+            img[i].src = '../images/' + pars[i];
             img[i].setAttribute('width', '690');
             img[i].setAttribute('height', '380');
 
-            //viewport.append("<img width=\"690\" height=\"380\"src="+ img[i] +">");
 
         }
-        openProject = dataImages;
-        viewport.html(img[0]);
-        bodyPopap.animate({opacity: 1},500);
+        txtPopap = el.find('.info-box-hidden');
+        dataHref = el.find('a').attr('data-href');
+        $(img).load(function() {
 
-        //viewport.fadeIn(500);
-        console.log('img.length ', img.length);
-        if(img.length > 1){
+            frontMask.css('display', 'none' );
+            headerPopap.html("");
+            viewport.html("");
+            infoBox.html("");
+            bodyPopap.animate({opacity: 0},0);
+            openProject =  el.data('data-project-number');
 
-            stop = false;
-            numImg = 0;
-            demoslides();
+
+            viewport.html(img[0]);
+            bodyPopap.animate({opacity: 1},500);
+            //viewport.fadeIn(500);
+
+            if(img.length > 1){
+
+                stop = false;
+                numImg = 0;
+                demoslides();
+            }
+
+            infoBox.html(txtPopap.clone());
 
 
-        }
+            if(dataHref){
+
+                btnPopupVisit.css('display', "block");
+                btnPopupVisit.attr('href', dataHref);
+
+            }else{
+
+                btnPopupVisit.css('display', 'none');
+            }
+
+
+
+            bgForPopup.fadeIn(200);
+            popup.fadeIn(300);
+            popup.slideDown(200);
+
+
+            if(htmlHeight > 900){
+
+                popup.css('top', htmlPage.scrollTop()+(htmlHeight - 850)/2);
+
+            }else{
+
+                popup.css('top', htmlPage.scrollTop()+10);
+            }
+
+            if(htmlWidth > 768){
+
+                viewport.css('width', portfolioImgBox.width() - (btnPrev.width() + btnNext.width() + 40));
+            }else{
+
+                viewport.css('width', 100 +"%");
+            }
+
+            setTimeout(canBePressedRun, 500);
+
+            function canBePressedRun(){
+
+                canBePressed = true;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -96,48 +155,6 @@ var Portfolio  = (function(){
             }
 
         }
-
-        txtPopap = el.find('.info-box-hidden');
-        infoBox.html(txtPopap.clone());
-
-
-        dataHref = el.find('a').attr('data-href');
-
-        if(dataHref){
-
-            btnPopupVisit.css('display', "block");
-            btnPopupVisit.attr('href', dataHref);
-
-        }else{
-
-            btnPopupVisit.css('display', 'none');
-        }
-
-
-
-        bgForPopup.fadeIn(200);
-        popup.fadeIn(300);
-        popup.slideDown(200);
-
-
-        if(htmlHeight > 900){
-
-            popup.css('top', htmlPage.scrollTop()+(htmlHeight - 850)/2);
-
-        }else{
-
-            popup.css('top', htmlPage.scrollTop()+10);
-        }
-
-        if(htmlWidth > 768){
-
-            viewport.css('width', portfolioImgBox.width() - (btnPrev.width() + btnNext.width() + 40));
-        }else{
-
-            viewport.css('width', 100 +"%");
-        }
-
-
         return false
     }
 
@@ -162,11 +179,21 @@ var Portfolio  = (function(){
             btnPrev             = portfolioImgBox.find('.prev');
             btnNext             = portfolioImgBox.find('.next');
             btnPopupVisit       = popup.find('.read-more');
+            frontMask           = bgForPopup.find('.front-mask');
 
 
 
             htmlPage.resize(widthPage);
             widthPage();
+
+
+
+            for(var i=0; i < portfolio.length; i++){
+
+                portfolio.eq(i).data("data-project-number", i);
+            }
+
+
 
 
             btnRunPopap.click(function(event){
@@ -185,21 +212,23 @@ var Portfolio  = (function(){
             btnPrev.click(function(event) {
 
                 event.preventDefault();
+
+                if(!canBePressed){
+
+                    return false;
+                }
                 stop = true;
                 clearTimeout(timestop);
 
 
-                el = portfolio.eq(elem);
-
-
-                elem = elem - 1;
+                elem = openProject - 1;
 
                 if(elem < 0 ){
 
                     elem = portfolio.length - 1;
                 }
 
-
+                el = portfolio.eq(elem);
 
                 runPopap(el);
 
@@ -209,31 +238,25 @@ var Portfolio  = (function(){
             btnNext.click(function(event) {
 
                 event.preventDefault();
+
+                if(canBePressed == false){
+console.log("dddddddddddffffffffffggggggggggg");
+                    return false;
+                }
+
                 clearTimeout(timestop);
 
                 stop = true;
                 //viewport.fadeOut();
 
-
-
-                el = portfolio.eq(elem);
-
-                elem = elem + 1;
+                elem = openProject + 1;
 
                 if(elem > (portfolio.length - 1) ){
 
                     elem = 0;
                 }
-                console.log("el", el);
 
-                if(openProject.indexOf(el.find('a').attr('data-images')) == 0){
-
-                    el = portfolio.eq(elem);
-                    elem = elem + 1;
-
-
-                }
-                console.log("2elem ", elem);
+                el = portfolio.eq(elem);
 
 
                 runPopap(el);

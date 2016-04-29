@@ -125,7 +125,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://infinitebeginnings.com/" data-images="infinite_beginnings1.jpg">
-                <img src="images/btn-infinite-beginnings.jpg" width="289" height="214" />
+                <img src="../images/btn-infinite-beginnings.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Infinite Beginnings</h3>
             </a>
@@ -155,7 +155,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="" data-images="fisherman_id.jpg">
-                <img src="images/btn-fisherman.jpg" width="289" height="214" />
+                <img src="../images/btn-fisherman.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Fisherman ID</h3>
             </a>
@@ -183,7 +183,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="https://www.citrix.com/" data-images="citrix_cynergy.jpg">
-                <img src="images/btn-citrix-synergy.jpg" width="289" height="214" />
+                <img src="../images/btn-citrix-synergy.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Citrix Synergy</h3>
             </a>
@@ -217,7 +217,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://www.castles.uk.com/" data-images="castles.jpg">
-                <img src="images/btn-сastles_estate_agents.jpg" width="289" height="214" />
+                <img src="../images/btn-сastles_estate_agents.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Castles - Estate agents</h3>
             </a>
@@ -243,7 +243,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://marketplace.skynix.solutions/" data-images="m2_marketplace_extension.jpg">
-                <img src="images/btn-marketplace-extension.jpg" width="289" height="214" />
+                <img src="../images/btn-marketplace-extension.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">M2 Marketplace Extension</h3>
             </a>
@@ -260,7 +260,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://handmade.works/" data-images="handmadeworks.jpg">
-                <img src="images/btn-handmade-works.jpg" width="289" height="214" />
+                <img src="../images/btn-handmade-works.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">M2 Marketplace - Handmade Theme</h3>
             </a>
@@ -560,6 +560,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
     </div>
+    <div class="front-mask"></div>
 </div>
 
 <!--****   End Popup portfolio   ****-->
