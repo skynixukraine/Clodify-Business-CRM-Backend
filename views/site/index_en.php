@@ -136,7 +136,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <p><strong>DESCRIPTION: </strong>This theme is compatible with all recent versions of Wordpress and
                         is based on Twitter Bootstrap (responsive, mobile first project on the web)
                         <br>
-                        As a child theme of the premium <a href="#" class="blue-txt">Enfold theme</a>  this theme has
+                        As a child theme of the premium <a href="http://themeforest.net/item/enfold-responsive-multipurpose-theme/4519990" target = "_blank" class="blue-txt">Enfold theme</a>  this theme has
                         all features of Enfold them + the following custom features:
                     </p>
                 </div>
@@ -553,7 +553,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 </div>
                 <div class="col-lg-12">
-                    <a href="#" class="btn read-more" target = "_ blank" rel="nofollow">VISIT WEBSITE</a>
+                    <a href="#" class="btn read-more" target = "_blank" rel="nofollow">VISIT WEBSITE</a>
                 </div>
 
             </div>

@@ -41,7 +41,7 @@ var Portfolio  = (function(){
         canBePressed = false;
 
 
-        headerPopap.html((el.find('h3')).html());
+
         dataImages = el.find('a').attr('data-images');
 
         pars = dataImages.split(", ");
@@ -66,7 +66,7 @@ var Portfolio  = (function(){
             bodyPopap.animate({opacity: 0},0);
             openProject =  el.data('data-project-number');
 
-
+            headerPopap.html((el.find('h3')).html());
             viewport.html(img[0]);
             bodyPopap.animate({opacity: 1},500);
             //viewport.fadeIn(500);
