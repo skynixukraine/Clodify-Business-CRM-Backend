@@ -35,7 +35,7 @@ var Portfolio  = (function(){
 
     function runPopap(el){
 
-        frontMask.css('display', 'block' );
+        //frontMask.css('display', 'block' );
         img             = [];
         htmlHeight      = htmlPage.height();
         canBePressed = false;
@@ -59,7 +59,7 @@ var Portfolio  = (function(){
         dataHref = el.find('a').attr('data-href');
         $(img).load(function() {
 
-            frontMask.css('display', 'none' );
+            //frontMask.css('display', 'none' );
             headerPopap.html("");
             viewport.html("");
             infoBox.html("");
@@ -192,8 +192,6 @@ var Portfolio  = (function(){
 
                 portfolio.eq(i).data("data-project-number", i);
             }
-
-
 
 
             btnRunPopap.click(function(event){

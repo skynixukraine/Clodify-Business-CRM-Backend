@@ -560,7 +560,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
 
     </div>
-    <div class="front-mask"></div>
+    <!--<div class="front-mask"></div>-->
 </div>
 
 <!--****   End Popup portfolio   ****-->
