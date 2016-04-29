@@ -75,7 +75,16 @@ $this->params['menu'] = [
             </tr>
         </thead>
     </table>
+<?php
 
+/*$a = \app\models\Report::reportsPM();
+$reports = [];
+foreach($a as $b){
+    $reports[] = $b->user_id;
+}
+var_dump($reports);
+exit();*/
+?>
 <script>
 
     $(function(){
