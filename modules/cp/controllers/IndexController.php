@@ -124,6 +124,7 @@ class IndexController extends DefaultController
 
         }
         return $this->render('index' ,['model' => $model]);
+
     }
 
     /** Delete developer`s report */
