@@ -217,5 +217,23 @@ class Report extends \yii\db\ActiveRecord
                 ])
             ->sum(Report::tableName() . '.hours');
     }
+    public static function reportsPM()
+    {
+        $teamspm = Team::find()
+        ->where(Team::tableName() . '.team_leader_id=:UserId', [ ':UserId' => Yii::$app->user->id])
+        ->all();
+        $tea = [];
+        foreach($teamspm as $teams){
+            $tea[] = $teams->id;
+        }
+
+       return Teammate::find()
+            ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $tea) . '")')
+            ->all();
+
+        //var_dump($tea);
+        //exit();
+
+    }
 
 }

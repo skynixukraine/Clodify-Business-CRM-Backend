@@ -9,7 +9,9 @@ namespace app\modules\cp\controllers;
 use app\models\Invoice;
 use app\models\Project;
 use app\models\ProjectCustomer;
+use app\models\ProjectDeveloper;
 use app\models\Report;
+use app\models\Teammate;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -144,7 +146,27 @@ class ReportController extends DefaultController
 
             }
         }
-        if($dateStart && $dateStart != null){
+        if(User::hasPermission([User::ROLE_PM])) {
+
+
+            $reporpm = Report::reportsPM();
+            $reports = [];
+            foreach($reporpm as $report){
+                $reports[] = $report->user_id;
+            }
+
+            if($reports && $reports != null) {
+
+                $dataTable->setFilter('user_id IN (' . implode(', ', $reports) . ") ");
+            }else{
+
+                $dataTable->setFilter('user_id IN (null) ');
+            }
+
+        }
+
+
+            if($dateStart && $dateStart != null){
 
            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
 
