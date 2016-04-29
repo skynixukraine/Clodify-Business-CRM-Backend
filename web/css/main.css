@@ -839,6 +839,11 @@ footer .link a:hover {
   }
 }
 @media (max-width: 768px) {
+  #canvas1,
+  #canvas2,
+  #canvas3 {
+    top: 65px;
+  }
   #about_skynix h1 {
     padding: 112px 0 11px 0;
   }

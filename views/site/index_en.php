@@ -227,7 +227,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <p><strong>CATEGORY: </strong>Wordpress Plugin</p>
                     <p><strong>CLIENT: </strong>Castles Estate Agents ltd.</p><br>
                     <p><strong>DESCRIPTION: </strong>The plugin was developed for grabbing properties from ExpertAgent
-                        API and build a catalog of properties with rich featured property details pages..
+                        API and build a catalog of properties with rich featured property details pages.
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">

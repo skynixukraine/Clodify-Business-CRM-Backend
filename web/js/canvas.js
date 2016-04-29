@@ -47,7 +47,7 @@ var skynixCanvas = (function(){
             elem3.get(0).height = height;
         }
 
-        if((canvas == false) && (width > 768)){
+        if((canvas == false) && (width > 480)){
 
             restart();
         }
@@ -55,7 +55,7 @@ var skynixCanvas = (function(){
     }
     function restart(){
 
-        if(width > 768) {
+        if(width > 480) {
             canvas = true;
             BuildCanvas(elem1, elem2, elem3, width, height);
         }else{
@@ -123,7 +123,24 @@ var skynixCanvas = (function(){
                 6);
 
         }
+        if(width <= 768 && width > 480){
 
+            var point1 = new Point(imgPoint[0],
+                [{x: 318, y: 0}, {x: 318, y: 66}, {x: 751, y: 66}],
+                30,
+                12);
+
+            var point2 = new Point(imgPoint[1],
+                [{x: 25, y: 560}, {x: 25, y: 187}, {x: 365, y: 187}, {x: 365, y: 142}, {x: 407, y: 142}, {x: 407, y: 0} ],
+                16,
+                10);
+            var point3 = new Point(imgPoint[2],
+                [{x: 0, y: 314}, {x: 26, y: 314}, {x: 26, y: 409}, {x: 227, y: 409}, {x: 228, y: 503},  {x: 347, y: 503},
+                    {x: 347, y: 580}, {x: 479, y: 580}, {x: 479, y: 527}, {x: 563, y: 527}, {x: 563, y: 490}],
+                14,
+                20);
+
+        }
 
         /* if(width < 480){
 
@@ -240,6 +257,7 @@ var skynixCanvas = (function(){
             }
 
             function go(obj){
+
 
                 if(obj.y < obj.coordinates[index].y){
 
@@ -432,7 +450,7 @@ var skynixCanvas = (function(){
 
                 }
                 if(stop){
-console.log("ddddddd");
+
                     stop = false;
                     delete point1;
                     delete point2;
