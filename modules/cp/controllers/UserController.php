@@ -105,12 +105,12 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
 
             $query = User::find();
         }
 
-        if( User::hasPermission([User::ROLE_PM])) {
+        /*if( User::hasPermission([User::ROLE_PM])) {
             $users = \app\models\ProjectDeveloper::allPmUsers(Yii::$app->user->id);
             $projectId=[];
             foreach($users as $user){
@@ -129,7 +129,7 @@ class UserController extends DefaultController {
                 ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . $projectPm . ')');
 
 
-        }
+        }*/
 
         if( User::hasPermission([User::ROLE_CLIENT])){
 
@@ -175,6 +175,24 @@ class UserController extends DefaultController {
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter('is_delete=0');
+
+        if(User::hasPermission([User::ROLE_PM]))
+        {
+            $useteam = User::teamUs();
+            $tea = [];
+            /** @var  $teams Teammate*/
+            foreach($useteam as $teams){
+                $tea[] = $teams->user_id;
+            }
+
+            if($tea && $tea != null) {
+
+                $dataTable->setFilter('id IN (' . implode(', ', $tea) . ") ");
+            }else{
+
+                $dataTable->setFilter('id IN (null) ');
+            }
+        }
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
