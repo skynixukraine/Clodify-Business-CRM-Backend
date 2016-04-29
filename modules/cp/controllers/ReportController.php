@@ -147,7 +147,7 @@ class ReportController extends DefaultController
 
             }
         }
-        if(User::hasPermission([User::ROLE_PM]) && Team::findOne(['team_leader_id' => Yii::$app->user->id]) != null) {
+        if(User::hasPermission([User::ROLE_DEV]) && Team::findOne(['team_leader_id' => Yii::$app->user->id]) != null) {
 
 
             $reporpm = Report::reportsPM();
