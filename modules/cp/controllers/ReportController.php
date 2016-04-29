@@ -11,6 +11,7 @@ use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\Report;
+use app\models\Team;
 use app\models\Teammate;
 use app\models\User;
 use Yii;
@@ -146,7 +147,7 @@ class ReportController extends DefaultController
 
             }
         }
-        if(User::hasPermission([User::ROLE_PM])) {
+        if(User::hasPermission([User::ROLE_PM]) && Team::findOne(['team_leader_id' => Yii::$app->user->id]) != null) {
 
 
             $reporpm = Report::reportsPM();
