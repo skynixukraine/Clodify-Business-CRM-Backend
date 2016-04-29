@@ -37,12 +37,6 @@ var requestQuoteModals = (function(){
         htmlwidth = htmlPage.width();
         progressBar.css('width' , factor * step + '%');
 
-
-        if(htmlwidth < 768){
-
-            //htmlPage.animate({scrollTop:0},500);
-
-        }
     }
 
     function validateForm(elem){

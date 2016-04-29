@@ -179,6 +179,10 @@
             padding: 13px 10px 10px 10px;
             line-height: 1.5;
         }
+
+
+
+
     }
     .step2{
 
@@ -315,8 +319,8 @@
             }
             .option-group:not(#foo) label{
                 height: 50px;
-                text-align: left;
-                padding: 7px 10px 10px 90px!important;
+
+                padding: 10px !important;
                 line-height: 1.45;
             }
 
@@ -326,9 +330,19 @@
 
             .option-group:not(#foo){
 
+                label{
+                    text-align: left;
+                    padding: 10px 10px 10px 75px!important;
+
+                }
+
                 input:checked + label {
                     background-position: 22px -51px;
 
+                }
+                label[for='optimization'],
+                label[for='redesign']{
+                    line-height: 1.5;
                 }
             }
 
@@ -396,6 +410,7 @@
                 margin-top: 10px;
             }
         }
+
         .step2{
 
             .option-group:not(#foo){
@@ -416,8 +431,13 @@
                     }
 
                 }
+                label[for="module_plugin"],
+                label[for="code_adjustments"]{
+                    padding: 1px 10px 5px 75px!important;
+                }
 
             }
+
 
         }
         .step6 input {

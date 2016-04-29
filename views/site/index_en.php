@@ -18,7 +18,6 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
-
                         <h1 class="en">ABOUT SKYNIX</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
@@ -327,6 +326,10 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <div class="option-group right-elem">
                         <input type="radio" value="Only technical specification" name="website_state" id="technical"  required>
                         <label for="technical">Only technical specification</label>
+
+
+
+
                     </div>
 
                     <div class="option-group">

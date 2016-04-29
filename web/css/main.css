@@ -1560,12 +1560,19 @@ footer .link a:hover {
   }
   #request-quote-modals .step .option-group:not(#foo) label {
     height: 50px;
-    text-align: left;
-    padding: 7px 10px 10px 90px!important;
+    padding: 10px !important;
     line-height: 1.45;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label {
+    text-align: left;
+    padding: 10px 10px 10px 75px!important;
   }
   #request-quote-modals .step2 .option-group:not(#foo) input:checked + label {
     background-position: 22px -51px;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label[for='optimization'],
+  #request-quote-modals .step2 .option-group:not(#foo) label[for='redesign'] {
+    line-height: 1.5;
   }
   #request-quote-modals .next,
   #request-quote-modals .quotes,
@@ -1629,6 +1636,10 @@ footer .link a:hover {
   #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"] .visible-xs,
   #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"] .visible-xs {
     display: none!important;
+  }
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="module_plugin"],
+  #request-quote-modals .step2 .option-group:not(#foo) label[for="code_adjustments"] {
+    padding: 1px 10px 5px 75px!important;
   }
   #request-quote-modals .step6 input {
     height: 40px;
