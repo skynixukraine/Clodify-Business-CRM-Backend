@@ -255,7 +255,7 @@ class UserController extends DefaultController {
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
                     $userEmailes->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
                     return $this->redirect('index');
 
                 } else {
@@ -263,13 +263,14 @@ class UserController extends DefaultController {
                     if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                     return $this->redirect('index');
 
                     }
                 }
             }
         } else{
+
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
         return $this->render('invite',['model' => $model]);
