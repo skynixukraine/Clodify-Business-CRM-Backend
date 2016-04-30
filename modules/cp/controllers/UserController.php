@@ -176,6 +176,10 @@ class UserController extends DefaultController {
 
         $dataTable->setFilter('is_delete=0');
 
+        if(User::hasPermission([User::ROLE_PM]))
+        {
+            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
+        }
         /*if(User::hasPermission([User::ROLE_PM]))
         {
             $useteam = User::teamUs();
@@ -303,7 +307,7 @@ class UserController extends DefaultController {
                             return $this->redirect(['user/index']);
 
                         }
-                        return $this->redirect(['index']);
+                        return $this->redirect(['index/index']);
 
                     } else {
 
