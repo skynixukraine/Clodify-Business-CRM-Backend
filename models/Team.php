@@ -83,29 +83,27 @@ class Team extends \yii\db\ActiveRecord
             ->where(Team::tableName() . '.is_deleted=0')
             ->all();*/
 
+    /**
+     *
+     * @param $currentUserId
+     */
     public static function hasTeam($currentUserId)
     {
-        $users_id = Team::find()->where(Team::tableName() . '.is_deleted=0')->all();
+        /**
+         *         SELECT COUNT(*) FROM teammates tm
+         *           LEFT JOIN teams t ON tm.team_id=t.id
+         *           WHERE t.is_deleted=0 AND tm.is_deleted=0 AND tm.user_id=10;
+         */
 
-        /*$userId = [];
-        foreach($users_id as $id){
-            $userId[] = $id->user_id;
-        }*/
 
-        $user_id = Teammate::find()->all();
-        foreach ($user_id as $id) {
-            $userId[] = $id->user_id;
-        }
+        $c = Teammate::find()
+                ->leftJoin(Team::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . '.id' )
+                ->where( Team::tableName() . '.is_deleted=0 AND ' .
+                        Teammate::tableName() . '.is_deleted=0 AND ' .
+                        Teammate::tableName() . '.user_id=:uid', [':uid' => $currentUserId])
+                ->count();
+        return ( $c > 0 ? true : false);
 
-        if (in_array($currentUserId, $userId)) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
     }
 
     public function afterSave($insert, $changedAttributes)
