@@ -309,7 +309,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($this->email)
-                ->setSubject('You invited')
+                ->setSubject('Welcome to Skynix company. Please activate your account.')
                 ->send();
         }
 
