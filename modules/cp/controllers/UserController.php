@@ -349,6 +349,6 @@ class UserController extends DefaultController {
             return $this->redirect('/cp/index');
 
         }
-        $this->redirect('index');
+        $this->redirect('user/index');
     }
 }
