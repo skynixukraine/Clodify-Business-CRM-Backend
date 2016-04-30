@@ -26,24 +26,27 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
     ];
 }
 ?>
-<table class="table table-hover" id="invoice_table">
-    <thead>
-    <tr>
-        <th><?=Yii::t('app', 'ID')?> </th>
-        <th><?=Yii::t('app', 'First Name')?></th>
-        <th><?=Yii::t('app', 'Discount')?></th>
-        <th><?=Yii::t('app', 'Subtotal')?></th>
-        <th><?=Yii::t('app', 'Total')?></th>
-        <th><?=Yii::t('app', 'Date Start')?></th>
-        <th><?=Yii::t('app', 'Date End')?></th>
-        <th><?=Yii::t('app', 'Date Create')?></th>
-        <th><?=Yii::t('app', 'Date Sent')?></th>
-        <th><?=Yii::t('app', 'Date Paid')?></th>
-        <th><?=Yii::t('app', 'Status')?></th>
-        <th><?=Yii::t('app', 'Actions')?></th>
-    </tr>
-    </thead>
-</table>
+
+    <table class="table table-hover box " id="invoice_table">
+        <thead>
+        <tr>
+            <th><?=Yii::t('app', 'ID')?> </th>
+            <th><?=Yii::t('app', 'Client Name')?></th>
+            <th><?=Yii::t('app', 'Subtotal')?></th>
+            <th><?=Yii::t('app', 'Discount')?></th>
+            <th><?=Yii::t('app', 'Total')?></th>
+            <th><?=Yii::t('app', 'Date Start')?></th>
+            <th><?=Yii::t('app', 'Date End')?></th>
+            <th><?=Yii::t('app', 'Date Create')?></th>
+            <th><?=Yii::t('app', 'Date Sent')?></th>
+            <th><?=Yii::t('app', 'Date Paid')?></th>
+            <th><?=Yii::t('app', 'Status')?></th>
+            <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+                <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+            <?php endif;?>
+        </tr>
+        </thead>
+    </table>
 
 <script>
 
@@ -55,8 +58,8 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             deleteUrl   : '<?=Url::to(['invoice/delete'])?>',
             findUrl     : '<?=Url::to(['invoice/find'])?>',
             viewUrl     : '<?=Url::to(['invoice/view'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>
         })

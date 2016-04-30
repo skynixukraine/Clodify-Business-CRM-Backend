@@ -20,6 +20,8 @@ use app\models\Story;
 use app\models\Photo;
 use app\models\User;
 use app\models\Language;
+use app\models\LoginForm;
+use yii\web\Cookie;
 
 class UserController extends DefaultController {
 
@@ -36,14 +38,19 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'find', 'index', 'invite', 'delete'],
+                        'actions' => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN],
                     ],
                     [
-                        'actions' => [ 'find', 'index', 'delete'],
+                        'actions' => [ 'find', 'index', 'delete', 'loginback'],
                         'allow' => true,
                         'roles' => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                    ],
+                    [
+                        'actions' => ['loginback'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_DEV],
                     ],
                 ],
             ],
@@ -53,6 +60,8 @@ class UserController extends DefaultController {
                     'find'      => ['get'],
                     'delete'    => ['delete'],
                     'invite'    => ['get', 'post'],
+                    'loginas'   => ['get', 'post'],
+                    'loginback' => ['get', 'post'],
                 ],
             ],
         ];
@@ -60,31 +69,8 @@ class UserController extends DefaultController {
 
     public function actionIndex()
     {
-
-
         return $this->render("index");
     }
-
-    /*public function actionCreate()
-    {
-
-        $model              = new User();
-        //$model->scenario    = "create";
-        if ( Yii::$app->request->isPost ) {
-
-            if ( $model->load( Yii::$app->request->post() ) && $model->validate()  ) {
-
-                $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have successfully added the user"));
-                return $this->redirect(['user/index']);
-
-            }
-
-        }
-        return $this->render("create", array(
-            'model'         => $model,
-        ));
-    }*/
 
     /** Delete user from Manage Users */
     public function actionDelete()
@@ -119,12 +105,12 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
 
             $query = User::find();
         }
 
-        if( User::hasPermission([User::ROLE_PM])) {
+        /*if( User::hasPermission([User::ROLE_PM])) {
             $users = \app\models\ProjectDeveloper::allPmUsers(Yii::$app->user->id);
             $projectId=[];
             foreach($users as $user){
@@ -143,7 +129,7 @@ class UserController extends DefaultController {
                 ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . $projectPm . ')');
 
 
-        }
+        }*/
 
         if( User::hasPermission([User::ROLE_CLIENT])){
 
@@ -152,14 +138,23 @@ class UserController extends DefaultController {
             foreach($workers as $worker){
                 $arrayWorkers[]= $worker->user_id;
             }
+            $devUser = '';
+            if(!empty($arrayWorkers)) {
+                $devUser = implode(', ' , $arrayWorkers);
+            }
+            else{
+                $devUser = 'null';
+            }
+
             $query = User::find()
-            ->where(User::tableName() . '.id IN (' . implode( ', ', $arrayWorkers ) . ')') ;
+            ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
         }
         $columns        = [
             'id',
             'first_name',
             'role',
             'email',
+            'company',
             'phone',
             'date_login',
             'date_signup',
@@ -181,6 +176,27 @@ class UserController extends DefaultController {
 
         $dataTable->setFilter('is_delete=0');
 
+        if(User::hasPermission([User::ROLE_PM]))
+        {
+            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
+        }
+        /*if(User::hasPermission([User::ROLE_PM]))
+        {
+            $useteam = User::teamUs();
+            $tea = [];
+            foreach($useteam as $teams){
+                $tea[] = $teams->user_id;
+            }
+
+            if($tea && $tea != null) {
+
+                $dataTable->setFilter('id IN (' . implode(', ', $tea) . ") ");
+            }else{
+
+                $dataTable->setFilter('id IN (null) ');
+            }
+        }*/
+
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\User */
@@ -198,11 +214,6 @@ class UserController extends DefaultController {
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
             ];
-
-
-
-
-
         }
 
         $data = [
@@ -242,11 +253,12 @@ class UserController extends DefaultController {
                     $userEmailes->first_name = $model->first_name;
                     $userEmailes->last_name = $model->last_name;
                     $userEmailes->role = $model->role;
+                    $userEmailes->company = $model->company;
                     $userEmailes->password = $model->password;
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
                     $userEmailes->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
                     return $this->redirect('index');
 
                 } else {
@@ -254,15 +266,89 @@ class UserController extends DefaultController {
                     if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                     return $this->redirect('index');
 
                     }
                 }
             }
         } else{
+
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
         return $this->render('invite',['model' => $model]);
+    }
+
+    public function actionLoginas()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+
+            /** @var $user User */
+            if (( $id = Yii::$app->request->get("id") ) &&
+                ( $user = User::findOne($id) ) ) {
+
+                if ( $user->is_delete == 0 ) {
+
+                    if ( $user->is_active == 1 ) {
+
+                        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                            'name' => 'admin',
+                            'value' => Yii::$app->user->id,
+                        ]));
+
+                        Yii::$app->user->logout();
+
+                        /** @var  $model LoginForm */
+                        $model = new LoginForm();
+                        $model->loginUser($user);
+
+                        if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+
+                            return $this->redirect(['user/index']);
+
+                        }
+                        return $this->redirect(['index/index']);
+
+                    } else {
+
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you can not login as inactive user"));
+
+
+                    }
+
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you can not login as deleted user"));
+
+
+                }
+            }
+            return $this->redirect(['user/index']);
+
+
+        } else {
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+        }
+
+    }
+
+    public function actionLoginback()
+    {
+        Yii::$app->user->logout();
+        /** @var  $model LoginForm */
+        $model = new LoginForm();
+
+        if (isset(Yii::$app->request->cookies['admin']) &&
+            ( $user = User::findOne( Yii::$app->request->cookies['admin'] ) ) ) {
+
+            $form = new LoginForm();
+            $form->loginUser( $user );
+            Yii::$app->response->cookies->remove('admin');
+            return $this->redirect('/cp/index');
+
+        }
+        $this->redirect('user/index');
     }
 }

@@ -90,4 +90,11 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
-
+.alert{
+    width: 500px;
+    margin: 26px auto;
+    position: absolute;
+    z-index: 201;
+    left: calc(50% - 250px);
+    top: 150px;
+}

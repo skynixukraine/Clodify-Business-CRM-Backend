@@ -24,27 +24,29 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
                                         ] : $this->params['menu'] = []
 
 ?>
-<table class="table table-hover" id="project_table">
-    <thead>
-    <tr>
-        <th><?=Yii::t('app', 'ID')?> </th>
-        <th><?=Yii::t('app', 'Name')?></th>
-        <th><?=Yii::t('app', 'JIRA')?></th>
-        <th><?=Yii::t('app', 'Total Logged, h')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
-        <th id="role"><?=Yii::t('app', 'Total Paid, h')?></th>
-        <?php endif;?>
-        <th><?=Yii::t('app', 'Date Start')?></th>
-        <th><?=Yii::t('app', 'Date End')?></th>
-        <th><?=Yii::t('app', 'Developers')?></th>
-        <th><?=Yii::t('app', 'Clients')?></th>
-        <th><?=Yii::t('app', 'Status')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])):?>
-        <th><?=Yii::t('app', 'Actions')?></th>
-        <?php endif;?>
-    </tr>
-    </thead>
-</table>
+
+    <table class="table table-hover box" id="project_table">
+        <thead>
+            <tr>
+                <th><?=Yii::t('app', 'ID')?> </th>
+                <th><?=Yii::t('app', 'Name')?></th>
+                <th><?=Yii::t('app', 'JIRA')?></th>
+                <th><?=Yii::t('app', 'Total Logged, h')?></th>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
+                <th id="role"><?=Yii::t('app', 'Total Paid, h')?></th>
+                <?php endif;?>
+                <th><?=Yii::t('app', 'Date Start')?></th>
+                <th><?=Yii::t('app', 'Date End')?></th>
+                <th><?=Yii::t('app', 'Developers')?></th>
+                <th><?=Yii::t('app', 'Clients')?></th>
+                <th><?=Yii::t('app', 'Status')?></th>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])):?>
+                <th><?=Yii::t('app', 'Actions')?></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+    </table>
+
 <script>
 
     $(function(){

@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use yii\web\View;
 use app\models\User;
+use app\models\Team;
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/bootstrap.min.css');
 $this->registerCssFile('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
@@ -40,7 +41,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>FPP</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><?=Yii::$app->params['applicationName']?></span>
+            <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.png')?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -51,7 +52,11 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-
+            <?php if( Yii::$app->request->cookies['admin'] ):?>
+                <div style="float: right; padding-right: 10px;padding-top: 10px;">
+                    <?php echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);?>
+                </div>
+            <?php endif;?>
 
             <?php if ( isset( $this->params['menu'] ) && count($this->params['menu']) ) :?>
 
@@ -63,6 +68,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </ul>
 
             <?php endif;?>
+            
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
@@ -104,8 +110,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <div class="pull-left image">
                     <img src="/img/avatar.png" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
                 </div>
-                <div class="pull-left info">
-                    <p><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></p>
+                <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
+                    <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>
+                    <p style="white-space: normal !important"><?= Yii::$app->user->identity->last_name?></p>
 
                     <a href="#"><i class="fa fa-circle text-success"></i> <?=Yii::t('app', 'Online')?></a>
                 </div>
@@ -129,16 +136,16 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
-                <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
+                <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
                     <a href="<?=Url::to(['teammate/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Teams ')?></span>
+                        <i class="fa fa-wechat"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
                     </a>
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) : ?>
-                <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
+                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM]) && Team::hasTeam(Yii::$app->user->id) ) : ?>
+                <li class="treeview<?=( Yii::$app->controller->id == "teams" ? " active" : "")?>">
                         <a href="<?=Url::to(['teams/index']);?>">
                             <i class="fa fa-users"></i> <span><?=Yii::t('app', 'My Team')?></span>
                         </a>
@@ -230,9 +237,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 1.0
+            <b>Version</b> 1.2
         </div>
-        <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'All rights reserved.')?>
+        <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'Skynix Ltd. All rights reserved.')?>
     </footer>
 
     <div class='control-sidebar-bg'></div>

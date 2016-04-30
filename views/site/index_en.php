@@ -110,6 +110,173 @@ $this->title = 'Welcome to the Skynix - software development company';
     </div>
 </section>
 
+<section class="container" id="portfolio">
+    <div class="row">
+        <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
+            <div class="line"></div>
+        </div>
+        <div class="col-lg-6 col-sm-8 col-xs-10 portfolio-header"><h2>PROJECTS WE HAVE DONE</h2></div>
+        <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
+            <div class="line"></div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="http://infinitebeginnings.com/" data-images="infinite_beginnings1.jpg">
+                <img src="images/btn-infinite-beginnings.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Infinite Beginnings</h3>
+            </a>
+            <div class="info-box-hidden row" >
+                <div class="col-lg-6 col-sm-12">
+                    <p><strong>CATEGORY: </strong> Wordpress Theme</p>
+                    <p><strong>CLIENT: </strong> Web Mission Control Inc.</p><br>
+                    <p><strong>DESCRIPTION: </strong>This theme is compatible with all recent versions of Wordpress and
+                        is based on Twitter Bootstrap (responsive, mobile first project on the web)
+                        <br>
+                        As a child theme of the premium <a href="#" class="blue-txt">Enfold theme</a>  this theme has
+                        all features of Enfold them + the following custom features:
+                    </p>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <ul>
+                        <li>
+                            Custom post types and appropriate backend for managing: events, services, resources and people;
+                        </li>
+                        <li>
+                            Custom registration form and workflow
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="" data-images="fisherman_id.jpg">
+                <img src="images/btn-fisherman.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Fisherman ID</h3>
+            </a>
+            <div class="info-box-hidden row" >
+
+                <div class="col-lg-6 col-sm-12">
+                    <p><strong>CATEGORY: </strong>Mobile App: iOS & Android</p>
+                    <p><strong>CLIENT: </strong>Fisherman UK ltd</p><br>
+                    <p><strong>DESCRIPTION: </strong>This mobile application is intended to help for specific groups of
+                        people to get their aims. This app contents from a social network and a reporting system.
+                        The App has been developed using the most modern technologies:
+                    </p>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <ul>
+                        <li>HTML5, CSS3, Javascript;</li>
+                        <li>AngularJS;</li>
+                        <li>Twitter Bootstrap</li>
+                        <li>Phonegap (iOS + Android)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="https://www.citrix.com/" data-images="citrix_cynergy.jpg">
+                <img src="images/btn-citrix-synergy.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Citrix Synergy</h3>
+            </a>
+            <div class="info-box-hidden row" >
+
+                <div class="col-lg-6 col-sm-12">
+                    <p><strong>CATEGORY: </strong>CMS & Web</p>
+                    <p><strong>CLIENT: </strong>Citrix Systems</p><br>
+                    <p><strong>DESCRIPTION: </strong>This informational announcement site for events at Citrix is
+                        developed using flexible CMS Adobe CQ. CMS allows administrators of the site to manage content
+                        by multiple admins with different privilege levels. The CMS has been developed using the
+                        following technologies:
+                    </p>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <ul>
+                        <li>
+                            Adobe CQ 5.6  - the most modern content management system on Java;
+                        </li>
+                        <li>
+                            Foundation - responsive framework for creating mobile friendly web sites;
+                        </li>
+                        <li>
+                            HTML5, CSS3, Javascript
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="http://www.castles.uk.com/" data-images="castles.jpg">
+                <img src="images/btn-сastles_estate_agents.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">Castles - Estate agents</h3>
+            </a>
+            <div class="info-box-hidden row" >
+
+                <div class="col-lg-6 col-sm-12">
+                    <p><strong>CATEGORY: </strong>Wordpress Plugin</p>
+                    <p><strong>CLIENT: </strong>Castles Estate Agents ltd.</p><br>
+                    <p><strong>DESCRIPTION: </strong>The plugin was developed for grabbing properties from ExpertAgent
+                        API and build a catalog of properties with rich featured property details pages..
+                    </p>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <ul>
+                        <li>Custom post type;</li>
+                        <li>ExpertAgent API;</li>
+                        <li>Custom arrange a free valuation feature</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="http://marketplace.skynix.solutions/" data-images="m2_marketplace_extension.jpg">
+                <img src="images/btn-marketplace-extension.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">M2 Marketplace Extension</h3>
+            </a>
+            <div class="info-box-hidden row">
+
+                <div class="col-lg-12 col-sm-12">
+                    <p>The M2 Marketplace extension intended to create specific markets based on Magento 2 ecommerce.
+                        It shares Magento 2 functionality between different vendors and promote their products under one catalog (marketplace).
+                        (List of features will be provided later)</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
+            <a href="#" data-href="http://handmade.works/" data-images="handmadeworks.jpg">
+                <img src="images/btn-handmade-works.jpg" width="289" height="214" />
+                <div class="mask"></div>
+                <h3 class="name">M2 Marketplace - Handmade Theme</h3>
+            </a>
+            <div class="info-box-hidden row" >
+
+                <div class="col-lg-12 col-sm-12">
+                    <p>
+                        The theme for handmade markets is developed for M2 Marketplace extension
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</section>
+
 <section class="container-fluid" id="evaluation">
     <div class="row">
         <div class="col-lg-12">
@@ -131,7 +298,6 @@ $this->title = 'Welcome to the Skynix - software development company';
 </section>
 
 <!--****   Popup REQUEST a QUOTE modals   ****-->
-
 <div id="request-quote-modals">
     <div class="masks-back"></div>
     <div class="popup">
@@ -283,7 +449,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 <div class = "col-lg-12 step step6">
                     <input type="text" placeholder="Name" name="name" autocomplete="on" required >
-                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" required >
+                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" pattern="[^ @]*@[^ @]*" required >
                     <input type="text" placeholder="Company" name="company" autocomplete="on" required>
                     <input type="text" placeholder="Country" name="country" autocomplete="on" required>
                 </div>
@@ -325,8 +491,73 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
 </div>
-
-
-
 <!--****   End Popup REQUEST a QUOTE modals   ****-->
+
+<!--****   Popup portfolio   ****-->
+<div id="view_portfolio" >
+    <div class="masks-back"></div>
+    <div class="popup">
+        <div class="close"></div>
+        <div class="header-popap">Infinite Beginnings</div>
+        <div class="container-fluid">
+            <div class="row body-popap">
+                <div class="slider_portfolio col-lg-12">
+
+                    <div class="prev-box">
+
+                        <div>
+                            <a class="prev" href="javascript:void(0);">
+
+                                <div class="hidden768">
+                                    PREV<br>PROJECT
+                                </div>
+                                <div class="visible768">
+                                    PREV PROJECT
+                                </div>
+
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="viewport">
+
+                    </div>
+                    <div class="next-box">
+
+                        <div>
+                            <a class="next" href="javascript:void(0);">
+
+                                <div class="hidden768">
+                                    NEXT<br>PROJECT
+                                </div>
+                                <div class="visible768">
+                                    NEXT PROJECT
+                                </div>
+
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="container-fluid info-box"></div>
+
+                </div>
+                <div class="col-lg-12">
+                    <a href="#" class="btn read-more" target = "_ blank" rel="nofollow">VISIT WEBSITE</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--****   End Popup portfolio   ****-->
+
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js'); ?>
+<?php $this->registerJsFile('/js/portfolio.js'); ?>
+
+

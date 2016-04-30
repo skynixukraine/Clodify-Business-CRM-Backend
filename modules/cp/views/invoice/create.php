@@ -36,6 +36,8 @@ $this->params['menu'] = [
     ]
 ]);
 ?>
+<div class="row">
+    <div class="col-md-6 box box-primary box-body">
             <?php $customers = User::allCustomersWhithReceive();
             $listCustomers = ArrayHelper::map( $customers, 'id', 'first_name' );
             /** @var $model Invoice */
@@ -65,12 +67,13 @@ $this->params['menu'] = [
             ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
 
             <?php echo $form->field( $model, 'discount')->textInput();?>
-
             <?php echo $form->field( $model, 'total')->textInput();?>
-
+            <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
+        </div>
+    </div>
 
 <?php ActiveForm::end();?>
     <table class = "table" id="invoice-create-table">

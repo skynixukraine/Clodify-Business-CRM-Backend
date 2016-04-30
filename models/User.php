@@ -309,7 +309,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($this->email)
-                ->setSubject('You invited')
+                ->setSubject('Welcome to Skynix company. Please activate your account.')
                 ->send();
         }
 
@@ -321,7 +321,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                    User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -331,7 +331,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -357,5 +357,69 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return $string;
     }
+
+    public static function temmateUser($userId)
+    {
+        $r = self::find()
+            ->from(User::tableName())
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND id=:userId",[
+                ":userId" => $userId
+            ])
+            ->one();
+        return $r;
+    }
+
+    /**
+     * @param $userId
+     * @param bool $idsOnly
+     * @return array|Team[]
+     */
+    public static function getUserTeams($userId, $idsOnly = false)
+    {
+        $result = Teammate::find()
+            ->from(Teammate::tableName())
+            ->where(Teammate::tableName() . ".user_id=:userId", [
+                ":userId" => $userId
+            ])
+            ->all();
+        if ($idsOnly) {
+            $result = self::getTeamIds($result);
+        }
+        return $result;
+    }
+
+    /**
+     * @param array|Team[] $userTeams
+     * @return array
+     */
+    protected static function getTeamIds($userTeams)
+    {
+        $result = [];
+        foreach ($userTeams as $team) {
+            $result[] = $team->team_id;
+        }
+        return $result;
+    }
+    public static function teamUs()
+    {
+        $teamIds = Team::find()->where(Team::tableName() . '.team_leader_id=:Id', [':Id' => Yii::$app->user->id])->all();
+        $result = [];
+        foreach ($teamIds as $team) {
+            $result[] = $team->id;
+        }
+        return $teamsus = Teammate::find()
+
+            ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $result) . '")')
+            ->all();
+        /*var_dump($tea);
+        exit();*/
+        /*return User::find()
+            ->where(User::tableName() . '.id IN ("' . implode(', ', $tea) . '")')
+            ->all();*/
+    }
+    /*SELECT teammates.user_id, teammates.team_id, teams.team_leader_id
+    FROM teams
+    LEFT JOIN teammates ON teams.id=teammates.team_id
+    WHERE teams.team_leader_id = 2*/
 
 }

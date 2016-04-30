@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use app\components\SkynixNavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\User;
 
 AppAsset::register($this);
 ?>
@@ -103,10 +104,15 @@ AppAsset::register($this);
         </div>
         <div class="col-lg-2 col-xs-2 link">
             <?php
-                if (Yii::$app->user->id != null):?>
-                    <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
+                if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
+                    <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>">cp</a>
                     <a href="<?=Url::to(['site/logout'])?>">log out</a>
                 <?php endif;?>
+            <?php
+                if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
+                <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
+                <a href="<?=Url::to(['site/logout'])?>">log out</a>
+            <?php endif;?>
             <?php
             if (Yii::$app->user->id ==null ):?>
                     <a href="<?=Url::to(['site/login'])?>">log in</a>
@@ -121,6 +127,8 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
+<?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
+
 
 
 <script>

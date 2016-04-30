@@ -26,14 +26,12 @@ var invoiceCreateModule = (function() {
                 var id = $(this).val();
                 dataFilter['user_id'] = id;
                 dataTable.api().ajax.reload();
-                console.log(id);
             });
-
-
 
             var date = new Date();
             var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             var firstDayOfCurrMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
 
             filterDateStartSelect = $( filterDateStartSelect );
             filterDateStartSelect.datepicker({
@@ -45,8 +43,6 @@ var invoiceCreateModule = (function() {
                 dataFilter['date_start'] = startDate;
                 dataTable.api().ajax.reload();
             }).datepicker("setDate", firstDayOfCurrMonth);
-
-            //dataFilter['date_start'] = $("#date_start").val();
 
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
@@ -60,8 +56,8 @@ var invoiceCreateModule = (function() {
                 dataTable.api().ajax.reload();
             }).datepicker("setDate", currentDay);
 
-            //dataFilter['date_end'] = $("#date_end").val();
-
+            dataFilter['date_start'] = filterDateStartSelect.val();
+            dataFilter['date_end'] = filterDateEndSelect.val();
 
             dataTable = $('#invoice-create-table').dataTable({
                 "bPaginate": false,
@@ -115,6 +111,27 @@ var invoiceCreateModule = (function() {
                 },
                 "processing": true,
                 "serverSide": true
+            });
+            dataTable.on( 'draw.dt', function (e, settings, data) {
+
+                var sum = 0;
+                var MyRows = $('#invoice-create-table').find('tr');
+                for (var i = 1; i < MyRows.length; i++){
+
+                    var hours = $(MyRows[i]).find('td:eq(5)').html();
+                    if(hours != '') {
+
+                        sum += parseFloat(hours);
+                    }
+                }
+
+                if( isNaN(sum) || sum == null ) {
+
+                    $(document).find('#invoice-total_hours').val('');
+                } else {
+
+                    $(document).find('#invoice-total_hours').val(sum);
+                }
             });
         }
     };

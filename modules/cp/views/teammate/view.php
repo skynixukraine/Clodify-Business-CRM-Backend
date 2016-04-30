@@ -30,10 +30,12 @@ $this->params['menu'] = [
 <ul>
 <li>ID: <?php echo $model->id; ?></li>
 <li>Team Name: <?php echo $model->name; ?></li>
-<li>Team Leader: <?php echo $model->getUser()->one()->first_name . ' ' . $model->getUser()->one()->last_name; ?></li>
+<li>Team Leader: <?php echo $model->getLeader()->one()->first_name . ' ' . $model->getLeader()->one()->last_name; ?></li>
 <li> Date of Creation: <?php echo $model->date_created ?></li>
 </ul>
-<?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+<?php  ActiveForm::end();?>
+<?php $form =  ActiveForm::begin();?>
+<?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
         APPEND
     </button>
@@ -49,9 +51,8 @@ $this->params['menu'] = [
                     <?php $teammates = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                         User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
                     $listReport = \yii\helpers\ArrayHelper::map( $teammates, 'id', 'first_name' );
-                   /* var_dump($listReport);
-                    exit();*/
-                    echo $form->field( $model, 'teammate', [
+
+                    echo $form->field( $model, 'user_id', [
 
                         'options' => [
 
@@ -60,10 +61,8 @@ $this->params['menu'] = [
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary sendForm">Save changes</button>-->
-                    <div>
-                        <?= Html::submitButton( Yii::t('app', 'Save changes'), ['type' => 'button', 'class' => 'btn btn-primary']) ?>
-                    </div>
+                    <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+
                 </div>
             </div>
         </div>
@@ -71,27 +70,29 @@ $this->params['menu'] = [
 <?php endif;?>
 
 <?php  ActiveForm::end();?>
-<table id="teammates-table" class="table table-hover">
-    <thead>
-    <tr>
-        <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
-        <th><?=Yii::t('app', 'First Name')?></th>
-        <th><?=Yii::t('app', 'Last Name')?></th>
-        <th><?=Yii::t('app', 'Email')?></th>
-        <th><?=Yii::t('app', 'Phone')?></th>
-        <th><?=Yii::t('app', 'Projects')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-        <th><?=Yii::t('app', 'Actions')?></th>
-        <?php endif;?>
-    </tr>
-    </thead>
-</table>
+
+    <table id="teammates-table" class="table table-hover box">
+        <thead>
+            <tr>
+                <th class="id-col"><?=Yii::t('app', 'User ID')?></th>
+                <th><?=Yii::t('app', 'First Name')?></th>
+                <th><?=Yii::t('app', 'Last Name')?></th>
+                <th><?=Yii::t('app', 'Email')?></th>
+                <th><?=Yii::t('app', 'Phone')?></th>
+                <th><?=Yii::t('app', 'Projects')?></th>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                <th><?=Yii::t('app', 'Actions')?></th>
+                <?php endif;?>
+            </tr>
+        </thead>
+    </table>
+
 <script>
 
     $(function(){
         TeammateModule.init({
             deleteUrl   : '<?=Url::to(['teammate/delete'])?>',
-            findUrl     : '<?=Url::to(['teams/find'])?>',
+            findUrl     : '<?=Url::to(['teams/find2'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });

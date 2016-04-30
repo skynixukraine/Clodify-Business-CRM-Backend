@@ -136,8 +136,24 @@ class Report extends \yii\db\ActiveRecord
 
             if( !$this->reporter_name ) {
 
-                $this->reporter_name =   Yii::$app->user->getIdentity()->first_name . ' ' .
-                                         Yii::$app->user->getIdentity()->last_name;
+                /** @var $pDev ProjectDeveloper */
+                /** @var $aliasUser User */
+                if ( ($pDev = ProjectDeveloper::findOne([
+                                    'user_id'       => Yii::$app->user->id,
+                                    'project_id'    => $this->project_id]) ) &&
+                    $pDev->alias_user_id && ( $aliasUser = User::findOne( $pDev->alias_user_id )) ) {
+
+
+                    $this->reporter_name =  $aliasUser->first_name . ' ' . $aliasUser->last_name;
+
+                } else {
+
+                    $this->reporter_name =   Yii::$app->user->getIdentity()->first_name . ' ' .
+                        Yii::$app->user->getIdentity()->last_name;
+
+                }
+
+
             }
         }/*else
             $this->modified = new CDbExpression('NOW()');*/
@@ -200,6 +216,29 @@ class Report extends \yii\db\ActiveRecord
                     ':DateReport' => $dateReport,
                 ])
             ->sum(Report::tableName() . '.hours');
+    }
+    public static function reportsPM()
+    {
+        if ( ( $teamspm = Team::find()
+                    ->where(Team::tableName() . '.team_leader_id=:UserId', [ ':UserId' => Yii::$app->user->id])
+                    ->andWhere('is_deleted=0')
+                    ->all() ) ) {
+
+            $tea = [];
+            foreach($teamspm as $teams){
+                $tea[] = $teams->id;
+            }
+
+
+            return Teammate::find()
+                ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $tea) . '")')
+                ->all();
+
+        }
+
+        //var_dump($tea);
+        //exit();
+
     }
 
 }
