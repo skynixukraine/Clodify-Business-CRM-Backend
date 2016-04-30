@@ -147,24 +147,32 @@ class ReportController extends DefaultController
 
             }
         }
-        if(User::hasPermission([User::ROLE_PM]) && Team::findOne(['team_leader_id' => Yii::$app->user->id]) != null) {
+            if(User::hasPermission([User::ROLE_PM])) {
 
 
-            $reporpm = Report::reportsPM();
-            $reports = [];
-            foreach($reporpm as $report){
-                $reports[] = $report->user_id;
+                $teammates = [];
+                if ( ( $pmTeammates = Report::reportsPM() ) ) {
+
+                    foreach($pmTeammates as $teammate) {
+
+                        $teammates[] = $teammate->user_id;
+
+                    }
+
+
+                }
+
+
+
+                if( $teammates && count($teammates) ) {
+
+                    $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
+                }else{
+
+                    $dataTable->setFilter('user_id IN (null) ');
+                }
+
             }
-
-            if($reports && $reports != null) {
-
-                $dataTable->setFilter('user_id IN (' . implode(', ', $reports) . ") ");
-            }else{
-
-                $dataTable->setFilter('user_id IN (null) ');
-            }
-
-        }
 
 
             if($dateStart && $dateStart != null){
