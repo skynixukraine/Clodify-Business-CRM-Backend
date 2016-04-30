@@ -119,11 +119,12 @@ class IndexController extends DefaultController
 
                 Yii::$app->getSession()->setFlash('error',
                 Yii::t("app", "Report can't be added as invoice has been created on this project"));
-                return $this->render('cp/index', ['model' => $model]);
+                return $this->render('index', ['model' => $model]);
             }
 
         }
         return $this->render('index' ,['model' => $model]);
+
     }
 
     /** Delete developer`s report */

@@ -103,7 +103,12 @@ AppAsset::register($this);
         </div>
         <div class="col-lg-2 col-xs-2 link">
             <?php
-            if (Yii::$app->user->id != null):?>
+            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
+                <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>">cp</a>
+                <a href="<?=Url::to(['site/logout'])?>">вийти</a>
+            <?php endif;?>
+            <?php
+            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
                 <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
                 <a href="<?=Url::to(['site/logout'])?>">вийти</a>
             <?php endif;?>

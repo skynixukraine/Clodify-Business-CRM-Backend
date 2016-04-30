@@ -118,7 +118,7 @@ var adminReportModule = (function() {
             columns.push(
                 {
                     "targets"   : index,
-                    "orderable" : true,
+                    "orderable" : false,
                     "render"    : function (data, type, row) {
                         return row[3];
                     }

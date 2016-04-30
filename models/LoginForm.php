@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\User;
 
 /**
  * LoginForm is the model behind the login form.
@@ -62,6 +63,11 @@ class LoginForm extends Model
 
         }
         return false;
+    }
+
+    public function loginUser( User $user )
+    {
+        Yii::$app->user->login( $user , 0);
     }
 
     /**

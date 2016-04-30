@@ -110,8 +110,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <div class="pull-left image">
                     <img src="/img/avatar.png" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
                 </div>
-                <div class="pull-left info">
-                    <p><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></p>
+                <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
+                    <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>
+                    <p style="white-space: normal !important"><?= Yii::$app->user->identity->last_name?></p>
 
                     <a href="#"><i class="fa fa-circle text-success"></i> <?=Yii::t('app', 'Online')?></a>
                 </div>
@@ -138,7 +139,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
                     <a href="<?=Url::to(['teammate/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
+                        <i class="fa fa-wechat"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
                     </a>
                 </li>
                 <?php endif;?>

@@ -105,12 +105,12 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
 
             $query = User::find();
         }
 
-        if( User::hasPermission([User::ROLE_PM])) {
+        /*if( User::hasPermission([User::ROLE_PM])) {
             $users = \app\models\ProjectDeveloper::allPmUsers(Yii::$app->user->id);
             $projectId=[];
             foreach($users as $user){
@@ -129,7 +129,7 @@ class UserController extends DefaultController {
                 ->where(ProjectDeveloper::tableName() . '.project_id IN ( ' . $projectPm . ')');
 
 
-        }
+        }*/
 
         if( User::hasPermission([User::ROLE_CLIENT])){
 
@@ -175,6 +175,27 @@ class UserController extends DefaultController {
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter('is_delete=0');
+
+        if(User::hasPermission([User::ROLE_PM]))
+        {
+            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
+        }
+        /*if(User::hasPermission([User::ROLE_PM]))
+        {
+            $useteam = User::teamUs();
+            $tea = [];
+            foreach($useteam as $teams){
+                $tea[] = $teams->user_id;
+            }
+
+            if($tea && $tea != null) {
+
+                $dataTable->setFilter('id IN (' . implode(', ', $tea) . ") ");
+            }else{
+
+                $dataTable->setFilter('id IN (null) ');
+            }
+        }*/
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -237,7 +258,7 @@ class UserController extends DefaultController {
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
                     $userEmailes->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
                     return $this->redirect('index');
 
                 } else {
@@ -245,13 +266,14 @@ class UserController extends DefaultController {
                     if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You invite user"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                     return $this->redirect('index');
 
                     }
                 }
             }
         } else{
+
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
         return $this->render('invite',['model' => $model]);
@@ -261,40 +283,51 @@ class UserController extends DefaultController {
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
-            if (( $email = Yii::$app->request->get("email") ) ) {
+            /** @var $user User */
+            if (( $id = Yii::$app->request->get("id") ) &&
+                ( $user = User::findOne($id) ) ) {
 
-                if (!isset(Yii::$app->request->cookies['admin'])) {
+                if ( $user->is_delete == 0 ) {
 
-                    Yii::$app->response->cookies->add(new \yii\web\Cookie([
-                        'name' => 'admin',
-                        'value' => User::findOne(['id' => Yii::$app->user->id])->email,
-                    ]));
-                }
+                    if ( $user->is_active == 1 ) {
 
-                Yii::$app->user->logout();
+                        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                            'name' => 'admin',
+                            'value' => Yii::$app->user->id,
+                        ]));
 
-                /** @var  $model LoginForm */
-                $model = new LoginForm();
-                $model->email = $email;
+                        Yii::$app->user->logout();
 
+                        /** @var  $model LoginForm */
+                        $model = new LoginForm();
+                        $model->loginUser($user);
 
-                    if ($model->login()) {
+                        if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
 
-                        if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                            return $this->redirect('/cp/index');
+                            return $this->redirect(['user/index']);
+
                         }
-                        if ( User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])){
-                            return $this->redirect('/cp/user/index');
-                        }
+                        return $this->redirect(['index/index']);
 
                     } else {
 
-                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
-                        return $this->refresh();
-                    }
-                }
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you can not login as inactive user"));
 
-        }else{
+
+                    }
+
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you can not login as deleted user"));
+
+
+                }
+            }
+            return $this->redirect(['user/index']);
+
+
+        } else {
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
         }
@@ -307,16 +340,15 @@ class UserController extends DefaultController {
         /** @var  $model LoginForm */
         $model = new LoginForm();
 
-        if (isset(Yii::$app->request->cookies['admin'])) {
+        if (isset(Yii::$app->request->cookies['admin']) &&
+            ( $user = User::findOne( Yii::$app->request->cookies['admin'] ) ) ) {
 
-            $model->email = Yii::$app->request->cookies['admin'];
+            $form = new LoginForm();
+            $form->loginUser( $user );
+            Yii::$app->response->cookies->remove('admin');
+            return $this->redirect('/cp/index');
 
-            if ($model->login()) {
-
-                Yii::$app->response->cookies->remove('admin');
-                return $this->redirect('/cp/index');
-            }
         }
-        $this->redirect('index');
+        $this->redirect('user/index');
     }
 }

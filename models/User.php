@@ -309,7 +309,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($this->email)
-                ->setSubject('You invited')
+                ->setSubject('Welcome to Skynix company. Please activate your account.')
                 ->send();
         }
 
@@ -400,5 +400,26 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return $result;
     }
+    public static function teamUs()
+    {
+        $teamIds = Team::find()->where(Team::tableName() . '.team_leader_id=:Id', [':Id' => Yii::$app->user->id])->all();
+        $result = [];
+        foreach ($teamIds as $team) {
+            $result[] = $team->id;
+        }
+        return $teamsus = Teammate::find()
+
+            ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $result) . '")')
+            ->all();
+        /*var_dump($tea);
+        exit();*/
+        /*return User::find()
+            ->where(User::tableName() . '.id IN ("' . implode(', ', $tea) . '")')
+            ->all();*/
+    }
+    /*SELECT teammates.user_id, teammates.team_id, teams.team_leader_id
+    FROM teams
+    LEFT JOIN teammates ON teams.id=teammates.team_id
+    WHERE teams.team_leader_id = 2*/
 
 }

@@ -47,7 +47,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['delete', 'download', 'downloadreports'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                 ],
             ],
@@ -110,6 +110,10 @@ class InvoiceController extends DefaultController
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
+        if(User::hasPermission([User::ROLE_CLIENT])) {
+
+            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
@@ -283,16 +287,19 @@ class InvoiceController extends DefaultController
                                 ])
                             ->execute();
                     }
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
-                }else{
-                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Client has not email!!"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have sent the invoice to the client"));
 
-                    }
+                }else{
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Client does not have the email"));
+
+                }
+
             } else {
 
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
-                                                                    Choose the pay method!"));
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Please choose a payment method"));
             }
+
         }
         return $this->redirect(['invoice/index']);
     }
@@ -310,7 +317,7 @@ class InvoiceController extends DefaultController
             $model->status = Invoice::STATUS_PAID;
             $model->date_paid = date('Y-m-d');
             $model->save(true, ['status', 'date_paid']);
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You paid invoice " . $id));
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have marked the invoice " . $id . " as paid"));
             return $this->redirect(['invoice/index']);
         }
     }
@@ -334,7 +341,7 @@ class InvoiceController extends DefaultController
 
     public function actionDelete()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) ) {
 
             if (( $id = Yii::$app->request->post("id") ) ) {
 
