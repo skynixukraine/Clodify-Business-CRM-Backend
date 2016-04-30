@@ -176,11 +176,10 @@ class UserController extends DefaultController {
 
         $dataTable->setFilter('is_delete=0');
 
-        if(User::hasPermission([User::ROLE_PM]))
+        /*if(User::hasPermission([User::ROLE_PM]))
         {
             $useteam = User::teamUs();
             $tea = [];
-            /** @var  $teams Teammate*/
             foreach($useteam as $teams){
                 $tea[] = $teams->user_id;
             }
@@ -192,7 +191,7 @@ class UserController extends DefaultController {
 
                 $dataTable->setFilter('id IN (null) ');
             }
-        }
+        }*/
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
