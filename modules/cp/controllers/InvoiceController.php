@@ -270,16 +270,19 @@ class InvoiceController extends DefaultController
                                 ])
                             ->execute();
                     }
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You sent information about invoice"));
-                }else{
-                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Client has not email!!"));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have sent the invoice to the client"));
 
-                    }
+                }else{
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Client does not have the email"));
+
+                }
+
             } else {
 
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "You DONT sent information about invoice.
-                                                                    Choose the pay method!"));
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Please choose a payment method"));
             }
+
         }
         return $this->redirect(['invoice/index']);
     }
@@ -297,7 +300,7 @@ class InvoiceController extends DefaultController
             $model->status = Invoice::STATUS_PAID;
             $model->date_paid = date('Y-m-d');
             $model->save(true, ['status', 'date_paid']);
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You paid invoice " . $id));
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have marked the invoice " . $id . " as paid"));
             return $this->redirect(['invoice/index']);
         }
     }
