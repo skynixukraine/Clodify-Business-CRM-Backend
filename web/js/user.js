@@ -21,9 +21,9 @@ var userModule = (function() {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
 
-    function actionLogin( email )
+    function actionLogin( id )
     {
-        document.location.href = cfg.loginAsUserUrl + "?email=" + email;
+        document.location.href = cfg.loginAsUserUrl + "?id=" + id;
     }
 
     function actionDelete( id, name, dataTable )
@@ -177,9 +177,8 @@ var userModule = (function() {
 
                 dataTable.find("button[class*=btn]").click(function(){
 
-                    var email = $(this).parents("tr").find("td").eq(3).text();
-                    console.log(email);
-                    actionLogin(email);
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionLogin(id);
 
                 });
                 dataTable.find("i[class*=delete]").click(function(){
