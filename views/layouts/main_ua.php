@@ -9,6 +9,7 @@ use app\components\SkynixNavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use app\models\User;
 
 AppAsset::register($this);
 ?>
