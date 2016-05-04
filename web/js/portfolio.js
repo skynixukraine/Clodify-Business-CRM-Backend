@@ -23,7 +23,7 @@ var Portfolio  = (function(){
         elem = 0,
         pars,
         dataHref,
-        dataImages,
+        dataImages = [],
         img = [],
         numImg = 0,
         viewport,
@@ -35,95 +35,77 @@ var Portfolio  = (function(){
 
     function runPopap(el){
 
-        //frontMask.css('display', 'block' );
-        img             = [];
+
+
         htmlHeight      = htmlPage.height();
         canBePressed = false;
 
 
-
-        dataImages = el.find('a').attr('data-images');
-
-        pars = dataImages.split(", ");
-
-        for (var i in pars) {
-
-            img[i] = new Image();
-            img[i].src = '../images/' + pars[i];
-            img[i].setAttribute('width', '690');
-            img[i].setAttribute('height', '380');
-
-
-        }
         txtPopap = el.find('.info-box-hidden');
         dataHref = el.find('a').attr('data-href');
-        $(img).load(function() {
+        openProject =  el.data('data-project-number');
 
-            //frontMask.css('display', 'none' );
-            headerPopap.html("");
-            viewport.html("");
-            infoBox.html("");
-            bodyPopap.animate({opacity: 0},0);
-            openProject =  el.data('data-project-number');
-
-            headerPopap.html((el.find('h3')).html());
-            viewport.html(img[0]);
-            bodyPopap.animate({opacity: 1},500);
-            //viewport.fadeIn(500);
-
-            if(img.length > 1){
-
-                stop = false;
-                numImg = 0;
-                demoslides();
-            }
-
-            infoBox.html(txtPopap.clone());
+        headerPopap.html("");
+        viewport.html("");
+        infoBox.html("");
+        bodyPopap.animate({opacity: 0},0);
 
 
-            if(dataHref){
+        headerPopap.html((el.find('h3')).html());
+        viewport.html(img[openProject]);
+        bodyPopap.animate({opacity: 1},500);
+        //viewport.fadeIn(500);
 
-                btnPopupVisit.css('display', "block");
-                btnPopupVisit.attr('href', dataHref);
+        /*if(img.length > 1){
 
-            }else{
+         stop = false;
+         numImg = 0;
+         demoslides();
+         }*/
 
-                btnPopupVisit.css('display', 'none');
-            }
-
-
-
-            bgForPopup.fadeIn(200);
-            popup.fadeIn(300);
-            popup.slideDown(200);
+        infoBox.html(txtPopap.clone());
 
 
-            if(htmlHeight > 900){
+        if(dataHref){
 
-                popup.css('top', htmlPage.scrollTop()+(htmlHeight - 850)/2);
+            btnPopupVisit.css('display', "block");
+            btnPopupVisit.attr('href', dataHref);
 
-            }else{
+        }else{
 
-                popup.css('top', htmlPage.scrollTop()+10);
-            }
-
-            if(htmlWidth > 768){
-
-                viewport.css('width', portfolioImgBox.width() - (btnPrev.width() + btnNext.width() + 40));
-            }else{
-
-                viewport.css('width', 100 +"%");
-            }
-
-            setTimeout(canBePressedRun, 500);
-
-            function canBePressedRun(){
-
-                canBePressed = true;
-            }
-        });
+            btnPopupVisit.css('display', 'none');
+        }
 
 
+
+        bgForPopup.fadeIn(200);
+        popup.fadeIn(300);
+        popup.slideDown(200);
+
+
+        if(htmlHeight > 900){
+
+            popup.css('top', htmlPage.scrollTop()+(htmlHeight - 850)/2);
+
+        }else{
+
+            popup.css('top', htmlPage.scrollTop()+10);
+        }
+
+        if(htmlWidth > 768){
+
+            viewport.css('width', portfolioImgBox.width() - (btnPrev.width() + btnNext.width() + 40));
+        }else{
+
+            viewport.css('width', 100 +"%");
+        }
+
+        setTimeout(canBePressedRun, 500);
+
+        function canBePressedRun(){
+
+            canBePressed = true;
+        }
 
 
 
@@ -167,7 +149,7 @@ var Portfolio  = (function(){
         init: function(){
             htmlPage            = $(window);
             portfolio           = $('.portfolio-sample');
-            btnRunPopap         = portfolio.find('a');
+            btnRunPopap         = portfolio.find('[data-images]');
             bgForPopup          = $('#view_portfolio');
             popup               = bgForPopup.find('.popup');
             headerPopap         = popup.find('.header-popap');
@@ -196,13 +178,47 @@ var Portfolio  = (function(){
 
             btnRunPopap.click(function(event){
 
+                var index = 0;
                 event.preventDefault();
-
                 el=$(event.target);
-
                 el = el.closest('.portfolio-sample');
 
-                runPopap(el);
+
+
+                if(img.length == 0){
+
+                    frontMask.css('display', 'block' );
+                    for (var i = 0;  i < btnRunPopap.length; i++) {
+
+                        dataImages.push(btnRunPopap.eq(i).attr('data-images'));
+                        pars = dataImages[i].split(", ");
+
+                        for (var ii in pars) {
+
+                            img[index] = new Image();
+                            img[index].src = '../images/' + pars[ii];
+                            img[index].setAttribute('width', '690');
+                            img[index].setAttribute('height', '380');
+                            index +=1;
+
+                        }
+
+                    }
+
+                    $(img).eq(img.length-1).one("load", function() {
+
+                        frontMask.css('display', 'none' );
+                        runPopap(el);
+                    });
+                    dataImages.length = 0;
+
+
+                }else{
+
+                    runPopap(el);
+                }
+
+
                 return false;
 
             });
@@ -238,7 +254,7 @@ var Portfolio  = (function(){
                 event.preventDefault();
 
                 if(canBePressed == false){
-console.log("dddddddddddffffffffffggggggggggg");
+
                     return false;
                 }
 
