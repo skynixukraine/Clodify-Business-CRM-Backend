@@ -30,9 +30,17 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
-            $projects = Project::find()->all();
-            $listReport = ArrayHelper::map( $projects, 'id', 'name' );
-            $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
+             if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+                 $projects = Project::find()->all();
+                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
+                 $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
+             }
+            if ( User::hasPermission([User::ROLE_PM, User::ROLE_CLIENT])){
+                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
+                 $listReport = ArrayHelper::merge(['' => 'ownprojects'], $listReport);
+             }
+
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
         </div>
         <div class="col-lg-2">
