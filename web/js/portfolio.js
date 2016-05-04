@@ -5,6 +5,7 @@
 var Portfolio  = (function(){
 
     var htmlPage,
+        body,
         htmlHeight,
         htmlWidth,
         portfolio = [],
@@ -31,7 +32,8 @@ var Portfolio  = (function(){
         stop = true,
         openProject,
         frontMask,
-        canBePressed = true;
+        canBePressed = true,
+        portfolioPage;
 
     function runPopap(el){
 
@@ -148,6 +150,8 @@ var Portfolio  = (function(){
 
         init: function(){
             htmlPage            = $(window);
+            body                =$("body, html");
+            portfolioPage       =$('#portfolio');
             portfolio           = $('.portfolio-sample');
             btnRunPopap         = portfolio.find('[data-images]');
             bgForPopup          = $('#view_portfolio');
@@ -290,6 +294,23 @@ var Portfolio  = (function(){
                 return false;
 
             });
+
+            htmlPage.on("hashchange", function() {
+
+                if(location.href.indexOf("#portfolio") > 0){
+
+                    body.animate({scrollTop: 0}, 0);
+                    body.animate({scrollTop: portfolioPage.position().top - 80},600);
+                }
+
+                return false;
+            });
+            if(location.href.indexOf("#portfolio") > 0){
+
+                body.animate({scrollTop: portfolioPage.position().top - 80},600);
+
+            }
+
 
         }
     }
