@@ -24,6 +24,7 @@ var Portfolio  = (function(){
         elem = 0,
         pars,
         dataHref,
+        nofollow,
         dataImages = [],
         img = [],
         numImg = 0,
@@ -43,8 +44,9 @@ var Portfolio  = (function(){
         canBePressed = false;
 
 
-        txtPopap = el.find('.info-box-hidden');
-        dataHref = el.find('a').attr('data-href');
+        txtPopap    = el.find('.info-box-hidden');
+        dataHref    = el.find('a').attr('data-href');
+        nofollow    = el.find('a').attr('rel');
         openProject =  el.data('data-project-number');
 
         headerPopap.html("");
@@ -77,6 +79,13 @@ var Portfolio  = (function(){
 
             btnPopupVisit.css('display', 'none');
         }
+        if(nofollow){
+
+            btnPopupVisit.attr('rel', "nofollow");
+
+        }else{
+            btnPopupVisit.removeAttr('rel');
+        }
 
 
 
@@ -108,14 +117,6 @@ var Portfolio  = (function(){
 
             canBePressed = true;
         }
-
-
-
-
-
-
-
-
 
 
 
@@ -295,6 +296,7 @@ var Portfolio  = (function(){
 
             });
 
+            //to scroll to the section Portfolio
             htmlPage.on("hashchange", function() {
 
                 if(location.href.indexOf("#portfolio") > 0){
@@ -310,6 +312,7 @@ var Portfolio  = (function(){
                 body.animate({scrollTop: portfolioPage.position().top - 80},600);
 
             }
+            //End to scroll to the section Portfolio
 
 
         }
