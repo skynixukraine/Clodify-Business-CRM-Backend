@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Surveys;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -258,9 +259,22 @@ class SiteController extends Controller
 
     }
     public function actionSurvey(){
+        /** @var  $model Surveys*/
+        $model = Surveys::findOne(['id' => 1]);
+        if($model->is_private == 1)
+        {
+            if(Yii::$app->user->isGuest )
+            {
+                return $this->render('site/login');
+
+            }else{
+
+            }
+        }
 
 
         return $this->render('survey');
+
     }
 
 }
