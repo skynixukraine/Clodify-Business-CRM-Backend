@@ -297,7 +297,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </div>
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
-            <a href="#" data-href="fisherman-id.p.skynix.co" data-images="fisherman_id.jpg" rel="nofollow">
+            <a href="#" data-href="http://fisherman-id.p.skynix.co/" data-images="fisherman_id.jpg" rel="nofollow">
                 <img src="../images/btn-fisherman.jpg" width="289" height="214" />
                 <div class="mask"></div>
                 <h3 class="name">Fisherman ID</h3>

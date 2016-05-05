@@ -1931,7 +1931,7 @@ footer .link a:hover {
 }
 #view_portfolio .slider_portfolio .viewport {
   width: 500px;
-  margin: 0 0 0 18px;
+  margin: 0 0 30px 18px;
   position: relative;
   overflow: hidden;
   padding: 0 0 10px;
