@@ -228,6 +228,10 @@ input[type="radio"] {
     .survey-wrap fieldset > div:nth-of-type(3) .tooltip-survey {
       display: none; }
 
+      .form-sent {
+        padding-top:55%; 
+      }
+
   .tooltip-survey p {
     width: 255px;
     height: 63px;
