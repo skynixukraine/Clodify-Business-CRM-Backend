@@ -7,6 +7,10 @@
  */
 ?>
 
+<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
+<?php $this->registerJsFile('/js/survey.js'); ?>
+<?php $this->registerCssFile('/css/survey.css'); ?>
+
 <section class = "form-sent">
       <p></p>
     </section>
@@ -92,6 +96,3 @@
 })
   </script>
 
-<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
-<?php $this->registerJsFile('/js/survey.js'); ?>
-<?php $this->registerCssFile('/css/survey.css'); ?>

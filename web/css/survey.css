@@ -1,19 +1,19 @@
 @font-face {
   font-family: "RalewayRegular";
-  src: url("../fonts/RalewayRegular/RalewayRegular.eot");
-  src: url("../fonts/RalewayRegular/RalewayRegular.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayRegular/RalewayRegular.woff") format("woff"), url("../fonts/RalewayRegular/RalewayRegular.ttf") format("truetype");
+  src: url("../fonts/Raleway-Regular.eot");
+  src: url("../fonts/Raleway-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Regular.woff") format("woff"), url("../fonts/Raleway-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
-  font-family: "RalewayExtraBold";
-  src: url("../fonts/RalewayExtraBold/RalewayExtraBold.eot");
-  src: url("../fonts/RalewayExtraBold/RalewayExtraBold.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayExtraBold/RalewayExtraBold.woff") format("woff"), url("../fonts/RalewayExtraBold/RalewayExtraBold.ttf") format("truetype");
+  font-family: "Raleway-SemiBold";
+  src: url("../fonts/Raleway-SemiBold.eot");
+  src: url("../fonts/Raleway-SemiBold.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-SemiBold.woff") format("woff"), url("../fonts/Raleway-SemiBold.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
   font-family: "RalewayMedium";
-  src: url("../fonts/RalewayMedium/RalewayMedium.eot");
-  src: url("../fonts/RalewayMedium/RalewayMedium.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayMedium/RalewayMedium.woff") format("woff"), url("../fonts/RalewayMedium/RalewayMedium.ttf") format("truetype");
+  src: url("../fonts/Raleway-Medium.eot");
+  src: url("../fonts/Raleway-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Medium.woff") format("woff"), url("../fonts/Raleway-Medium.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 .survey-wrap {
@@ -28,7 +28,7 @@
   color: black; }
   .survey-wrap header {
     text-align: center;
-    font-family: "RalewayExtraBold";
+    font-family: "Raleway-SemiBold";
     width: 1100px; }
     .survey-wrap header h1 {
       font-size: 25px;
