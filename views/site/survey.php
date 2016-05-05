@@ -42,7 +42,7 @@
            <input type="radio"  name="radio" value="Подобається але могло бути й краще" >
             <span>Подобається але могло бути й краще</span>
             </label>
-            <div class="tooltip">
+            <div class="tooltip-survey">
               <span class="tooltip-over">?</span>
               <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
             </div>
@@ -60,7 +60,7 @@
             <input type="radio" name="radio" value="Я до цього ставлюсь нормально" >
             <span>Я до цього ставлюсь нормально</span>
             </label>
-            <div class="tooltip">
+            <div class="tooltip-survey">
               <span class="tooltip-over">?</span>
               <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
             </div>

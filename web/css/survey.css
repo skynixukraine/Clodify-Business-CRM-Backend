@@ -17,7 +17,6 @@
   font-style: normal;
   font-weight: normal; }
 .survey-wrap {
-  position: relative;
   width: 1170px;
   margin: 0 auto;
   padding-left: 50px;
@@ -130,7 +129,9 @@ input[type="radio"] {
 .checked-radio {
   background-color: #2697f9; }
 
-.tooltip > span {
+
+.tooltip-survey > span {
+  display: block;
   position: absolute;
   bottom: -12px;
   left: 22px;
@@ -145,20 +146,20 @@ input[type="radio"] {
   text-align: center;
   color: white;
   float: left; }
-.tooltip > span:hover {
+.tooltip-survey > span:hover {
   cursor: help; }
-.tooltip .over {
+.tooltip-survey .over {
   visibility: visible;
   z-index: 5; }
-.tooltip p {
+.tooltip-survey p {
   position: absolute;
   bottom: -42px;
   left: 55px;
   font-family: "RalewayMedium";
   text-align: justify;
-  padding: 10px 25px 10px 38px;
-  width: 373px;
-  height: 43px;
+  padding: 6px 25px 10px 38px;
+  width: 436px;
+  height: 63px;
   background-image: url(../img/tooltip_back.png);
   background-repeat: no-repeat;
   font-size: 14px;
@@ -224,14 +225,15 @@ input[type="radio"] {
       width: 320px;
       font-size: 14px;
       margin-bottom: 20px; }
-    .survey-wrap fieldset > div:nth-of-type(3) .tooltip {
+    .survey-wrap fieldset > div:nth-of-type(3) .tooltip-survey {
       display: none; }
 
-  .tooltip p {
+  .tooltip-survey p {
+    width: 255px;
+    height: 63px;
     bottom: -51px;
     font-size: 13px;
     overflow: hidden;
-    width: 200px;
     background-image: url(../img/tooltip_back_mobile.png); } }
 
 /*# sourceMappingURL=style.css.map */
