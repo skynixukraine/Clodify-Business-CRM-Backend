@@ -86,10 +86,11 @@
   .survey-wrap fieldset {
     padding: 0; }
 
-.wrap::before{
+#w0::after{
   content:"";
   display: block;
   left:0;
+  bottom:0;
   width: 100%;
   height:3px;
   box-shadow:0 1px 3px #D5EEFB;
