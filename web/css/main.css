@@ -1896,6 +1896,12 @@ footer .link a:hover {
   font-size: 30px;
   text-align: center;
 }
+#view_portfolio .info-box .txt-center {
+  text-align: center;
+}
+#view_portfolio .info-box ul {
+  padding: 0 0 0 15px;
+}
 #view_portfolio .info-box p,
 #view_portfolio .info-box li {
   font-size: 15px;
