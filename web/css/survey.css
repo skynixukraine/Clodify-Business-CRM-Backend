@@ -1,22 +1,23 @@
 @font-face {
   font-family: "RalewayRegular";
-  src: url("../fonts/RalewayRegular/RalewayRegular.eot");
-  src: url("../fonts/RalewayRegular/RalewayRegular.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayRegular/RalewayRegular.woff") format("woff"), url("../fonts/RalewayRegular/RalewayRegular.ttf") format("truetype");
+  src: url("../fonts/Raleway-Regular.eot");
+  src: url("../fonts/Raleway-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Regular.woff") format("woff"), url("../fonts/Raleway-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
-  font-family: "RalewayExtraBold";
-  src: url("../fonts/RalewayExtraBold/RalewayExtraBold.eot");
-  src: url("../fonts/RalewayExtraBold/RalewayExtraBold.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayExtraBold/RalewayExtraBold.woff") format("woff"), url("../fonts/RalewayExtraBold/RalewayExtraBold.ttf") format("truetype");
+  font-family: "Raleway-SemiBold";
+  src: url("../fonts/Raleway-SemiBold.eot");
+  src: url("../fonts/Raleway-SemiBold.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-SemiBold.woff") format("woff"), url("../fonts/Raleway-SemiBold.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
   font-family: "RalewayMedium";
-  src: url("../fonts/RalewayMedium/RalewayMedium.eot");
-  src: url("../fonts/RalewayMedium/RalewayMedium.eot?#iefix") format("embedded-opentype"), url("../fonts/RalewayMedium/RalewayMedium.woff") format("woff"), url("../fonts/RalewayMedium/RalewayMedium.ttf") format("truetype");
+  src: url("../fonts/Raleway-Medium.eot");
+  src: url("../fonts/Raleway-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Medium.woff") format("woff"), url("../fonts/Raleway-Medium.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 .survey-wrap {
+  position: relative;
   width: 1170px;
   margin: 0 auto;
   padding-left: 50px;
@@ -28,10 +29,11 @@
   color: black; }
   .survey-wrap header {
     text-align: center;
-    font-family: "RalewayExtraBold";
+    font-family: "Raleway-SemiBold";
     width: 1100px; }
     .survey-wrap header h1 {
       font-size: 25px;
+      padding-top: 30px;
       position: relative; }
   .survey-wrap p {
     text-align: center;
@@ -84,6 +86,17 @@
   .survey-wrap fieldset {
     padding: 0; }
 
+/*#w0::after{
+  content:"";
+  display: block;
+  left:0;
+  bottom:0;
+  width: 100%;
+  height:3px;
+  box-shadow:0 1px 3px #D5EEFB;
+  background-color: #D5EEFB;
+  position: absolute;
+}*/
 header h1:before {
   content: '';
   display: block;
@@ -92,7 +105,7 @@ header h1:before {
   background-color: #2697f9;
   position: absolute;
   left: 0;
-  top: 20px; }
+  top: 50px; }
 
 header h1:after {
   content: '';
@@ -102,7 +115,7 @@ header h1:after {
   background-color: #2697f9;
   position: absolute;
   right: 22px;
-  top: 20px; }
+  top: 50px; }
 
 fieldset {
   border: none; }
