@@ -86,7 +86,7 @@
   .survey-wrap fieldset {
     padding: 0; }
 
-#w0::after{
+/*#w0::after{
   content:"";
   display: block;
   left:0;
@@ -96,7 +96,7 @@
   box-shadow:0 1px 3px #D5EEFB;
   background-color: #D5EEFB;
   position: absolute;
-}
+}*/
 header h1:before {
   content: '';
   display: block;
