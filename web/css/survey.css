@@ -17,6 +17,7 @@
   font-style: normal;
   font-weight: normal; }
 .survey-wrap {
+  position: relative;
   width: 1170px;
   margin: 0 auto;
   padding-left: 50px;
@@ -84,6 +85,14 @@
   .survey-wrap fieldset {
     padding: 0; }
 
+.survey-wrap::before{
+  content:"";
+  display: block;
+  width: 100%;
+  height:4px;
+  background-color: #D5EEFB;
+  position: absolute;
+}
 header h1:before {
   content: '';
   display: block;
