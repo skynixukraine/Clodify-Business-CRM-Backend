@@ -6,21 +6,10 @@
  * Time: 10:32
  */
 ?>
-<!DOCTYPE html>
-<html>
 
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skynix</title>
-    <link rel="stylesheet" href="style/style.css">
-    <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-    <script src="js/main.js"></script>
-
-  </head>
-
-  <body>
+<section class = "form-sent">
+      <p></p>
+    </section>
     <section class="survey-wrap">
       <article>
         <header class="question">
@@ -28,31 +17,45 @@
         <p> Подумайте про гарні та погані сторони цієї пори, зважте всі за і проти та як омого точніше обиріть один із варіантів.
           <br> Згадайте про перепади температур, та про відключення опалення, а також про гарні сторони коли все розквітає.</p>
       </article>
-      <form>
+      <form method="POST"  >
         <fieldset>
           <div>
-            <input type="radio" id="radio-1" name="radio" value="Дуже подобається">
-            <label class="my-label" for="radio-1"><span>Дуже подобається</span></label>
+             <label class="my-label">
+             <input type="radio" name="radio" value="Дуже подобається" >
+            <span>Дуже подобається</span>
+            </label>
           </div>
           <div>
-            <input type="radio" id="radio-2" name="radio" value="Жахлива пора, бо в мене алергія на квіти">
-            <label class="my-label" for="radio-2"><span>Жахлива пора, бо в мене алергія на квіти</span></label>
+           
+            <label class="my-label">
+            <input type="radio"  name="radio" value="Жахлива пора, бо в мене алергія на квіти" >
+            <span>Жахлива пора, бо в мене алергія на квіти</span>
+            </label>
           </div>
           <div>
-            <input type="radio" id="radio-3" name="radio" value="Подобається але могло бути й краще">
-            <label class="my-label" for="radio-3"><span>Подобається але могло бути й краще</span></label>
+            
+            <label class="my-label" >
+           <input type="radio"  name="radio" value="Подобається але могло бути й краще" >
+            <span>Подобається але могло бути й краще</span>
+            </label>
             <div class="tooltip">
               <span class="tooltip-over">?</span>
               <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
             </div>
           </div>
           <div>
-            <input type="radio" id="radio-4" name="radio" value="Не подобається, бо більше незручностей">
-            <label class="my-label" for="radio-4"><span>Не подобається, бо більше незручностей</span></label>
+            
+            <label class="my-label">
+            <input type="radio" name="radio" value="Не подобається, бо більше незручностей" >
+            <span>Не подобається, бо більше незручностей</span>
+            </label>
           </div>
           <div>
-            <input type="radio" id="radio-5" name="radio" value="Я до цього ставлюсь нормально">
-            <label class="my-label" for="radio-5"><span>Я до цього ставлюсь нормально</span></label>
+            
+            <label class="my-label">
+            <input type="radio" name="radio" value="Я до цього ставлюсь нормально" >
+            <span>Я до цього ставлюсь нормально</span>
+            </label>
             <div class="tooltip">
               <span class="tooltip-over">?</span>
               <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
@@ -60,8 +63,33 @@
           </div>
         </fieldset>
         <input type="submit" id="submit" class="sub" value="Проголосувати" disabled>
-      </form>
+        </form>
+       
     </section>
+     <div class = "loader">
+            <img src="/img/495.gif" >
+        </div>
   </body>
 
-</html>
+  <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <script src="js/main.js"></script>
+  <script>
+    $(function() {
+
+  myModule.changeFunction();
+  myModule.ajaxFormSubmit();
+  var myHtml = $("html");
+
+  if (myHtml.width() < 1170) {
+    myModule.tooltipSmallScreen();
+  }
+
+  if (myHtml.width() > 1170) {
+    myModule.tooltipLargeScreen();
+  }
+
+})
+  </script>
+
+<?php $this->registerJsFile('/js/survey.js'); ?>
+<?php $this->registerCssFile('/js/survey.css'); ?>
