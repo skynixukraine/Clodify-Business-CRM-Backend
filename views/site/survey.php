@@ -69,11 +69,11 @@
      <div class = "loader">
             <img src="/img/495.gif" >
         </div>
-       
+
   </body>
 
-  <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-  <script src="js/main.js"></script>
+ 
+  
   <script>
     $(function() {
 
@@ -92,5 +92,6 @@
 })
   </script>
 
+<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
 <?php $this->registerJsFile('/js/survey.js'); ?>
-<?php $this->registerCssFile('/js/survey.css'); ?>
+<?php $this->registerCssFile('/css/survey.css'); ?>
