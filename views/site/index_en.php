@@ -84,8 +84,10 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <li>PHP5</li>
                     <li>Yii Framework 2</li>
                     <li>Zend Framework 2</li>
+                    <li>Magento 1</li>
                     <li>Magento 2</li>
                     <li>Wordpress</li>
+                    <li>Nodejs</li>
                 </ul>
             </div>
             <div class="arrow-box">
@@ -106,7 +108,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <li>jQuery</li>
                     <li>Sencha ExtJS</li>
                     <li>AngularJS</li>
-                    <li>Twitter Bootstrap</li>
+                    <li>Foundation Bootstrap</li>
                 </ul>
             </div>
         </div>
