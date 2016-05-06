@@ -37,13 +37,4 @@ $this->params['menu'] = [
     </thead>
 </table>
 
-<script>
 
-    $(function(){
-
-        surveysModule.init({
-            findUrl     : '<?=Url::to(['surveys/find'])?>'
-        })
-    });
-
-</script>

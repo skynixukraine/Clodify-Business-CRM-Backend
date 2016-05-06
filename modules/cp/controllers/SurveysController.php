@@ -30,7 +30,7 @@ class SurveysController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'results'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -86,6 +86,19 @@ class SurveysController extends DefaultController
             $dataTable->setFilter('date_end <= "' . DateUtil::convertData($dateEnd). '"');
 
         }
+    }
+    public function actionResults()
+    {
+        /** @var  $model Surveys*/
+        /*$model = Surveys::findOne(['total_votes' => 1]);
+        if($model -> total_votes != null){
+            $model -> result = Surveys::find()->sum('total_votes');
+
+
+        }*/
+            /*return $this->render(['model' => $model]);*/
+            return $this->render('results');
+
     }
 
 }

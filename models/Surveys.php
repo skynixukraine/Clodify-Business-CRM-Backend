@@ -19,6 +19,7 @@ use Yii;
  */
 class Surveys extends \yii\db\ActiveRecord
 {
+    public $result;
     /**
      * @inheritdoc
      */
@@ -57,4 +58,5 @@ class Surveys extends \yii\db\ActiveRecord
             'total_votes' => 'Total Votes',
         ];
     }
+
 }

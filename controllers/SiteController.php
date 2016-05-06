@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Surveys;
+use Faker\Provider\tr_TR\DateTime;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -14,7 +15,7 @@ use app\models\User;
 use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
-
+use DateTimeInterface;
 
 class SiteController extends Controller
 {
@@ -26,7 +27,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'request'],
+                        'actions' => ['logout', 'request', 'survey'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -261,14 +262,29 @@ class SiteController extends Controller
     public function actionSurvey(){
         /** @var  $model Surveys*/
         $model = Surveys::findOne(['id' => 1]);
-        if($model->is_private == 1)
-        {
-            if(Yii::$app->user->isGuest )
-            {
-                return $this->render('site/login');
+        if ($model->is_private == 1) {
 
-            }else{
+            if (Yii::$app->user->isGuest ) {
 
+
+                return $this->redirect('login');
+
+            } else {
+                $difference = (strtotime($model->date_start) - strtotime($model->date_end));
+                $start = $model->date_start;
+                if ($difference > 0) {
+                    if ((strtotime($model->date_start) < time()) || (strtotime($model->date_end) > time()))
+                    { Yii::$app->getSession()->setFlash("error", "Thank You for visiting our survey.
+                        Get back on $start and take a survey"); }
+
+                }else{
+
+
+                }
+                if (strtotime($model->date_end) < time()){
+
+                    return $this->redirect('/cp/surveys/results');
+                }
             }
         }
 
