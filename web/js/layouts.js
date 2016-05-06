@@ -17,10 +17,10 @@ var LoginPage = (function(){
 
             heightH = $(window).height();
             header = $('.box-header-menu');
-            heightW = $('.page').outerHeight(true);//heightW = $('.wrap').height();
+            heightW = $('.wrap').outerHeight(true);//heightW = $('.wrap').height();
+            nav = $('nav').height();
 
-
-            if((heightW)<heightH){
+            if((heightW + nav)<heightH){
 
                 header.css('box-shadow', 'none');
 
@@ -33,7 +33,7 @@ var LoginPage = (function(){
 
             console.log(".page ", heightW);
             console.log("window ",heightH);
-
+            console.log("nav ",nav);
 
 
 
