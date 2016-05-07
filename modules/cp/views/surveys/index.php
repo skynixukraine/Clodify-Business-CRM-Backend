@@ -14,13 +14,19 @@ use yii\widgets\ActiveForm;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
 $this->title                    = Yii::t("app", "Take a Survey");
 
 $this->params['breadcrumbs'][]  = $this->title;
 
-$this->params['menu'] = [
-
-];
+if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+    $this->params['menu'] = [
+        [
+            'label' => Yii::t('app', 'Create survey'),
+            'url' => Url::to(['surveys/create'])
+        ]
+    ];
+}
 ?>
 <table class="table table-hover box" id="surveys_table">
     <thead>
@@ -32,9 +38,23 @@ $this->params['menu'] = [
         <th><?=Yii::t('app', 'Date End')?></th>
         <th><?=Yii::t('app', 'Is Private?')?></th>
         <th><?=Yii::t('app', 'Votes')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM ])) : ?>
+            <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+        <?php endif;?>
 
     </tr>
     </thead>
 </table>
+<script>
+    $(function(){
+        surveysModule.init({
+            findUrl     : '<?=Url::to(['surveys/find'])?>',
+            deleteUrl   : '<?=Url::to(['surveys/delete'])?>',
+            editUrl     : '<?=Url::to(['surveys/edit'])?>',
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
+            canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
+            canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
+        })
+    });
 
-
+</script>

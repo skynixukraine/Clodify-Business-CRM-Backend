@@ -174,6 +174,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                    <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
+                        <a href="<?=Url::to(['surveys/index']);?>">
+                            <i class="fa  fa-question"></i> <span>Manage Surveys</span>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "setting" ? " active" : "")?>">
                         <a href="<?=Url::to(['setting/index']);?>">
                             <i class="fa fa-gears"></i> <span>Settings</span>

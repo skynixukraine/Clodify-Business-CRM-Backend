@@ -25,7 +25,7 @@ $this->params['menu'] = [];
 <div class="row">
     <div class="col-md-6">
         <?php /** @var $model \app\models\Surveys */?>
-        <span> Result: <?php /*echo $model->result ;*/?> people took a part in this survey<span>
+        <span> Result:<!-- --><?php /*echo $model->result;*/?> people took a part in this survey<span>
     </div>
 </div>
 <?php ActiveForm::end();?>

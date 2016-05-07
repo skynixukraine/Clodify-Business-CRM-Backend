@@ -4,7 +4,11 @@
 var surveysModule = (function() {
 
     var cfg = {
-            findUrl     : ''
+            findUrl     : '',
+            editUrl     : '',
+            deleteUrl   : '',
+            canDelete   : null,
+            canEdit     : null
         },
         dataTable,
         dataFilter = {
@@ -16,7 +20,50 @@ var surveysModule = (function() {
     {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
+    function actionDelete( id, name, dataTable )
+    {
 
+        function deleteRequest(  )
+        {
+            var params = {
+                url     : cfg.deleteUrl,
+                data    : {id : id},
+                dataType: 'json',
+                type    : 'DELETE',
+                success : function ( response ) {
+
+                    if ( response.message ) {
+
+                        var win = new ModalBootstrap({
+                            title: 'Message',
+                            body: response.message,
+                            buttons: [
+                                {class: 'btn-default confirm', text: 'Ok'}
+                            ]
+
+
+                        });
+                        win.show();
+                    }
+                    dataTable.api().ajax.reload();
+
+                }
+            };
+
+            $.ajax( params );
+
+        }
+        deleteModal = new ModalBootstrap({
+            title       : 'Delete ' + name + "?",
+            body        : 'All data related to this project will be deleted.',
+            winAttrs    : { class : 'modal delete'}
+        });
+        deleteModal.show();
+        deleteModal.getWin().find("button[class*=confirm]").click(function () {
+            deleteRequest();
+        });
+
+    }
 
     return {
 
@@ -27,7 +74,6 @@ var surveysModule = (function() {
 
                 {
                     "targets"   : 0,
-                    "data"  :   0,
                     "orderable" : true
                 },
                 {
@@ -55,7 +101,30 @@ var surveysModule = (function() {
                     "orderable" : true
                 }
             ];
+            if( cfg.canAction){
+                columns.push({
+                    "targets"   : 7,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        var icons = [];
+                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+                        if ( cfg.canEdit ) {
 
+                            icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+
+                        }
+                        if ( cfg.canDelete ) {
+
+                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+
+                        }
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                    }
+                });
+            }
 
 
             dataTable = $('#surveys_table').dataTable({
@@ -83,7 +152,7 @@ var surveysModule = (function() {
                 "processing": true,
                 "serverSide": true
             });
-
+            var id="", name, a = [];
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
                 dataTable.find("i[class*=edit]").click(function(){
@@ -92,6 +161,25 @@ var surveysModule = (function() {
                     actionEdit( id );
 
                 });
+
+                dataTable.find("i[class*=delete]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        name   = $(this).parents("tr").find("td").eq(1).text();
+                    actionDelete( id, name, dataTable );
+
+                });
+
+            });
+
+            dataTable.on( 'draw.dt', function (e, settings, data) {
+
+                /*dataTable.find("i[class*=edit]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionEdit( id );
+
+                });*/
 
 
             });

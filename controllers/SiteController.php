@@ -262,10 +262,10 @@ class SiteController extends Controller
     public function actionSurvey(){
         /** @var  $model Surveys*/
         $model = Surveys::findOne(['id' => 1]);
-        if ($model->is_private == 1) {
+        /*var_dump($model);exit();*/
+        if ($model != null && $model->is_private == 1) {
 
             if (Yii::$app->user->isGuest ) {
-
 
                 return $this->redirect('login');
 
