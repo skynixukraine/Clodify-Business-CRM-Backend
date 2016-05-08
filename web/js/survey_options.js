@@ -7,6 +7,7 @@ var surveysModule = (function() {
             findUrl     : '',
             editUrl     : '',
             deleteUrl   : '',
+            codeUrl     : '',
             canDelete   : null,
             canEdit     : null
         },
@@ -19,6 +20,10 @@ var surveysModule = (function() {
     function actionEdit( id )
     {
         document.location.href = cfg.editUrl + "?id=" + id;
+    }
+    function actionCode( code )
+    {
+        document.location.href = cfg.codeUrl + "?shortcode=" + code;
     }
     function actionDelete( id, name, dataTable )
     {
@@ -54,8 +59,8 @@ var surveysModule = (function() {
 
         }
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
-            body        : 'All data related to this project will be deleted.',
+            title       : 'Are you sure you wish to completely delete the survey ' + id + "?",
+            body        : 'All data related to this survey will be deleted.',
             winAttrs    : { class : 'modal delete'}
         });
         deleteModal.show();
@@ -78,7 +83,18 @@ var surveysModule = (function() {
                 },
                 {
                     "targets"   : 1,
-                    "orderable" : true
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        var icons = [];
+                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
+
+
+                            icons.push('<a class="code">' + data + '</a>');
+
+
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+
+                    }
                 },
                 {
                     "targets"   : 2,
@@ -167,6 +183,13 @@ var surveysModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+
+                });
+
+                dataTable.find("a[class*=code]").click(function(){
+
+                    var code     = $(this).parents("tr").find("td").eq(1).text();
+                        actionCode( code );
 
                 });
 

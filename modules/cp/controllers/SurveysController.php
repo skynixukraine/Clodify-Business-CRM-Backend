@@ -9,6 +9,7 @@ namespace app\modules\cp\controllers;
 use app\models\Surveys;
 use app\models\SurveysOption;
 use app\models\User;
+use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
@@ -131,30 +132,69 @@ class SurveysController extends DefaultController
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_FIN] ) ) {
 
             $model = new Surveys();
+            do{
+                $model->shortcode = Yii::$app->security->generateRandomString(4);
+                $model->validate(['shortcode']);
+
+            }while($model->getErrors('shortcode'));
+
+            $survayOptions = [new SurveysOption()];
+
            /* $options = new SurveysOption();*/
 
 
             if ($model->load(Yii::$app->request->post())) {
 
+                $sOptions = SurveysOption::createMultiple(SurveysOption::classname());
+                SurveysOption::loadMultiple($sOptions, Yii::$app->request->post());
 
-                if ($model->validate()) {
+                // ajax validation
+                if (Yii::$app->request->isAjax) {
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return ArrayHelper::merge(
+                        ActiveForm::validateMultiple($sOptions),
+                        ActiveForm::validate($sOptions)
+                    );
+                }// validate all models
+                $valid = $model->validate();
+                $valid = SurveysOption::validateMultiple($sOptions) && $valid;
+
+
+                if ($valid) {
                     $model->date_start = DateUtil::convertData($model->date_start);
                     $model->date_end = DateUtil::convertData($model->date_end);
                     $model->user_id = Yii::$app->user->id;
-                    /*$options->name = $model->name;
-                    $options->description = $model->descriptions;
-                    $options->save();*/
-                    $model->save();
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        if ($flag = $model->save(false)) {
+                            foreach ($sOptions as $sOption) {
+                                if(!$sOption->name || !$sOption->description){
+                                    continue;
+                                }
+                                $sOption->survey_id = $model->id;
+                                if (! ($flag = $sOption->save(false))) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                        }
+                        if ($flag) {
+                            $transaction->commit();
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                            return $this->redirect(['index']);
+                        }
+                    } catch (Exception $e) {
+                        $transaction->rollBack();
+                    }
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
-                    return $this->redirect(['index']);
+
 
                 }else{
                     /* var_dump($model->getErrors());
                      exit();*/
                 }
             }
-            return $this->render('create', ['model' => $model,
+            return $this->render('create', ['model' => $model, 'survayOptions' => $survayOptions,
                 'title' => 'Create a new survey']);
         }else{
 
@@ -162,6 +202,24 @@ class SurveysController extends DefaultController
 
         }
     }
+
+    /**
+     * @param $survay_id
+     * @param $options - Array of ['name'=>'', 'description'=>'']
+     */
+    public function createSuraayOptions($survay_id, $options){
+        if(!$options){
+            return;
+        }
+        foreach($options as $option){
+            var_dump($option);die();
+            $sOpt = new SurveysOption();
+            $sOpt->name = $option['name'];
+            $sOpt->description = $option['description'];
+            $sOpt->save();
+        }
+    }
+
     /** Delete project */
     public function actionDelete()
     {
@@ -171,12 +229,17 @@ class SurveysController extends DefaultController
 
                 /** @var  $model Surveys */
                 $model  = Surveys::findOne( $id );
-                $model->is_delete = 1;
-                $model->save(true, ['is_delete']);
-                return json_encode([
-                    "message"   => Yii::t("app", "You deleted survey " . $id),
-                    /*"success"   => true*/
-                ]);
+                if ($model->user_id = Yii::$app->user->id){
+                    $model->is_delete = 1;
+                    $model->save(true, ['is_delete']);
+                    return json_encode([
+                        "message"   => Yii::t("app", "You deleted survey " . $id),
+                        /*"success"   => true*/
+                    ]);
+                } else{
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this survey."));
+                    return $this->refresh();
+                }
             }
 
         }else{
@@ -237,6 +300,24 @@ class SurveysController extends DefaultController
 
         }
 
+    }
+    public function actionCode()
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
+
+            if ( ( $shortcode = Yii::$app->request->post("shortcode") ) ) {
+
+                /** @var  $model Surveys */
+                $model  = Surveys::findOne( $shortcode );
+                return $this->render('/s', ["model" => $model]);
+            }
+
+        }else{
+
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Ooops, you do not have priviledes for this action."));
+            return $this->refresh();
+
+        }
     }
     public function actionResults()
     {
