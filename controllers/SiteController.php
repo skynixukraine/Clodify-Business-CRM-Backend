@@ -8,6 +8,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use app\models\LoginForm;
 use app\models\ContactForm;
@@ -259,9 +260,9 @@ class SiteController extends Controller
 
 
     }
-    public function actionSurvey(){
+    public function actionSurvey($shortcode){
         /** @var  $model Surveys*/
-        $model = Surveys::findOne(['id' => 1]);
+        $model = Surveys::findOne(['shortcode' => $shortcode]);
         /*var_dump($model);exit();*/
         if ($model != null && $model->is_private == 1) {
 
@@ -286,6 +287,8 @@ class SiteController extends Controller
                     return $this->redirect('/cp/surveys/results');
                 }
             }
+        }else{
+            throw new NotFoundHttpException('survey not faund');
         }
 
 

@@ -55,7 +55,8 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '/cp' => '/cp/default/index',
-                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
+                '/s/<shortcode>' => '/site/survey',
+                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>'
             ],
         ],
         'log' => [
