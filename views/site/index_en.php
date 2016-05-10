@@ -719,6 +719,7 @@ $this->title = 'Welcome to the Skynix - software development company';
  
 })
   </script>
+  
 
 <!--****   End Popup portfolio   ****-->
 
