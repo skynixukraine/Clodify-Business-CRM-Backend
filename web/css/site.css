@@ -98,3 +98,34 @@ a.desc:after {
     left: calc(50% - 250px);
     top: 150px;
 }
+.alert.alert-danger{
+    width: 50%;
+    margin: 26px auto 50px auto;
+    position: relative;
+    left: inherit;
+    top: inherit;
+}
+.site-error{
+    width: 100%;
+    position: fixed;
+}
+.site-error >p{
+    width: 50%;
+    margin: 5px auto;
+    display: block;
+}
+@media (max-width: 768px){
+
+    .alert.alert-danger{
+        width: 80%;
+    }
+    .site-error >p{
+        width: 80%;
+    }
+}
+@media (max-width: 600px){
+
+    .site-error > h1{
+        font-size: 30px;
+    }
+}

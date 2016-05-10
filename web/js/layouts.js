@@ -36,7 +36,7 @@ var LoginPage = (function(){
                     header.addClass('fix-height');
 
                 }else{
-                    
+
                     header.removeClass('fix-height');
                 }
 
