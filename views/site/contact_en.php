@@ -73,3 +73,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
 
 </section>
+
+<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+        localStorageModule.homePageProject();
+        localStorageModule.careerPageVacation();
+        localStorageModule.inputFunction();
+        localStorageModule.subjectLocal();
+ 
+})
+  </script>
+
+<?php $this->registerJsFile('/js/local-storage.js'); ?>
