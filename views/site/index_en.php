@@ -136,7 +136,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Extension <strong>CLIENT: </strong>Skynix Solutions</p>
+                    <p><strong>CATEGORY: </strong>Magento 2.x Extension <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
 
@@ -174,7 +174,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Marketplace Theme <strong>CLIENT: </strong>Skynix Solutions</p>
+                    <p><strong>CATEGORY: </strong>Magento 2.x Marketplace Theme <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -212,7 +212,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 1.x Extension <strong>CLIENT: </strong>After Eden</p>
+                    <p><strong>CATEGORY: </strong>Magento 1.x Extension <strong class="padding-l-30">CLIENT: </strong>After Eden</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -239,7 +239,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Theme <strong>CLIENT: </strong>Skynix Solutions</p>
+                    <p><strong>CATEGORY: </strong>Magento 2.x Theme <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -267,7 +267,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong> Wordpress Theme <strong>CLIENT: </strong> Web Mission Control Inc.</p>
+                    <p><strong>CATEGORY: </strong> Wordpress Theme <strong class="padding-l-30">CLIENT: </strong> Web Mission Control Inc.</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -308,7 +308,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Mobile App: iOS & Android <strong>CLIENT: </strong>Fisherman UK ltd.</p>
+                    <p><strong>CATEGORY: </strong>Mobile App: iOS & Android <strong class="padding-l-30">CLIENT: </strong>Fisherman UK ltd.</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -345,7 +345,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>CMS & Web <strong>CLIENT: </strong>Citrix Systems</p>
+                    <p><strong>CATEGORY: </strong>CMS & Web <strong class="padding-l-30">CLIENT: </strong>Citrix Systems</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -373,7 +373,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong>CLIENT: </strong>Castles Estate Agents ltd.</p>
+                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong class="padding-l-30">CLIENT: </strong>Castles Estate Agents ltd.</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
@@ -402,7 +402,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong>CLIENT: </strong>UOU ltd.</p>
+                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong class="padding-l-30">CLIENT: </strong>UOU ltd.</p>
                     <p><strong>DESCRIPTION: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
