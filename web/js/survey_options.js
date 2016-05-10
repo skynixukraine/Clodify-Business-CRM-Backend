@@ -23,7 +23,7 @@ var surveysModule = (function() {
     }
     function actionCode( code )
     {
-        document.location.href = cfg.codeUrl + "?shortcode=" + code;
+        document.location.href = cfg.codeUrl + "/" + code;
     }
     function actionDelete( id, name, dataTable )
     {

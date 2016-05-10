@@ -12,6 +12,8 @@ $this->title = 'Welcome to the Skynix - software development company';
 <canvas id="canvas2" width="100%"></canvas>
 <canvas id="canvas3" width="100%"></canvas>
 
+
+
 <section class="container-fluid" id="about_skynix">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
@@ -710,24 +712,24 @@ $this->title = 'Welcome to the Skynix - software development company';
 </div>
 
 <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-  <script>
+<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
+<?php $this->registerJsFile('/js/local-storage.js'); ?>
+<script>
     $(function() {
         localStorageModule.homePageProject();
-        localStorageModule.careerPageVacation();
-        localStorageModule.inputFunction();
-        localStorageModule.subjectLocal();
- 
-})
+        
+});
   </script>
-  
 
 <!--****   End Popup portfolio   ****-->
 
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/portfolio.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/canvas.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
 
 
 
+
+ 
+  
 

@@ -7,6 +7,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Careers in Skynix');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="container career">
 
     <div class="row">
@@ -135,15 +136,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
+<?php $this->registerJsFile('/js/local-storage.js'); ?>
   <script>
     $(function() {
-        localStorageModule.homePageProject();
         localStorageModule.careerPageVacation();
-        localStorageModule.inputFunction();
-        localStorageModule.subjectLocal();
- 
+        
 })
   </script>
 
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
+
 <?php $this->registerJsFile('/js/career.js'); ?>
