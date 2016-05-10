@@ -13,6 +13,7 @@ use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
+use yii\helpers\ArrayHelper;
 use app\components\DataTable;
 use app\components\DateUtil;
 use Yii;
@@ -32,7 +33,7 @@ class SurveysController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'results', 'find', 'create', 'delete', 'edit'],
+                        'actions'   => ['index', 'results', 'find', 'create', 'delete', 'edit', 'code'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV],
                     ],
@@ -47,8 +48,9 @@ class SurveysController extends DefaultController
                     'index'     => ['get', 'post'],
                     'find'      => ['get'],
                     'create'    =>['get', 'post'],
-                    'edit'  =>['get', 'post'],
+                    'edit'      =>['get', 'post'],
                     'delete'    => ['delete'],
+                    'code'         => ['get', 'post']
 
                 ],
             ],
@@ -107,6 +109,7 @@ class SurveysController extends DefaultController
                 $model->id,
                 $model->shortcode,
                 $model->question,
+                $model->description,
                 $model->date_start,
                 $model->date_end,
                 $model->is_private,
@@ -204,10 +207,10 @@ class SurveysController extends DefaultController
     }
 
     /**
-     * @param $survay_id
+     * @param $survey_id
      * @param $options - Array of ['name'=>'', 'description'=>'']
      */
-    public function createSuraayOptions($survay_id, $options){
+    public function createSurveyOptions($survey_id, $options){
         if(!$options){
             return;
         }
@@ -218,6 +221,93 @@ class SurveysController extends DefaultController
             $sOpt->description = $option['description'];
             $sOpt->save();
         }
+    }
+    public function actionEdit($id)
+    {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV] ) ){
+
+                /*///////////////////////////////////////////////////*/
+
+                $model  = Surveys::find()
+                    ->where("id=:iD",
+                        [
+                            ':iD' => $id
+                        ])
+                    ->one();
+                $survayOptions = $model->surveys;
+                /*if(!$survayOptions){
+                    $survayOptions = [new SurveysOption()];
+                }*/
+                /** @var $model Surveys */
+                if( $model->is_delete == 0) {
+
+
+
+                    if ($model->load(Yii::$app->request->post())) {
+
+                        $oldIDs = ArrayHelper::map($survayOptions, 'id', 'id');
+                        $survayOptions = SurveysOption::createMultiple(SurveysOption::classname(), $survayOptions);
+                        SurveysOption::loadMultiple($survayOptions, Yii::$app->request->post());
+                        $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($survayOptions, 'id', 'id')));
+
+                        // ajax validation
+                        if (Yii::$app->request->isAjax) {
+                            Yii::$app->response->format = Response::FORMAT_JSON;
+                            return ArrayHelper::merge(
+                                ActiveForm::validateMultiple($survayOptions),
+                                ActiveForm::validate($model)
+                            );
+                        }
+
+                        // validate all models
+                        $valid = $model->validate();
+                        $valid = SurveysOption::validateMultiple($survayOptions) && $valid;
+                        if ($valid) {
+
+
+                            $transaction = \Yii::$app->db->beginTransaction();
+                            try {
+                                if ($flag = $model->save(false)) {
+                                    if (! empty($deletedIDs)) {
+                                        SurveysOption::deleteAll(['id' => $deletedIDs]);
+                                    }
+                                    foreach ($survayOptions as $survayOption) {
+                                        $survayOption->survey_id = $model->id;
+                                        if (! ($flag = $survayOption->save(false))) {
+                                            $transaction->rollBack();
+                                            break;
+                                        }
+                                    }
+                                }
+                                if ($flag) {
+                                    $transaction->commit();
+                                    Yii::$app->getSession()->setFlash('success',
+                                        Yii::t("app", "You edited survey " . $id));
+                                    return $this->redirect(['edit','id'=>$model->id]);
+                                }
+                            } catch (Exception $e) {
+                                $transaction->rollBack();
+                            }
+
+
+                        }
+                    }
+                }else{
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Oops, sorry, this survey is deleted and can not be accessible anymore"));
+                    return $this->redirect(['create']);
+                }
+
+
+            return $this->render('create', ['model' => $model, 'survayOptions' => (empty($survayOptions)) ? [new SurveysOption] : $survayOptions,
+                'title' => 'Edit the survey #' . $model->id]);
+
+        }else{
+
+            throw new \Exception('Ooops, you do not have priviledes for this action');
+
+        }
+
     }
 
     /** Delete project */
@@ -249,73 +339,23 @@ class SurveysController extends DefaultController
 
         }
     }
-    public function actionEdit()
-    {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_PM, User::ROLE_DEV] ) ){
-
-            if( $id = Yii::$app->request->get('id') ) {
-
-                $model  = Surveys::find()
-                    ->where("id=:iD",
-                        [
-                            ':iD' => $id
-                        ])
-                    ->one();
-                /** @var $model Surveys */
-                if( $model->is_delete == 0) {
-
-                    $model->date_start = DateUtil::reConvertData($model->date_start);
-                    $model->date_end = DateUtil::reConvertData($model->date_end);
-
-                    if ($model->load(Yii::$app->request->post())) {
-
-                        if ($model->validate()) {
-
-
-
-                                $model->save();
-                                if(Yii::$app->request->post('updated')) {
-
-                                    Yii::$app->getSession()->setFlash('success',
-                                        Yii::t("app", "You edited survey " . $id));
-                                }
-                                return $this->redirect(['create']);
-
-
-                        }
-                    }
-                }else{
-
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Oops, sorry, this survey is deleted and can not be accessible anymore"));
-                    return $this->redirect(['create']);
-                }
-
-            }
-            return $this->render('create', ['model' => $model,
-                'title' => 'Edit the survey #' . $model->id]);
-
-        }else{
-
-            throw new \Exception('Ooops, you do not have priviledes for this action');
-
-        }
-
-    }
     public function actionCode()
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
 
             if ( ( $shortcode = Yii::$app->request->post("shortcode") ) ) {
-
+/*var_dump($shortcode);
+                exit();*/
                 /** @var  $model Surveys */
                 $model  = Surveys::findOne( $shortcode );
-                return $this->render('/s', ["model" => $model]);
+                return $this->render('/s/', ["model" => $model]);
             }
 
         }else{
 
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Ooops, you do not have priviledes for this action."));
-            return $this->refresh();
+            return $this->render('/s');
+            // return $this->refresh();
 
         }
     }

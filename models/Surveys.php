@@ -24,6 +24,7 @@ class Surveys extends \yii\db\ActiveRecord
     public $model;
     public $name;
     public $descriptions;
+    public $survayOptions = [];
     /**
      * @inheritdoc
      */
@@ -39,7 +40,7 @@ class Surveys extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['shortcode', 'question', /*'date_start', 'date_end'*/ ], 'required'],
+            [['shortcode', 'question', 'date_start', 'date_end' ], 'required'],
             [['shortcode'], 'unique', 'message' => 'Sorry, the entered shortcode already exists'],
             [['name'],'string', 'max' => 250],
             [['descriptions'], 'string', 'max' => 1200],
