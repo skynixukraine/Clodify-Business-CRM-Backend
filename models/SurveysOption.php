@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -15,6 +16,7 @@ use Yii;
  */
 class SurveysOption extends \yii\db\ActiveRecord
 {
+    public $survayOptions = [];
     /**
      * Creates and populates a set of models.
      *
