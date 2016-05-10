@@ -1912,6 +1912,9 @@ footer .link a:hover {
 #view_portfolio .info-box .blue-txt {
   text-decoration: underline;
 }
+#view_portfolio .info-box .padding-l-30 {
+  padding: 0 0 0 30px;
+}
 #view_portfolio .read-more {
   width: 175px;
   margin: 50px auto 0 auto;
@@ -1931,7 +1934,7 @@ footer .link a:hover {
 }
 #view_portfolio .slider_portfolio .viewport {
   width: 500px;
-  margin: 0 0 30px 18px;
+  margin: 0 0 0 18px;
   position: relative;
   overflow: hidden;
   padding: 0 0 10px;
