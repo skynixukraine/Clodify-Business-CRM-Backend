@@ -140,10 +140,7 @@ AppAsset::register($this);
 </script>
 <script>
     $(function() {
-        localStorageModule.homePageProject();
-        localStorageModule.careerPageVacation();
-        localStorageModule.inputFunction();
-        localStorageModule.subjectLocal();
+       localStorageModule.storageFunction();
         
 })
   </script>
