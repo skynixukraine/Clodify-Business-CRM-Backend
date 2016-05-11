@@ -141,6 +141,15 @@ AppAsset::register($this);
     ga('send', 'pageview');
 
 </script>
+ <script>
+    $(function() {
+        localStorageModule.homePageProject();
+        localStorageModule.careerPageVacation();
+        localStorageModule.inputFunction();
+        localStorageModule.subjectLocal();
+        
+})
+  </script>
 </body>
 </html>
 <?php $this->endPage() ?>
