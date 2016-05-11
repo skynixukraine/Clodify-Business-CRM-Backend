@@ -276,6 +276,7 @@ class ProjectController extends DefaultController
                                    ($model->date_start == null && $model->date_end == null) ) {
 
                                    $model->save();
+
                                    if(Yii::$app->request->post('updated')) {
 
                                        Yii::$app->getSession()->setFlash('success',
@@ -289,25 +290,25 @@ class ProjectController extends DefaultController
                                    Yii::t("app", "Start date must be less than end date"));
                                }
                            }
-                   }else {
+                       }else {
 
-                       $customers = $model->getProjectCustomers()
-                           ->all();
-                       $model->customers = [];
-                       foreach ($customers as $customer) {
+                           $customers = $model->getProjectCustomers()
+                               ->all();
+                           $model->customers = [];
+                           foreach ($customers as $customer) {
 
-                           /** @var $customer ProjectCustomer */
-                           $model->customers[] = $customer->user_id;
+                               /** @var $customer ProjectCustomer */
+                               $model->customers[] = $customer->user_id;
+                           }
+
+                           $developers = $model->getProjectDevelopers()
+                               ->all();
+                           $model->developers = [];
+                           foreach ($developers as $developer) {
+
+                               $model->developers[] = $developer->user_id;
+                           }
                        }
-
-                       $developers = $model->getProjectDevelopers()
-                           ->all();
-                       $model->developers = [];
-                       foreach ($developers as $developer) {
-
-                           $model->developers[] = $developer->user_id;
-                       }
-                   }
                }else{
 
                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Oops, sorry, this project is deleted and can not be accessible anymore"));
