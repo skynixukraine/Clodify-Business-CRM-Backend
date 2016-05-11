@@ -102,18 +102,27 @@ class SiteController extends Controller
 
                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
 
-                    $modelUserLogins->save(true, ['date_login']);
+
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                        Yii::$app->getSession()->setFlash('success',
-                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        if($modelUserLogins->date_signup == null) {
+
+                            $model->date_signup = date('Y-m-d H:i:s');
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        }
+
                         return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
-                        Yii::$app->getSession()->setFlash('success',
-                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        if($modelUserLogins->date_signup == null) {
+
+                            $model->date_signup = date('Y-m-d H:i:s');
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        }
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
-
+                    $modelUserLogins->save(true, ['date_login']);
                 } else {
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
@@ -171,7 +180,7 @@ class SiteController extends Controller
 
             $model->is_active = 1;
             $model->invite_hash = null;
-            $model->date_signup = date('Y-m-d H:i:s');
+
             $model->save();
             if( Yii::$app->user->id != null ){
 
