@@ -106,7 +106,7 @@ class SiteController extends Controller
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
                         if($modelUserLogins->date_signup == null) {
 
-                            $model->date_signup = date('Y-m-d H:i:s');
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
@@ -115,8 +115,7 @@ class SiteController extends Controller
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                         if($modelUserLogins->date_signup == null) {
-
-                            $model->date_signup = date('Y-m-d H:i:s');
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
