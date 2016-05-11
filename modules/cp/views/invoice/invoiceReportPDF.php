@@ -111,17 +111,10 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
         </tr>
 
     <?php endforeach;?>
-
-    <tr>
-        <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
-         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            Below the table should be the following information:
-        </td>
-    </tr>
     <tr>
         <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            <strong>Report is generated from :
+            <strong>Report is generated from
             <span><?=DateUtil::reConvertData($model->date_start)?></span> to <span><?= DateUtil::reConvertData($model->date_end)?></span></strong>
 
         </td>
@@ -129,7 +122,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
     <tr>
         <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            <strong>Total hours :
+            <strong>Total hours:
             <span><?= $model->total_hours?></span></strong>
         </td>
     </tr>
