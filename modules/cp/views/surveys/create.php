@@ -58,7 +58,7 @@ $this->params['menu'] = [
                     'convertFormat' => true,
                     'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss',
+                    'format' => 'dd-mm-yyyy hh:ii ',
                     'startDate' =>'01-Mar-2016 12:00 AM',
                     'todayHighlight' => true
                     ]
@@ -71,7 +71,7 @@ $this->params['menu'] = [
                 'convertFormat' => true,
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss',
+                    'format' => 'dd-mm-yyyy hh:ii ',
                     'startDate' => '01-Mar-2016 12:00 AM',
                     'todayHighlight' => true
                 ]
