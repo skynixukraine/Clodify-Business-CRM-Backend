@@ -35,11 +35,16 @@ $this->params['menu'] = [
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
                  $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
              }
-            if ( User::hasPermission([User::ROLE_PM, User::ROLE_CLIENT])){
+            if ( User::hasPermission([User::ROLE_PM])){
                  $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
                  $listReport = ArrayHelper::merge(['' => 'ownprojects'], $listReport);
              }
+            if (User::hasPermission([User::ROLE_CLIENT])){
+                $projects = Project::ProjectsCurrentClient(Yii::$app->user->id);
+                $listReport = ArrayHelper::map( $projects, 'id', 'name' );
+                $listReport = ArrayHelper::merge(['' => 'ownprojects'], $listReport);
+            }
 
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
         </div>
