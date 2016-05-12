@@ -294,7 +294,7 @@ class SiteController extends Controller
                 }
                 if (strtotime($model->date_end) < time()){
 
-                    return $this->redirect('/cp/surveys/results');
+                    return $this->redirect('/cp/surveys/result');
                 }
             }
         }else{
@@ -305,5 +305,9 @@ class SiteController extends Controller
         return $this->render('survey');
 
     }
+    public function actionSurveys(){
+        return $this->render('survey');
+    }
+
 
 }

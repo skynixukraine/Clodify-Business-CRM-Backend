@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
-$this->title                    = Yii::t("app", "Take a Survey");
+$this->title                    = Yii::t("app", "Surveys List");
 
 $this->params['breadcrumbs'][]  = $this->title;
 
