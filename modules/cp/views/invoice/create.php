@@ -67,7 +67,8 @@ $this->params['menu'] = [
 
             ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
 
-
+            <?php echo $form->field( $model, 'contract_number')->textInput();?>
+            <?php echo $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>
             <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
