@@ -111,17 +111,19 @@ class SiteController extends Controller
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
 
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                         if($modelUserLogins->date_signup == null) {
+
                             $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
-                    $modelUserLogins->save(true, ['date_login']);
                 } else {
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
