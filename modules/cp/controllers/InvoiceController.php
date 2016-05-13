@@ -91,10 +91,13 @@ class InvoiceController extends DefaultController
             'total',
             'date_start',
             'date_end',
+            'contract_number',
+            'act_of_work',
             'date_created',
             'date_sent',
             'date_paid',
-            'status'
+            'status',
+
         ];
 
         $dataTable = DataTable::getInstance()

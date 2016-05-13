@@ -19,7 +19,7 @@ $this->title                    = Yii::t("app", "Surveys List");
 
 $this->params['breadcrumbs'][]  = $this->title;
 
-if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
     $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'Create survey'),

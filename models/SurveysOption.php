@@ -84,4 +84,7 @@ class SurveysOption extends \yii\db\ActiveRecord
             'votes' => 'Votes',
         ];
     }
+    public function getSurvay(){
+        $this->hasOne(Surveys::className(),['survey_id'=>'id']);
+    }
 }

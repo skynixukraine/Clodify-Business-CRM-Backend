@@ -37,6 +37,8 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             <th><?=Yii::t('app', 'Total')?></th>
             <th><?=Yii::t('app', 'Date Start')?></th>
             <th><?=Yii::t('app', 'Date End')?></th>
+            <th><?=Yii::t('app', 'Contract_number')?></th>
+            <th><?=Yii::t('app', 'Act_number')?></th>
             <th><?=Yii::t('app', 'Date Create')?></th>
             <th><?=Yii::t('app', 'Date Sent')?></th>
             <th><?=Yii::t('app', 'Date Paid')?></th>

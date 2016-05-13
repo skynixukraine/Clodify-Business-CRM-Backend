@@ -47,26 +47,31 @@ var myModule = (function() {
 
     //Function for tracking changes in the radio buttons
     changeFunction : function() {
+
       for (var i = 0; i < radioArr.length; i++) {
         radioArr[i].onchange = function() {
           for (var k = 0; k < labelArr.length; k++) {
             if (labelArr.hasClass("checked-radio")) {
               labelArr.removeClass("checked-radio");
+              console.log(labelArr);
             }
           }
-          var thisLabel = $(this).parent();
-          if (this.checked) {
-            $("#submit").removeAttr("disabled");
-            thisLabel.addClass("checked-radio");
-          }
+          console.log(labelArr);
+          //var thisLabel = $(this).parent();
+          //if (this.checked) {
+          //  $("#submit").removeAttr("disabled");
+          //  thisLabel.addClass("checked-radio");
+          //}
 
         }
       }
+      console.log($('input').attr('checked', "checked"));
     } ,
 
     ajaxFormSubmit : function() {
-      $('form').submit(function(e) {
+      $('#survey-voice').submit(function(e) {
         e.preventDefault();
+        alert('ssssssssssssssss');
         showProgressBar();
         var data = $('form').serializeArray();
         $.ajax({
