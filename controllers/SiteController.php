@@ -274,7 +274,7 @@ class SiteController extends Controller
         /** @var  $model Surveys*/
         $model = Surveys::findOne(['shortcode' => $shortcode]);
         /*var_dump($model);exit();*/
-        if ($model != null && $model->is_private == 1) {
+        if ($model != null /*&& $model->is_private == 1*/) {
 
             if (Yii::$app->user->isGuest ) {
 
@@ -292,10 +292,13 @@ class SiteController extends Controller
 
 
                 }
-                if (strtotime($model->date_end) < time()){
+                return $this->render('survey', [
+                        'model' => $model,
+                ]);
+                /*if (strtotime($model->date_end) < time()){
 
                     return $this->redirect('/cp/surveys/result');
-                }
+                }*/
             }
         }else{
             throw new NotFoundHttpException('survey not faund');
@@ -303,9 +306,8 @@ class SiteController extends Controller
 
 
         return $this->render('survey');
-
     }
-    public function actionSurveys(){
+    public function actionSurve(){
         return $this->render('survey');
     }
 

@@ -164,8 +164,8 @@ class SurveysController extends DefaultController
 
 
                 if ($valid) {
-                    $model->date_start = DateUtil::convertData($model->date_start);
-                    $model->date_end = DateUtil::convertData($model->date_end);
+                    $model->date_start = DateUtil::convertDatetime($model->date_start);
+                    $model->date_end = DateUtil::convertDatetime($model->date_end);
                     $model->user_id = Yii::$app->user->id;
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {

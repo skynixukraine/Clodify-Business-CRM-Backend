@@ -58,8 +58,8 @@ $this->params['menu'] = [
                     'convertFormat' => true,
                     'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'dd-mm-yyyy hh:ii ',
-                    'startDate' =>'01-Mar-2016 12:00 AM',
+                    'format' => 'dd/MM/yyyy hh:i',
+                    'startDate' => date('d/m/Y H:i'),
                     'todayHighlight' => true
                     ]
                     ]);?>
@@ -71,8 +71,8 @@ $this->params['menu'] = [
                 'convertFormat' => true,
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'dd-mm-yyyy hh:ii ',
-                    'startDate' => '01-Mar-2016 12:00 AM',
+                    'format' => 'dd/MM/yyyy hh:i',
+                    'startDate' => date('d/m/Y H:i'),
                     'todayHighlight' => true
                 ]
             ]);?>
