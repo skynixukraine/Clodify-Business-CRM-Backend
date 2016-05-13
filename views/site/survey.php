@@ -5,21 +5,33 @@
  * Date: 05.05.16
  * Time: 10:32
  */
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 ?>
 
 <!-- <?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?> -->
 <?php $this->registerJsFile('/js/survey.js'); ?>
 <?php $this->registerCssFile('/css/survey.css'); ?>
 
+<?php $form = ActiveForm::begin(['options' => [
+            'class' => 'horizontal'
+        ]]);?>
 <section class = "form-sent">
       <p></p>
     </section>
     <section class="survey-wrap">
       <article>
         <header class="question">
-          <h1>Чи подобається вам погода в квітні?</h1></header>
-        <p> Подумайте про гарні та погані сторони цієї пори, зважте всі за і проти та як омого точніше обиріть один із варіантів.
-          <br> Згадайте про перепади температур, та про відключення опалення, а також про гарні сторони коли все розквітає.</p>
+
+          <!--<h1>Чи подобається вам погода в квітні?</h1>-->
+           <h1> <?= Html::encode($model->question)?></h1>
+            <!--<h1>
+               <?php /*echo $form->field( $model, 'question' )
+                    ->template([])
+                    ->label(false);*/?>?
+            </h1>-->
+        </header>
+        <p> <?= Html::encode($model->description)?></p>
       </article>
       <form method="POST"  >
         <fieldset>
@@ -74,7 +86,7 @@
             <img src="/img/loader.gif" >
         </div>
 
-  </body>
+<?php ActiveForm::end();?>
 
    <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
   <script>

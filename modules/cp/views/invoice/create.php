@@ -39,7 +39,7 @@ $this->params['menu'] = [
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
             <?php $customers = User::allCustomersWhithReceive();
-            $listCustomers = ArrayHelper::map( $customers, 'id', 'first_name');
+            $listCustomers = User::getCustomersDropDown( $customers, 'id');
             /** @var $model Invoice */
             echo $form->field($model, 'user_id')
                       ->dropDownList( $listCustomers,  [

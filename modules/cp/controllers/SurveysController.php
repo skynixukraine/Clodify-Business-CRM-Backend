@@ -109,12 +109,12 @@ class SurveysController extends DefaultController
                 $model->id,
                 $model->shortcode,
                 $model->question,
-                $model->description,
                 $model->date_start,
                 $model->date_end,
                 $model->is_private,
                 $model->user_id,
-                $model->total_votes
+                $model->total_votes,
+                $model->description,
             ];
         }
 
@@ -164,8 +164,8 @@ class SurveysController extends DefaultController
 
 
                 if ($valid) {
-                    $model->date_start = DateUtil::convertData($model->date_start);
-                    $model->date_end = DateUtil::convertData($model->date_end);
+                    $model->date_start = DateUtil::convertDatetime($model->date_start);
+                    $model->date_end = DateUtil::convertDatetime($model->date_end);
                     $model->user_id = Yii::$app->user->id;
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {
@@ -215,7 +215,6 @@ class SurveysController extends DefaultController
             return;
         }
         foreach($options as $option){
-            var_dump($option);die();
             $sOpt = new SurveysOption();
             $sOpt->name = $option['name'];
             $sOpt->description = $option['description'];
@@ -344,8 +343,7 @@ class SurveysController extends DefaultController
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
 
             if ( ( $shortcode = Yii::$app->request->post("shortcode") ) ) {
-/*var_dump($shortcode);
-                exit();*/
+
                 /** @var  $model Surveys */
                 $model  = Surveys::findOne( $shortcode );
                 return $this->render('/s/', ["model" => $model]);
@@ -359,6 +357,7 @@ class SurveysController extends DefaultController
 
         }
     }
+
     public function actionResults()
     {
         /** @var  $model Surveys*/
