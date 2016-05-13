@@ -14,7 +14,8 @@ use yii\helpers\Html;
 <?php $this->registerCssFile('/css/survey.css'); ?>
 
 <?php $form = ActiveForm::begin(['options' => [
-            'class' => 'horizontal'
+            'class' => 'horizontal',
+            'id'=>'survey-voice',
         ]]);?>
 <section class = "form-sent">
       <p></p>
@@ -24,32 +25,41 @@ use yii\helpers\Html;
         <header class="question">
 
           <!--<h1>Чи подобається вам погода в квітні?</h1>-->
-           <h1> <?= Html::encode($model->question)?></h1>
+           <h1> <?= Html::encode($model->question)?>?</h1>
             <!--<h1>
                <?php /*echo $form->field( $model, 'question' )
                     ->template([])
                     ->label(false);*/?>?
             </h1>-->
         </header>
-        <p> <?= Html::encode($model->description)?></p>
+          <div class="row">
+              <div class="col-md-12">
+                <p style="word-break: break-all;"><?= Html::encode($model->description)?></p>
+              </div>
+          </div>
       </article>
-      <form method="POST"  >
         <fieldset>
+            <?php foreach($model->surveys as $survey):?>
           <div>
              <label class="my-label">
-             <input type="radio" name="radio" value="Дуже подобається" >
-            <span>Дуже подобається</span>
+                 <?php
+                 echo Html::input('radio','answer',$survey->id);
+                 echo $survey->name;
+                  ?>
+             <!--<input type="radio" name="radio" value="Дуже подобається" >-->
+            <!--<span>Дуже подобається</span>-->
             </label>
           </div>
-          <div>
-           
+            <?php endforeach ?>
+         <!-- <div>
+
             <label class="my-label">
             <input type="radio"  name="radio" value="Жахлива пора, бо в мене алергія на квіти" >
             <span>Жахлива пора, бо в мене алергія на квіти</span>
             </label>
           </div>
           <div>
-            
+
             <label class="my-label" >
            <input type="radio"  name="radio" value="Подобається але могло бути й краще" >
             <span>Подобається але могло бути й краще</span>
@@ -60,14 +70,14 @@ use yii\helpers\Html;
             </div>
           </div>
           <div>
-            
+
             <label class="my-label">
             <input type="radio" name="radio" value="Не подобається, бо більше незручностей" >
             <span>Не подобається, бо більше незручностей</span>
             </label>
           </div>
           <div>
-            
+
             <label class="my-label">
             <input type="radio" name="radio" value="Я до цього ставлюсь нормально" >
             <span>Я до цього ставлюсь нормально</span>
@@ -76,10 +86,10 @@ use yii\helpers\Html;
               <span class="tooltip-over">?</span>
               <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
             </div>
-          </div>
+          </div>-->
         </fieldset>
         <input type="submit" id="submit" class="sub" value="Проголосувати" disabled>
-        </form>
+
        
     </section>
      <div class = "loader">

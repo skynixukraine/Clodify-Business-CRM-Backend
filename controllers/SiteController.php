@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Surveys;
+use app\models\SurveysOption;
 use Faker\Provider\tr_TR\DateTime;
 use Yii;
 use yii\filters\AccessControl;
@@ -272,7 +273,14 @@ class SiteController extends Controller
     }
     public function actionSurvey($shortcode){
         /** @var  $model Surveys*/
-        $model = Surveys::findOne(['shortcode' => $shortcode]);
+        /*$model = Surveys::findOne(['shortcode' => $shortcode]);*/
+
+       /* $model = Surveys::find()
+            ->leftJoin(SurveysOption::tableName(), SurveysOption::tableName() . '.survey_id=' . Surveys::tableName() . '.id')
+            ->where(Surveys::tableName() . '.shortcode=:Code',[':Code' => $shortcode])->one();*/
+        $model = Surveys::find()
+            ->innerJoin(SurveysOption::tableName(), SurveysOption::tableName() . '.survey_id=' . Surveys::tableName() . '.id')
+            ->where(Surveys::tableName() . '.shortcode=:Code',[':Code' => $shortcode])->one();
         /*var_dump($model);exit();*/
         if ($model != null /*&& $model->is_private == 1*/) {
 
@@ -284,7 +292,7 @@ class SiteController extends Controller
                 $difference = (strtotime($model->date_start) - strtotime($model->date_end));
                 $start = $model->date_start;
                 if ($difference > 0) {
-                    if ((strtotime($model->date_start) < time()) || (strtotime($model->date_end) > time()))
+                    if ((strtotime($model->date_start) < time()) || (strtotime($model>date_end) > time()))
                     { Yii::$app->getSession()->setFlash("error", "Thank You for visiting our survey.
                         Get back on $start and take a survey"); }
 
