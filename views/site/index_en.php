@@ -110,7 +110,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <li>jQuery</li>
                     <li>Sencha ExtJS</li>
                     <li>AngularJS</li>
-                    <li>Foundation Bootstrap</li>
+                    <li>Bootstrap</li>
+                    <li>Foundation</li>
                 </ul>
             </div>
         </div>
