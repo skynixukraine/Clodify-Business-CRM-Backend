@@ -172,9 +172,10 @@ class SurveysController extends DefaultController
 
 
                 if ($valid) {
-                    $model->date_start = DateUtil::convertDatetime($model->date_start);
-                    $model->date_end = DateUtil::convertDatetime($model->date_end);
-                    $model->user_id = Yii::$app->user->id;
+                    $model->date_start  = DateUtil::convertDatetime($model->date_start);
+                    $model->date_end    = DateUtil::convertDatetime($model->date_end);
+                    $model->user_id     = Yii::$app->user->id;
+                    $model->total_votes = 0;
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {
                         if ($flag = $model->save(false)) {
@@ -191,7 +192,7 @@ class SurveysController extends DefaultController
                         }
                         if ($flag) {
                             $transaction->commit();
-                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created a new survey #" . $model->id));
                             return $this->redirect(['index']);
                         }
                     } catch (Exception $e) {
@@ -207,7 +208,7 @@ class SurveysController extends DefaultController
             }
             return $this->render('create', ['model' => $model, 'survayOptions' => $survayOptions,
                 'title' => 'Create a new survey']);
-        }else{
+        } else {
 
             throw new \Exception('Ooops, you do not have priviledes for this action');
 
@@ -330,7 +331,7 @@ class SurveysController extends DefaultController
                     $model->is_delete = 1;
                     $model->save(true, ['is_delete']);
                     return json_encode([
-                        "message"   => Yii::t("app", "You deleted survey " . $id),
+                        "message"   => Yii::t("app", "You have deleted the survey #" . $id),
                         /*"success"   => true*/
                     ]);
                 } else{
