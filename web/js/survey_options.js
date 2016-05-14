@@ -21,10 +21,6 @@ var surveysModule = (function() {
     {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
-    function actionCode( code )
-    {
-        document.location.href = cfg.codeUrl + "/" + code;
-    }
     function actionDelete( id, name, dataTable )
     {
 
@@ -85,14 +81,8 @@ var surveysModule = (function() {
                     "targets"   : 1,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
-                        var icons = [];
-                        //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
 
-
-                            icons.push('<a class="code">' + data + '</a>');
-
-
-                        return '<div class="actions">' + icons.join(" ") + '</div>';
+                        return '<a class="code" target="_blank" href="' + cfg.codeUrl + "/" + data + '">' + data + '</a>';
 
                     }
                 },
@@ -110,7 +100,12 @@ var surveysModule = (function() {
                 },
                 {
                     "targets"   : 5,
-                    "orderable" : true
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+
+                        return ( data > 0 ? 'Yes' : 'No');
+
+                    }
                 },
                 {
                     "targets"   : 6,
@@ -177,19 +172,11 @@ var surveysModule = (function() {
                     actionEdit( id );
 
                 });
-
                 dataTable.find("i[class*=delete]").click(function(){
 
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
-
-                });
-
-                dataTable.find("a[class*=code]").click(function(){
-
-                    var code     = $(this).parents("tr").find("td").eq(1).text();
-                        actionCode( code );
 
                 });
 
