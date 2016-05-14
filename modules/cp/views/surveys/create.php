@@ -18,14 +18,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.datetimepicker.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
 $this->title                    = Yii::t("app", $title );
-$this->params['breadcrumbs'][]  = $this->title;
 
-$this->params['menu'] = [
+$this->params['breadcrumbs'][]  =
     [
-        'label' => Yii::t('app', 'Take a Survey'),
+        'label' => Yii::t('app', 'Your Surveys'),
         'url'   => Url::to(['surveys/index'])
-    ]
-];
+    ];
+$this->params['breadcrumbs'][]  = $this->title;
 ?>
 <?php $form = ActiveForm::begin([
     'options' => [
@@ -138,17 +137,11 @@ $this->params['menu'] = [
                             echo Html::activeHiddenInput($survayOption, "[{$i}]id");
                         }
                         ?>
-                        <div class="row">
-                            <div class="col-sm-6">
+                        <div class="form-group">
                                 <?= $form->field($survayOption, "[{$i}]name")->textInput(['maxlength' => true]) ?>
-                            </div>
-
                         </div><!-- .row -->
-                        <div class="row">
-
-                            <div class="col-sm-4">
-                                <?= $form->field($survayOption, "[{$i}]description")->textarea(['maxlength' => true]) ?>
-                            </div>
+                        <div class="form-group">
+                             <?= $form->field($survayOption, "[{$i}]description")->textarea(['maxlength' => true]) ?>
                         </div><!-- .row -->
                     </div>
                 </div>

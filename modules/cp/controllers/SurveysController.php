@@ -134,12 +134,20 @@ class SurveysController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_FIN] ) ) {
 
-            $model = new Surveys();
+            $model  = new Surveys();
+            $cycles = 0;
+            $num    = 2;
             do{
-                $model->shortcode = Yii::$app->security->generateRandomString(4);
+                $model->shortcode = strtolower( Yii::$app->security->generateRandomString( $num ) );
                 $model->validate(['shortcode']);
+                $cycles++;
+                if ( $cycles > $num * 5 ) {
 
-            }while($model->getErrors('shortcode'));
+                    $num++;
+
+                }
+
+            }while($model->getErrors('shortcode') && $cycles < 100 );
 
             $survayOptions = [new SurveysOption()];
 
