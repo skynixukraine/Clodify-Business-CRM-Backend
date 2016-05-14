@@ -86,13 +86,10 @@ class InvoiceController extends DefaultController
         $columns        = [
             'id',
             'first_name',
+            'contract',
             'subtotal',
             'discount',
             'total',
-            'date_start',
-            'date_end',
-            'contract_number',
-            'act_of_work',
             'date_created',
             'date_sent',
             'date_paid',
@@ -124,14 +121,16 @@ class InvoiceController extends DefaultController
 
         foreach ( $activeRecordsData as $model ) {
 
+            $client = $model->getUser()->one();
+
             $list[] = [
                 $model->id,
-                $model->getUser()->one()->first_name,
-                '$' . $model->subtotal,
-                '$' . $model->discount,
-                '$' . $model->total,
-                $model->date_start,
-                $model->date_end,
+                $client->first_name . ' ' . $client->last_name,
+                "C#" . $model->contract_number . ", Act#" . $model->act_of_work .
+                    "<br> (" . $model->date_start . '~' . $model->date_end .')',
+                '$' . ($model->subtotal > 0 ? $model->subtotal : 0),
+                '$' . ($model->discount > 0 ? $model->discount : 0),
+                '$' . ($model->total > 0 ? $model->total : 0),
                 $model->date_created,
                 $model->date_sent,
                 $model->date_paid,
@@ -237,6 +236,7 @@ class InvoiceController extends DefaultController
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
                         'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
                         'idCustomer' => $dataPdf->getUser()->one()->id,
+                        'notes'      => $dataPdf->note
 
                     ]);
 
