@@ -60,6 +60,7 @@ AppAsset::register($this);
             ['label' => 'КОНТАКТИ', 'url' => ['site/contact']],
             ['label' => 'КАР\'ЄРА', 'url' => ['site/career']],
             ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => 'http://ua.skynix.solutions'],
+            ['label' => 'БЛОГ', 'url' => '/blog'],
 
         ],
     ]);
