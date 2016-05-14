@@ -60,6 +60,7 @@ AppAsset::register($this);
             ['label' => 'CONTACT US', 'url' => ['site/contact']],
             ['label' => 'CAREERS', 'url' => ['site/career']],
             ['label' => 'Solutions Store', 'url' => 'http://skynix.solutions'],
+            ['label' => 'Blog', 'url' => '/blog'],
 
         ],
     ]);

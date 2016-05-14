@@ -107,16 +107,7 @@ var invoiceModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "orderable" : true,
-                        /*"render"    : function (data, type, row) {
-                         /!*var icons = [];
-                            if (cfg.canDollar) {
-
-                                icons.push('<i class="fa fa-dollar dollar"></i>');
-
-                            }*!/
-
-                        }*/
+                        "orderable" : false
                     },
                     {
                         "targets"   : 3,
@@ -148,16 +139,13 @@ var invoiceModule = (function() {
                     },
                     {
                         "targets"   : 10,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 11,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
 
-                            var icons = [];
+                            var icons   = [],
+                                status  =  row[9];
 
-                            if( row[10] == "NEW") {
+                            if( status == "NEW") {
 
                                 if (cfg.canPaid) {
 
@@ -167,7 +155,7 @@ var invoiceModule = (function() {
                                 }
 
                             }
-                            if( row[10] == "NEW" ) {
+                            if( status == "NEW" ) {
 
                                     if (cfg.canCanceled) {
 
@@ -178,7 +166,7 @@ var invoiceModule = (function() {
 
                             }
 
-                            if( row[10] == "NEW" || row[10] == "PAID" || row[10] == "CANCELED" ) {
+                            if( status == "NEW" || status == "PAID" || status == "CANCELED" ) {
                                 if (cfg.canView) {
 
                                     icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
@@ -186,7 +174,7 @@ var invoiceModule = (function() {
 
                                 }
                             }
-                            if( row[10] == "NEW" || row[10] == "CANCELED" ){
+                            if( status == "NEW" || status == "CANCELED" ){
 
                                     if (cfg.canDelete) {
 
