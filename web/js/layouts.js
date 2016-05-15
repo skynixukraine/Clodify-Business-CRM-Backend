@@ -4,19 +4,21 @@
 
 var LoginPage = (function(){
 
+    var header,
+        scrollY,
+        heightP,
+        windowH;
 
 
     return{
 
         init: function(){
 
-            var header = $('.box-header-menu'),
-                scrollY,
-                heightW = $('.wrap').height(),
-                heightH = $('html').height();
+            windowH = $(window).height();
+            heightP = $('.page').outerHeight(true);
+            header = $('.box-header-menu');
 
-
-            if(heightW<heightH){
+            if(heightP < (windowH/1.4)){
 
                 header.css('box-shadow', 'none');
 
@@ -25,10 +27,6 @@ var LoginPage = (function(){
                 header.css('box-shadow', '0 2px 8px rgba(100, 192, 239, 0.37)');
             }
 
-
-
-
-
             $(document).scroll(function() {
 
                 scrollY = $(document).scrollTop();
@@ -36,7 +34,9 @@ var LoginPage = (function(){
                 if(scrollY > 100){
 
                     header.addClass('fix-height');
+
                 }else{
+
                     header.removeClass('fix-height');
                 }
 
@@ -56,5 +56,7 @@ var LoginPage = (function(){
 $(function(){
 
     LoginPage.init();
+
+
 
 });

@@ -342,7 +342,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->from(User::tableName())
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id AND receive_invoices=1")
-            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1")
+            ->leftJoin(Project::tableName(), Project::tableName() . ".id=" . ProjectCustomer::tableName() . ".project_id")
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " . Project::tableName() .
+                ".status IN ('" . Project::STATUS_INPROGRESS . "' ) AND " . Project::tableName() . ".is_delete=0")
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }
@@ -400,6 +402,21 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return $result;
     }
+
+    /**
+     * @param User[] $customers
+     * @param $value
+     * @return array
+     */
+    public static function getCustomersDropDown($customers, $value)
+    {
+        $result = [];
+        foreach ($customers as $customer) {
+            $result[$customer->{$value}] = $customer->first_name . ' ' . $customer->last_name;
+        }
+        return $result;
+    }
+
     public static function teamUs()
     {
         $teamIds = Team::find()->where(Team::tableName() . '.team_leader_id=:Id', [':Id' => Yii::$app->user->id])->all();

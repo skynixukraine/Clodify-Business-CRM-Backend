@@ -7,6 +7,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Careers in Skynix');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="container career">
 
     <div class="row">
@@ -133,4 +134,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
+
+
 <?php $this->registerJsFile('/js/career.js'); ?>

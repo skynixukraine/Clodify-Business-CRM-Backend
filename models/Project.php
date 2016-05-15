@@ -56,7 +56,7 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['name', 'status'], 'required'],
             [['customers', 'developers','invoice_received', 'is_pm'], 'required', 'on' => 'admin'],
-            [['total_logged_hours', 'total_paid_hours', 'is_delete'], 'integer'],
+            [['total_logged_hours', 'invoice_received', 'is_pm','total_paid_hours', 'is_delete'], 'integer'],
             [['status'], 'string'],
             [['date_start', 'date_end'], 'safe'],
             [['name'], 'string', 'max' => 150],
@@ -166,15 +166,18 @@ class Project extends \yii\db\ActiveRecord
                 ->execute();
 
             /* Add to ProjectCustomers*/
-            foreach ($this->customers as $customer) {
 
-                $connection->createCommand()
-                    ->insert(ProjectCustomer::tableName(), [
-                        'project_id' => $this->id,
-                        'user_id' => $customer,
-                        /*'receive_invoices' => 1,*///when add project to some user receive_invoices from project_customers = 1
-                        'receive_invoices' => ($this->invoice_received==$customer),
-                    ])->execute();
+            foreach (User::allCustomers() as $customer) {
+                if($this->invoice_received == $customer->id || in_array($customer->id, $this->customers)){
+                    $connection->createCommand()
+                        ->insert(ProjectCustomer::tableName(), [
+                            'project_id' => $this->id,
+                            'user_id' => $customer->id,
+                            /*'receive_invoices' => 1,*///when add project to some user receive_invoices from project_customers = 1
+                            'receive_invoices' => ($this->invoice_received==$customer->id),
+                        ])->execute();
+                }
+
             }
         }
 
@@ -188,14 +191,16 @@ class Project extends \yii\db\ActiveRecord
                 ->execute();
 
             /* Add to ProjectDevelopers*/
-            foreach ($this->developers as $developer) {
+            foreach (User::allDevelopers() as $developer) {
+                if($this->is_pm == $developer->id || in_array($developer->id, $this->developers)){
+                    $connection->createCommand()
+                        ->insert(ProjectDeveloper::tableName(), [
+                            'project_id' => $this->id,
+                            'user_id' => $developer->id,
+                            'is_pm' => ($this->is_pm==$developer->id),
+                        ])->execute();
+                }
 
-                $connection->createCommand()
-                    ->insert(ProjectDeveloper::tableName(), [
-                        'project_id' => $this->id,
-                        'user_id' => $developer,
-                        'is_pm' => ($this->is_pm==$developer),
-                    ])->execute();
             }
         }
 
@@ -212,7 +217,16 @@ class Project extends \yii\db\ActiveRecord
                     ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
             ->all();
     }
-
+    public static function ProjectsCurrentClient($curentClient)
+    {
+        return self::find()
+            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=id')
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=id')
+            ->where (Project::tableName() . '.is_delete=0 AND ' .
+                ProjectCustomer::tableName() . '.user_id=' . $curentClient . ' AND ' .
+                ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
+            ->all();
+    }
     public static function projectsName($userId)
     {
         return self::find()

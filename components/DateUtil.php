@@ -25,7 +25,14 @@ class DateUtil
         }
         return $date;
     }
-
+    public static function convertDatetime( $date )
+    {
+        if( $date ) {
+            $date_explode = explode(" ", trim($date));
+            $date = self::convertData($date_explode[0] ) . " " . $date_explode[1];
+        }
+        return $date;
+    }
     /** Convert date from format Y-m-d to format dd/mm/yyyy */
     public static function  reConvertData($date)
     {

@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-/*$this->title                    = Yii::t("app", "My Report");*/
+$this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
 $this->params['menu'] = [

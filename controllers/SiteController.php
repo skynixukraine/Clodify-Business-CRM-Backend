@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\Surveys;
+use app\models\SurveysOption;
+use Faker\Provider\tr_TR\DateTime;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use app\models\LoginForm;
 use app\models\ContactForm;
@@ -13,10 +17,12 @@ use app\models\User;
 use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
-
+use DateTimeInterface;
 
 class SiteController extends Controller
 {
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -25,7 +31,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'request'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -99,18 +105,28 @@ class SiteController extends Controller
 
                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
 
-                    $modelUserLogins->save(true, ['date_login']);
+
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                        Yii::$app->getSession()->setFlash('success',
-                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        if($modelUserLogins->date_signup == null) {
+
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        }
+
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
-                        Yii::$app->getSession()->setFlash('success',
-                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        if($modelUserLogins->date_signup == null) {
+
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        }
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
-
                 } else {
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
@@ -168,7 +184,7 @@ class SiteController extends Controller
 
             $model->is_active = 1;
             $model->invite_hash = null;
-            $model->date_signup = date('Y-m-d H:i:s');
+
             $model->save();
             if( Yii::$app->user->id != null ){
 
@@ -257,4 +273,91 @@ class SiteController extends Controller
 
 
     }
+    public function actionSurvey($shortcode)
+    {
+        /** @var  $model Surveys*/
+        $model = Surveys::find()
+                        ->where(['shortcode' => $shortcode])
+                        ->one();
+        if ($model != null) {
+
+                if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
+
+                    Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
+                    return $this->redirect(['login']);
+
+                } else {
+
+                    if ( $model->isLive() ) {
+
+                        return $this->render('survey', [
+                            'model' => $model,
+                        ]);
+
+                    } else {
+
+                        $now = strtotime('now');
+
+                        //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
+                        //var_dump(date("Y-m-d H:i:s", $now));
+                        //exit;
+                        if ( $now < strtotime( $model->date_start ) ) {
+
+                            return $this->render('survey-coming', [
+                                'model' => $model,
+                            ]);
+
+                        } else {
+
+                            return $this->render('survey-results', [
+                                'model' => $model,
+                            ]);
+
+                        }
+
+                    }
+
+                }
+
+        }else{
+
+            throw new NotFoundHttpException('The survey has not been found');
+
+        }
+        return $this->render('survey');
+    }
+
+    public function actionSubmitSurvey()
+    {
+        $data = ['success' => false];
+        /** @var $surveyModel Surveys */
+        if ( ($id           = Yii::$app->request->post('id')) &&
+                ( $surveyModel  = Surveys::findOne($id) ) &&
+                ( $answer       = Yii::$app->request->post('answer')) &&
+                $surveyModel->isLive() &&
+                $surveyModel->canVote()
+
+            ) {
+
+            $surveyModel->vote( $answer );
+            $data['success'] = true;
+            $data['message'] = Yii::t('app', 'Your vote has been submitted. Thank You for your effort!');
+
+        } elseif ( $surveyModel ) {
+
+            $data['message'] = Yii::t('app', 'Your vote has not been calculated. This seems you have already took a part in this survey.');
+
+        } else {
+
+            $data['message'] = Yii::t('app', 'You can not participate this survey');
+
+        }
+       // \yii\helpers\VarDumper::dump( $_POST, 10, true);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->content = json_encode($data);
+        Yii::$app->end();
+    }
+
+
 }

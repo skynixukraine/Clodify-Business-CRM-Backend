@@ -13,6 +13,7 @@ var invoiceCreateModule = (function() {
         dataFilter = {
         },
         deleteModal;
+
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
 
@@ -122,15 +123,16 @@ var invoiceCreateModule = (function() {
                     if(hours != '') {
 
                         sum += parseFloat(hours);
+
                     }
+
                 }
-
                 if( isNaN(sum) || sum == null ) {
-
                     $(document).find('#invoice-total_hours').val('');
-                } else {
 
-                    $(document).find('#invoice-total_hours').val(sum);
+                } else {
+                    $(document).find('#invoice-total_hours').val(sum.toFixed(2));
+
                 }
             });
         }

@@ -1,6 +1,7 @@
 DirectoryIndex index.html index.php
 RewriteEngine on
-
+    php_value xdebug.remote_enable 1
+    php_value xdebug.remote_connect_back 1
 # if a directory or a file exists, use it directly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
