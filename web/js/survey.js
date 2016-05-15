@@ -1,12 +1,15 @@
 var myModule = (function() {
 
-  var radioArr = $('input:radio[name=radio]');
-  var labelArr = $('input:radio[name= radio]').parent();
-  var surveySection =  $('.survey-wrap');
-  var formSent = $('.form-sent');
-  var textFormSentSuccess = "Form has been sent successfully";
-  var textFormSentError = "Unfortunately, the server is temporarily unavailable. Please try again later."
-  var progressBar = $(".loader");
+  var cfg = {
+        submitUrl: null
+  },
+      radioArr,
+      labelArr,
+      surveySection,
+      formSent,
+      progressBar,
+      textFormSentSuccess = "You vote has been successfully submitted",
+      textFormSentError = "Unfortunately, the server is temporarily unavailable. Please try again later.";
 
   function showProgressBar() {
    progressBar.css("display", "block");
@@ -46,52 +49,80 @@ var myModule = (function() {
     } ,
 
     //Function for tracking changes in the radio buttons
-    changeFunction : function() {
+    changeFunction : function( config ) {
+
+      cfg = $.extend(cfg, config);
+
+      radioArr      = $('input:radio[name=answer]');
+      labelArr      = $('input:radio[name=answer]').parent();
+      surveySection =  $('.survey-wrap');
+      formSent      = $('.form-sent');
+      progressBar   = $(".loader");
+
+      console.log( radioArr );
 
       for (var i = 0; i < radioArr.length; i++) {
         radioArr[i].onchange = function() {
+          console.log("changed");
           for (var k = 0; k < labelArr.length; k++) {
             if (labelArr.hasClass("checked-radio")) {
               labelArr.removeClass("checked-radio");
-              console.log(labelArr);
             }
           }
-          console.log(labelArr);
-          //var thisLabel = $(this).parent();
-          //if (this.checked) {
-          //  $("#submit").removeAttr("disabled");
-          //  thisLabel.addClass("checked-radio");
-          //}
+          var thisLabel = $(this).parent();
+          if (this.checked) {
+            $("#submit").removeAttr("disabled");
+            thisLabel.addClass("checked-radio");
+          }
 
         }
       }
-      console.log($('input').attr('checked', "checked"));
+
+
     } ,
 
     ajaxFormSubmit : function() {
-      $('#survey-voice').submit(function(e) {
+
+      var $form = $('#survey-voice');
+      console.log('ajaxFormSubmit: ' + $form.length );
+
+      $form.submit(function(e) {
+
+        console.log('ajaxFormSubmit - SUBMITTED');
         e.preventDefault();
-        alert('ssssssssssssssss');
         showProgressBar();
         var data = $('form').serializeArray();
         $.ajax({
           type: "POST" ,
-          url: "send.php" ,
+          url: cfg.submitUrl,
           data: data ,
           dataType: "json" ,
-          success: function(){
+          success: function( response ){
             hideProgressBar();
-            surveySection.slideUp();
-            formSent.slideDown().children("p").text(textFormSentSuccess);
+            if ( response.success ) {
+
+              surveySection.slideUp();
+              formSent.slideDown().children("p").text( response.message );
+
+            } else {
+
+              formSent.fadeIn().children("p").text(response.message);
+              window.setTimeout(function(){
+                formSent.fadeOut();
+              } , 5000);
+
+            }
           } ,
           error: function(){
             hideProgressBar();
             formSent.fadeIn().children("p").text(textFormSentError);
             window.setTimeout(function(){
               formSent.fadeOut();
-            } , 5000)
+            } , 5000);
           }
         });
+        return false;
+
      });
     }
   }

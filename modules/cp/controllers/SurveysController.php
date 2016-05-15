@@ -74,11 +74,9 @@ class SurveysController extends DefaultController
             'id',
             'shortcode',
             'question',
-            'description',
             'date_start',
             'date_end',
             'is_private',
-            'user_id',
             'total_votes',
         ];
         $dataTable = DataTable::getInstance()
@@ -112,9 +110,7 @@ class SurveysController extends DefaultController
                 $model->date_start,
                 $model->date_end,
                 $model->is_private,
-                $model->user_id,
-                $model->total_votes,
-                $model->description,
+                $model->total_votes
             ];
         }
 
@@ -176,11 +172,12 @@ class SurveysController extends DefaultController
                     $model->date_end    = DateUtil::convertDatetime($model->date_end);
                     $model->user_id     = Yii::$app->user->id;
                     $model->total_votes = 0;
+                    $model->is_delete   = 0;
                     $transaction = \Yii::$app->db->beginTransaction();
                     try {
                         if ($flag = $model->save(false)) {
                             foreach ($sOptions as $sOption) {
-                                if(!$sOption->name || !$sOption->description){
+                                if(!$sOption->name ){
                                     continue;
                                 }
                                 $sOption->survey_id = $model->id;
@@ -275,6 +272,9 @@ class SurveysController extends DefaultController
 
                             $transaction = \Yii::$app->db->beginTransaction();
                             try {
+
+                                $model->date_start  = DateUtil::convertDatetime($model->date_start);
+                                $model->date_end    = DateUtil::convertDatetime($model->date_end);
                                 if ($flag = $model->save(false)) {
                                     if (! empty($deletedIDs)) {
                                         SurveysOption::deleteAll(['id' => $deletedIDs]);

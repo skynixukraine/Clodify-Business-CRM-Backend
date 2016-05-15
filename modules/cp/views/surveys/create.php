@@ -53,7 +53,9 @@ $this->params['breadcrumbs'][]  = $this->title;
         <div class="form-group">
             <?php echo  $form->field( $model, 'date_start')->widget(DateTimePicker::className(), [
                     'name' => 'date_start',
-                    'options' => [/*'placeholder' => 'Select operating time ...'*/],
+                    'options' => [
+                        'value' => ($model->date_start ? date('d/m/Y H:i', strtotime($model->date_start)) : '')
+                    ],
                     'convertFormat' => true,
                     'pluginOptions' => [
                     'autoclose' => true,
@@ -66,7 +68,9 @@ $this->params['breadcrumbs'][]  = $this->title;
         <div class="form-group">
             <?php echo $form->field( $model, 'date_end')->widget(DateTimePicker::className(), [
                 'name' => 'date_end',
-                'options' => [/*'placeholder' => 'Select operating time ...'*/],
+                'options' => [
+                    'value' => ($model->date_end ? date('d/m/Y H:i', strtotime($model->date_end)) : '')
+                ],
                 'convertFormat' => true,
                 'pluginOptions' => [
                     'autoclose' => true,

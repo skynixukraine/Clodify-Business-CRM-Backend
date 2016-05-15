@@ -29,6 +29,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     <?= Html::csrfMetaTags() ?>
     <title><?= Yii::$app->params['applicationName'] . ' - ' . Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 </head>
 <body>
 <body class="skin-blue sidebar-mini">

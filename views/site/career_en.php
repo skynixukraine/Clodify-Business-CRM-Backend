@@ -135,6 +135,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
- <?php $this->registerJsFile('/js/career.js'); ?>
+
+<?php $this->registerJsFile('/js/career.js'); ?>
