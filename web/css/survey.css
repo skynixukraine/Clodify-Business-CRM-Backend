@@ -1,19 +1,16 @@
 @font-face {
   font-family: "RalewayRegular";
-  src: url("../fonts/Raleway-Regular.eot");
-  src: url("../fonts/Raleway-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Regular.woff") format("woff"), url("../fonts/Raleway-Regular.ttf") format("truetype");
+  src: url("../fonts/Raleway-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
   font-family: "Raleway-SemiBold";
-  src: url("../fonts/Raleway-SemiBold.eot");
-  src: url("../fonts/Raleway-SemiBold.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-SemiBold.woff") format("woff"), url("../fonts/Raleway-SemiBold.ttf") format("truetype");
+  src: url("../fonts/Raleway-SemiBold.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 @font-face {
   font-family: "RalewayMedium";
-  src: url("../fonts/Raleway-Medium.eot");
-  src: url("../fonts/Raleway-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Raleway-Medium.woff") format("woff"), url("../fonts/Raleway-Medium.ttf") format("truetype");
+  src: url("../fonts/Raleway-Medium.ttf") format("truetype");
   font-style: normal;
   font-weight: normal; }
 .survey-wrap {
@@ -196,7 +193,20 @@ input[type="radio"] {
     font-size: 28px;
     color: white;
     font-weight: bold; }
+.survey-results {
+  max-width: 500px;
+  margin: 0px auto;
 
+}
+.survey-results .progress{
+  clear: both;
+}
+.survey-results .progress-text{
+  float: left;
+}
+.survey-results .progress-number{
+  float: right;
+}
 @media screen and (max-width: 1170px) {
   .survey-wrap {
     width: 350px;
