@@ -9,7 +9,13 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
-use app\models\User;
+
+$this->title                    = Yii::t("app", "Email Tester Tool");
+$this->params['breadcrumbs'][]  = $this->title;
+
+$this->params['menu'] = [
+
+];
 ?>
 
 

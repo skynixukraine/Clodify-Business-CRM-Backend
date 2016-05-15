@@ -27,7 +27,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Yii::$app->params['applicationName'] . ' - ' . Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) . ' - ' . Yii::$app->params['applicationName']?></title>
     <?php $this->head() ?>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 </head>
