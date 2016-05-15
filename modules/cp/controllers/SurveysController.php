@@ -180,6 +180,7 @@ class SurveysController extends DefaultController
                                 if(!$sOption->name ){
                                     continue;
                                 }
+                                $sOption->votes     = 0;
                                 $sOption->survey_id = $model->id;
                                 if (! ($flag = $sOption->save(false))) {
                                     $transaction->rollBack();
@@ -281,6 +282,7 @@ class SurveysController extends DefaultController
                                     }
                                     foreach ($survayOptions as $survayOption) {
                                         $survayOption->survey_id = $model->id;
+                                        $survayOption->votes     = 0;
                                         if (! ($flag = $survayOption->save(false))) {
                                             $transaction->rollBack();
                                             break;
