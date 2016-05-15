@@ -30,15 +30,14 @@ var projectModule = (function() {
             }
 
         });
-    $(".two input[type='checkbox']").click(function () {
+        $(".two input[type='checkbox']").click(function () {
 
-        if ($(".two input[type='checkbox']:checked").length == 1) {
+            if ($(".two input[type='checkbox']:checked").length == 1) {
 
-            $(this).parent().parent().find("input[type='radio']").trigger("click");
+                $(this).parent().parent().find("input[type='radio']").trigger("click");
 
-        }
-
-    });
+            }
+        });
 
 
     function actionEdit( id )

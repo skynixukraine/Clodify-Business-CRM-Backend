@@ -97,7 +97,8 @@ $this->title = 'Вітаємо у Скайнікс - компанія з роз�
                         <li>jQuery</li>
                         <li>Sencha ExtJS</li>
                         <li>AngularJS</li>
-                        <li>Twitter Bootstrap</li>
+                        <li>Bootstrap</li>
+                        <li>Foundation</li>
                     </ul>
                 </div>
             </div>

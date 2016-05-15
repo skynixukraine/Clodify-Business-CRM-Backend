@@ -35,17 +35,17 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download', 'downloadreports'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
-                        'actions'   => ['index', 'find', 'view', 'download'],
+                        'actions'   => ['index', 'find', 'view', 'download', 'downloadreports'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_CLIENT],
                     ],
                     [
-                        'actions'   => ['delete', 'download'],
+                        'actions'   => ['delete', 'download', 'downloadreports'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -62,7 +62,8 @@ class InvoiceController extends DefaultController
                     'paid'      => ['get', 'post'],
                     'canceled'  => ['get', 'post'],
                     'delete'    => ['delete'],
-                    'download'  => ['get', 'post']
+                    'download'  => ['get', 'post'],
+                    'downloadreports'=> ['get', 'post'],
                 ],
             ],
         ];
@@ -85,15 +86,15 @@ class InvoiceController extends DefaultController
         $columns        = [
             'id',
             'first_name',
+            'contract',
             'subtotal',
             'discount',
             'total',
-            'date_start',
-            'date_end',
             'date_created',
             'date_sent',
             'date_paid',
-            'status'
+            'status',
+
         ];
 
         $dataTable = DataTable::getInstance()
@@ -120,14 +121,16 @@ class InvoiceController extends DefaultController
 
         foreach ( $activeRecordsData as $model ) {
 
+            $client = $model->getUser()->one();
+
             $list[] = [
                 $model->id,
-                $model->getUser()->one()->first_name,
-                '$' . $model->subtotal,
-                '$' . $model->discount,
-                '$' . $model->total,
-                $model->date_start,
-                $model->date_end,
+                $client->first_name . ' ' . $client->last_name,
+                "C#" . $model->contract_number . ", Act#" . $model->act_of_work .
+                    "<br> (" . $model->date_start . '~' . $model->date_end .')',
+                '$' . ($model->subtotal > 0 ? $model->subtotal : 0),
+                '$' . ($model->discount > 0 ? $model->discount : 0),
+                '$' . ($model->total > 0 ? $model->total : 0),
                 $model->date_created,
                 $model->date_sent,
                 $model->date_paid,
@@ -204,6 +207,7 @@ class InvoiceController extends DefaultController
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
 
+
             if (!empty($model->id) && !empty($model->method)) {
 
                 $dataPdf = Invoice::find()
@@ -232,6 +236,7 @@ class InvoiceController extends DefaultController
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
                         'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
                         'idCustomer' => $dataPdf->getUser()->one()->id,
+                        'notes'      => $dataPdf->note
 
                     ]);
 
@@ -239,6 +244,20 @@ class InvoiceController extends DefaultController
                     $pdf->WriteHTML($html);
                     $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
                     $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
+
+                    $model = Invoice::find()->where("id=:iD", [':iD' => $dataPdf->id])->one();
+
+                    $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
+                    $html2 = $this->renderPartial('invoiceReportPDF', [
+                        'model' => $model,
+                        'id' => $dataPdf->id,
+                        'r'  => $r,
+
+                    ]);
+                    $pdf = new mPDF();
+                    $pdf->WriteHTML($html2);
+                    $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
+                    $content2 = $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'S');
 
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
@@ -249,13 +268,14 @@ class InvoiceController extends DefaultController
                                 $dataPdf->getUser()->one()->last_name,
                             'dataFrom' => date('j F Y', strtotime($dataPdf->date_start)),
                             'dataTo' => date('j F Y', strtotime($dataPdf->date_end)),
-
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo($dataPdf->getUser()->one()->email)
                             ->setCc(Yii::$app->params['adminEmail'])
+                            /*->setTo('valeriya@skynix.co')*/
                             ->attachContent($content, ['fileName' => 'Invoice.pdf'])
+                            ->attachContent($content2, ['fileName' => 'InvoiceReport.pdf'])
                             ->send();
 
                         $connection = Yii::$app->db;
@@ -362,6 +382,41 @@ class InvoiceController extends DefaultController
                         header('Content-Length: ' . filesize($path));
                         readfile($path);
                         Yii::$app->end();
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, this seems like this PDF invoice was deleted."));
+                    return $this->redirect(['view', 'id' => $id]);
+                }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action."));
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        } else {
+
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but this page does not exist."));
+            return $this->redirect(['index']);
+        }
+
+    }
+    public function actionDownloadreports()
+    {
+        /** @var $model Invoice */
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one() ) ) {
+
+            if( ( $model->user_id == Yii::$app->user->id &&
+                    User::hasPermission([User::ROLE_CLIENT]) ) ||
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+
+                if (file_exists($path = Yii::getAlias('@app/data/invoices/' . 'reports'. $id . '.pdf'))) {
+                    /*$this->downloadFile($path);*/
+
+                    header("Content-type:application/pdf"); //for pdf file
+                    header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+                    header('Content-Length: ' . filesize($path));
+                    readfile($path);
+                    Yii::$app->end();
 
                 } else {
 

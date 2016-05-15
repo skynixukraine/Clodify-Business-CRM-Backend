@@ -78,6 +78,12 @@ $this->params['menu'] = [
                 file_exists( Yii::getAlias('@app/data/invoices/' . $model->id . '.pdf'))):?>
                     <?= Html::a('Download PDF Invoice', ['invoice/download?id=' . $model->id]) ?>
         <?php endif;?>
+<br>
+        <?php if($model->date_sent != null &&
+            (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) &&
+            file_exists( Yii::getAlias('@app/data/invoices/' . 'reports' . $model->id . '.pdf'))):?>
+            <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $model->id]) ?>
+        <?php endif;?>
 
     <?php ActiveForm::end();?>
 

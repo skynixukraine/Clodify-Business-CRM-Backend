@@ -37,12 +37,6 @@ var requestQuoteModals = (function(){
         htmlwidth = htmlPage.width();
         progressBar.css('width' , factor * step + '%');
 
-
-        if(htmlwidth < 768){
-
-            htmlPage.animate({scrollTop:0},500);
-
-        }
     }
 
     function validateForm(elem){
@@ -121,6 +115,12 @@ var requestQuoteModals = (function(){
 
                 formStep.eq(i).data("data-step", i);
             }
+
+
+
+
+
+
 
             $(".box-evaluation .en-btn").click(function (event) {//button open REQUEST A QUOTE
 
@@ -330,6 +330,9 @@ var requestQuoteModals = (function(){
 
 })();
 
+$(function(){
 
+    requestQuoteModals.init();
 
-addEventListener("load", requestQuoteModals.init);
+});
+

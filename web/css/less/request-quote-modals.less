@@ -7,28 +7,7 @@
     display: none;
     z-index: 2000;
 
-    .front-mask{
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        display: none;
-        background: rgba(0,0,0,0.5);
-        z-index: 20000;
 
-        &:before{
-            width: 64px;
-            height: 64px;
-            margin: auto;
-            position: relative;
-            top: 35%;
-            content: "";
-            background: url(../img/ajax-loader100_2.gif) no-repeat 0 0;
-            display: block;
-        }
-
-    }
 
     .popup{
         width: 690px;
@@ -65,22 +44,7 @@
     }
 
 
-    /*.close{
-        width: 16px;
-        height: 15px;
-        position: absolute;
-        top: 18px;
-        right: 12px;
-        background: url(../img/x.png) no-repeat;
-        opacity: .5;
-        filter: alpha(opacity=50);
 
-        &:hover{
-
-            opacity: 1;
-            filter: alpha(opacity=1);
-        }
-    }*/
     .header-popap{
         padding: 0 0 28px 0;
         font-size: 30px;
@@ -122,17 +86,9 @@
             position: relative;
             text-align: left;
 
-            /*&:hover{
-                background-color: #9fcae5;
-                border: 1px solid #878787;
-                color: @color-white1;
 
-                .caret1{
-                    color:  @color-white1;
-                }
-            }*/
         }
-        //.dropdown-menu,
+
         .file_upload{
             width: 100%;
         }
@@ -150,20 +106,12 @@
             }
 
         }
-        /*.caret1{
-            position: absolute;
-            top: 15px;
-            right: 10px;
-            //float: right;
-            //margin: 0 10px 0 0;
-            color:  #5f5f5f;
-        }*/
+
         .margin-text{
             margin:  48px 0 0 0;
         }
         .option-group:not(#foo) input:checked + label,
-        //.dropdown-menu a:focus,
-        //.dropdown-menu a:hover,
+
         option:hover{
             background-color: #006eb4;
             color: @color-white1;
@@ -210,6 +158,10 @@
             padding: 13px 10px 10px 10px;
             line-height: 1.5;
         }
+
+
+
+
     }
     .step2{
 
@@ -346,16 +298,30 @@
             }
             .option-group:not(#foo) label{
                 height: 50px;
+
+                padding: 10px !important;
                 line-height: 1.45;
             }
+
 
         }
         .step2{
 
             .option-group:not(#foo){
 
+                label{
+                    text-align: left;
+                    padding: 10px 10px 10px 75px!important;
+
+                }
+
                 input:checked + label {
                     background-position: 22px -51px;
+
+                }
+                label[for='optimization'],
+                label[for='redesign']{
+                    line-height: 1.5;
                 }
             }
 
@@ -423,6 +389,7 @@
                 margin-top: 10px;
             }
         }
+
         .step2{
 
             .option-group:not(#foo){
@@ -443,8 +410,13 @@
                     }
 
                 }
+                label[for="module_plugin"],
+                label[for="code_adjustments"]{
+                    padding: 1px 10px 5px 75px!important;
+                }
 
             }
+
 
         }
         .step6 input {

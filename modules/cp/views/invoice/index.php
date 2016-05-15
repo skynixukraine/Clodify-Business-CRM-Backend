@@ -32,14 +32,13 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
         <tr>
             <th><?=Yii::t('app', 'ID')?> </th>
             <th><?=Yii::t('app', 'Client Name')?></th>
+            <th><?=Yii::t('app', 'Contract')?></th>
             <th><?=Yii::t('app', 'Subtotal')?></th>
             <th><?=Yii::t('app', 'Discount')?></th>
             <th><?=Yii::t('app', 'Total')?></th>
-            <th><?=Yii::t('app', 'Date Start')?></th>
-            <th><?=Yii::t('app', 'Date End')?></th>
-            <th><?=Yii::t('app', 'Date Create')?></th>
-            <th><?=Yii::t('app', 'Date Sent')?></th>
-            <th><?=Yii::t('app', 'Date Paid')?></th>
+            <th><?=Yii::t('app', 'Created')?></th>
+            <th><?=Yii::t('app', 'Sent')?></th>
+            <th><?=Yii::t('app', 'Paid')?></th>
             <th><?=Yii::t('app', 'Status')?></th>
             <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
                 <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>

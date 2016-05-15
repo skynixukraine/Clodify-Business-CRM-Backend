@@ -146,7 +146,7 @@ class IndexController extends DefaultController
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this report as
                                                                                 invoice has been generated"));
-                    return $this->render('index' ,['model' => $model]);
+                    return $this->redirect('index' ,['model' => $model]);
                 }
             }
         //}else{

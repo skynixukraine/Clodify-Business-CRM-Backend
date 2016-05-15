@@ -102,6 +102,9 @@ class TeammateController extends DefaultController
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter(Team::tableName() . '.is_deleted=0');
+       /* if(User::hasPermission([User::ROLE_DEV])){
+            $dataTable->setFilter(Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
+        }*/
 
 
         $activeRecordsData = $dataTable->getData();
@@ -258,7 +261,7 @@ class TeammateController extends DefaultController
     {
         if ($correctRole = User::hasPermission([User::ROLE_PM, User::ROLE_DEV])) {
             $isInTeam = in_array($teamId, User::getUserTeams(Yii::$app->user->identity->getId(), true));
-            return $correctRole && $isInTeam;
+            return $isInTeam;
         }
         return true;
     }

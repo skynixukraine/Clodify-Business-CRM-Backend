@@ -5,6 +5,7 @@
 var Portfolio  = (function(){
 
     var htmlPage,
+        body,
         htmlHeight,
         htmlWidth,
         portfolio = [],
@@ -23,82 +24,51 @@ var Portfolio  = (function(){
         elem = 0,
         pars,
         dataHref,
-        dataImages,
+        nofollow,
+        dataImages = [],
         img = [],
         numImg = 0,
         viewport,
         timestop,
-        stop = true;
+        stop = true,
+        openProject,
+        frontMask,
+        canBePressed = true,
+        portfolioPage;
 
     function runPopap(el){
+
+
+
+        htmlHeight      = htmlPage.height();
+        canBePressed = false;
+
+
+        txtPopap    = el.find('.info-box-hidden');
+        dataHref    = el.find('a').attr('data-href');
+        nofollow    = el.find('a').attr('rel');
+        openProject =  el.data('data-project-number');
 
         headerPopap.html("");
         viewport.html("");
         infoBox.html("");
-        img             = [];
-        htmlHeight      = htmlPage.height();
         bodyPopap.animate({opacity: 0},0);
 
 
-
         headerPopap.html((el.find('h3')).html());
-        dataImages = el.find('a').attr('data-images');
-        pars = dataImages.split(", ");
-
-        for (var i in pars) {
-
-            img[i] = new Image();
-            img[i].src = 'images/' + pars[i];
-
-            img[i].setAttribute('width', '690');
-            img[i].setAttribute('height', '380');
-
-            //viewport.append("<img width=\"690\" height=\"380\"src="+ img[i] +">");
-
-        }
-
-        viewport.html(img[0]);
+        viewport.html(img[openProject]);
         bodyPopap.animate({opacity: 1},500);
-
         //viewport.fadeIn(500);
-        console.log('img.length ', img.length);
-        if(img.length > 1){
 
-            stop = false;
-            numImg = 0;
-            demoslides();
+        /*if(img.length > 1){
 
+         stop = false;
+         numImg = 0;
+         demoslides();
+         }*/
 
-        }
-
-
-
-        function demoslides(){
-
-            viewport.animate({opacity: 0.5},0);
-            viewport.find("img").replaceWith(img[numImg]);
-            viewport.animate({opacity: 1},500);
-
-            numImg++;
-
-            if (numImg == img.length){
-
-                numImg = 0;
-            }
-
-            if(stop != true ) {
-
-                timestop = setTimeout(demoslides, 5000);
-
-            }
-
-        }
-
-        txtPopap = el.find('.info-box-hidden');
         infoBox.html(txtPopap.clone());
 
-
-        dataHref = el.find('a').attr('data-href');
 
         if(dataHref){
 
@@ -108,6 +78,13 @@ var Portfolio  = (function(){
         }else{
 
             btnPopupVisit.css('display', 'none');
+        }
+        if(nofollow){
+
+            btnPopupVisit.attr('rel', "nofollow");
+
+        }else{
+            btnPopupVisit.removeAttr('rel');
         }
 
 
@@ -134,7 +111,35 @@ var Portfolio  = (function(){
             viewport.css('width', 100 +"%");
         }
 
+        setTimeout(canBePressedRun, 500);
 
+        function canBePressedRun(){
+
+            canBePressed = true;
+        }
+
+
+
+        function demoslides(){
+
+            viewport.animate({opacity: 0.5},0);
+            viewport.find("img").replaceWith(img[numImg]);
+            viewport.animate({opacity: 1},500);
+
+            numImg++;
+
+            if (numImg == img.length){
+
+                numImg = 0;
+            }
+
+            if(stop != true ) {
+
+                timestop = setTimeout(demoslides, 5000);
+
+            }
+
+        }
         return false
     }
 
@@ -146,8 +151,10 @@ var Portfolio  = (function(){
 
         init: function(){
             htmlPage            = $(window);
+            body                =$("body, html");
+            portfolioPage       =$('#portfolio');
             portfolio           = $('.portfolio-sample');
-            btnRunPopap         = portfolio.find('a');
+            btnRunPopap         = portfolio.find('[data-images]');
             bgForPopup          = $('#view_portfolio');
             popup               = bgForPopup.find('.popup');
             headerPopap         = popup.find('.header-popap');
@@ -159,6 +166,7 @@ var Portfolio  = (function(){
             btnPrev             = portfolioImgBox.find('.prev');
             btnNext             = portfolioImgBox.find('.next');
             btnPopupVisit       = popup.find('.read-more');
+            frontMask           = bgForPopup.find('.front-mask');
 
 
 
@@ -166,15 +174,56 @@ var Portfolio  = (function(){
             widthPage();
 
 
+
+            for(var i=0; i < portfolio.length; i++){
+
+                portfolio.eq(i).data("data-project-number", i);
+            }
+
+
             btnRunPopap.click(function(event){
 
+                var index = 0;
                 event.preventDefault();
-
                 el=$(event.target);
-
                 el = el.closest('.portfolio-sample');
 
-                runPopap(el);
+
+
+                if(img.length == 0){
+
+                    frontMask.css('display', 'block' );
+                    for (var i = 0;  i < btnRunPopap.length; i++) {
+
+                        dataImages.push(btnRunPopap.eq(i).attr('data-images'));
+                        pars = dataImages[i].split(", ");
+
+                        for (var ii in pars) {
+
+                            img[index] = new Image();
+                            img[index].src = '../images/' + pars[ii];
+                            img[index].setAttribute('width', '690');
+                            img[index].setAttribute('height', '380');
+                            index +=1;
+
+                        }
+
+                    }
+
+                    $(img).eq(img.length-1).one("load", function() {
+
+                        frontMask.css('display', 'none' );
+                        runPopap(el);
+                    });
+                    dataImages.length = 0;
+
+
+                }else{
+
+                    runPopap(el);
+                }
+
+
                 return false;
 
             });
@@ -182,21 +231,23 @@ var Portfolio  = (function(){
             btnPrev.click(function(event) {
 
                 event.preventDefault();
+
+                if(!canBePressed){
+
+                    return false;
+                }
                 stop = true;
                 clearTimeout(timestop);
 
 
-                el = portfolio.eq(elem);
-
-
-                elem = elem - 1;
+                elem = openProject - 1;
 
                 if(elem < 0 ){
 
                     elem = portfolio.length - 1;
                 }
 
-
+                el = portfolio.eq(elem);
 
                 runPopap(el);
 
@@ -206,20 +257,26 @@ var Portfolio  = (function(){
             btnNext.click(function(event) {
 
                 event.preventDefault();
+
+                if(canBePressed == false){
+
+                    return false;
+                }
+
                 clearTimeout(timestop);
 
                 stop = true;
                 //viewport.fadeOut();
 
-                el = portfolio.eq(elem);
-
-
-                elem = elem + 1;
+                elem = openProject + 1;
 
                 if(elem > (portfolio.length - 1) ){
 
                     elem = 0;
                 }
+
+                el = portfolio.eq(elem);
+
 
                 runPopap(el);
 
@@ -239,11 +296,36 @@ var Portfolio  = (function(){
 
             });
 
+            //to scroll to the section Portfolio
+            htmlPage.on("hashchange", function() {
+
+                if(location.href.indexOf("#portfolio") > 0){
+
+                    body.animate({scrollTop: 0}, 0);
+                    body.animate({scrollTop: portfolioPage.position().top - 80},600);
+                }
+
+                return false;
+            });
+            if(location.href.indexOf("#portfolio") > 0){
+
+                body.animate({scrollTop: portfolioPage.position().top - 80},600);
+
+            }
+            //End to scroll to the section Portfolio
+
+
         }
     }
 
 })();
 
-addEventListener("load", Portfolio.init);
+
+$(function(){
+
+    Portfolio.init();
+
+});
+
 
 
