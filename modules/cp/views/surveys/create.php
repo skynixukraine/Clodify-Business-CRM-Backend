@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 use yii\widgets;
 use kartik\datetime\DateTimePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
-use app\models\Surveys;
+use app\models\Survey;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -166,8 +166,5 @@ $this->params['breadcrumbs'][]  = $this->title;
                 </div>
 
     </div>
-
-
-</div>
 <?php ActiveForm::end();?>
 

@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets;
 use yii\widgets\ActiveForm;
+use app\models\Survey;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -24,7 +25,7 @@ $this->params['menu'] = [];
 <?php $form = ActiveForm::begin();?>
 <div class="row">
     <div class="col-md-6">
-        <?php /** @var $model \app\models\Surveys */?>
+        <?php /** @var $model \app\models\Survey */?>
         <span> Result:<!-- --><?php /*echo $model->result;*/?> people took a part in this survey<span>
     </div>
 </div>
