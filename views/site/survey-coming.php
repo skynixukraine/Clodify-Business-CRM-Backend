@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 /**
  * @var $survey \app\models\SurveysOption
- * @var $model \app\models\Surveys
+ * @var $model \app\models\Survey
  */
 $this->title = $model->question;
 ?>

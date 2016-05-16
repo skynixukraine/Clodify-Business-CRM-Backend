@@ -6,7 +6,7 @@
  * Time: 15:58
  */
 namespace app\modules\cp\controllers;
-use app\models\Surveys;
+use app\models\Survey;
 use app\models\SurveysOption;
 use app\models\User;
 use yii\base\Model;
@@ -45,12 +45,12 @@ class SurveysController extends DefaultController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'     => ['get', 'post'],
-                    'find'      => ['get'],
-                    'create'    =>['get', 'post'],
-                    'edit'      =>['get', 'post'],
-                    'delete'    => ['delete'],
-                    'code'         => ['get', 'post']
+                    'index'     =>   ['get', 'post'],
+                    'find'      =>   ['get'],
+                    'create'    =>   ['get', 'post'],
+                    'edit'      =>   ['get', 'post'],
+                    'delete'    =>   ['delete'],
+                    'code'      =>   ['get', 'post']
 
                 ],
             ],
@@ -68,7 +68,7 @@ class SurveysController extends DefaultController
         $dateStart          = Yii::$app->request->getQueryParam("date_start");
         $dateEnd            = Yii::$app->request->getQueryParam("date_end");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        $query              = Surveys::find();
+        $query              = Survey::find();
 
         $columns        = [
             'id',
@@ -91,7 +91,7 @@ class SurveysController extends DefaultController
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-        $dataTable->setFilter(Surveys::tableName() . '.is_delete=0');
+        $dataTable->setFilter(Survey::tableName() . '.is_delete=0');
         /*if($dateEnd && $dateEnd != null){
 
             $dataTable->setFilter('date_end <= "' . DateUtil::convertData($dateEnd). '"');
@@ -100,13 +100,13 @@ class SurveysController extends DefaultController
         $dataTable->setFilter('user_id = ' . Yii::$app->user->id);
         $activeRecordsData = $dataTable->getData();
         $list = array();
-        /** @var $model \app\models\Surveys */
+        /** @var $model \app\models\Survey */
         foreach ( $activeRecordsData as $model ) {
 
             $list[] = [
                 $model->id,
                 $model->shortcode,
-                $model->question,
+                $model->question, 
                 $model->date_start,
                 $model->date_end,
                 $model->is_private,
@@ -130,7 +130,7 @@ class SurveysController extends DefaultController
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_FIN] ) ) {
 
-            $model  = new Surveys();
+            $model  = new Survey();
             $cycles = 0;
             $num    = 2;
             do{
@@ -234,7 +234,7 @@ class SurveysController extends DefaultController
 
                 /*///////////////////////////////////////////////////*/
 
-                $model  = Surveys::find()
+                $model  = Survey::find()
                     ->where("id=:iD",
                         [
                             ':iD' => $id
@@ -244,7 +244,7 @@ class SurveysController extends DefaultController
                 /*if(!$survayOptions){
                     $survayOptions = [new SurveysOption()];
                 }*/
-                /** @var $model Surveys */
+                /** @var $model Survey */
                 if( $model->is_delete == 0) {
 
 
@@ -327,8 +327,8 @@ class SurveysController extends DefaultController
 
             if ( ( $id = Yii::$app->request->post("id") ) ) {
 
-                /** @var  $model Surveys */
-                $model  = Surveys::findOne( $id );
+                /** @var  $model Survey */
+                $model  = Survey::findOne( $id );
                 if ($model->user_id = Yii::$app->user->id){
                     $model->is_delete = 1;
                     $model->save(true, ['is_delete']);
@@ -355,8 +355,8 @@ class SurveysController extends DefaultController
 
             if ( ( $shortcode = Yii::$app->request->post("shortcode") ) ) {
 
-                /** @var  $model Surveys */
-                $model  = Surveys::findOne( $shortcode );
+                /** @var  $model Survey */
+                $model  = Survey::findOne( $shortcode );
                 return $this->render('/s/', ["model" => $model]);
             }
 
@@ -369,18 +369,5 @@ class SurveysController extends DefaultController
         }
     }
 
-    public function actionResults()
-    {
-        /** @var  $model Surveys*/
-        /*$model = Surveys::findOne(['user_id' => 1]);
-        if($model -> user_id ){
-            $model -> result = Surveys::find()->sum('user_id');
-
-
-        }*/
-            /*return $this->render(['model' => $model]);*/
-            return $this->render('results');
-
-    }
 
 }

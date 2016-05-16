@@ -18,7 +18,7 @@ use Yii;
  * @property integer $total_votes
  * @property integer $is_delete
  */
-class Surveys extends \yii\db\ActiveRecord
+class Survey extends \yii\db\ActiveRecord
 {
     const SKYNIX_SURVEY_COOKIE = 'SKYNIX_SURVEY';
 

@@ -2,7 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\Surveys;
+use app\models\Survey;
+use app\models\SurveyVoter;
 use app\models\SurveysOption;
 use Faker\Provider\tr_TR\DateTime;
 use Yii;
@@ -275,8 +276,8 @@ class SiteController extends Controller
     }
     public function actionSurvey($shortcode)
     {
-        /** @var  $model Surveys*/
-        $model = Surveys::find()
+        /** @var  $model Survey*/
+        $model = Survey::find()
                         ->where(['shortcode' => $shortcode])
                         ->one();
         if ($model != null) {
@@ -330,9 +331,9 @@ class SiteController extends Controller
     public function actionSubmitSurvey()
     {
         $data = ['success' => false];
-        /** @var $surveyModel Surveys */
+        /** @var $survey Model Survey */
         if ( ($id           = Yii::$app->request->post('id')) &&
-                ( $surveyModel  = Surveys::findOne($id) ) &&
+                ( $surveyModel  = Survey::findOne($id) ) &&
                 ( $answer       = Yii::$app->request->post('answer')) &&
                 $surveyModel->isLive() &&
                 $surveyModel->canVote()

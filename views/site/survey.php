@@ -11,13 +11,12 @@ use yii\helpers\Url;
 
 /**
  * @var $survey \app\models\SurveysOption
- * @var $model \app\models\Surveys
+ * @var $model \app\models\Survey
  */
 
 $this->title = $model->question;
 $canVote     = $model->canVote();
 $usersVote   = $model->getUsersVote();
-///var_dump($usersVote); exit;
 ?>
 
 <?php $this->registerJsFile('/js/survey.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
@@ -61,8 +60,13 @@ $usersVote   = $model->getUsersVote();
           </div>
             <?php endforeach ?>
         </fieldset>
-        <?php if ( $canVote ) : ?>
-            <input type="submit" id="submit" class="sub" value="Проголосувати" disabled>
+        <?php if ( $canVote )  : ?>
+            <?php if (\app\components\Language::getLanguage() == 'en'):?>
+                <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Vote')?>" disabled>
+            <?php endif;?>
+            <?php if (\app\components\Language::getLanguage() == 'ua'):?>
+                <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Проголосувати')?>" disabled>
+            <?php endif;?>
         <?php endif;?>
         </form>
        
