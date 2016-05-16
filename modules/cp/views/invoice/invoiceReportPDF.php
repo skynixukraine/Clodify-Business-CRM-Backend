@@ -52,19 +52,19 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
     <tr>
         <th colspan="1" width="50" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
          font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            <strong>Number</strong>
+            <strong>#</strong>
         </th>
         <th colspan="1" width="100" height="12" valign="top" style="padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center; border: 1px solid darkgray;">
-            <strong>Developer Name</strong>
+            <strong>Developer</strong>
         </th>
         <th colspan="1" width="100" height="12" valign="top" style="padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center; border: 1px solid darkgray;">
-            <strong>Project Name</strong>
+            <strong>Project</strong>
         </th>
         <th colspan="1" width="80" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            <strong>Reported Date</strong>
+            <strong>Date</strong>
         </th>
         <th colspan="1" width="200" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">

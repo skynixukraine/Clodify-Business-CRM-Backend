@@ -187,6 +187,7 @@ class Invoice extends \yii\db\ActiveRecord
                         ':start'    => DateUtil::convertData($date_start),
                         ':end'      => DateUtil::convertData($date_end),
                     ])
+            ->orderBy(Report::tableName() . '.date_report asc')
                 ->all();
         //var_dump($result);exit();
         return $result;
