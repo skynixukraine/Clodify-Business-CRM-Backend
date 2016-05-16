@@ -106,7 +106,7 @@ class SurveysController extends DefaultController
             $list[] = [
                 $model->id,
                 $model->shortcode,
-                $model->question, 
+                $model->question,
                 $model->date_start,
                 $model->date_end,
                 $model->is_private,
