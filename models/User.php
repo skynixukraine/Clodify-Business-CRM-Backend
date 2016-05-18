@@ -7,7 +7,11 @@ use Yii;
 use yii\web\IdentityInterface;
 use yii\db\Expression;
 use yii\db\ActiveQuery;
+<<<<<<< HEAD
+use yii\web\UploadedFile;
+=======
 
+>>>>>>> e8683501efc6d1459b3bf4d12d2c3fb8eb0e7812
 /**
  * This is the model class for table "users".
  *
@@ -35,6 +39,8 @@ use yii\db\ActiveQuery;
  * @property integer $total_paid_hours
  * @property string $invite_hash
  * @property integer $is_delete
+ * @property string $photo
+ * @property string $sing
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -83,6 +89,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             ['password', 'match', 'pattern' => '/^\S*$/i'],
+            [['photo', 'sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
 
         ];
     }
@@ -432,6 +439,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
 
     }
+<<<<<<< HEAD
+    public function upload(){
+=======
+>>>>>>> e8683501efc6d1459b3bf4d12d2c3fb8eb0e7812
+
 
 
 
