@@ -434,12 +434,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
 
     }
-    public function upload(){
-        if ($this->validate()) {
-            $this->photo->saveAs('uploads/' . $this->photo->baseName . '.' . $this->photo->extension);
-            return true;
-        } else {
-            return false;
-        }
+
+
+    public static function setUserPhoto($fileName)
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        $user->photo = $fileName;
+        $user->save(true, ['photo']);
+
     }
 }
