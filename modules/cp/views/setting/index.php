@@ -122,11 +122,6 @@ $this->params['menu'] = [
                 ],
             ]);
         ?>
-       <!-- <form action="data/" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
-        </form>-->
-
-        <!-------------------------------------------------------------------------->
 
         </div>
         <div id="tab_3" class="tab-pane" >
@@ -136,9 +131,29 @@ $this->params['menu'] = [
                 'options' => [
                     'url'   =>'uploaded',
                     'maxFilesize' => '2',
+                    'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
                 ],
                 'clientEvents' => [
-                    'complete' => "function(file){console.log(file)}",
+                    'complete' => "function(file){
+                    $(file.previewElement).on('click', function(){
+                            params = {
+                                url: '". Yii::$app->getUrlManager()->getBaseUrl() . "sing',
+                                data: {
+                                    sing: file.name
+                                },
+                                method: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert('Now its your default photo');
+                                    } else {
+                                        alert('Error! ' + response.error)
+                                    }
+                                }
+                            }
+                            $.ajax(params);
+                        })
+                    }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
                 ],
             ]);

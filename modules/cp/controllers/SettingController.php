@@ -34,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -49,6 +49,7 @@ class SettingController extends DefaultController
                     'upload'    => ['get', 'post'],
                     'uploaded'  => ['get', 'post'],
                     'photo'     => ['get', 'post'],
+                    'sing'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -134,8 +135,6 @@ class SettingController extends DefaultController
         }
     public function actionUploaded()
     {
-
-        if (Yii::$app->request->isPost) {
             $fileName = 'file';
             $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
             if (!is_dir($path)) {
@@ -156,7 +155,7 @@ class SettingController extends DefaultController
                     return $this->render('index');
                 }
             }
-        }
+
     }
 
     public function actionPhoto()
@@ -165,6 +164,19 @@ class SettingController extends DefaultController
         try {
             $request = Yii::$app->getRequest()->post();
             User::setUserPhoto($request['photo']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+    public function actionSing()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserPhoto($request['sing']);
             $result['success'] = true;
         } catch (\Exception $e) {
             $result['error'] = $e->getMessage();
