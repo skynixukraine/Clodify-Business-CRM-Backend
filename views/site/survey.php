@@ -73,7 +73,7 @@ $usersVote   = $model->getUsersVote();
     </section>
      <div class = "loader">
             <img src="/img/loader.gif" >
-     </div>
+     </div>     
 
 
 <?php
