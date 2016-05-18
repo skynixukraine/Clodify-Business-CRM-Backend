@@ -36,5 +36,9 @@ class Dropzone extends \kato\DropZone
     public $dropzoneContainer = 'myDropzone1';
     public $previewsContainer = 'previews1';
     public $autoDiscover = false;
+<<<<<<< HEAD
 >>>>>>> 8e200edd53e12825339da886503cede101e8992d
 }
+=======
+}  
+>>>>>>> 16b059b4a4b20f32097821090a1c4a03e7dc8d58
