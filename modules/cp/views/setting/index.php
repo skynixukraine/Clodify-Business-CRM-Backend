@@ -151,7 +151,7 @@ $this->params['menu'] = [
         <div id="tab_3" class="tab-pane" >
 
             <?php
-            echo \kato\DropZone::widget([
+            echo \app\models\Dropzone::widget([
                 'options' => [
                     'url'   =>'uploaded',
                     'maxFilesize' => '2',
