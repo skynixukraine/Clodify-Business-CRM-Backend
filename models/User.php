@@ -6,7 +6,8 @@ use app\modules\cp\controllers\IndexController;
 use Yii;
 use yii\web\IdentityInterface;
 use yii\db\Expression;
-
+use yii\db\ActiveQuery;
+use yii\web\UploadedFile;
 /**
  * This is the model class for table "users".
  *
@@ -34,6 +35,8 @@ use yii\db\Expression;
  * @property integer $total_paid_hours
  * @property string $invite_hash
  * @property integer $is_delete
+ * @property string $photo
+ * @property string $sing
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -70,6 +73,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['role'], 'string'],
             [['password', 'email', 'first_name', 'last_name', 'role'], 'required'],
+            [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique'],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
@@ -81,6 +85,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             ['password', 'match', 'pattern' => '/^\S*$/i'],
+            [['photo', 'sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
 
         ];
     }
@@ -430,10 +435,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
 
     }
-    public static function getReport()
-    {
+    public function upload(){
 
     }
+
 
 
 }

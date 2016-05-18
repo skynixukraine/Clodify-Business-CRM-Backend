@@ -240,5 +240,16 @@ class Report extends \yii\db\ActiveRecord
         //exit();
 
     }
+    /*the total amount report for the current week*/
+    public static function getReportHours($currUser)
+    {
+        return self::find()
+            ->where ('TO_DAYS(NOW()) - TO_DAYS(date_report) <= 7 AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser] )->sum('hours');
+    }
+    public static function getReportHoursMonth($currUser){
+
+        return self::find()
+            ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser])->sum('hours');
+    }
 
 }
