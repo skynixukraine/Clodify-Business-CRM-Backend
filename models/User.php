@@ -7,7 +7,11 @@ use Yii;
 use yii\web\IdentityInterface;
 use yii\db\Expression;
 use yii\db\ActiveQuery;
+<<<<<<< HEAD
 use yii\web\UploadedFile;
+=======
+
+>>>>>>> e8683501efc6d1459b3bf4d12d2c3fb8eb0e7812
 /**
  * This is the model class for table "users".
  *
@@ -435,9 +439,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
 
     }
+<<<<<<< HEAD
     public function upload(){
+=======
+>>>>>>> e8683501efc6d1459b3bf4d12d2c3fb8eb0e7812
 
-    }
 
 
 
