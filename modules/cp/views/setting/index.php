@@ -29,13 +29,8 @@ $this->params['menu'] = [
 <div class="nav-tabs-custom">
 <ul class="nav nav-tabs">
     <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
-<<<<<<< HEAD
     <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
     <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
-=======
-    <li><a href="#tab_2" data-toggle="tab">Sign</a></li>
-    <li><a href="#tab_3" data-toggle="tab">Tab 3</a></li>
->>>>>>> e8683501efc6d1459b3bf4d12d2c3fb8eb0e7812
 </ul>
 <div class="tab-content">
         <div id="tab_1" class="tab-pane active">
