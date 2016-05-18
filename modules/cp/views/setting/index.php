@@ -34,37 +34,41 @@ $this->params['menu'] = [
 </ul>
 <div class="tab-content">
         <div id="tab_1" class="tab-pane active">
-            <span>Hello <?php echo $model->first_name?> <?php echo Yii::$app->user->identity->role?> </span>.<br/>
+            <span>Hello <?php echo $model->first_name?>.
+                <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                    <?php echo Yii::$app->user->identity->role?> </span>.<br/>
+                <?php endif?>
             <span>You are joined Skynix at <?php echo $model->date_signup?></span>.<br/>
             <span>Last time you visited Skynix at <?php echo $model->date_login?></span>.<br/>
+            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                <span>Today you have reported
 
-            <span>Today you have reported
+                    <?php $hoursReportThisDay = Report::sumHoursReportsOfThisDay(Yii::$app->user->id, date('Y-m-d'));
+                        if($hoursReportThisDay == null) {
+                            echo '0';
+                        }else {
+                            echo $hoursReportThisDay;
+                        }?> hours
+                </span><br/>
 
-                <?php $hoursReportThisDay = Report::sumHoursReportsOfThisDay(Yii::$app->user->id, date('Y-m-d'));
-                    if($hoursReportThisDay == null) {
-                        echo '0';
-                    }else {
-                        echo $hoursReportThisDay;
-                    }?> hours
-            </span><br/>
+                <span>This week you have reported
 
-            <span>This week you have reported
-
-                <?php $hoursReportThisWeek = Report::getReportHours(Yii::$app->user->id, date('Y-m-d') );
-                    if($hoursReportThisWeek == null) {
-                        echo '0';
-                    }else {
-                        echo $hoursReportThisWeek;
-                    }?> hours
-            </span><br/>
-            <span>This month you have reported
-                <?php $hoursReportThisMonth = Report::getReportHoursMonth(Yii::$app->user->id, date('Y-m-d'));
-                    if($hoursReportThisMonth == null) {
-                        echo '0';
-                    }else {
-                        echo $hoursReportThisMonth;
-                    }?> hours
-            </span><br/>
+                    <?php $hoursReportThisWeek = Report::getReportHours(Yii::$app->user->id, date('Y-m-d') );
+                        if($hoursReportThisWeek == null) {
+                            echo '0';
+                        }else {
+                            echo $hoursReportThisWeek;
+                        }?> hours
+                </span><br/>
+                <span>This month you have reported
+                    <?php $hoursReportThisMonth = Report::getReportHoursMonth(Yii::$app->user->id, date('Y-m-d'));
+                        if($hoursReportThisMonth == null) {
+                            echo '0';
+                        }else {
+                            echo $hoursReportThisMonth;
+                        }?> hours
+                </span><br/>
+            <?php endif?>
             <span>If you need to change your password or change email <a href="#"> click here</a></span><br/>
 
             <?php $form = ActiveForm::begin();?>

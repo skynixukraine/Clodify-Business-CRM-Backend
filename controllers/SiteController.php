@@ -280,52 +280,52 @@ class SiteController extends Controller
         $model = Survey::find()
                         ->where(['shortcode' => $shortcode])
                         ->one();
-        if ($model != null) {
 
-                if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
+            if ($model != null) {
 
-                    Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
-                    return $this->redirect(['login']);
+                    if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
 
-                } else {
-
-                    if ( $model->isLive() ) {
-
-                        return $this->render('survey', [
-                            'model' => $model,
-                        ]);
+                        Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
+                        return $this->redirect(['login']);
 
                     } else {
 
-                        $now = strtotime('now');
+                        if ( $model->isLive() ) {
 
-                        //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
-                        //var_dump(date("Y-m-d H:i:s", $now));
-                        //exit;
-                        if ( $now < strtotime( $model->date_start ) ) {
-
-                            return $this->render('survey-coming', [
+                            return $this->render('survey', [
                                 'model' => $model,
                             ]);
 
                         } else {
 
-                            return $this->render('survey-results', [
-                                'model' => $model,
-                            ]);
+                            $now = strtotime('now');
+
+                            //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
+                            //var_dump(date("Y-m-d H:i:s", $now));
+                            //exit;
+                            if ( $now < strtotime( $model->date_start ) ) {
+
+                                return $this->render('survey-coming', [
+                                    'model' => $model,
+                                ]);
+
+                            } else {
+
+                                return $this->render('survey-results', [
+                                    'model' => $model,
+                                ]);
+
+                            }
 
                         }
 
                     }
 
-                }
+            }else{
 
-        }else{
+                throw new NotFoundHttpException('The survey has not been found');
 
-            throw new NotFoundHttpException('The survey has not been found');
-
-        }
-        return $this->render('survey');
+            }
     }
 
     public function actionSubmitSurvey()
