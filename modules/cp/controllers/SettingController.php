@@ -133,29 +133,30 @@ class SettingController extends DefaultController
         }
     public function actionUploaded()
     {
-        $fileName = 'file';
-        $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
-        if (!is_dir($path))
-        {
-            mkdir($path, 0777, true);
-        }
 
-        if (isset($_FILES[$fileName])) {
-            $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+        if (Yii::$app->request->isPost) {
+                $fileName = 'file';
+                $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
+                if (!is_dir($path)) {
+                    mkdir($path, 0777, true);
+                }
 
-            //Print file data
-            //print_r($file);
+                if (isset($_FILES[$fileName])) {
+                    $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
-            if ($file->saveAs($path . '/' . $file->name)) {
-                //Now save file data to database
+                    //Print file data
+                    //print_r($file);
 
-                echo \yii\helpers\Json::encode($file);
-            }else{
-                return $this->render('index');
+                    if ($file->saveAs($path . '/' . $file->name)) {
+                        //Now save file data to database
+
+                        echo \yii\helpers\Json::encode($file);
+                    } else {
+                        return $this->render('index');
+                    }
+                }
+
+                return false;
             }
-        }
-
-        return false;
     }
-
 }

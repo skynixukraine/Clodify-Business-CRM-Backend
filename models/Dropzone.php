@@ -16,4 +16,4 @@ class Dropzone extends \kato\DropZone
     public $dropzoneContainer = 'myDropzone1';
     public $previewsContainer = 'previews1';
     public $autoDiscover = false;
-}  
+}

@@ -86,7 +86,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             ['password', 'match', 'pattern' => '/^\S*$/i'],
-            [['photo', 'sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
 
         ];
     }
@@ -434,5 +433,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $result) . '")')
             ->all();
 
+    }
+    public function upload(){
+        if ($this->validate()) {
+            $this->photo->saveAs('uploads/' . $this->photo->baseName . '.' . $this->photo->extension);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
