@@ -14,6 +14,7 @@ use app\models\ProjectDeveloper;
 use app\models\Report;
 use app\components\DateUtil;
 use kato\DropZone;
+use yii\helpers\FileHelper;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -89,7 +90,8 @@ $this->params['menu'] = [
 
         </div>
     <div id="tab_2" class="tab-pane">
-
+        <?php echo $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/');?>
+        <?php /*var_dump($files); exit();*/?>
         <?php
             echo \kato\DropZone::widget([
                 'options' => [
@@ -125,7 +127,7 @@ $this->params['menu'] = [
 
         </div>
         <div id="tab_3" class="tab-pane" >
-
+            <?php $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');?>
             <?php
             echo \app\models\Dropzone::widget([
                 'options' => [

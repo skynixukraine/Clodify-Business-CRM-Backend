@@ -135,6 +135,11 @@ class SettingController extends DefaultController
         }
     public function actionUploaded()
     {
+        $pathuser = __DIR__ . '/../../../data/' . Yii::$app->user->id;
+        if ( file_exists( $pathuser) &&  file_exists( $pathuser . '/sing/')) {
+
+
+        }else{
             $fileName = 'file';
             $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
             if (!is_dir($path)) {
@@ -155,7 +160,7 @@ class SettingController extends DefaultController
                     return $this->render('index');
                 }
             }
-
+        }
     }
 
     public function actionPhoto()
