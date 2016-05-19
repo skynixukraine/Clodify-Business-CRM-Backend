@@ -86,7 +86,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             ['password', 'match', 'pattern' => '/^\S*$/i'],
-            [['photo', 'sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
 
         ];
     }
@@ -433,6 +432,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $teamsus = Teammate::find()
             ->where(Teammate::tableName() . '.team_id IN ("' . implode(', ', $result) . '")')
             ->all();
+
+    }
+
+    public static function setUserPhoto($fileName)
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        $user->photo = $fileName;
+        $user->save(true, ['photo']);
+
+    }
+
+    public static function setUserSing($fileName)
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        $user->sing = $fileName;
+        $user->save(true, ['sing']);
 
     }
 }

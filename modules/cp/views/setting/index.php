@@ -14,6 +14,7 @@ use app\models\ProjectDeveloper;
 use app\models\Report;
 use app\components\DateUtil;
 use kato\DropZone;
+use yii\helpers\FileHelper;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -31,7 +32,9 @@ $this->params['menu'] = [
     <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
     <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
     <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
+    <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
 </ul>
+    <?php $form = ActiveForm::begin();?>
 <div class="tab-content">
         <div id="tab_1" class="tab-pane active">
             <span>Hello <?php echo $model->first_name?>.
@@ -71,8 +74,6 @@ $this->params['menu'] = [
             <?php endif?>
             <span>If you need to change your password or change email <a href="#"> click here</a></span><br/>
 
-            <?php $form = ActiveForm::begin();?>
-
                             <?php /** @var $model User */?>
                             <?php echo $form->field( $model, 'first_name' )->textInput();?>
                             <?php echo $form->field( $model, 'last_name' )->textInput();?>
@@ -85,42 +86,116 @@ $this->params['menu'] = [
                                 <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
 
                             <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
-            <?php ActiveForm::end();?>
+
 
         </div>
-
     <div id="tab_2" class="tab-pane">
-
+       <!-- --><?php /*echo $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/');*/?>
+        <?php /*var_dump($files); exit();*/?>
         <?php
             echo \kato\DropZone::widget([
                 'options' => [
                     'url'   =>'upload',
                     'maxFilesize' => '5',
+                    'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
                 ],
                 'clientEvents' => [
-                    'complete' => "function(file){console.log(file)}",
+                    'complete' => "function(file){
+                    $(file.previewElement).on('click', function(){
+                            params = {
+                                url: '". Yii::$app->getUrlManager()->getBaseUrl() . "photo',
+                                data: {
+                                    photo: file.name
+                                },
+                                method: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert('Now its your default photo');
+                                    } else {
+                                        alert('Error! ' + response.error)
+                                    }
+                                }
+                            }
+                            $.ajax(params);
+                        })
+                    }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
                 ],
             ]);
         ?>
-       <!-- <form action="data/" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
-        </form>-->
 
-        <!-------------------------------------------------------------------------->
+        <script type="text/javascript">
+            $(document).ready(function (){
+                var html = '';
+                <?php $photos = []; ?>
+                <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
+                    <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
+                            html +=
+                                '<div class="dz-preview dz-image-preview">' +
+                                    '<div class="dz-image">' +
+                                        '<img data-dz-thumbnail="" alt="" src="<?php echo $photo ?>" />' +
+                                    '</div>' +
+                                '</div>';
+                    <?php endforeach ?>
+                $('#previews').html(html);
+                <?php endif; ?>
+            });
+        </script>
+
+        </div>
+        <div id="tab_3" class="tab-pane" >
+            <?php /*$files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');*/?>
+            <?php
+            echo \app\models\Dropzone::widget([
+                'options' => [
+                    'url'   =>'uploaded',
+                    'maxFilesize' => '2',
+                    'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
+                ],
+                'clientEvents' => [
+                    'complete' => "function(file){
+                    $(file.previewElement).on('click', function(){
+                            params = {
+                                url: '". Yii::$app->getUrlManager()->getBaseUrl() . "sing',
+                                data: {
+                                    sing: file.name
+                                },
+                                method: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert('Now its your default sing');
+                                    } else {
+                                        alert('Error! ' + response.error)
+                                    }
+                                }
+                            }
+                            $.ajax(params);
+                        })
+                    }",
+                    'removedfile' => "function(file){alert(file.name + ' is removed')}"
+                ],
+            ]);
+            ?>
+
+
+        </div>
+    <div id="tab_4" class="tab-pane">
         <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])):?>
-                <div class="box-body">
-                    <table class="table box">
-                        <thead>
-                        <tr>
-                            <th><?=Yii::t('app', 'Customer')?></th>
-                            <th><?=Yii::t('app', 'Project Name')?></th>
-                            <th><?=Yii::t('app', 'Status')?></th>
-                            <th><?=Yii::t('app', 'Actions')?></th>
-                        </tr>
-                        </thead>
-                        <?php $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
-                        foreach($projects as $project):?>
+            <div class="box-header with-border">
+            <div class="box-body">
+                <table class="table box">
+                    <thead>
+                    <tr>
+                        <th><?=Yii::t('app', 'Customer')?></th>
+                        <th><?=Yii::t('app', 'Project Name')?></th>
+                        <th><?=Yii::t('app', 'Status')?></th>
+                        <th><?=Yii::t('app', 'Actions')?></th>
+                    </tr>
+                    </thead>
+                    <?php $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                    foreach($projects as $project):?>
                         <tbody>
                         <tr>
                             <?php /** @var $project Project */?>
@@ -132,7 +207,7 @@ $this->params['menu'] = [
                                 <td>
                                     <a href='<?= Url::toRoute(['setting/suspend', 'id' => $project->id])?>'>
                                         <i class="fa fa-clock-o suspend" style="cursor: pointer"
-                                        data-toggle="tooltip" data-placement="top" title="Suspend"></i>
+                                           data-toggle="tooltip" data-placement="top" title="Suspend"></i>
                                     </a>
                                 </td>
                             <?php endif;?>
@@ -141,34 +216,26 @@ $this->params['menu'] = [
                                 <td>
                                     <a href='<?= Url::toRoute(['setting/activate', 'id' => $project->id])?>'>
                                         <i class="fa fa-check-square-o activate" style="cursor: pointer"
-                                        data-toggle="tooltip" data-placement="top" title="Activate"></i>
+                                           data-toggle="tooltip" data-placement="top" title="Activate"></i>
                                     </a>
                                 </td>
                             <?php endif;?>
                         </tr>
                         </tbody>
-                        <?php endforeach;?>
-                    </table>
-                </div>
+                    <?php endforeach;?>
+                </table>
+            </div>
+        </div>
         <?php endif;?>
-        </div>
-        <div id="tab_3" class="tab-pane" >
-
-            <?php
-            echo \app\models\Dropzone::widget([
-                'options' => [
-                    'url'   =>'uploaded',
-                    'maxFilesize' => '2',
-                ],
-                'clientEvents' => [
-                    'complete' => "function(file){console.log(file)}",
-                    'removedfile' => "function(file){alert(file.name + ' is removed')}"
-                ],
-            ]);
-            ?>
-
-
-        </div>
-
+    </div>
+    <?php ActiveForm::end();?>
     </div>
 </div>
+<!--<script>
+    $(function() {
+        var myDropzone = new Dropzone("#my-dropzone");
+        myDropzone.on("click", function(file) {
+
+        });
+    });
+</script>-->

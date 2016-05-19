@@ -34,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -47,7 +47,9 @@ class SettingController extends DefaultController
                     'suspend'   => ['get', 'post'],
                     'activate'  => ['get', 'post'],
                     'upload'    => ['get', 'post'],
-                    'uploaded'  => ['get', 'post']
+                    'uploaded'  => ['get', 'post'],
+                    'photo'     => ['get', 'post'],
+                    'sing'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -133,29 +135,60 @@ class SettingController extends DefaultController
         }
     public function actionUploaded()
     {
-        $fileName = 'file';
-        $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
-        if (!is_dir($path))
-        {
-            mkdir($path, 0777, true);
-        }
+        $pathuser = __DIR__ . '/../../../data/' . Yii::$app->user->id;
+        if ( file_exists( $pathuser) &&  file_exists( $pathuser . '/sing/')) {
 
-        if (isset($_FILES[$fileName])) {
-            $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
-            //Print file data
-            //print_r($file);
+        }else{
+            $fileName = 'file';
+            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
 
-            if ($file->saveAs($path . '/' . $file->name)) {
-                //Now save file data to database
+            if (isset($_FILES[$fileName])) {
+                $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
-                echo \yii\helpers\Json::encode($file);
-            }else{
-                return $this->render('index');
+                //Print file data
+                //print_r($file);
+
+                if ($file->saveAs($path . '/' . $file->name)) {
+                    //Now save file data to database
+
+                    echo \yii\helpers\Json::encode($file);
+                } else {
+                    return $this->render('index');
+                }
             }
         }
-
-        return false;
     }
+
+    public function actionPhoto()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserPhoto($request['photo']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+    public function actionSing()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserSing($request['sing']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+
 
 }
