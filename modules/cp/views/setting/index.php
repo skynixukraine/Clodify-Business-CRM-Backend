@@ -125,6 +125,24 @@ $this->params['menu'] = [
             ]);
         ?>
 
+        <script type="text/javascript">
+            $(document).ready(function (){
+                var html = '';
+                <?php $photos = []; ?>
+                <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
+                    <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
+                            html +=
+                                '<div class="dz-preview dz-image-preview">' +
+                                    '<div class="dz-image">' +
+                                        '<img data-dz-thumbnail="" alt="" src="<?php echo $photo ?>" />' +
+                                    '</div>' +
+                                '</div>';
+                    <?php endforeach ?>
+                $('#previews').html(html);
+                <?php endif; ?>
+            });
+        </script>
+
         </div>
         <div id="tab_3" class="tab-pane" >
             <?php $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');?>
@@ -147,7 +165,7 @@ $this->params['menu'] = [
                                 dataType: 'json',
                                 success: function (response) {
                                     if (response.success) {
-                                        alert('Now its your default photo');
+                                        alert('Now its your default sing');
                                     } else {
                                         alert('Error! ' + response.error)
                                     }
