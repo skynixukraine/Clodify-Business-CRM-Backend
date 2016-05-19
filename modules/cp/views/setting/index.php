@@ -90,7 +90,7 @@ $this->params['menu'] = [
 
         </div>
     <div id="tab_2" class="tab-pane">
-        <?php echo $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/');?>
+       <!-- --><?php /*echo $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/');*/?>
         <?php /*var_dump($files); exit();*/?>
         <?php
             echo \kato\DropZone::widget([
@@ -145,7 +145,7 @@ $this->params['menu'] = [
 
         </div>
         <div id="tab_3" class="tab-pane" >
-            <?php $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');?>
+            <?php /*$files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');*/?>
             <?php
             echo \app\models\Dropzone::widget([
                 'options' => [

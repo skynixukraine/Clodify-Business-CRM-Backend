@@ -35,6 +35,7 @@ $this->params['menu'] = [
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
                  $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
              }
+
             if ( User::hasPermission([User::ROLE_PM])){
                  $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
@@ -47,6 +48,16 @@ $this->params['menu'] = [
             }
 
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
+        </div>
+        <div class="col-lg-2">
+            <?php echo Html::label('Users:');
+            if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
+                $users = User::find()->all();
+                $listUsers = User::getCustomersDropDown( $users, 'id' );
+                $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);
+            }
+            echo Html::dropDownList('users', null, $listUsers, ['class'=>"form-control"])
+            ?>
         </div>
         <div class="col-lg-2">
             <?php echo Html::label('From date:');?>

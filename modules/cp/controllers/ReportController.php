@@ -64,6 +64,7 @@ class ReportController extends DefaultController
         $order              = Yii::$app->request->getQueryParam("order");
         $search             = Yii::$app->request->getQueryParam("search");
         $projectId          = Yii::$app->request->getQueryParam("project_id");
+        $usersId            = Yii::$app->request->getQueryParam("user_id");
         $customerId         = Yii::$app->request->getQueryParam("user_id");
         $dateStart          = Yii::$app->request->getQueryParam("date_start");
         $dateEnd            = Yii::$app->request->getQueryParam("date_end");
@@ -104,6 +105,10 @@ class ReportController extends DefaultController
         if($projectId && $projectId != null){
 
             $dataTable->setFilter('project_id=' . $projectId);
+        }
+        if($usersId && $usersId != null){
+
+            $dataTable->setFilter('user_id=' . $usersId);
         }
 
         if($customerId && $customerId != null){
