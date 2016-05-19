@@ -176,7 +176,7 @@ class SettingController extends DefaultController
         $result = [];
         try {
             $request = Yii::$app->getRequest()->post();
-            User::setUserPhoto($request['sing']);
+            User::setUserSing($request['sing']);
             $result['success'] = true;
         } catch (\Exception $e) {
             $result['error'] = $e->getMessage();

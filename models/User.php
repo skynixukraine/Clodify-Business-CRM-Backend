@@ -435,12 +435,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
-
     public static function setUserPhoto($fileName)
     {
         $user = self::findOne(Yii::$app->user->id);
         $user->photo = $fileName;
         $user->save(true, ['photo']);
+
+    }
+
+    public static function setUserSing($fileName)
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        $user->sing = $fileName;
+        $user->save(true, ['sing']);
 
     }
 }
