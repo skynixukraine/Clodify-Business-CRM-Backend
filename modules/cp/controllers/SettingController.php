@@ -62,7 +62,7 @@ class SettingController extends DefaultController
                 ':ID' => Yii::$app->user->id
             ])->one();
 
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
             if ($model->validate()) {
 
@@ -71,7 +71,9 @@ class SettingController extends DefaultController
                 return $this->redirect(['index']);
             }
         }
-        return $this->render("index", ['model' => $model]);
+        $defaultPhoto = User::getUserPhoto();
+        $defaultSing = User::getUserSing();
+        return $this->render("index", ['model' => $model, 'defaultPhoto' => $defaultPhoto, 'defaultSing' => $defaultSing]);
     }
 
 
@@ -135,10 +137,7 @@ class SettingController extends DefaultController
         }
     public function actionUploaded()
     {
-        $pathuser = __DIR__ . '/../../../data/' . Yii::$app->user->id;
-        if ( file_exists( $pathuser) &&  file_exists( $pathuser . '/sing/')) {
 
-        }else{
             $fileName = 'file';
             $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
             if (!is_dir($path)) {
@@ -159,7 +158,7 @@ class SettingController extends DefaultController
                     return $this->render('index');
                 }
             }
-        }
+
     }
 
     public function actionPhoto()
