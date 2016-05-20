@@ -450,4 +450,25 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $user->save(true, ['sing']);
 
     }
+    public static function getUserPhoto()
+    {
+        $userphoto = self::findOne(Yii::$app->user->id);
+        if ($userphoto->photo != null){
+            return $userphoto->photo;
+        }else{
+            return false;
+        }
+
+    }
+    public static function getUserSing()
+    {
+        $usersing = self::findOne(Yii::$app->user->id);
+        if ($usersing->photo != null){
+            return $usersing->photo;
+        }else{
+            return false;
+        }
+
+    }
+
 }

@@ -89,7 +89,6 @@ $this->params['menu'] = [
 
         </div>
     <div id="tab_2" class="tab-pane">
-
         <?php
             echo \kato\DropZone::widget([
                 'options' => [
@@ -100,7 +99,9 @@ $this->params['menu'] = [
                 'clientEvents' => [
                     'complete' => "function(file){
                         $(file.previewElement).on('click', function(){
+                            var img = $(file.previewElement);
                             setAsDefault(file.name);
+                            $(img).css('border', '3px solid blue');
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
@@ -147,8 +148,7 @@ $this->params['menu'] = [
                         dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                                $(img).css('border', '3px solid blue');
-                                alert('Now its your default photo');
+                               /* alert('Now its your default photo')*/;
                             } else {
                                 alert('Error! ' + response.error)
                             }
@@ -156,8 +156,23 @@ $this->params['menu'] = [
                     };
                     $.ajax(params);
                 };
+                    $('#tab_2 img').click(function() {
+
+                        $('#tab_2 img').css('border', "0");
+                        $(this).css('border', '3px solid blue');
+
+                    });
+                $('#tab_3 img').click(function() {
+
+                    $('#tab_3 img').css('border', "0");
+                    $(this).css('border', '3px solid blue');
+
+                });
             });
         </script>
+        <?php  if($photoUser = User::getUserPhoto()){
+            echo $photoUser;
+        };?>
 
         </div>
         <div id="tab_3" class="tab-pane" >
