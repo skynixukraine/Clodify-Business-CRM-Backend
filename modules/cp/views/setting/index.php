@@ -116,9 +116,9 @@ $this->params['menu'] = [
                 <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
                     <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
                             html +=
-                                '<div onclick="setAsDefault(\'<?=basename($photo)?>\')" class="dz-preview dz-image-preview">' +
+                                '<div onclick="setAsDefault(\'<?=basename($photo)?>\', \'photo\')" class="dz-preview dz-image-preview">' +
                                     '<div class="dz-image">' +
-                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" />' +
+                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" style="<?=$defaultPhoto!=basename($photo) ?: 'border: 3px solid blue'?>" />' +
                                     '</div>' +
                                 '</div>';
                     <?php endforeach ?>
@@ -129,20 +129,21 @@ $this->params['menu'] = [
                 <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/sing")): ?>
                     <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/') as $sing): ?>
                             html +=
-                                '<div onclick="setAsDefault(\'<?=basename($sing)?>\')" class="dz-preview dz-image-preview">' +
+                                '<div onclick="setAsDefault(\'<?=basename($sing)?>\', \'sing\')" class="dz-preview dz-image-preview">' +
                                     '<div class="dz-image">' +
-                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$sing?>" />' +
+                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$sing?>" style="<?=$defaultSing!=basename($sing) ?: 'border: 3px solid blue'?>" />' +
                                     '</div>' +
                                 '</div>';
                     <?php endforeach ?>
                 $('#previews1').html(html);
                 <?php endif; ?>
 
-                setAsDefault = function(photo) {
+                setAsDefault = function(photo, request) {
                     var params = {
-                        url: '<?=Yii::$app->getUrlManager()->getBaseUrl() . 'photo' ?>',
+                        url: '<?=Yii::$app->getUrlManager()->getBaseUrl() ?>' + request,
                         data: {
-                            photo: photo
+                            photo: photo,
+                            sing: photo
                         },
                         method: 'POST',
                         dataType: 'json',
@@ -156,18 +157,22 @@ $this->params['menu'] = [
                     };
                     $.ajax(params);
                 };
-                    $('#tab_2 img').click(function() {
+                $('#tab_2 img').click(function() {
 
-                        $('#tab_2 img').css('border', "0");
-                        $(this).css('border', '3px solid blue');
-
-                    });
-                $('#tab_3 img').click(function() {
-
-                    $('#tab_3 img').css('border', "0");
-                    $(this).css('border', '3px solid blue');
+                    setBorder(this, '#tab_2 img');
 
                 });
+
+                $('#tab_3 img').click(function() {
+
+                    setBorder(this, '#tab_3 img');
+
+                });
+
+                setBorder = function(element, selector) {
+                    $(selector).css('border', "0");
+                    $(element).css('border', '3px solid blue');
+                };
             });
         </script>
         <?php  if($photoUser = User::getUserPhoto()){

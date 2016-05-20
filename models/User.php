@@ -452,9 +452,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     public static function getUserPhoto()
     {
-        $userphoto = self::findOne(Yii::$app->user->id);
-        if ($userphoto->photo != null){
-            return $userphoto->photo;
+        $user = self::findOne(Yii::$app->user->id);
+        if (isset($user->photo)) {
+            return $user->photo;
         }else{
             return false;
         }
@@ -462,9 +462,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     public static function getUserSing()
     {
-        $usersing = self::findOne(Yii::$app->user->id);
-        if ($usersing->photo != null){
-            return $usersing->photo;
+        $user = self::findOne(Yii::$app->user->id);
+        if (isset($user->sing)){
+            return $user->sing;
         }else{
             return false;
         }
