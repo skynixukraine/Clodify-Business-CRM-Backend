@@ -39,6 +39,7 @@ class Project extends \yii\db\ActiveRecord
     public $developers;
     public $invoice_received;
     public $is_pm;
+    public $alias =[];
     /**
      * @inheritdoc
      */
@@ -198,6 +199,7 @@ class Project extends \yii\db\ActiveRecord
                             'project_id' => $this->id,
                             'user_id' => $developer->id,
                             'is_pm' => ($this->is_pm==$developer->id),
+                            'alias_user_id' => $this->alias==$developer->id
                         ])->execute();
                 }
 

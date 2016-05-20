@@ -67,7 +67,7 @@ class SettingController extends DefaultController
             if ($model->validate()) {
 
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited yours data"));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your profile data"));
                 return $this->redirect(['index']);
             }
         }
