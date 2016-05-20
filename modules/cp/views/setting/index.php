@@ -84,7 +84,9 @@ $this->params['menu'] = [
                                  <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
                                 <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
 
-                            <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+
+
+
 
 
         </div>
@@ -175,9 +177,6 @@ $this->params['menu'] = [
                 };
             });
         </script>
-        <?php  if($photoUser = User::getUserPhoto()){
-            echo $photoUser;
-        };?>
 
         </div>
         <div id="tab_3" class="tab-pane" >
@@ -249,14 +248,14 @@ $this->params['menu'] = [
         </div>
         <?php endif;?>
     </div>
+    <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary','disabled' => 'disabled', 'style' => ' background: gray;'])) ?>
     <?php ActiveForm::end();?>
     </div>
 </div>
-<!--<script>
-    $(function() {
-        var myDropzone = new Dropzone("#my-dropzone");
-        myDropzone.on("click", function(file) {
-
-        });
+<script>
+    $(".tab-content").click(function(event){
+        $(".btn.btn-primary").removeAttr("disabled");
+        $(".btn-primary").css("background", "green");
+       /* $(".btn").click(function(){alert("Thank You. You have successfully saved your profile data");})*/
     });
-</script>-->
+</script>
