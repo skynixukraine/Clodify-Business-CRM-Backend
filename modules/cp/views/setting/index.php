@@ -14,7 +14,6 @@ use app\models\ProjectDeveloper;
 use app\models\Report;
 use app\components\DateUtil;
 use kato\DropZone;
-use yii\helpers\FileHelper;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -90,8 +89,6 @@ $this->params['menu'] = [
 
         </div>
     <div id="tab_2" class="tab-pane">
-       <!-- --><?php /*echo $files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/');*/?>
-        <?php /*var_dump($files); exit();*/?>
         <?php
             echo \kato\DropZone::widget([
                 'options' => [
@@ -101,23 +98,10 @@ $this->params['menu'] = [
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
-                    $(file.previewElement).on('click', function(){
-                            params = {
-                                url: '". Yii::$app->getUrlManager()->getBaseUrl() . "photo',
-                                data: {
-                                    photo: file.name
-                                },
-                                method: 'POST',
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.success) {
-                                        alert('Now its your default photo');
-                                    } else {
-                                        alert('Error! ' + response.error)
-                                    }
-                                }
-                            }
-                            $.ajax(params);
+                        $(file.previewElement).on('click', function(){
+                            var img = $(file.previewElement);
+                            setAsDefault(file.name);
+                            $(img).css('border', '3px solid blue');
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
@@ -132,20 +116,67 @@ $this->params['menu'] = [
                 <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
                     <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
                             html +=
-                                '<div class="dz-preview dz-image-preview">' +
+                                '<div onclick="setAsDefault(\'<?=basename($photo)?>\')" class="dz-preview dz-image-preview">' +
                                     '<div class="dz-image">' +
-                                        '<img data-dz-thumbnail="" alt="" src="<?php echo $photo ?>" />' +
+                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" />' +
                                     '</div>' +
                                 '</div>';
                     <?php endforeach ?>
                 $('#previews').html(html);
                 <?php endif; ?>
+                <?php $sings = []; ?>
+                html = '';
+                <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/sing")): ?>
+                    <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/') as $sing): ?>
+                            html +=
+                                '<div onclick="setAsDefault(\'<?=basename($sing)?>\')" class="dz-preview dz-image-preview">' +
+                                    '<div class="dz-image">' +
+                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$sing?>" />' +
+                                    '</div>' +
+                                '</div>';
+                    <?php endforeach ?>
+                $('#previews1').html(html);
+                <?php endif; ?>
+
+                setAsDefault = function(photo) {
+                    var params = {
+                        url: '<?=Yii::$app->getUrlManager()->getBaseUrl() . 'photo' ?>',
+                        data: {
+                            photo: photo
+                        },
+                        method: 'POST',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success) {
+                               /* alert('Now its your default photo')*/;
+                            } else {
+                                alert('Error! ' + response.error)
+                            }
+                        }
+                    };
+                    $.ajax(params);
+                };
+                    $('#tab_2 img').click(function() {
+
+                        $('#tab_2 img').css('border', "0");
+                        $(this).css('border', '3px solid blue');
+
+                    });
+                $('#tab_3 img').click(function() {
+
+                    $('#tab_3 img').css('border', "0");
+                    $(this).css('border', '3px solid blue');
+
+                });
             });
         </script>
+        <?php  if($photoUser = User::getUserPhoto()){
+            echo $photoUser;
+        };?>
 
         </div>
         <div id="tab_3" class="tab-pane" >
-            <?php /*$files=\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/');*/?>
+
             <?php
             echo \app\models\Dropzone::widget([
                 'options' => [
@@ -156,22 +187,7 @@ $this->params['menu'] = [
                 'clientEvents' => [
                     'complete' => "function(file){
                     $(file.previewElement).on('click', function(){
-                            params = {
-                                url: '". Yii::$app->getUrlManager()->getBaseUrl() . "sing',
-                                data: {
-                                    sing: file.name
-                                },
-                                method: 'POST',
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.success) {
-                                        alert('Now its your default sing');
-                                    } else {
-                                        alert('Error! ' + response.error)
-                                    }
-                                }
-                            }
-                            $.ajax(params);
+                            setAsDefault(file.name);
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"

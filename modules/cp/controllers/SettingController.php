@@ -138,7 +138,6 @@ class SettingController extends DefaultController
         $pathuser = __DIR__ . '/../../../data/' . Yii::$app->user->id;
         if ( file_exists( $pathuser) &&  file_exists( $pathuser . '/sing/')) {
 
-
         }else{
             $fileName = 'file';
             $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
