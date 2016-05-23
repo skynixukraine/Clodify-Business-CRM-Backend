@@ -155,35 +155,6 @@ $this->params['menu'] = [
                         </table>
                     </div>
                 </div>
-
-
-            <!--<div class="form-group">
-                <?php
-/*                $customers = User::allCustomers();
-                $listCustomers = \yii\helpers\ArrayHelper::map( $customers, 'id', 'first_name' );
-                echo $form->field( $model, 'customers' )
-                    ->listBox($listCustomers,
-                        [
-                            'multiple'  => "true",
-                            'class'     => "form-control"
-                        ])
-                    ->label('Clients');
-                */?>
-            </div>-->
-                   <!-- </div>
-            </div>-->
-            <!--<div class="form-group">
-                <?php
-/*                $developers = User::allDevelopers();
-                $listDevelopers = \yii\helpers\ArrayHelper::map( $developers, 'id', 'first_name' );
-                echo $form->field( $model, 'developers' )
-                    ->listBox($listDevelopers,
-                        [
-                            'multiple'  => "true",
-                            'class'     => "form-control"
-                        ]);
-                */?>
-            </div>-->
             <?php endif;?>
             <div>
                 <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>

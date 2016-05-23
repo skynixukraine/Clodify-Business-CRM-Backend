@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <title>&#9993;Skynix email template</title>
+    <title>&#9993;Skynix Invoice</title>
     <style>
         a,
         a:hover,
@@ -44,33 +44,34 @@
 
     <tr>
         <td colspan = "8" width = "570" height="23" valign="top" style="padding: 0 0 23px 0; margin: 0; font-size: 23px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            Invoice (Рахунок) № <span><?= $id?></span>
+            The invoice # <span><?= $id?></span>
         </td>
     </tr>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            Invoice for paying completed work according to the contract #<span><?= $numberContract?></span>
+            for paying completed work according to the contract #<span><?= $numberContract?></span>
         </td>
     </tr>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            from <span><?= $dataFrom?></span> and act of work #<span><?= $actWork?></span> to <span><?= $dataTo?></span>.
+            from <span><?= $dataFromUkr?></span> and act of work #<span><?= $actWork?></span> of <span><?= $dataToUkr?></span>.
         </td>
     </tr>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            Рахунок для оплати виконаних робіт відповідно до договору №<span><?= $numberContract?></span>
+            <?=nl2br($notes)?>
+        </td>
+    </tr>
+   <tr>
+        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 10px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
+           <span> (The invoice has to be paid in 3 working days)</span>
         </td>
     </tr>
 
-    <tr>
-        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            від <span><?= $dataFromUkr?></span>, та акту №<span><?= $actWork?></span> до <span><?= $dataToUkr?></span>.
-        </td>
-    </tr>
+
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 13px 0; margin: 0; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">

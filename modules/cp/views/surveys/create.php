@@ -11,21 +11,20 @@ use yii\widgets\ActiveForm;
 use yii\widgets;
 use kartik\datetime\DateTimePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
-use app\models\Surveys;
+use app\models\Survey;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.datetimepicker.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
 $this->title                    = Yii::t("app", $title );
-$this->params['breadcrumbs'][]  = $this->title;
 
-$this->params['menu'] = [
+$this->params['breadcrumbs'][]  =
     [
-        'label' => Yii::t('app', 'Take a Survey'),
+        'label' => Yii::t('app', 'Your Surveys'),
         'url'   => Url::to(['surveys/index'])
-    ]
-];
+    ];
+$this->params['breadcrumbs'][]  = $this->title;
 ?>
 <?php $form = ActiveForm::begin([
     'options' => [
@@ -54,12 +53,14 @@ $this->params['menu'] = [
         <div class="form-group">
             <?php echo  $form->field( $model, 'date_start')->widget(DateTimePicker::className(), [
                     'name' => 'date_start',
-                    'options' => [/*'placeholder' => 'Select operating time ...'*/],
+                    'options' => [
+                        'value' => ($model->date_start ? date('d/m/Y H:i', strtotime($model->date_start)) : '')
+                    ],
                     'convertFormat' => true,
                     'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss',
-                    'startDate' =>'01-Mar-2016 12:00 AM',
+                    'format' => 'dd/MM/yyyy hh:i',
+                    'startDate' => date('d/m/Y H:i'),
                     'todayHighlight' => true
                     ]
                     ]);?>
@@ -67,12 +68,14 @@ $this->params['menu'] = [
         <div class="form-group">
             <?php echo $form->field( $model, 'date_end')->widget(DateTimePicker::className(), [
                 'name' => 'date_end',
-                'options' => [/*'placeholder' => 'Select operating time ...'*/],
+                'options' => [
+                    'value' => ($model->date_end ? date('d/m/Y H:i', strtotime($model->date_end)) : '')
+                ],
                 'convertFormat' => true,
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss',
-                    'startDate' => '01-Mar-2016 12:00 AM',
+                    'format' => 'dd/MM/yyyy hh:i',
+                    'startDate' => date('d/m/Y H:i'),
                     'todayHighlight' => true
                 ]
             ]);?>
@@ -126,7 +129,7 @@ $this->params['menu'] = [
                     <div class="panel-heading">
                         <h3 class="panel-title pull-left">Option</h3>
                         <div class="pull-right">
-                            <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+                            <!--<button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>-->
                             <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
                         </div>
                         <div class="clearfix"></div>
@@ -138,17 +141,11 @@ $this->params['menu'] = [
                             echo Html::activeHiddenInput($survayOption, "[{$i}]id");
                         }
                         ?>
-                        <div class="row">
-                            <div class="col-sm-6">
+                        <div class="form-group">
                                 <?= $form->field($survayOption, "[{$i}]name")->textInput(['maxlength' => true]) ?>
-                            </div>
-
                         </div><!-- .row -->
-                        <div class="row">
-
-                            <div class="col-sm-4">
-                                <?= $form->field($survayOption, "[{$i}]description")->textarea(['maxlength' => true]) ?>
-                            </div>
+                        <div class="form-group">
+                             <?= $form->field($survayOption, "[{$i}]description")->textarea(['maxlength' => true]) ?>
                         </div><!-- .row -->
                     </div>
                 </div>
@@ -169,8 +166,5 @@ $this->params['menu'] = [
                 </div>
 
     </div>
-
-
-</div>
 <?php ActiveForm::end();?>
 

@@ -15,11 +15,11 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
-$this->title                    = Yii::t("app", "Take a Survey");
+$this->title                    = Yii::t("app", "Surveys List");
 
 $this->params['breadcrumbs'][]  = $this->title;
 
-if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
+if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
     $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'Create survey'),
@@ -51,7 +51,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             findUrl     : '<?=Url::to(['surveys/find'])?>',
             deleteUrl   : '<?=Url::to(['surveys/delete'])?>',
             editUrl     : '<?=Url::to(['surveys/edit'])?>',
-            codeUrl     : '<?=Yii::$app->urlManager->createAbsoluteUrl(['/s'])?>',
+            codeUrl     : '<?=Yii::$app->params['en_site'].Yii::$app->urlManager->createUrl(['/s'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
             canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,

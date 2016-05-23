@@ -110,7 +110,8 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <li>jQuery</li>
                     <li>Sencha ExtJS</li>
                     <li>AngularJS</li>
-                    <li>Foundation Bootstrap</li>
+                    <li>Bootstrap</li>
+                    <li>Foundation</li>
                 </ul>
             </div>
         </div>
@@ -714,8 +715,6 @@ $this->title = 'Welcome to the Skynix - software development company';
 
 
 <!--****   End Popup portfolio   ****-->
-<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/portfolio.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/canvas.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>

@@ -16,6 +16,7 @@ use app\components\AccessRule;
 //use yii\web\User;
 use app\models\User;
 use app\models\Project;
+use yii\web\UploadedFile;
 
 
 class SettingController extends DefaultController
@@ -33,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -45,6 +46,10 @@ class SettingController extends DefaultController
                     'index'     => ['get', 'post'],
                     'suspend'   => ['get', 'post'],
                     'activate'  => ['get', 'post'],
+                    'upload'    => ['get', 'post'],
+                    'uploaded'  => ['get', 'post'],
+                    'photo'     => ['get', 'post'],
+                    'sing'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -57,7 +62,7 @@ class SettingController extends DefaultController
                 ':ID' => Yii::$app->user->id
             ])->one();
 
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
             if ($model->validate()) {
 
@@ -66,7 +71,9 @@ class SettingController extends DefaultController
                 return $this->redirect(['index']);
             }
         }
-        return $this->render("index", ['model' => $model]);
+        $defaultPhoto = User::getUserPhoto();
+        $defaultSing = User::getUserSing();
+        return $this->render("index", ['model' => $model, 'defaultPhoto' => $defaultPhoto, 'defaultSing' => $defaultSing]);
     }
 
 
@@ -100,5 +107,86 @@ class SettingController extends DefaultController
         }
         return $this->redirect(['setting/index']);
     }
+    public function actionUpload()
+    {
+
+        $fileName = 'file';
+        $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/photo/';
+        if (!is_dir($uploadPath))
+        {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        if (isset($_FILES[$fileName])) {
+            $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+
+            //Print file data
+            //print_r($file);
+
+            if ($file->saveAs($uploadPath . '/' . $file->name)) {
+                //Now save file data to database
+
+                echo \yii\helpers\Json::encode($file);
+            }else{
+                return $this->render('index');
+            }
+        }
+
+        return false;
+
+        }
+    public function actionUploaded()
+    {
+
+            $fileName = 'file';
+            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            if (isset($_FILES[$fileName])) {
+                $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+
+                //Print file data
+                //print_r($file);
+
+                if ($file->saveAs($path . '/' . $file->name)) {
+                    //Now save file data to database
+
+                    echo \yii\helpers\Json::encode($file);
+                } else {
+                    return $this->render('index');
+                }
+            }
+
+    }
+
+    public function actionPhoto()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserPhoto($request['photo']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+    public function actionSing()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserSing($request['sing']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+
 
 }

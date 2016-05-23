@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\Surveys;
+use app\models\Survey;
+use app\models\SurveyVoter;
+use app\models\SurveysOption;
 use Faker\Provider\tr_TR\DateTime;
 use Yii;
 use yii\filters\AccessControl;
@@ -20,6 +22,8 @@ use DateTimeInterface;
 
 class SiteController extends Controller
 {
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -28,7 +32,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'request', 'survey'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -106,23 +110,24 @@ class SiteController extends Controller
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
                         if($modelUserLogins->date_signup == null) {
 
-                            $model->date_signup = date('Y-m-d H:i:s');
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
 
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                         if($modelUserLogins->date_signup == null) {
 
-                            $model->date_signup = date('Y-m-d H:i:s');
+                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
+                        $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
-                    $modelUserLogins->save(true, ['date_login']);
                 } else {
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
@@ -269,40 +274,91 @@ class SiteController extends Controller
 
 
     }
-    public function actionSurvey($shortcode){
-        /** @var  $model Surveys*/
-        $model = Surveys::findOne(['shortcode' => $shortcode]);
-        /*var_dump($model);exit();*/
-        if ($model != null && $model->is_private == 1) {
+    public function actionSurvey($shortcode)
+    {
+        /** @var  $model Survey*/
+        $model = Survey::find()
+                        ->where(['shortcode' => $shortcode])
+                        ->one();
 
-            if (Yii::$app->user->isGuest ) {
+            if ($model != null) {
 
-                return $this->redirect('login');
+                    if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
 
-            } else {
-                $difference = (strtotime($model->date_start) - strtotime($model->date_end));
-                $start = $model->date_start;
-                if ($difference > 0) {
-                    if ((strtotime($model->date_start) < time()) || (strtotime($model->date_end) > time()))
-                    { Yii::$app->getSession()->setFlash("error", "Thank You for visiting our survey.
-                        Get back on $start and take a survey"); }
+                        Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
+                        return $this->redirect(['login']);
 
-                }else{
+                    } else {
 
+                        if ( $model->isLive() ) {
 
-                }
-                if (strtotime($model->date_end) < time()){
+                            return $this->render('survey', [
+                                'model' => $model,
+                            ]);
 
-                    return $this->redirect('/cp/surveys/results');
-                }
+                        } else {
+
+                            $now = strtotime('now');
+
+                            //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
+                            //var_dump(date("Y-m-d H:i:s", $now));
+                            //exit;
+                            if ( $now < strtotime( $model->date_start ) ) {
+
+                                return $this->render('survey-coming', [
+                                    'model' => $model,
+                                ]);
+
+                            } else {
+
+                                return $this->render('survey-results', [
+                                    'model' => $model,
+                                ]);
+
+                            }
+
+                        }
+
+                    }
+
+            }else{
+
+                throw new NotFoundHttpException('The survey has not been found');
+
             }
-        }else{
-            throw new NotFoundHttpException('survey not faund');
-        }
-
-
-        return $this->render('survey');
-
     }
+
+    public function actionSubmitSurvey()
+    {
+        $data = ['success' => false];
+        /** @var $survey Model Survey */
+        if ( ($id           = Yii::$app->request->post('id')) &&
+                ( $surveyModel  = Survey::findOne($id) ) &&
+                ( $answer       = Yii::$app->request->post('answer')) &&
+                $surveyModel->isLive() &&
+                $surveyModel->canVote()
+
+            ) {
+
+            $surveyModel->vote( $answer );
+            $data['success'] = true;
+            $data['message'] = Yii::t('app', 'Your vote has been submitted. Thank You for your effort!');
+
+        } elseif ( $surveyModel ) {
+
+            $data['message'] = Yii::t('app', 'Your vote has not been calculated. This seems you have already took a part in this survey.');
+
+        } else {
+
+            $data['message'] = Yii::t('app', 'You can not participate this survey');
+
+        }
+       // \yii\helpers\VarDumper::dump( $_POST, 10, true);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->content = json_encode($data);
+        Yii::$app->end();
+    }
+
 
 }

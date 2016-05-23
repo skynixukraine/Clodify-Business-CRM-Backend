@@ -27,8 +27,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Yii::$app->params['applicationName'] . ' - ' . Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) . ' - ' . Yii::$app->params['applicationName']?></title>
     <?php $this->head() ?>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 </head>
 <body>
 <body class="skin-blue sidebar-mini">
@@ -183,7 +184,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "setting" ? " active" : "")?>">
                         <a href="<?=Url::to(['setting/index']);?>">
-                            <i class="fa fa-gears"></i> <span>Settings</span>
+                            <i class="fa fa-gears"></i> <span>My Profile</span>
                         </a>
                     </li>
                 <?php endif;?>

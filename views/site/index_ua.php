@@ -97,7 +97,8 @@ $this->title = 'Вітаємо у Скайнікс - компанія з роз�
                         <li>jQuery</li>
                         <li>Sencha ExtJS</li>
                         <li>AngularJS</li>
-                        <li>Twitter Bootstrap</li>
+                        <li>Bootstrap</li>
+                        <li>Foundation</li>
                     </ul>
                 </div>
             </div>
@@ -123,6 +124,3 @@ $this->title = 'Вітаємо у Скайнікс - компанія з роз�
             </div>
         </div>
     </section>
-
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
-<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>

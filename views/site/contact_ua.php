@@ -72,6 +72,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php endif; ?>
 </section>
-
-<?php $this->registerJsFile('/js/local-storage.js'); ?>
-<?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?>

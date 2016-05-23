@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= ($this->title ? Html::encode($this->title) : '') ?> - Skynix Ukraine</title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
@@ -59,7 +59,8 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'CONTACT US', 'url' => ['site/contact']],
             ['label' => 'CAREERS', 'url' => ['site/career']],
-            ['label' => 'Solutions Store', 'url' => 'http://skynix.solutions'],
+            ['label' => 'Solutions Store', 'url' => 'https://skynix.solutions'],
+            ['label' => 'Blog', 'url' => '/blog'],
 
         ],
     ]);
@@ -129,7 +130,8 @@ AppAsset::register($this);
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
 <?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
 
-
+<?php $this->registerJs('localStorageModule.storageFunction();'); ?>
+<?php $this->registerJsFile('/js/local-storage.js'); ?>
 
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -141,11 +143,8 @@ AppAsset::register($this);
     ga('send', 'pageview');
 
 </script>
- <script>
-    $(function() {
-        localStorageModule.storageFunction();
-})
-  </script>
+
+
 </body>
 </html>
 <?php $this->endPage() ?>

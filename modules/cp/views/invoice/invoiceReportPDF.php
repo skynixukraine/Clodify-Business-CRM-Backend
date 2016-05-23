@@ -52,19 +52,19 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
     <tr>
         <th colspan="1" width="50" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
          font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            <strong>Number</strong>
+            <strong>#</strong>
         </th>
         <th colspan="1" width="100" height="12" valign="top" style="padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center; border: 1px solid darkgray;">
-            <strong>Developer Name</strong>
+            <strong>Developer</strong>
         </th>
         <th colspan="1" width="100" height="12" valign="top" style="padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center; border: 1px solid darkgray;">
-            <strong>Project Name</strong>
+            <strong>Project</strong>
         </th>
         <th colspan="1" width="80" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            <strong>Reported Date</strong>
+            <strong>Date</strong>
         </th>
         <th colspan="1" width="200" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
         font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
@@ -111,17 +111,10 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
         </tr>
 
     <?php endforeach;?>
-
-    <tr>
-        <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
-         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            Below the table should be the following information:
-        </td>
-    </tr>
     <tr>
         <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            <strong>Report is generated from :
+            <strong>Report is generated from
             <span><?=DateUtil::reConvertData($model->date_start)?></span> to <span><?= DateUtil::reConvertData($model->date_end)?></span></strong>
 
         </td>
@@ -129,7 +122,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
     <tr>
         <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
-            <strong>Total hours :
+            <strong>Total hours:
             <span><?= $model->total_hours?></span></strong>
         </td>
     </tr>

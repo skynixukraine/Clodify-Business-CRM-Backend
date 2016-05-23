@@ -6,8 +6,13 @@
 }
 
 @font-face {
+<<<<<<< HEAD
   font-family: "RalewayBold";
   src: url("../fonts/Raleway-Bold.ttf") format("truetype");
+=======
+  font-family: "Raleway-SemiBold";
+  src: url("../fonts/Raleway-SemiBold.ttf") format("truetype");
+>>>>>>> 1706e5252e6c2a6ab924036edcf9b4e2495458e1
   font-style: normal;
   font-weight: normal;
 }
@@ -256,6 +261,7 @@ input[type="radio"] {
   z-index: 20;
   position: absolute;
   left: 0;
+<<<<<<< HEAD
   top: 0;
 }
 
@@ -264,7 +270,27 @@ input[type="radio"] {
   color: white;
   font-weight: bold;
 }
+=======
+  top: 0; }
+  .form-sent p {
+    font-size: 28px;
+    color: white;
+    font-weight: bold; }
+.survey-results {
+  max-width: 500px;
+  margin: 0px auto;
+>>>>>>> 1706e5252e6c2a6ab924036edcf9b4e2495458e1
 
+}
+.survey-results .progress{
+  clear: both;
+}
+.survey-results .progress-text{
+  float: left;
+}
+.survey-results .progress-number{
+  float: right;
+}
 @media screen and (max-width: 1170px) {
   .survey-wrap {
     width: 350px;

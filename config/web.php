@@ -13,7 +13,7 @@ $config = [
         ],
     ],
 
-    'timeZone'=>'UTC',//'Europe/Kiev',
+    'timeZone'=> 'Europe/Kiev',
     'language' => 'en-US',
     'components' => [
         'assetManager' => [
@@ -103,7 +103,8 @@ if (YII_ENV_DEV) {
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class'         => 'yii\gii\Module',
+        'allowedIPs'    => ['127.0.0.1', '*']
     ];
 }
 if ( file_exists(__DIR__ . '/local.php') ) {
