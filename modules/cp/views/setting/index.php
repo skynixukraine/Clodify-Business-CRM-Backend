@@ -20,6 +20,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
+$this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -35,19 +36,19 @@ $this->params['menu'] = [
     <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
     <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
 </ul>
-    <?php $form = ActiveForm::begin();?>
+    <?php $form = ActiveForm::begin(); ?>
 <div class="tab-content">
         <div id="tab_1" class="tab-pane active col-xs-12">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="box box-inform">
                         <div class="box-body">
-                            <span>Hello <?php echo $model->first_name?>.
+                            <span>Hello <?php echo $model->first_name?>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
-                                <?php echo Yii::$app->user->identity->role?> </span>.<br/>
+                                <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>
-                            <span>You are joined Skynix at <?php echo $model->date_signup?></span>.<br/>
-                            <span>Last time you visited Skynix at <?php echo $model->date_login?></span>.<br/>
+                            <span>You are joined Skynix on <?php echo $model->date_signup?></span><br/>
+                            <span>Last time you visited Skynix on <?php echo $model->date_login?></span><br/>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                         </div>
                     </div>

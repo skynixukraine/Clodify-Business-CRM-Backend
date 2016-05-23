@@ -46,11 +46,6 @@
 }
 
 
-#w0{
-    margin-top:20px;
-    height: 500px;
-}
-
 
 @media screen and (max-width: 1200px) {
     #report-table_filter{
@@ -69,11 +64,6 @@
     }
 }
 
-@media screen and (max-width: 949px) {
-    #w0{
-        height:760px;
-    }
-}
 @media screen and (max-width: 429px){
     .submit-form{
         float:left;
