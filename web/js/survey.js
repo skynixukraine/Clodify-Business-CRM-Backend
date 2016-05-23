@@ -1,17 +1,21 @@
 var SurveyModule = (function() {
 
+    var textFormSentSuccess = "Form has been sent successfully",
+        textFormSentError = "Unfortunately, the server is temporarily unavailable. Please try again later.",
+        progressBar = $(".loader");
+
     function showProgressBar() {
-        $(".loader").css("display", "block");
+        progressBar.show();
     }
 
     function hideProgressBar() {
-        $(".loader").css("display", "none");
+        progressBar.hide();
     }
 
     return {
         init: function() {
+
             var myHtml = $("html"),
-                xhr = new XMLHttpRequest(),
                 radioArr = $('input:radio[name=radio]'),
                 labelArr = $('input:radio[name= radio]').parent(),
                 radioInput = $('input:radio');
@@ -37,56 +41,56 @@ var SurveyModule = (function() {
             })
 
             if (myHtml.width() > 1170) {
-                $(".tooltip-over").hover(
-                    function() {
-                        var tooltipLarge = $(this);
-                        tooltipLarge.next(".tooltip-text").addClass("over");
-                    },
-                    function() {
-                        var link = $(this);
+                $(".tooltip-over").mouseover(function() {
+                    var tooltipLarge = $(this);
+                    if (!tooltipLarge.hasClass("show")) {
+                        tooltipLarge.nextAll(".tooltip-text, .tooltip-arrow").addClass("over");
+                        tooltipLarge.addClass("show");
                         window.setTimeout(function() {
-                            $(link).next(".tooltip-text").removeClass('over');
+                            tooltipLarge.removeClass("show");
+                            tooltipLarge.nextAll(".tooltip-text, .tooltip-arrow").removeClass('over');
                         }, 3000);
-                    });
-
+                    }
+                })
             }
-
 
             if (myHtml.width() < 1170) {
                 $(".tooltip-over").click(function() {
                     var element = $(this);
-                    if (element.next(".tooltip-text").hasClass("over")) {
-                        element.next(".tooltip-text").removeClass('over');
+                    if (element.nextAll(".tooltip-text, .tooltip-arrow").hasClass("over")) {
+                        element.nextAll(".tooltip-text, .tooltip-arrow").removeClass('over');
                     } else {
-                        element.next(".tooltip-text").addClass("over");
+                        element.nextAll(".tooltip-text, .tooltip-arrow").addClass("over");
                     }
                 })
             }
 
             $('form').submit(function(e) {
+                var surveySection = $('.survey-wrap'),
+                    formSent = $('.form-sent'),
+                    formSent = $('.form-sent');
                 e.preventDefault();
                 showProgressBar();
                 var data = $('form').serializeArray();
                 $.ajax({
                     type: "POST",
-                    url: "send.php",
+                    url: "",
                     data: data,
-                    dataType: "html",
-                    success: hideProgressBar()
+                    dataType: "json",
+                    success: function() {
+                        hideProgressBar();
+                        surveySection.slideUp();
+                        formSent.slideDown().children("p").text(textFormSentSuccess);
+                    },
+                    error: function() {
+                        hideProgressBar();
+                        formSent.fadeIn().children("p").text(textFormSentError);
+                        window.setTimeout(function() {
+                            formSent.fadeOut();
+                        }, 5000)
+                    }
                 });
-
-                $(':input', 'form')
-                    .not(':submit')
-                    .val('')
-                    .removeAttr('checked');
             });
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    hideProgressBar();
-                }
-            }
-
         }
     }
 
