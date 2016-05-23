@@ -19,6 +19,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
 $this->title                    = Yii::t("app", "My Profile");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -35,60 +36,71 @@ $this->params['menu'] = [
 </ul>
     <?php $form = ActiveForm::begin();?>
 <div class="tab-content">
-        <div id="tab_1" class="tab-pane active">
-            <span>Hello <?php echo $model->first_name?>.
-                <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
-                    <?php echo Yii::$app->user->identity->role?> </span>.<br/>
-                <?php endif?>
-            <span>You are joined Skynix at <?php echo $model->date_signup?></span>.<br/>
-            <span>Last time you visited Skynix at <?php echo $model->date_login?></span>.<br/>
-            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
-                <span>Today you have reported
-
-                    <?php $hoursReportThisDay = Report::sumHoursReportsOfThisDay(Yii::$app->user->id, date('Y-m-d'));
-                        if($hoursReportThisDay == null) {
-                            echo '0';
-                        }else {
-                            echo $hoursReportThisDay;
-                        }?> hours
-                </span><br/>
-
-                <span>This week you have reported
-
-                    <?php $hoursReportThisWeek = Report::getReportHours(Yii::$app->user->id, date('Y-m-d') );
-                        if($hoursReportThisWeek == null) {
-                            echo '0';
-                        }else {
-                            echo $hoursReportThisWeek;
-                        }?> hours
-                </span><br/>
-                <span>This month you have reported
-                    <?php $hoursReportThisMonth = Report::getReportHoursMonth(Yii::$app->user->id, date('Y-m-d'));
-                        if($hoursReportThisMonth == null) {
-                            echo '0';
-                        }else {
-                            echo $hoursReportThisMonth;
-                        }?> hours
-                </span><br/>
-            <?php endif?>
-            <span>If you need to change your password or change email <a href="#"> click here</a></span><br/>
-
-                            <?php /** @var $model User */?>
-                            <?php echo $form->field( $model, 'first_name' )->textInput();?>
-                            <?php echo $form->field( $model, 'last_name' )->textInput();?>
-                            <?php echo $form->field( $model, 'phone' )->textInput();?>
-                            <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
-                            <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?>
-                                <?php echo $form->field( $model, 'company' )->textInput();?>
+    
+        <div id="tab_1" class="tab-pane active col-xs-12">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box box-inform">
+                        <div class="box-body">
+                            <span>Hello <?php echo $model->first_name?>.
+                            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                                <?php echo Yii::$app->user->identity->role?> </span>.<br/>
                             <?php endif?>
-                                 <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
-                                <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
-
-
-
-
-
-
+                            <span>You are joined Skynix at <?php echo $model->date_signup?></span>.<br/>
+                            <span>Last time you visited Skynix at <?php echo $model->date_login?></span>.<br/>
+                            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="box box-inform">
+                        <div class="box-body">
+                            <span>Today you have reported
+                            <?php $hoursReportThisDay = Report::sumHoursReportsOfThisDay(Yii::$app->user->id, date('Y-m-d'));
+                                if($hoursReportThisDay == null) {
+                                    echo '0';
+                                }else {
+                                    echo $hoursReportThisDay;
+                                }?> hours
+                            </span><br/>
+                            <span>This week you have reported
+                            <?php $hoursReportThisWeek = Report::getReportHours(Yii::$app->user->id, date('Y-m-d') );
+                                if($hoursReportThisWeek == null) {
+                                    echo '0';
+                                }else {
+                                    echo $hoursReportThisWeek;
+                                }?> hours
+                             </span><br/>
+                            <span>This month you have reported
+                            <?php $hoursReportThisMonth = Report::getReportHoursMonth(Yii::$app->user->id, date('Y-m-d'));
+                                if($hoursReportThisMonth == null) {
+                                    echo '0';
+                                }else {
+                                    echo $hoursReportThisMonth;
+                                }?> hours
+                            </span><br/>
+                            <?php endif?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 change-span">
+                    <span>If you need to change your password or change email <a href="#"> click here</a></span><br/>
+                </div> 
+            </div>
+            <div class="my-profile-form">
+                <fieldset class = "">
+                    <?php /** @var $model User */?>
+                    <?php echo $form->field( $model, 'first_name' )->textInput();?>
+                    <?php echo $form->field( $model, 'last_name' )->textInput();?>
+                    <?php echo $form->field( $model, 'phone' )->textInput();?>
+                    <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
+                    <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?>
+                        <?php echo $form->field( $model, 'company' )->textInput();?>
+                    <?php endif?>
+                    <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
+                    <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
+                </fieldset>
+            </div>
         </div>
     <div id="tab_2" class="tab-pane">
         <?php
@@ -180,7 +192,6 @@ $this->params['menu'] = [
 
         </div>
         <div id="tab_3" class="tab-pane" >
-
             <?php
             echo \app\models\Dropzone::widget([
                 'options' => [
@@ -198,8 +209,6 @@ $this->params['menu'] = [
                 ],
             ]);
             ?>
-
-
         </div>
     <div id="tab_4" class="tab-pane">
         <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])):?>
@@ -248,14 +257,16 @@ $this->params['menu'] = [
         </div>
         <?php endif;?>
     </div>
-    <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary','disabled' => 'disabled', 'style' => ' background: gray;'])) ?>
-    <?php ActiveForm::end();?>
+    <div class="submit-block">
+        <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary','disabled' => 'disabled', 'style' => ' background: gray;'])) ?>
+        <?php ActiveForm::end();?>
+    </div>
     </div>
 </div>
+
 <script>
-    $(".tab-content").click(function(event){
-        $(".btn.btn-primary").removeAttr("disabled");
-        $(".btn-primary").css("background", "green");
-       /* $(".btn").click(function(){alert("Thank You. You have successfully saved your profile data");})*/
-    });
+     $(function() {
+       MyProfileModule.init();  
+    })
 </script>
+
