@@ -3,8 +3,7 @@ var MyProfileModule = (function(){
 		init: function(){
 			var tabContentInput = $(".tab-content input, .tab-content textarea");
 			var tabContentImg = $(".dropzone-previews img");
-			console.log(tabContentImg);
-			
+						
 			function inputChange(){
 				tabContentInput.each(function(){
 					thisInput = $(this);

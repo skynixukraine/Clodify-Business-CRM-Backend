@@ -33,10 +33,10 @@ $this->params['menu'] = [
     <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
     <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
     <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
+    <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
 </ul>
     <?php $form = ActiveForm::begin();?>
 <div class="tab-content">
-    
         <div id="tab_1" class="tab-pane active col-xs-12">
             <div class="row">
                 <div class="col-sm-6">
@@ -87,19 +87,23 @@ $this->params['menu'] = [
                     <span>If you need to change your password or change email <a href="#"> click here</a></span><br/>
                 </div> 
             </div>
-            <div class="my-profile-form">
-                <fieldset class = "">
-                    <?php /** @var $model User */?>
-                    <?php echo $form->field( $model, 'first_name' )->textInput();?>
-                    <?php echo $form->field( $model, 'last_name' )->textInput();?>
-                    <?php echo $form->field( $model, 'phone' )->textInput();?>
-                    <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
-                    <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?>
+            <div class="my-profile-form col-sm-12">
+                <div class="row">
+                    <fieldset class = "col-sm-6">
+                        <?php /** @var $model User */?>
+                        <?php echo $form->field( $model, 'first_name' )->textInput();?>
+                        <?php echo $form->field( $model, 'last_name' )->textInput();?>
+                        <?php echo $form->field( $model, 'phone' )->textInput();?>
+                    </fieldset>
+                    <fieldset class = "col-sm-6">
+                        <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
+                        <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?>
                         <?php echo $form->field( $model, 'company' )->textInput();?>
-                    <?php endif?>
-                    <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
-                    <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
-                </fieldset>
+                        <?php endif?>
+                        <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
+                        <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
+                    </fieldset>
+                </div>
             </div>
         </div>
     <div id="tab_2" class="tab-pane">
@@ -257,10 +261,7 @@ $this->params['menu'] = [
         </div>
         <?php endif;?>
     </div>
-    <div class="submit-block">
-        <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary','disabled' => 'disabled', 'style' => ' background: gray;'])) ?>
         <?php ActiveForm::end();?>
-    </div>
     </div>
 </div>
 

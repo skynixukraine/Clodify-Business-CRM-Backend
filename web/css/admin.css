@@ -22,22 +22,33 @@
     width: 500px;
 }
 
+
+.submit-form{
+    float:right;
+    margin:10px 15px 0 10px;
+}
 .my-profile-form{
     margin:25px auto;
-    width: 450px;
+   
     padding: 20px;
     /*border:1px solid #C7C7C7;
     border-radius:4px;
     padding:15px;*/
 }
 
+.my-profile-form fieldset{
+   
+}
+
+
 .change-span{
     margin-left: 10px;
 }
 
-.submit-block{
-    padding:20px;
-    margin:10px;
+
+#w0{
+    margin-top:20px;
+    height: 500px;
 }
 
 
@@ -58,8 +69,14 @@
     }
 }
 
-@media screen and (max-width: 500px){
-    .my-profile-form{
-        width:320px;
+@media screen and (max-width: 949px) {
+    #w0{
+        height:760px;
+    }
+}
+@media screen and (max-width: 429px){
+    .submit-form{
+        float:left;
+        margin-left:15px;
     }
 }
