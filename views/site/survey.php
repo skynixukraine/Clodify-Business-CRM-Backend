@@ -43,9 +43,9 @@
                     <span>Подобається але могло бути й краще</span>
                 </label>
                 <div class="survey-tooltip">
-                    <span class="tooltip-over">?</span>
-                    <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
-                    <span class="tooltip-arrow"></span>
+                    <span class="survey-tooltip-over">?</span>
+                    <p class="survey-tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
+                    <span class="survey-tooltip-arrow"></span>
                 </div>
             </div>
             <div>
@@ -60,9 +60,9 @@
                     <span>Я до цього ставлюсь нормально  Я до цього ставлюсь нормально Я до цього ставлюсь нормально Я до цього ставлюсь нормально</span>
                 </label>
                 <div class="survey-tooltip">
-                    <span class="tooltip-over">?</span>
-                    <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
-                    <span class="tooltip-arrow"></span>
+                    <span class="survey-tooltip-over">?</span>
+                    <p class="survey-tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
+                    <span class="survey-tooltip-arrow"></span>
                 </div>
             </div>
         </fieldset>

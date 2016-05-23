@@ -41,26 +41,26 @@ var SurveyModule = (function() {
             })
 
             if (myHtml.width() > 1170) {
-                $(".tooltip-over").mouseover(function() {
+                $(".survey-tooltip-over").mouseover(function() {
                     var tooltipLarge = $(this);
                     if (!tooltipLarge.hasClass("show")) {
-                        tooltipLarge.nextAll(".tooltip-text, .tooltip-arrow").addClass("over");
+                        tooltipLarge.nextAll(".survey-tooltip-text, .survey-tooltip-arrow").addClass("over");
                         tooltipLarge.addClass("show");
                         window.setTimeout(function() {
                             tooltipLarge.removeClass("show");
-                            tooltipLarge.nextAll(".tooltip-text, .tooltip-arrow").removeClass('over');
+                            tooltipLarge.nextAll(".survey-tooltip-text, .survey-tooltip-arrow").removeClass('over');
                         }, 3000);
                     }
                 })
             }
 
             if (myHtml.width() < 1170) {
-                $(".tooltip-over").click(function() {
+                $(".survey-tooltip-over").click(function() {
                     var element = $(this);
-                    if (element.nextAll(".tooltip-text, .tooltip-arrow").hasClass("over")) {
-                        element.nextAll(".tooltip-text, .tooltip-arrow").removeClass('over');
+                    if (element.nextAll(".survey-tooltip-text, .survey-tooltip-arrow").hasClass("over")) {
+                        element.nextAll(".survey-tooltip-text, .survey-tooltip-arrow").removeClass('over');
                     } else {
-                        element.nextAll(".tooltip-text, .tooltip-arrow").addClass("over");
+                        element.nextAll(".survey-tooltip-text, .survey-tooltip-arrow").addClass("over");
                     }
                 })
             }
