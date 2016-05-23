@@ -192,6 +192,7 @@ class ReportController extends DefaultController
 
         }
 
+
         $dataTable->setFilter('is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
@@ -204,12 +205,17 @@ class ReportController extends DefaultController
                 $model->task,
                 $model->date_added,
                 $model->getProject()->one()->name,
-                $model->reporter_name,
+               /* $model->reporter_name,*/
+                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
+                    ProjectDeveloper::findOne(['user_id' => $model->user_id, 'project_id' => $model->getProject()->one()->id ])->alias_user_id != null) ?
+                    $model->reporter_name . '(' . Yii::$app->user->getIdentity()->first_name . ' ' .
+                        Yii::$app->user->getIdentity()->last_name . ')' : $model->reporter_name  ,
                 $model->date_report,
                 ( $model->invoice_id == null ? "No" : "Yes" ),
                 $model->hours
             ];
         }
+
 
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),

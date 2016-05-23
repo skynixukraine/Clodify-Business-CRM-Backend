@@ -62,7 +62,7 @@ class Project extends \yii\db\ActiveRecord
             [['date_start', 'date_end'], 'safe'],
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
-            [['customers', 'developers'], 'safe'],
+            [['customers', 'developers', 'alias'], 'safe'],
         ];
     }
 
@@ -80,7 +80,8 @@ class Project extends \yii\db\ActiveRecord
             'status'            => 'Status',
             'date_start'        => 'Date Start',
             'date_end'          => 'Date End',
-            'is_delete'         => 'Is Delete'
+            'is_delete'         => 'Is Delete',
+            'alias'             => 'Alias',
         ];
     }
 
@@ -182,7 +183,7 @@ class Project extends \yii\db\ActiveRecord
             }
         }
 
-        if($this->developers) {
+        if ($this->developers) {
 
             /* Delete from ProjectCustomers*/
             $connection->createCommand()
@@ -193,13 +194,13 @@ class Project extends \yii\db\ActiveRecord
 
             /* Add to ProjectDevelopers*/
             foreach (User::allDevelopers() as $developer) {
-                if($this->is_pm == $developer->id || in_array($developer->id, $this->developers)){
+                if ($this->is_pm == $developer->id || in_array($developer->id, $this->developers)) {
                     $connection->createCommand()
                         ->insert(ProjectDeveloper::tableName(), [
                             'project_id' => $this->id,
                             'user_id' => $developer->id,
                             'is_pm' => ($this->is_pm==$developer->id),
-                            'alias_user_id' => $this->alias==$developer->id
+                            'alias_user_id' => isset($this->alias[$developer->id]) ? $this->alias[$developer->id] : null
                         ])->execute();
                 }
 
@@ -272,6 +273,12 @@ class Project extends \yii\db\ActiveRecord
             }
         }
         return false;
+    }
+
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        return $this;
     }
 
 }

@@ -208,6 +208,7 @@ class Report extends \yii\db\ActiveRecord
     public static function sumHoursReportsOfThisDay($currUser, $dateReport)
     {
         return self::find()
+
             ->where(Report::tableName() . '.date_report =:DateReport AND ' .
                     Report::tableName() . '.user_id=:userId AND ' .
                     Report::tableName() . '.is_delete=0',
@@ -246,10 +247,17 @@ class Report extends \yii\db\ActiveRecord
         return self::find()
             ->where ('TO_DAYS(NOW()) - TO_DAYS(date_report) <= 7 AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser] )->sum('hours');
     }
-    public static function getReportHoursMonth($currUser){
+    public static function getReportHoursMonth($currUser)
+    {
 
         return self::find()
             ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser])->sum('hours');
     }
+    /*public static function getUserAlias($user_id)
+    {
+        return self::find()
+            ->from(User::tableName())
+            ->leftJoin()
+    }*/
 
 }
