@@ -42,7 +42,7 @@
                     <input type="radio" name="radio" value="Подобається але могло бути й краще">
                     <span>Подобається але могло бути й краще</span>
                 </label>
-                <div class="tooltip">
+                <div class="survey-tooltip">
                     <span class="tooltip-over">?</span>
                     <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
                     <span class="tooltip-arrow"></span>
@@ -59,7 +59,7 @@
                     <input type="radio" name="radio" value="Я до цього ставлюсь нормально">
                     <span>Я до цього ставлюсь нормально  Я до цього ставлюсь нормально Я до цього ставлюсь нормально Я до цього ставлюсь нормально</span>
                 </label>
-                <div class="tooltip">
+                <div class="survey-tooltip">
                     <span class="tooltip-over">?</span>
                     <p class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
                     <span class="tooltip-arrow"></span>
@@ -70,7 +70,7 @@
     </form>
 </section>
 <div class="loader">
-    <img src="img/495.gif">
+    <img src="../img/loader.gif">
 </div>
 
 <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>

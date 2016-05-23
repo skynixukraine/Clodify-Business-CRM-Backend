@@ -1,349 +1,327 @@
 @font-face {
-  font-family: "RalewayRegular";
-  src: url("../fonts/Raleway-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-weight: normal;
+    font-family: "RalewayRegular";
+    src: url("../fonts/Raleway-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
 }
 
 @font-face {
-<<<<<<< HEAD
-  font-family: "RalewayBold";
-  src: url("../fonts/Raleway-Bold.ttf") format("truetype");
-=======
-  font-family: "Raleway-SemiBold";
-  src: url("../fonts/Raleway-SemiBold.ttf") format("truetype");
->>>>>>> 1706e5252e6c2a6ab924036edcf9b4e2495458e1
-  font-style: normal;
-  font-weight: normal;
+    font-family: "RalewayBold";
+    src: url("../fonts/Raleway-Bold.ttf") format("truetype");
+    font-family: "Raleway-SemiBold";
+    src: url("../fonts/Raleway-SemiBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
 }
 
 @font-face {
-  font-family: "RalewayMedium";
-  src: url("../fonts/Raleway-Medium.ttf") format("truetype");
-  font-style: normal;
-  font-weight: normal;
+    font-family: "RalewayMedium";
+    src: url("../fonts/Raleway-Medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
 }
 
 .survey-wrap {
-  width: 1170px;
-  margin: 0 auto;
-  padding-left: 50px;
-  z-index: 10;
-  -webkit-box-sizing: padding-box;
-  -moz-box-sizing: padding-box;
-  box-sizing: padding-box;
-  font-family: "RalewayRegular";
-  color: black;
+    width: 1170px;
+    margin: 0 auto;
+    padding:50px 0 0 50px;
+    z-index: 10;
+    -webkit-box-sizing: padding-box;
+    -moz-box-sizing: padding-box;
+    box-sizing: padding-box;
+    font-family: "RalewayRegular";
+    color: black;
 }
 
 .survey-wrap header {
-  text-align: center;
-  font-family: "RalewayBold";
-  font-size: 25px;
-  width: 1100px;
+    text-align: center;
+    font-family: "RalewayExtraBold";
+    font-size: 25px;
+    width: 1100px;
 }
 
 .survey-wrap header h1 {
-  position: relative;
+    position: relative;
+    font-size: 30px;
 }
 
 .survey-wrap p {
-  text-align: center;
-  font-size: 18px;
+    text-align: center;
+    font-size: 18px;
 }
 
 .survey-wrap form {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: inline-block;
-  margin-top: 30px;
-  width: 1120px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-top: 30px;
+    width: 1120px;
 }
 
 .survey-wrap form fieldset > div,
 .survey-wrap form input[type="submit"] {
-  float: left;
-  width: 518px;
-  height: 65px;
-  border: 1px solid #2697f9;
-  margin-right: 40px;
-  margin-bottom: 23px;
-  text-align: center;
-  font-size: 17px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    float: left;
+    width: 518px;
+    height: 65px;
+    border: 1px solid #2697f9;
+    margin-right: 40px;
+    margin-bottom: 23px;
+    text-align: center;
+    font-size: 17px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .survey-wrap form fieldset > div .my-label > span,
 .survey-wrap form input[type="submit"] .my-label > span {
-  display: inline-block;
-  overflow: hidden;
-  max-height: 39px;
+    display: inline-block;
+    overflow: hidden;
+    max-height: 49px;
 }
 
 .survey-wrap form input[type="submit"]:focus {
-  outline: none;
+    outline: none;
 }
 
 .survey-wrap form fieldset > div {
-  position: relative;
+    position: relative;
 }
 
 .survey-wrap .my-label:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .survey-wrap form input[type="submit"] {
-  float: right;
-  text-transform: uppercase;
-  border: 1px solid #ffa77a;
-  color: #ffa77a;
-  background-color: white;
+    float: right;
+    text-transform: uppercase;
+    border: 1px solid #ffa77a;
+    color: #ffa77a;
+    background-color: white;
 }
 
 .survey-wrap form input[type="submit"]:enabled {
-  border: 1px solid #eb6723;
-  background-color: white;
-  color: #eb6723;
+    border: 1px solid #eb6723;
+    background-color: white;
+    color: #eb6723;
 }
 
 .survey-wrap form input[type="submit"]:enabled:hover {
-  border: none;
-  background-color: #ffa77a;
-  color: white;
+    border: none;
+    background-color: #ffa77a;
+    color: white;
 }
 
 .survey-wrap form input[type="submit"]:enabled:active {
-  border: 1px solid #eb6723;
-  background-color: #eb6723;
-  color: white;
+    border: 1px solid #eb6723;
+    background-color: #eb6723;
+    color: white;
 }
 
 .survey-wrap fieldset {
-  padding: 0;
+    padding: 0;
 }
 
 header h1:before {
-  content: '';
-  display: block;
-  width: 240px;
-  height: 1px;
-  background-color: #2697f9;
-  position: absolute;
-  left: 0;
-  top: 20px;
+    content: '';
+    display: block;
+    width: 240px;
+    height: 1px;
+    background-color: #2697f9;
+    position: absolute;
+    left: 0;
+    top: 20px;
 }
 
 header h1:after {
-  content: '';
-  display: block;
-  width: 240px;
-  height: 1px;
-  background-color: #2697f9;
-  position: absolute;
-  right: 22px;
-  top: 20px;
+    content: '';
+    display: block;
+    width: 240px;
+    height: 1px;
+    background-color: #2697f9;
+    position: absolute;
+    right: 22px;
+    top: 20px;
 }
 
 fieldset {
-  border: none;
+    border: none;
 }
 
 input[type="radio"] {
-  display: none;
+    display: none;
 }
 
 .my-label {
-  display: table-cell;
-  vertical-align: middle;
-  z-index: 4;
-  height: 63px;
-  overflow: hidden;
-  padding: 0 15px 0 42px;
-  width: 518px;
+    display: table-cell;
+    vertical-align: middle;
+    z-index: 4;
+    height: 63px;
+    overflow: hidden;
+    padding: 0 15px 0 42px;
+    width: 518px;
 }
 
 .checked-radio {
-  background-color: #2697f9;
+    background-color: #2697f9;
 }
 
-.tooltip > .tooltip-over {
-  position: absolute;
-  bottom: -12px;
-  left: 22px;
-  height: 29px;
-  width: 29px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  border-radius: 50%;
-  background-color: #2697f9;
-  line-height: 29px;
-  text-align: center;
-  color: white;
-  float: left;
+.survey-tooltip > .tooltip-over {
+    position: absolute;
+    bottom: -12px;
+    left: 22px;
+    height: 29px;
+    width: 29px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #2697f9;
+    line-height: 29px;
+    text-align: center;
+    color: white;
+    float: left;
 }
 
-.tooltip >.tooltip-over:hover {
-  cursor: help;
+.survey-tooltip >.tooltip-over:hover {
+    cursor: help;
 }
 
-.tooltip .over {
-  visibility: visible;
-  z-index: 5;
+.survey-tooltip .over {
+    visibility: visible;
+    z-index: 5;
 }
 
-.tooltip p {
-  position: absolute;
-  bottom: -42px;
-  left: 75px;
-  font-family: "RalewayMedium";
-  text-align: justify;
-  padding: 10px 25px 10px 38px;
-  width: 373px;
-  height: auto;
-  background-color: #71BAF9;
-  min-height: 45px;
-  border-radius: 15px;
-  border: 1px solid white;
-  font-size: 14px;
-  float: left;
-  color: white;
-  visibility: hidden;
-  z-index: 0;
-  overflow: hidden;
+.survey-tooltip p {
+    position: absolute;
+    bottom: -42px;
+    left: 75px;
+    font-family: "RalewayMedium";
+    text-align: justify;
+    padding: 10px 25px 10px 38px;
+    width: 373px;
+    height: auto;
+    background-color: #71BAF9;
+    min-height: 45px;
+    border-radius: 15px;
+    border: 1px solid white;
+    font-size: 14px;
+    float: left;
+    color: white;
+    visibility: hidden;
+    z-index: 0;
+    overflow: hidden;
 }
 
 .tooltip-arrow {
-  width: 0;
-  height: 0;
-  display: block;
-  position: absolute;
-  border-top: 13px solid transparent;
-  border-bottom: 9px solid transparent;
-  border-right: 13px solid white;
-  left: 63px;
-  bottom: -8px;
-  visibility: hidden;
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    border-top: 13px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-right: 13px solid white;
+    left: 63px;
+    bottom: -8px;
+    visibility: hidden;
 }
 
-.tooltip-arrow:before {
-  content: "";
-  position: absolute;
-  border-top: 13px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-right: 13px solid #71BAF9;
-  top: -12px;
+.tooltip-arrow::before {
+    content: "";
+    position: absolute;
+    border-top: 13px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 13px solid #71BAF9;
+    top: -12px;
 }
 
 .loader {
-  width: 100%;
-  height: 100%;
-  background: rgba(51, 51, 51, 0.3);
-  text-align: center;
-  padding-top: 35%;
-  position: absolute;
-  z-index: 15;
-  top: 0;
-  left: 0;
-  display: none;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, 0.3);
+    text-align: center;
+    padding-top: 35%;
+    position: absolute;
+    z-index: 15;
+    top: 0;
+    left: 0;
+    display: none;
 }
 
 .form-sent {
-  display: none;
-  width: 100%;
-  text-align: center;
-  height: 100%;
-  padding-top: 20%;
-  background-color: rgba(51, 51, 51, 0.7);
-  z-index: 20;
-  position: absolute;
-  left: 0;
-<<<<<<< HEAD
-  top: 0;
+    display: none;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    padding-top: 20%;
+    background-color: rgba(51, 51, 51, 0.7);
+    z-index: 20;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .form-sent p {
-  font-size: 28px;
-  color: white;
-  font-weight: bold;
-}
-=======
-  top: 0; }
-  .form-sent p {
     font-size: 28px;
     color: white;
-    font-weight: bold; }
-.survey-results {
-  max-width: 500px;
-  margin: 0px auto;
->>>>>>> 1706e5252e6c2a6ab924036edcf9b4e2495458e1
+    font-weight: bold;
+}
 
-}
-.survey-results .progress{
-  clear: both;
-}
-.survey-results .progress-text{
-  float: left;
-}
-.survey-results .progress-number{
-  float: right;
-}
 @media screen and (max-width: 1170px) {
-  .survey-wrap {
-    width: 350px;
-    padding-left: 0;
-  }
-  .survey-wrap article {
-    width: 300px;
-    margin-left: 15px;
-  }
-  .survey-wrap header {
-    width: 300px;
-    border-bottom: 1px solid #2697f9;
-  }
-  .survey-wrap header h1 {
-    margin-bottom: 20px;
-    font-size: 26px;
-  }
-  .survey-wrap header h1:before {
-    display: none;
-  }
-  .survey-wrap header h1:after {
-    display: none;
-  }
-  .survey-wrap p {
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  .survey-wrap form {
-    margin-top: 0px;
-  }
-  .survey-wrap form fieldset > div,
-  .survey-wrap form input[type="submit"] {
-    float: none;
-    width: 320px;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  .survey-wrap fieldset > div:nth-of-type(3) .tooltip {
-    display: none;
-  }
-  .tooltip p {
-    bottom: -51px;
-    font-size: 13px;
-    overflow: hidden;
-    width: 200px;
-  }
-  .my-lable {
-    height: 44px;
-    padding-top: 19px;
-    width: 320px;
-  }
-  .survey-wrap form fieldset > div .my-label > span,
-  .survey-wrap form input[type="submit"] .my-label > span {
-    max-height: 34px;
-  }
+    .survey-wrap {
+        width: 350px;
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .survey-wrap article {
+        width: 300px;
+        margin-left: 15px;
+    }
+    .survey-wrap header {
+        width: 300px;
+        border-bottom: 1px solid #2697f9;
+    }
+    .survey-wrap header h1 {
+        margin-bottom: 20px;
+        font-size: 26px;
+    }
+    .survey-wrap header h1:before {
+        display: none;
+    }
+    .survey-wrap header h1:after {
+        display: none;
+    }
+    .survey-wrap p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .survey-wrap form {
+        margin-top: 0px;
+    }
+    .survey-wrap form fieldset > div,
+    .survey-wrap form input[type="submit"] {
+        float: none;
+        width: 320px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .survey-wrap fieldset > div:nth-of-type(3) .survey-tooltip {
+        display: none;
+    }
+    .survey-tooltip p {
+        bottom: -51px;
+        font-size: 13px;
+        overflow: hidden;
+        width: 200px;
+    }
+    .my-lable {
+        height: 44px;
+        padding-top: 19px;
+        width: 320px;
+    }
+    .survey-wrap form fieldset > div .my-label > span,
+    .survey-wrap form input[type="submit"] .my-label > span {
+        max-height: 40px;
+    }
 }
