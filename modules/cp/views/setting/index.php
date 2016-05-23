@@ -106,6 +106,7 @@ $this->params['menu'] = [
                     </fieldset>
                 </div>
             </div>
+
         </div>
     <div id="tab_2" class="tab-pane">
         <?php

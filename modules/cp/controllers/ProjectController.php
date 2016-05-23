@@ -260,6 +260,7 @@ class ProjectController extends DefaultController
                                 ':iD' => $id
                             ])
                    ->one();
+               $aliases = [];
                /** @var $model Project */
                if( $model->is_delete == 0) {
 
@@ -305,7 +306,7 @@ class ProjectController extends DefaultController
                                ->all();
                            $model->developers = [];
                            foreach ($developers as $developer) {
-
+                               $aliases[$developer->user_id] = $developer->alias_user_id;
                                $model->developers[] = $developer->user_id;
                            }
                        }
@@ -316,8 +317,13 @@ class ProjectController extends DefaultController
                }
 
            }
-            return $this->render('create', ['model' => $model,
-                                            'title' => 'Edit the project #' . $model->id]);
+           return $this->render('create',
+               [
+                   'model' => $model,
+                   'aliases' => $aliases,
+                   'title' => 'Edit the project #' . $model->id
+               ]
+           );
 
         }else{
 

@@ -157,9 +157,11 @@ $this->params['menu'] = [
                                             $listUser = ArrayHelper::merge([], $listUsers);
                                             //var_dump($listUser);
                                         }
+                                        $model->setAlias(isset($aliases[$developer->id]) ? $aliases[$developer->id] : []);
                                         echo $form->field($model, 'alias')
                                             ->dropDownList( $listUser,  [
                                                 'prompt' => 'Not Set',
+                                                'name' => "Project[alias][$developer->id]"
                                             ] )
                                             ->label( '' );
 
