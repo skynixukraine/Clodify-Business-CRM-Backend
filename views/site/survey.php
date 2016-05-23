@@ -5,97 +5,78 @@
  * Date: 05.05.16
  * Time: 10:32
  */
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
-use yii\helpers\Url;
-
-/**
- * @var $survey \app\models\SurveysOption
- * @var $model \app\models\Survey
- */
-
-$this->title = $model->question;
-$canVote     = $model->canVote();
-$usersVote   = $model->getUsersVote();
 ?>
 
-<?php $this->registerJsFile('/js/survey.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+<!-- <?php $this->registerJsFile('/js/jQuery-2.1.4.min.js'); ?> -->
+<?php $this->registerJsFile('/js/survey.js'); ?>
 <?php $this->registerCssFile('/css/survey.css'); ?>
 
-<section class = "form-sent">
+<section class="form-sent">
     <p></p>
 </section>
 <section class="survey-wrap">
     <article>
         <header class="question">
-           <h1> <?= Html::encode($model->question)?></h1>
+            <h1>Чи подобається вам погода в квітні?</h1>
         </header>
-
-        <p><?= nl2br( Html::encode($model->description) )?></p>
-
+        <p> Подумайте про гарні та погані сторони цієї пори, зважте всі за і проти та як омого точніше обиріть один із варіантів.
+            <br> Згадайте про перепади температур, та про відключення опалення, а також про гарні сторони коли все розквітає.
+        </p>
     </article>
-    <i>(The survey will be closed on <?=date('d M, Y \a\t H:i', strtotime($model->date_end))?> and results will be published on this page)
-    <form id='survey-voice'>
-    <input type="hidden" name="id" value="<?=$model->id?>">
-    <fieldset>
-            <?php foreach($model->surveys as $survey):?>
-          <div>
-             <label class="my-label <?=( $usersVote && $usersVote == $survey->id ? 'checked-radio' : '' )?>">
-                 <?=Html::input('radio','answer',$survey->id);?>
-                 <span><?=Html::encode($survey->name);?></span>
-
-                 <?php if ( $survey->description ): ?>
-
-                     <div class="tooltip-survey">
-                         <span class="tooltip-over">?</span>
-                         <p class="tooltip-text">
-
-                             <?=nl2br(Html::encode($survey->description))?>
-
-                         </p>
-                     </div>
-
-                 <?php endif;?>
-            </label>
-          </div>
-            <?php endforeach ?>
+    <form method="POST">
+        <fieldset>
+            <div>
+                <label class="my-label">
+                    <input type="radio" name="radio" value="Дуже подобається">
+                    <span>Дуже подобається</span>
+                </label>
+            </div>
+            <div>
+                <label class="my-label">
+                    <input type="radio" name="radio" value="Жахлива пора, бо в мене алергія на квіти">
+                    <span>Жахлива пора, бо в мене алергія на квіти</span>
+                </label>
+            </div>
+            <div>
+                <label class="my-label">
+                    <input type="radio" name="radio" value="Подобається але могло бути й краще">
+                    <span>Подобається але могло бути й краще</span>
+                </label>
+                <div class="survey-tooltip">
+                    <span class="survey-tooltip-over">?</span>
+                    <p class="survey-tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
+                    <span class="survey-tooltip-arrow"></span>
+                </div>
+            </div>
+            <div>
+                <label class="my-label">
+                    <input type="radio" name="radio" value="Не подобається, бо більше незручностей">
+                    <span>Не подобається, бо більше незручностей</span>
+                </label>
+            </div>
+            <div>
+                <label class="my-label">
+                    <input type="radio" name="radio" value="Я до цього ставлюсь нормально">
+                    <span>Я до цього ставлюсь нормально  Я до цього ставлюсь нормально Я до цього ставлюсь нормально Я до цього ставлюсь нормально</span>
+                </label>
+                <div class="survey-tooltip">
+                    <span class="survey-tooltip-over">?</span>
+                    <p class="survey-tooltip-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidiminim veniam, quis</p>
+                    <span class="survey-tooltip-arrow"></span>
+                </div>
+            </div>
         </fieldset>
-        <?php if ( $canVote )  : ?>
-            <?php if (\app\components\Language::getLanguage() == 'en'):?>
-                <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Vote')?>" disabled>
-            <?php endif;?>
-            <?php if (\app\components\Language::getLanguage() == 'ua'):?>
-                <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Проголосувати')?>" disabled>
-            <?php endif;?>
-        <?php endif;?>
-        </form>
-       
-    </section>
-     <div class = "loader">
-            <img src="/img/loader.gif" >
-     </div>
+        <input type="submit" id="submit" class="sub" value="Проголосувати" disabled>
+    </form>
+</section>
+<div class="loader">
+    <img src="../img/loader.gif">
+</div>
 
+<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+<script>
+    $(function() {
+       SurveyModule.init();  
+    })
+</script>
 
-<?php
-
-if ( $canVote ) {
-
-    $this->registerJs('
-
-          myModule.changeFunction({
-            submitUrl : "' . Url::to(['site/submit-survey']) . '"
-          });
-          myModule.ajaxFormSubmit();
-          var myHtml = $("html");
-
-          if (myHtml.width() < 1170) {
-            myModule.tooltipSmallScreen();
-          }
-
-          if (myHtml.width() > 1170) {
-            myModule.tooltipLargeScreen();
-          }
-
-    ');
-
-}
