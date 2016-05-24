@@ -44,6 +44,7 @@ $this->params['menu'] = [
                     <div class="box box-inform">
                         <div class="box-body">
                             <span>Hello <?php echo $model->first_name?>
+                            <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?><br><?php endif?>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                                 <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>

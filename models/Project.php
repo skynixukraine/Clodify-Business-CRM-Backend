@@ -133,7 +133,8 @@ class Project extends \yii\db\ActiveRecord
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
             LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP )
-            WHERE users.id=:userId AND projects.is_delete = 0;
+            WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
+            AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
             ':role'     => User::ROLE_DEV,
             ':roleA'     => User::ROLE_ADMIN,
