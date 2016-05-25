@@ -106,7 +106,7 @@ class ReportController extends DefaultController
 
             $dataTable->setFilter('project_id=' . $projectId);
         }
-        if(isset($usersId)){
+        if($usersId && $usersId != null){
 
             $dataTable->setFilter('user_id=' . $usersId);
         }
@@ -177,7 +177,7 @@ class ReportController extends DefaultController
             }
             if($dateStart && $dateStart != null){
 
-               $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
+               $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
 
             }
 
