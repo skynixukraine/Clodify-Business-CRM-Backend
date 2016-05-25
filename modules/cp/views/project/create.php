@@ -143,10 +143,12 @@ $this->params['menu'] = [
                                 <tbody>
                                 <tr>
                                     <td><input type="checkbox" title="" name="Project[developers][]"
-                                            <?=($model->isInDevelopers($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?=($model->isInDevelopers($developer->id))
+                                                ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
                                     <td><input type="radio" title=""  name="Project[is_pm]"
-                                            <?=($model->isPm($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?=($model->isPm($developer->id))
+                                                ?'checked':''?>  value = "<?=$developer->id?>">
                                     </td>
                                     <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
                                     <td>

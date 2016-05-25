@@ -56,6 +56,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_FIN = "FIN";
 
     public $rawPassword;
+    public $status = [];
     private $auth_key = "XnM";
 
     /**
@@ -469,6 +470,44 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
 
+    }
+
+    public static function assignProject($project)
+    {
+        $data = [
+            'user_id'       => Yii::$app->user->id,
+            'project_id'    => $project,
+        ];
+        $model = ProjectDeveloper::find()
+            ->where($data)->one();
+
+        $data = [
+            'ProjectDeveloper' => $data
+        ];
+        $model = $model ?: new ProjectDeveloper();
+        $model->load($data);
+        $model->status = ProjectDeveloper::STATUS_ACTIVE;
+        $model->validate();
+        $model->save();
+    }
+
+    public static function unassignProject($project)
+    {
+        $data = [
+            'user_id'       => Yii::$app->user->id,
+            'project_id'    => $project,
+        ];
+        $model = ProjectDeveloper::find()
+            ->where($data)->one();
+
+        $data = [
+            'ProjectDeveloper' => $data
+        ];
+        $model = $model ?: new ProjectDeveloper();
+        $model->load($data);
+        $model->status = ProjectDeveloper::STATUS_INACTIVE;
+        $model->validate();
+        $model->save();
     }
 
 }

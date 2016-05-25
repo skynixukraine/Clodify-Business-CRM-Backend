@@ -64,7 +64,7 @@ class ReportController extends DefaultController
         $order              = Yii::$app->request->getQueryParam("order");
         $search             = Yii::$app->request->getQueryParam("search");
         $projectId          = Yii::$app->request->getQueryParam("project_id");
-        $usersId            = Yii::$app->request->getQueryParam("user_id");
+        $usersId            = Yii::$app->request->getQueryParam("user_develop");
         $customerId         = Yii::$app->request->getQueryParam("user_id");
         $dateStart          = Yii::$app->request->getQueryParam("date_start");
         $dateEnd            = Yii::$app->request->getQueryParam("date_end");
@@ -106,7 +106,7 @@ class ReportController extends DefaultController
 
             $dataTable->setFilter('project_id=' . $projectId);
         }
-        if($usersId && $usersId != null){
+        if(isset($usersId)){
 
             $dataTable->setFilter('user_id=' . $usersId);
         }
@@ -166,9 +166,6 @@ class ReportController extends DefaultController
 
 
                 }
-
-
-
                 if( $teammates && count($teammates) ) {
 
                     $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
@@ -178,19 +175,17 @@ class ReportController extends DefaultController
                 }
 
             }
-
-
             if($dateStart && $dateStart != null){
 
-           $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
+               $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '"');
 
-        }
+            }
 
-        if($dateEnd && $dateEnd != null){
+            if($dateEnd && $dateEnd != null){
 
-            $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
+                $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
 
-        }
+            }
 
 
         $dataTable->setFilter('is_delete=0');
@@ -207,12 +202,13 @@ class ReportController extends DefaultController
                 $model->getProject()->one()->name,
                /* $model->reporter_name,*/
                 (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
-                    ProjectDeveloper::findOne(['user_id' => $model->user_id, 'project_id' => $model->getProject()->one()->id ])->alias_user_id != null) ?
+                    ProjectDeveloper::findOne(['user_id' => $model->user_id,
+                        'project_id' => $model->getProject()->one()->id ])->alias_user_id != null) ?
                     $model->reporter_name . '(' . Yii::$app->user->getIdentity()->first_name . ' ' .
                         Yii::$app->user->getIdentity()->last_name . ')' : $model->reporter_name  ,
-                $model->date_report,
-                ( $model->invoice_id == null ? "No" : "Yes" ),
-                $model->hours
+                    $model->date_report,
+                    ( $model->invoice_id == null ? "No" : "Yes" ),
+                    $model->hours
             ];
         }
 

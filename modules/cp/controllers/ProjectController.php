@@ -140,7 +140,21 @@ class ProjectController extends DefaultController
             /*  @var $developer \app\models\User */
             foreach($developers as $developer){
 
-                $developersNames[] = $developer->first_name;
+                /** @var  $alias_user ProjectDeveloper*/
+                if($alias_user = ProjectDeveloper::findOne(['user_id' => $developer->id,
+                                                            'project_id' => $model->id])->alias_user_id) {
+                    $aliases = User::find()
+                                ->where('id=:alias', [
+                                        ':alias' => $alias_user])->one()->first_name . ' ' .
+                               User::find()
+                                ->where('id=:alias', [
+                                    ':alias' => $alias_user])->one()->last_name;
+                    $developersNames[] = $aliases . '(' .  $developer->first_name . $developer->last_name .') ';
+                } else {
+                    $developersNames[] = $developer->first_name;
+                }
+                //$aliases[$developer->user_id] = $developer->alias_user_id;
+
             }
             $customers = $model->getCustomers()->all();
             $customersNames = [];
