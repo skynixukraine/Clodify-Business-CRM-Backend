@@ -51,7 +51,7 @@ $this->params['menu'] = [
         </div>
         <div class="col-lg-2">
             <?php echo Html::label('Users:');
-            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '") AND is_delete=0')->groupBy(User::tableName() . '.id')->all();
+            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '") AND is_delete=0 AND is_active=1')->groupBy(User::tableName() . '.id ')->all();
             $listUsers = User::getCustomersDropDown( $users, 'id' );
             $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);
             echo Html::dropDownList('users', null, $listUsers, ['class'=>"form-control"])
