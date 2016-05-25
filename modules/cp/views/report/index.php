@@ -52,7 +52,7 @@ $this->params['menu'] = [
         <div class="col-lg-2">
             <?php echo Html::label('Users:');
             if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
-                $users = User::find()->all();
+                $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")')->all();
                 $listUsers = User::getCustomersDropDown( $users, 'id' );
                 $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);
             }

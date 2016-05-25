@@ -69,7 +69,7 @@ var adminReportModule = (function() {
             filterUsersSelect = $( filterUsersSelect );
             filterUsersSelect.change(function(){
                 var id = $(this).val();
-                dataFilter['user_id'] = id;
+                dataFilter['user_develop'] = id;
                 dataTable.api().ajax.reload();
             });
 

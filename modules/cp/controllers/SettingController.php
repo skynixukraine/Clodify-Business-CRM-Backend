@@ -64,6 +64,9 @@ class SettingController extends DefaultController
 
         if ($model->load(Yii::$app->request->post())) {
 
+            // Projects tab functionality
+            $this->assignToProject();
+
             if ($model->validate()) {
 
                 $model->save();
@@ -73,11 +76,13 @@ class SettingController extends DefaultController
         }
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
-        return $this->render("index", ['model' => $model, 'defaultPhoto' => $defaultPhoto, 'defaultSing' => $defaultSing]);
+        return $this->render("index", ['model' => $model,
+                            'defaultPhoto' => $defaultPhoto,
+                            'defaultSing' => $defaultSing]);
     }
 
 
-    public function actionSuspend()
+   /* public function actionSuspend()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
             $model =  ProjectDeveloper::find()
@@ -87,13 +92,19 @@ class SettingController extends DefaultController
                 ->one();
 
             $model->status = ProjectDeveloper::STATUS_INACTIVE;
-            $model->save(true, ['status']);
+            if($model->validate()){
+
+                $model->save();
+            }
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
         }
         return $this->redirect(['setting/index']);
-    }
+    }*/
 
-    public function actionActivate()
+    /**
+     * @return string
+     */
+    /*public function actionActivate()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
             $model =  ProjectDeveloper::find()
@@ -102,11 +113,27 @@ class SettingController extends DefaultController
                 ])
                 ->one();
             $model->status = ProjectDeveloper::STATUS_ACTIVE;
-            $model->save(true, ['status']);
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));
-        }
-        return $this->redirect(['setting/index']);
-    }
+            if($model->validate()){
+
+                $model->save();
+            }
+            $projects = [];
+            foreach ($projects as $project) {
+
+                /** @var $customer ProjectCustomer */
+                //$model->projects[] = $project->user_id;
+
+           // }
+            /*Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));*/
+        //}
+        /*return $this->redirect(['setting/index']);*/
+        /*return $this->render('index',
+            [
+                'model' => $model,
+                'title' => 'Edit the project #' . $model->id
+            ]
+        );
+    }*/
     public function actionUpload()
     {
 
@@ -134,7 +161,11 @@ class SettingController extends DefaultController
 
         return false;
 
-        }
+    }
+
+    /**
+     * @return string
+     */
     public function actionUploaded()
     {
 
@@ -161,6 +192,9 @@ class SettingController extends DefaultController
 
     }
 
+    /**
+     * @return string
+     */
     public function actionPhoto()
     {
         $result = [];
@@ -174,6 +208,10 @@ class SettingController extends DefaultController
         return json_encode($result);
 
     }
+
+    /**
+     * @return string
+     */
     public function actionSing()
     {
         $result = [];
@@ -186,6 +224,20 @@ class SettingController extends DefaultController
         }
         return json_encode($result);
 
+    }
+
+    protected function assignToProject()
+    {
+        $assigns = Yii::$app->request->post('Project');
+        $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+        /** @var Project $project */
+        foreach ($projects as $project) {
+            if (isset($assigns[$project->id])) {
+                User::assignProject($project->id);
+            } else {
+                User::unassignProject($project->id);
+            }
+        }
     }
 
 

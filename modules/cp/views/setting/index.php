@@ -238,24 +238,18 @@ $this->params['menu'] = [
                             <td><?= Html::encode($project->getCustomers()->one()->first_name  . $project->getCustomers()->one()->last_name)?></td>
                             <td><?= Html::encode($project->name)?></td>
                             <td><?= Html::encode($project->getProjectDevelopers()->one()->status)?></td>
-                            <?php if(($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)):?>
+                            <?php $active = ($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)?>
 
                                 <td>
-                                    <a href='<?= Url::toRoute(['setting/suspend', 'id' => $project->id])?>'>
-                                        <i class="fa fa-clock-o suspend" style="cursor: pointer"
-                                           data-toggle="tooltip" data-placement="top" title="Suspend"></i>
-                                    </a>
+                                    <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
+                                        <input class="<?=$active?'activate':'suspend'?>" type="checkbox"
+                                            <?=$active ? 'checked' : '' ?> style="cursor: pointer"
+                                            name="Project[<?=$project->id?>]" data-toggle="tooltip"
+                                            data-placement="top" title="<?=Yii::t('app', $active
+                                            ? 'Untick the checkbox to hide the project from your lists'
+                                            : 'Tick the checkbox to start using the project for your reports')?>"
+                                        />
                                 </td>
-                            <?php endif;?>
-                            <?php if(($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_INACTIVE)):?>
-
-                                <td>
-                                    <a href='<?= Url::toRoute(['setting/activate', 'id' => $project->id])?>'>
-                                        <i class="fa fa-check-square-o activate" style="cursor: pointer"
-                                           data-toggle="tooltip" data-placement="top" title="Activate"></i>
-                                    </a>
-                                </td>
-                            <?php endif;?>
                         </tr>
                         </tbody>
                     <?php endforeach;?>
@@ -271,6 +265,26 @@ $this->params['menu'] = [
 <script>
      $(function() {
        MyProfileModule.init();  
-    })
+    });
+     var inputCheck = $('input[type=checkbox]');
+
+     inputCheck.each(function(){
+         var thisCheck = $(this);
+         if(!thisCheck.prop('checked')){
+             thisCheck.parent().parent('tr').css("color", "grey");
+             /*console.log(thisCheck.parent().parent('tr'));*/
+         }
+
+         thisCheck.click(function(){
+             var check = $(this);
+             if(!check.prop('checked')){
+                 check.parent().parent('tr').css("color", "grey");
+             }
+
+             else{
+                 check.parent().parent('tr').css("background-color", "white");
+             }
+         })
+     })
 </script>
 
