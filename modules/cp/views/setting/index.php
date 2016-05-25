@@ -36,7 +36,7 @@ $this->params['menu'] = [
     <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
     <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
 </ul>
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 <div class="tab-content">
         <div id="tab_1" class="tab-pane active col-xs-12">
             <div class="row">
@@ -128,20 +128,30 @@ $this->params['menu'] = [
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
                 ],
             ]);
-        ?>
 
+         $photos = [];
+        //if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")) {
+        //    foreach (\yii\helpers\FileHelper::findFiles(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo){
+        /* @var $modelupload \app\models\Upload*/
+         echo   $form->field($modelupload, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo/*"]);
+        //    }
+       // }
+        ?>
+<!---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
         <script type="text/javascript">
             $(document).ready(function (){
                 var html = '';
                 <?php $photos = []; ?>
                 <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
                     <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
-                            html +=
-                                '<div onclick="setAsDefault(\'<?=basename($photo)?>\', \'photo\')" class="dz-preview dz-image-preview">' +
-                                    '<div class="dz-image">' +
-                                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" style="<?=$defaultPhoto!=basename($photo) ?: 'border: 3px solid blue'?>" />' +
-                                    '</div>' +
-                                '</div>';
+
+html +=
+    '<div onclick="setAsDefault(\'<?=basename($photo)?>\', \'photo\')" class="dz-preview dz-image-preview">' +
+        '<div class="dz-image">' +
+            '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" style="<?=$defaultPhoto!=basename($photo) ?: 'border: 3px solid blue'?>" />' +
+        '</div>' +
+    '</div>';
+
                     <?php endforeach ?>
                 $('#previews').html(html);
                 <?php endif; ?>
@@ -170,7 +180,7 @@ $this->params['menu'] = [
                         dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                               /* alert('Now its your default photo')*/;
+                               /* alert('Now its your default photo')*///;
                             } else {
                                 alert('Error! ' + response.error)
                             }

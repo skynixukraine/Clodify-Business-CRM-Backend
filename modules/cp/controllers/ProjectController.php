@@ -149,7 +149,7 @@ class ProjectController extends DefaultController
                                User::find()
                                 ->where('id=:alias', [
                                     ':alias' => $alias_user])->one()->last_name;
-                    $developersNames[] = $aliases . '(' .  $developer->first_name . $developer->last_name .') ';
+                    $developersNames[] = $aliases;
                 } else {
                     $developersNames[] = $developer->first_name;
                 }
