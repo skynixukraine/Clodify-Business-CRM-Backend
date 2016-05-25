@@ -38,6 +38,8 @@ use yii\web\UploadedFile;
  * @property integer $is_delete
  * @property string $photo
  * @property string $sing
+ * @property string $photos
+
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -58,6 +60,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public $rawPassword;
     public $status = [];
     private $auth_key = "XnM";
+    public $photo;
+    public $sing;
+    public $photos = [];
 
     /**
      * @inheritdoc
@@ -78,7 +83,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique'],
             ['email', 'email'],
-            [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
+            [['date_signup', 'date_login', 'date_salary_up', 'photos'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete'], 'integer'],
             [['phone','company' ], 'string', 'max' => 25],
             [['email'], 'string', 'max' => 150],
