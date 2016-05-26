@@ -91,7 +91,7 @@ class SiteController extends Controller
         }
         if ( $model->load(Yii::$app->request->post()) ) {
 
-            if( md5($model->password) == User::findOne(['email' => $model->email])->password ){
+            if( md5($model->password) == User::findOne(['email' => $model->email])->password && User::findOne(['email' => $model->email])->password != null ){
 
                 if ($model->login()) {
 
