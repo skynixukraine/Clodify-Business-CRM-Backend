@@ -77,14 +77,15 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="/img/avatar.png" class="user-image" alt="User Image"/>
-                            <!--<img src="<?/*=( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/' . Yii::$app->user->identity->photo)*/?>" class="user-image" alt="User Image"/>-->
+                            <?php //var_dump(Yii::$app->user->identity->photo);die();?>
+                           <!-- <img src="/img/avatar.png" class="user-image" alt="User Image"/>-->
+                            <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="user-image" alt="User Image"/>
                             <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="/img/avatar.png" class="img-circle" alt="User Image" />
+                                <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="User Image" />
                                 <p>
                                     <?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?>
                                     <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
@@ -93,7 +94,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
-                                        <a href="<?=Url::to("/site/logout")?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
+                                        <a href="<?=Url::to(["site/logout"])?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
                                 </div>
                             </li>
                         </ul>
@@ -110,7 +111,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="/img/avatar.png" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
                 </div>
                 <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
                     <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>
