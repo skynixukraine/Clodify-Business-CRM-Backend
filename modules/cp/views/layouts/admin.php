@@ -78,6 +78,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="/img/avatar.png" class="user-image" alt="User Image"/>
+                            <!--<img src="<?/*=( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/' . Yii::$app->user->identity->photo)*/?>" class="user-image" alt="User Image"/>-->
                             <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -245,7 +246,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 1.4
+            <b>Version</b> 1.2
         </div>
         <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'Skynix Ltd. All rights reserved.')?>
     </footer>
