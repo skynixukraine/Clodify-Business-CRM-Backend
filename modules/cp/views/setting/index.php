@@ -121,7 +121,14 @@ $this->params['menu'] = [
                             var img = $(file.previewElement);
                             setAsDefaultPhoto(file.name);
                             $(img).css('border', '3px solid blue');
+                            $('#tab_2 .dz-image img').css('border','0');
                         })
+                        $('#tab_2 .dz-image img').click(function(){
+                            var img = $(file.previewElement);
+                            $(img).css('border', '0');
+                        })
+                        
+
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
                 ],
@@ -163,9 +170,13 @@ $this->params['menu'] = [
                         console.log(photo);
                         $('.singuser').val(photo);
                     };
+
+                    
                     $('#tab_2 .dz-image img').click(function() {
-                        setBorder(this, '#tab_2 img');
+                    setBorder(this, '#tab_2 img');
                     });
+                                                        
+                   
                     $('#tab_3 .dz-image img').click(function() {
                         setBorder(this, '#tab_3 img');
                     });
@@ -190,6 +201,14 @@ $this->params['menu'] = [
                     'complete' => "function(file){
                     $(file.previewElement).on('click', function(){
                             setAsDefaultSing(file.name);
+                            var img = $(file.previewElement);
+                            $(img).css('border', '3px solid blue');
+                            $('#tab_3 .dz-image img').css('border','0');
+                        })
+                        $('#tab_3 .dz-image img').click(function(){
+                            var img = $(file.previewElement);
+                            $(img).css('border', '0');
+
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
