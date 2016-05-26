@@ -174,9 +174,9 @@ $this->params['menu'] = [
                         console.log(photo);
                         $('.photouser').val(photo);
                     };
-                    setAsDefaultSing = function(photo, request) {
-                        console.log(photo);
-                        $('.singuser').val(photo);
+                    setAsDefaultSing = function(sing, request) {
+                        console.log(sing);
+                        $('.singuser').val(sing);
                     };
 
                     

@@ -32,12 +32,17 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'delete', 'save', 'getphoto' ],
+                        'actions' => [ 'index', 'delete', 'save'],
                         'allow' => true,
                         'roles' => [User::ROLE_PM ],
                     ],
                     [
-                        'actions' => [ 'index', 'test', 'delete', 'save', 'getphoto'],
+                        'actions'=>['getphoto'],
+                        'allow'=>true,
+                        'roles'=>[User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                    ],
+                    [
+                        'actions' => [ 'index', 'test', 'delete', 'save'],
                         'allow' => true,
                         'roles' => [User::ROLE_DEV, User::ROLE_ADMIN],
                     ],
