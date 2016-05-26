@@ -119,17 +119,23 @@ $this->params['menu'] = [
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
-                        $(file.previewElement).on('click', function(){
+
+                        var imgPr = $('#previews img');
+                            $(file.previewElement).on('click', function(){
+                            $('.btn.btn-primary').removeAttr('disabled');
+                            $('.btn-primary').css('background', 'green');
                             var img = $(file.previewElement);
                             setAsDefaultPhoto(file.name);
-                            $(img).css('border', '3px solid blue');
-                            $('#tab_2 .dz-image img').css('border','0');
+                            imgPr.css('border','0');
+                            $('.dz-preview').css('border','0');
+                            $(this).css('border', '3px solid blue');
+                            
                         })
                         $('#tab_2 .dz-image img').click(function(){
                             var img = $(file.previewElement);
                             $(img).css('border', '0');
                         })
-                        
+                       
 
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
@@ -201,11 +207,16 @@ $this->params['menu'] = [
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
+                        var imgPr = $('#previews1 img');
                     $(file.previewElement).on('click', function(){
-                            setAsDefaultSing(file.name);
+                            $('.btn.btn-primary').removeAttr('disabled');
+                            $('.btn-primary').css('background', 'green');
                             var img = $(file.previewElement);
-                            $(img).css('border', '3px solid blue');
-                            $('#tab_3 .dz-image img').css('border','0');
+                            setAsDefaultSing(file.name);
+                            imgPr.css('border','0');
+                            $('.dz-preview').css('border','0');
+                            $(this).css('border', '3px solid blue');
+                            
                         })
                         $('#tab_3 .dz-image img').click(function(){
                             var img = $(file.previewElement);

@@ -41,8 +41,12 @@
 }
 
 
-.load tbody tr td:nth-child(1), .load tbody tr td:nth-child(4), .load tbody tr td:nth-child(6){
+.load tbody tr td:nth-child(1), .load tbody tr td:nth-child(6){
     width:5%;
+}
+
+.load tbody tr td:nth-child(4){
+    width:9%;
 }
 .load tbody tr td:nth-child(6){
     width:5%;
@@ -54,7 +58,7 @@
 }
 
 .load tbody tr td:nth-child(3){
-    width:50%;
+    width:46%;
 }
 
 .load tbody tr td:nth-child(5){
