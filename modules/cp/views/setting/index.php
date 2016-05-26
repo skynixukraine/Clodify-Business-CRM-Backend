@@ -208,6 +208,7 @@ $this->params['menu'] = [
                         $('#tab_3 .dz-image img').click(function(){
                             var img = $(file.previewElement);
                             $(img).css('border', '0');
+
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"

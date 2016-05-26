@@ -137,10 +137,17 @@ class SettingController extends DefaultController
     {
 
         $fileName = 'file';
-        $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/photo/';
-        if (!is_dir($uploadPath))
+        $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
+        if (!file_exists($uploadPath))
         {
             mkdir($uploadPath, 0777, true);
+            chmod($uploadPath, 0777);
+        }
+        $uploadPath = $uploadPath . 'photo/';
+        if (!file_exists($uploadPath))
+        {
+            mkdir($uploadPath, 0777, true);
+            chmod($uploadPath, 0777);
         }
 
         if (isset($_FILES[$fileName])) {
@@ -169,9 +176,16 @@ class SettingController extends DefaultController
     {
 
             $fileName = 'file';
-            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/sing/';
-            if (!is_dir($path)) {
+            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
+            if (!file_exists($path)) {
                 mkdir($path, 0777, true);
+                chmod($path, 0777);
+            }
+            $path = $path . 'sing/';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+                chmod($path, 0777);
+
             }
 
             if (isset($_FILES[$fileName])) {
@@ -180,7 +194,7 @@ class SettingController extends DefaultController
                 //Print file data
                 //print_r($file);
 
-                if ($file->saveAs($path . '/' . $file->name)) {
+                if ($file->saveAs($path  . '/' . $file->name)) {
                     //Now save file data to database
 
                     echo \yii\helpers\Json::encode($file);
