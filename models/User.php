@@ -38,8 +38,6 @@ use yii\web\UploadedFile;
  * @property integer $is_delete
  * @property string $photo
  * @property string $sing
- * @property string $photos
-
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -60,9 +58,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public $rawPassword;
     public $status = [];
     private $auth_key = "XnM";
-    public $photo;
-    public $sing;
-    public $photos = [];
 
     /**
      * @inheritdoc
@@ -78,12 +73,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role'], 'string'],
+            [['photo','sing','role'], 'string'],
             [['password', 'email', 'first_name', 'last_name', 'role'], 'required'],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique'],
             ['email', 'email'],
-            [['date_signup', 'date_login', 'date_salary_up', 'photos'], 'safe'],
+            [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete'], 'integer'],
             [['phone','company' ], 'string', 'max' => 25],
             [['email'], 'string', 'max' => 150],
@@ -498,15 +493,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public static function unassignProject($project)
     {
-        $data = [
-            'user_id'       => Yii::$app->user->id,
-            'project_id'    => $project,
-        ];
+
         $model = ProjectDeveloper::find()
-            ->where($data)->one();
+            ->where([
+                'user_id'       => Yii::$app->user->id,
+                'project_id'    => $project,
+            ])->one();
 
         $data = [
-            'ProjectDeveloper' => $data
+            'ProjectDeveloper' => [
+                'user_id' => Yii::$app->user->id,
+                'project_id' => $project,
+            ]
         ];
         $model = $model ?: new ProjectDeveloper();
         $model->load($data);

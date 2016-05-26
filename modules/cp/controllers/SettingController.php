@@ -17,7 +17,6 @@ use app\components\AccessRule;
 use app\models\User;
 use app\models\Project;
 use yii\web\UploadedFile;
-use app\models\Upload;
 
 
 class SettingController extends DefaultController
@@ -63,36 +62,20 @@ class SettingController extends DefaultController
                 ':ID' => Yii::$app->user->id
             ])->one();
 
-        $modelupload = new Upload();
         if ($model->load(Yii::$app->request->post())) {
-            //var_dump($model->photos);
-           // exit();
             // Projects tab functionality
-            if (Yii::$app->request->isPost) {
-                $modelupload->imageFiles[] = UploadedFile::getInstances($modelupload, 'imageFiles[]');
-                //var_dump($modelupload->imageFiles);
-                //exit();
+            $this->assignToProject();
 
-                if ($modelupload->uploadimg()) {
-                    // file is uploaded successfully
-                    //return;
-                    $this->assignToProject();
+            if ($model->validate()) {
 
-                    if ($model->validate()) {
-
-                        //$model->save();
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your profile data"));
-                        return $this->redirect(['index']);
-                    }
-                }
+                $model->save();
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your profile data"));
+                return $this->redirect(['index']);
             }
-
-
         }
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
         return $this->render("index", ['model' => $model,
-                            'modelupload' => $modelupload,
                             'defaultPhoto' => $defaultPhoto,
                             'defaultSing' => $defaultSing]);
     }
