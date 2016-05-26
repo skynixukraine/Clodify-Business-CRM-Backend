@@ -119,7 +119,7 @@ $this->params['menu'] = [
                     'complete' => "function(file){
                         $(file.previewElement).on('click', function(){
                             var img = $(file.previewElement);
-                            setAsDefault(file.name);
+                            setAsDefaultPhoto(file.name);
                             $(img).css('border', '3px solid blue');
                         })
                     }",
@@ -189,7 +189,7 @@ $this->params['menu'] = [
                 'clientEvents' => [
                     'complete' => "function(file){
                     $(file.previewElement).on('click', function(){
-                            setAsDefault(file.name);
+                            setAsDefaultSing(file.name);
                         })
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
