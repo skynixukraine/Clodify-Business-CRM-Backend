@@ -271,9 +271,9 @@ class InvoiceController extends DefaultController
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
-                            //->setTo($dataPdf->getUser()->one()->email)
-                            //->setCc(Yii::$app->params['adminEmail'])
-                            ->setTo('valeriya@skynix.co')
+                            ->setTo($dataPdf->getUser()->one()->email)
+                            ->setCc(Yii::$app->params['adminEmail'])
+                            //->setTo('valeriya@skynix.co')
                             ->attachContent($content, ['fileName' => 'Invoice' . $dataPdf->id . '.pdf'])
                             ->attachContent($content2, ['fileName' => 'TimesheetReport-Contract' . $dataPdf->contract_number . '-Invoice'. $dataPdf->id . '.pdf'])
                             ->send();
