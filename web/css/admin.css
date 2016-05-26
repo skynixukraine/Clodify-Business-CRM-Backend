@@ -1,72 +1,112 @@
-#emailtesterform-body{
-
+#emailtesterform-body {
     height: 300px;
 }
-.horizontal{
+
+.horizontal {
     max-width: 600px;
 }
-.generate{
+
+.generate {
     margin-top: 23px;
 }
-.hour + td{
+
+.hour + td {
     width: 200px;
 }
-#report-table_filter{
+
+#report-table_filter {
     margin: -34px 0 34px 0;
 }
-#report-table_filter input{
+
+#report-table_filter input {
     width: 200px;
     height: 33px;
 }
-#w0[action="/cp/user/invite"]{
+
+#w0[action="/cp/user/invite"] {
     width: 500px;
 }
 
-
-.submit-form{
-    float:right;
-    margin:10px 15px 0 10px;
+.submit-form {
+    float: right;
+    margin: 10px 15px 0 10px;
 }
-.my-profile-form{
-    margin:25px auto;
-   
+
+.my-profile-form {
+    margin: 25px auto;
     padding: 20px;
     /*border:1px solid #C7C7C7;
     border-radius:4px;
     padding:15px;*/
 }
 
-.my-profile-form fieldset{
-   
+
+.load tbody tr td:nth-child(1), .load tbody tr td:nth-child(4), .load tbody tr td:nth-child(6){
+    width:5%;
+}
+.load tbody tr td:nth-child(6){
+    width:5%;
+    
 }
 
+.load tbody tr td:nth-child(2){
+    width:20%;
+}
 
-.change-span{
+.load tbody tr td:nth-child(3){
+    width:50%;
+}
+
+.load tbody tr td:nth-child(5){
+    width:15%;
+}
+
+.change-span {
     margin-left: 10px;
 }
 
+.form-add-report>div {
+    padding-right: 0;
+}
 
+.form-add-report>div:first-child{
+    padding-left:0;
+}
 
 @media screen and (max-width: 1200px) {
-    #report-table_filter{
+    #report-table_filter {
         margin: 24px 0 0 0;
     }
-    .hour + td{
+    .hour + td {
         width: 100px;
     }
 }
+
 @media screen and (max-width: 768px) {
-    #report-table_filter{
+    #report-table_filter {
         margin: 24px 0 0 0;
     }
-    #w0{
+    #w0 {
         width: 100%;
     }
 }
 
-@media screen and (max-width: 429px){
-    .submit-form{
-        float:left;
-        margin-left:15px;
+@media screen and (max-width: 429px) {
+    .submit-form {
+        float: left;
+        margin-left: 15px;
+    }
+}
+
+@media screen and (max-width: 550px){
+    .form-add-report>div:nth-child(1), .form-add-report>div:nth-child(2){
+        width:49%;
+    }
+    .form-add-report>div:nth-child(3){
+        width:80%;
+        padding-left:0;
+    }
+    .form-add-report>div:nth-child(4){
+        width:19%;
     }
 }
