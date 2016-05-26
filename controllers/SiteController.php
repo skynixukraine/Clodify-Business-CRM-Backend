@@ -93,7 +93,7 @@ class SiteController extends Controller
             $user = User::findOne(['email' => $email]);
 
 
-            if($user && md5($model->password) == $user->password && $user->password != null ){
+            if( ($user = User::findOne(['email' => $email]) ) && md5($model->password) == $user->password ){
 
                 if ($model->login()) {
 
