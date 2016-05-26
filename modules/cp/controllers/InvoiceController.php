@@ -221,7 +221,6 @@ class InvoiceController extends DefaultController
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
 
 
-
                     $html = $this->renderPartial('invoicePDF', [
 
                         'id' => $dataPdf->id,
@@ -236,7 +235,8 @@ class InvoiceController extends DefaultController
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
                         'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
                         'idCustomer' => $dataPdf->getUser()->one()->id,
-                        'notes'      => $dataPdf->note
+                        'notes'      => $dataPdf->note,
+                        'sing'       => $dataPdf->getUser()->one()->sing
 
                     ]);
 
@@ -271,9 +271,9 @@ class InvoiceController extends DefaultController
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
-                            ->setTo($dataPdf->getUser()->one()->email)
-                            ->setCc(Yii::$app->params['adminEmail'])
-                            /*->setTo('valeriya@skynix.co')*/
+                            //->setTo($dataPdf->getUser()->one()->email)
+                            //->setCc(Yii::$app->params['adminEmail'])
+                            ->setTo('valeriya@skynix.co')
                             ->attachContent($content, ['fileName' => 'Invoice' . $dataPdf->id . '.pdf'])
                             ->attachContent($content2, ['fileName' => 'TimesheetReport-Contract' . $dataPdf->contract_number . '-Invoice'. $dataPdf->id . '.pdf'])
                             ->send();
