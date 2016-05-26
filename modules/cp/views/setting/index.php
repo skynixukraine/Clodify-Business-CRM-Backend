@@ -31,7 +31,9 @@ $this->params['menu'] = [
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
         <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
         <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
-        <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
+        <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
+            <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
+        <?php endif?>
         <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
     </ul>
     <?php $form = ActiveForm::begin(); ?>
@@ -46,8 +48,8 @@ $this->params['menu'] = [
                                 <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                                 <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>
-                            <span>You are joined Skynix on <?php echo $model->date_signup?></span><br/>
-                            <span>Last time you visited Skynix on <?php echo $model->date_login?></span><br/>
+                            <span>You are joined Skynix on <?php echo  Yii::$app->formatter->asDate($model->date_signup,'d/mm/Y') ?></span><br/>
+                            <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/mm/Y H:i')?></span><br/>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                         </div>
                     </div>
@@ -68,7 +70,7 @@ $this->params['menu'] = [
                                 if($hoursReportThisWeek == null) {
                                     echo '0';
                                 }else {
-                                    echo $hoursReportThisWeek;
+                                    echo round($hoursReportThisWeek, 2);
                                 }?> hours
                              </span><br/>
                             <span>This month you have reported
@@ -76,7 +78,7 @@ $this->params['menu'] = [
                                 if($hoursReportThisMonth == null) {
                                     echo '0';
                                 }else {
-                                    echo $hoursReportThisMonth;
+                                    echo round($hoursReportThisMonth);
                                 }?> hours
                             </span><br/>
                             <?php endif?>
@@ -96,7 +98,7 @@ $this->params['menu'] = [
                         <?php echo $form->field( $model, 'phone' )->textInput();?>
                     </fieldset>
                     <fieldset class = "col-sm-6">
-                        <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> true]);?>
+                        <?php echo $form->field( $model, 'email' )->textInput(['readonly'=> 'readonly']);?>
                         <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?>
                             <?php echo $form->field( $model, 'company' )->textInput();?>
                         <?php endif?>
