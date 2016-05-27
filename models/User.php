@@ -75,7 +75,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            [['password', 'email', 'first_name', 'last_name', 'role'], 'required'],
+            [['password', 'email', 'first_name', 'last_name', 'role'], 'required', 'except'=>'settings'],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique'],
             ['email', 'email'],
