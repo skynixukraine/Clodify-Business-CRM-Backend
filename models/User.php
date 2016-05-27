@@ -54,6 +54,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_DEV = "DEV";
     const ROLE_CLIENT = "CLIENT";
     const ROLE_FIN = "FIN";
+    const ROLE_GUEST = "GUEST";
 
     public $rawPassword;
     public $status = [];
