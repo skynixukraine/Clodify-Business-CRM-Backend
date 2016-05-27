@@ -61,6 +61,7 @@ class SettingController extends DefaultController
             ->where('id=:ID', [
                 ':ID' => Yii::$app->user->id
             ])->one();
+        $model->scenario = 'settings';
 
         if ($model->load(Yii::$app->request->post())) {
             // Projects tab functionality
