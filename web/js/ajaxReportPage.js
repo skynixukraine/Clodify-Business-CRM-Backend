@@ -33,7 +33,6 @@ var ajaxReportPageModule = (function() {
             ///Function changes load-table elements and do their input or select elements
             function changeTableRow() {
                 var tableLoad = $('.load'),
-                    clonedSelect = projectId.clone(),
                     tableLoadRow = tableLoad.find('tr:not(.changed-row)');
                 tableLoadRow.each(function() {
                     var thisRow = $(this);
@@ -46,11 +45,12 @@ var ajaxReportPageModule = (function() {
                         switch (i) {
                             case 1:
                                 thisTd.empty();
+                                var clonedSelect = projectId.clone();
                                 thisTd.append(clonedSelect);
-                                if(thisTd.hasClass('created-project-id')){
+                                if (thisTd.hasClass('created-project-id')) {
                                     thisTd.find("option:contains('" + thisValue + "')").prop('selected', true);
                                 }
-                                    thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
+                                thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
                                 break;
                             case 2:
                                 thisTd.empty();
@@ -62,8 +62,14 @@ var ajaxReportPageModule = (function() {
                                 break
                             case 4:
                                 thisTd.empty();
-                                thisTd.append('<div class="input-group date"><input class="form-control" data-date-format="dd/mm/yyyy" data-provide="datepicker" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>')
+                                thisTd.append('<div class="input-group date"><input class="form-control created-date" data-date-format="dd/mm/yyyy" data-provide="datepicker" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>');
                                 var input = thisTd.find('div');
+                                if (!input.find(input).hasClass('created-date')) {
+                                    thisValue = thisValue.split('-');
+                                    thisValue = thisValue.reverse();
+                                    thisValue = thisValue.join('');
+                                    console.log(thisValue);
+                                }
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy'
                                 }).datepicker("setDate", thisValue);
@@ -254,14 +260,33 @@ var ajaxReportPageModule = (function() {
 
             function countHours() {
                 var totalHours = 0;
-                var eachReportHours = $('.load tr>td:nth-child(4) input');
-                eachReportHours.each(function() {
-                    var thisHours = $(this);
-                    totalHours += +thisHours.val();
-                })
-                var showTotalHours = $('#totalHours');
-                showTotalHours.text("Total: " + totalHours + " hours");
+                var dateInp = $('.load .date input');
+                // var eachReportHours = $('.load tr>td:nth-child(4) input');
+                // eachReportHours.each(function() {
+                //     var thisHours = $(this);
+                //     totalHours += +thisHours.val();
+                // })
+                var day = new Date();
+                var date = (day.getDate()).toString();
+                var month = (day.getMonth() + 1).toString();
 
+                var dateFilterVal = $("#dateFilter").val();
+                if (dateFilterVal == 1) {
+                    dateInp.each(function() {
+                        var thisDate = $(this);
+                        var thisDateVal = thisDate.val();
+                        var splitDate = thisDateVal.split('/');
+                        if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
+                            console.log("dattttt");
+                            var hour = thisDate.closest('tr').find('.report-hour').val();
+                            console.log(thisDate.closest('tr').find('.report-hour').val());
+                            totalHours += +hour;
+                        }
+
+                    })
+                    var showTotalHours = $('#totalHours');
+                    showTotalHours.text("Total: " + totalHours + " hours");
+                }
             }
 
             removeReport();
