@@ -49,8 +49,8 @@
     width:9%;
 }
 .load tbody tr td:nth-child(6){
-    width:5%;
-    
+   max-width: 50px;
+   line-height:10px;
 }
 
 .load tbody tr td:nth-child(2){
