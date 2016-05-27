@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/ajaxReportPage.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -132,7 +132,7 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-xs-5  col-sm-6 col-md-6 field-task">
+            <div class="col-xs-5  col-sm-6 col-md-7 field-task">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [
@@ -151,9 +151,7 @@ $this->params['menu'] = [
                         ]
                 ])->textInput();?>
             </div>
-            <div class="col-xs-12 col-md-1" style="top: 24px; padding-left: 0px;">
-                <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
-            </div>
+            
         </div>
     </div>
 <?php ActiveForm::end();?>

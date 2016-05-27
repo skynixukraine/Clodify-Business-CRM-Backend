@@ -273,9 +273,11 @@ $this->params['menu'] = [
     </div>
 </div>
 <script>
+
     $(function() {
         MyProfileModule.init();
     });
+
     var inputCheck = $('input[type=checkbox]');
     inputCheck.each(function(){
         var thisCheck = $(this);
