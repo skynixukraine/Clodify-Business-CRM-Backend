@@ -68,7 +68,6 @@ var ajaxReportPageModule = (function() {
                                     thisValue = thisValue.split('-');
                                     thisValue = thisValue.reverse();
                                     thisValue = thisValue.join('');
-                                    console.log(thisValue);
                                 }
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy'
@@ -159,10 +158,17 @@ var ajaxReportPageModule = (function() {
                 return dataArr;
             }
 
-            function deleteHelpBlock() {
-                var helpSpan = $('.load .help-block');
-                var hasErrorTd = $('.load .has-error');
+            function deleteHelpBlock(thisHelp, all) {
+                if (all == "all") {
+                    var helpSpan = thisHelp.closest('td').find('.help-block');
+                    var hasErrorTd = thisHelp.closest('td');
+                    helpSpan.remove();
+                    hasErrorTd.removeClass('has-error');
+                }
+                var helpSpan = thisHelp.next('.help-block');
+                var hasErrorTd = thisHelp.closest('td');
                 helpSpan.remove();
+                console.log();
                 hasErrorTd.removeClass('has-error');
 
             }
@@ -176,27 +182,45 @@ var ajaxReportPageModule = (function() {
                     thisChange.change(function() {
                         var thisInput = $(this);
                         if (thisInput.hasClass('report-text') && thisInput.val().length < 20 && thisInput.val().length > 0) {
-                            deleteHelpBlock();
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task should contain at least 20 characters.</span>');
                         } else if (thisInput.hasClass('report-text') && thisInput.val().length == 0) {
-                            deleteHelpBlock();
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
                         } else if (thisInput.hasClass('report-hour') && thisInput.val() > 10) {
-                            deleteHelpBlock();
+
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Hours must be no greater than 10.</span>');
                         } else if (thisInput.hasClass('report-hour') && thisInput.val() <= 0) {
-                            deleteHelpBlock();
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Hours must be no less than 0.1.</span>');
                         } else if (thisInput.hasClass('report-hour') && thisInput.val().length == 0) {
-                            deleteHelpBlock();
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
+                        } else if (thisInput.closest('td').hasClass('created-project-id') && thisInput.val() == "") {
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
+                            thisInput.closest('td').addClass("has-error");
+                            thisInput.after('<span class = "help-block" id= "helpblockEr">Project ID cannot be blank.</span>');
                         } else {
-                            deleteHelpBlock();
+                            deleteHelpBlock(thisInput, "all");
+                            var count = 0;
                             saveDataInObject(thisInput);
                             jsonData = JSON.stringify(dataArr);
                             $.ajax({
@@ -217,6 +241,7 @@ var ajaxReportPageModule = (function() {
                                     countHours();
                                 }
                             })
+
                         }
                     })
                 })
@@ -277,7 +302,6 @@ var ajaxReportPageModule = (function() {
                         var thisDateVal = thisDate.val();
                         var splitDate = thisDateVal.split('/');
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
-                            console.log("dattttt");
                             var hour = thisDate.closest('tr').find('.report-hour').val();
                             console.log(thisDate.closest('tr').find('.report-hour').val());
                             totalHours += +hour;
