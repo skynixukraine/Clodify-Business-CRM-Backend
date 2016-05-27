@@ -18,7 +18,6 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
@@ -26,6 +25,8 @@ $this->params['breadcrumbs'][]  = $this->title;
 $this->params['menu'] = [
 ];
 ?>
+
+
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
@@ -116,6 +117,7 @@ $this->params['menu'] = [
                     'url'   =>'upload',
                     'maxFilesize' => '5',
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
+                    'autoDiscover' => 'false',
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
@@ -204,6 +206,7 @@ $this->params['menu'] = [
                     'url'   =>'uploaded',
                     'maxFilesize' => '2',
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
+                    'autoDiscover' => 'false',
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
@@ -275,6 +278,7 @@ $this->params['menu'] = [
 <script>
 
     $(function() {
+        Dropzone.autoDiscover = false;
         MyProfileModule.init();
     });
 
