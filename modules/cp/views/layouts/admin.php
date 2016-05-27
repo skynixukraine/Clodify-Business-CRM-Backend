@@ -125,7 +125,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <li class="header"><?=Yii::t('app', 'MAIN NAVIGATION')?></li>
                 <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "index" || Yii::$app->controller->id == "index" ? " active" : "")?>">
-                    <a href="<?=Url::to(['index/index']);?>">
+                    <a href="<?=Url::to(['/cp/index/index']);?>">
                         <i class="fa fa-home"></i> <span><?=Yii::t('app', "My Report")?></span>
                     </a>
                 </li>
@@ -133,7 +133,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
-                      <a href="<?=Url::to(['user/index']);?>">
+                      <a href="<?=Url::to(['/cp/user/index']);?>">
                         <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Users')?></span>
                     </a>
                 </li>
@@ -141,7 +141,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
-                    <a href="<?=Url::to(['teammate/index']);?>">
+                    <a href="<?=Url::to(['/cp/teammate/index']);?>">
                         <i class="fa fa-wechat"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
                     </a>
                 </li>
@@ -149,7 +149,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM]) && Team::hasTeam(Yii::$app->user->id) ) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teams" ? " active" : "")?>">
-                        <a href="<?=Url::to(['teams/index']);?>">
+                        <a href="<?=Url::to(['/cp/teams/index']);?>">
                             <i class="fa fa-users"></i> <span><?=Yii::t('app', 'My Team')?></span>
                         </a>
                 </li>
@@ -157,42 +157,49 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
-                    <a href="<?=Url::to(['project/index']);?>">
+                    <a href="<?=Url::to(['/cp/project/index']);?>">
                         <i class="fa fa-edit"></i> <span><?=Yii::t('app', 'Manage Projects')?></span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "report" ? " active" : "")?>">
-                    <a href="<?=Url::to(['report/index']);?>">
+                    <a href="<?=Url::to(['/cp/report/index']);?>">
                         <i class="fa fa-puzzle-piece"></i> <span><?=Yii::t('app', 'Reports')?></span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "invoice" ? " active" : "")?>">
-                    <a href="<?=Url::to(['invoice/index']);?>">
+                    <a href="<?=Url::to(['/cp/invoice/index']);?>">
                         <i class="fa fa-money"></i> <span>Invoices</span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
-                        <a href="<?=Url::to(['surveys/index']);?>">
+                        <a href="<?=Url::to(['/cp/surveys/index']);?>">
                             <i class="fa  fa-question"></i> <span>Manage Surveys</span>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                    <li class="treeview<?=( Yii::$app->controller->id == "extension" ? " active" : "")?>">
+                        <a href="<?=Url::to(['/ExtensionPackager/extension/index']);?>">
+                            <i class="fa fa-file-text-o"></i> <span>Manage Extensions</span>
                         </a>
                     </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "setting" ? " active" : "")?>">
-                        <a href="<?=Url::to(['setting/index']);?>">
+                        <a href="<?=Url::to(['/cp/setting/index']);?>">
                             <i class="fa fa-gears"></i> <span>My Profile</span>
                         </a>
                     </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "tool" ? " active" : "")?>">
-                        <a href="<?=Url::to(['tool/emailtester']);?>">
+                        <a href="<?=Url::to(['/cp/tool/emailtester']);?>">
                             <i class="fa fa-mail-forward"></i> <span>Email Tester</span>
                         </a>
                     </li>
