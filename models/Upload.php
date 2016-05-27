@@ -18,11 +18,13 @@ class Upload extends Model
      */
     public $file;
     public $fileName;
+    public $imageFiles;
 
     public function rules()
     {
         return [
             [['file'], 'file', 'skipOnEmpty' => false],
+
         ];
     }
 

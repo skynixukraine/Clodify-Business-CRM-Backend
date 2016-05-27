@@ -10,7 +10,7 @@ use yii\helpers\Url;
 
 /**
  * @var $survey \app\models\SurveysOption
- * @var $model \app\models\Surveys
+ * @var $model \app\models\Survey
  */
 
 $this->title = $model->question;
@@ -36,8 +36,10 @@ $colors = ['success', 'info', 'warning', 'danger'];
                     <span class="progress-text"><?=Html::encode($survey->name);?></span>
                     <span class="progress-number"><b><?=$survey->votes?></b>/<?=$model->total_votes?></span>
                     <div class="progress sm">
-                        <div class="progress-bar progress-bar-<?=(isset($colors[$key]) ? $colors[$key] : 'success') ?>" style="width: <?=round(($survey->votes / $model->total_votes) * 100 )?>%">
-                            <?=round(($survey->votes / $model->total_votes) * 100 )?>%
+                        <div class="progress-bar progress-bar-<?=(isset($colors[$key]) ? $colors[$key] : 'success') ?>"
+                             style="width: <?php ($model->total_votes != 0)? (round(($survey->votes / $model->total_votes) * 100 ) . '%') : 0 ?>">
+                            <?php ($model->total_votes != 0)? (round(($survey->votes / $model->total_votes) * 100 ) . '%') : 0 ?>
+
                         </div>
                     </div>
                 </div>

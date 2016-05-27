@@ -18,7 +18,7 @@ use Yii;
  * @property integer $total_votes
  * @property integer $is_delete
  */
-class Surveys extends \yii\db\ActiveRecord
+class Survey extends \yii\db\ActiveRecord
 {
     const SKYNIX_SURVEY_COOKIE = 'SKYNIX_SURVEY';
 
@@ -44,6 +44,7 @@ class Surveys extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['shortcode', 'question', 'date_start', 'date_end' ], 'required'],
             [['shortcode'], 'unique', 'message' => 'Sorry, the entered shortcode already exists'],
+            [['shortcode'], 'unique', 'targetAttribute'=>'shortcode'],
             [['name'],'string', 'max' => 250],
             [['descriptions'], 'string', 'max' => 1200],
             [['date_start', 'date_end'], 'safe'],

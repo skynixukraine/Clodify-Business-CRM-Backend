@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets;
+use yii\helpers\ArrayHelper;
 use app\models\Project;
 use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
@@ -132,6 +133,7 @@ $this->params['menu'] = [
                                 <th>Assign</th>
                                 <th>PM</th>
                                 <th>Developer Name</th>
+                                <th>Alias Name</th>
                             </tr>
                             </thead>
                             <?php $developers = User::allDevelopers();
@@ -141,13 +143,32 @@ $this->params['menu'] = [
                                 <tbody>
                                 <tr>
                                     <td><input type="checkbox" title="" name="Project[developers][]"
-                                            <?=($model->isInDevelopers($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?=($model->isInDevelopers($developer->id))
+                                                ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
                                     <td><input type="radio" title=""  name="Project[is_pm]"
-                                            <?=($model->isPm($developer->id))?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?=($model->isPm($developer->id))
+                                                ?'checked':''?>  value = "<?=$developer->id?>">
                                     </td>
                                     <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
+                                    <td>
+                                        <?php
+                                        if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
+                                            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '") AND is_delete=0 AND is_active=1')->all();
+                                            $listUsers = User::getCustomersDropDown( $users, 'id' );
+                                            $listUser = ArrayHelper::merge([], $listUsers);
+                                            //var_dump($listUser);
+                                        }
+                                        $model->setAlias(isset($aliases[$developer->id]) ? $aliases[$developer->id] : []);
+                                        echo $form->field($model, 'alias')
+                                            ->dropDownList( $listUser,  [
+                                                'prompt' => 'Not Set',
+                                                'name' => "Project[alias][$developer->id]"
+                                            ] )
+                                            ->label( '' );
 
+                                        ?>
+                                    </td>
 
                                 </tr>
                                 </tbody>
