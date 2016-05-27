@@ -162,7 +162,7 @@ $this->params['menu'] = [
             saveUrl: '<?=Url::to(['index/save'])?>',
             indexUrl: '<?=Url::to(['index/index'])?>'
         })
-        // ajaxReportPageModule.init();
+        ajaxReportPageModule.init();
 
 })
 </script> 
