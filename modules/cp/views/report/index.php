@@ -31,10 +31,13 @@ $this->params['menu'] = [
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
              if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-                 $projects = Project::find()->all();
+                 $projects = Project::find()
+                     ->where('is_delete=0')
+                     ->all();
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
                  $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
              }
+
             if ( User::hasPermission([User::ROLE_PM])){
                  $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
@@ -47,6 +50,16 @@ $this->params['menu'] = [
             }
 
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
+        </div>
+        <div class="col-lg-2">
+            <?php echo Html::label('Users:');
+            $users = User::find()
+                ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+                 AND is_delete=0 AND is_active=1')->groupBy(User::tableName() . '.id ')->all();
+            $listUsers = User::getCustomersDropDown( $users, 'id' );
+            $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);
+            echo Html::dropDownList('users', null, $listUsers, ['class'=>"form-control"])
+            ?>
         </div>
         <div class="col-lg-2">
             <?php echo Html::label('From date:');?>

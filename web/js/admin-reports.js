@@ -14,6 +14,7 @@ var adminReportModule = (function() {
         filterProjectsSelect = "select[name=project]",
         filterDateStartSelect = "#project-date_start",
         filterDateEndSelect = "#project-date_end",
+        filterUsersSelect = "select[name=users]",
         dataFilter = {
         },
         deleteModal;
@@ -63,6 +64,12 @@ var adminReportModule = (function() {
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
                 dataFilter['project_id'] = id;
+                dataTable.api().ajax.reload();
+            });
+            filterUsersSelect = $( filterUsersSelect );
+            filterUsersSelect.change(function(){
+                var id = $(this).val();
+                dataFilter['user_develop'] = id;
                 dataTable.api().ajax.reload();
             });
 

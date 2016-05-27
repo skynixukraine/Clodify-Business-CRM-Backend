@@ -15,6 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
+
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -72,22 +73,21 @@ $this->params['menu'] = [
             foreach($reports->each() as $report):?>
             <tbody>
             <tr>
-                <td><?= Html::encode($report->id)?></td>
+                <td><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
-                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
-                <td class="hour"><?= Html::encode($report->hours)?></td>
+                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>               
+                <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
                 <td><?= Html::encode($report->date_report)?></td>
                 <td>
                     <?php if($report->invoice_id == null):?>
-                        <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>
-                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                       <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
                     <?php if($report->invoice_id != null):?>
-                        <i class="fa fa-edit edit" style="cursor: pointer; visibility: hidden" data-toggle="tooltip" data-placement="top" title="Edit"></i>
-                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                       <i class="fa fa-edit edit" style="cursor: pointer; visibility: hidden" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                       <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
-                </td>
-            </tr>
+               </td>
+            </tr>
             </tbody>
             <?php endforeach;?>
         </table>
@@ -111,8 +111,8 @@ $this->params['menu'] = [
 /** @var $model Report */?>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2" style="padding-right: 10px;">
+        <div class="row form-add-report">
+            <div class="col-xs-3 col-sm-2 " ">
 
                 <?php $projects = \app\models\Project::getDevOrAdminOrPmProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
@@ -124,7 +124,7 @@ $this->params['menu'] = [
                 ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Project');?>
             </div>
 
-            <div class="col-lg-2" style="padding-left: 0; padding-right: 1px;">
+            <div class="col-xs-3 col-md-2" >
                     <?php echo $form->field( $model, 'date_report', [
 
                         'template' => '{label} ' .
@@ -136,7 +136,7 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-lg-6" style="padding-left: 10px; padding-right: 10px;">
+            <div class="col-xs-5  col-sm-6 col-md-6 field-task">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [
@@ -147,7 +147,7 @@ $this->params['menu'] = [
                 ])->label( 'Text field with task description' );?>
             </div>
 
-            <div class="col-lg-1" style="padding-left: 1px;">
+            <div class="col-xs-1 " >
                 <?php echo $form->field( $model, 'hours', [
 
                         'options' => [
@@ -155,8 +155,8 @@ $this->params['menu'] = [
                         ]
                 ])->textInput();?>
             </div>
-            <div class="col-lg-1" style="top: 24px; padding-left: 0px;">
-                    <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
+            <div class="col-xs-12 col-md-1" style="top: 24px; padding-left: 0px;">
+                <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
             </div>
         </div>
     </div>
@@ -168,5 +168,7 @@ $this->params['menu'] = [
             saveUrl: '<?=Url::to(['index/save'])?>',
             indexUrl: '<?=Url::to(['index/index'])?>'
         })
-    })
-</script>
+        // ajaxReportPageModule.init();
+
+})
+</script> 

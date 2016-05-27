@@ -2,7 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\Surveys;
+use app\models\Survey;
+use app\models\SurveyVoter;
 use app\models\SurveysOption;
 use Faker\Provider\tr_TR\DateTime;
 use Yii;
@@ -90,7 +91,11 @@ class SiteController extends Controller
         }
         if ( $model->load(Yii::$app->request->post()) ) {
 
-            if( md5($model->password) == User::findOne(['email' => $model->email])->password ){
+            //var_dump($email);
+            //exit();
+
+            /** @var $user User */
+            if( ($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password ){
 
                 if ($model->login()) {
 
@@ -275,64 +280,64 @@ class SiteController extends Controller
     }
     public function actionSurvey($shortcode)
     {
-        /** @var  $model Surveys*/
-        $model = Surveys::find()
+        /** @var  $model Survey*/
+        $model = Survey::find()
                         ->where(['shortcode' => $shortcode])
                         ->one();
-        if ($model != null) {
 
-                if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
+            if ($model != null) {
 
-                    Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
-                    return $this->redirect(['login']);
+                    if ( $model->is_private == 1 && Yii::$app->user->isGuest ) {
 
-                } else {
-
-                    if ( $model->isLive() ) {
-
-                        return $this->render('survey', [
-                            'model' => $model,
-                        ]);
+                        Yii::$app->getSession()->setFlash("error", "It is Skynix internal survey. Please login and get back to the survey.");
+                        return $this->redirect(['login']);
 
                     } else {
 
-                        $now = strtotime('now');
+                        if ( $model->isLive() ) {
 
-                        //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
-                        //var_dump(date("Y-m-d H:i:s", $now));
-                        //exit;
-                        if ( $now < strtotime( $model->date_start ) ) {
-
-                            return $this->render('survey-coming', [
+                            return $this->render('survey', [
                                 'model' => $model,
                             ]);
 
                         } else {
 
-                            return $this->render('survey-results', [
-                                'model' => $model,
-                            ]);
+                            $now = strtotime('now');
+
+                            //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
+                            //var_dump(date("Y-m-d H:i:s", $now));
+                            //exit;
+                            if ( $now < strtotime( $model->date_start ) ) {
+
+                                return $this->render('survey-coming', [
+                                    'model' => $model,
+                                ]);
+
+                            } else {
+
+                                return $this->render('survey-results', [
+                                    'model' => $model,
+                                ]);
+
+                            }
 
                         }
 
                     }
 
-                }
+            }else{
 
-        }else{
+                throw new NotFoundHttpException('The survey has not been found');
 
-            throw new NotFoundHttpException('The survey has not been found');
-
-        }
-        return $this->render('survey');
+            }
     }
 
     public function actionSubmitSurvey()
     {
         $data = ['success' => false];
-        /** @var $surveyModel Surveys */
+        /** @var $survey Model Survey */
         if ( ($id           = Yii::$app->request->post('id')) &&
-                ( $surveyModel  = Surveys::findOne($id) ) &&
+                ( $surveyModel  = Survey::findOne($id) ) &&
                 ( $answer       = Yii::$app->request->post('answer')) &&
                 $surveyModel->isLive() &&
                 $surveyModel->canVote()

@@ -37,7 +37,7 @@ $this->params['menu'] = [
             </div>
             <div class="form-group">
                 <?php $team_leader = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "')")->all();
+                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->all();
                 $listLeader = \yii\helpers\ArrayHelper::map( $team_leader, 'id', 'first_name' );
 
                 echo $form->field( $model, 'team_leader_id', [

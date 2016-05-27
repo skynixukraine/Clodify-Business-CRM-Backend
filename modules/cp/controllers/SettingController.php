@@ -16,6 +16,7 @@ use app\components\AccessRule;
 //use yii\web\User;
 use app\models\User;
 use app\models\Project;
+use yii\web\UploadedFile;
 
 
 class SettingController extends DefaultController
@@ -33,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
                     ],
@@ -45,6 +46,10 @@ class SettingController extends DefaultController
                     'index'     => ['get', 'post'],
                     'suspend'   => ['get', 'post'],
                     'activate'  => ['get', 'post'],
+                    'upload'    => ['get', 'post'],
+                    'uploaded'  => ['get', 'post'],
+                    'photo'     => ['get', 'post'],
+                    'sing'      => ['get', 'post'],
                 ],
             ],
         ];
@@ -56,21 +61,28 @@ class SettingController extends DefaultController
             ->where('id=:ID', [
                 ':ID' => Yii::$app->user->id
             ])->one();
+        $model->scenario = 'settings';
 
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
+            // Projects tab functionality
+            $this->assignToProject();
 
             if ($model->validate()) {
 
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited yours data"));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your profile data"));
                 return $this->redirect(['index']);
             }
         }
-        return $this->render("index", ['model' => $model]);
+        $defaultPhoto = User::getUserPhoto();
+        $defaultSing = User::getUserSing();
+        return $this->render("index", ['model' => $model,
+                            'defaultPhoto' => $defaultPhoto,
+                            'defaultSing' => $defaultSing]);
     }
 
 
-    public function actionSuspend()
+   /* public function actionSuspend()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
             $model =  ProjectDeveloper::find()
@@ -80,13 +92,19 @@ class SettingController extends DefaultController
                 ->one();
 
             $model->status = ProjectDeveloper::STATUS_INACTIVE;
-            $model->save(true, ['status']);
+            if($model->validate()){
+
+                $model->save();
+            }
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
         }
         return $this->redirect(['setting/index']);
-    }
+    }*/
 
-    public function actionActivate()
+    /**
+     * @return string
+     */
+    /*public function actionActivate()
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
             $model =  ProjectDeveloper::find()
@@ -95,10 +113,146 @@ class SettingController extends DefaultController
                 ])
                 ->one();
             $model->status = ProjectDeveloper::STATUS_ACTIVE;
-            $model->save(true, ['status']);
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));
+            if($model->validate()){
+
+                $model->save();
+            }
+            $projects = [];
+            foreach ($projects as $project) {
+
+                /** @var $customer ProjectCustomer */
+                //$model->projects[] = $project->user_id;
+
+           // }
+            /*Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));*/
+        //}
+        /*return $this->redirect(['setting/index']);*/
+        /*return $this->render('index',
+            [
+                'model' => $model,
+                'title' => 'Edit the project #' . $model->id
+            ]
+        );
+    }*/
+    public function actionUpload()
+    {
+
+        $fileName = 'file';
+        $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
+        if (!file_exists($uploadPath))
+        {
+            mkdir($uploadPath, 0777, true);
+            chmod($uploadPath, 0777);
         }
-        return $this->redirect(['setting/index']);
+        $uploadPath = $uploadPath . 'photo/';
+        if (!file_exists($uploadPath))
+        {
+            mkdir($uploadPath, 0777, true);
+            chmod($uploadPath, 0777);
+        }
+
+        if (isset($_FILES[$fileName])) {
+            $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+
+            //Print file data
+            //print_r($file);
+
+            if ($file->saveAs($uploadPath . '/' . $file->name)) {
+                //Now save file data to database
+
+                echo \yii\helpers\Json::encode($file);
+            }else{
+                return $this->render('index');
+            }
+        }
+
+        return false;
+
     }
+
+    /**
+     * @return string
+     */
+    public function actionUploaded()
+    {
+
+            $fileName = 'file';
+            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+                chmod($path, 0777);
+            }
+            $path = $path . 'sing/';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+                chmod($path, 0777);
+
+            }
+
+            if (isset($_FILES[$fileName])) {
+                $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+
+                //Print file data
+                //print_r($file);
+
+                if ($file->saveAs($path  . '/' . $file->name)) {
+                    //Now save file data to database
+
+                    echo \yii\helpers\Json::encode($file);
+                } else {
+                    return $this->render('index');
+                }
+            }
+
+    }
+
+    /**
+     * @return string
+     */
+    public function actionPhoto()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserPhoto($request['photo']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+
+    /**
+     * @return string
+     */
+    public function actionSing()
+    {
+        $result = [];
+        try {
+            $request = Yii::$app->getRequest()->post();
+            User::setUserSing($request['sing']);
+            $result['success'] = true;
+        } catch (\Exception $e) {
+            $result['error'] = $e->getMessage();
+        }
+        return json_encode($result);
+
+    }
+
+    protected function assignToProject()
+    {
+        $assigns = Yii::$app->request->post('Project');
+        $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+        /** @var Project $project */
+        foreach ($projects as $project) {
+            if (isset($assigns[$project->id])) {
+                User::assignProject($project->id);
+            } else {
+                User::unassignProject($project->id);
+            }
+        }
+    }
+
 
 }

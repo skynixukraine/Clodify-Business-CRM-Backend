@@ -25,17 +25,23 @@ var projectModule = (function() {
 
             if ($(".one input[type='checkbox']:checked").length == 1) {
 
-                $(this).parent().parent().find(" input[type='radio']").trigger("click");
+                if( $(".one input[type='radio']:checked").length == 1 ){
+                   return ;
+                }
+                else {
+                    $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
+                }
 
             }
 
         });
         $(".two input[type='checkbox']").click(function () {
 
-            if ($(".two input[type='checkbox']:checked").length == 1) {
-
-                $(this).parent().parent().find("input[type='radio']").trigger("click");
-
+            if( $(".two input[type='radio']:checked").length == 1 ){
+                return ;
+            }
+            else {
+                $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
             }
         });
 

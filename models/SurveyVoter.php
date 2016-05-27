@@ -14,7 +14,7 @@ use Yii;
  * @property integer $survey_id
  * @property integer $option_id
  *
- * @property Surveys $survey
+ * @property Survey $survey
  * @property Users $user
  */
 class SurveyVoter extends \yii\db\ActiveRecord
@@ -37,7 +37,7 @@ class SurveyVoter extends \yii\db\ActiveRecord
             [['user_id', 'survey_id', 'option_id'], 'integer'],
             [['ip'], 'string', 'max' => 25],
             [['ua_hash'], 'string', 'max' => 45],
-            [['survey_id'], 'exist', 'skipOnError' => true, 'targetClass' => Surveys::className(), 'targetAttribute' => ['survey_id' => 'id']],
+            [['survey_id'], 'exist', 'skipOnError' => true, 'targetClass' => Survey::className(), 'targetAttribute' => ['survey_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -61,7 +61,7 @@ class SurveyVoter extends \yii\db\ActiveRecord
      */
     public function getSurvey()
     {
-        return $this->hasOne(Surveys::className(), ['id' => 'survey_id']);
+        return $this->hasOne(Survey::className(), ['id' => 'survey_id']);
     }
 
     /**
