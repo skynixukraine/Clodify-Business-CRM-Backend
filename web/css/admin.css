@@ -41,29 +41,7 @@
 }
 
 
-/*.load tbody tr td:nth-child(1), .load tbody tr td:nth-child(6){
-    width:5%;
-}
 
-.load tbody tr td:nth-child(4){
-    width:9%;
-}
-.load tbody tr td:nth-child(6){
-   max-width: 50px;
-   line-height:10px;
-}
-
-.load tbody tr td:nth-child(2){
-    width:20%;
-}
-
-.load tbody tr td:nth-child(3){
-    width:46%;
-}
-
-.load tbody tr td:nth-child(5){
-    width:15%;
-}*/
 
 .change-span {
     margin-left: 10px;
