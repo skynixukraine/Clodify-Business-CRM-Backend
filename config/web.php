@@ -11,6 +11,9 @@ $config = [
         'cp' => [
             'class' => 'app\modules\cp\ControlPanel',
         ],
+        'ExtensionPackager' => [
+            'class' => 'app\modules\ExtensionPackager\ExtensionPackager',
+        ],
     ],
 
     'timeZone'=> 'Europe/Kiev',
