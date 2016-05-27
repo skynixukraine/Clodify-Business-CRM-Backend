@@ -15,7 +15,7 @@ var ajaxReportPageModule = (function() {
                 event.preventDefault();
             });
 
-            var projectId = $("#report-project_id"),
+            var projectId = $(".form-add-report #report-project_id"),
                 reportDate = $('#date_report'),
                 reportText = $('#report-task'),
                 reportHours = $('#report-hours'),
@@ -46,7 +46,9 @@ var ajaxReportPageModule = (function() {
                             case 1:
                                 thisTd.empty();
                                 var clonedSelect = projectId.clone();
+                                clonedSelect.addClass('report-project-id');
                                 thisTd.append(clonedSelect);
+
                                 if (thisTd.hasClass('created-project-id')) {
                                     thisTd.find("option:contains('" + thisValue + "')").prop('selected', true);
                                 }
@@ -105,7 +107,7 @@ var ajaxReportPageModule = (function() {
                                         console.log('error');
                                         tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.projectId + "</td><td>" + dataArr.reportText + "</td><td>" + dataArr.reportHours + "</td><td>" + dataArr.reportDate + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                         var form = $('.form-add-report');
-                                        form.find('#report-task, #report-hours, #report-project_id').val('');
+                                        form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
                                         $.each(dataArr, function(i) {
                                             console.log(dataArr[i]);
                                             delete dataArr[i];
@@ -135,25 +137,33 @@ var ajaxReportPageModule = (function() {
             }
 
             function saveChangedData() {
-                var thisSelect = $('#report-project_id option:selected').text(),
+                var thisSelect = $('.form-add-report #report-project_id :selected').val(),
                     dateReport = $('#date_report').val(),
                     reportTask = $('#report-task').val(),
                     reportHours = $('#report-hours').val();
 
-                if (thisSelect != "" && thisSelect != "Choose...") {
+                if (thisSelect != "") {
                     dataArr.projectId = thisSelect;
+                } else {
+                    dataArr.projectId = "";
                 }
 
                 if (dateReport != "") {
                     dataArr.reportDate = dateReport;
+                } else {
+                    dataArr.reportDate = "";
                 }
 
                 if (reportTask.length >= 20) {
                     dataArr.reportText = reportTask;
+                } else {
+                    dataArr.reportText = "";
                 }
 
                 if (reportHours != "" && reportHours < 10 && reportHours != 0) {
                     dataArr.reportHours = reportHours;
+                } else {
+                    dataArr.reportHours = "";
                 }
                 return dataArr;
             }
@@ -212,7 +222,7 @@ var ajaxReportPageModule = (function() {
                             }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
-                        } else if (thisInput.closest('td').hasClass('created-project-id') && thisInput.val() == "") {
+                        } else if (thisInput.hasClass('report-project-id') && thisInput.val() == "") {
                             if (thisInput.closest('td').hasClass("has-error")) {
                                 deleteHelpBlock(thisInput);
                             }
@@ -303,7 +313,6 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
-                            console.log(thisDate.closest('tr').find('.report-hour').val());
                             totalHours += +hour;
                         }
 
