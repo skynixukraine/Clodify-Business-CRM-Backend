@@ -103,7 +103,9 @@ $this->params['menu'] = [
                             <?php echo $form->field( $model, 'company' )->textInput();?>
                         <?php endif?>
                         <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
-                        <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
+                        <?php echo $form->field( $model, 'about', [
+                            'options' => ['style' => 'max-width: 500px'],
+                             ])->textarea(['style'=>'max-height: 300px'])->label('About Me');?>
                     </fieldset>
                 </div>
             </div>
