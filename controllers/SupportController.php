@@ -58,6 +58,12 @@ class SupportController extends Controller
     public function actionIndex()
     {
         $model = new SupportTicket();
+
+        if ( $model->load(Yii::$app->request->post()) ) {
+            if ($model->validate()) {
+                $model->save();
+            }
+        }
         return $this->render('index' ,['model' => $model]);
     }
 }

@@ -2,12 +2,13 @@
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use app\models\SupportTicket;
 
 /* @var $this yii\web\View
  */
 $this->title = 'Skynix Support';
 $this->registerJsFile('/js/bootstrap.min.js');
-$this->registerJsFile('/js/jquery-2.1.4.min.js');
+$this->registerJsFile('/js/jQuery-2.1.4.min.js');
 
 ?>﻿
 <?php $form = ActiveForm::begin()?>
