@@ -13,7 +13,6 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
-//use yii\web\User;
 use app\models\User;
 use app\models\Project;
 use yii\web\UploadedFile;

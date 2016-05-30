@@ -18,16 +18,14 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/jQuery-2.1.4.min.js');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
 $this->params['breadcrumbs'][]  = $this->title;
 $this->params['menu'] = [
 ];
 ?>
-
-
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
@@ -118,7 +116,6 @@ $this->params['menu'] = [
                     'url'   =>'upload',
                     'maxFilesize' => '5',
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
-                    'autoDiscover' => 'false',
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
@@ -132,13 +129,13 @@ $this->params['menu'] = [
                             imgPr.css('border','0');
                             $('.dz-preview').css('border','0');
                             $(this).css('border', '3px solid blue');
-                            
+
                         })
                         $('#tab_2 .dz-image img').click(function(){
                             var img = $(file.previewElement);
                             $(img).css('border', '0');
                         })
-                       
+
 
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
@@ -182,12 +179,12 @@ $this->params['menu'] = [
                         $('.singuser').val(sing);
                     };
 
-                    
+
                     $('#tab_2 .dz-image img').click(function() {
-                    setBorder(this, '#tab_2 img');
+                        setBorder(this, '#tab_2 img');
                     });
-                                                        
-                   
+
+
                     $('#tab_3 .dz-image img').click(function() {
                         setBorder(this, '#tab_3 img');
                     });
@@ -207,7 +204,6 @@ $this->params['menu'] = [
                     'url'   =>'uploaded',
                     'maxFilesize' => '2',
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
-                    'autoDiscover' => 'false',
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){
@@ -220,7 +216,7 @@ $this->params['menu'] = [
                             imgPr.css('border','0');
                             $('.dz-preview').css('border','0');
                             $(this).css('border', '3px solid blue');
-                            
+
                         })
                         $('#tab_3 .dz-image img').click(function(){
                             var img = $(file.previewElement);
@@ -274,21 +270,19 @@ $this->params['menu'] = [
             <?php endif;?>
         </div>
         </div>
-    </div>
         <?php ActiveForm::end();?>
+    </div>
 </div>
 <script>
-
     $(function() {
-        Dropzone.autoDiscover = false;
         MyProfileModule.init();
     });
-
     var inputCheck = $('input[type=checkbox]');
     inputCheck.each(function(){
         var thisCheck = $(this);
         if(!thisCheck.prop('checked')){
             thisCheck.parent().parent('tr').css("color", "grey");
+            /*console.log(thisCheck.parent().parent('tr'));*/
         }
         thisCheck.click(function(){
             var check = $(this);
