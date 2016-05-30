@@ -57,7 +57,7 @@ $this->params['menu'] = [
 <!--<label>Reports</label>-->
 <div class = "box">
     <div class = "box-body no-padding">
-        <table class = "table load">
+        <table class = "table load load-table">
             <!--<thead>
             <tr>
                 <th>ID</th>
@@ -77,11 +77,11 @@ $this->params['menu'] = [
                <td><?= Html::encode($report->getProject()->one()->name)?></td>
                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
                <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
-               <td><?= $report->date_report?></td>
+               <td><?= Html::encode($report->date_report)?></td>
                <td>
-                   <?php if($report->invoice_id == null):?>
+                    <?php if($report->invoice_id == null):?>
                         <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
-                   <?php endif;?>
+                    <?php endif;?>
                     <?php if($report->invoice_id != null):?>
                         <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
