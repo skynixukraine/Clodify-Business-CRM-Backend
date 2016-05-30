@@ -108,7 +108,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
-                                        <a href="<?=Url::to(["site/logout"])?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
+                                        <a href="<?=Url::to(["/site/logout"])?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
                                 </div>
                             </li>
                         </ul>
