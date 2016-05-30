@@ -19,6 +19,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/jQuery-2.1.4.min.js');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
 $this->params['breadcrumbs'][]  = $this->title;
@@ -272,8 +273,9 @@ $this->params['menu'] = [
                 </div>
             <?php endif;?>
         </div>
-        <?php ActiveForm::end();?>
+        </div>
     </div>
+        <?php ActiveForm::end();?>
 </div>
 <script>
 
@@ -287,7 +289,6 @@ $this->params['menu'] = [
         var thisCheck = $(this);
         if(!thisCheck.prop('checked')){
             thisCheck.parent().parent('tr').css("color", "grey");
-            /*console.log(thisCheck.parent().parent('tr'));*/
         }
         thisCheck.click(function(){
             var check = $(this);
