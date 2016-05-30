@@ -77,18 +77,32 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <?php //var_dump(Yii::$app->user->identity->photo);die();?>
-                           <!-- <img src="/img/avatar.png" class="user-image" alt="User Image"/>-->
-                            <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="user-image" alt="User Image"/>
+
+                            <?php if (Yii::$app->user->identity->photo != null):?>
+                                <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                                    '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="user-image" alt="User Image"/>
+                            <?php else:?>
+                                 <img src="/img/avatar.png" class="user-image" alt="User Image"/>
+                            <?php endif;?>
                             <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
+
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="User Image" />
+                                <?php if (Yii::$app->user->identity->photo != null):?>
+                                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                                    '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+                                <?php else:?>
+                                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+                                <?php endif;?>
                                 <p>
                                     <?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?>
-                                    <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php if (Yii::$app->user->identity->photo != null):?>
+                                         <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php else:?>
+                                        <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php endif;?>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -111,7 +125,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php if (Yii::$app->user->identity->photo != null):?>
+                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                        '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php else:?>
+                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php endif?>
                 </div>
                 <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
                     <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>
@@ -254,7 +273,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 1.2
+            <b>Version</b> 1.4
         </div>
         <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'Skynix Ltd. All rights reserved.')?>
     </footer>

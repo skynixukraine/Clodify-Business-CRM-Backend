@@ -50,9 +50,10 @@ var ajaxReportPageModule = (function() {
                                 thisTd.append(clonedSelect);
 
                                 if (thisTd.hasClass('created-project-id')) {
-                                    thisTd.find("option:contains('" + thisValue + "')").prop('selected', true);
+                                    thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
+                                } else {
+                                    thisTd.find("option:contains('" + thisValue + "')").prop('selected', true)
                                 }
-                                thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
                                 break;
                             case 2:
                                 thisTd.empty();
@@ -69,7 +70,7 @@ var ajaxReportPageModule = (function() {
                                 if (!input.find(input).hasClass('created-date')) {
                                     thisValue = thisValue.split('-');
                                     thisValue = thisValue.reverse();
-                                    thisValue = thisValue.join('');
+                                    thisValue = thisValue.join('/');
                                 }
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy'
@@ -89,7 +90,7 @@ var ajaxReportPageModule = (function() {
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
-                        saveChangedData();
+                        saveDataInObject();
                         $.each(dataArr, function(i) {
                             if (dataArr[i].length > 0) {
                                 count++;
@@ -125,23 +126,23 @@ var ajaxReportPageModule = (function() {
             }
 
 
-            ////////////////////////////////////////////////////////////////////////////
-            ///Function saves data from load-table//////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////
+            ///Function saves data from "load-table", when it changing and from /////////
+            ///"add-report" table, when report adding //////////////////////////////////
             function saveDataInObject(el) {
-                var selectVal = el.closest('tr').find('td:nth-child(2)').find('select option:selected').text();
-                dataArr.projectId = selectVal;
-                dataArr.reportDate = el.closest('tr').find('td:nth-child(5) div>input').val();
-                dataArr.reportText = el.closest('tr').find('td:nth-child(3) input').val();
-                dataArr.reportHours = el.closest('tr').find('td:nth-child(4) input').val();
-                return dataArr;
-            }
+                if (el != undefined) {
+                    var thisSelect = el.closest('tr').find('select option:selected').val(),
+                        dateReport = el.closest('tr').find('.created-date').val(),
+                        reportTask = el.closest('tr').find('.report-text').val(),
+                        reportHours = el.closest('tr').find('.report-hour').val();
+                } else {
+                    var thisSelect = $('.form-add-report #report-project_id :selected').val(),
+                        dateReport = $('#date_report').val(),
+                        reportTask = $('#report-task').val(),
+                        reportHours = $('#report-hours').val();
+                }
 
-            function saveChangedData() {
-                var thisSelect = $('.form-add-report #report-project_id :selected').val(),
-                    dateReport = $('#date_report').val(),
-                    reportTask = $('#report-task').val(),
-                    reportHours = $('#report-hours').val();
-
+                ///checking entered data, and saving their////////////////////////////////
                 if (thisSelect != "") {
                     dataArr.projectId = thisSelect;
                 } else {
@@ -150,6 +151,7 @@ var ajaxReportPageModule = (function() {
 
                 if (dateReport != "") {
                     dataArr.reportDate = dateReport;
+
                 } else {
                     dataArr.reportDate = "";
                 }
@@ -159,7 +161,6 @@ var ajaxReportPageModule = (function() {
                 } else {
                     dataArr.reportText = "";
                 }
-
                 if (reportHours != "" && reportHours < 10 && reportHours != 0) {
                     dataArr.reportHours = reportHours;
                 } else {
@@ -167,6 +168,8 @@ var ajaxReportPageModule = (function() {
                 }
                 return dataArr;
             }
+
+
 
             function deleteHelpBlock(thisHelp, all) {
                 if (all == "all") {
@@ -232,26 +235,32 @@ var ajaxReportPageModule = (function() {
                             deleteHelpBlock(thisInput, "all");
                             var count = 0;
                             saveDataInObject(thisInput);
-                            jsonData = JSON.stringify(dataArr);
-                            $.ajax({
-                                type: "POST",
-                                url: "index",
-                                data: jsonData,
-                                dataType: 'json',
-                                success: function(data) {
-                                    console.log('success');
-                                    console.log(data);
-                                },
-                                error: function(data) {
-                                    console.log('Data were send:');
-                                    $.each(dataArr, function(i) {
-                                        console.log(dataArr[i]);
-                                        delete dataArr[i];
-                                    });
-                                    countHours();
+                            $.each(dataArr, function(i) {
+                                if (dataArr[i] != "") {
+                                    count++;
                                 }
                             })
-
+                            if (count == 4) {
+                                jsonData = JSON.stringify(dataArr);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "index",
+                                    data: jsonData,
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        console.log('success');
+                                        console.log(data);
+                                    },
+                                    error: function(data) {
+                                        console.log('Data were send:');
+                                        $.each(dataArr, function(i) {
+                                            console.log(dataArr[i]);
+                                            delete dataArr[i];
+                                        });
+                                        countHours();
+                                    }
+                                })
+                            }
                         }
                     })
                 })
@@ -304,8 +313,12 @@ var ajaxReportPageModule = (function() {
                 var day = new Date();
                 var date = (day.getDate()).toString();
                 var month = (day.getMonth() + 1).toString();
+                var today = (day.getDay()).toString();
+
+                console.log(today);
 
                 var dateFilterVal = $("#dateFilter").val();
+                //for today reports
                 if (dateFilterVal == 1) {
                     dateInp.each(function() {
                         var thisDate = $(this);
@@ -317,10 +330,53 @@ var ajaxReportPageModule = (function() {
                         }
 
                     })
-                    var showTotalHours = $('#totalHours');
-                    showTotalHours.text("Total: " + totalHours + " hours");
+
                 }
+                //for this month reports
+                else if (dateFilterVal == 3) {
+                    dateInp.each(function() {
+                        var thisDate = $(this);
+                        var thisDateVal = thisDate.val();
+                        var splitDate = thisDateVal.split('/');
+                        if (month == parseInt(splitDate[1], 10)) {
+                            var hour = thisDate.closest('tr').find('.report-hour').val();
+                            totalHours += +hour;
+                        }
+
+                    })
+                }
+                //for last manth reports
+                else if (dateFilterVal == 4) {
+                    dateInp.each(function() {
+                        var thisDate = $(this);
+                        var thisDateVal = thisDate.val();
+                        var splitDate = thisDateVal.split('/');
+                        if (month - 1 == parseInt(splitDate[1], 10)) {
+                            var hour = thisDate.closest('tr').find('.report-hour').val();
+                            totalHours += +hour;
+                        }
+
+                    })
+                }
+                // //for this week reports
+                // else if(dateFilterVal == 2){
+                //     var week = 7 - today;
+                //     dateInp.each(function() {
+                //         var thisDate = $(this);
+                //         var thisDateVal = thisDate.val();
+                //         var splitDate = thisDateVal.split('/');
+                //         if (month == parseInt(splitDate[1], 10)) {
+                //             var hour = thisDate.closest('tr').find('.report-hour').val();
+                //             totalHours += +hour;
+                //         }
+
+                //     })
+                // }
+                var showTotalHours = $('#totalHours');
+                showTotalHours.text("Total: " + totalHours + " hours");
             }
+
+
 
             removeReport();
             addReport();

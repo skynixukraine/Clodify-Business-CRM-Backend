@@ -77,6 +77,11 @@
     padding-left:0;
 }
 
+
+.alias-name{
+    width:30%;
+    min-width:135px;
+}
 @media screen and (max-width: 1200px) {
     #report-table_filter {
         margin: 24px 0 0 0;

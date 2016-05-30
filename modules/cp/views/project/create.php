@@ -133,7 +133,7 @@ $this->params['menu'] = [
                                 <th>Assign</th>
                                 <th>PM</th>
                                 <th>Developer Name</th>
-                                <th>Alias Name</th>
+                                <th class = "alias-name">Alias Name</th>
                             </tr>
                             </thead>
                             <?php $developers = User::allDevelopers();
