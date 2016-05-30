@@ -186,10 +186,10 @@ var surveysModule = (function() {
 
                 /*dataTable.find("i[class*=edit]").click(function(){
 
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
+                 var id = $(this).parents("tr").find("td").eq(0).text();
+                 actionEdit( id );
 
-                });*/
+                 });*/
 
 
             });
