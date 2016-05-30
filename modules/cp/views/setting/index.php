@@ -49,7 +49,7 @@ $this->params['menu'] = [
                                 <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>
                             <span>You are joined Skynix on <?php echo  Yii::$app->formatter->asDate($model->date_signup,'d/MM/Y') ?></span><br/>
-                            <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/MM/Y H:i')?></span><br/>
+                            <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/MM/Y HH:mm')?></span><br/>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                         </div>
                     </div>
