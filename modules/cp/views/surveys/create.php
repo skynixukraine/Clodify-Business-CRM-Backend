@@ -54,13 +54,13 @@ $this->params['breadcrumbs'][]  = $this->title;
             <?php echo  $form->field( $model, 'date_start')->widget(DateTimePicker::className(), [
                     'name' => 'date_start',
                     'options' => [
-                        'value' => ($model->date_start ? date('d/m/Y H:i', strtotime($model->date_start)) : '')
+                        'value' => ($model->date_start ? date('dd/MM/yyyy HH:i', strtotime($model->date_start)) : '')
                     ],
                     'convertFormat' => true,
                     'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'dd/MM/yyyy hh:i',
-                    'startDate' => date('d/m/Y H:i'),
+                    'format' => 'dd/MM/yyyy HH:i',
+                    'startDate' => date('dd/MM/yyyy HH:i'),
                     'todayHighlight' => true
                     ]
                     ]);?>
@@ -69,13 +69,13 @@ $this->params['breadcrumbs'][]  = $this->title;
             <?php echo $form->field( $model, 'date_end')->widget(DateTimePicker::className(), [
                 'name' => 'date_end',
                 'options' => [
-                    'value' => ($model->date_end ? date('d/m/Y H:i', strtotime($model->date_end)) : '')
+                    'value' => ($model->date_end ? date('dd/MM/yyyy HH:i', strtotime($model->date_end)) : '')
                 ],
                 'convertFormat' => true,
                 'pluginOptions' => [
                     'autoclose' => true,
                     'format' => 'dd/MM/yyyy HH:i',
-                    'startDate' => date('d/m/Y H:i'),
+                    'startDate' => date('dd/MM/yyyy HH:i'),
                     'todayHighlight' => true
                 ]
             ]);?>
