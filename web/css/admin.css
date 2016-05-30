@@ -40,29 +40,29 @@
     padding:15px;*/
 }
 
-
-.load tbody tr td:nth-child(1), .load tbody tr td:nth-child(6){
-    width:5%;
+.load tbody tr td:nth-child(1),
+.load tbody tr td:nth-child(6) {
+    width: 5%;
 }
 
-.load tbody tr td:nth-child(4){
-    width:9%;
-}
-.load tbody tr td:nth-child(6){
-   max-width: 50px;
-   line-height:10px;
+.load tbody tr td:nth-child(4) {
+    width: 9%;
 }
 
-.load tbody tr td:nth-child(2){
-    width:20%;
+.load tbody tr td:nth-child(6) {
+    max-width: 50px;
 }
 
-.load tbody tr td:nth-child(3){
-    width:46%;
+.load tbody tr td:nth-child(2) {
+    width: 20%;
 }
 
-.load tbody tr td:nth-child(5){
-    width:15%;
+.load tbody tr td:nth-child(3) {
+    width: 46%;
+}
+
+.load tbody tr td:nth-child(5) {
+    width: 15%;
 }
 
 .change-span {
@@ -73,15 +73,19 @@
     padding-right: 0;
 }
 
-.form-add-report>div:first-child{
-    padding-left:0;
+.form-add-report>div:first-child {
+    padding-left: 0;
 }
 
-
-.alias-name{
-    width:30%;
-    min-width:135px;
+.alias-name {
+    width: 30%;
+    min-width: 135px;
 }
+
+.load-table .form-control {
+    padding: 2px 4px;
+}
+
 @media screen and (max-width: 1200px) {
     #report-table_filter {
         margin: 24px 0 0 0;
@@ -98,6 +102,27 @@
     #w0 {
         width: 100%;
     }
+    .load-table .form-control {
+        font-size: 11px;
+    }
+    .load-table .created-date {
+        display: none;
+    }
+    .load-table .created-date+span {
+        border: none;
+    }
+    .load-table tbody tr td:nth-child(5) {
+        width: 2%;
+    }
+    .load-table tbody tr td:nth-child(4) {
+        width: 12%;
+    }
+    .load-table>tbody>tr>td {
+        padding: 5px;
+    }
+    .load-table .date .input-group-addon {
+        padding: 6px 0;
+    }
 }
 
 @media screen and (max-width: 429px) {
@@ -107,15 +132,16 @@
     }
 }
 
-@media screen and (max-width: 550px){
-    .form-add-report>div:nth-child(1), .form-add-report>div:nth-child(2){
-        width:49%;
+@media screen and (max-width: 550px) {
+    .form-add-report>div:nth-child(1),
+    .form-add-report>div:nth-child(2) {
+        width: 49%;
     }
-    .form-add-report>div:nth-child(3){
-        width:80%;
-        padding-left:0;
+    .form-add-report>div:nth-child(3) {
+        width: 80%;
+        padding-left: 0;
     }
-    .form-add-report>div:nth-child(4){
-        width:19%;
+    .form-add-report>div:nth-child(4) {
+        width: 19%;
     }
 }

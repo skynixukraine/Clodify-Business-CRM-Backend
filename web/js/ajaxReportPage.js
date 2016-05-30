@@ -3,6 +3,7 @@ var ajaxReportPageModule = (function() {
     return {
         init: function() {
 
+            //for submit button
             // var fieldTask = $('.field-task');
             // var submitDiv = $('.submit-div');
             // var submitButton = $('.submit-div button[type=submit]'),
@@ -254,6 +255,7 @@ var ajaxReportPageModule = (function() {
                                     error: function(data) {
                                         console.log('Data were send:');
                                         $.each(dataArr, function(i) {
+                                            console.log(dataArr[i]);
                                             delete dataArr[i];
                                         });
                                         countHours();
@@ -293,7 +295,7 @@ var ajaxReportPageModule = (function() {
                                     console.log(dataArr[i]);
                                     delete dataArr[i];
                                 });
-                                clickedButton.parent().parent('tr').remove();
+                                clickedButton.parent().parent('tr').parent('tbody').remove();
                                 countHours();
                             }
                         })
