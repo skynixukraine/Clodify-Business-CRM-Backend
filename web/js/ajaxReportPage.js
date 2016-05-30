@@ -89,7 +89,7 @@ var ajaxReportPageModule = (function() {
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
-                        saveChangedData();
+                        saveDataInObject();
                         $.each(dataArr, function(i) {
                             if (dataArr[i].length > 0) {
                                 count++;
@@ -125,23 +125,23 @@ var ajaxReportPageModule = (function() {
             }
 
 
-            ////////////////////////////////////////////////////////////////////////////
-            ///Function saves data from load-table//////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////
+            ///Function saves data from "load-table", when it changing and from /////////
+            ///"add-report" table, when report adding //////////////////////////////////
             function saveDataInObject(el) {
-                var selectVal = el.closest('tr').find('td:nth-child(2)').find('select option:selected').text();
-                dataArr.projectId = selectVal;
-                dataArr.reportDate = el.closest('tr').find('td:nth-child(5) div>input').val();
-                dataArr.reportText = el.closest('tr').find('td:nth-child(3) input').val();
-                dataArr.reportHours = el.closest('tr').find('td:nth-child(4) input').val();
-                return dataArr;
-            }
+                if (el != undefined) {
+                    var thisSelect = el.closest('tr').find('select option:selected').val(),
+                        dateReport = el.closest('tr').find('.created-date').val(),
+                        reportTask = el.closest('tr').find('.report-text').val(),
+                        reportHours = el.closest('tr').find('.report-hour').val();
+                } else {
+                    var thisSelect = $('.form-add-report #report-project_id :selected').val(),
+                        dateReport = $('#date_report').val(),
+                        reportTask = $('#report-task').val(),
+                        reportHours = $('#report-hours').val();
+                }
 
-            function saveChangedData() {
-                var thisSelect = $('.form-add-report #report-project_id :selected').val(),
-                    dateReport = $('#date_report').val(),
-                    reportTask = $('#report-task').val(),
-                    reportHours = $('#report-hours').val();
-
+            ///checking entered data, and saving their////////////////////////////////
                 if (thisSelect != "") {
                     dataArr.projectId = thisSelect;
                 } else {
@@ -150,6 +150,7 @@ var ajaxReportPageModule = (function() {
 
                 if (dateReport != "") {
                     dataArr.reportDate = dateReport;
+
                 } else {
                     dataArr.reportDate = "";
                 }
@@ -159,7 +160,6 @@ var ajaxReportPageModule = (function() {
                 } else {
                     dataArr.reportText = "";
                 }
-
                 if (reportHours != "" && reportHours < 10 && reportHours != 0) {
                     dataArr.reportHours = reportHours;
                 } else {
@@ -167,6 +167,8 @@ var ajaxReportPageModule = (function() {
                 }
                 return dataArr;
             }
+
+
 
             function deleteHelpBlock(thisHelp, all) {
                 if (all == "all") {
@@ -232,26 +234,32 @@ var ajaxReportPageModule = (function() {
                             deleteHelpBlock(thisInput, "all");
                             var count = 0;
                             saveDataInObject(thisInput);
-                            jsonData = JSON.stringify(dataArr);
-                            $.ajax({
-                                type: "POST",
-                                url: "index",
-                                data: jsonData,
-                                dataType: 'json',
-                                success: function(data) {
-                                    console.log('success');
-                                    console.log(data);
-                                },
-                                error: function(data) {
-                                    console.log('Data were send:');
-                                    $.each(dataArr, function(i) {
-                                        console.log(dataArr[i]);
-                                        delete dataArr[i];
-                                    });
-                                    countHours();
+                            $.each(dataArr, function(i) {
+                                if (dataArr[i] != "") {
+                                    count++;
                                 }
                             })
-
+                            if (count == 4) {
+                                jsonData = JSON.stringify(dataArr);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "index",
+                                    data: jsonData,
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        console.log('success');
+                                        console.log(data);
+                                    },
+                                    error: function(data) {
+                                        console.log('Data were send:');
+                                        $.each(dataArr, function(i) {
+                                            console.log(dataArr[i]);
+                                            delete dataArr[i];
+                                        });
+                                        countHours();
+                                    }
+                                })
+                            }
                         }
                     })
                 })
