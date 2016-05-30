@@ -30,7 +30,7 @@ $this->params['menu'] = [
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
         <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
-        <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
+        <li><a href="#tab_3" data-toggle="tab">Sign</a></li>
         <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
             <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
         <?php endif?>
