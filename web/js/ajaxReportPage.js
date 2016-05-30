@@ -50,9 +50,10 @@ var ajaxReportPageModule = (function() {
                                 thisTd.append(clonedSelect);
 
                                 if (thisTd.hasClass('created-project-id')) {
-                                    thisTd.find("option:contains('" + thisValue + "')").prop('selected', true);
+                                    thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
+                                } else {
+                                    thisTd.find("option:contains('" + thisValue + "')").prop('selected', true)
                                 }
-                                thisTd.find("option[value = '" + thisValue + "']").prop('selected', true)
                                 break;
                             case 2:
                                 thisTd.empty();
@@ -69,7 +70,7 @@ var ajaxReportPageModule = (function() {
                                 if (!input.find(input).hasClass('created-date')) {
                                     thisValue = thisValue.split('-');
                                     thisValue = thisValue.reverse();
-                                    thisValue = thisValue.join('');
+                                    thisValue = thisValue.join('/');
                                 }
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy'
@@ -141,7 +142,7 @@ var ajaxReportPageModule = (function() {
                         reportHours = $('#report-hours').val();
                 }
 
-            ///checking entered data, and saving their////////////////////////////////
+                ///checking entered data, and saving their////////////////////////////////
                 if (thisSelect != "") {
                     dataArr.projectId = thisSelect;
                 } else {
@@ -312,8 +313,12 @@ var ajaxReportPageModule = (function() {
                 var day = new Date();
                 var date = (day.getDate()).toString();
                 var month = (day.getMonth() + 1).toString();
+                var today = (day.getDay()).toString();
+
+                console.log(today);
 
                 var dateFilterVal = $("#dateFilter").val();
+                //for today reports
                 if (dateFilterVal == 1) {
                     dateInp.each(function() {
                         var thisDate = $(this);
@@ -325,10 +330,53 @@ var ajaxReportPageModule = (function() {
                         }
 
                     })
-                    var showTotalHours = $('#totalHours');
-                    showTotalHours.text("Total: " + totalHours + " hours");
+
                 }
+                //for this month reports
+                else if (dateFilterVal == 3) {
+                    dateInp.each(function() {
+                        var thisDate = $(this);
+                        var thisDateVal = thisDate.val();
+                        var splitDate = thisDateVal.split('/');
+                        if (month == parseInt(splitDate[1], 10)) {
+                            var hour = thisDate.closest('tr').find('.report-hour').val();
+                            totalHours += +hour;
+                        }
+
+                    })
+                }
+                //for last manth reports
+                else if (dateFilterVal == 4) {
+                    dateInp.each(function() {
+                        var thisDate = $(this);
+                        var thisDateVal = thisDate.val();
+                        var splitDate = thisDateVal.split('/');
+                        if (month - 1 == parseInt(splitDate[1], 10)) {
+                            var hour = thisDate.closest('tr').find('.report-hour').val();
+                            totalHours += +hour;
+                        }
+
+                    })
+                }
+                // //for this week reports
+                // else if(dateFilterVal == 2){
+                //     var week = 7 - today;
+                //     dateInp.each(function() {
+                //         var thisDate = $(this);
+                //         var thisDateVal = thisDate.val();
+                //         var splitDate = thisDateVal.split('/');
+                //         if (month == parseInt(splitDate[1], 10)) {
+                //             var hour = thisDate.closest('tr').find('.report-hour').val();
+                //             totalHours += +hour;
+                //         }
+
+                //     })
+                // }
+                var showTotalHours = $('#totalHours');
+                showTotalHours.text("Total: " + totalHours + " hours");
             }
+
+
 
             removeReport();
             addReport();
