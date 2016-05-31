@@ -17,6 +17,7 @@ var ajaxReportPageModule = (function() {
             });
 
             var projectId = $(".form-add-report #report-project_id"),
+                report,
                 reportDate = $('#date_report'),
                 reportText = $('#report-task'),
                 reportHours = $('#report-hours'),
@@ -56,15 +57,15 @@ var ajaxReportPageModule = (function() {
                                     thisTd.find("option:contains('" + thisValue + "')").prop('selected', true)
                                 }
                                 break;
-                            case 2:
+                            case 3:
                                 thisTd.empty();
                                 thisTd.append('<input class="form-control report-text" type = "text" value = "' + thisValue + '">')
                                 break
-                            case 3:
+                            case 4:
                                 thisTd.empty();
                                 thisTd.append('<input class="form-control report-hour" type = "text" value = "' + thisValue + '">')
                                 break
-                            case 4:
+                            case 2:
                                 thisTd.empty();
                                 thisTd.append('<div class="input-group date"><input class="form-control created-date" data-date-format="dd/mm/yyyy" data-provide="datepicker" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>');
                                 var input = thisTd.find('div');
@@ -104,8 +105,8 @@ var ajaxReportPageModule = (function() {
                                     url: "index",
                                     data: report,
                                     dataType: 'json',
-                                    success: function(data) {
-                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td>" + dataArr.date_report + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
+                                    success: function() {
+                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                         var form = $('.form-add-report');
                                         form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
                                         $.each(dataArr, function(i) {
@@ -250,7 +251,7 @@ var ajaxReportPageModule = (function() {
                                     url: "index",
                                     data: report,
                                     dataType: 'json',
-                                    success: function(data) {
+                                    success: function() {
                                         console.log('success');
                                         console.log('Data were send:');
                                         $.each(dataArr, function(i) {
@@ -260,7 +261,7 @@ var ajaxReportPageModule = (function() {
                                         countHours();
                                     },
                                     error: function(data) {
-                                        console.log('error');
+                                        console.log('error' + data);
                                     }
                                 })
                             }
@@ -286,7 +287,7 @@ var ajaxReportPageModule = (function() {
                             url: "index",
                             data: report,
                             dataType: 'json',
-                            success: function(data) {
+                            success: function() {
                                 console.log('success');
                                 console.log('Data were send:');
                                 $.each(dataArr, function(i) {
@@ -297,7 +298,7 @@ var ajaxReportPageModule = (function() {
                                 countHours();
                             },
                             error: function(data) {
-                                console.log('error');
+                                console.log('error' + data);
                             }
                         })
                     })
