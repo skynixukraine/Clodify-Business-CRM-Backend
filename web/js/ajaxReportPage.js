@@ -99,13 +99,14 @@ var ajaxReportPageModule = (function() {
                             }
                             if (count == 4) {
                                 report = JSON.stringify(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
                                     data: 'jsonData=' + report,
                                     dataType: 'json',
-                                    success: function() {
-                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
+                                    success: function(data) {
+                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td>" + dataArr.date_report + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                         var form = $('.form-add-report');
                                         form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
                                         $.each(dataArr, function(i) {
@@ -118,7 +119,6 @@ var ajaxReportPageModule = (function() {
                                         countHours();
                                     },
                                     error: function(data) {
-                                        console.log(data);
                                         console.log('error');
                                     }
                                 })
@@ -135,9 +135,12 @@ var ajaxReportPageModule = (function() {
             function saveDataInObject(el) {
                 if (el != undefined) {
                     var thisSelect = el.closest('tr').find('select option:selected').val(),
+                        id = el.closest('tr').find('.report-id').text(),
                         dateReport = el.closest('tr').find('.created-date').val(),
                         reportTask = el.closest('tr').find('.report-text').val(),
                         reportHours = el.closest('tr').find('.report-hour').val();
+                    dataArr.id = id;
+
                 } else {
                     var thisSelect = $('.form-add-report #report-project_id :selected').val(),
                         dateReport = $('#date_report').val(),
@@ -235,16 +238,20 @@ var ajaxReportPageModule = (function() {
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Project ID cannot be blank.</span>');
                         } else {
+
                             deleteHelpBlock(thisInput, "all");
                             var count = 0;
                             saveDataInObject(thisInput);
                             $.each(dataArr, function(i) {
+
                                 if (dataArr[i] != "") {
                                     count++;
                                 }
+
                             })
-                            if (count == 4) {
+                            if (count == 5) {
                                 report = JSON.stringify(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
@@ -260,7 +267,7 @@ var ajaxReportPageModule = (function() {
                                         countHours();
                                     },
                                     error: function(data) {
-                                        console.log('error' + data);
+                                        console.log('error');
                                     }
                                 })
                             }
@@ -281,9 +288,10 @@ var ajaxReportPageModule = (function() {
                         var clickedButton = $(this);
                         saveDataInObject(clickedButton);
                         report = JSON.stringify(dataArr);
+                        console.log(report);
                         $.ajax({
                             type: "POST",
-                            url: "index",
+                            url: "index/delete",
                             data: 'jsonData=' + report,
                             dataType: 'json',
                             success: function() {
@@ -297,7 +305,11 @@ var ajaxReportPageModule = (function() {
                                 countHours();
                             },
                             error: function(data) {
-                                console.log('error' + data);
+                                var items = [];
+                                $.each(data, function(key, val) {
+                                    items.push(val);
+                                })
+                                console.log('error');
                             }
                         })
                     })

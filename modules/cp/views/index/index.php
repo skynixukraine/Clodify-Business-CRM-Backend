@@ -73,7 +73,7 @@ $this->params['menu'] = [
             foreach($reports->each() as $report):?>
             <tbody>
             <tr>
-                <td><?= Html::encode($report->id)?></td>
+                <td class = "report-id"><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td><?= Html::encode($report->date_report)?></td>
                 <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
