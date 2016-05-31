@@ -103,7 +103,7 @@ var ajaxReportPageModule = (function() {
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: report,
+                                    data: 'jsonData=' + report,
                                     dataType: 'json',
                                     success: function() {
                                         tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
