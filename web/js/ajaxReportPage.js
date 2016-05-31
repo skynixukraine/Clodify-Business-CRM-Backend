@@ -99,7 +99,6 @@ var ajaxReportPageModule = (function() {
                             }
                             if (count == 4) {
                                 report = JSON.stringify(dataArr);
-                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
@@ -249,7 +248,7 @@ var ajaxReportPageModule = (function() {
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: report,
+                                    data: 'jsonData=' + report,
                                     dataType: 'json',
                                     success: function() {
                                         console.log('success');
@@ -285,7 +284,7 @@ var ajaxReportPageModule = (function() {
                         $.ajax({
                             type: "POST",
                             url: "index",
-                            data: report,
+                            data: 'jsonData=' + report,
                             dataType: 'json',
                             success: function() {
                                 console.log('success');
