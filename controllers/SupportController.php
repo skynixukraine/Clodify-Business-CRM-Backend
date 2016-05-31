@@ -62,24 +62,48 @@ class SupportController extends Controller
         if( ( Yii::$app->request->isAjax &&
             Yii::$app->request->isGet &&
             ($data = Yii::$app->request->get('query'))) ) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-            return json_encode([
-                "success" => $data
-            ]);
+            $words = explode(' ', $data);
+            /*return json_encode([
+                "success" => $words
+            ]);*/
+            //$subjectId = [];
+
+            foreach($words as $word){
+                $subjects = SupportTicket::getSupport($word);
+                foreach($subjects as $subject){
+                    $subjectId[$subject->id] = $subject->subject;
+
+                }
+
+                //var_dump($subject);die();
+
+            }
+            if(!isset($subjectId)){
+                return [
+                    "error" => true
+                ];
+            }else{
+                return  $subjectId;
+                //return  $subjectId;
+
+            }
+
         }
-            if ( $model->load(Yii::$app->request->post()) ) {
-            $supportTicket = SupportTicket::supportSearch(SupportTicket::classname());
-            SupportTicket::loadMultiple($supportTicket, Yii::$app->request->post());
+            /*if ( $model->load(Yii::$app->request->post()) ) {*/
+            /*$supportTicket = SupportTicket::getSupport(SupportTicket::classname());
+            SupportTicket::loadMultiple($supportTicket, Yii::$app->request->post());*/
             //var_dump($supportTicket);die();
             /*if ($model != null) {
                 if ( $model->is_private == 0){
 
                 }
             }*/
-            if ($model->validate()) {
+            /*if ($model->validate()) {
                 $model->save();
-            }
-        }
+            }*/
+       // }
         return $this->render('index' ,['model' => $model]);
     }
 }

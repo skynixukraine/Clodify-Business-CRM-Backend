@@ -45,15 +45,13 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     ])->textInput(array('placeholder' => 'Enter the subject or your question'))->label( false );?>
 
                 </div><br>
-            </article>
-            <div>
                 <span>Are you looking for the following subject?</span>
-                <?php foreach($subject as $subjects):?>
-                    <div>
-                        <?php $model->id ?>
-                    </div>
-                <?php endforeach ?>
-            </div>
+                <table id="table-result">
+                <?php $subject = SupportTicket::getSupport(null);?>
+
+
+                </table>
+            </article>
 
             <div class="col-md-12">
                 <?= Html::submitButton( Yii::t('app', 'Submit Request'), [
@@ -75,7 +73,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
         var thisSup = $(this);
         var saveButton = $('.off-button');
         if(thisSup.val() == ""){
-            saveButton.removeAttr('disabled').css('background', '#337ab7');
+           // saveButton.removeAttr('disabled').css('background', '#337ab7');
         }
     });
     var input = '#supportticket-subject';
@@ -87,7 +85,26 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
             data: 'query='+$(input).val(),
             beforeSend: function(){
             },
-            success: function(msg){
+            success: function(response) {
+
+                var subjects = '';
+                if(response.error){
+                    var saveButton = $('.off-button');
+                    saveButton.removeAttr('disabled').css('background', '#337ab7');
+                    $('#table-result').html('');
+                    return;
+                }
+                $.each(response, function(e, i) {
+                    subjects += '<p><a href="ticket/'+e+'">Ticket '+i+' '+e+'</a></p>';
+
+                });
+                $('#table-result').html(subjects);
+
+            },
+            error: function(response) {
+                var saveButton = $('.off-button');
+                saveButton.removeAttr('disabled').css('background', '#337ab7');
+                console.log('error');
             }
         });
     })

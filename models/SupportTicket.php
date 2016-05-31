@@ -19,7 +19,8 @@ use Yii;
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
-    public $subject = [];
+    //public $subject;
+
     /**
      * @inheritdoc
      */
@@ -58,11 +59,12 @@ class SupportTicket extends \yii\db\ActiveRecord
             'date_completed' => 'Date Completed',
         ];
     }
-    public static function supportSearch()
+     static public function getSupport($words)
     {
         return self::find()
-            ->where("subject LIKE '%s%' ")
+            ->where("subject LIKE '%" . $words . "%' AND is_private=0")
             ->all();
+
     }
 
 
