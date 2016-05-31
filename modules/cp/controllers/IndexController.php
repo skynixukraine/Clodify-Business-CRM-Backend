@@ -100,7 +100,7 @@ class IndexController extends DefaultController
         if( ( Yii::$app->request->isAjax &&
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
-            
+
             $model->project_id  = $data->project_id;
             $model->date_report = DateUtil::convertData( $data->date_report );
             $model->task        = $data->task;
@@ -122,14 +122,15 @@ class IndexController extends DefaultController
 
                         Yii::$app->user->getIdentity()->last_name;
                         if($model->save()){
-                            //Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
                             return json_encode([
-                                "success" => true
+                                "success" => true,
+                                "id"      => $model->id
                             ]);
                         } else {
                             return json_encode([
                                 "success" => false,
-                                "errors" => [ "field" =>  $model->project_id, "message" => "Please choose a project" ]
+                                "id"      => $model->id,
+                                "errors"  => [ "field" =>  $model->project_id, "message" => "Please choose a project" ]
                             ]);
                         }
 
