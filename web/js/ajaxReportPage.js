@@ -23,10 +23,10 @@ var ajaxReportPageModule = (function() {
                 tableLoad = $('.load'),
                 formInput = [projectId, reportDate, reportText, reportHours];
             var dataArr = {
-                'projectId': '',
-                'reportDate': '',
-                'reportText': '',
-                'reportHours': '',
+                'project_id': '',
+                'date_report': '',
+                'task': '',
+                'hours': '',
             };
 
 
@@ -97,17 +97,15 @@ var ajaxReportPageModule = (function() {
                                 count++;
                             }
                             if (count == 4) {
-                                jsonData = JSON.stringify(dataArr);
+                                report = JSON.stringify(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: jsonData,
+                                    data: report,
                                     dataType: 'json',
-                                    success: function(data) {},
-                                    error: function(data) {
-                                        console.log(data);
-                                        console.log('error');
-                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.projectId + "</td><td>" + dataArr.reportText + "</td><td>" + dataArr.reportHours + "</td><td>" + dataArr.reportDate + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
+                                    success: function(data) {
+                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td>" + dataArr.date_report + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                         var form = $('.form-add-report');
                                         form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
                                         $.each(dataArr, function(i) {
@@ -118,6 +116,10 @@ var ajaxReportPageModule = (function() {
                                         editReport();
                                         removeReport();
                                         countHours();
+                                    },
+                                    error: function(data) {
+                                        console.log(data);
+                                        console.log('error');
                                     }
                                 })
                             }
@@ -145,27 +147,27 @@ var ajaxReportPageModule = (function() {
 
                 ///checking entered data, and saving their////////////////////////////////
                 if (thisSelect != "") {
-                    dataArr.projectId = thisSelect;
+                    dataArr.project_id = thisSelect;
                 } else {
-                    dataArr.projectId = "";
+                    dataArr.project_id = "";
                 }
 
                 if (dateReport != "") {
-                    dataArr.reportDate = dateReport;
+                    dataArr.date_report = dateReport;
 
                 } else {
-                    dataArr.reportDate = "";
+                    dataArr.date_report = "";
                 }
 
                 if (reportTask.length >= 20) {
-                    dataArr.reportText = reportTask;
+                    dataArr.task = reportTask;
                 } else {
-                    dataArr.reportText = "";
+                    dataArr.task = "";
                 }
                 if (reportHours != "" && reportHours < 10 && reportHours != 0) {
-                    dataArr.reportHours = reportHours;
+                    dataArr.hours = reportHours;
                 } else {
-                    dataArr.reportHours = "";
+                    dataArr.hours = "";
                 }
                 return dataArr;
             }
@@ -242,23 +244,23 @@ var ajaxReportPageModule = (function() {
                                 }
                             })
                             if (count == 4) {
-                                jsonData = JSON.stringify(dataArr);
+                                report = JSON.stringify(dataArr);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: jsonData,
+                                    data: report,
                                     dataType: 'json',
                                     success: function(data) {
                                         console.log('success');
-                                        console.log(data);
-                                    },
-                                    error: function(data) {
                                         console.log('Data were send:');
                                         $.each(dataArr, function(i) {
                                             console.log(dataArr[i]);
                                             delete dataArr[i];
                                         });
                                         countHours();
+                                    },
+                                    error: function(data) {
+                                        console.log('error');
                                     }
                                 })
                             }
@@ -278,18 +280,14 @@ var ajaxReportPageModule = (function() {
                     thisButton.click(function() {
                         var clickedButton = $(this);
                         saveDataInObject(clickedButton);
-                        jsonData = JSON.stringify(dataArr);
+                        report = JSON.stringify(dataArr);
                         $.ajax({
                             type: "POST",
                             url: "index",
-                            data: jsonData,
+                            data: report,
                             dataType: 'json',
                             success: function(data) {
                                 console.log('success');
-                                console.log(data);
-                            },
-                            error: function(data) {
-                                console.log('error');
                                 console.log('Data were send:');
                                 $.each(dataArr, function(i) {
                                     console.log(dataArr[i]);
@@ -297,6 +295,9 @@ var ajaxReportPageModule = (function() {
                                 });
                                 clickedButton.parent().parent('tr').parent('tbody').remove();
                                 countHours();
+                            },
+                            error: function(data) {
+                                console.log('error');
                             }
                         })
                     })
@@ -309,7 +310,7 @@ var ajaxReportPageModule = (function() {
             function countHours() {
                 var totalHours = 0;
                 var dateInp = $('.load .date input');
-                
+
                 var day = new Date();
                 var date = (day.getDate()).toString();
                 var month = (day.getMonth() + 1).toString();
@@ -363,8 +364,8 @@ var ajaxReportPageModule = (function() {
                     var mondayMonth = (monday.getMonth() + 1).toString();
                     var tuesday, wednesday, thursday, friday, saturday, sunday;
                     var week = [tuesday, wednesday, thursday, friday, saturday, sunday];
-                    var thisDayArr = [];  //array for saving days of week(date/month)
-                    
+                    var thisDayArr = []; //array for saving days of week(date/month)
+
                     //for every day of week, except monday, pushing date/month in array
                     $.each(week, function(i) {
                         var thisDay = $(this);
