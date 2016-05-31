@@ -57,9 +57,25 @@ class SupportController extends Controller
     }
     public function actionIndex()
     {
+        /** @var  $model SupportTicket*/
         $model = new SupportTicket();
+        if( ( Yii::$app->request->isAjax &&
+            Yii::$app->request->isGet &&
+            ($data = Yii::$app->request->get('query'))) ) {
 
-        if ( $model->load(Yii::$app->request->post()) ) {
+            return json_encode([
+                "success" => $data
+            ]);
+        }
+            if ( $model->load(Yii::$app->request->post()) ) {
+            $supportTicket = SupportTicket::supportSearch(SupportTicket::classname());
+            SupportTicket::loadMultiple($supportTicket, Yii::$app->request->post());
+            //var_dump($supportTicket);die();
+            /*if ($model != null) {
+                if ( $model->is_private == 0){
+
+                }
+            }*/
             if ($model->validate()) {
                 $model->save();
             }

@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -19,6 +19,7 @@ use Yii;
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
+    public $subject = [];
     /**
      * @inheritdoc
      */
@@ -57,4 +58,14 @@ class SupportTicket extends \yii\db\ActiveRecord
             'date_completed' => 'Date Completed',
         ];
     }
+    public static function supportSearch()
+    {
+        return self::find()
+            ->where("subject LIKE '%s%' ")
+            ->all();
+    }
+
+
+
+
 }

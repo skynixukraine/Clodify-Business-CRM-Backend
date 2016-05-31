@@ -4,8 +4,11 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\models\SupportTicket;
 
-/* @var $this yii\web\View
+/**
+ * @var $subject \app\models\SupportTicket
+ *  * @var $model \app\models\SupportTicket
  */
+
 $this->title = 'Skynix Support';
 $this->registerJsFile('/js/bootstrap.min.js');
 $this->registerJsFile('/js/jQuery-2.1.4.min.js');
@@ -23,6 +26,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
         </ul>
     </nav>-->
 </header>
+<?php /*var_dump(SupportTicket::supportSearch());exit();*/?>
 <div class="container-fluid">
     <div class="row">
         <section class="col-lg-6 col-lg-offset-3 sect3">
@@ -40,9 +44,16 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                         ]
                     ])->textInput(array('placeholder' => 'Enter the subject or your question'))->label( false );?>
 
-
                 </div><br>
             </article>
+            <div>
+                <span>Are you looking for the following subject?</span>
+                <?php foreach($subject as $subjects):?>
+                    <div>
+                        <?php $model->id ?>
+                    </div>
+                <?php endforeach ?>
+            </div>
 
             <div class="col-md-12">
                 <?= Html::submitButton( Yii::t('app', 'Submit Request'), [
@@ -66,5 +77,19 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
         if(thisSup.val() == ""){
             saveButton.removeAttr('disabled').css('background', '#337ab7');
         }
+    });
+    var input = '#supportticket-subject';
+    $(input).blur(function(event){
+        $.ajax({
+            type: "GET",
+            url: '',
+            dataType: 'json',
+            data: 'query='+$(input).val(),
+            beforeSend: function(){
+            },
+            success: function(msg){
+            }
+        });
     })
+
 </script>

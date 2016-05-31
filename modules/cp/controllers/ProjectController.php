@@ -149,7 +149,9 @@ class ProjectController extends DefaultController
                                User::find()
                                 ->where('id=:alias', [
                                     ':alias' => $alias_user])->one()->last_name;
-                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN])){$developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';}
+                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN] )){
+                        $developer->id == $alias_user ? $developersNames[] = $aliases:
+                        $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';}
                 } else {
                     $developersNames[] = $developer->first_name;
                 }

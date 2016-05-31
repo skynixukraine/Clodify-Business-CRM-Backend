@@ -16,7 +16,7 @@ $config = [
         ],
     ],
 
-   /* 'timeZone'=> 'Europe/Kiev',*/
+    'timeZone'=> 'Europe/Kiev',
     'language' => 'en-US',
     'components' => [
         'assetManager' => [
