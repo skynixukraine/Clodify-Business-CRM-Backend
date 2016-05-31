@@ -73,12 +73,12 @@ $this->params['menu'] = [
             foreach($reports->each() as $report):?>
             <tbody>
             <tr>
-               <td><?= Html::encode($report->id)?></td>
-               <td><?= Html::encode($report->getProject()->one()->name)?></td>
-               <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
-               <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
-               <td><?= Html::encode($report->date_report)?></td>
-               <td>
+                <td class = "report-id"><?= Html::encode($report->id)?></td>
+                <td><?= Html::encode($report->getProject()->one()->name)?></td>
+                <td><?= Html::encode($report->date_report)?></td>
+                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
+                <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
+                <td>
                     <?php if($report->invoice_id == null):?>
                         <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
