@@ -100,7 +100,6 @@ var ajaxReportPageModule = (function() {
                                 count++;
                             }
                             if (count == 4) {
-                                console.log(count + " count")
                                 report = JSON.stringify(dataArr);
                                 $.ajax({
                                     type: "POST",
@@ -124,7 +123,6 @@ var ajaxReportPageModule = (function() {
                                             countHours();
                                         } else {
                                             $.each(dataArr, function(i) {
-                                                console.log(dataArr[i]);
                                                 delete dataArr[i];
                                             });
                                             var ajaxError = $('.ajax-error');
@@ -135,7 +133,9 @@ var ajaxReportPageModule = (function() {
 
                                     },
                                     error: function(data) {
-                                        console.log('error');
+                                        var ajaxError = $('.ajax-error');
+                                        ajaxError.remove();
+                                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                     }
                                 })
                             }
@@ -203,7 +203,6 @@ var ajaxReportPageModule = (function() {
                 var helpSpan = thisHelp.next('.help-block');
                 var hasErrorTd = thisHelp.closest('td');
                 helpSpan.remove();
-                console.log();
                 hasErrorTd.removeClass('has-error');
 
             }
@@ -316,19 +315,26 @@ var ajaxReportPageModule = (function() {
                             url: "delete",
                             data: 'jsonData=' + report,
                             dataType: 'json',
-                            success: function() {
-                                var ajaxError = $('.ajax-error');
-                                ajaxError.remove();
-                                $.each(dataArr, function(i) {
-                                    delete dataArr[i];
-                                });
-                                clickedButton.parent().parent('tr').parent('tbody').remove();
-                                countHours();
+                            success: function(data) {
+                                if (data.success) {
+                                    var ajaxError = $('.ajax-error');
+                                    ajaxError.remove();
+                                    $.each(dataArr, function(i) {
+                                        delete dataArr[i];
+                                    });
+                                    clickedButton.parent().parent('tr').parent('tbody').remove();
+                                    countHours();
+                                } else {
+                                    var ajaxError = $('.ajax-error');
+                                    ajaxError.remove();
+                                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
+                                }
+
                             },
                             error: function(data) {
                                 var ajaxError = $('.ajax-error');
                                 ajaxError.remove();
-                                lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                                lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                             }
                         })
                     })
