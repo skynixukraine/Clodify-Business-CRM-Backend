@@ -29,6 +29,7 @@ var ajaxReportPageModule = (function() {
                 'task': '',
                 'hours': '',
             };
+            var lastForm = $('form:last');
 
 
             ////////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,8 @@ var ajaxReportPageModule = (function() {
                                 break
                             case 4:
                                 thisTd.empty();
-                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + thisValue + '">')
+                                var time = +thisValue;
+                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time.toFixed(2) + '">')
                                 break
                             case 2:
                                 thisTd.empty();
@@ -98,25 +100,39 @@ var ajaxReportPageModule = (function() {
                                 count++;
                             }
                             if (count == 4) {
+                                console.log(count + " count")
                                 report = JSON.stringify(dataArr);
-                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
                                     data: 'jsonData=' + report,
                                     dataType: 'json',
                                     success: function(data) {
-                                        tableLoad.append("<tbody><tr><td></td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td>" + dataArr.date_report + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
-                                        var form = $('.form-add-report');
-                                        form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
-                                        $.each(dataArr, function(i) {
-                                            console.log(dataArr[i]);
-                                            delete dataArr[i];
-                                        })
-                                        changeTableRow();
-                                        editReport();
-                                        removeReport();
-                                        countHours();
+                                        if (data.success) {
+                                            var ajaxError = $('.ajax-error');
+                                            ajaxError.remove();
+                                            id = data.id;
+                                            tableLoad.append("<tbody><tr><td class = 'report-id'>" + id + "</td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
+                                            var form = $('.form-add-report');
+                                            form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
+                                            $.each(dataArr, function(i) {
+                                                delete dataArr[i];
+                                            })
+                                            changeTableRow();
+                                            editReport();
+                                            removeReport();
+                                            countHours();
+                                        } else {
+                                            $.each(dataArr, function(i) {
+                                                console.log(dataArr[i]);
+                                                delete dataArr[i];
+                                            });
+                                            var ajaxError = $('.ajax-error');
+                                            ajaxError.remove();
+                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+
+                                        }
+
                                     },
                                     error: function(data) {
                                         console.log('error');
@@ -251,23 +267,30 @@ var ajaxReportPageModule = (function() {
                             })
                             if (count == 5) {
                                 report = JSON.stringify(dataArr);
-                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
                                     data: 'jsonData=' + report,
                                     dataType: 'json',
-                                    success: function() {
-                                        console.log('success');
-                                        console.log('Data were send:');
-                                        $.each(dataArr, function(i) {
-                                            console.log(dataArr[i]);
-                                            delete dataArr[i];
-                                        });
-                                        countHours();
+                                    success: function(data) {
+                                        if (data.success) {
+                                            var ajaxError = $('.ajax-error');
+                                            ajaxError.remove();
+                                            $.each(dataArr, function(i) {
+                                                delete dataArr[i];
+                                            });
+                                            countHours();
+                                        } else {
+                                            var ajaxError = $('.ajax-error');
+                                            ajaxError.remove();
+                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                                        }
+
                                     },
                                     error: function(data) {
-                                        console.log('error');
+                                        var ajaxError = $('.ajax-error');
+                                        ajaxError.remove();
+                                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
                                     }
                                 })
                             }
@@ -288,28 +311,24 @@ var ajaxReportPageModule = (function() {
                         var clickedButton = $(this);
                         saveDataInObject(clickedButton);
                         report = JSON.stringify(dataArr);
-                        console.log(report);
                         $.ajax({
                             type: "POST",
                             url: "delete",
                             data: 'jsonData=' + report,
                             dataType: 'json',
                             success: function() {
-                                console.log('success');
-                                console.log('Data were send:');
+                                var ajaxError = $('.ajax-error');
+                                ajaxError.remove();
                                 $.each(dataArr, function(i) {
-                                    console.log(dataArr[i]);
                                     delete dataArr[i];
                                 });
                                 clickedButton.parent().parent('tr').parent('tbody').remove();
                                 countHours();
                             },
                             error: function(data) {
-                                var items = [];
-                                $.each(data, function(key, val) {
-                                    items.push(val);
-                                })
-                                console.log('error');
+                                var ajaxError = $('.ajax-error');
+                                ajaxError.remove();
+                                lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
                             }
                         })
                     })
@@ -337,7 +356,10 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
+
                             totalHours += +hour;
+                            totalHours = totalHours.toFixed(2);
+                            totalHours = countMinutes(totalHours);
                         }
 
                     })
@@ -351,7 +373,10 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
+
                             totalHours += +hour;
+                            totalHours = totalHours.toFixed(2);
+                            totalHours = countMinutes(totalHours);
                         }
 
                     })
@@ -364,7 +389,10 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month - 1 == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
+
                             totalHours += +hour;
+                            totalHours = totalHours.toFixed(2);
+                            totalHours = countMinutes(totalHours);
                         }
 
                     })
@@ -396,14 +424,19 @@ var ajaxReportPageModule = (function() {
                         var thisDateVal = thisDate.val();
                         var splitDate = thisDateVal.split('/');
                         var hour = thisDate.closest('tr').find('.report-hour').val();
+
                         $.each(thisDayArr, function(i) {
                             var thisDate = thisDayArr[i].split('/');
                             if (thisDate[0] == parseInt(splitDate[0], 10) && thisDate[1] == parseInt(splitDate[1], 10)) {
                                 totalHours += +hour;
+                                totalHours = totalHours.toFixed(2);
+                                totalHours = countMinutes(totalHours);
                             }
                         })
                         if (mondayDate == parseInt(splitDate[0], 10) && mondayMonth == parseInt(splitDate[1], 10)) {
                             totalHours += +hour;
+                            totalHours = totalHours.toFixed(2);
+                            totalHours = countMinutes(totalHours);
                         }
                     })
                 }
@@ -417,6 +450,26 @@ var ajaxReportPageModule = (function() {
                 if (day !== 1)
                     date.setHours(-24 * (day - 1));
                 return date;
+            }
+
+            function countMinutes(val) {
+                var hours = String(val);
+                var splitHour = hours.split('.');
+                var hour = +splitHour[0];
+                var minutes = +splitHour[1];
+                var time;
+                if (minutes > 59) {
+                    hour += 1;
+                    splitHour[0] = hour;
+                    minutes = minutes % 60;
+                    if (minutes < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    splitHour[1] = minutes;
+                    time = splitHour.join('.');
+                }
+                time = splitHour.join('.');
+                return +time;
             }
 
 
