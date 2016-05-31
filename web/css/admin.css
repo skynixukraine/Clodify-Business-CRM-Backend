@@ -40,29 +40,30 @@
     padding:15px;*/
 }
 
-.load tbody tr td:nth-child(1),
-.load tbody tr td:nth-child(6) {
+.load-table tbody tr td:nth-child(1),
+.load-table tbody tr td:nth-child(6) {
     width: 5%;
 }
 
-.load tbody tr td:nth-child(4) {
+.load-table tbody tr td:nth-child(5) {
     width: 9%;
 }
 
-.load tbody tr td:nth-child(6) {
+.load-table tbody tr td:nth-child(6) {
     max-width: 50px;
+    line-height: 33px;
 }
 
-.load tbody tr td:nth-child(2) {
+.load-table tbody tr td:nth-child(2) {
     width: 20%;
 }
 
-.load tbody tr td:nth-child(3) {
+.load-table tbody tr td:nth-child(4) {
     width: 46%;
 }
 
-.load tbody tr td:nth-child(5) {
-    width: 15%;
+.load-table tbody tr td:nth-child(3) {
+    width: 18%;
 }
 
 .change-span {
@@ -95,6 +96,20 @@
     }
 }
 
+@media screen and (max-width: 990px) {
+    .load-table .created-date {
+        display: none;
+    }
+    .load-table .created-date+span {
+        border: none;
+    }
+    .load-table tbody tr td:nth-child(3) {
+        width: 2%;
+    }
+    .load-table .date .input-group-addon {
+        padding: 10px 0;
+    }
+}
 @media screen and (max-width: 768px) {
     #report-table_filter {
         margin: 24px 0 0 0;
@@ -105,24 +120,14 @@
     .load-table .form-control {
         font-size: 11px;
     }
-    .load-table .created-date {
-        display: none;
-    }
-    .load-table .created-date+span {
-        border: none;
-    }
+    
     .load-table tbody tr td:nth-child(5) {
-        width: 2%;
-    }
-    .load-table tbody tr td:nth-child(4) {
         width: 12%;
     }
     .load-table>tbody>tr>td {
         padding: 5px;
     }
-    .load-table .date .input-group-addon {
-        padding: 6px 0;
-    }
+    
 }
 
 @media screen and (max-width: 429px) {
