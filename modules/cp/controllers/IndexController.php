@@ -101,6 +101,11 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
+            if(isset($data->id)) {
+
+                $model = Report::findOne( $data->id );
+
+            }
             $model->project_id  = $data->project_id;
             $model->date_report = DateUtil::convertData( $data->date_report );
             $model->task        = $data->task;
@@ -130,56 +135,75 @@ class IndexController extends DefaultController
                             return json_encode([
                                 "success" => false,
                                 "id"      => $model->id,
-                                "errors"  => [ "field" =>  $model->project_id, "message" => "Please choose a project" ]
+                                "errors"  => [ "field" =>  $model->id, "message" => "Report does not add" ]
                             ]);
                         }
 
                     } else {
-                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
-                                                                                Maximum total hours is 12"));
+                        return json_encode([
+                            "success" => false,
+                            "id"      => $model->id,
+                            "errors"  => [ "field" =>  $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12" ]
+                        ]);
 
                     }
+                } else {
+                    return json_encode([
+                        "success" => false,
+                        "id"      => $model->id,
+                        "errors"  => [ "field" =>  $model->id, "message" => "Data is not valid!" ]
+                    ]);
                 }
-            }else{
+            } else{
 
-                Yii::$app->getSession()->setFlash('error',
-                Yii::t("app", "Report can't be added as invoice has been created on this project"));
-                return $this->render('index', ['model' => $model]);
+                return json_encode([
+                    "success" => false,
+                    "id"      => $model->id,
+                    "errors"  => [ "field" =>  $model->id, "message" => "The invoice has been created on this project" ]
+                ]);
             }
 
         }
-        return $this->render('index' ,['model' => $model]);
-
+        return $this->render('index', ['model' => $model]);
     }
 
     /** Delete developer`s report */
-    public function actionDelete()
-    {
-        //if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
+    public function actionDelete()    {
 
-            if( ( $id =  Yii::$app->request->get("id") ) ){
+        if( ( Yii::$app->request->isAjax &&
+            Yii::$app->request->isPost &&
+            ( $data = json_decode($_POST['jsonData']) ) &&
+             isset($data->id) ) ) {
 
-                /** @var  $model  Report*/
-                $model = Report::findOne( $id );
-                if($model->invoice_id == null) {
+            /** @var  $model  Report*/
+            $model = Report::findOne( $data->id );
 
-                    $model->is_delete = 1;
-                    $model->save(true, ['is_delete']);
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been deleted"));
-                    return $this->render('index' ,['model' => $model]);
-                }else{
+            if($model->invoice_id == null) {
 
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this report as
-                                                                                invoice has been generated"));
-                    return $this->redirect('index' ,['model' => $model]);
+                $model->is_delete = 1;
+                if($model->save(true, ['is_delete'])) {
+
+                    return json_encode([
+                        "success" => true,
+                        "id"      => $model->id
+                    ]);
+                } else {
+                    return json_encode([
+                        "success" => false,
+                        "id"      => $model->id,
+                        "errors"  => [ "field" =>  $model->project_id, "message" => "Data is not valid" ]
+                    ]);
                 }
+            }else{
+
+                return json_encode([
+                    "success" => false,
+                    "id"      => $model->id,
+                    "errors"  => [ "field" =>  $model->id, "message" => "You can't delete this report as invoice has been generated" ]
+                ]);
             }
-        //}else{
 
-        //    throw new \Exception('Ooops, you do not have priviledes for this action');
-
-       // }
-        return $this->redirect(['index']);
+        }
     }
 
     /** Add new report */
@@ -228,7 +252,7 @@ class IndexController extends DefaultController
                 }
             }
         }
-        return $this->redirect(['index']);
+        return $this->render('index');
     }
 
     public function actionGetphoto()

@@ -291,7 +291,7 @@ var ajaxReportPageModule = (function() {
                         console.log(report);
                         $.ajax({
                             type: "POST",
-                            url: "index/delete",
+                            url: "delete",
                             data: 'jsonData=' + report,
                             dataType: 'json',
                             success: function() {
