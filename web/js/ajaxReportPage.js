@@ -77,8 +77,11 @@ var ajaxReportPageModule = (function() {
                                     thisValue = thisValue.reverse();
                                     thisValue = thisValue.join('/');
                                 }
+                                var date = new Date();
+                                var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                                 $(input).datepicker({
-                                    format: 'dd/mm/yyyy'
+                                    format: 'dd/mm/yyyy',
+                                    endDate: currentDay
                                 }).datepicker("setDate", thisValue);
                                 break
                         }
@@ -88,11 +91,10 @@ var ajaxReportPageModule = (function() {
 
             ////////////////////////////////////////////////////////////////////////////
             ///Function for adding report in load-table and sending data trough ajax/////////
-
             function addReport() {
                 $.each(formInput, function(num) {
                     thisInput = $(this);
-                    //remove error message
+                    ///////Remove error messages,from under input
                     thisInput.click(function() {
                         var ajaxError = $('.ajax-error');
                         ajaxError.remove();
@@ -110,6 +112,7 @@ var ajaxReportPageModule = (function() {
                             if (dataArr[i].length > 0) {
                                 count++;
                             }
+                            ///////When count = 4 (all inputs in create-report form filled), send ajax
                             if (count == 4) {
                                 report = JSON.stringify(dataArr);
                                 $.ajax({
@@ -183,15 +186,13 @@ var ajaxReportPageModule = (function() {
                 } else {
                     dataArr.task = "";
                 }
-                if (reportHours != "" && reportHours < 10 && reportHours != 0) {
+                if (reportHours != "" && reportHours <= 10 && reportHours != 0) {
                     dataArr.hours = reportHours;
                 } else {
                     dataArr.hours = "";
                 }
                 return dataArr;
             }
-
-
 
             function deleteHelpBlock(thisHelp, all) {
                 if (all == "all") {
@@ -204,7 +205,6 @@ var ajaxReportPageModule = (function() {
                 var hasErrorTd = thisHelp.closest('td');
                 helpSpan.remove();
                 hasErrorTd.removeClass('has-error');
-
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +313,6 @@ var ajaxReportPageModule = (function() {
                                 } else {
                                     ajaxSuccessFunc(errorMsg, data);
                                 }
-
                             },
                             error: function(data) {
                                 ajaxSuccessFunc(errorMsg, data);

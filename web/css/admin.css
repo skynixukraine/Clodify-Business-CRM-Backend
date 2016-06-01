@@ -151,7 +151,9 @@
 }
 
 @media screen and (max-width: 550px) {
-    .form-add-report>div:nth-child(1),
+    .form-add-report>div:nth-child(1){
+        width:50%;
+    }
     .form-add-report>div:nth-child(2) {
         width: 49%;
     }
