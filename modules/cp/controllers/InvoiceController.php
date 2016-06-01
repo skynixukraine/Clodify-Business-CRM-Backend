@@ -261,7 +261,7 @@ class InvoiceController extends DefaultController
 
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
-                        Yii::$app->mailer->compose('invoice', [
+                        $email = Yii::$app->mailer->compose('invoice', [
 
                             'id' => $dataPdf->id,
                             'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
@@ -271,10 +271,14 @@ class InvoiceController extends DefaultController
                         ])
                             ->setSubject('Skynix Invoice #' . $dataPdf->id)
                             ->setFrom(Yii::$app->params['adminEmail'])
-                            ->setTo($dataPdf->getUser()->one()->email)
-                            ->setCc(Yii::$app->params['adminEmail'])
-                            //->setTo('valeriya@skynix.co')
-                            ->attachContent($content, ['fileName' => 'Invoice' . $dataPdf->id . '.pdf'])
+                            ->setTo($dataPdf->getUser()->one()->email);
+                        if(Yii::$app->params['invoice_cc_email']) {
+
+                            $email->setCc(Yii::$app->params['invoice_cc_email']);
+
+                        }
+                            //$email->setTo('valeriya@skynix.co');
+                            $email->attachContent($content, ['fileName' => 'Invoice' . $dataPdf->id . '.pdf'])
                             ->attachContent($content2, ['fileName' => 'TimesheetReport-Contract' . $dataPdf->contract_number . '-Invoice'. $dataPdf->id . '.pdf'])
                             ->send();
 
