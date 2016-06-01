@@ -135,6 +135,8 @@ var ajaxReportPageModule = (function() {
                                             $.each(dataArr, function(i) {
                                                 delete dataArr[i];
                                             });
+                                            var helpBlock = $('.form-add-report .help-block');
+                                            helpBlock.text('');
                                             var ajaxError = $('.ajax-error');
                                             ajaxError.remove();
                                             lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
@@ -334,6 +336,8 @@ var ajaxReportPageModule = (function() {
                                     });
                                     clickedButton.parent().parent('tr').parent('tbody').remove();
                                     countHours();
+                                    var form = $('.form-add-report');
+                                    form.find(' #report-hours').val('');
                                 } else {
                                     var ajaxError = $('.ajax-error');
                                     ajaxError.remove();
