@@ -21,46 +21,57 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
     <h1>Skynix Team</h1>
 </header>
 <div class="container-fluid">
-<div class="row">
-    <div class="col-md-6 box box-primary box-body col-lg-offset-3">
+    <div class="row">
+        <div class="col-md-6 box box-primary box-body col-lg-offset-3">
 
-            <?php echo $form->field( $model, 'subject')
-                ->textInput([
-                    'class'  => 'form-control',
-                ])-> label();?>
+                <?php echo $form->field( $model, 'subject')
+                    ->textInput([
+                        'class'  => 'form-control',
+                    ])-> label();?>
+            <?php if(Yii::$app->user->isGuest):?>
+                <?php echo $form->field( $model, 'email')
+                    ->textInput([
+                        'class' => 'form-control ',
+                        'placeholder'   => 'Enter email',
+                        'type'          => 'email',
+                    ])-> label( 'Your Email Address' );?>
+            <?php endif?>
 
-            <?php echo $form->field( $model, 'email')
-                ->textInput([
-                    'class' => 'form-control',
-                    'placeholder'   => 'Enter email',
-                    'type'          => 'email',
-                ])-> label( 'Your Email Address' );?>
-
-            <?php echo $form->field( $model, 'description')
-                ->textarea([
-                    'class'  => 'form-control',
-                ])-> label();?>
-        <!--Upload file Dropzone-->
-        <?php
-        echo \kato\DropZone::widget([
-            'options' => [
-                'url'   =>  'upload',
-                'maxFilesize' => '5',
-                'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
-            ],
-            'clientEvents' => [
-                'complete' => "function(file){console.log(file)}",
-                'removedfile' => "function(file){alert(file.name + ' is removed')}"
-            ],
-        ]);
-        ?>
-            </div>
+                <?php echo $form->field( $model, 'description')
+                    ->textarea([
+                        'class'  => 'form-control',
+                    ])-> label();?>
+            <!--Upload file Dropzone-->
+            <?php
+            echo \kato\DropZone::widget([
+                'options' => [
+                    'url'   =>  'upload',
+                    'maxFilesize' => '5',
+                    'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
+                ],
+                'clientEvents' => [
+                    'complete' => "function(file){console.log(file)}",
+                    'removedfile' => "function(file){alert(file.name + ' is removed')}"
+                ],
+            ]);
+            ?>
+        </div>
     </div>
 </div>
-
-<?php
-/*echo realpath('/../../../data/ticket/temp');
-*/?>
-
 <?php ActiveForm::end();?>
-<?php //$this->registerJsFile('/js/dropzone.js');?>
+<script>
+    var input = '#supportticket-email';
+    $(input).blur(function(event){
+        $.ajax({
+            type: "GET",
+            url: '',
+            dataType: 'json',
+            data: 'query='+$(input).val(),
+            beforeSend: function(){
+            },
+            success: function(response) {
+            }
+        });
+    })
+</script>
+

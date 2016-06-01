@@ -43,9 +43,9 @@ class SupportController extends Controller
              'verbs' => [
                     'class' => VerbFilter::className(),
                         'actions' => [
-                            'index' => ['get', 'post'],
+                            'index'          => ['get', 'post'],
                             'submit-request' => ['get', 'post'],
-                            'upload'=> ['get', 'post'],
+                            'upload'         => ['get', 'post'],
                         ],
                 ],
         ];
@@ -87,8 +87,6 @@ class SupportController extends Controller
 
                 }
 
-                //var_dump($subject);die();
-
             }
             if (!isset($subjectId)) {
                 return [
@@ -96,83 +94,41 @@ class SupportController extends Controller
                 ];
             } else {
                 return $subjectId;
-                //return  $subjectId;
 
             }
 
         }
-        /*if ( $model->load(Yii::$app->request->post()) ) {*/
-        /*$supportTicket = SupportTicket::getSupport(SupportTicket::classname());
-        SupportTicket::loadMultiple($supportTicket, Yii::$app->request->post());*/
-        //var_dump($supportTicket);die();
-        /*if ($model != null) {
-            if ( $model->is_private == 0){
 
-            }
-        }*/
-        /*if ($model->validate()) {
-            $model->save();
-        }*/
-        // }
         return $this->render('index', ['model' => $model]);
     }
 
     public function actionSubmitRequest()
     {
         $model = new SupportTicket();
-        $model->email = Yii::$app->user->identity->email;
+        if ((Yii::$app->request->isAjax &&
+            Yii::$app->request->isGet &&
+            ($data = Yii::$app->request->get('query')))
+        ) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $model->email = Yii::$app->user->identity->email;
+        }
         return $this->render('submit-request', ['model' => $model]);
     }
 
-    /* public function actionUpload()
-     {
-
-         $fileName = 'file';
-         $uploadPath = __DIR__ . '/../../../data/' . 'ticket/' ;
-         if (!file_exists($uploadPath))
-         {
-             mkdir($uploadPath, 0777, true);
-             chmod($uploadPath, 0777);
-         }
-         $uploadPath = $uploadPath . 'temp/';
-         if (!file_exists($uploadPath))
-         {
-             mkdir($uploadPath, 0777, true);
-             chmod($uploadPath, 0777);
-         }
-
-         if (isset($_FILES[$fileName])) {
-             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
-
-             //Print file data
-             //print_r($file);
-
-             if ($file->saveAs($uploadPath . '/' . $file->name)) {
-                 //Now save file data to database
-
-                 echo \yii\helpers\Json::encode($file);
-             }else{
-                 return $this->render('index');
-             }
-         }
-
-         return false;
-
-     }*/
     public function actionUpload()
     {
         $fileName = 'file';
-        $uploadPath = realpath(__DIR__ . '/../../../data/ticket/temp') ;
-        var_dump($uploadPath);die();
+        $uploadPath = Yii::getAlias("@app") . "/data/ticket" ;
+        //var_dump($uploadPath);die();
         if (!file_exists($uploadPath))
         {
-            mkdir($uploadPath, 0777, true);
+            mkdir($uploadPath);
             chmod($uploadPath, 0777);
         }
-        $uploadPath = $uploadPath . '/';
+        $uploadPath .= '/temp/';
         if (!file_exists($uploadPath))
         {
-            mkdir($uploadPath, 0777, true);
+            mkdir($uploadPath);
             chmod($uploadPath, 0777);
         }
 
