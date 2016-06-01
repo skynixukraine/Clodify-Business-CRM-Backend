@@ -96,6 +96,11 @@ var ajaxReportPageModule = (function() {
                             thisChange = $(this);
                         saveDataInObject();
                         $.each(dataArr, function(i) {
+                            if (i == "project_id") {
+                                if (dataArr.project_id.length == 0) {
+                                    count++;
+                                }
+                            }
                             if (dataArr[i].length > 0) {
                                 count++;
                             }
@@ -404,7 +409,7 @@ var ajaxReportPageModule = (function() {
                 else if (dateFilterVal == 2) {
                     var monday = getMonday(new Date());
                     var mondayDate = (monday.getDate()).toString();
-                    var mondayMonth = (monday.getMonth()+1).toString();
+                    var mondayMonth = (monday.getMonth() + 1).toString();
                     var tuesday, wednesday, thursday, friday, saturday, sunday;
                     var week = [tuesday, wednesday, thursday, friday, saturday, sunday];
                     var thisDayArr = []; //array for saving days of week(date/month)
@@ -442,7 +447,7 @@ var ajaxReportPageModule = (function() {
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
                         }
-                        
+
                     })
                 }
                 var showTotalHours = $('#totalHours');
