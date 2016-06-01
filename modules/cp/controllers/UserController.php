@@ -7,6 +7,7 @@
  */
 
 namespace app\modules\cp\controllers;
+use app\components\DateUtil;
 use app\models\ProjectDeveloper;
 use app\models\SiteUser;
 use app\models\Visit;
@@ -208,8 +209,11 @@ class UserController extends DefaultController {
                 $model->role,
                 $model->email,
                 $model->phone,
-                Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y HH:mm'),
-                Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y HH:mm'),
+                DateUtil::convertDatetime($model->date_signup),
+                DateUtil::convertDatetime($model->date_login),
+
+                //Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y hh:m'),
+                //Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y hh:m'),
 
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 $model->is_delete
