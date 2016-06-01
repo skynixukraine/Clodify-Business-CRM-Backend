@@ -43,6 +43,7 @@
 .load-table tbody tr td:nth-child(1),
 .load-table tbody tr td:nth-child(6) {
     width: 5%;
+    line-height: 33px;
 }
 
 .load-table tbody tr td:nth-child(5) {
@@ -51,7 +52,6 @@
 
 .load-table tbody tr td:nth-child(6) {
     max-width: 50px;
-    line-height: 33px;
 }
 
 .load-table tbody tr td:nth-child(2) {
@@ -72,6 +72,7 @@
 
 .form-add-report>div {
     padding-right: 0;
+    padding-left: 7px;
 }
 
 .form-add-report>div:first-child {
@@ -90,6 +91,10 @@
 .ajax-error{
     font-size:16px;
     color:red;
+}
+
+.form-add-report .form-control{
+    padding:6px 2px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -122,7 +127,7 @@
     #w0 {
         width: 100%;
     }
-    .load-table .form-control {
+    .load-table .form-control, .load-table .report-id {
         font-size: 11px;
     }
     
