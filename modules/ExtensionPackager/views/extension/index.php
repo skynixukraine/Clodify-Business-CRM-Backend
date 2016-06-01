@@ -39,8 +39,7 @@ $this->params['breadcrumbs'][]  = $this->title;
             findUrl     : '<?=Url::to(['extension/find'])?>',
             deleteUrl   : '<?=Url::to(['extension/delete'])?>',
             editUrl     : '<?=Url::to(['extension/create'])?>',
-            downloadUrl : '<?=Url::to(['extension/download'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            downloadUrl : '<?=Url::to(['extension/download'])?>'
         })
     });
 </script>
