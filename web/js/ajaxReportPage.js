@@ -360,9 +360,8 @@ var ajaxReportPageModule = (function() {
                         var thisDate = $(this);
                         var thisDateVal = thisDate.val();
                         var splitDate = thisDateVal.split('/');
+                        var hour = thisDate.closest('tr').find('.report-hour').val();
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
-                            var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
@@ -379,7 +378,6 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
@@ -395,7 +393,6 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month - 1 == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
@@ -407,24 +404,25 @@ var ajaxReportPageModule = (function() {
                 else if (dateFilterVal == 2) {
                     var monday = getMonday(new Date());
                     var mondayDate = (monday.getDate()).toString();
-                    var mondayMonth = (monday.getMonth() + 1).toString();
+                    var mondayMonth = (monday.getMonth()+1).toString();
                     var tuesday, wednesday, thursday, friday, saturday, sunday;
                     var week = [tuesday, wednesday, thursday, friday, saturday, sunday];
                     var thisDayArr = []; //array for saving days of week(date/month)
-
+                    var countI = 1;
                     //for every day of week, except monday, pushing date/month in array
-                    $.each(week, function(i) {
+                    $.each(week, function() {
                         var thisDay = $(this);
-                        thisDay = new Date();
-                        thisDay.setDate(monday.getDate() + (i + 1));
-                        var thisDayDate = (thisDay.getDate()).toString();
+                        thisDay = new Date(monday);
+                        thisDay.setDate(monday.getDate() + countI);
+                        var thisDayDate = thisDay.getDate().toString();
                         var thisDayMonth = (thisDay.getMonth() + 1).toString();
                         var dayMonth = [];
                         dayMonth.push(thisDayDate, thisDayMonth);
                         var d = dayMonth.join('/');
                         thisDayArr.push(d);
-                    })
+                        countI++;
 
+                    })
                     dateInp.each(function() {
                         var thisDate = $(this);
                         var thisDateVal = thisDate.val();
@@ -444,6 +442,7 @@ var ajaxReportPageModule = (function() {
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
                         }
+                        
                     })
                 }
                 var showTotalHours = $('#totalHours');
