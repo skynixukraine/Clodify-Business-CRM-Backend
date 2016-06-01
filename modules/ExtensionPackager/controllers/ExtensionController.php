@@ -31,7 +31,7 @@ class ExtensionController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'find'],
+                        'actions' => [ 'index', 'create', 'find', 'delete'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN ],
                     ]
@@ -43,6 +43,7 @@ class ExtensionController extends DefaultController {
                     'index'     => ['get', 'post'],
                     'create'    => ['get', 'post'],
                     'find'      => ['get', 'post'],
+                    'delete'    => ['delete'],
                 ],
             ],
         ];
@@ -127,7 +128,7 @@ class ExtensionController extends DefaultController {
                 /** Save data to table extensions */
             if($model->load(Yii::$app->request->post())){
 
-                if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id)) {
+                if($model->id != null && file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id)) {
                     exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id);
                 }
 
@@ -211,6 +212,29 @@ class ExtensionController extends DefaultController {
         }
         
         return $this->render("create", ['model' => $model, 'modelUpload' => $modelUpload, 'title' => $title]);
-    }    
+    }
+
+    public function actionDelete()
+    {
+        if (( $id = Yii::$app->request->post("id") ) && ($model = Extension::findOne($id)) != null ) {
+
+            if($model->delete()){
+                if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $id)) {
+                    exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id);
+                }
+                return json_encode([
+                    "success" => true,
+                    "message"   => 'You delete the extensions ' . $id,
+                ]);
+            }
+
+        } else {
+
+            return json_encode([
+                "success" => false,
+                "message"   => 'ERROR!!! This extension does not exist!!!',
+            ]);
+        }
+    }
 }
 

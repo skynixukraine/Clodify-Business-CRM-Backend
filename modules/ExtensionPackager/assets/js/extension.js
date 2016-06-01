@@ -7,8 +7,7 @@ var extensionModule = (function() {
             editUrl         : '',
             downloadUrl     : '',
             deleteUrl       : '',
-            findUrl         : '',
-            canDelete       : null
+            findUrl         : ''
         },
         dataTable,
         dataFilter = {
