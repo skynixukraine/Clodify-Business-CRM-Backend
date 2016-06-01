@@ -84,6 +84,9 @@
     min-width: 135px;
 }
 
+.load-table td{
+    padding:8px 4px;
+}
 .load-table .form-control {
     padding: 2px 4px;
 }

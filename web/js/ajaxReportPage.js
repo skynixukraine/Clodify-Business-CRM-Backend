@@ -91,6 +91,11 @@ var ajaxReportPageModule = (function() {
             function addReport() {
                 $.each(formInput, function(num) {
                     thisInput = $(this);
+                    //remove error message
+                    thisInput.click(function() {
+                        var ajaxError = $('.ajax-error');
+                        ajaxError.remove();
+                    })
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
