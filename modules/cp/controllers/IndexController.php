@@ -101,9 +101,11 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
+            $oldhours = 0;
             if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
+                $oldhours = $model->hours;
 
             }
             if($data->project_id != null) {
@@ -125,7 +127,8 @@ class IndexController extends DefaultController
 
                     if ($model->validate()) {
 
-                        if ($totalHoursOfThisDay + $model->hours <= 12) {
+                        if ($totalHoursOfThisDay - $oldhours + $data->hours <= 12) {
+
 
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
