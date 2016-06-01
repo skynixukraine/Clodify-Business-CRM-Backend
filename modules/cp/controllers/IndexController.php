@@ -101,68 +101,81 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
+            $oldhours = 0;
             if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
+                $oldhours = $model->hours;
 
             }
-            $model->project_id  = $data->project_id;
-            $model->date_report = DateUtil::convertData( $data->date_report );
-            $model->task        = $data->task;
-            $model->hours       = $data->hours;
-            $model->user_id = Yii::$app->user->id;
+            if($data->project_id != null) {
+
+                $model->project_id = $data->project_id;
+                $model->date_report = DateUtil::convertData($data->date_report);
+                $model->task = $data->task;
+                $model->hours = $data->hours;
+                $model->user_id = Yii::$app->user->id;
 
 
+                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
 
-            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
+                $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
 
-            $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+                if ($date_end == null || $model->date_report == null ||
+                    DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
+                ) {
 
-            if( $date_end == null || $model->date_report == null ||
-            DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))){
+                    if ($model->validate()) {
 
-                if ($model->validate()) {
+                        if ($totalHoursOfThisDay - $oldhours + $data->hours <= 12) {
 
-                    if ($totalHoursOfThisDay + $model->hours <= 12) {
 
-                        Yii::$app->user->getIdentity()->last_name;
-                        if($model->save()){
-                            return json_encode([
-                                "success" => true,
-                                "id"      => $model->id
-                            ]);
+                            Yii::$app->user->getIdentity()->last_name;
+                            if ($model->save()) {
+                                return json_encode([
+                                    "success" => true,
+                                    "id" => $model->id
+                                ]);
+                            } else {
+                                return json_encode([
+                                    "success" => false,
+                                    "id" => $model->id,
+                                    "errors" => ["field" => $model->id, "message" => "Report does not add"]
+                                ]);
+                            }
+
                         } else {
                             return json_encode([
                                 "success" => false,
-                                "id"      => $model->id,
-                                "errors"  => [ "field" =>  $model->id, "message" => "Report does not add" ]
+                                "id" => $model->id,
+                                "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
                             ]);
-                        }
 
+                        }
                     } else {
                         return json_encode([
                             "success" => false,
-                            "id"      => $model->id,
-                            "errors"  => [ "field" =>  $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12" ]
+                            "id" => $model->id,
+                            "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
                         ]);
-
                     }
                 } else {
+
                     return json_encode([
                         "success" => false,
-                        "id"      => $model->id,
-                        "errors"  => [ "field" =>  $model->id, "message" => "Data is not valid!" ]
+                        "id" => $model->id,
+                        "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
                     ]);
                 }
-            } else{
+
+            }  else {
 
                 return json_encode([
                     "success" => false,
-                    "id"      => $model->id,
-                    "errors"  => [ "field" =>  $model->id, "message" => "The invoice has been created on this project" ]
+                    "id" => $model->id,
+                    "errors" => ["field" => 'project_id', "message" => "Please choose a project"]
                 ]);
             }
-
         }
         return $this->render('index', ['model' => $model]);
     }

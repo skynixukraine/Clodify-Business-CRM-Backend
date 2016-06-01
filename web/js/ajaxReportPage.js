@@ -30,7 +30,8 @@ var ajaxReportPageModule = (function() {
                 'hours': '',
             };
             var lastForm = $('form:last');
-
+            var errorMsg = "error",
+                successMsg = "success";
 
             ////////////////////////////////////////////////////////////////////////////
             ///Function changes load-table elements and do their input or select elements
@@ -91,11 +92,21 @@ var ajaxReportPageModule = (function() {
             function addReport() {
                 $.each(formInput, function(num) {
                     thisInput = $(this);
+                    //remove error message
+                    thisInput.click(function() {
+                        var ajaxError = $('.ajax-error');
+                        ajaxError.remove();
+                    })
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
                         saveDataInObject();
                         $.each(dataArr, function(i) {
+                            if (i == "project_id") {
+                                if (dataArr.project_id.length == 0) {
+                                    count++;
+                                }
+                            }
                             if (dataArr[i].length > 0) {
                                 count++;
                             }
@@ -108,34 +119,24 @@ var ajaxReportPageModule = (function() {
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
-                                            var ajaxError = $('.ajax-error');
-                                            ajaxError.remove();
                                             id = data.id;
                                             tableLoad.append("<tbody><tr><td class = 'report-id'>" + id + "</td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                             var form = $('.form-add-report');
                                             form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
-                                            $.each(dataArr, function(i) {
-                                                delete dataArr[i];
-                                            })
+                                            ajaxSuccessFunc(successMsg);
                                             changeTableRow();
                                             editReport();
                                             removeReport();
                                             countHours();
                                         } else {
-                                            $.each(dataArr, function(i) {
-                                                delete dataArr[i];
-                                            });
-                                            var ajaxError = $('.ajax-error');
-                                            ajaxError.remove();
+                                            ajaxSuccessFunc(successMsg);
+                                            var helpBlock = $('.form-add-report .help-block');
+                                            helpBlock.text('');
                                             lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
-
                                         }
-
                                     },
                                     error: function(data) {
-                                        var ajaxError = $('.ajax-error');
-                                        ajaxError.remove();
-                                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
+                                        ajaxSuccessFunc(errorMsg, data);
                                     }
                                 })
                             }
@@ -156,7 +157,6 @@ var ajaxReportPageModule = (function() {
                         reportTask = el.closest('tr').find('.report-text').val(),
                         reportHours = el.closest('tr').find('.report-hour').val();
                     dataArr.id = id;
-
                 } else {
                     var thisSelect = $('.form-add-report #report-project_id :selected').val(),
                         dateReport = $('#date_report').val(),
@@ -253,16 +253,13 @@ var ajaxReportPageModule = (function() {
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Project ID cannot be blank.</span>');
                         } else {
-
                             deleteHelpBlock(thisInput, "all");
                             var count = 0;
                             saveDataInObject(thisInput);
                             $.each(dataArr, function(i) {
-
                                 if (dataArr[i] != "") {
                                     count++;
                                 }
-
                             })
                             if (count == 5) {
                                 report = JSON.stringify(dataArr);
@@ -273,23 +270,14 @@ var ajaxReportPageModule = (function() {
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
-                                            var ajaxError = $('.ajax-error');
-                                            ajaxError.remove();
-                                            $.each(dataArr, function(i) {
-                                                delete dataArr[i];
-                                            });
+                                            ajaxSuccessFunc(successMsg);
                                             countHours();
                                         } else {
-                                            var ajaxError = $('.ajax-error');
-                                            ajaxError.remove();
-                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                                            ajaxSuccessFunc(errorMsg, data);
                                         }
-
                                     },
                                     error: function(data) {
-                                        var ajaxError = $('.ajax-error');
-                                        ajaxError.remove();
-                                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                                        ajaxSuccessFunc(errorMsg, data);
                                     }
                                 })
                             }
@@ -317,24 +305,18 @@ var ajaxReportPageModule = (function() {
                             dataType: 'json',
                             success: function(data) {
                                 if (data.success) {
-                                    var ajaxError = $('.ajax-error');
-                                    ajaxError.remove();
-                                    $.each(dataArr, function(i) {
-                                        delete dataArr[i];
-                                    });
+                                    ajaxSuccessFunc(successMsg);
                                     clickedButton.parent().parent('tr').parent('tbody').remove();
                                     countHours();
+                                    var form = $('.form-add-report');
+                                    form.find(' #report-hours').val('');
                                 } else {
-                                    var ajaxError = $('.ajax-error');
-                                    ajaxError.remove();
-                                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
+                                    ajaxSuccessFunc(errorMsg, data);
                                 }
 
                             },
                             error: function(data) {
-                                var ajaxError = $('.ajax-error');
-                                ajaxError.remove();
-                                lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
+                                ajaxSuccessFunc(errorMsg, data);
                             }
                         })
                     })
@@ -360,16 +342,13 @@ var ajaxReportPageModule = (function() {
                         var thisDate = $(this);
                         var thisDateVal = thisDate.val();
                         var splitDate = thisDateVal.split('/');
+                        var hour = thisDate.closest('tr').find('.report-hour').val();
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
-                            var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
                         }
-
                     })
-
                 }
                 //for this month reports
                 else if (dateFilterVal == 3) {
@@ -379,7 +358,6 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
@@ -395,7 +373,6 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         if (month - 1 == parseInt(splitDate[1], 10)) {
                             var hour = thisDate.closest('tr').find('.report-hour').val();
-
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
@@ -411,20 +388,20 @@ var ajaxReportPageModule = (function() {
                     var tuesday, wednesday, thursday, friday, saturday, sunday;
                     var week = [tuesday, wednesday, thursday, friday, saturday, sunday];
                     var thisDayArr = []; //array for saving days of week(date/month)
-
+                    var countI = 1;
                     //for every day of week, except monday, pushing date/month in array
-                    $.each(week, function(i) {
+                    $.each(week, function() {
                         var thisDay = $(this);
-                        thisDay = new Date();
-                        thisDay.setDate(monday.getDate() + (i + 1));
-                        var thisDayDate = (thisDay.getDate()).toString();
+                        thisDay = new Date(monday);
+                        thisDay.setDate(monday.getDate() + countI);
+                        var thisDayDate = thisDay.getDate().toString();
                         var thisDayMonth = (thisDay.getMonth() + 1).toString();
                         var dayMonth = [];
                         dayMonth.push(thisDayDate, thisDayMonth);
                         var d = dayMonth.join('/');
                         thisDayArr.push(d);
+                        countI++;
                     })
-
                     dateInp.each(function() {
                         var thisDate = $(this);
                         var thisDateVal = thisDate.val();
@@ -457,7 +434,7 @@ var ajaxReportPageModule = (function() {
                     date.setHours(-24 * (day - 1));
                 return date;
             }
-
+            //converts hour to minutes, and sums hour and minutes, and return converted hours and minutes
             function countMinutes(val) {
                 var hours = String(val);
                 var splitHour = hours.split('.');
@@ -478,7 +455,19 @@ var ajaxReportPageModule = (function() {
                 return +time;
             }
 
-
+            function ajaxSuccessFunc(er, data) {
+                if (er == "error") {
+                    var ajaxError = $('.ajax-error');
+                    ajaxError.remove();
+                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                } else {
+                    var ajaxError = $('.ajax-error');
+                    ajaxError.remove();
+                    $.each(dataArr, function(i) {
+                        delete dataArr[i];
+                    });
+                }
+            }
 
             removeReport();
             addReport();
@@ -488,5 +477,4 @@ var ajaxReportPageModule = (function() {
 
         }
     }
-
 })();
