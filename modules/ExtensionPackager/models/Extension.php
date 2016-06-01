@@ -21,6 +21,8 @@ class Extension extends \yii\db\ActiveRecord
     const TYPE_THEME     = "THEME";
     const TYPE_LANGUAGE  = "LANGUAGE";
     
+    public $path1;
+    public $path2;
     /**
      * @inheritdoc
      */
@@ -35,7 +37,7 @@ class Extension extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type'], 'string'],
+            [['type', 'path1', 'path2'], 'string'],
             [['name', 'repository', 'version', 'package'], 'string', 'max' => 250],            
             [['name', 'repository', 'type'], 'required'],
         ];
@@ -98,5 +100,110 @@ class Extension extends \yii\db\ActiveRecord
             chmod ( $path, 0777 );
         }
         return $path;
+    }
+
+    public static function extensionType($path1, $path2, $id)
+    {
+        $path = Yii::getAlias("@app") . "/data/extensions/" . $id . "/SkynixExtension/app";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/code";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/" . $path1;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/" . $path2;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
+        
+        return true;
+    }
+
+    public static function themeType($path1, $path2, $id)
+    {
+        $path = Yii::getAlias("@app") . "/data/extensions/" . $id . "/SkynixExtension/app";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/design";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/frontend";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/" . $path1;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/" . $path2;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
+
+        return true;
+    }
+
+    public static function languageType($path1, $path2, $id)
+    {
+        $path = Yii::getAlias("@app") . "/data/extensions/" . $id . "/SkynixExtension/app";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/i18n";
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }        
+        $path .= "/" . $path1;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        $path .= "/" . $path2;
+        if( !file_exists( $path ) ) {
+
+            mkdir($path);
+            chmod($path, 0777 );
+        }
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
+
+        return true;
     }
 }

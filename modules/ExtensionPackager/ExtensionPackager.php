@@ -1,7 +1,6 @@
 <?php
 
 namespace app\modules\ExtensionPackager;
-use yii\BaseYii;
 
 /**
  * ExtensionPackager module definition class
