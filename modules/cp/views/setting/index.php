@@ -251,7 +251,7 @@ $this->params['menu'] = [
                                     <?php /** @var $project Project */?>
                                     <td><?= Html::encode($project->getCustomers()->one()->first_name  . $project->getCustomers()->one()->last_name)?></td>
                                     <td><?= Html::encode($project->name)?></td>
-                                    <td><?= Html::encode($project->getProjectDevelopers()->one()->status)?></td>
+                                    <td><?= Html::encode($project->getProjectDevelopers()->one()->status )?></td>
                                     <?php $active = ($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)?>
                                     <td>
                                         <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
