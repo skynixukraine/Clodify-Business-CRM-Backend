@@ -19,7 +19,7 @@ use Yii;
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
-    //public $subject;
+    public $email;
 
     /**
      * @inheritdoc
@@ -35,7 +35,7 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'status'], 'string'],
+            [['description', 'status', 'email'], 'string'],
             [['is_private', 'assignet_to', 'client_id'], 'integer'],
             [['date_added', 'date_completed'], 'safe'],
             [['subject'], 'string', 'max' => 250],
@@ -59,14 +59,27 @@ class SupportTicket extends \yii\db\ActiveRecord
             'date_completed' => 'Date Completed',
         ];
     }
-     static public function getSupport($words)
+      public static function getSupport($words)
     {
         return self::find()
             ->where("subject LIKE '%" . $words . "%' AND is_private=0")
             ->all();
 
     }
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['client_id' => 'id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDev()
+    {
+        return $this->hasOne(User::className(), ['assignet_to' => 'id']);
+    }
 
 
 

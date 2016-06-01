@@ -232,7 +232,7 @@ $this->params['menu'] = [
             ?>
         </div>
         <div id="tab_4" class="tab-pane">
-            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])):?>
+            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
                 <div class="box-header with-border">
                     <div class="box-body">
                         <table class="table box">

@@ -54,12 +54,10 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
             </article>
 
             <div class="col-md-12">
-                <?= Html::submitButton( Yii::t('app', 'Submit Request'), [
-                    'class' => 'btn btn-primary off-button',
+                <?php echo Html::a(Yii::t('app', 'Submit Request'), ['support/submit-request'/*, 'id' => $model->id*/], ['class' => 'btn btn-primary off-button',
                     'style' => 'float: right; margin-top: 10px;',
-                    'disabled'  =>  'disabled',
-                    ])
-                ?>
+                    'disabled'  =>  'disabled']) ?>
+
             </div>
 
         </section>
