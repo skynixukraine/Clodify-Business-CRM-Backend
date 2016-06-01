@@ -155,7 +155,7 @@ $this->params['menu'] = [
                                         <?php
                                         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
                                             $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
-                                             AND is_delete=0 AND is_active=1')->all();
+                                             AND is_delete=0 AND is_active=1 AND id != ' . $developer->id)->all();
                                             $listUsers = User::getCustomersDropDown( $users, 'id' );
                                             $listUser = ArrayHelper::merge([], $listUsers);
                                             //var_dump($listUser);
@@ -167,7 +167,7 @@ $this->params['menu'] = [
                                                 'name' => "Project[alias][$developer->id]"
                                             ] )
                                             ->label( '' );
-
+                                       // var_dump($developer);die();
                                         ?>
                                     </td>
 
