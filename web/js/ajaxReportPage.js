@@ -284,15 +284,18 @@ var ajaxReportPageModule = (function() {
             function removeReport() {
                 var deleteButton = $('.load .delete'),
                     win = new ModalBootstrap({
-                    title: 'Message',
-                    body: "Are you sure you want to delete this report?"
-                });
-                    
+                        title: 'Message',
+                        body: "Are you sure you want to delete this report?"
+                    });
+
                 deleteButton.each(function() {
                     var thisButton = $(this);
                     thisButton.unbind();
                     thisButton.click(function() {
                         var clickedButton = $(this);
+                        $.each(dataArr, function(i) {
+                            delete dataArr[i];
+                        });
                         saveDataInObject(clickedButton);
                         win.show();
                         win.getWin().find(".confirm").click(function() {
