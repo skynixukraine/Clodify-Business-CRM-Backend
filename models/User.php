@@ -292,7 +292,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->password = md5($this->password);
             }
 
-            $this->date_signup = null;
+            $this->date_signup = date('Y-m-d H:i:s');
             $this->date_login = null;
             //$this->getCustomers()->one()->receive_invoices = 1;
         }

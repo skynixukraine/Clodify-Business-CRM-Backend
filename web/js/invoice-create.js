@@ -26,7 +26,9 @@ var invoiceCreateModule = (function() {
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
                 dataFilter['user_id'] = id;
-                dataTable.api().ajax.reload();
+                if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
+                    dataTable.api().ajax.reload();
+                }
             });
 
             var date = new Date();
