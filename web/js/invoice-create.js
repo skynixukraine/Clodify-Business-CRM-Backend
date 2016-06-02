@@ -42,8 +42,8 @@ var invoiceCreateModule = (function() {
             }).on("hide", function( event ){
                 var startDate = filterDateStartSelect.val();
                 dataFilter['date_start'] = startDate;
-                console.log(startDate);
-                if(startDate != ''){
+                console.log(filterDateStartSelect.val());
+                if(startDate != '' && filterDateEndSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
 
@@ -58,7 +58,7 @@ var invoiceCreateModule = (function() {
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['date_end'] = endDate;
-                if(endDate != ''){
+                if(endDate != '' && filterDateStartSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
             }).datepicker("setDate", currentDay);
