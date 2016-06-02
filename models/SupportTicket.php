@@ -36,7 +36,8 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'status', 'email', 'password'], 'string'],
+            [['description', 'status', 'password'], 'string'],
+            [[ 'email'], 'required', 'except'=>'settings'],
             [['is_private', 'assignet_to', 'client_id'], 'integer'],
             [['date_added', 'date_completed'], 'safe'],
             [['subject'], 'string', 'max' => 250],

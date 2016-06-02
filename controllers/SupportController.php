@@ -9,11 +9,14 @@ namespace app\controllers;
 
 use app\models\User;
 use Yii;
-use yii\base\Controller;
 use yii\filters\AccessControl;
+use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use app\components\AccessRule;
 use app\models\SupportTicket;
+
 
 
 class SupportController extends Controller
@@ -29,12 +32,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -47,7 +50,8 @@ class SupportController extends Controller
                             'index'          => ['get', 'post'],
                             'submit-request' => ['get', 'post'],
                             'upload'         => ['get', 'post'],
-                            'us'             => ['get', 'post']
+                            'us'             => ['get', 'post'],
+                            'create'         => ['get', 'post']
                         ],
                 ],
         ];
@@ -107,7 +111,6 @@ class SupportController extends Controller
     public function actionSubmitRequest()
     {
         $model = new SupportTicket();
-
             //$model->email = Yii::$app->user->identity->email;
 
         return $this->render('submit-request', ['model' => $model]);
@@ -120,7 +123,7 @@ class SupportController extends Controller
         ) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-            if( User::findOne(['email' => $data]) != null ) {
+            if( User::findOne(['email' => $data, 'is_delete'=> 0, 'is_active'=> 1]) != null ) {
                 return [
                     "success" => true
                 ];
@@ -164,5 +167,56 @@ class SupportController extends Controller
             }
         }
         return false;
+    }
+    public function actionCreate()
+    {
+        $model = new SupportTicket();
+
+        if($model->load(Yii::$app->request->post())) {
+
+
+            $userticket = User::findOne(['email'=> $model->email]);
+
+            if($userticket == null) {
+                //no login user
+                $guest = new User();
+                $guest->password = User::generatePassword();
+                $guest->email = $model->email;
+                $guest->role = User::ROLE_GUEST;
+                $guest->first_name = 'GUEST';
+                $guest->last_name = 'GUEST';
+                $guest->is_delete = 0;
+                $guest->is_active = 0;
+                $guest->invite_hash = md5(time());
+                $guest->rawPassword = $guest->password;
+                var_dump(md5($guest->password));die();
+                $guest->password = md5($guest->password);
+                $guest->date_signup = date('Y-m-d H:i:s');
+
+                if($guest->validate() && $guest->save()){
+
+                }
+            } else {
+                //login user
+                if($userticket->password == md5($model->password)) {
+                    //password right
+                } else {
+                    //no right
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you entered a wrong password of your account"));
+                    //return $this->redirect('index');
+                    //exit();
+                    return $this->redirect('submit-request');
+                }
+            }
+        }
+        /*if(Yii::$app->user->id == null){
+            if ($model->validate()) {
+
+                $model->save();
+
+
+            }
+        }*/
+        //return $this->redirect('index', ['model' => $model]);
     }
 }
