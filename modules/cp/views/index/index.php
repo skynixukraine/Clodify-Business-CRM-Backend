@@ -97,8 +97,8 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-6">
         </div>
-        <div class="col-lg-6">
-            <label id="totalHours"></label>
+        <div class="col-lg-6 text-right">
+            <label id="totalHours" class = "text-right col-xs-12"></label>
         </div>
     </div>
 

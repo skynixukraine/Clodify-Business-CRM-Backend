@@ -2,16 +2,6 @@ var ajaxReportPageModule = (function() {
 
     return {
         init: function() {
-
-            //for submit button
-            // var fieldTask = $('.field-task');
-            // var submitDiv = $('.submit-div');
-            // var submitButton = $('.submit-div button[type=submit]'),
-            //     editButton = $('.edit');
-            // submitButton.css("visibility", "hidden");
-            // submitDiv.hide();
-            // fieldTask.removeClass("col-lg-6").addClass("col-lg-7");
-
             $('form').submit(function(event) {
                 event.preventDefault();
             });
@@ -29,8 +19,8 @@ var ajaxReportPageModule = (function() {
                 'task': '',
                 'hours': '',
             };
-            var lastForm = $('form:last');
-            var errorMsg = "error",
+            var lastForm = $('form:last'),
+                errorMsg = "error",
                 successMsg = "success";
 
             ////////////////////////////////////////////////////////////////////////////
@@ -47,6 +37,7 @@ var ajaxReportPageModule = (function() {
                         var thisTd = $(this);
                         var thisValue = thisTd.text();
                         switch (i) {
+                            //////Changing project-id cell
                             case 1:
                                 thisTd.empty();
                                 var clonedSelect = projectId.clone();
@@ -58,16 +49,8 @@ var ajaxReportPageModule = (function() {
                                 } else {
                                     thisTd.find("option:contains('" + thisValue + "')").prop('selected', true)
                                 }
-                                break;
-                            case 3:
-                                thisTd.empty();
-                                thisTd.append('<input class="form-control report-text" type = "text" value = "' + thisValue + '">')
                                 break
-                            case 4:
-                                thisTd.empty();
-                                var time = +thisValue;
-                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time.toFixed(2) + '">')
-                                break
+                                /////Changing date cell
                             case 2:
                                 thisTd.empty();
                                 thisTd.append('<div class="input-group date"><input class="form-control created-date" data-date-format="dd/mm/yyyy" data-provide="datepicker" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>');
@@ -84,6 +67,17 @@ var ajaxReportPageModule = (function() {
                                     endDate: currentDay
                                 }).datepicker("setDate", thisValue);
                                 break
+                                //////Changing task cell
+                            case 3:
+                                thisTd.empty();
+                                thisTd.append('<input class="form-control report-text" type = "text" value = "' + thisValue + '">')
+                                break
+                                //////Changing hour cell
+                            case 4:
+                                thisTd.empty();
+                                var time = +thisValue;
+                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time.toFixed(2) + '">')
+                                break
                         }
                     })
                 })
@@ -96,8 +90,7 @@ var ajaxReportPageModule = (function() {
                     thisInput = $(this);
                     ///////Remove error messages,from under input
                     thisInput.click(function() {
-                        var ajaxError = $('.ajax-error');
-                        ajaxError.remove();
+                        $('.ajax-error').remove();
                     })
                     thisInput.change(function() {
                         var count = 0,
@@ -228,7 +221,6 @@ var ajaxReportPageModule = (function() {
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
                         } else if (thisInput.hasClass('report-hour') && thisInput.val() > 10) {
-
                             if (thisInput.closest('td').hasClass("has-error")) {
                                 deleteHelpBlock(thisInput);
                             }
@@ -361,7 +353,6 @@ var ajaxReportPageModule = (function() {
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
                         }
-
                     })
                 }
                 //for last month reports
@@ -376,7 +367,6 @@ var ajaxReportPageModule = (function() {
                             totalHours = totalHours.toFixed(2);
                             totalHours = countMinutes(totalHours);
                         }
-
                     })
                 }
                 //for this week reports
@@ -423,7 +413,7 @@ var ajaxReportPageModule = (function() {
                     })
                 }
                 var showTotalHours = $('#totalHours');
-                showTotalHours.text("Total: " + totalHours + " hours");
+                showTotalHours.text("Total: " + totalHours.toFixed(2) + " hours");
             }
 
             //function gets date for monday of the week
