@@ -293,9 +293,6 @@ var ajaxReportPageModule = (function() {
                     thisButton.unbind();
                     thisButton.click(function() {
                         var clickedButton = $(this);
-                        $.each(dataArr, function(i) {
-                            delete dataArr[i];
-                        });
                         saveDataInObject(clickedButton);
                         win.show();
                         win.getWin().find(".confirm").click(function() {
@@ -314,6 +311,9 @@ var ajaxReportPageModule = (function() {
                                         form.find(' #report-hours').val('');
                                     } else {
                                         ajaxSuccessFunc(errorMsg, data);
+                                        $.each(dataArr, function(i) {
+                                            delete dataArr[i];
+                                        });
                                     }
                                 },
                                 error: function(data) {
