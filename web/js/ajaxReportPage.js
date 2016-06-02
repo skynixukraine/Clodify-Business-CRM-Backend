@@ -282,34 +282,44 @@ var ajaxReportPageModule = (function() {
             //////////////////////////////////////////////////////////////////////////////////////
             ///Function for removing reports from load-table, saves its and sends data trough ajax 
             function removeReport() {
-                var deleteButton = $('.load .delete');
+                var deleteButton = $('.load .delete'),
+                    win = new ModalBootstrap({
+                    title: 'Message',
+                    body: "Are you sure you want to delete this report?"
+                });
+                    
                 deleteButton.each(function() {
                     var thisButton = $(this);
                     thisButton.unbind();
                     thisButton.click(function() {
                         var clickedButton = $(this);
                         saveDataInObject(clickedButton);
-                        report = JSON.stringify(dataArr);
-                        $.ajax({
-                            type: "POST",
-                            url: "delete",
-                            data: 'jsonData=' + report,
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data.success) {
-                                    ajaxSuccessFunc(successMsg);
-                                    clickedButton.parent().parent('tr').parent('tbody').remove();
-                                    countHours();
-                                    var form = $('.form-add-report');
-                                    form.find(' #report-hours').val('');
-                                } else {
+                        win.show();
+                        win.getWin().find(".confirm").click(function() {
+                            report = JSON.stringify(dataArr);
+                            $.ajax({
+                                type: "POST",
+                                url: "delete",
+                                data: 'jsonData=' + report,
+                                dataType: 'json',
+                                success: function(data) {
+                                    if (data.success) {
+                                        ajaxSuccessFunc(successMsg);
+                                        clickedButton.parent().parent('tr').parent('tbody').remove();
+                                        countHours();
+                                        var form = $('.form-add-report');
+                                        form.find(' #report-hours').val('');
+                                    } else {
+                                        ajaxSuccessFunc(errorMsg, data);
+                                    }
+                                },
+                                error: function(data) {
                                     ajaxSuccessFunc(errorMsg, data);
                                 }
-                            },
-                            error: function(data) {
-                                ajaxSuccessFunc(errorMsg, data);
-                            }
+                            })
                         })
+
+
                     })
                 })
             }
