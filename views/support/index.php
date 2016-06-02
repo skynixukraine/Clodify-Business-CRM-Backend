@@ -45,8 +45,8 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     ])->textInput(array('placeholder' => 'Enter the subject or your question'))->label( false );?>
 
                 </div><br>
-                <span>Are you looking for the following subject?</span>
                 <table id="table-result">
+                <span>Are you looking for the following subject?</span>
                 <?php $subject = SupportTicket::getSupport(null);?>
 
 

@@ -107,8 +107,8 @@ class SurveysController extends DefaultController
                 $model->id,
                 $model->shortcode,
                 $model->question,
-                $model->date_start,
-                $model->date_end,
+                DateUtil::convertDatetimeWithoutSecund($model->date_start),
+                DateUtil::convertDatetimeWithoutSecund($model->date_end),
                 $model->is_private,
                 $model->total_votes
             ];

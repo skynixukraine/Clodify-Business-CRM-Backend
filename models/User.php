@@ -310,7 +310,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 'user' => $this->first_name,
                 'email' => $this->email,
                 'password' => $this->rawPassword,
-                'adminName' => Yii::$app->user->identity->first_name,
+                'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company',
                 'hash' => $this->invite_hash
 
             ])
