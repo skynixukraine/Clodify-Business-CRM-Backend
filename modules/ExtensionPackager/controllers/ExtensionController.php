@@ -31,7 +31,7 @@ class ExtensionController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'find', 'delete'],
+                        'actions' => [ 'index', 'create', 'find', 'delete', 'download'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN ],
                     ]
@@ -44,6 +44,7 @@ class ExtensionController extends DefaultController {
                     'create'    => ['get', 'post'],
                     'find'      => ['get', 'post'],
                     'delete'    => ['delete'],
+                    'download'  => ['get', 'post'],
                 ],
             ],
         ];
@@ -235,6 +236,43 @@ class ExtensionController extends DefaultController {
                 "message"   => 'ERROR!!! This extension does not exist!!!',
             ]);
         }
+    }
+
+    public function actionDownload()
+    {
+        if (( $id = Yii::$app->request->get("id") ) && ($model = Extension::findOne($id)) != null ) {
+
+            $nameArchive = str_replace('/', '-', $model->name);
+            $pathArchive = Yii::getAlias("@app") . "/data/extensions/" . $id . '/' . $nameArchive . '.zip';
+            if (file_exists(Yii::getAlias("@app") . "/data/extensions/" . $id)) {
+                if (file_exists($pathArchive)) {
+                    exec('rm -rf ' . $pathArchive);
+                }
+                exec('cd ' . Yii::getAlias("@app") . "/data/extensions/" . $id . ' && zip -r ' . $nameArchive . '.zip *');
+                if (file_exists($pathArchive)) {
+
+                    header("Content-type:application/zip");
+                    header('Content-Disposition: attachment; filename="' . basename($pathArchive) . '"');
+                    header('Content-Length: ' . filesize($pathArchive));
+                    readfile($pathArchive);
+                    Yii::$app->end();
+
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, archive does not exist."));
+
+                }
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Files for extension is not loaded. Please upload files!"));
+            }
+
+        } else {
+
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Extension does not exist."));
+        }
+        return $this->redirect('index');
+
     }
 }
 
