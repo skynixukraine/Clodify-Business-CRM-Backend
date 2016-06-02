@@ -294,7 +294,7 @@ class SurveysController extends DefaultController
                                     $transaction->commit();
                                     Yii::$app->getSession()->setFlash('success',
                                         Yii::t("app", "You edited survey " . $id));
-                                    return $this->redirect(['edit','id'=>$model->id]);
+                                    return $this->redirect('index');
                                 }
                             } catch (Exception $e) {
                                 $transaction->rollBack();
@@ -318,6 +318,7 @@ class SurveysController extends DefaultController
             throw new \Exception('Ooops, you do not have priviledes for this action');
 
         }
+
 
     }
 

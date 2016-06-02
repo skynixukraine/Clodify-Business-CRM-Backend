@@ -8,6 +8,7 @@
 namespace app\controllers;
 
 use app\models\LoginForm;
+use app\models\SupportTicketComment;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -192,6 +193,8 @@ class SupportController extends Controller
 
                         $guest->save();
                         $model->client_id = Yii::$app->user->id;
+                        $model->status = SupportTicket::STATUS_NEW;
+                        $model->date_added = date('Y-m-d H:i:s');
                         if ($model->validate()) {
 
                             $model->save();
@@ -239,6 +242,8 @@ class SupportController extends Controller
 
             if(!Yii::$app->request->isGet){
                 // user is not a guest
+                $model->status = SupportTicket::STATUS_NEW;
+                $model->date_added = date('Y-m-d H:i:s');
                 $model->client_id = Yii::$app->user->id;
                 if ($model->validate()) {
 
@@ -264,15 +269,42 @@ class SupportController extends Controller
     }
     public function actionTicket()
     {
+        /** @var  $model SupportTicket*/
         $model = new SupportTicket();
+        if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
+
+            if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id) &&
+             $model->is_private == 1) ||
+             $model->is_private == 0){
 
 
+                if($model->load(Yii::$app->request->post())) {
 
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && $model->is_private == 1){
+                    $modelComment = new SupportTicketComment();
+                    $modelComment->comment = $model->comment;
+                    $modelComment->date_added = date('Y-m-d H:i:s');
+                    $modelComment->user_id = Yii::$app->user->id;
+                    $modelComment->support_ticket_id = $model->id;
+                    if($modelComment->validate()){
+                        $modelComment->save();
 
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
+                        //$model->comment = null;
+                        return $this->refresh();
+                    }
+                }
+                    return $this->render('ticket', ['model' => $model]);
 
+            }else{
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
+                return $this->redirect('submit-request');
+
+            }
         }
-        return $this->render('ticket', ['model' => $model]);
+
+
+
+
 
     }
 }

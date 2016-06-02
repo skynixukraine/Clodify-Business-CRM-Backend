@@ -26,6 +26,7 @@ class SupportTicket extends \yii\db\ActiveRecord
 
     public $email;
     public $password;
+    public $comment;
 
     /**
      * @inheritdoc
@@ -41,7 +42,7 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'status', 'password', 'email'], 'string'],
+            [['description', 'status', 'password', 'email', 'comment'], 'string'],
             [['is_private', 'assignet_to', 'client_id'], 'integer'],
             [['date_added', 'date_completed'], 'safe'],
             [['subject'], 'string', 'max' => 250],
