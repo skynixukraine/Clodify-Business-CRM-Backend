@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 
+use app\models\LoginForm;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -32,12 +33,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -51,7 +52,8 @@ class SupportController extends Controller
                             'submit-request' => ['get', 'post'],
                             'upload'         => ['get', 'post'],
                             'us'             => ['get', 'post'],
-                            'create'         => ['get', 'post']
+                            'create'         => ['get', 'post'],
+                            'ticket'         => ['get', 'post'],
                         ],
                 ],
         ];
@@ -174,49 +176,103 @@ class SupportController extends Controller
 
         if($model->load(Yii::$app->request->post())) {
 
+                /** @var  $userticket User */
+                $userticket = User::findOne(['email' => $model->email]);
 
-            $userticket = User::findOne(['email'=> $model->email]);
+                if ($userticket == null) {
+                    //no login user
+                    $guest = new User();
+                    $guest->password = User::generatePassword();
+                    $guest->email = $model->email;
+                    $guest->role = User::ROLE_GUEST;
+                    $guest->first_name = 'GUEST';
+                    $guest->last_name = 'GUEST';
 
-            if($userticket == null) {
-                //no login user
-                $guest = new User();
-                $guest->password = User::generatePassword();
-                $guest->email = $model->email;
-                $guest->role = User::ROLE_GUEST;
-                $guest->first_name = 'GUEST';
-                $guest->last_name = 'GUEST';
-                $guest->is_delete = 0;
-                $guest->is_active = 0;
-                $guest->invite_hash = md5(time());
-                $guest->rawPassword = $guest->password;
-                var_dump(md5($guest->password));die();
-                $guest->password = md5($guest->password);
-                $guest->date_signup = date('Y-m-d H:i:s');
+                    if ($guest->validate()) {
 
-                if($guest->validate() && $guest->save()){
+                        $guest->save();
+                        $model->client_id = Yii::$app->user->id;
+                        if ($model->validate()) {
 
-                }
-            } else {
-                //login user
-                if($userticket->password == md5($model->password)) {
-                    //password right
+                            $model->save();
+                            Yii::$app->mailer->compose()
+                                ->setFrom(Yii::$app->params['adminEmail'])
+                                ->setTo('valeriya@skynix.co')
+                                ->setSubject('New ticket' . $model->id)
+                                ->send();
+                            Yii::$app->mailer->compose()
+                                ->setFrom(Yii::$app->params['adminEmail'])
+                                ->setTo('valeriya@skynix.co')
+                                ->setSubject('You Skynix ticket ' . $model->id)
+                                ->send();
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
+
+                            return $this->redirect(['ticket', 'id' => $model->id]);
+
+                        }
+                    }
                 } else {
-                    //no right
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you entered a wrong password of your account"));
-                    //return $this->redirect('index');
-                    //exit();
-                    return $this->redirect('submit-request');
+                    if ($userticket != null && $userticket->is_delete == 1) {
+
+                        $userticket->is_delete = 0;
+                        $userticket->is_active = 0;
+                        $userticket->invite_hash = md5(time());
+                        $userticket->password = User::generatePassword();
+                        $userticket->rawPassword = $userticket->password;
+                        $userticket->password = md5($userticket->password);
+                        $userticket->date_signup = date('Y-m-d H:i:s');
+                        $userticket->save();
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
+                        return $this->redirect('index');
+                    }
+                    if (!empty($userticket) && $userticket->is_delete == 0 && $userticket->password == md5($model->password)) {
+
+                        $login = new LoginForm();
+                        $login->email = $userticket->email;
+                        $login->password = $userticket->rawPassword;
+                        $login->login();
+                    } else {
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you entered a wrong password of your account"));
+                        return $this->redirect('submit-request');
+                    }
+                }
+
+            if(!Yii::$app->request->isGet){
+                // user is not a guest
+                $model->client_id = Yii::$app->user->id;
+                if ($model->validate()) {
+
+                    $model->save();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo('valeriya@skynix.co')
+                        ->setSubject('New ticket' . $model->id)
+                        ->send();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo('valeriya@skynix.co')
+                        ->setSubject('You Skynix ticket ' . $model->id)
+                        ->send();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
+
+                    return $this->redirect(['ticket', 'id' => $model->id]);
+
+
                 }
             }
         }
-        /*if(Yii::$app->user->id == null){
-            if ($model->validate()) {
+    }
+    public function actionTicket()
+    {
+        $model = new SupportTicket();
 
-                $model->save();
 
 
-            }
-        }*/
-        //return $this->redirect('index', ['model' => $model]);
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && $model->is_private == 1){
+
+
+        }
+        return $this->render('ticket', ['model' => $model]);
+
     }
 }

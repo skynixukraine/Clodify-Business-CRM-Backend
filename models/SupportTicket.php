@@ -19,6 +19,11 @@ use Yii;
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
+    const STATUS_NEW        = "NEW";
+    const STATUS_ASSIGNED   = "ASSIGNED";
+    const STATUS_COMPLETED  = "COMPLETED";
+    const STATUS_CANCELLED  = "CANCELLED";
+
     public $email;
     public $password;
 
@@ -36,8 +41,7 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'status', 'password'], 'string'],
-            [[ 'email'], 'required', 'except'=>'settings'],
+            [['description', 'status', 'password', 'email'], 'string'],
             [['is_private', 'assignet_to', 'client_id'], 'integer'],
             [['date_added', 'date_completed'], 'safe'],
             [['subject'], 'string', 'max' => 250],
@@ -50,14 +54,14 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'subject' => 'Subject',
-            'description' => 'Description',
-            'is_private' => 'Is Private',
-            'assignet_to' => 'Assignet To',
-            'status' => 'Status',
-            'client_id' => 'Client ID',
-            'date_added' => 'Date Added',
+            'id'             => 'ID',
+            'subject'        => 'Subject',
+            'description'    => 'Description',
+            'is_private'     => 'Is Private',
+            'assignet_to'    => 'Assignet To',
+            'status'         => 'Status',
+            'client_id'      => 'Client ID',
+            'date_added'     => 'Date Added',
             'date_completed' => 'Date Completed',
         ];
     }

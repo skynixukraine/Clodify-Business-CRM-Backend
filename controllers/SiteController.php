@@ -133,6 +133,16 @@ class SiteController extends Controller
                         $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
+                    if (User::hasPermission([User::ROLE_GUEST])) {
+                        if($modelUserLogins->date_login == null) {
+
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                        }
+                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                        $modelUserLogins->save();
+                        return $this->redirect(Language::getDefaultUrl() . '/');
+                    }
                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
                     $modelUserLogins->save();
 

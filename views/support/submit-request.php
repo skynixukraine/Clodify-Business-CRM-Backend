@@ -65,15 +65,11 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
             ]);
             ?>
             <div class="col-md-12">
-
-                <?php /*echo Html::a(Yii::t('app', 'Create a Ticket'), ['support/create'], ['method' => 'post', 'class' => 'btn btn-primary off-button',
-                    'style' => 'float: right; margin-top: 10px;']) */?>
+                <?= Html::submitButton( Yii::t('app', 'Create a Ticket'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>
             </div>
         </div>
     </div>
 </div>
-<?php echo Html::submitButton('Create a Ticket'); ?>
-<?= Html::submitButton( Yii::t('app', 'Create a Ticket'), ['url'=>'create', 'class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end();?>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>

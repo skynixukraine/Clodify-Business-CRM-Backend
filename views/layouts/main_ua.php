@@ -115,6 +115,10 @@ AppAsset::register($this);
                 <a href="<?=Url::to(['site/logout'])?>">вийти</a>
             <?php endif;?>
             <?php
+            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_GUEST])):?>
+                <a href="<?=Url::to(['site/logout'])?>">вийти</a>
+            <?php endif;?>
+            <?php
             if (Yii::$app->user->id ==null ):?>
                 <a href="<?=Url::to(['site/login'])?>">увійти</a>
 
