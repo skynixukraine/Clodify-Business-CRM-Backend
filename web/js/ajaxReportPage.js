@@ -264,6 +264,8 @@ var ajaxReportPageModule = (function() {
                                         if (data.success) {
                                             ajaxSuccessFunc(successMsg);
                                             countHours();
+                                            var form = $('.form-add-report');
+                                            form.find(' #report-hours').val('');
                                         } else {
                                             ajaxSuccessFunc(errorMsg, data);
                                         }
@@ -286,46 +288,48 @@ var ajaxReportPageModule = (function() {
                     win = new ModalBootstrap({
                         title: 'Message',
                         body: "Are you sure you want to delete this report?"
-                    });
+                    }),
+                    clickedButton;
 
                 deleteButton.each(function() {
                     var thisButton = $(this);
                     thisButton.unbind();
                     thisButton.click(function() {
-                        var clickedButton = $(this);
+                        clickedButton = $(this);
                         saveDataInObject(clickedButton);
                         win.show();
-                        win.getWin().find(".confirm").click(function() {
-                            report = JSON.stringify(dataArr);
-                            $.ajax({
-                                type: "POST",
-                                url: "delete",
-                                data: 'jsonData=' + report,
-                                dataType: 'json',
-                                success: function(data) {
-                                    if (data.success) {
-                                        ajaxSuccessFunc(successMsg);
-                                        clickedButton.parent().parent('tr').parent('tbody').remove();
-                                        countHours();
-                                        var form = $('.form-add-report');
-                                        form.find(' #report-hours').val('');
-                                    } else {
-                                        ajaxSuccessFunc(errorMsg, data);
-                                        $.each(dataArr, function(i) {
-                                            delete dataArr[i];
-                                        });
-                                    }
-                                },
-                                error: function(data) {
-                                    ajaxSuccessFunc(errorMsg, data);
-                                }
-                            })
-                        })
+                    })
+                })
 
-
+                win.getWin().find(".confirm").click(function() {
+                    report = JSON.stringify(dataArr);
+                    $.ajax({
+                        type: "POST",
+                        url: "delete",
+                        data: 'jsonData=' + report,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.success) {
+                                ajaxSuccessFunc(successMsg);
+                                clickedButton.parent().parent('tr').parent('tbody').remove();
+                                countHours();
+                                var form = $('.form-add-report');
+                                form.find(' #report-hours').val('');
+                            } else {
+                                ajaxSuccessFunc(errorMsg, data);
+                                $.each(dataArr, function(i) {
+                                    delete dataArr[i];
+                                });
+                            }
+                        },
+                        error: function(data) {
+                            ajaxSuccessFunc(errorMsg, data);
+                        }
                     })
                 })
             }
+
+
 
             //function gets value of sort-select (view report of this day, this week, this month, last month)
             // and counts hour depending on the chosen option///////////////////////////////////////////////
