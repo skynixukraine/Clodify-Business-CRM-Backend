@@ -108,7 +108,7 @@ class SiteController extends Controller
                             ])
                         ->one();
 
-                    $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                    //$modelUserLogins->date_login = date('Y-m-d H:i:s');
 
 
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
