@@ -97,7 +97,8 @@ class SurveysController extends DefaultController
             $dataTable->setFilter('date_end <= "' . DateUtil::convertData($dateEnd). '"');
 
         }*/
-        $dataTable->setFilter('user_id = ' . Yii::$app->user->id /*. ' OR is_private=0'*/);
+
+        $dataTable->setFilter('user_id = ' . Yii::$app->user->id . ' AND is_private=1 OR is_private=0');
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /** @var $model \app\models\Survey */
