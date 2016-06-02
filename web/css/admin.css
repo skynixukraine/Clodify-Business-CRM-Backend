@@ -70,6 +70,10 @@
     margin-left: 10px;
 }
 
+.form-add-report{
+    margin-top:20px;
+}
+
 .form-add-report>div {
     padding-right: 0;
     padding-left: 7px;
@@ -142,6 +146,8 @@
     }
     
 }
+
+
 
 @media screen and (max-width: 429px) {
     .submit-form {
