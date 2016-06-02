@@ -20,6 +20,7 @@ use Yii;
 class SupportTicket extends \yii\db\ActiveRecord
 {
     public $email;
+    public $password;
 
     /**
      * @inheritdoc
@@ -35,7 +36,7 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'status', 'email'], 'string'],
+            [['description', 'status', 'email', 'password'], 'string'],
             [['is_private', 'assignet_to', 'client_id'], 'integer'],
             [['date_added', 'date_completed'], 'safe'],
             [['subject'], 'string', 'max' => 250],

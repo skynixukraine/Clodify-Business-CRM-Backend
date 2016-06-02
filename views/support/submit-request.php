@@ -36,6 +36,13 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                         'type'          => 'email',
                     ])-> label( 'Your Email Address' );?>
             <?php endif?>
+            <?php echo $form->field( $model, 'password')
+                ->textInput([
+                    'class' => 'form-control ',
+                    'placeholder'   => 'password',
+                    'type'          => 'password',
+                    'style'         => 'display: none'
+                ])-> label( 'Your Password', ['class'=> 'password','style'=>'display:none;']);?>
 
                 <?php echo $form->field( $model, 'description')
                     ->textarea([
@@ -47,6 +54,8 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 'options' => [
                     'url'   =>  'upload',
                     'maxFilesize' => '5',
+                    'maxFiles'=> '5',
+                    'dictMaxFilesExceeded'=>'Maximum of 1 You can not add more than 5 files',
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
                 ],
                 'clientEvents' => [
@@ -59,19 +68,30 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
     </div>
 </div>
 <?php ActiveForm::end();?>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var input = '#supportticket-email';
+    console.log($('.dz-preview'));
     $(input).blur(function(event){
         $.ajax({
             type: "GET",
-            url: '',
+            url: 'us',
             dataType: 'json',
             data: 'query='+$(input).val(),
             beforeSend: function(){
             },
             success: function(response) {
+                if(response.success == true) {
+                    $('#supportticket-password').css('display', 'block');
+                    $('.password').css('display', 'block');
+                }
+                if(response.success == false) {
+                    $('#supportticket-password').css('display', 'none');
+                    $('.password').css('display', 'none');
+                }
+
             }
         });
-    })
+    });
 </script>
 

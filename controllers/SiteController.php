@@ -112,26 +112,30 @@ class SiteController extends Controller
 
 
                     if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                        if($modelUserLogins->date_signup == null) {
+                        if($modelUserLogins->date_login == null) {
 
-                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                            //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
 
+                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                     }
                     if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
-                        if($modelUserLogins->date_signup == null) {
+                        if($modelUserLogins->date_login == null) {
 
-                            $modelUserLogins->date_signup = date('Y-m-d H:i:s');
                             Yii::$app->getSession()->setFlash('success',
                                 Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
                         }
+                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
                         return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
+                    $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                    $modelUserLogins->save();
+
                 } else {
 
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));

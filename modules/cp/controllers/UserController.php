@@ -209,8 +209,8 @@ class UserController extends DefaultController {
                 $model->role,
                 $model->email,
                 $model->phone,
-                DateUtil::convertDatetime($model->date_signup),
-                DateUtil::convertDatetime($model->date_login),
+                DateUtil::convertDatetimeWithoutSecund($model->date_login),
+                DateUtil::convertDatetimeWithoutSecund($model->date_signup),
 
                 //Yii::$app->formatter->asDateTime($model->date_login,'d/MM/Y hh:m'),
                 //Yii::$app->formatter->asDateTime($model->date_signup,'d/MM/Y hh:m'),
@@ -261,6 +261,7 @@ class UserController extends DefaultController {
                     $userEmailes->password = $model->password;
                     $userEmailes->rawPassword = $model->password;
                     $userEmailes->password = md5($model->password);
+                    $userEmailes->date_signup = date('Y-m-d H:i:s');
                     $userEmailes->save();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
                     return $this->redirect('index');

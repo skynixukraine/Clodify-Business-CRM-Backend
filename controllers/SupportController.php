@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use yii\base\Controller;
 use yii\filters\AccessControl;
@@ -28,12 +29,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -46,6 +47,7 @@ class SupportController extends Controller
                             'index'          => ['get', 'post'],
                             'submit-request' => ['get', 'post'],
                             'upload'         => ['get', 'post'],
+                            'us'             => ['get', 'post']
                         ],
                 ],
         ];
@@ -105,14 +107,31 @@ class SupportController extends Controller
     public function actionSubmitRequest()
     {
         $model = new SupportTicket();
+
+            //$model->email = Yii::$app->user->identity->email;
+
+        return $this->render('submit-request', ['model' => $model]);
+    }
+    public function actionUs()
+    {
         if ((Yii::$app->request->isAjax &&
             Yii::$app->request->isGet &&
             ($data = Yii::$app->request->get('query')))
         ) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            $model->email = Yii::$app->user->identity->email;
+
+            if( User::findOne(['email' => $data]) != null ) {
+                return [
+                    "success" => true
+                ];
+            } else {
+                return [
+                    "success" => false
+                ];
+            }
+
+
         }
-        return $this->render('submit-request', ['model' => $model]);
     }
 
     public function actionUpload()

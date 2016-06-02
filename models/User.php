@@ -328,7 +328,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "', '" . User::ROLE_FIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
