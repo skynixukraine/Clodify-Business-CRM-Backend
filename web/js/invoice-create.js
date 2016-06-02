@@ -42,7 +42,11 @@ var invoiceCreateModule = (function() {
             }).on("hide", function( event ){
                 var startDate = filterDateStartSelect.val();
                 dataFilter['date_start'] = startDate;
-                dataTable.api().ajax.reload();
+                console.log(startDate);
+                if(startDate != ''){
+                    dataTable.api().ajax.reload();
+                }
+
             }).datepicker("setDate", firstDayOfCurrMonth);
 
             filterDateEndSelect = $( filterDateEndSelect );
@@ -54,11 +58,14 @@ var invoiceCreateModule = (function() {
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['date_end'] = endDate;
-                dataTable.api().ajax.reload();
+                if(endDate != ''){
+                    dataTable.api().ajax.reload();
+                }
             }).datepicker("setDate", currentDay);
 
             dataFilter['date_start'] = filterDateStartSelect.val();
             dataFilter['date_end'] = filterDateEndSelect.val();
+
 
             dataTable = $('#invoice-create-table').dataTable({
                 "bPaginate": false,
