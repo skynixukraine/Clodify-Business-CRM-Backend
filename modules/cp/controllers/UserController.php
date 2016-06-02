@@ -82,8 +82,10 @@ class UserController extends DefaultController {
 
                 /** @var  $model User */
                 $model  = User::findOne( $id );
+                $model->date_signup = null;
+                $model->date_login = null;
                 $model->is_delete = 1;
-                $model->save(true, ['is_delete']);
+                $model->save(true, ['is_delete', 'date_login', 'date_signup']);
 
                 return json_encode([
                     "message"   => Yii::t("app", "User # " . $id ." has been deleted "),
