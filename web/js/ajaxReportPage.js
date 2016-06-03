@@ -92,6 +92,8 @@ var ajaxReportPageModule = (function() {
                     thisInput.click(function() {
                         $('.ajax-error').remove();
                     })
+                    var ajaxError = $('.ajax-error');
+                    ajaxError.remove();
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
@@ -117,18 +119,18 @@ var ajaxReportPageModule = (function() {
                                         if (data.success) {
                                             id = data.id;
                                             tableLoad.append("<tbody><tr><td class = 'report-id'>" + id + "</td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
-                                            var form = $('.form-add-report');
-                                            form.find('#report-task, #report-hours, .form-add-report #report-project_id').val('');
                                             ajaxSuccessFunc(successMsg);
+                                            var form = $('.form-add-report');
+                                            form.find('#report-task,.form-add-report #report-project_id').val('');
                                             changeTableRow();
                                             editReport();
                                             removeReport();
                                             countHours();
                                         } else {
-                                            ajaxSuccessFunc(successMsg);
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
-                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                                            ajaxSuccessFunc(successMsg);
+                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },
                                     error: function(data) {
@@ -469,6 +471,8 @@ var ajaxReportPageModule = (function() {
                 } else {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
+                    var form = $('.form-add-report');
+                    form.find('#report-hours').val('');
                     $.each(dataArr, function(i) {
                         delete dataArr[i];
                     });
