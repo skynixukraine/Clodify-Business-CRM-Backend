@@ -107,7 +107,7 @@ class SurveysController extends DefaultController
             $list[] = [
                 $model->id,
                 $model->shortcode,
-                $model->question,
+                strlen($model->question) > 40 ? mb_substr($model->question, 1, 40) . '...' : $model->question,
                 DateUtil::convertDatetimeWithoutSecund($model->date_start),
                 DateUtil::convertDatetimeWithoutSecund($model->date_end),
                 $model->is_private,
