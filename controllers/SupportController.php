@@ -272,12 +272,31 @@ class SupportController extends Controller
         /** @var  $model SupportTicket*/
         $model = new SupportTicket();
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
+            if($model->is_private == 1){
+                if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id))){
+                    if($model->load(Yii::$app->request->post())) {
 
-            if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id) &&
-             $model->is_private == 1) ||
-             $model->is_private == 0){
+                        $modelComment = new SupportTicketComment();
+                        $modelComment->comment = $model->comment;
+                        $modelComment->date_added = date('Y-m-d H:i:s');
+                        $modelComment->user_id = Yii::$app->user->id;
+                        $modelComment->support_ticket_id = $model->id;
+                        if($modelComment->validate()){
+                            $modelComment->save();
 
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
+                            //$model->comment = null;
+                            return $this->refresh();
+                        }
+                    }
+                    return $this->render('ticket', ['model' => $model]);
 
+                }else{
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
+                    return $this->redirect('submit-request');
+
+                }
+            }else{
                 if($model->load(Yii::$app->request->post())) {
 
                     $modelComment = new SupportTicketComment();
@@ -293,13 +312,36 @@ class SupportController extends Controller
                         return $this->refresh();
                     }
                 }
-                    return $this->render('ticket', ['model' => $model]);
-
-            }else{
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
-                return $this->redirect('submit-request');
+                return $this->render('ticket', ['model' => $model]);
 
             }
+            /* if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id) &&
+              $model->is_private == 1) ||
+                 ($model->is_private == 0 && Yii::$app->user->id == null)){
+
+
+                 if($model->load(Yii::$app->request->post())) {
+
+                     $modelComment = new SupportTicketComment();
+                     $modelComment->comment = $model->comment;
+                     $modelComment->date_added = date('Y-m-d H:i:s');
+                     $modelComment->user_id = Yii::$app->user->id;
+                     $modelComment->support_ticket_id = $model->id;
+                     if($modelComment->validate()){
+                         $modelComment->save();
+
+                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
+                         //$model->comment = null;
+                         return $this->refresh();
+                     }
+                 }
+                     return $this->render('ticket', ['model' => $model]);
+
+             }else{
+                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
+                 return $this->redirect('submit-request');
+
+             }*/
         }
 
 

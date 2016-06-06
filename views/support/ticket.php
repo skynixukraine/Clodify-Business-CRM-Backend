@@ -29,12 +29,14 @@ use yii\widgets\ActiveForm;
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
                     <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
 
-                <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
+                <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
+
                     <h2>Your comment</h2>
                     <?php $form = ActiveForm::begin();?>
                         <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
                      <?= Html::submitButton( Yii::t('app', 'Post Comment'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>
                     <?php ActiveForm::end();?>
+
                 <?php endif?>
 
                 <?php $comments = SupportTicketComment::find()->where('support_ticket_id=:id', [':id' => $model->id])->all();?>
