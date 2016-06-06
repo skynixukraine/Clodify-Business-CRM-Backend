@@ -46,6 +46,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 
                 </div><br>
                 <table id="table-result">
+                    <span class="quest" style="display: none;">Are you looking for the following subject?</span>
                     <?php $subject = SupportTicket::getSupport(null);?>
                 </table>
             </article>
@@ -89,11 +90,10 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     return;
                 }
                 $.each(response, function(e, i) {
-                    subjects += '<span>Are you looking for the following subject?</span><br/>' +
-                        '        <p><a href="ticket/'+e+'">Ticket '+i+' '+e+'</a></p>';
+                    subjects += '<p><a href="ticket/'+e+'">Ticket '+i+' '+e+'</a></p>';
 
                 });
-                $('#table-result').html(subjects);
+                $('#table-result').html(subjects).prepend('<span>Are you looking for the following subject?</span>');
 
             },
             error: function(response) {
