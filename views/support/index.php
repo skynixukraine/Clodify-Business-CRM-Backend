@@ -46,18 +46,13 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 
                 </div><br>
                 <table id="table-result">
-                <span>Are you looking for the following subject?</span>
-                <?php $subject = SupportTicket::getSupport(null);?>
-
-
+                    <?php $subject = SupportTicket::getSupport(null);?>
                 </table>
             </article>
-
             <div class="col-md-12">
-                <?php echo Html::a(Yii::t('app', 'Submit Request'), ['support/submit-request'/*, 'id' => $model->id*/], ['class' => 'btn btn-primary off-button',
+                <?php echo Html::a(Yii::t('app', 'Submit Request'), null, ['class' => 'btn btn-primary off-button',
                     'style' => 'float: right; margin-top: 10px;',
                     'disabled'  =>  'disabled']) ?>
-
             </div>
 
         </section>
@@ -89,11 +84,13 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                 if(response.error){
                     var saveButton = $('.off-button');
                     saveButton.removeAttr('disabled').css('background', '#337ab7');
+                    saveButton.attr('href', 'submit-request');
                     $('#table-result').html('');
                     return;
                 }
                 $.each(response, function(e, i) {
-                    subjects += '<p><a href="ticket/'+e+'">Ticket '+i+' '+e+'</a></p>';
+                    subjects += '<span>Are you looking for the following subject?</span><br/>' +
+                        '        <p><a href="ticket/'+e+'">Ticket '+i+' '+e+'</a></p>';
 
                 });
                 $('#table-result').html(subjects);
