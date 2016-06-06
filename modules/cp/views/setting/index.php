@@ -290,9 +290,11 @@ $this->params['menu'] = [
             var check = $(this);
             if(!check.prop('checked')){
                 check.parent().parent('tr').css("color", "grey");
+                check.parent().parent('tr').find('td:nth-child(3)').css('color','grey');
             }
             else{
                 check.parent().parent('tr').css("background-color", "white");
+                check.parent().parent('tr').find('td:nth-child(3)').css('color','black');
             }
         })
     });
