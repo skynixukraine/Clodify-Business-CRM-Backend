@@ -31,10 +31,6 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
     <div class="row">
         <section class="col-lg-6 col-lg-offset-3 sect3">
             <article>
-                <!--<header>
-                    <h3>Подзаголовок</h3>
-                </header>-->
-                <p contenteditable="true">
                 <div class="form-group">
                     <?php echo $form->field( $model, 'subject', [
 
@@ -85,7 +81,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                 if(response.error){
                     var saveButton = $('.off-button');
                     saveButton.removeAttr('disabled').css('background', '#337ab7');
-                    saveButton.attr('href', 'submit-request');
+                    saveButton.attr('href', 'support/submit-request');
                     $('#table-result').html('');
                     return;
                 }

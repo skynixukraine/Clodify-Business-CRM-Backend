@@ -48,4 +48,11 @@ class SupportTicketComment extends \yii\db\ActiveRecord
             'support_ticket_id' => 'Support Ticket ID',
         ];
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['user_id' => 'id']);
+    }
 }

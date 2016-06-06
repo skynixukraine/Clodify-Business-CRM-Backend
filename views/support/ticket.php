@@ -13,6 +13,7 @@ use app\models\User;
 use yii\widgets\ActiveForm;
 /**
  * @var $model \app\models\SupportTicket
+ * @var $develop\app\models\SupportTicketComment
  */
 ?>
 <header>
@@ -28,11 +29,27 @@ use yii\widgets\ActiveForm;
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
                     <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
+                <?php $form = ActiveForm::begin();?>
+                <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
+                    <div class="form-group">
+                        <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                            User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();;
+                        $listUsers = User::getCustomersDropDown( $developer, 'id' );
+                        //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
 
+                        echo $form->field( $model, 'assignee', [
+
+                            'options' => [
+
+                            ]
+                        ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to'] )->label(false);?>
+
+                    </div>
+                <?php endif?>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
 
                     <h2>Your comment</h2>
-                    <?php $form = ActiveForm::begin();?>
+
                         <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
                      <?= Html::submitButton( Yii::t('app', 'Post Comment'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>
                     <?php ActiveForm::end();?>
