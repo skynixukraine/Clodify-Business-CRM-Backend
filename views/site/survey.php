@@ -29,7 +29,7 @@ $usersVote   = $model->getUsersVote();
         <article>
             <header class="question">
 
-                <h1><?= Html::tag('p', Html::encode($model->question), ['class' => 'answer']) ?></h1>
+                <h1><?= Html::tag('p', Html::encode($model->question), ['class' => 'answer', 'style' => 'padding-right: 19px;']) ?></h1>
             </header>
 
             <p><?= nl2br( Html::encode($model->description) )?></p>

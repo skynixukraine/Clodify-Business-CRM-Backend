@@ -83,6 +83,9 @@ $this->params['menu'] = [
 </div>
 <?php ActiveForm::end();?>
 
+<div id="total-hours" style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
+    Total Hours: <span style="font-weight: bold;"></span> hours
+</div>
     <table id="report-table" class="table table-hover box ">
         <thead>
             <tr>
@@ -124,5 +127,6 @@ exit();*/
             canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN]) ? 'true' : 'false')?>
         })
     });
+
 
 </script>

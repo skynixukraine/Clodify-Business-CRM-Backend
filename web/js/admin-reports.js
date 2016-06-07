@@ -186,6 +186,19 @@ var adminReportModule = (function() {
                 "serverSide": true
             });
             dataTable.on( 'draw.dt', function (e, settings, data) {
+                var totalHours = '#total-hours';
+                $.ajax({
+                    type: "GET",
+                    url: '',
+                    dataType: 'json',
+                    success: function (responce) {
+                        alert(response.totalHours);
+                    }
+                });
+                totalHours = settings.json.totalHours || '0';
+                $('#total-hours span').text(Math.round(totalHours*100)/100);
+
+
                 dataTable.find("img[class*=edit]").click(function(){
                     var id = $(this).parents("tr").find("td").eq(0).text();
                     actionEdit( id );

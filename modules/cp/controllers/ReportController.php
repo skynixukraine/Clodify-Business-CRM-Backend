@@ -212,15 +212,18 @@ class ReportController extends DefaultController
             ];
         }
 
+        $totalHours = $query->sum(Report::tableName() . '.hours');
 
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
-            "data" => $list
+            "totalHours"        => $totalHours,
+            "data"              => $list
         ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
+
         Yii::$app->end();
 
     }
