@@ -28,7 +28,8 @@ $usersVote   = $model->getUsersVote();
     <section class="survey-wrap">
         <article>
             <header class="question">
-                <h1> <?= Html::encode($model->question)?></h1>
+
+                <h1><?= Html::tag('p', Html::encode($model->question), ['class' => 'answer']) ?></h1>
             </header>
 
             <p><?= nl2br( Html::encode($model->description) )?></p>

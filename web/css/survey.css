@@ -34,6 +34,14 @@
 .survey-wrap p {
     text-align: center;
     font-size: 18px; }
+.survey-wrap .answer{
+    max-width: 100%;
+    width: 600px;
+    text-align: center;
+    margin: 0px auto;
+    word-break: break-all;
+    font-size: 25px;
+}
 .survey-wrap form {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
