@@ -23,12 +23,12 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <section class="col-lg-6 col-lg-offset-3 sect3">
             <article>
+                <?php $form = ActiveForm::begin();?>
                 <div class="form-group">
                     <p>Status: <?= Html::encode($model->status)?></p>
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
                     <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
-                <?php $form = ActiveForm::begin();?>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
                     <div class="form-group">
                         <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
                         </div>
                     </div>
                 <?php endif?>
-                <?php ActiveForm::end();?>
+
                     <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
                         <h2>Your comment</h2>
                             <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
@@ -69,6 +69,7 @@ use yii\widgets\ActiveForm;
                         </div>
                 <?php endforeach;?>
                 </div><br>
+                <?php ActiveForm::end();?>
             </article>
         </section>
     </div>

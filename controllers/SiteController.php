@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\SupportTicket;
 use app\models\Survey;
 use app\models\SurveyVoter;
 use app\models\SurveysOption;
@@ -141,7 +142,8 @@ class SiteController extends Controller
                         }
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
-                        return $this->redirect(Language::getDefaultUrl() . '/');
+                        /** @var $quest SupportTicket */
+                        return $this->redirect(Language::getDefaultUrl() . "support/ticket/$quest->id");
                     }
                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
                     $modelUserLogins->save();
