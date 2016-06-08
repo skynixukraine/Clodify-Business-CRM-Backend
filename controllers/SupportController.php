@@ -197,6 +197,7 @@ class SupportController extends Controller
                         $guest->save();
                         $model->client_id = Yii::$app->user->id;
                         $model->status = SupportTicket::STATUS_NEW;
+                        $model->is_private = 1;
                         $model->date_added = date('Y-m-d H:i:s');
                         if ($model->validate()) {
 
@@ -246,6 +247,7 @@ class SupportController extends Controller
             if(!Yii::$app->request->isGet){
                 // user is not a guest
                 $model->status = SupportTicket::STATUS_NEW;
+                $model->is_private = 1;
                 $model->date_added = date('Y-m-d H:i:s');
                 $model->client_id = Yii::$app->user->id;
                 if ($model->validate()) {
@@ -276,7 +278,7 @@ class SupportController extends Controller
         $model = new SupportTicket();
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
             if($model->is_private == 1){
-                if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id))){
+                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM ]) || (isset($model->client_id) && $model->client_id == Yii::$app->user->id)))){
                     if($model->load(Yii::$app->request->post())) {
 
                         $modelComment = new SupportTicketComment();
@@ -295,8 +297,9 @@ class SupportController extends Controller
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket. Please sign in"));
                     return $this->redirect('submit-request');
+                   // return $this->redirect(['/site/login']);
 
                 }
             }else{

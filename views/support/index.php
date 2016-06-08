@@ -88,7 +88,6 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             return;
                         }
                         $.each(response, function (e, i) {
-                            //subjects += '<p><a href="ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
                             subjects += '<p><a href="support/ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
 
                         });
