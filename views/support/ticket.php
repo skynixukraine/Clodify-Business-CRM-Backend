@@ -25,7 +25,9 @@ use yii\widgets\ActiveForm;
             <article>
                 <?php $form = ActiveForm::begin();?>
                 <div class="form-group">
-                    <p>Status: <?= Html::encode($model->status)?></p>
+                    <div id="butt">
+                        <p>Status: <?= Html::encode($model->status)?></p>
+                    </div>
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
                     <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
@@ -77,6 +79,7 @@ use yii\widgets\ActiveForm;
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var button = '.complete';
+    var em = '#butt';
     $('.button').on('click', function() {
         $.ajax({
             type: "GET",
@@ -86,6 +89,10 @@ use yii\widgets\ActiveForm;
             beforeSend: function(){
             },
             success: function(response) {
+                //if(response.success == true) {
+                $('#butt').text('Status: COMPLETE');
+                // }
+
             }
         });
     });
@@ -98,6 +105,7 @@ use yii\widgets\ActiveForm;
             beforeSend: function(){
             },
             success: function(response) {
+                $('#butt').text('Status: CANCELLED');
             }
         });
     });

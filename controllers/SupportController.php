@@ -335,6 +335,8 @@ class SupportController extends Controller
             if($status = SupportTicket::findOne($data)){
                 $status->status = SupportTicket::STATUS_COMPLETED;
                 if($status->validate() && $status->save()){
+                    //return $this->refresh();
+
                     return [
                         "success" => true,
                     ];
@@ -358,6 +360,7 @@ class SupportController extends Controller
             if($status = SupportTicket::findOne($data)){
                 $status->status = SupportTicket::STATUS_CANCELLED;
                 if($status->validate() && $status->save()){
+                    //return $this->refresh();
                     return [
                         "success" => true,
                     ];
