@@ -35,10 +35,11 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     <?php echo $form->field( $model, 'subject', [
 
                         'options' => [
-                            'class'=>'supportticket-subject'
+                            'class'=>'supportticket-subject subject',
+                            'type'=>'text',
 
                         ]
-                    ])->textInput(array('placeholder' => 'Enter the subject or your question'))->label( false );?>
+                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text'))->label( false );?>
 
                 </div><br>
                 <table id="table-result">
@@ -66,38 +67,40 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
            // saveButton.removeAttr('disabled').css('background', '#337ab7');
         }
     });
-    var input = '#supportticket-subject';
-    $(input).blur(function(event){
-        $.ajax({
-            type: "GET",
-            url: '',
-            dataType: 'json',
-            data: 'query='+$(input).val(),
-            beforeSend: function(){
-            },
-            success: function(response) {
 
-                var subjects = '';
-                if(response.error){
-                    var saveButton = $('.off-button');
-                    saveButton.removeAttr('disabled').css('background', '#337ab7');
-                    saveButton.attr('href', '/support/submit-request');
-                    $('#table-result').html('');
-                    return;
-                }
-                $.each(response, function(e, i) {
-                    subjects += '<p><a href="ticket?id='+e+'">Ticket '+i+' '+e+'</a></p>';
+        var input = '#supportticket-subject';
+        $("input").on('change keydown paste input', function (event) {
+                $.ajax({
+                    type: "GET",
+                    url: '',
+                    dataType: 'json',
+                    data: 'query=' + $(input).val(),
+                    beforeSend: function () {
+                    },
+                    success: function (response) {
 
+                        var subjects = '';
+                        if (response.error) {
+                            var saveButton = $('.off-button');
+                            saveButton.removeAttr('disabled').css('background', '#337ab7');
+                            saveButton.attr('href', '/support/submit-request');
+                            $('#table-result').html('');
+                            return;
+                        }
+                        $.each(response, function (e, i) {
+                            subjects += '<p><a href="ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
+
+                        });
+                        $('#table-result').html(subjects).prepend('<span>Are you looking for the following subject?</span>');
+
+                    },
+                    error: function (response) {
+                        var saveButton = $('.off-button');
+                        saveButton.removeAttr('disabled').css('background', '#337ab7');
+                        console.log('error');
+                    }
                 });
-                $('#table-result').html(subjects).prepend('<span>Are you looking for the following subject?</span>');
+            });
 
-            },
-            error: function(response) {
-                var saveButton = $('.off-button');
-                saveButton.removeAttr('disabled').css('background', '#337ab7');
-                console.log('error');
-            }
-        });
-    })
 
 </script>
