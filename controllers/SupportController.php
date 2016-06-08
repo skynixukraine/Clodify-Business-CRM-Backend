@@ -213,7 +213,7 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
-                            return $this->redirect (['ticket', 'id' => $model->id]);
+                            return $this->redirect (["support/ticket/$model->id"]);
 
                         }
                     }

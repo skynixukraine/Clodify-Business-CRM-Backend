@@ -45,24 +45,19 @@ use yii\widgets\ActiveForm;
                     </div>
                     <div class="col-lg-12">
                         <div class="btn-group" style="float: right;">
-
-                        <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
-                            'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
-                        <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button',
-                            'style' => ' margin-top: 10px;']) ?>
+                            <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
+                                'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
+                            <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button',
+                                'style' => ' margin-top: 10px;']) ?>
                         </div>
                     </div>
                 <?php endif?>
-                <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
-
-                    <h2>Your comment</h2>
-
-                        <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
-                     <?= Html::submitButton( Yii::t('app', 'Post Comment'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>
-                    <?php ActiveForm::end();?>
-
-                <?php endif?>
-
+                <?php ActiveForm::end();?>
+                    <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
+                        <h2>Your comment</h2>
+                            <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
+                            <?= Html::submitButton( Yii::t('app', 'Post Comment'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>
+                    <?php endif?>
                 <?php $comments = SupportTicketComment::find()->where('support_ticket_id=:id', [':id' => $model->id])->all();?>
                 <?php /** @var $comment SupportTicketComment */?>
                 <?php foreach($comments as $comment):?>
@@ -73,12 +68,8 @@ use yii\widgets\ActiveForm;
                             <span><?php echo $comment->comment?></span>
                         </div>
                 <?php endforeach;?>
-
-
                 </div><br>
-
             </article>
-
         </section>
     </div>
 </div>
