@@ -23,7 +23,6 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <section class="col-lg-6 col-lg-offset-3 sect3">
             <article>
-                <p contenteditable="true">
                 <div class="form-group">
                     <p>Status: <?= Html::encode($model->status)?></p>
                     <p>Description: <?= Html::encode($model->description)?></p>
@@ -43,7 +42,15 @@ use yii\widgets\ActiveForm;
 
                             ]
                         ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to'] )->label(false);?>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="btn-group" style="float: right;">
 
+                        <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
+                            'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
+                        <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button',
+                            'style' => ' margin-top: 10px;']) ?>
+                        </div>
                     </div>
                 <?php endif?>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
@@ -75,3 +82,32 @@ use yii\widgets\ActiveForm;
         </section>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script>
+    var button = '.complete';
+    $('.button').on('click', function() {
+        $.ajax({
+            type: "GET",
+            url: 'complete',
+            data: 'query='+<?php echo $model->id?>,
+            dataType: 'json',
+            beforeSend: function(){
+            },
+            success: function(response) {
+            }
+        });
+    });
+    $('.off-button').on('click', function() {
+        $.ajax({
+            type: "GET",
+            url: 'cancel',
+            data: 'query='+<?php echo $model->id?>,
+            dataType: 'json',
+            beforeSend: function(){
+            },
+            success: function(response) {
+            }
+        });
+    });
+
+</script>

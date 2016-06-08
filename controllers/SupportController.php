@@ -18,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use app\components\AccessRule;
 use app\models\SupportTicket;
+use yii\helpers\Url;
 
 
 
@@ -34,12 +35,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,6 +56,8 @@ class SupportController extends Controller
                             'us'             => ['get', 'post'],
                             'create'         => ['get', 'post'],
                             'ticket'         => ['get', 'post'],
+                            'complete'       => ['get', 'post'],
+                            'cancel'         => ['get', 'post']
                         ],
                 ],
         ];
@@ -210,7 +213,7 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
-                            return $this->redirect(['ticket', 'id' => $model->id]);
+                            return $this->redirect (['ticket', 'id' => $model->id]);
 
                         }
                     }
@@ -260,7 +263,7 @@ class SupportController extends Controller
                         ->send();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
-                    return $this->redirect(['ticket', 'id' => $model->id]);
+                    return $this->redirect (['ticket', 'id' => $model->id]);
 
 
                 }
@@ -315,38 +318,53 @@ class SupportController extends Controller
                 return $this->render('ticket', ['model' => $model]);
 
             }
-            /* if(((User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) || $model->client_id == Yii::$app->user->id) &&
-              $model->is_private == 1) ||
-                 ($model->is_private == 0 && Yii::$app->user->id == null)){
-
-
-                 if($model->load(Yii::$app->request->post())) {
-
-                     $modelComment = new SupportTicketComment();
-                     $modelComment->comment = $model->comment;
-                     $modelComment->date_added = date('Y-m-d H:i:s');
-                     $modelComment->user_id = Yii::$app->user->id;
-                     $modelComment->support_ticket_id = $model->id;
-                     if($modelComment->validate()){
-                         $modelComment->save();
-
-                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
-                         //$model->comment = null;
-                         return $this->refresh();
-                     }
-                 }
-                     return $this->render('ticket', ['model' => $model]);
-
-             }else{
-                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket"));
-                 return $this->redirect('submit-request');
-
-             }*/
         }
 
+    }
+    public function actionComplete()
+    {
+        if ((Yii::$app->request->isAjax &&
+            Yii::$app->request->isGet &&
+            ($data = Yii::$app->request->get('query')))
+        ) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            /** @var $status SupportTicket */
+            if($status = SupportTicket::findOne($data)){
+                $status->status = SupportTicket::STATUS_COMPLETED;
+                if($status->validate() && $status->save()){
+                    return [
+                        "success" => true,
+                    ];
+                }else{
+                    return[
+                        "success" =>false,
+                    ];
+                }
+            }
+        }
 
-
-
+    }
+    public function actionCancel()
+    {
+        if ((Yii::$app->request->isAjax &&
+            Yii::$app->request->isGet &&
+            ($data = Yii::$app->request->get('query')))
+        ) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            /** @var $status SupportTicket */
+            if($status = SupportTicket::findOne($data)){
+                $status->status = SupportTicket::STATUS_CANCELLED;
+                if($status->validate() && $status->save()){
+                    return [
+                        "success" => true,
+                    ];
+                }else{
+                    return[
+                        "success" =>false,
+                    ];
+                }
+            }
+        }
 
     }
 }

@@ -28,6 +28,7 @@ class SupportTicket extends \yii\db\ActiveRecord
     public $password;
     public $comment;
     public $assignee;
+    public $complete;
 
     /**
      * @inheritdoc
