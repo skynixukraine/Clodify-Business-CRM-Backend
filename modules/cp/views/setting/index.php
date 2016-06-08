@@ -249,7 +249,7 @@ $this->params['menu'] = [
                                 <tbody>
                                 <tr>
                                     <?php /** @var $project Project */?>
-                                    <td><?= Html::encode($project->getCustomers()->one()->first_name  . $project->getCustomers()->one()->last_name)?></td>
+                                    <td><?= Html::encode($project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name)?></td>
                                     <td><?= Html::encode($project->name)?></td>
                                     <td><?= Html::encode($project->getProjectDevelopers()->one()->status )?></td>
                                     <?php $active = ($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)?>
