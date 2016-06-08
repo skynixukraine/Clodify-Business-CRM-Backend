@@ -81,7 +81,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                 if(response.error){
                     var saveButton = $('.off-button');
                     saveButton.removeAttr('disabled').css('background', '#337ab7');
-                    saveButton.attr('href', 'support/submit-request');
+                    saveButton.attr('href', 'submit-request');
                     $('#table-result').html('');
                     return;
                 }
