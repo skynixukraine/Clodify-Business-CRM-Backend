@@ -312,17 +312,8 @@ class SupportController extends Controller
                     $modelComment->user_id = Yii::$app->user->id;
                     $modelComment->support_ticket_id = $model->id;
                     if($modelComment->validate()){
-                        Yii::$app->mailer->compose()
-                            ->setFrom('olha@skynix.co')
-                            ->setTo('olha@skynix.co')
-                            ->setSubject('New ticket' . $model->id)
-                            ->send();
-                        Yii::$app->mailer->compose()
-                            ->setFrom('olha@skynix.co')
-                            ->setTo('olha@skynix.co')
-                            ->setSubject('You Skynix ticket ' . $model->id)
-                            ->send();
                         $modelComment->save();
+
 
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
                         //$model->comment = null;
@@ -345,6 +336,7 @@ class SupportController extends Controller
             /** @var $status SupportTicket */
             if($status = SupportTicket::findOne($data)){
                 $status->status = SupportTicket::STATUS_COMPLETED;
+                $status->date_completed = date('Y-m-d H:i:s');
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
                     Yii::$app->mailer->compose()

@@ -17,6 +17,7 @@ use yii\widgets\ActiveForm;
  * @var $query User
  */
 ?>
+
 <header>
     <h1><?= Html::encode($model->subject)?></h1>
 </header>

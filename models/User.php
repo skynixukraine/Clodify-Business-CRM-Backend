@@ -514,4 +514,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $model->save();
     }
 
+    public static function AssigneTo($id){
+        return self::find()
+            ->leftJoin(SupportTicket::tableName(), SupportTicket::tableName() . ".assignet_to=" . User::tableName() . ".id")
+            ->leftJoin(SupportTicketComment::tableName(), SupportTicketComment::tableName() . ".support_ticket_id=" . SupportTicket::tableName() . ".id")
+
+            ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
+    }
+
+    public static function ClientTo($id){
+        return self::find()
+            ->leftJoin(SupportTicket::tableName(), SupportTicket::tableName() . ".client_id=" . User::tableName() . ".id")
+            ->leftJoin(SupportTicketComment::tableName(), SupportTicketComment::tableName() . ".support_ticket_id=" . SupportTicket::tableName() . ".id")
+
+            ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
+    }
+
 }
