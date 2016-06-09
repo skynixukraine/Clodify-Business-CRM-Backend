@@ -24,13 +24,6 @@ use yii\widgets\ActiveForm;
         <section class="col-lg-6 col-lg-offset-3 sect3">
             <article>
                 <?php $form = ActiveForm::begin();?>
-                <div class="form-group">
-                    <div id="butt">
-                        <p>Status: <?= Html::encode($model->status)?></p>
-                    </div>
-                    <p>Description: <?= Html::encode($model->description)?></p>
-                    <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
-                    <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
                     <div class="form-group">
                         <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
@@ -43,7 +36,7 @@ use yii\widgets\ActiveForm;
                             'options' => [
 
                             ]
-                        ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to'] )->label(false);?>
+                        ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev'] )->label(false);?>
                     </div>
                     <div class="col-lg-12">
                         <div class="btn-group" style="float: right;">
@@ -54,6 +47,14 @@ use yii\widgets\ActiveForm;
                         </div>
                     </div>
                 <?php endif?>
+                <div class="form-group">
+                    <div id="butt">
+                        <p>Status: <?= Html::encode($model->status)?></p>
+                    </div>
+                    <p>Description: <?= Html::encode($model->description)?></p>
+                    <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
+                    <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
+
 
                     <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
                         <h2>Your comment</h2>
@@ -109,5 +110,18 @@ use yii\widgets\ActiveForm;
             }
         });
     });
+    $('.dev').on('change', function(){
+        $.ajax({
+            type: "GET",
+            url: 'develop',
+            data: 'query='+<?php echo $model->assignee?>,
+            dataType: 'json',
+            beforeSend: function(){
+            },
+            success: function(response) {
+
+            }
+        });
+    })
 
 </script>
