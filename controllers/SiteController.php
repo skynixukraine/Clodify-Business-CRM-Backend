@@ -143,7 +143,7 @@ class SiteController extends Controller
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
                         /** @var $quest SupportTicket */
-                        return $this->redirect(Language::getDefaultUrl() . "support/ticket/$quest->id");
+                        return $this->redirect(Language::getDefaultUrl() . "/");
                     }
                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
                     $modelUserLogins->save();

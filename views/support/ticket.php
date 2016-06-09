@@ -110,7 +110,7 @@ use yii\widgets\ActiveForm;
             beforeSend: function(){
             },
             success: function(response) {
-                $('#butt').text('Status: CANCELLED');
+                $('#butt').text('Status: CANCELLE');
             }
         });
     });
@@ -118,14 +118,15 @@ use yii\widgets\ActiveForm;
         var id = $(this).val();
         console.log(id);
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: 'develop',
-            data: {id : id },
+            data: 'query=' + id + '&ticket=' + <?php echo $model->id?>,
             dataType: 'json',
             beforeSend: function(){
             },
             success: function(response) {
                 //if(response.success == true) {
+                $('#butt').text('Status: ASSIGNED');
                     return response;
                 //}
             },
