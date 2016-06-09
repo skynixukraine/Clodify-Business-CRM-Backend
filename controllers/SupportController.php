@@ -35,12 +35,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -57,7 +57,8 @@ class SupportController extends Controller
                             'create'         => ['get', 'post'],
                             'ticket'         => ['get', 'post'],
                             'complete'       => ['get', 'post'],
-                            'cancel'         => ['get', 'post']
+                            'cancel'         => ['get', 'post'],
+                            'develop'        => ['get', 'post']
                         ],
                 ],
         ];
@@ -255,7 +256,7 @@ class SupportController extends Controller
                     $model->save();
                     Yii::$app->mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo('valeriya@skynix.co')
+                        ->setTo(User::findOne($model->client_id)->email)
                         ->setSubject('New ticket' . $model->id)
                         ->send();
                     Yii::$app->mailer->compose()
@@ -275,10 +276,10 @@ class SupportController extends Controller
     public function actionTicket()
     {
         /** @var  $model SupportTicket*/
-        $model = new SupportTicket();
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
             if($model->is_private == 1){
-                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM ]) || (isset($model->client_id) && $model->client_id == Yii::$app->user->id)))){
+                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM ]) ||
+                    (isset($model->client_id) && $model->client_id == Yii::$app->user->id)))){
                     if($model->load(Yii::$app->request->post())) {
 
                         $modelComment = new SupportTicketComment();
@@ -336,6 +337,16 @@ class SupportController extends Controller
                 $status->status = SupportTicket::STATUS_COMPLETED;
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo(User::findOne($status->client_id)->email)
+                        ->setSubject('New ticket' . $status->id)
+                        ->send();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo('valeriya@skynix.co')
+                        ->setSubject('You Skynix ticket ' . $status->id)
+                        ->send();
 
                     return [
                         "success" => true,
@@ -361,6 +372,16 @@ class SupportController extends Controller
                 $status->status = SupportTicket::STATUS_CANCELLED;
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo(User::findOne($status->client_id)->email)
+                        ->setSubject('New ticket' . $status->id)
+                        ->send();
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo('valeriya@skynix.co')
+                        ->setSubject('You Skynix ticket ' . $status->id)
+                        ->send();
                     return [
                         "success" => true,
                     ];
@@ -372,5 +393,21 @@ class SupportController extends Controller
             }
         }
 
+    }
+    public static function actionDevelop()
+    {
+        $model = new SupportTicket();
+        if ((Yii::$app->request->isAjax &&
+            Yii::$app->request->isGet &&
+            ($data = Yii::$app->request->get('query')))
+        ) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $model->assignet_to = $model->assignee;
+            if ($model->validate()) {
+                $model->save();
+            }
+
+        }
     }
 }
