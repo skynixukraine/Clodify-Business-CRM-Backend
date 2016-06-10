@@ -129,7 +129,8 @@ class Extension extends \yii\db\ActiveRecord
             chmod($path, 0777 );
         }
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
-        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        $folder = exec('cd ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/ && ls');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/' . $folder . '/* ' . $path . '/');
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
         
         return true;
@@ -168,7 +169,8 @@ class Extension extends \yii\db\ActiveRecord
             chmod($path, 0777 );
         }
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
-        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        $folder = exec('cd ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/ && ls');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/' . $folder . '/* ' . $path . '/');
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
 
         return true;
@@ -201,7 +203,8 @@ class Extension extends \yii\db\ActiveRecord
             chmod($path, 0777 );
         }
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/.git');
-        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/* ' . $path . '/');
+        $folder = exec('cd ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/ && ls');
+        exec('mv ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp/' . $folder . '/* ' . $path . '/');
         exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $id . '/temp');
 
         return true;
