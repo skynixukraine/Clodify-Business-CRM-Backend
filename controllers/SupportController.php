@@ -101,7 +101,15 @@ class SupportController extends Controller
                 }
 
             }
-            if (!isset($subjectId)) {
+
+
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => 'subject',
+                    'value' => $data,
+
+                ]));
+
+                if (!isset($subjectId)) {
                 return [
                     "error" => true
                 ];
@@ -118,6 +126,9 @@ class SupportController extends Controller
     public function actionSubmitRequest()
     {
         $model = new SupportTicket();
+        if(Yii::$app->request->cookies['subject']){
+            $model->subject = Yii::$app->request->cookies['subject'];
+        }
             //$model->email = Yii::$app->user->identity->email;
 
         return $this->render('submit-request', ['model' => $model]);
@@ -214,8 +225,8 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->mailer->compose()
                                 ->setFrom(Yii::$app->params['adminEmail'])
-                                ->setTo('valeriya@skynix.co')
-                                ->setSubject('You Skynix ticket ' . $model->id)
+                                ->setTo(User::findOne($model->client_id)->email)
+                                ->setSubject('Your Skynix ticket ' . $model->id)
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
@@ -244,6 +255,7 @@ class SupportController extends Controller
                         $login->email = $userticket->email;
                         $login->password = $userticket->rawPassword;
                         $login->login();
+
                     } else {
                         Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you entered a wrong password of your account"));
                         return $this->redirect('submit-request');
@@ -267,7 +279,7 @@ class SupportController extends Controller
                     Yii::$app->mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($model->client_id)->email)
-                        ->setSubject('You Skynix ticket ' . $model->id)
+                        ->setSubject('Your Skynix ticket ' . $model->id)
                         ->send();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
@@ -355,7 +367,7 @@ class SupportController extends Controller
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->assignet_to)->email)
-                        ->setSubject(('You Skynix ticket ' . $status->id))
+                        ->setSubject(('Your Skynix ticket ' . $status->id))
                         ->send();
 
                     return [
@@ -391,7 +403,7 @@ class SupportController extends Controller
                     Yii::$app->mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->client_id)->email)
-                        ->setSubject('You Skynix ticket ' . $status->id)
+                        ->setSubject('Your Skynix ticket ' . $status->id)
                         ->send();
                     return [
                         "success" => true,
