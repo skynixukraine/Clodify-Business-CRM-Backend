@@ -206,7 +206,7 @@ class SupportController extends Controller
 
                     if ($guest->validate()) {
                         $guest->save();
-                        $model->client_id = Yii::$app->user->id;
+                        $model->client_id = $guest->id;
                         $model->status = SupportTicket::STATUS_NEW;
                         $model->is_private = 1;
                         $model->date_added = date('Y-m-d H:i:s');
@@ -225,7 +225,7 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->mailer->compose()
                                 ->setFrom(Yii::$app->params['adminEmail'])
-                                ->setTo(User::findOne($model->client_id)->email)
+                                ->setTo(User::ClientTo($model->id))
                                 ->setSubject('Your Skynix ticket ' . $model->id)
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
