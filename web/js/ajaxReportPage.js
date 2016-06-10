@@ -179,7 +179,7 @@ var ajaxReportPageModule = (function() {
                     dataArr.date_report = "";
                 }
 
-                if (reportTask.length >= 20) {
+                if (reportTask.length >= 20 && reportTask.length <= 500) {
                     dataArr.task = reportTask;
                 } else {
                     dataArr.task = "";
@@ -219,6 +219,12 @@ var ajaxReportPageModule = (function() {
                             }
                             thisInput.closest('td').addClass("has-error");
                             thisInput.after('<span class = "help-block" id= "helpblockEr">Task should contain at least 20 characters.</span>');
+                        } else if (thisInput.hasClass('report-text') && thisInput.val().length >= 500) {
+                            if (thisInput.closest('td').hasClass("has-error")) {
+                                deleteHelpBlock(thisInput);
+                            }
+                            thisInput.closest('td').addClass("has-error");
+                            thisInput.after('<span class = "help-block" id= "helpblockEr">Task should contain at most 500 characters.</span>');
                         } else if (thisInput.hasClass('report-text') && thisInput.val().length == 0) {
                             if (thisInput.closest('td').hasClass("has-error")) {
                                 deleteHelpBlock(thisInput);
