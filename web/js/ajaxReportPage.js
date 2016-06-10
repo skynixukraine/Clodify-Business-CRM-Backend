@@ -121,7 +121,9 @@ var ajaxReportPageModule = (function() {
                                             tableLoad.append("<tbody><tr><td class = 'report-id'>" + id + "</td><td class='created-project-id'>" + dataArr.project_id + "</td><td>" + dataArr.date_report + "</td><td>" + dataArr.task + "</td><td>" + dataArr.hours + "</td><td><i class='fa fa-times delete' style='cursor: pointer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Delete'></i></td></tr></tbody>");
                                             ajaxSuccessFunc(successMsg);
                                             var form = $('.form-add-report');
-                                            form.find('#report-task,.form-add-report #report-project_id').val('');
+                                            form.find('#report-task, #report-hours').val('');
+                                            form.trigger('reset');
+
                                             changeTableRow();
                                             editReport();
                                             removeReport();
@@ -161,6 +163,7 @@ var ajaxReportPageModule = (function() {
                         reportTask = $('#report-task').val(),
                         reportHours = $('#report-hours').val();
                 }
+
 
                 ///checking entered data, and saving their////////////////////////////////
                 if (thisSelect != "") {
@@ -331,8 +334,6 @@ var ajaxReportPageModule = (function() {
                 })
             }
 
-
-
             //function gets value of sort-select (view report of this day, this week, this month, last month)
             // and counts hour depending on the chosen option///////////////////////////////////////////////
 
@@ -442,6 +443,7 @@ var ajaxReportPageModule = (function() {
                     date.setHours(-24 * (day - 1));
                 return date;
             }
+
             //converts hour to minutes, and sums hour and minutes, and return converted hours and minutes
             function countMinutes(val) {
                 var hours = String(val);
@@ -463,6 +465,7 @@ var ajaxReportPageModule = (function() {
                 return +time;
             }
 
+            //function remove properties from object, and delete error message from page when ajax sent
             function ajaxSuccessFunc(er, data) {
                 if (er == "error") {
                     var ajaxError = $('.ajax-error');
@@ -472,7 +475,8 @@ var ajaxReportPageModule = (function() {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
                     var form = $('.form-add-report');
-                    form.find('#report-hours').val('');
+                    form.find('#report-task, #report-hours').val('');
+                    form.trigger('reset');
                     $.each(dataArr, function(i) {
                         delete dataArr[i];
                     });
