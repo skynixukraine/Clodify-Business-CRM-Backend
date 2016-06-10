@@ -194,7 +194,6 @@ class SupportController extends Controller
                     $guest->last_name = 'GUEST';
 
                     if ($guest->validate()) {
-
                         $guest->save();
                         $model->client_id = Yii::$app->user->id;
                         $model->status = SupportTicket::STATUS_NEW;
@@ -203,6 +202,11 @@ class SupportController extends Controller
                         if ($model->validate()) {
 
                             $model->save();
+                            Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                                'name' => 'ticket',
+                                'value' => $model->id,
+
+                            ]));
                             Yii::$app->mailer->compose()
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(Yii::$app->params['adminEmail'])
@@ -278,11 +282,11 @@ class SupportController extends Controller
     {
         /** @var  $model SupportTicket*/
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
-            if($model->is_private == 1){
+            if($model->is_private == 1  ){
                 if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM ]) ||
-                    (isset($model->client_id) && $model->client_id == Yii::$app->user->id)))){
+                    (isset($model->client_id) && $model->client_id == Yii::$app->user->id))) ||  Yii::$app->request->cookies['ticket']){
+                    Yii::$app->response->cookies->remove('ticket');
                     if($model->load(Yii::$app->request->post())) {
-
                         $modelComment = new SupportTicketComment();
                         $modelComment->comment = $model->comment;
                         $modelComment->date_added = date('Y-m-d H:i:s');
@@ -299,7 +303,7 @@ class SupportController extends Controller
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, but you don't see this ticket. Please sign in"));
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, You cannot see this ticket. Please, sign in"));
                     return $this->redirect('submit-request');
                    // return $this->redirect(['/site/login']);
 

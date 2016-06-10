@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
                         <div class="btn-group" style="float: right;">
                             <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
                                 'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
-                            <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button',
+                            <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button cancel',
                                 'style' => ' margin-top: 10px;']) ?>
                         </div>
                     </div>
@@ -128,6 +128,10 @@ use yii\widgets\ActiveForm;
 
         });
     });
+    $('.complete').bind('click', function(){
+        $('.off-button').css('display', 'none');
+        $('.complete').css('display', 'none');
+    });
     $('.off-button').on('click', function() {
         $.ajax({
             type: "GET",
@@ -141,6 +145,10 @@ use yii\widgets\ActiveForm;
                 return response;
             }
         });
+    });
+    $('.cancel').bind('click', function(){
+        $('.off-button').css('display', 'none');
+        $('.complete').css('display', 'none');
     });
     $('.dev').on('change', function(){
         var id = $(this).val();
