@@ -369,6 +369,14 @@ class SupportController extends Controller
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject(('Your Skynix ticket ' . $status->id))
                         ->send();
+                    Yii::$app->mailer->compose("newTicket", [
+                        "ticket"    =>  $id,
+                        "id"        =>  $status->id
+                    ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo(User::findOne($status->client_id)->email)
+                        ->setSubject(('Your Skynix ticket ' . $status->id))
+                        ->send();
 
                     return [
                         "success" => true,
