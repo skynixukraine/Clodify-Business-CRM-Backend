@@ -160,11 +160,12 @@ $this->params['menu'] = [
 <?php ActiveForm::end();?>
 <script>
     $(function(){
+
         reportModule.init({
-            deleteUrl: '<?=Url::toRoute(['index/delete'])?>',
-            saveUrl: '<?=Url::to(['index/save'])?>',
-            indexUrl: '<?=Url::to(['index/index'])?>'
-        })
+            deleteUrl:  '<?=Url::toRoute(['index/delete'])?>',
+            saveUrl:    '<?=Url::to(['index/save'])?>',
+            indexUrl:   '<?=Url::to(['index/index'])?>'
+        });
         ajaxReportPageModule.init();
 
 })

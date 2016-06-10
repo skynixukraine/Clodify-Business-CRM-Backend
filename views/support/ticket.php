@@ -11,6 +11,7 @@ use app\components\DateUtil;
 use app\models\SupportTicketComment;
 use app\models\User;
 use yii\widgets\ActiveForm;
+use app\models\SupportTicket;
 /**
  * @var $model \app\models\SupportTicket
  * @var $develop\app\models\SupportTicketComment
@@ -44,12 +45,21 @@ use yii\widgets\ActiveForm;
                         </div>
                     </div>
                     <div class="col-lg-12">
+                        <?php if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED):?>
+                            <div class="btn-group" style="float: right; display: none;">
+                                <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary',
+                                    'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
+                                <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary',
+                                    'style' => ' margin-top: 10px;']) ?>
+                            </div>
+                            <?php else: ?>
                         <div class="btn-group" style="float: right;">
                             <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
                                 'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
                             <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button cancel',
                                 'style' => ' margin-top: 10px;']) ?>
-                        </div>
+                            </div>
+                        <?php endif;?>
                     </div>
                 <?php endif?>
                 <div class="form-group">
@@ -131,6 +141,7 @@ use yii\widgets\ActiveForm;
     $('.complete').bind('click', function(){
         $('.off-button').css('display', 'none');
         $('.complete').css('display', 'none');
+        $('#butt').text('Status: COMPLETED');
     });
     $('.off-button').on('click', function() {
         $.ajax({
@@ -149,6 +160,7 @@ use yii\widgets\ActiveForm;
     $('.cancel').bind('click', function(){
         $('.off-button').css('display', 'none');
         $('.complete').css('display', 'none');
+        $('#butt').text('Status: CANCELLED');
     });
     $('.dev').on('change', function(){
         var id = $(this).val();
