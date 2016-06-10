@@ -235,7 +235,7 @@ class SupportController extends Controller
                         $userticket->password = md5($userticket->password);
                         $userticket->date_signup = date('Y-m-d H:i:s');
                         $userticket->save();
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have restored and sent the invitation to deleted user"));
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
                         return $this->redirect('index');
                     }
                     if (!empty($userticket) && $userticket->is_delete == 0 && $userticket->password == md5($model->password)) {

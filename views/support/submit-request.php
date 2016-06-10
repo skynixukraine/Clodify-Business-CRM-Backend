@@ -34,6 +34,7 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                         'class' => 'form-control ',
                         'placeholder'   => 'Enter email',
                         'type'          => 'email',
+                        'required'         => 'required'
                     ])-> label( 'Your Email Address' );?>
             <?php endif?>
             <?php echo $form->field( $model, 'password')
