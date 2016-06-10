@@ -215,6 +215,7 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
+
                             return $this->redirect (['ticket', 'id' => $model->id]);
 
                         }
@@ -330,28 +331,29 @@ class SupportController extends Controller
     {
         if ((Yii::$app->request->isAjax &&
             Yii::$app->request->isGet &&
-            ($data = Yii::$app->request->get('query')))
+            ($id = Yii::$app->request->get('ticket')) )
         ) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             /** @var $status SupportTicket */
-            if($status = SupportTicket::findOne($data)){
+            if($status = SupportTicket::findOne($id)){
                 $status->status = SupportTicket::STATUS_COMPLETED;
                 $status->date_completed = date('Y-m-d H:i:s');
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
-                    Yii::$app->mailer->compose()
+                   /* Yii::$app->mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject('New ticket' . $status->id)
-                        ->send();
+                        ->send();*/
                     Yii::$app->mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($status->client_id)->email)
-                        ->setSubject('You Skynix ticket ' . $status->id)
+                        ->setTo(User::findOne($status->assignet_to)->email)
+                        ->setSubject(('You Skynix ticket ' . $status->id))
                         ->send();
 
                     return [
                         "success" => true,
+                        "date" => $status->date_completed
                     ];
                 }else{
                     return[

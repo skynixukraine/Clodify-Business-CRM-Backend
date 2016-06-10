@@ -69,6 +69,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
     });
 
         var input = '#supportticket-subject';
+    console.log($(input).val());
         $("input").on('change keydown paste input', function (event) {
                 $.ajax({
                     type: "GET",

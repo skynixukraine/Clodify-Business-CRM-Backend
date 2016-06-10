@@ -58,7 +58,10 @@ use yii\widgets\ActiveForm;
                     </div>
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
-                    <p>Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
+                    <div class="resolved">
+                        <p class="resolved">Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
+                    </div>
+
 
 
                     <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
@@ -90,16 +93,39 @@ use yii\widgets\ActiveForm;
         $.ajax({
             type: "GET",
             url: 'complete',
-            data: 'query='+<?php echo $model->id?>,
+            data: 'query=' + '&ticket=' +<?php echo $model->id?>,
             dataType: 'json',
             beforeSend: function(){
             },
             success: function(response) {
-                //if(response.success == true) {
-                $('#butt').text('Status: COMPLETE');
+                $('#butt').text('Status: COMPLETED');
+                var myDate = response.date;
+               /* var date = new Date(response.date);
+                //console.log(myDate);
+                var response = response.date;
+                var day = date.getDate();
+                if (day<10) {
+                    day = "0"+day;
+                }
+                var month = date.getMonth()+1;
+                if (month<10) {
+                    month = "0"+ month;
+                }
+                var year = date.getFullYear();
+                var dateArr = response.split(' ');
+                var stringDate = [];
+                stringDate.push(year, month, day);
+                var time = dateArr[4];
+                time = time.split(':');
+                time.splice(2,1);
+                time = time.join(':');
+                var output = stringDate.join('-');*/
+                //$('.resolved').append('<p>' +output+ ' ' + time +'</p>');
+                $('.resolved').text(myDate);
+                    return response;
                 // }
-
             }
+
         });
     });
     $('.off-button').on('click', function() {
@@ -111,7 +137,8 @@ use yii\widgets\ActiveForm;
             beforeSend: function(){
             },
             success: function(response) {
-                $('#butt').text('Status: CANCELLE');
+                $('#butt').text('Status: CANCELLED');
+                return response;
             }
         });
     });
@@ -130,10 +157,6 @@ use yii\widgets\ActiveForm;
                 $('#butt').text('Status: ASSIGNED');
                     return response;
                 //}
-            },
-            error: function(response) {
-                console.log(response);
-                alert('Error occured');
             }
         });
     })
