@@ -4,6 +4,7 @@
  * User: lera
  * Date: 02.06.16
  * Time: 19:24
- */?>
-<h1>Hi!</h1>
-<h3>The new ticket was create!</h3>
+ */
+use yii\helpers\Url;
+?>
+<h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $ticket])?>"><?= $id ?></a></h1>
