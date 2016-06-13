@@ -29,6 +29,7 @@ use app\models\SupportTicket;
                 <?php $form = ActiveForm::begin();?>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
                     <div class="col-lg-12">
+                        <?php if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED):?>
                         <div class="form-group">
                             <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                                 User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();;
@@ -37,12 +38,24 @@ use app\models\SupportTicket;
 
                             echo $form->field( $model, 'assignee', [
 
-                                'options' => [
+                                'options' => []
+                            ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
+                                'style'=>'width: 100%;height: 40px; display: none;'] )->label(false);?>
+                        </div>
+                        <?php else: ?>
+                        <div class="form-group">
+                            <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();;
+                            $listUsers = User::getCustomersDropDown( $developer, 'id' );
+                            //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
 
-                                ]
+                            echo $form->field( $model, 'assignee', [
+
+                                'options' => []
                             ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
                                 'style'=>'width: 100%;height: 40px;'] )->label(false);?>
                         </div>
+                        <?php endif;?>
                     </div>
                     <div class="col-lg-12">
                         <?php if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED):?>
@@ -68,10 +81,7 @@ use app\models\SupportTicket;
                     </div>
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
-
-                        <p>Resolved : <span class="resolved"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></span></p>
-
-
+                    <p>Resolved : <span class="resolved"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></span></p>
 
 
                     <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
@@ -142,6 +152,7 @@ use app\models\SupportTicket;
         $('.off-button').css('display', 'none');
         $('.complete').css('display', 'none');
         $('#butt').text('Status: COMPLETED');
+        $('.dev').css('display', 'none');
     });
     $('.off-button').on('click', function() {
         $.ajax({
@@ -161,6 +172,7 @@ use app\models\SupportTicket;
         $('.off-button').css('display', 'none');
         $('.complete').css('display', 'none');
         $('#butt').text('Status: CANCELLED');
+        $('.dev').attr('display', 'none');
     });
     $('.dev').on('change', function(){
         var id = $(this).val();
