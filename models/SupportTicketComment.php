@@ -69,13 +69,19 @@ class SupportTicketComment extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if(SupportTicket::findOne($this->support_ticket_id)->assignet_to != null) {
-            Yii::$app->mailer->compose()
+            Yii::$app->mailer->compose("newTicket", [
+                "ticket"    =>  $this -> support_ticket_id,
+                "id"        =>  $this -> support_ticket_id
+            ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo(User::AssigneTo($this->support_ticket_id))
                 ->setSubject('New ticket' . $this->support_ticket_id)
                 ->send();
         }
-        Yii::$app->mailer->compose()
+        Yii::$app->mailer->compose("newTicket", [
+            "ticket"    =>  $this -> support_ticket_id,
+            "id"        =>  $this -> support_ticket_id
+        ])
             ->setFrom(Yii::$app->params['adminEmail'])
             ->setTo(User::ClientTo($this->support_ticket_id))
             ->setSubject('You Skynix ticket ' . $this->support_ticket_id)

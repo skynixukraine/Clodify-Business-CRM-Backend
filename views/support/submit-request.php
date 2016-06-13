@@ -109,12 +109,8 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                         alert("No more files!");
                     })
                 }
-
-
             }
         });
     });
-    Dropzone.options.myDropzone = { init: function() { this.on('success', function(file, message) { if (this.files.length > 1) { this.removeFile(this.files[0]); } }); // ... } }; - See more at: http://www.simosh.com/article/cgdccjeh-dropzone-replace-image-in-init.html#sthash.IxEDekeS.dpuf
-
 </script>
 

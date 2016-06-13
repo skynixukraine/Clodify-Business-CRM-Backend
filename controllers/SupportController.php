@@ -218,12 +218,18 @@ class SupportController extends Controller
                                 'value' => $model->id,
 
                             ]));
-                            Yii::$app->mailer->compose()
+                            Yii::$app->mailer->compose("newTicket", [
+                                "ticket"    =>  $model->id,
+                                "id"        =>  $model->id
+                            ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(Yii::$app->params['adminEmail'])
                                 ->setSubject('New ticket' . $model->id)
                                 ->send();
-                            Yii::$app->mailer->compose()
+                            Yii::$app->mailer->compose("newTicket", [
+                                "ticket"    =>  $model->id,
+                                "id"        =>  $model->id
+                            ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::ClientTo($model->id))
                                 ->setSubject('Your Skynix ticket ' . $model->id)
@@ -271,12 +277,18 @@ class SupportController extends Controller
                 if ($model->validate()) {
 
                     $model->save();
-                    Yii::$app->mailer->compose()
+                    Yii::$app->mailer->compose("newTicket", [
+                        "ticket"    =>  $model->id,
+                        "id"        =>  $model->id
+                    ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(Yii::$app->params['adminEmail'])
                         ->setSubject('New ticket' . $model->id)
                         ->send();
-                    Yii::$app->mailer->compose()
+                    Yii::$app->mailer->compose("newTicket", [
+                        "ticket"    =>  $model->id,
+                        "id"        =>  $model->id
+                    ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($model->client_id)->email)
                         ->setSubject('Your Skynix ticket ' . $model->id)
@@ -403,12 +415,18 @@ class SupportController extends Controller
                 $status->status = SupportTicket::STATUS_CANCELLED;
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
-                    Yii::$app->mailer->compose()
+                    Yii::$app->mailer->compose("newTicket", [
+                        "ticket"    =>  $status->id,
+                        "id"        =>  $status->id
+                    ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject('New ticket' . $status->id)
                         ->send();
-                    Yii::$app->mailer->compose()
+                    Yii::$app->mailer->compose("newTicket", [
+                        "ticket"    =>  $status->id,
+                        "id"        =>  $status->id
+                    ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->client_id)->email)
                         ->setSubject('Your Skynix ticket ' . $status->id)
