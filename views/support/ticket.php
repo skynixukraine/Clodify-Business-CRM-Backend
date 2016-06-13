@@ -68,9 +68,9 @@ use app\models\SupportTicket;
                     </div>
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
-                    <div class="resolved">
-                        <p class="resolved">Resolved : <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></p>
-                    </div>
+
+                        <p>Resolved : <span class="resolved"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></span></p>
+
 
 
 

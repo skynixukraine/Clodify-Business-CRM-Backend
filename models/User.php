@@ -519,7 +519,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->leftJoin(SupportTicket::tableName(), SupportTicket::tableName() . ".assignet_to=" . User::tableName() . ".id")
             ->leftJoin(SupportTicketComment::tableName(), SupportTicketComment::tableName() . ".support_ticket_id=" . SupportTicket::tableName() . ".id")
 
-            ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one();
+            ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
     }
 
     public static function ClientTo($id){

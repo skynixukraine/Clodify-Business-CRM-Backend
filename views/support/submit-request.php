@@ -56,13 +56,24 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                     'url'   =>  'upload',
                     'maxFilesize' => '5',
                     'maxFiles'=> '5',
-                    'dictMaxFilesExceeded'=>'Maximum of 1 You can not add more than 5 files',
+                    'dictMaxFilesExceeded'=>' You can not add more than 5 files',
+                    /*'accept'=> 'function(file,done){
+                done();
+            }',*/
+                    /*'dictDefaultMessage' => '<img src=eventos/no_image.jpg class="dz-image" alt="logo" width="100%">',*/
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
+
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){console.log(file)}",
-                    'removedfile' => "function(file){alert(file.name + ' is removed')}"
+                    'removedfile' => "function(file){alert(file.name + ' is removed')}",
+                    'maxfilesreached' => '  function(file){
+                                                            $(".dz-error").remove();
+                                                        }',
+
+
                 ],
+
             ]);
             ?>
             <div class="col-md-12">
@@ -97,5 +108,9 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
             }
         });
     });
+    myDropzone.on("maxfilesexceeded", function(file){
+        alert("No more files!");
+    })
+
 </script>
 
