@@ -66,11 +66,11 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){console.log(file)}",
-                    'removedfile' => "function(file){alert(file.name + ' is removed')}",
-                    'maxfilesreached' => '  function(file){
-                                                            $(".dz-error").remove();
+                    'removedfile' => "function(file){alert('You can not add more than 5 files')}",
+                    'maxfilesexceeded' => ' function(file){
+                                                            this.removeAllFiles();
+                                                            this.addFile(file);
                                                         }',
-
 
                 ],
 
@@ -104,13 +104,17 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                     $('#supportticket-password').css('display', 'none');
                     $('.password').css('display', 'none');
                 }
+                if (response.error) {
+                    $('.dz-error').on("maxfilesexceeded", function(file){
+                        alert("No more files!");
+                    })
+                }
+
 
             }
         });
     });
-    myDropzone.on("maxfilesexceeded", function(file){
-        alert("No more files!");
-    })
+    Dropzone.options.myDropzone = { init: function() { this.on('success', function(file, message) { if (this.files.length > 1) { this.removeFile(this.files[0]); } }); // ... } }; - See more at: http://www.simosh.com/article/cgdccjeh-dropzone-replace-image-in-init.html#sthash.IxEDekeS.dpuf
 
 </script>
 
