@@ -66,13 +66,15 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){console.log(file)}",
-                    'removedfile' => "function(file){alert('You can not add more than 5 files')}",
                     'maxfilesexceeded' => ' function(file){
-                                                            this.removeAllFiles();
+
+                                                            this.removeFile(file);
                                                             this.addFile(file);
                                                         }',
 
+
                 ],
+
 
             ]);
             ?>
@@ -104,11 +106,7 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                     $('#supportticket-password').css('display', 'none');
                     $('.password').css('display', 'none');
                 }
-                if (response.error) {
-                    $('.dz-error').on("maxfilesexceeded", function(file){
-                        alert("No more files!");
-                    })
-                }
+
             }
         });
     });
