@@ -461,6 +461,15 @@ class SupportController extends Controller
                 $modelDev->assignet_to = $data;
                 if ($modelDev->validate()) {
                     $modelDev->save();
+
+                        Yii::$app->mailer->compose("newTicket", [
+                            "ticket"    =>  $modelDev->id,
+                            "id"        =>  $modelDev->id
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo(User::findOne($modelDev->assignet_to)->email)
+                            ->setSubject(('Your Skynix ticket# ' . $modelDev->id))
+                            ->send();
                     return [
                         "success" => true,
                     ];
