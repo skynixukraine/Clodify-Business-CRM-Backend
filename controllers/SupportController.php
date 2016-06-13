@@ -373,6 +373,7 @@ class SupportController extends Controller
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject('New ticket' . $status->id)
                         ->send();*/
+                    if($status->assignet_to != null){
                     Yii::$app->mailer->compose("newTicket", [
                         "ticket"    =>  $id,
                         "id"        =>  $status->id
@@ -381,6 +382,7 @@ class SupportController extends Controller
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject(('New ticket# ' . $status->id))
                         ->send();
+                    }
                     Yii::$app->mailer->compose("newTicket", [
                         "ticket"    =>  $id,
                         "id"        =>  $status->id
@@ -413,8 +415,10 @@ class SupportController extends Controller
             /** @var $status SupportTicket */
             if($status = SupportTicket::findOne($data)){
                 $status->status = SupportTicket::STATUS_CANCELLED;
+                $status->date_cancelled = date('Y-m-d H:i:s');
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
+                    if($status->assignet_to != null){
                     Yii::$app->mailer->compose("newTicket", [
                         "ticket"    =>  $status->id,
                         "id"        =>  $status->id
@@ -423,6 +427,7 @@ class SupportController extends Controller
                         ->setTo(User::findOne($status->assignet_to)->email)
                         ->setSubject('New ticket' . $status->id)
                         ->send();
+                    }
                     Yii::$app->mailer->compose("newTicket", [
                         "ticket"    =>  $status->id,
                         "id"        =>  $status->id
@@ -433,6 +438,7 @@ class SupportController extends Controller
                         ->send();
                     return [
                         "success" => true,
+                        "date" => $status->date_cancelled
                     ];
                 }else{
                     return[

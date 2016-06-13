@@ -65,13 +65,13 @@ use app\models\SupportTicket;
                                 <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary',
                                     'style' => ' margin-top: 10px;']) ?>
                             </div>
-                            <?php else: ?>
-                        <div class="btn-group" style="float: right;">
-                            <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
-                                'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
-                            <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button cancel',
-                                'style' => ' margin-top: 10px;']) ?>
-                            </div>
+                        <?php else: ?>
+                            <div class="btn-group" style="float: right;">
+                                <?= Html::button( Yii::t('app', 'COMPLETE'), ['class' => 'btn btn-large btn-primary complete button',
+                                    'style' => ' margin-top: 10px; margin-right: 10px;']) ?>
+                                <?= Html::button(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-large btn-primary off-button cancel',
+                                    'style' => ' margin-top: 10px;']) ?>
+                                </div>
                         <?php endif;?>
                     </div>
                 <?php endif?>
@@ -82,7 +82,7 @@ use app\models\SupportTicket;
                     <p>Description: <?= Html::encode($model->description)?></p>
                     <p>Posted: <?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_added))?></p>
                     <p>Resolved : <span class="resolved"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></span></p>
-
+                    <p>Cancelled: <span class="cancel"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_cancelled))?></span></p>
 
                     <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
                         <h2>Your comment</h2>
@@ -121,7 +121,6 @@ use app\models\SupportTicket;
                 $('#butt').text('Status: COMPLETED');
                 var myDate = response.date;
                /* var date = new Date(response.date);
-                //console.log(myDate);
                 var response = response.date;
                 var day = date.getDate();
                 if (day<10) {
@@ -164,6 +163,8 @@ use app\models\SupportTicket;
             },
             success: function(response) {
                 $('#butt').text('Status: CANCELLED');
+                var myDate = response.date;
+                $('.cancel').text(myDate);
                 return response;
             }
         });
@@ -172,7 +173,7 @@ use app\models\SupportTicket;
         $('.off-button').css('display', 'none');
         $('.complete').css('display', 'none');
         $('#butt').text('Status: CANCELLED');
-        $('.dev').attr('display', 'none');
+        $('.dev').css('display', 'none');
     });
     $('.dev').on('change', function(){
         var id = $(this).val();

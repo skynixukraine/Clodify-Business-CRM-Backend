@@ -16,6 +16,7 @@ use Yii;
  * @property integer $client_id
  * @property string $date_added
  * @property string $date_completed
+ * @property string $date_cancelled
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
@@ -47,7 +48,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             [['description', 'status', 'password', 'email', 'comment'], 'string'],
             [['description'], 'required'],
             [['is_private', 'assignet_to', 'client_id', 'assignee'], 'integer'],
-            [['date_added', 'date_completed'], 'safe'],
+            [['date_added', 'date_completed', 'date_cancelled'], 'safe'],
             [['subject'], 'string', 'max' => 250],
         ];
     }
@@ -67,6 +68,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             'client_id'      => 'Client ID',
             'date_added'     => 'Date Added',
             'date_completed' => 'Date Completed',
+            'date_cancelled' => 'Date Cancelled'
         ];
     }
       public static function getSupport($words)
