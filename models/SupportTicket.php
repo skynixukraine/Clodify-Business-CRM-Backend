@@ -93,6 +93,12 @@ class SupportTicket extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['assignet_to' => 'id']);
     }
 
+    public static function lastTicket($userid)
+    {
+        return self::find()
+            ->where('client_id=:user', [':user'=>$userid])
+            ->max('id');
+    }
 
 
 }

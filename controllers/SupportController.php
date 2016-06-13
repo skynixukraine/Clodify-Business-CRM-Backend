@@ -378,8 +378,8 @@ class SupportController extends Controller
                         "ticket"    =>  $id,
                         "id"        =>  $status->id
                     ])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($status->assignet_to)->email)
+                        ->setFrom(User::findOne($status->assignet_to)->email)
+                        ->setTo(Yii::$app->params['adminEmail'])
                         ->setSubject(('New ticket# ' . $status->id))
                         ->send();
                     }
