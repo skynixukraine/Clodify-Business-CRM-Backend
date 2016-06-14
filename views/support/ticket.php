@@ -32,24 +32,34 @@ use app\models\SupportTicket;
 
                         <div class="form-group">
                             <?php
-                            if($model->assignet_to == null) {
-
+                            if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED){
                                 $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                                     User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();
                                 $listUsers = User::getCustomersDropDown( $developer, 'id' );
                                 echo $form->field( $model, 'assignee', [
 
                                 ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
-                                    'style'=>'width: 100%;height: 40px;'] )->label(false);
-                            } else {
+                                    'style'=>'width: 100%;height: 40px; display: none;'] )->label(false);
+                            }else{
 
-                                $developers = \app\models\User::findOne($model->assignet_to);
-                                $listUsers = $developers->first_name . ' ' . $developers->last_name;
-                               echo $form->field( $model, 'assignee', [
+                                if($model->assignet_to == null) {
 
-                                ])->textInput(['value' => $listUsers, 'readonly'=> 'readonly'])->label('Assign the ticket to');
+                                    $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                                        User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();
+                                    $listUsers = User::getCustomersDropDown( $developer, 'id' );
+                                    echo $form->field( $model, 'assignee', [
+
+                                    ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
+                                        'style'=>'width: 100%;height: 40px;'] )->label(false);
+                                } else {
+
+                                    $developers = \app\models\User::findOne($model->assignet_to);
+                                    $listUsers = $developers->first_name . ' ' . $developers->last_name;
+                                   echo $form->field( $model, 'assignee', [
+
+                                    ])->textInput(['value' => $listUsers, 'readonly'=> 'readonly'])->label('Assign the ticket to');
+                                }
                             }
-
 
                             //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
 
