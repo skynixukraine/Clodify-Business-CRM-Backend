@@ -310,13 +310,13 @@ var ajaxReportPageModule = (function() {
                         saveDataInObject(clickedButton);
                         win.show();
                     })
-                })
+                });
 
                 win.getWin().find(".confirm").click(function() {
                     report = JSON.stringify(dataArr);
                     $.ajax({
                         type: "POST",
-                        url: "delete",
+                        url: "/cp/index/delete",
                         data: 'jsonData=' + report,
                         dataType: 'json',
                         success: function(data) {
