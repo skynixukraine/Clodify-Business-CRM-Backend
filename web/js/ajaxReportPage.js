@@ -316,7 +316,7 @@ var ajaxReportPageModule = (function() {
                     report = JSON.stringify(dataArr);
                     $.ajax({
                         type: "POST",
-                        url: "index/delete",
+                        url: "delete",
                         data: 'jsonData=' + report,
                         dataType: 'json',
                         success: function(data) {
