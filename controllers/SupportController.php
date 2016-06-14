@@ -402,7 +402,7 @@ class SupportController extends Controller
 
                     return [
                         "success" => true,
-                        "date" => $status->date_completed
+                        "date" =>  Yii::$app->formatter->asDateTime($status->date_completed, 'Y-m-d H:i')
                     ];
                 }else{
                     return[
@@ -425,29 +425,29 @@ class SupportController extends Controller
                 $status->status = SupportTicket::STATUS_CANCELLED;
                 $status->date_cancelled = date('Y-m-d H:i:s');
                 if($status->validate() && $status->save()){
-                    //return $this->refresh();
+
                     if($status->assignet_to != null){
-                    Yii::$app->mailer->compose("ticket", [
-                        "ticket"    =>  $status->id,
-                        "id"        =>  $status->id
-                    ])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($status->assignet_to)->email)
-                        ->setSubject('New ticket# ' . $status->id)
-                        ->send();
-                    }
-                    Yii::$app->mailer->compose("newTicket", [
-                        "ticket"    =>  $status->id,
-                        "id"        =>  $status->id
-                    ])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($status->client_id)->email)
-                        ->setSubject('Your Skynix ticket# ' . $status->id)
-                        ->send();
-                    return [
-                        "success" => true,
-                        "date" => $status->date_cancelled
-                    ];
+                        Yii::$app->mailer->compose("ticket", [
+                            "ticket"    =>  $status->id,
+                            "id"        =>  $status->id
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo(User::findOne($status->assignet_to)->email)
+                            ->setSubject('New ticket# ' . $status->id)
+                            ->send();
+                        }
+                        Yii::$app->mailer->compose("newTicket", [
+                            "ticket"    =>  $status->id,
+                            "id"        =>  $status->id
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo(User::findOne($status->client_id)->email)
+                            ->setSubject('Your Skynix ticket# ' . $status->id)
+                            ->send();
+                        return [
+                            "success" => true,
+                            "date" =>  Yii::$app->formatter->asDateTime($status->date_cancelled, 'Y-m-d H:i')
+                        ];
                 }else{
                     return[
                         "success" =>false,
