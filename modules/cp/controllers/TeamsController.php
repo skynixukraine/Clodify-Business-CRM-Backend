@@ -66,13 +66,9 @@ class TeamsController extends DefaultController
 
     public function actionFind()
     {
-
-
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-
-
         $query = Team::find()->leftJoin(User::tableName(), Team::tableName() . '.team_leader_id=' . User::tableName() . '.id')
                     ->leftJoin(Teammate::tableName(), Teammate::tableName() . '.team_id=' . Team::tableName() . ".id");
 
@@ -88,8 +84,8 @@ class TeamsController extends DefaultController
             'team_leader_id',
             'team_id',
             'date_create',
-
         ];
+
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -107,9 +103,7 @@ class TeamsController extends DefaultController
 
         $dataTable->setFilter(Team::tableName() . '.is_deleted=0');
         $dataTable->setFilter(Teammate::tableName() . '.is_deleted=0');
-
         $dataTable->setFilter(Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
-
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -156,7 +150,6 @@ class TeamsController extends DefaultController
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         /**accepts a parameter 'team_id' in teammate_view.js*/
         $team_Id         = Yii::$app->request->getQueryParam('team_id');
-
         $query = Teammate::find();
 
         $columns        = [
@@ -167,6 +160,7 @@ class TeamsController extends DefaultController
             'phone',
             'project_id',
         ];
+
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -177,13 +171,13 @@ class TeamsController extends DefaultController
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-
         $dataTable->setFilter('is_deleted=0');
 
         if($team_Id) {
 
             $dataTable->setFilter(Teammate::tableName() . '.team_id=' . $team_Id);
         }
+
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\Teammate */
@@ -221,12 +215,8 @@ class TeamsController extends DefaultController
     {
         if (( $teamId = Yii::$app->request->get("id") ) ) {
 
-            $model = Teammate::find()
-                ->where("team_id=:teamiD",
-                    [
-                        ':teamiD' => $teamId
-                    ])
-                ->one();
+            $model = Teammate::findOne(['team_id' => $teamId]);
+
         }
         /** @var $model Teammate */
         return $this->render('view', ['model' => $model,

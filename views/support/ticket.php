@@ -29,33 +29,32 @@ use app\models\SupportTicket;
                 <?php $form = ActiveForm::begin();?>
                 <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
                     <div class="col-lg-12">
-                        <?php if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED):?>
+
                         <div class="form-group">
-                            <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();;
-                            $listUsers = User::getCustomersDropDown( $developer, 'id' );
+                            <?php
+                            if($model->assignet_to == null) {
+
+                                $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+                                    User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();
+                                $listUsers = User::getCustomersDropDown( $developer, 'id' );
+                                echo $form->field( $model, 'assignee', [
+
+                                ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
+                                    'style'=>'width: 100%;height: 40px;'] )->label(false);
+                            } else {
+
+                                $developers = \app\models\User::findOne($model->assignet_to);
+                                $listUsers = $developers->first_name . ' ' . $developers->last_name;
+                               echo $form->field( $model, 'assignee', [
+
+                                ])->textInput(['value' => $listUsers, 'readonly'=> 'readonly'])->label('Assign the ticket to');
+                            }
+
+
                             //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
 
-                            echo $form->field( $model, 'assignee', [
-
-                                'options' => []
-                            ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
-                                'style'=>'width: 100%;height: 40px; display: none;'] )->label(false);?>
+                            ?>
                         </div>
-                        <?php else: ?>
-                        <div class="form-group">
-                            <?php $developer = \app\models\User::find()->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "')")->groupBy(User::tableName() . '.id ')->all();;
-                            $listUsers = User::getCustomersDropDown( $developer, 'id' );
-                            //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
-
-                            echo $form->field( $model, 'assignee', [
-
-                                'options' => []
-                            ])->dropDownList( $listUsers, ['prompt' => 'Assign the ticket to', 'class'=>'dev divider',
-                                'style'=>'width: 100%;height: 40px;'] )->label(false);?>
-                        </div>
-                        <?php endif;?>
                     </div>
                     <div class="col-lg-12">
                         <?php if($model->status == \app\models\SupportTicket::STATUS_COMPLETED || $model->status == \app\models\SupportTicket::STATUS_CANCELLED):?>

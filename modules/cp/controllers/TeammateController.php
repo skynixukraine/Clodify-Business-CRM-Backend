@@ -56,11 +56,11 @@ class TeammateController extends DefaultController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'index'     => ['get'],
-                    'find'      => ['get'],
-                    'view'      => ['get', 'post'],
-                    'delete'    => ['delete'],
-                    'create'    => ['get', 'post'],
+                    'index'         => ['get'],
+                    'find'          => ['get'],
+                    'view'          => ['get', 'post'],
+                    'delete'        => ['delete'],
+                    'create'        => ['get', 'post'],
                     'deleteteam'    => ['delete'],
 
                 ],
@@ -74,12 +74,9 @@ class TeammateController extends DefaultController
     }
     public function actionFind()
     {
-
-
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-
         $query = Team::find()->leftJoin(Teammate::tableName(), Team::tableName() . '.id=' . Teammate::tableName() . '.team_id');
 
         $columns        = [
@@ -88,8 +85,8 @@ class TeammateController extends DefaultController
             'team_leader_id',
             'team_id',
             'date_created',
-
         ];
+
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -100,12 +97,7 @@ class TeammateController extends DefaultController
             ]);
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-
         $dataTable->setFilter(Team::tableName() . '.is_deleted=0');
-       /* if(User::hasPermission([User::ROLE_DEV])){
-            $dataTable->setFilter(Teammate::tableName() . '.user_id=' . Yii::$app->user->id);
-        }*/
-
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -131,7 +123,6 @@ class TeammateController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
     }
-
 
     public function actionView()
     {
@@ -163,12 +154,12 @@ class TeammateController extends DefaultController
             return $this->render('view', ['model' => $model,
                 'title' => 'List of Teammates  #' . $model->id]);
         } else {
-            /*return $this->render('view', ['model' => $model]);*/
 
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "This command is not exist"));
             return $this->render('index');
         }
     }
+
     public function actionDeleteteam()
     {
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
@@ -241,12 +232,12 @@ class TeammateController extends DefaultController
 
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new team " . $model->name));
-                return $this->redirect('index');
+                return $this->redirect(['index']);
 
             } else {
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "The data is nit valid"));
-                return $this->redirect('index');
+                return $this->redirect(['index']);
             }
 
         }

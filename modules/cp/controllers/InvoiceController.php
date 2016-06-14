@@ -77,7 +77,6 @@ class InvoiceController extends DefaultController
     /** Value table (Invoices in index) fields, filters, search */
     public function actionFind()
     {
-
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
@@ -106,7 +105,6 @@ class InvoiceController extends DefaultController
                 ['like', 'status', $keyword],
             ]);
 
-
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
@@ -118,7 +116,6 @@ class InvoiceController extends DefaultController
         $list = [];
 
         /** @var  $model Invoice*/
-
         foreach ( $activeRecordsData as $model ) {
 
             $client = $model->getUser()->one();
@@ -197,7 +194,7 @@ class InvoiceController extends DefaultController
         }else{
             /*throw new \Exception('Sorry, you are prohibited to see this page');*/
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
-            return $this->redirect('index');
+            return $this->redirect(['index']);
 
         }
     }
@@ -207,19 +204,12 @@ class InvoiceController extends DefaultController
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
 
-
             if (!empty($model->id) && !empty($model->method)) {
 
-                $dataPdf = Invoice::find()
-                    ->where("id=:iD",
-                        [
-                            ':iD' => $model->id,
-                        ])
-                    ->one();
+                $dataPdf = Invoice::findOne($model->id);
 
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
-
 
                     $html = $this->renderPartial('invoicePDF', [
 
@@ -244,9 +234,7 @@ class InvoiceController extends DefaultController
                     $pdf->WriteHTML($html);
                     $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
                     $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
-
                     $model = Invoice::find()->where("id=:iD", [':iD' => $dataPdf->id])->one();
-
                     $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
                     $html2 = $this->renderPartial('invoiceReportPDF', [
                         'model' => $model,
@@ -315,12 +303,7 @@ class InvoiceController extends DefaultController
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
 
-            $model = Invoice::find()
-                ->where("id=:iD",
-                    [
-                        ':iD' => $id
-                    ])
-                ->one();
+            $model = Invoice::findOne($id);
             $model->status = Invoice::STATUS_PAID;
             $model->date_paid = date('Y-m-d');
             $model->save(true, ['status', 'date_paid']);
@@ -333,12 +316,7 @@ class InvoiceController extends DefaultController
     {
         if (( $id = Yii::$app->request->get("id") ) ) {
 
-            $model = Invoice::find()
-                ->where("id=:iD",
-                    [
-                        ':iD' => $id
-                    ])
-                ->one();
+            $model = Invoice::findOne($id);
             $model->status = Invoice::STATUS_CANCELED;
             $model->save(true, ['status']);
             Yii::$app->getSession()->setFlash('success', Yii::t("app", "You canceled invoice " . $id));
@@ -359,7 +337,6 @@ class InvoiceController extends DefaultController
 
                 return json_encode([
                     "message"   => Yii::t("app", "Invoice # " . $id ." has been deleted "),
-                    //"success"   => true
                 ]);
             }
 
@@ -372,14 +349,13 @@ class InvoiceController extends DefaultController
     public function actionDownload()
     {
         /** @var $model Invoice */
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one() ) ) {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
 
             if( ( $model->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
                  User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
-                    /*$this->downloadFile($path);*/
 
                         header("Content-type:application/pdf"); //for pdf file
                         header('Content-Disposition: attachment; filename="' . basename($path) . '"');
@@ -407,7 +383,7 @@ class InvoiceController extends DefaultController
     public function actionDownloadreports()
     {
         /** @var $model Invoice */
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::find()->where('id=:ID', [':ID' => $id])->one() ) ) {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
 
             if( ( $model->user_id == Yii::$app->user->id &&
                     User::hasPermission([User::ROLE_CLIENT]) ) ||

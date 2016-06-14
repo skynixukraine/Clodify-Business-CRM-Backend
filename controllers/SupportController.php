@@ -341,7 +341,6 @@ class SupportController extends Controller
                 }else{
                     Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, You cannot see this ticket. Please, sign in"));
                     return $this->redirect('submit-request');
-                   // return $this->redirect(['/site/login']);
 
                 }
             }else{
@@ -354,10 +353,7 @@ class SupportController extends Controller
                     $modelComment->support_ticket_id = $model->id;
                     if($modelComment->validate()){
                         $modelComment->save();
-
-
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
-                        //$model->comment = null;
                         return $this->refresh();
                     }
                 }
@@ -474,13 +470,13 @@ class SupportController extends Controller
                 if ($modelDev->validate()) {
                     $modelDev->save();
 
-                        Yii::$app->mailer->compose("newTicket", [
+                        Yii::$app->mailer->compose("ticket", [
                             "ticket"    =>  $modelDev->id,
                             "id"        =>  $modelDev->id
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo(User::findOne($modelDev->assignet_to)->email)
-                            ->setSubject(('Your Skynix ticket# ' . $modelDev->id))
+                            ->setSubject(('New Ticket# ' . $modelDev->id))
                             ->send();
                     return [
                         "success" => true,

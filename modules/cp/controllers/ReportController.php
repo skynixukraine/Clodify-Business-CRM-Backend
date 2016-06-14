@@ -60,7 +60,6 @@ class ReportController extends DefaultController
     /** Value table (Reports) fields, filters, search */
     public function actionFind()
     {
-
         $order              = Yii::$app->request->getQueryParam("order");
         $search             = Yii::$app->request->getQueryParam("search");
         $projectId          = Yii::$app->request->getQueryParam("project_id");
@@ -154,7 +153,6 @@ class ReportController extends DefaultController
         }
             if(User::hasPermission([User::ROLE_PM])) {
 
-
                 $teammates = [];
                 if ( ( $pmTeammates = Report::reportsPM() ) ) {
 
@@ -163,8 +161,6 @@ class ReportController extends DefaultController
                         $teammates[] = $teammate->user_id;
 
                     }
-
-
                 }
                 if( $teammates && count($teammates) ) {
 
@@ -172,9 +168,10 @@ class ReportController extends DefaultController
                 }else{
 
                     $dataTable->setFilter('user_id IN (null) ');
-                }
 
+                }
             }
+
             if($dateStart && $dateStart != null){
 
                $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
@@ -186,7 +183,6 @@ class ReportController extends DefaultController
                 $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
 
             }
-
 
         $dataTable->setFilter('is_delete=0');
 
@@ -200,7 +196,6 @@ class ReportController extends DefaultController
                 $model->task,
                 $model->date_added,
                 $model->getProject()->one()->name,
-               /* $model->reporter_name,*/
                 (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
                     ProjectDeveloper::findOne(['user_id' => $model->user_id,
                         'project_id' => $model->getProject()->one()->id ])->alias_user_id != null) ?
@@ -223,9 +218,7 @@ class ReportController extends DefaultController
         ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
-
         Yii::$app->end();
-
     }
 
 }

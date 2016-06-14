@@ -96,7 +96,6 @@ class IndexController extends DefaultController
 
         }
 
-
         if( ( Yii::$app->request->isAjax &&
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
@@ -116,7 +115,6 @@ class IndexController extends DefaultController
                 $model->hours = $data->hours;
                 $model->user_id = Yii::$app->user->id;
 
-
                 $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
 
                 $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
@@ -128,7 +126,6 @@ class IndexController extends DefaultController
                     if ($model->validate()) {
 
                         if ($totalHoursOfThisDay - $oldhours + $data->hours <= 12) {
-
 
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
@@ -243,8 +240,6 @@ class IndexController extends DefaultController
                 $model->task = $task;
                 $model->hours = $hours;
 
-
-
                 if( $totalHoursOfThisDay + $hours <= 12 ) {
 
                     if ($model->save(true, ['id', 'task', 'hours'])) {
@@ -272,7 +267,6 @@ class IndexController extends DefaultController
     {
         $entry = Yii::$app->getRequest()->get('entry');
         $filename = realpath($entry);
-
         $file_extension = strtolower(substr(strrchr($filename,"."),1));
 
         switch ($file_extension) {
@@ -304,7 +298,4 @@ class IndexController extends DefaultController
         set_time_limit(0);
         @readfile("$filename") or die("File not found.");
     }
-
-
-
 }

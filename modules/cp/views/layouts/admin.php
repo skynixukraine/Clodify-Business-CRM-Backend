@@ -60,16 +60,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <?php endif;?>
 
             <?php if ( isset( $this->params['menu'] ) && count($this->params['menu']) ) :?>
-
                 <ul class="nav navbar-nav">
-
                     <?php foreach ( $this->params['menu'] as $item ) : ?>
                         <li <?=isset($item['active']) ? 'class="active"':''?>><a href="<?=$item['url'];?>"><?= $item['label'] ?> <span class="sr-only"></span></a></li>
                     <?php endforeach;?>
                 </ul>
 
             <?php endif;?>
-            
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
@@ -227,7 +224,6 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
         </section>
         <!-- /.sidebar -->
     </aside>
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->

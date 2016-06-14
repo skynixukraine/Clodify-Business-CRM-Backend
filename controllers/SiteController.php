@@ -96,64 +96,69 @@ class SiteController extends Controller
             //exit();
 
             /** @var $user User */
-            if( ($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password ){
+            if( ($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password ) {
+                $modelUserLogins = User::find()
+                    ->where('email=:Email',
+                        [
+                            ':Email' => $model->getUser()->email
+                        ])
+                    ->one();
+                if ($modelUserLogins->role == User::ROLE_GUEST) {
 
-                if ($model->login()) {
+                    if ($model->loginNoActive()) {
 
-                    /** Save date login when user login */
-                    /** @var $modelUserLogins User */
-                    $modelUserLogins = User::find()
-                        ->where('email=:Email',
-                            [
-                                ':Email' => $model->getUser()->email
-                            ])
-                        ->one();
+                        if (User::hasPermission([User::ROLE_GUEST])) {
+                            if ($modelUserLogins->date_login == null) {
 
-                    //$modelUserLogins->date_login = date('Y-m-d H:i:s');
-
-
-                    if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
-                        if($modelUserLogins->date_login == null) {
-
-                            //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
-                            Yii::$app->getSession()->setFlash('success',
-                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-                        }
-
-                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                        $modelUserLogins->save();
-                        return $this->redirect(Language::getDefaultUrl() . '/cp/index');
-                    }
-                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
-                        if($modelUserLogins->date_login == null) {
-
-                            Yii::$app->getSession()->setFlash('success',
-                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                                Yii::$app->getSession()->setFlash('success',
+                                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            }
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
+                            /** @var $quest SupportTicket */
+                            $ticket = SupportTicket::lastTicket($modelUserLogins->id);
+                            //exit();
+                            return $this->redirect(["support/ticket", 'id' => $ticket]);
                         }
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
-                        return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
                     }
-                    if (User::hasPermission([User::ROLE_GUEST])) {
-                        if($modelUserLogins->date_login == null) {
-
-                            Yii::$app->getSession()->setFlash('success',
-                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-                        }
-                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                        $modelUserLogins->save();
-                        /** @var $quest SupportTicket */
-                        $ticket = SupportTicket::lastTicket($modelUserLogins->id);
-                        //exit();
-                        return $this->redirect(["/support/ticket", 'id' => $ticket]);
-                    }
-                    $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                    $modelUserLogins->save();
-
                 } else {
 
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
-                    return $this->refresh();
+                    if ($model->login()) {
+
+                        /** Save date login when user login */
+                        /** @var $modelUserLogins User */
+                        if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
+                            if ($modelUserLogins->date_login == null) {
+
+                                //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                                Yii::$app->getSession()->setFlash('success',
+                                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            }
+
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
+                            return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                        }
+                        if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+                            if ($modelUserLogins->date_login == null) {
+
+                                Yii::$app->getSession()->setFlash('success',
+                                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            }
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
+                            return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                        }
+                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                        $modelUserLogins->save();
+
+                    } else {
+
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "No user is registered on this email"));
+                        return $this->refresh();
+                    }
                 }
             } else {
 
@@ -232,7 +237,6 @@ class SiteController extends Controller
     public function actionRequest()
     {
         $model = new Upload();
-
 
         if ( Yii::$app->request->isAjax &&
              Yii::$app->request->isPost ) {
@@ -322,9 +326,6 @@ class SiteController extends Controller
 
                             $now = strtotime('now');
 
-                            //var_dump(date("Y-m-d H:i:s", strtotime( $model->date_start )));
-                            //var_dump(date("Y-m-d H:i:s", $now));
-                            //exit;
                             if ( $now < strtotime( $model->date_start ) ) {
 
                                 return $this->render('survey-coming', [
@@ -355,11 +356,10 @@ class SiteController extends Controller
         $data = ['success' => false];
         /** @var $survey Model Survey */
         if ( ($id           = Yii::$app->request->post('id')) &&
-                ( $surveyModel  = Survey::findOne($id) ) &&
-                ( $answer       = Yii::$app->request->post('answer')) &&
-                $surveyModel->isLive() &&
-                $surveyModel->canVote()
-
+            ( $surveyModel  = Survey::findOne($id) ) &&
+            ( $answer       = Yii::$app->request->post('answer')) &&
+            $surveyModel->isLive() &&
+            $surveyModel->canVote()
             ) {
 
             $surveyModel->vote( $answer );
@@ -375,12 +375,9 @@ class SiteController extends Controller
             $data['message'] = Yii::t('app', 'You can not participate this survey');
 
         }
-       // \yii\helpers\VarDumper::dump( $_POST, 10, true);
-
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
     }
-
 
 }
