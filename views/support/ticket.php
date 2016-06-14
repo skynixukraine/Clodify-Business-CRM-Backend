@@ -186,10 +186,8 @@ use app\models\SupportTicket;
             beforeSend: function(){
             },
             success: function(response) {
-                //if(response.success == true) {
                 $('#butt').text('Status: ASSIGNED');
                     return response;
-                //}
             }
         });
     })
