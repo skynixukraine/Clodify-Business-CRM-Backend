@@ -69,7 +69,7 @@ class SupportTicketComment extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if(SupportTicket::findOne($this->support_ticket_id)->assignet_to != null) {
-            Yii::$app->mailer->compose("newTicket", [
+            Yii::$app->mailer->compose("ticket", [
                 "ticket"    =>  $this -> support_ticket_id,
                 "id"        =>  $this -> support_ticket_id
             ])

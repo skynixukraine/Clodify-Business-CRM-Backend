@@ -382,7 +382,7 @@ class SupportController extends Controller
                         ->setSubject('New ticket' . $status->id)
                         ->send();*/
                     if($status->assignet_to != null){
-                    Yii::$app->mailer->compose("newTicket", [
+                    Yii::$app->mailer->compose("ticket", [
                         "ticket"    =>  $id,
                         "id"        =>  $status->id
                     ])
@@ -427,7 +427,7 @@ class SupportController extends Controller
                 if($status->validate() && $status->save()){
                     //return $this->refresh();
                     if($status->assignet_to != null){
-                    Yii::$app->mailer->compose("newTicket", [
+                    Yii::$app->mailer->compose("ticket", [
                         "ticket"    =>  $status->id,
                         "id"        =>  $status->id
                     ])
