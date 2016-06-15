@@ -55,9 +55,8 @@ use app\models\SupportTicket;
 
                                     $developers = \app\models\User::findOne($model->assignet_to);
                                     $listUsers = $developers->first_name . ' ' . $developers->last_name;
-                                   echo $form->field( $model, 'assignee', [
-
-                                    ])->textInput(['value' => $listUsers, 'readonly'=> 'readonly'])->label('Assign the ticket to');
+                                    echo Html::label('Assign the ticket to');
+                                    echo Html::textInput('Assign the ticket to', $listUsers, ['readonly'=> 'readonly', 'id' => 'supportticket-assignee', 'class' => 'form-control']);
                                 }
                             }
 

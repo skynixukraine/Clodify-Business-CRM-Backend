@@ -402,7 +402,7 @@ class SupportController extends Controller
 
                     return [
                         "success" => true,
-                        "date" =>  Yii::$app->formatter->asDateTime($status->date_completed, 'Y-m-d H:i')
+                        "date" =>  Yii::$app->formatter->asDatetime($status->date_completed, 'y-MM-d H:m')
                     ];
                 }else{
                     return[
@@ -446,7 +446,7 @@ class SupportController extends Controller
                             ->send();
                         return [
                             "success" => true,
-                            "date" =>  Yii::$app->formatter->asDateTime($status->date_cancelled, 'Y-m-d H:i')
+                            "date" =>  Yii::$app->formatter->asDatetime($status->date_cancelled, 'y-MM-d H:i')
                         ];
                 }else{
                     return[
