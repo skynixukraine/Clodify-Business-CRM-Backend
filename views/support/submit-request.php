@@ -15,7 +15,6 @@ use  kato\DropZone;
  */
 $this->title = 'Create a ticket and submit the request to Skynix Team';
 ?>
-
 <?php $form = ActiveForm::begin(['action' => 'create','options' => ['enctype' => 'multipart/form-data']]) ;?>
 <header>
     <h1>Skynix Team</h1>
@@ -57,29 +56,15 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                     'maxFilesize' => '5',
                     'maxFiles'=> '5',
                     'dictMaxFilesExceeded'=>' You can not add more than 5 files',
-
-
-                    /*'accept'=> 'function(file,done){
-                done();
-            }',*/
-                    /*'dictDefaultMessage' => '<img src=eventos/no_image.jpg class="dz-image" alt="logo" width="100%">',*/
                     'acceptedFiles' => 'image/jpg, image/jpeg, image/png, image/gif',
-
                 ],
                 'clientEvents' => [
                     'complete' => "function(file){console.log(file)}",
                     'maxfilesexceeded' => ' function(file){
                                                             alert("You can not add more than 5 files");
                                                             this.removeFile(file);
-
-
                                                         }',
-
-
-
                 ],
-
-
             ]);
             ?>
             <div class="col-md-12">
@@ -92,7 +77,6 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var input = '#supportticket-email';
-    var myDropzone = '#dz-error';
     $(input).blur(function(event){
         $.ajax({
             type: "GET",
@@ -109,12 +93,9 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 if(response.success == false) {
                     $('#supportticket-password').css('display', 'none');
                     $('.password').css('display', 'none');
-
                 }
-
             }
         });
     });
-     if(myDropzone.length == 1)alert("Нельзя загружать больше 3 файлов!");
 </script>
 

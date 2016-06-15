@@ -35,12 +35,12 @@ class SupportController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop', 'login'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop'],
+                        'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop', 'login'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -58,7 +58,8 @@ class SupportController extends Controller
                             'ticket'         => ['get', 'post'],
                             'complete'       => ['get', 'post'],
                             'cancel'         => ['get', 'post'],
-                            'develop'        => ['get', 'post']
+                            'develop'        => ['get', 'post'],
+                            'login'          => ['get', 'post']
                         ],
                 ],
         ];
@@ -214,10 +215,12 @@ class SupportController extends Controller
                     $guest->last_name = 'GUEST';
                     $guest->ticketId = $model->id;
 
+
                     if ($guest->validate()) {
 
 
                         $guest->save();
+
                         $model->client_id = $guest->id;
                         /*$model->status = SupportTicket::STATUS_NEW;
                         $model->is_private = 1;

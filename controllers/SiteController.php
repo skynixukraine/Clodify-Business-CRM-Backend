@@ -139,7 +139,13 @@ class SiteController extends Controller
 
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
                             $modelUserLogins->save();
-                            return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                            if(($idticket = Yii::$app->request->get('ticket'))){
+
+                                return $this->redirect(["support/ticket", 'id' => $idticket]);
+
+                            }else {
+                                return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                            }
                         }
                         if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                             if ($modelUserLogins->date_login == null) {
