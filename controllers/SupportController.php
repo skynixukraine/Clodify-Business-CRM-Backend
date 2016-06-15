@@ -197,6 +197,14 @@ class SupportController extends Controller
                 $userticket = User::findOne(['email' => $model->email]);
 
                 if ($userticket == null) {
+
+                    $model->status = SupportTicket::STATUS_NEW;
+                    $model->is_private = 1;
+                    $model->date_added = date('Y-m-d H:i:s');
+                    if($model->validate()) {
+
+                        $model->save();
+                    }
                     //no login user
                     $guest = new User();
                     $guest->password = User::generatePassword();
@@ -204,16 +212,23 @@ class SupportController extends Controller
                     $guest->role = User::ROLE_GUEST;
                     $guest->first_name = 'GUEST';
                     $guest->last_name = 'GUEST';
+                    $guest->ticketId = $model->id;
 
                     if ($guest->validate()) {
+
+
                         $guest->save();
                         $model->client_id = $guest->id;
-                        $model->status = SupportTicket::STATUS_NEW;
+                        /*$model->status = SupportTicket::STATUS_NEW;
                         $model->is_private = 1;
-                        $model->date_added = date('Y-m-d H:i:s');
+                        $model->date_added = date('Y-m-d H:i:s');*/
                         if ($model->validate()) {
 
                             $model->save();
+
+                            /*$guest->ticketId = $model->id;
+                            $guest->rawPassword = null;
+                            $guest->save(true, ['ticketId', 'rawPassword']);*/
                             Yii::$app->response->cookies->add(new \yii\web\Cookie([
                                 'name' => 'ticket',
                                 'value' => $model->id,
@@ -487,6 +502,24 @@ class SupportController extends Controller
                     ];
                 }
 
+            }
+
+        }
+    }
+    public function actionLogin()
+    {
+        //var_dump(Yii::$app->params['en_site'] . Url::toRoute(['support/login', 'email' => 'oljg@333.j', 'id' => 300]));
+        //var_dump(Yii::$app->params['en_site'] . Url::to(['support/login', ['email' => 'ffgf', 'id' => 3]]));
+        $model = new LoginForm();
+        /** Put the user's mail input if mail is not empty */
+        if (($email = Yii::$app->request->get('email')) && ($id = Yii::$app->request->get('id'))) {
+            //var_dump($id);
+            //exit();
+            $model->email = $email;
+            if ($model->loginNoActive()) {
+
+                //var_dump('login');
+            return $this->redirect(['ticket', 'id' => $id]);
             }
 
         }

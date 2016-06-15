@@ -57,6 +57,8 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                     'maxFilesize' => '5',
                     'maxFiles'=> '5',
                     'dictMaxFilesExceeded'=>' You can not add more than 5 files',
+
+
                     /*'accept'=> 'function(file,done){
                 done();
             }',*/
@@ -71,6 +73,7 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                                                             this.removeFile(file);
                                                             this.addFile(file);
                                                         }',
+
 
 
                 ],
@@ -88,7 +91,7 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var input = '#supportticket-email';
-    console.log($('.dz-preview'));
+    var upload = '.dz-preview';
     $(input).blur(function(event){
         $.ajax({
             type: "GET",
@@ -105,8 +108,13 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 if(response.success == false) {
                     $('#supportticket-password').css('display', 'none');
                     $('.password').css('display', 'none');
+
                 }
 
+            }
+
+            init: function() {
+                this.on("error", function(file, message) { alert(message); });
             }
         });
     });
