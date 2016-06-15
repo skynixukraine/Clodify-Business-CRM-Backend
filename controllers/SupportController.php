@@ -508,18 +508,14 @@ class SupportController extends Controller
     }
     public function actionLogin()
     {
-        //var_dump(Yii::$app->params['en_site'] . Url::toRoute(['support/login', 'email' => 'oljg@333.j', 'id' => 300]));
-        //var_dump(Yii::$app->params['en_site'] . Url::to(['support/login', ['email' => 'ffgf', 'id' => 3]]));
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
         if (($email = Yii::$app->request->get('email')) && ($id = Yii::$app->request->get('id'))) {
-            //var_dump($id);
-            //exit();
             $model->email = $email;
             if ($model->loginNoActive()) {
 
-                //var_dump('login');
             return $this->redirect(['ticket', 'id' => $id]);
+
             }
 
         }

@@ -69,9 +69,10 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 'clientEvents' => [
                     'complete' => "function(file){console.log(file)}",
                     'maxfilesexceeded' => ' function(file){
-
+                                                            alert("You can not add more than 5 files");
                                                             this.removeFile(file);
-                                                            this.addFile(file);
+
+
                                                         }',
 
 
@@ -91,7 +92,7 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var input = '#supportticket-email';
-    var upload = '.dz-preview';
+    var myDropzone = '#dz-error';
     $(input).blur(function(event){
         $.ajax({
             type: "GET",
@@ -112,11 +113,8 @@ $this->title = 'Create a ticket and submit the request to Skynix Team';
                 }
 
             }
-
-            init: function() {
-                this.on("error", function(file, message) { alert(message); });
-            }
         });
     });
+     if(myDropzone.length == 1)alert("Нельзя загружать больше 3 файлов!");
 </script>
 
