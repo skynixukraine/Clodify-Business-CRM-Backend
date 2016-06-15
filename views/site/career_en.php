@@ -126,20 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li>SCRUM skills;</li>
                         <li>Work experience as a web developer.</li>
                     </ul>
-                    <h3>THE COMPANY OFFERS:</h3>
-                    <ul>
-                        <li>Permanent work;</li>
-                        <li>Official employment;</li>
-                        <li>Paid vacations and sick leaves;</li>
-                        <li>Dollar-based salary;</li>
-                        <li>Other bonuses.</li>
-                    </ul>
-                    <h3>YOU NEED:</h3>
-                    <ul>
-                        <li>Send us your CV;</li>
-                        <li>An interview via Skype or in office;</li>
-                        <li>Perform a test task.</li>
-                    </ul>
+
                 </div>
                 <div class="shadow-bottom"></div>
                 <button class="btn read-more">READ MORE &gt; &gt;</button>
@@ -182,20 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li>SCRUM skills;</li>
                         <li>Work experience as a web developer.</li>
                     </ul>
-                    <h3>THE COMPANY OFFERS:</h3>
-                    <ul>
-                        <li>Permanent work;</li>
-                        <li>Official employment;</li>
-                        <li>Paid vacations and sick leaves;</li>
-                        <li>Dollar-based salary;</li>
-                        <li>Other bonuses.</li>
-                    </ul>
-                    <h3>YOU NEED:</h3>
-                    <ul>
-                        <li>Send us your CV;</li>
-                        <li>An interview via Skype or in office;</li>
-                        <li>Perform a test task.</li>
-                    </ul>
+
                 </div>
                 <div class="shadow-bottom"></div>
                 <button class="btn read-more">READ MORE &gt; &gt;</button>
