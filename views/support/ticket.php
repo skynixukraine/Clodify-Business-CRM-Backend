@@ -59,9 +59,6 @@ use app\models\SupportTicket;
                                     echo Html::textInput('Assign the ticket to', $listUsers, ['readonly'=> 'readonly', 'id' => 'supportticket-assignee', 'class' => 'form-control']);
                                 }
                             }
-
-                            //$listDevelop = \yii\helpers\ArrayHelper::map( $listUsers, 'id', 'first_name' );
-
                             ?>
                         </div>
                     </div>
@@ -127,7 +124,8 @@ use app\models\SupportTicket;
             },
             success: function(response) {
                 $('#butt').text('Status: COMPLETED');
-                var myDate = response.date;
+                location.reload();
+               /* var myDate = response.date;*/
                /* var date = new Date(response.date);
                 var response = response.date;
                 var day = date.getDate();
@@ -148,7 +146,7 @@ use app\models\SupportTicket;
                 time = time.join(':');
                 var output = stringDate.join('-');*/
                 //$('.resolved').append('<p>' +output+ ' ' + time +'</p>');
-                $('.resolved').text(myDate);
+               /* $('.resolved').text(myDate);*/
                     return response;
                 // }
             }
@@ -171,8 +169,9 @@ use app\models\SupportTicket;
             },
             success: function(response) {
                 $('#butt').text('Status: CANCELLED');
-                var myDate = response.date;
-                $('.cancel').text(myDate);
+                location.reload();
+                /*var myDate = response.date;
+                $('.cancel').text(myDate);*/
                 return response;
             }
         });
