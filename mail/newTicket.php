@@ -7,4 +7,4 @@
  */
 use yii\helpers\Url;
 ?>
-<h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $ticket])?>"><?= $id ?></a></h1>
+<h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/site/login', 'ticket' => $id])?>"><?= $id ?></a></h1>
