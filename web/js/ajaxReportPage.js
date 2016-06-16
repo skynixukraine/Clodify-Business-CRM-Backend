@@ -337,6 +337,16 @@ var ajaxReportPageModule = (function() {
                             ajaxSuccessFunc(errorMsg, data);
                         }
                     })
+                });
+                win.getWin().find(".cancel").click(function() {
+                    $.each(dataArr, function(i) {
+                        delete dataArr[i];
+                    });
+                });
+                win.getWin().find(".close").click(function() {
+                    $.each(dataArr, function(i) {
+                        delete dataArr[i];
+                    });
                 })
             }
 
