@@ -76,7 +76,7 @@ $this->params['menu'] = [
                 <td class = "report-id"><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
                 <td><?= Html::encode($report->date_report)?></td>
-                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>
+                <td><?= Html::encode($report->task)?></td>
                 <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
                 <td>
                     <?php if($report->invoice_id == null):?>

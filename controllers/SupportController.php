@@ -238,7 +238,6 @@ class SupportController extends Controller
 
                             ]));
                             Yii::$app->mailer->compose("ticket", [
-                                "ticket"    =>  $model->id,
                                 "id"        =>  $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
@@ -246,7 +245,6 @@ class SupportController extends Controller
                                 ->setSubject('New ticket# ' . $model->id)
                                 ->send();
                             Yii::$app->mailer->compose("newTicket", [
-                                "ticket"    =>  $model->id,
                                 "id"        =>  $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
@@ -308,7 +306,6 @@ class SupportController extends Controller
                     $model->save();
 
                     Yii::$app->mailer->compose("ticket", [
-                        "ticket"    =>  $model->id,
                         "id"        =>  $model->id
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -316,7 +313,6 @@ class SupportController extends Controller
                         ->setSubject('New ticket #' . $model->id)
                         ->send();
                     Yii::$app->mailer->compose("newTicket", [
-                        "ticket"    =>  $model->id,
                         "id"        =>  $model->id
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -401,7 +397,6 @@ class SupportController extends Controller
                         ->send();*/
                     if($status->assignet_to != null){
                     Yii::$app->mailer->compose("ticket", [
-                        "ticket"    =>  $id,
                         "id"        =>  $status->id
                     ])
                         ->setFrom(User::findOne($status->assignet_to)->email)
@@ -410,7 +405,6 @@ class SupportController extends Controller
                         ->send();
                     }
                     Yii::$app->mailer->compose("newTicket", [
-                        "ticket"    =>  $id,
                         "id"        =>  $status->id
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -446,7 +440,6 @@ class SupportController extends Controller
 
                     if($status->assignet_to != null){
                         Yii::$app->mailer->compose("ticket", [
-                            "ticket"    =>  $status->id,
                             "id"        =>  $status->id
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
@@ -455,7 +448,6 @@ class SupportController extends Controller
                             ->send();
                         }
                         Yii::$app->mailer->compose("newTicket", [
-                            "ticket"    =>  $status->id,
                             "id"        =>  $status->id
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
@@ -489,7 +481,6 @@ class SupportController extends Controller
                     $modelDev->save();
 
                         Yii::$app->mailer->compose("ticket", [
-                            "ticket"    =>  $modelDev->id,
                             "id"        =>  $modelDev->id
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])

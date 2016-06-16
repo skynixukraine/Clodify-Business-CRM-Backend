@@ -106,7 +106,10 @@ var adminReportModule = (function() {
                 },
                 {
                     "targets"   : 1,
-                    "orderable" : true
+                    "orderable" : true,
+                    "render" : function (data, type, row) {
+                        return row[1].replace(/(<([^>]+)>)/ig,"");
+                    }
                 }
             ], index=1;
             if( cfg.canSeeHours){

@@ -71,16 +71,16 @@ class Report extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'project_id' => 'Project ID',
-            'user_id' => 'User ID',
+            'id'            => 'ID',
+            'project_id'    => 'Project ID',
+            'user_id'       => 'User ID',
             'reporter_name' => 'Reporter Name',
-            'invoice_id' => 'Invoice ID',
-            'task' => 'Task',
-            'date_added' => 'Date Added',
-            'date_paid' => 'Date Paid',
-            'status' => 'Status',
-            'is_delete' => 'Is Delete',
+            'invoice_id'    => 'Invoice ID',
+            'task'          => 'Task',
+            'date_added'    => 'Date Added',
+            'date_paid'     => 'Date Paid',
+            'status'        => 'Status',
+            'is_delete'     => 'Is Delete',
         ];
     }
 
