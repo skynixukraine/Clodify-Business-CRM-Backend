@@ -23,10 +23,10 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['picture'], 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => 'jpg', 'mimeTypes' => 'image/jpeg'],
-            [['license'], 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => 'txt', 'mimeTypes' => 'text/plain'],
-            [['user_guide', 'installation_guide'], 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => 'pdf', 'mimeTypes' => 'application/pdf'],
+            [['picture'], 'file', 'checkExtensionByMimeType' => false, 'extensions' => 'jpg', 'mimeTypes' => 'image/jpeg'],
+            [['license'], 'file', 'checkExtensionByMimeType' => false, 'extensions' => 'txt', 'mimeTypes' => 'text/plain'],
+            [['user_guide', 'installation_guide'], 'file', 'checkExtensionByMimeType' => false, 'extensions' => 'pdf', 'mimeTypes' => 'application/pdf'],
         ];
     }
-  
+
 }
