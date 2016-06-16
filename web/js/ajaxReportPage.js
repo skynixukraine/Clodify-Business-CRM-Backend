@@ -53,7 +53,7 @@ var ajaxReportPageModule = (function() {
                                 /////Changing date cell
                             case 2:
                                 thisTd.empty();
-                                thisTd.append('<div class="input-group date"><input class="form-control created-date" data-date-format="dd/mm/yyyy" data-provide="datepicker" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>');
+                                thisTd.append('<div class="input-group date"><input class="form-control created-date" type = "text" ><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>');
                                 var input = thisTd.find('div');
                                 if (!input.find(input).hasClass('created-date')) {
                                     thisValue = thisValue.split('-');
@@ -64,6 +64,7 @@ var ajaxReportPageModule = (function() {
                                 var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy',
+                                    defaultViewDate: currentDay,
                                     endDate: currentDay
                                 }).datepicker("setDate", thisValue);
                                 break
@@ -97,6 +98,7 @@ var ajaxReportPageModule = (function() {
                     thisInput.change(function() {
                         var count = 0,
                             thisChange = $(this);
+                        console.log(thisChange.val());
                         saveDataInObject();
                         $.each(dataArr, function(i) {
                             if (i == "project_id") {
@@ -208,9 +210,52 @@ var ajaxReportPageModule = (function() {
             ///////////////////////////////////////////////////////////////////////////////////////
             ///Function for editing information in load-table, saves its and sends data trough ajax 
             function editReport() {
+
                 var tableLoadRow = tableLoad.find('tr');
+
                 tableLoadRow.each(function() {
-                    var thisChange = $(this).find('td input,td select');
+                    var thisChange = $(this).find('td input,td select').not('td .date input');
+                    var datepickerDate = $(this).find('td .date');
+                   
+                   //Event for date
+                   datepickerDate.datepicker().on('changeDate', function() {
+                        var thisInput = $(this).find('input');
+                        deleteHelpBlock(thisInput, "all");
+                        var count = 0;
+                        saveDataInObject(thisInput);
+                        $.each(dataArr, function(i) {
+                            if (dataArr[i] != "") {
+                                count++;
+                            }
+                        })
+                        if (count == 5) {
+                            report = JSON.stringify(dataArr);
+                            $.ajax({
+                                type: "POST",
+                                url: "index",
+                                data: 'jsonData=' + report,
+                                dataType: 'json',
+                                success: function(data) {
+                                    if (data.success) {
+                                        ajaxSuccessFunc(successMsg);
+                                        countHours();
+                                        var form = $('.form-add-report');
+                                        form.find(' #report-hours').val('');
+                                    } else {
+                                        ajaxSuccessFunc(errorMsg, data);
+                                    }
+                                },
+                                error: function(data) {
+                                    ajaxSuccessFunc(errorMsg, data);
+                                }
+                            })
+
+
+                        }
+
+                    });
+
+
                     thisChange.change(function() {
                         var thisInput = $(this);
                         if (thisInput.hasClass('report-text') && thisInput.val().length < 20 && thisInput.val().length > 0) {
@@ -265,6 +310,7 @@ var ajaxReportPageModule = (function() {
                                 }
                             })
                             if (count == 5) {
+
                                 report = JSON.stringify(dataArr);
                                 $.ajax({
                                     type: "POST",
@@ -273,6 +319,7 @@ var ajaxReportPageModule = (function() {
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
+                                            console.log("success");
                                             ajaxSuccessFunc(successMsg);
                                             countHours();
                                             var form = $('.form-add-report');
@@ -285,6 +332,8 @@ var ajaxReportPageModule = (function() {
                                         ajaxSuccessFunc(errorMsg, data);
                                     }
                                 })
+
+
                             }
                         }
                     })
@@ -504,6 +553,21 @@ var ajaxReportPageModule = (function() {
             changeTableRow();
             editReport();
             countHours();
+
+            //             function showError(){
+            //                 var date = $('.form-add-report .field-date_report');
+            //                console.log(date);
+            //                 date.unbind();
+
+            //                 $('.date').datepicker().on('changeDate',function( event ){
+
+            // console.log(event);
+            //                     console.log($(this).find('input').val());
+            //                     return false;
+            //                 })
+            //             };
+
+            //             showError();
 
         }
     }
