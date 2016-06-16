@@ -7,4 +7,8 @@
  */
 use yii\helpers\Url;
 ?>
-<h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $ticket])?>"><?= $id ?></a></h1>
+<?php if($active == 0):?>
+    <h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $id])?>"><?= $id ?></a></h1>
+<?php else: ?>
+    <h1>Your Skynix ticket #<a href="<?=Yii::$app->params['en_site'] . Url::to(['/site/login?email=' . $email])?>"><?= $id ?></a></h1>
+<?php endif;?>

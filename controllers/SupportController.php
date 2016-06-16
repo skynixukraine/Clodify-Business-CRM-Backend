@@ -245,6 +245,9 @@ class SupportController extends Controller
                                 ->setSubject('New ticket# ' . $model->id)
                                 ->send();
                             Yii::$app->mailer->compose("newTicket", [
+                                "active"    => $guest->is_active,
+                                "email"     => $guest->email,
+                                "ticket"    => $model->id,
                                 "id"        =>  $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
@@ -312,7 +315,10 @@ class SupportController extends Controller
                         ->setTo(Yii::$app->params['adminEmail'])
                         ->setSubject('New ticket #' . $model->id)
                         ->send();
+                    $user = User::findOne($model->client_id);
                     Yii::$app->mailer->compose("newTicket", [
+                        "active"    => $user->is_active,
+                        "email"     => $user->email,
                         "id"        =>  $model->id
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -405,6 +411,8 @@ class SupportController extends Controller
                         ->send();
                     }
                     Yii::$app->mailer->compose("newTicket", [
+                        "active"    => User::findOne($status->client_id)->is_active,
+                        "email"     => User::findOne($status->client_id)->email,
                         "id"        =>  $status->id
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -448,6 +456,8 @@ class SupportController extends Controller
                             ->send();
                         }
                         Yii::$app->mailer->compose("newTicket", [
+                            "active"    => User::findOne($status->client_id)->is_active,
+                            "email"     => User::findOne($status->client_id)->email,
                             "id"        =>  $status->id
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
@@ -505,10 +515,26 @@ class SupportController extends Controller
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
         if (($email = Yii::$app->request->get('email')) && ($id = Yii::$app->request->get('id'))) {
-            $model->email = $email;
-            if ($model->loginNoActive()) {
 
-            return $this->redirect(['ticket', 'id' => $id]);
+            /** @var  $user User*/
+            if( $user = User::findOne(['email' => $email]) ) {
+
+                $user->is_active = 1;
+                $user->invite_hash = null;
+
+                $user->save(true, ['is_active', 'invite_hash']);
+                if( Yii::$app->user->id != null ){
+
+                    Yii::$app->user->logout();
+                }
+                Yii::$app->getSession()->setFlash('success',
+                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account", false));
+                $model->email = $email;
+                if ($model->loginNoActive()) {
+
+                    return $this->redirect(['ticket', 'id' => $id]);
+
+                }
 
             }
 
