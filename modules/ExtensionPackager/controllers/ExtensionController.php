@@ -15,6 +15,7 @@ use app\components\AccessRule;
 use app\components\DataTable;
 use app\models\User;
 use app\modules\ExtensionPackager\models\UploadForm;
+use yii\validators\Validator;
 use yii\web\UploadedFile;
 
 class ExtensionController extends DefaultController {
@@ -116,36 +117,77 @@ class ExtensionController extends DefaultController {
 
             $title = Yii::t('app', 'Edit the extension #{s}', ['s' => $id]);
             $model = Extension::findOne($id);
+            $modelUpload = new UploadForm();
+
         } else {
 
             $title = Yii::t('app', 'Add a New Extension');
             $model = new Extension();
+            $modelUpload = new UploadForm();
+
+            $validators = $modelUpload->getValidators();
+            $validators->append(Validator::createValidator('required', $modelUpload, ['picture', 'license', 'user_guide', 'installation_guide']));
 
         }
-        $modelUpload = new UploadForm();
         /** Load data from form*/
         if (Yii::$app->request->isPost) {
             
                 /** Save data to table extensions */
             if($model->load(Yii::$app->request->post())){
 
-                if($model->id != null && file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id)) {
-                    exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id);
+                if($model->id != null && file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/SkynixExtension/')) {
+                    exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/SkynixExtension/*');
                 }
+                if($model->id != null && file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/temp/')) {
+                    exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/temp/*');
+                }
+
 
                 $modelUpload->picture = UploadedFile::getInstance($modelUpload, 'picture');
                 $modelUpload->license = UploadedFile::getInstance($modelUpload, 'license');
                 $modelUpload->user_guide = UploadedFile::getInstance($modelUpload, 'user_guide');
                 $modelUpload->installation_guide = UploadedFile::getInstance($modelUpload, 'installation_guide');
 
+
                 if($model->validate() && $model->save() && $modelUpload->validate()) {
                     /** Create the folders */
                     $path = Extension::getPathExtension($model->id);
 
-                    $modelUpload->picture->           saveAs($path . 'cover.jpg');
-                    $modelUpload->license->           saveAs($path . 'license.txt');
-                    $modelUpload->user_guide->        saveAs($path . 'Skynix-Installation-Guide.pdf');
-                    $modelUpload->installation_guide->saveAs($path . 'User-Guide.pdf');
+                    if(isset($modelUpload->picture)) {
+                        if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/cover.jpg')) {
+
+                            exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/cover.jpg');
+
+                        }
+                        $modelUpload->picture->saveAs($path . 'cover.jpg');
+                    }
+
+                    if(isset($modelUpload->license)) {
+                        if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/license.txt')) {
+
+                            exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/license.txt');
+
+                        }
+                        $modelUpload->license->saveAs($path . 'license.txt');
+                    }
+
+                    if(isset($modelUpload->user_guide)) {
+                        if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/Skynix-Installation-Guide.pdf')) {
+
+                            exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/Skynix-Installation-Guide.pdf');
+
+                        }
+                        $modelUpload->user_guide->saveAs($path . 'Skynix-Installation-Guide.pdf');
+                    }
+
+                    if(isset($modelUpload->installation_guide)) {
+                        if(file_exists(Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/User-Guide.pdf')) {
+
+                            exec('rm -rf ' . Yii::getAlias("@app") . '/data/extensions/' . $model->id . '/User-Guide.pdf');
+
+                        }
+                        $modelUpload->installation_guide->saveAs($path . 'User-Guide.pdf');
+                    }
 
                     Extension::createExtensionFolder($model->id);
 
