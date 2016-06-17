@@ -80,7 +80,6 @@ class SupportTicketComment extends \yii\db\ActiveRecord
                 ->setSubject('New ticket#' . $this->support_ticket_id)
                 ->send();
         }
-        /** @var $model SupportTicket*/
         Yii::$app->mailer->compose("newTicket", [
             "active"    => User::findOne($this->user_id)->is_active,
             "email"     => User::findOne($this->user_id)->email,

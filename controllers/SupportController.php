@@ -248,7 +248,7 @@ class SupportController extends Controller
                                 "active"    => $guest->is_active,
                                 "email"     => $guest->email,
                                 "ticket"    => $model->id,
-                                "id"        =>  $model->id
+                                "id"        => $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::ClientTo($model->id))

@@ -115,10 +115,19 @@ class SiteController extends Controller
                             }
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
                             $modelUserLogins->save();
-                            /** @var $quest SupportTicket */
-                            $ticket = SupportTicket::lastTicket($modelUserLogins->id);
-                            //exit();
-                            return $this->redirect(["support/ticket", 'id' => $ticket]);
+
+                            if (($id = Yii::$app->request->get('id'))) {
+
+                                return $this->redirect(["support/ticket", 'id' => $id]);
+                            } else {
+
+                                /** @var $quest SupportTicket */
+                                $ticket = SupportTicket::lastTicket($modelUserLogins->id);
+                                //exit();
+                                return $this->redirect(["support/ticket", 'id' => $ticket]);
+                            }
+
+
                         }
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
