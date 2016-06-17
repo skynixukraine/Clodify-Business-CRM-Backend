@@ -231,7 +231,7 @@ class ProjectController extends DefaultController
                     } else {
                         $model = new Project();
                         Yii::$app->getSession()->setFlash('error',
-                            Yii::t("app", "Please, assign with customers and developers are required"));
+                            Yii::t("app", "Fields with customers and developers are required"));
                         return $this->render('create', ['model' => $model,
                             'title' => 'Create a new project']);
                     }
@@ -240,7 +240,7 @@ class ProjectController extends DefaultController
 
                     $model->status = null;
                     Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "Please, assign with customers and developers are required"));
+                        Yii::t("app", "Fields with customers and developers are required"));
                     return $this->render('create', ['model' => $model,
                         'title' => 'Create a new project']);
 
