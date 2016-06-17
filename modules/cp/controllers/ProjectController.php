@@ -229,6 +229,10 @@ class ProjectController extends DefaultController
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
 
+                } else {
+
+                    Yii::$app->getSession()->setFlash('error',
+                        Yii::t("app", "To assign the client and the project developer"));
                 }
             }
             return $this->render('create', ['model' => $model,
