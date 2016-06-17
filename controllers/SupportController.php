@@ -359,8 +359,8 @@ class SupportController extends Controller
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, You cannot see this ticket. Please, sign in"));
-                    return $this->redirect('submit-request');
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket"));
+                    return $this->redirect(['index']);
 
                 }
             }else{
