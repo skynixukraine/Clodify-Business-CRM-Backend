@@ -108,7 +108,7 @@ class SiteController extends Controller
                     if ($model->loginNoActive()) {
 
                         if (User::hasPermission([User::ROLE_GUEST])) {
-                            if ($modelUserLogins->date_login == null) {
+                            if ($modelUserLogins->date_login == null && $user->is_active == 0) {
 
                                 Yii::$app->getSession()->setFlash('success',
                                     Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
