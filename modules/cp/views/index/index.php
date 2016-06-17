@@ -111,7 +111,7 @@ $this->params['menu'] = [
 
     <div class="container-fluid">
         <div class="row form-add-report">
-            <div class="col-xs-3 col-sm-2 " ">
+            <div class="col-xs-4 col-sm-3 " ">
 
                 <?php $projects = \app\models\Project::getDevOrAdminOrPmProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
@@ -120,7 +120,12 @@ $this->params['menu'] = [
                         'options' => [
 
                     ]
-                ])->dropDownList( $listReport, ['prompt' => 'Choose...'] )->label('Project');?>
+                ])->dropDownList( $listReport, ['prompt' => 'Choose...', 'class' => 'dropdown-toggle ',
+                    'style' => 'background-color: white;
+                                                border: 1px solid rgb(204, 204, 204);
+                                                height: 34px;
+
+                                                '] )->label('Project');?>
             </div>
 
             <div class="col-xs-3 col-md-2" >
@@ -135,7 +140,7 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-xs-5  col-sm-6 col-md-7 field-task">
+            <div class="col-xs-4  col-sm-5 col-md-6 field-task">
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => [
