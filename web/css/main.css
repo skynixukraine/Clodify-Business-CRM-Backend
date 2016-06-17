@@ -749,6 +749,7 @@ footer .link a:hover {
   padding: 0;
 }
 #evaluation .box-evaluation .evaluation-txt h3 {
+  margin: 6px 0 10px 0;
   padding: 3px 0 0 0;
   font-size: 32px;
   font-family: Raleway-Medium;
