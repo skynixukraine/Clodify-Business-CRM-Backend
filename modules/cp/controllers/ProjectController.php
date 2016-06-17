@@ -225,14 +225,25 @@ class ProjectController extends DefaultController
 
                 if ($model->validate()) {
 
-                    $model->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
-                    return $this->redirect(['index']);
+                    if( $model->save() ) {
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                        return $this->redirect(['index']);
+                    } else {
+                        $model = new Project();
+                        Yii::$app->getSession()->setFlash('error',
+                            Yii::t("app", "Please, assign with customers and developers are required"));
+                        return $this->render('create', ['model' => $model,
+                            'title' => 'Create a new project']);
+                    }
 
                 } else {
 
+                    $model->status = null;
                     Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "To assign the client and the project developer"));
+                        Yii::t("app", "Please, assign with customers and developers are required"));
+                    return $this->render('create', ['model' => $model,
+                        'title' => 'Create a new project']);
+
                 }
             }
             return $this->render('create', ['model' => $model,
