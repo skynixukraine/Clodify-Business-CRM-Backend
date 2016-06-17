@@ -748,7 +748,8 @@ footer .link a:hover {
 #evaluation .box-evaluation .evaluation-txt {
   padding: 0;
 }
-#evaluation .box-evaluation .evaluation-txt p {
+#evaluation .box-evaluation .evaluation-txt h3 {
+  margin: 6px 0 10px 0;
   padding: 3px 0 0 0;
   font-size: 32px;
   font-family: Raleway-Medium;
@@ -795,7 +796,7 @@ footer .link a:hover {
     padding-top: 28px;
     text-align: center;
   }
-  #evaluation .box-evaluation .evaluation-txt p {
+  #evaluation .box-evaluation .evaluation-txt h3 {
     white-space: normal;
   }
   #evaluation a,
@@ -849,7 +850,7 @@ footer .link a:hover {
   #about_skynix .about-txt1-en {
     padding: 0 10px;
   }
-  #evaluation .box-evaluation .evaluation-txt p {
+  #evaluation .box-evaluation .evaluation-txt h3 {
     font-size: 24px;
   }
 }
@@ -917,7 +918,7 @@ footer .link a:hover {
   #evaluation .box-evaluation > div {
     padding: 0;
   }
-  #evaluation .box-evaluation .evaluation-txt p {
+  #evaluation .box-evaluation .evaluation-txt h3 {
     padding: 0 15px;
   }
   #evaluation a,

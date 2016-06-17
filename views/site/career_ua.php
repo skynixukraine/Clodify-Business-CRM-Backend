@@ -134,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li>SCRUM навички;</li>
                         <li>Досвід роботи на посаді веб розробника.</li>
                     </ul>
-                    
+
                 </div>
                 <div class="shadow-bottom"></div>
                 <button class="btn read-more">ДЕТАЛЬНІШЕ &gt; &gt;</button>
