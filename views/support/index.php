@@ -60,10 +60,11 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var supportTicket = $('.supportticket-subject');
+
     supportTicket.change(function(){
         var thisSup = $(this);
         var saveButton = $('.off-button');
-        saveButton.attr('tabindex','1');
+      //  saveButton.attr('tabindex','1');
         if(thisSup.val() == ""){
            // saveButton.removeAttr('disabled').css('background', '#337ab7');
         }
@@ -87,8 +88,12 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             $(document).keydown(function(e){
                                 console.log(e.keyCode);
                                 saveButton.attr('href', '/support/submit-request');
-                                saveButton.attr('tabindex','0');
-                                if (e.keyCode == 13) {
+                                //saveButton.attr('tabindex','0');
+                                if (e.keyCode == 9 ) {
+                                    return false;
+                                }
+
+                                if (e.keyCode == 13 ) {
 
 //                                    saveButton.attr('href', '/support/submit-request');
                                     window.location.pathname = '/support/submit-request';
