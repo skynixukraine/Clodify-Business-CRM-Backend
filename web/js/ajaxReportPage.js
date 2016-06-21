@@ -77,7 +77,15 @@ var ajaxReportPageModule = (function() {
                             case 4:
                                 thisTd.empty();
                                 var time = +thisValue;
-                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time.toFixed(2) + '">')
+                                time = time.toFixed(2);
+                               //  var timeString = time.toString();
+                               //  var timeArr = timeString.split('.');
+                               //  if(timeArr[1] > 59){
+                               //  timeArr[1] = timeArr[1]%60;
+                               //  timeArr[0] = (timeArr[1]/60).toFixed(0);
+                               // }
+                               // time = timeArr.join('.');
+                               thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time + '">')
                                 break
                         }
                     })
@@ -422,6 +430,7 @@ var ajaxReportPageModule = (function() {
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
+                            //console.log(totalHours);
                             totalHours = countMinutes(totalHours);
                         }
                     })
@@ -498,7 +507,24 @@ var ajaxReportPageModule = (function() {
                     })
                 }
                 var showTotalHours = $('#totalHours');
-                showTotalHours.text("Total: " + totalHours.toFixed(2) + " hours");
+                
+                totalHours = totalHours.toFixed(2);
+                console.log(totalHours);
+                totalHours = totalHours.toString();
+                var totalArr = totalHours.split('.');
+                 if(totalArr[1]<10){
+                    totalArr[1] = totalArr[1]/10;
+                 }
+                totalArr[1] = (totalArr[1]*60)/100;
+                if(totalArr[1]<10){
+                    totalArr[1] = "0"+totalArr[1];
+                }
+                var minutes = +totalArr[1];
+                minutes = minutes.toFixed(0);
+                totalArr[1] = minutes;
+                console.log(totalArr);
+                totalHours = totalArr.join('.');
+                showTotalHours.text("Total: " + totalHours + " hours");
             }
 
             //function gets date for monday of the week
@@ -515,14 +541,14 @@ var ajaxReportPageModule = (function() {
                 var splitHour = hours.split('.');
                 var hour = +splitHour[0];
                 var minutes = +splitHour[1];
-                var time;
-                if (minutes > 59) {
+                 var time;
+                if (minutes > 99) {
                     hour += 1;
                     splitHour[0] = hour;
-                    minutes = minutes % 60;
-                    if (minutes < 10) {
-                        minutes = "0" + minutes;
-                    }
+                    minutes = minutes % 100;
+                    // if (minutes < 10) {
+                    //     minutes = "0" + minutes;
+                    // }
                     splitHour[1] = minutes;
                     time = splitHour.join('.');
                 }
