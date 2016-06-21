@@ -55,6 +55,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return [
             [['project_id', 'user_id', 'task', 'hours'], 'required'],
+            [['task'], 'trim'],
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
             [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
@@ -110,11 +111,7 @@ class Report extends \yii\db\ActiveRecord
 
     public  function  validateProjectReport($attribute, $params)
     {
-       // var_dump($this->user_id);
-       // var_dump($this->project_id);
         $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]);
-       // var_dump($r);
-       // exit;
         if( !$r ) {
 
             $this->addError($attribute, 'Sorry, but you can not report this project.');
