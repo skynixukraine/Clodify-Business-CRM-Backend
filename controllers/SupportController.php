@@ -381,9 +381,8 @@ class SupportController extends Controller
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
             if($model->is_private == 1  ){
                 if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) ||
+                        User::hasPermission([User::ROLE_DEV]) && $model->assignet_to == Yii::$app->user->id ||
                     (isset($model->client_id) && $model->client_id == Yii::$app->user->id))) ||  Yii::$app->request->cookies['ticket']){
-
-                    if ((User::hasPermission([User::ROLE_DEV ]) == Yii::$app->request->get('id'))) {
 
                         Yii::$app->response->cookies->remove('ticket');
                         if($model->load(Yii::$app->request->post())) {
@@ -399,7 +398,7 @@ class SupportController extends Controller
                                 return $this->refresh();
                             }
                         }
-                    }
+
 
                     return $this->render('ticket', ['model' => $model]);
 
