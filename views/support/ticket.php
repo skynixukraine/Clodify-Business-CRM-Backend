@@ -27,7 +27,7 @@ use app\models\SupportTicket;
         <section class="col-lg-6 col-lg-offset-3 sect3">
             <article>
                 <?php $form = ActiveForm::begin();?>
-                <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])):?>
+                <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])):?>
                     <div class="col-lg-12">
 
                         <div class="form-group">
@@ -89,7 +89,7 @@ use app\models\SupportTicket;
                     <p>Resolved : <span class="resolved"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_completed))?></span></p>
                     <p>Cancelled: <span class="cancel"><?= Html::encode(DateUtil::convertDatetimeWithoutSecund($model->date_cancelled))?></span></p>
 
-                    <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST])):?>
+                    <?php if(isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_GUEST, User::ROLE_DEV])):?>
                         <h2>Your comment</h2>
                             <?php echo $form->field($model, 'comment')->textarea(['required' => 'required'])->label(false);?>
                             <?= Html::submitButton( Yii::t('app', 'Post Comment'), ['class' => 'btn btn-primary', 'style' => 'float: right; margin-top: 10px;']) ?>

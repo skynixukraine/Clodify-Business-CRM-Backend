@@ -85,6 +85,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                         if (response.error) {
                             $(document).keydown(function(e){
                                 console.log(e.keyCode);
+                                saveButton.attr('href', '/support/submit-request');
                                 if (e.keyCode == 13) {
 
 //                                    saveButton.attr('href', '/support/submit-request');
