@@ -380,22 +380,27 @@ class SupportController extends Controller
         /** @var  $model SupportTicket*/
         if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
             if($model->is_private == 1  ){
-                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV ]) ||
+                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) ||
                     (isset($model->client_id) && $model->client_id == Yii::$app->user->id))) ||  Yii::$app->request->cookies['ticket']){
-                    Yii::$app->response->cookies->remove('ticket');
-                    if($model->load(Yii::$app->request->post())) {
-                        $modelComment = new SupportTicketComment();
-                        $modelComment->comment = $model->comment;
-                        $modelComment->date_added = date('Y-m-d H:i:s');
-                        $modelComment->user_id = Yii::$app->user->id;
-                        $modelComment->support_ticket_id = $model->id;
-                        if($modelComment->validate()){
-                            $modelComment->save();
 
-                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
-                            return $this->refresh();
+                    if ((User::hasPermission([User::ROLE_DEV ]) == Yii::$app->request->get('id'))) {
+
+                        Yii::$app->response->cookies->remove('ticket');
+                        if($model->load(Yii::$app->request->post())) {
+                            $modelComment = new SupportTicketComment();
+                            $modelComment->comment = $model->comment;
+                            $modelComment->date_added = date('Y-m-d H:i:s');
+                            $modelComment->user_id = Yii::$app->user->id;
+                            $modelComment->support_ticket_id = $model->id;
+                            if($modelComment->validate()){
+                                $modelComment->save();
+
+                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
+                                return $this->refresh();
+                            }
                         }
                     }
+
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
