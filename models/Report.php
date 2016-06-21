@@ -215,6 +215,40 @@ class Report extends \yii\db\ActiveRecord
                 ])
             ->sum(Report::tableName() . '.hours');
     }
+
+    public static function sumHoursReportsOfThisDayV2($currUser, $dateReport)
+    {
+        $hours = self::find()
+
+            ->where(Report::tableName() . '.date_report =:DateReport AND ' .
+                Report::tableName() . '.user_id=:userId AND ' .
+                Report::tableName() . '.is_delete=0',
+                [
+                    ':userId' => $currUser,
+                    ':DateReport' => $dateReport,
+                ])
+            ->all();//sum(Report::tableName() . '.hours');
+        $allhours = [];
+
+        $sum = 0;
+        $mun = 0;
+        foreach($hours as $hour) {
+
+            $allhours[] = $hour->hours;
+        }
+
+        foreach($allhours as $allhour) {
+            if(floor($allhour)>0) {
+                $sum = $sum + 60*floor($allhour);
+            }
+            if(($mun = ($allhour - floor($allhour))*100)>0) {
+                $sum = $sum + $mun;
+            }
+        }
+        return $sum/60;
+    }
+
+
     public static function reportsPM()
     {
         if ( ( $teamspm = Team::find()

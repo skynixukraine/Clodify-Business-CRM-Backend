@@ -23,6 +23,7 @@ $this->params['menu'] = [
 
 ];
 ?>
+<?php /*var_dump(Report::sumHoursReportsOfThisDayV2(1,'2016-06-21'))*/?>
 <?php $form = ActiveForm::begin(['options' => [
                                                 'class' => 'horizontal'
                                             ]]);

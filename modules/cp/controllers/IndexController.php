@@ -101,10 +101,18 @@ class IndexController extends DefaultController
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
             $oldhours = 0;
+            $hours = 0;
             if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
-                $oldhours = $model->hours;
+                if(floor($model->hours)>0) {
+                    $oldhours = floor($model->hours)*60;
+
+                }
+                if(($mun = $model->hours - floor($model->hours))>0.0) {
+                    $oldhours = $oldhours + $mun*100;
+                }
+                $oldhours = $oldhours/60;
 
             }
             if($data->project_id != null) {
@@ -115,7 +123,7 @@ class IndexController extends DefaultController
                 $model->hours = $data->hours;
                 $model->user_id = Yii::$app->user->id;
 
-                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
+                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDayV2(Yii::$app->user->id, $model->date_report);
 
                 $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
 
@@ -124,8 +132,16 @@ class IndexController extends DefaultController
                 ) {
 
                     if ($model->validate()) {
+                        if(floor($data->hours)>0) {
+                            $hours = floor($data->hours)*60;
 
-                        if ($totalHoursOfThisDay - $oldhours + $data->hours <= 12) {
+                        }
+                        if(($mun = $data->hours - floor($data->hours))>0.0) {
+                            $hours = $hours + $mun*100;
+                        }
+                        $hours = $hours/60;
+
+                        if (($totalHoursOfThisDay - $oldhours + $hours) <= 12) {
 
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
