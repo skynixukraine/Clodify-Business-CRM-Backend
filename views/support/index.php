@@ -69,8 +69,9 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
     });
 
         var input = '#supportticket-subject';
-        //console.log($(input).val());
         $("input").on('change keydown paste input', function (event) {
+
+            var saveButton = $('.off-button');
                 $.ajax({
                     type: "GET",
                     url: '',
@@ -82,9 +83,16 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 
                         var subjects = '';
                         if (response.error) {
-                            var saveButton = $('.off-button');
+                            $(document).keydown(function(e){
+                                console.log(e.keyCode);
+                                if (e.keyCode == 13) {
+
+//                                    saveButton.attr('href', '/support/submit-request');
+                                    window.location.pathname = '/support/submit-request';
+
+                                }
+                            });
                             saveButton.removeAttr('disabled').css('background', '#337ab7');
-                            saveButton.attr('href', '/support/submit-request');
                             $('#table-result').html('');
                             return;
                         }
