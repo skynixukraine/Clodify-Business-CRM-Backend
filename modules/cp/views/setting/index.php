@@ -18,7 +18,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
+// $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
