@@ -100,7 +100,7 @@ class IndexController extends DefaultController
 
             $oldhours = 0;
             $hours = 0;
-            if(isset($data->id)) {
+           /* if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
                 if(floor($model->hours)>0) {
@@ -112,7 +112,7 @@ class IndexController extends DefaultController
                 }
                 $oldhours = $oldhours/60;
 
-            }
+            }*/
             if($data->project_id != null) {
 
                 $model->project_id = $data->project_id;
@@ -130,14 +130,14 @@ class IndexController extends DefaultController
                 ) {
 
                     if ($model->validate()) {
-                        if(floor($data->hours)>0) {
+                        /*if(floor($data->hours)>0) {
                             $hours = floor($data->hours)*60;
 
                         }
                         if(($mun = $data->hours - floor($data->hours))>0.0) {
                             $hours = $hours + $mun*100;
                         }
-                        $hours = $hours/60;
+                        $hours = $hours/60;*/
 
                         if (($totalHoursOfThisDay - $oldhours + $hours) <= 12) {
 

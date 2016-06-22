@@ -127,7 +127,7 @@ $this->params['menu'] = [
                 <?php echo $form->field( $model, 'task', [
 
                         'options' => []
-                    
+
                 ])->textInput([
                     /*'pattern' => '^(\S+\s{0,1})+$',*/ /*'maxlength'=>'500', 'size' => '500'*/
                 ])->label( 'Text field with task description' );?>
