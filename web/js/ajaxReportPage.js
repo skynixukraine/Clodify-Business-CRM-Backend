@@ -78,14 +78,14 @@ var ajaxReportPageModule = (function() {
                                 thisTd.empty();
                                 var time = +thisValue;
                                 time = time.toFixed(2);
-                               //  var timeString = time.toString();
-                               //  var timeArr = timeString.split('.');
-                               //  if(timeArr[1] > 59){
-                               //  timeArr[1] = timeArr[1]%60;
-                               //  timeArr[0] = (timeArr[1]/60).toFixed(0);
-                               // }
-                               // time = timeArr.join('.');
-                               thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time + '">')
+                                //  var timeString = time.toString();
+                                //  var timeArr = timeString.split('.');
+                                //  if(timeArr[1] > 59){
+                                //  timeArr[1] = timeArr[1]%60;
+                                //  timeArr[0] = (timeArr[1]/60).toFixed(0);
+                                // }
+                                // time = timeArr.join('.');
+                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time + '">')
                                 break
                         }
                     })
@@ -224,9 +224,9 @@ var ajaxReportPageModule = (function() {
                 tableLoadRow.each(function() {
                     var thisChange = $(this).find('td input,td select').not('td .date input');
                     var datepickerDate = $(this).find('td .date');
-                   
-                   //Event for date
-                   datepickerDate.datepicker().on('changeDate', function() {
+
+                    //Event for date
+                    datepickerDate.datepicker().on('changeDate', function() {
                         var thisInput = $(this).find('input');
                         deleteHelpBlock(thisInput, "all");
                         var count = 0;
@@ -507,20 +507,23 @@ var ajaxReportPageModule = (function() {
                     })
                 }
                 var showTotalHours = $('#totalHours');
-                
+
                 totalHours = totalHours.toFixed(2);
                 console.log(totalHours);
                 totalHours = totalHours.toString();
                 var totalArr = totalHours.split('.');
-                 if(totalArr[1]<10){
-                    totalArr[1] = totalArr[1]/10;
-                 }
-                totalArr[1] = (totalArr[1]*60)/100;
-                if(totalArr[1]<10){
-                    totalArr[1] = "0"+totalArr[1];
+                if (totalArr[1] < 10) {
+                    totalArr[1] = totalArr[1] / 10;
+                }
+                totalArr[1] = (totalArr[1] * 60) / 100;
+                if (totalArr[1] < 10) {
+                    totalArr[1] = "0" + totalArr[1];
                 }
                 var minutes = +totalArr[1];
                 minutes = minutes.toFixed(0);
+                if(minutes<10){
+                    minutes = "0" + minutes; 
+                }
                 totalArr[1] = minutes;
                 console.log(totalArr);
                 totalHours = totalArr.join('.');
@@ -541,7 +544,7 @@ var ajaxReportPageModule = (function() {
                 var splitHour = hours.split('.');
                 var hour = +splitHour[0];
                 var minutes = +splitHour[1];
-                 var time;
+                var time;
                 if (minutes > 99) {
                     hour += 1;
                     splitHour[0] = hour;
