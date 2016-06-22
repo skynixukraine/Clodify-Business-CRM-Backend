@@ -110,9 +110,9 @@ var ajaxReportPageModule = (function() {
                         saveDataInObject();
                         $.each(dataArr, function(i) {
                             if (i == "project_id") {
-                                if (dataArr.project_id.length == 0) {
-                                    count++;
-                                }
+                                // if (dataArr.project_id.length == 0) {
+                                //     count++;
+                                // }
                             }
                             if (dataArr[i].length > 0) {
                                 count++;
@@ -149,6 +149,33 @@ var ajaxReportPageModule = (function() {
                                         ajaxSuccessFunc(errorMsg, data);
                                     }
                                 })
+                            } else {
+                                var closerInput = thisInput.closest('.row').find('input, select');
+                                $.each(closerInput, function() {
+                                    var thisCloserInput = $(this);
+                                    if (thisCloserInput.attr('id') == "report-project_id" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            deleteHelpBlock(thisCloserInput);
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Project ID cannot be blank.</span>');
+                                    }
+                                    if (thisCloserInput.attr('id') == "report-task" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            deleteHelpBlock(thisCloserInput);
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
+                                    }
+                                    if (thisCloserInput.attr('id') == "report-hours" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            deleteHelpBlock(thisCloserInput);
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Hours cannot be blank.</span>');
+                                    }
+                                })
+
                             }
                         })
                     })
@@ -521,8 +548,8 @@ var ajaxReportPageModule = (function() {
                 }
                 var minutes = +totalArr[1];
                 minutes = minutes.toFixed(0);
-                if(minutes<10){
-                    minutes = "0" + minutes; 
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
                 }
                 totalArr[1] = minutes;
                 console.log(totalArr);
