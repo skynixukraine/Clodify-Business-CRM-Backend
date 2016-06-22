@@ -151,28 +151,30 @@ var ajaxReportPageModule = (function() {
                                 })
                             } else {
                                 var closerInput = thisInput.closest('.row').find('input, select');
+                                console.log(closerInput);
                                 $.each(closerInput, function() {
                                     var thisCloserInput = $(this);
+                                    console.log(thisCloserInput.attr('id'));
                                     if (thisCloserInput.attr('id') == "report-project_id" && thisCloserInput.val() == "") {
                                         if (thisCloserInput.closest('div').hasClass("has-error")) {
-                                            deleteHelpBlock(thisCloserInput);
+                                            thisCloserInput.closest('div').removeClass("has-error")
                                         }
                                         thisCloserInput.closest('div').addClass("has-error");
-                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Project ID cannot be blank.</span>');
+
                                     }
                                     if (thisCloserInput.attr('id') == "report-task" && thisCloserInput.val() == "") {
                                         if (thisCloserInput.closest('div').hasClass("has-error")) {
-                                            deleteHelpBlock(thisCloserInput);
+                                            thisCloserInput.closest('div').removeClass("has-error")
                                         }
                                         thisCloserInput.closest('div').addClass("has-error");
-                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Task cannot be blank.</span>');
+
                                     }
                                     if (thisCloserInput.attr('id') == "report-hours" && thisCloserInput.val() == "") {
                                         if (thisCloserInput.closest('div').hasClass("has-error")) {
-                                            deleteHelpBlock(thisCloserInput);
+                                            thisCloserInput.closest('div').removeClass("has-error")
                                         }
                                         thisCloserInput.closest('div').addClass("has-error");
-                                        thisCloserInput.after('<span class = "help-block" id= "helpblockEr">Hours cannot be blank.</span>');
+
                                     }
                                 })
 
