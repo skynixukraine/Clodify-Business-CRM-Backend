@@ -39,7 +39,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             'type'=>'text',
 
                         ]
-                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text'))->label( false );?>
+                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus'))->label( false );?>
 
                 </div><br>
                 <table id="table-result">
@@ -60,13 +60,19 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"; integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     var supportTicket = $('.supportticket-subject');
-
     supportTicket.change(function(){
         var thisSup = $(this);
         var saveButton = $('.off-button');
-      //  saveButton.attr('tabindex','1');
         if(thisSup.val() == ""){
            // saveButton.removeAttr('disabled').css('background', '#337ab7');
+            //saveButton.attr('tabindex','0');
+        }
+    });
+    //var supportTick = $('input');
+    $(document).keydown(function(e){
+        if (e.keyCode == 9 ) {
+            //console.log("tab");
+            return false;
         }
     });
 
@@ -92,9 +98,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                                 if (e.keyCode == 9 ) {
                                     return false;
                                 }
-
                                 if (e.keyCode == 13 ) {
-
 //                                    saveButton.attr('href', '/support/submit-request');
                                     window.location.pathname = '/support/submit-request';
 
@@ -115,9 +119,13 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                         var saveButton = $('.off-button');
                         saveButton.removeAttr('disabled').css('background', '#337ab7');
                         console.log('error');
+
                     }
                 });
             });
-
-
+    /*$("input").onkeypress = function(event) {
+        if (event.keyCode == 9) return false;
+        event.preventDefault();
+    };
+*/
 </script>
