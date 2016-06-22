@@ -526,7 +526,7 @@ var ajaxReportPageModule = (function() {
                 }
                 totalArr[1] = minutes;
                 console.log(totalArr);
-                totalHours = totalArr.join('.');
+                totalHours = totalArr.join(':');
                 showTotalHours.text("Total: " + totalHours + " hours");
             }
 
