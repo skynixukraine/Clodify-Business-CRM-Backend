@@ -17,14 +17,6 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 <?php $form = ActiveForm::begin()?>
 <header>
     <h1>Skynix Support</h1>
-   <!-- <nav class ="center_nav">
-        <ul class="nav nav-pills" >
-            <li>
-                <a href="#"><h3>вернуться на главную страницу</h3></a>
-            </li>
-
-        </ul>
-    </nav>-->
 </header>
 <?php /*var_dump(SupportTicket::supportSearch());exit();*/?>
 <div class="container-fluid">
@@ -64,13 +56,12 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
         var thisSup = $(this);
         var saveButton = $('.off-button');
         if(thisSup.val() == ""){
-           // saveButton.removeAttr('disabled').css('background', '#337ab7');
-            //saveButton.attr('tabindex','0');
+
         }
     });
     $(document).keydown(function(e){
         if (e.keyCode == 9 ) {
-            //console.log("tab");
+
             return false;
         }
     });
@@ -97,7 +88,6 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                                 if (e.keyCode == 13 ) {
 //                                    saveButton.attr('href', '/support/submit-request');
                                     window.location.pathname = '/support/submit-request';
-
                                 }
                             });
                             saveButton.removeAttr('disabled').css('background', '#337ab7');

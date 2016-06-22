@@ -23,10 +23,10 @@ $this->params['menu'] = [
 
 ];
 ?>
-<?php /*var_dump(Report::sumHoursReportsOfThisDayV2(1,'2016-06-21'))*/?>
-<?php $form = ActiveForm::begin(['options' => [
-                                                'class' => 'horizontal'
-                                            ]]);
+<?php $form = ActiveForm::begin([
+                'options' => [
+                                'class' => 'horizontal'
+                                ]]);
 /** @var $model Report */?>
     <?php echo $form->field( $model, 'dateFilter', [
 
@@ -46,29 +46,18 @@ $this->params['menu'] = [
             'display' => 'none'
         ]
     ]);?>
-
-
     <?php if($model->dateFilter == 1):?>
         <label style="visibility: hidden"></label>
     <?php else:?>
         <label>Your reports from <?php echo $model->dateStartReport?> to <?php echo $model->dateEndReport?></label>
     <?php endif;?>
+
 <?php ActiveForm::end();?>
 
-<!--<label>Reports</label>-->
 <div class = "box">
     <div class = "box-body no-padding">
         <table class = "table load load-table">
-            <!--<thead>
-            <tr>
-                <th>ID</th>
-                <th>Project</th>
-                <th>Task</th>
-                <th>Hours</th>
-                <th>Date Report</th>
-                <th>Actions</th>
-            </tr>
-            </thead>-->
+
             <?php $reports = Report::getReports(Yii::$app->user->id, $model->dateFilter);
             /** @var  $report Report */
             foreach($reports->each() as $report):?>
@@ -105,8 +94,6 @@ $this->params['menu'] = [
 
 </div>
 
-<!--<h4 class = "box-title" style="text-align: center">NEW REPORT</h4>-->
-
 <?php $form = ActiveForm::begin();
 /** @var $model Report */?>
 
@@ -139,9 +126,8 @@ $this->params['menu'] = [
             <div class="col-xs-5  col-sm-6 col-md-7 field-task">
                 <?php echo $form->field( $model, 'task', [
 
-                        'options' => [
-
-                    ]
+                        'options' => []
+                    
                 ])->textInput([
                     /*'pattern' => '^(\S+\s{0,1})+$',*/ /*'maxlength'=>'500', 'size' => '500'*/
                 ])->label( 'Text field with task description' );?>
@@ -150,9 +136,8 @@ $this->params['menu'] = [
             <div class="col-xs-1 " >
                 <?php echo $form->field( $model, 'hours', [
 
-                        'options' => [
+                        'options' => []
 
-                        ]
                 ])->textInput();?>
             </div>
             

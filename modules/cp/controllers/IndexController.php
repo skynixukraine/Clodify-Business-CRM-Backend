@@ -60,7 +60,6 @@ class IndexController extends DefaultController
             ],
         ];
     }
-
     /** Testing email */
     public function actionTest()
     {
@@ -72,7 +71,6 @@ class IndexController extends DefaultController
             ->send();
         Yii::$app->end();
     }
-
     public function actionIndex()
     {
         $model = new Report();
@@ -192,7 +190,6 @@ class IndexController extends DefaultController
         }
         return $this->render('index', ['model' => $model]);
     }
-
     /** Delete developer`s report */
     public function actionDelete()    {
 
@@ -228,10 +225,8 @@ class IndexController extends DefaultController
                     "errors"  => [ "field" =>  $model->id, "message" => "You can't delete this report as invoice has been generated" ]
                 ]);
             }
-
         }
     }
-
     /** Add new report */
     public function actionSave()
     {
