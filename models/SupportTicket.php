@@ -50,6 +50,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             [['is_private', 'assignet_to', 'client_id', 'assignee'], 'integer'],
             [['date_added', 'date_completed', 'date_cancelled'], 'safe'],
             [['subject'], 'string', 'max' => 250],
+            [['subject'], 'required'],
         ];
     }
 
