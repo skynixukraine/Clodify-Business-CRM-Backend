@@ -68,14 +68,12 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
             //saveButton.attr('tabindex','0');
         }
     });
-    //var supportTick = $('input');
     $(document).keydown(function(e){
         if (e.keyCode == 9 ) {
             //console.log("tab");
             return false;
         }
     });
-
         var input = '#supportticket-subject';
         $("input").on('change keydown paste input', function (event) {
 
@@ -88,13 +86,11 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     beforeSend: function () {
                     },
                     success: function (response) {
-
                         var subjects = '';
                         if (response.error) {
                             $(document).keydown(function(e){
                                 console.log(e.keyCode);
                                 saveButton.attr('href', '/support/submit-request');
-                                //saveButton.attr('tabindex','0');
                                 if (e.keyCode == 9 ) {
                                     return false;
                                 }
@@ -117,15 +113,10 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     },
                     error: function (response) {
                         var saveButton = $('.off-button');
-                        saveButton.removeAttr('disabled').css('background', '#337ab7');
+                        //saveButton.removeAttr('disabled').css('background', '#337ab7');
+                        saveButton.attr('disabled', 'disabled');
                         console.log('error');
-
                     }
                 });
             });
-    /*$("input").onkeypress = function(event) {
-        if (event.keyCode == 9) return false;
-        event.preventDefault();
-    };
-*/
 </script>
