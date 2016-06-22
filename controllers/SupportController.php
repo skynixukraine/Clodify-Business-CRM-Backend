@@ -20,8 +20,6 @@ use app\components\AccessRule;
 use app\models\SupportTicket;
 use yii\helpers\Url;
 
-
-
 class SupportController extends Controller
 {
     public $enableCsrfValidation = false;
@@ -102,8 +100,6 @@ class SupportController extends Controller
                 }
 
             }
-
-
                 Yii::$app->response->cookies->add(new \yii\web\Cookie([
                     'name' => 'subject',
                     'value' => $data,
@@ -152,11 +148,8 @@ class SupportController extends Controller
                     "success" => false
                 ];
             }
-
-
         }
     }
-
     public function actionUpload()
     {
         $fileName = 'file';
@@ -173,7 +166,6 @@ class SupportController extends Controller
             mkdir($uploadPath);
             chmod($uploadPath, 0777);
         }
-
         if (isset($_FILES[$fileName])) {
             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
@@ -193,12 +185,10 @@ class SupportController extends Controller
         $model = new SupportTicket();
 
         if($model->load(Yii::$app->request->post())) {
-
                 /** @var  $userticket User */
                 $userticket = User::findOne(['email' => $model->email]);
 
                 if ($userticket == null) {
-
                     $model->status = SupportTicket::STATUS_NEW;
                     $model->is_private = 1;
                     $model->date_added = date('Y-m-d H:i:s');
@@ -215,23 +205,16 @@ class SupportController extends Controller
                     $guest->last_name = 'GUEST';
                     $guest->ticketId = $model->id;
 
-
                     if ($guest->validate()) {
 
-
-                        $guest->save();
+                            $guest->save();
 
                         $model->client_id = $guest->id;
-                        /*$model->status = SupportTicket::STATUS_NEW;
-                        $model->is_private = 1;
-                        $model->date_added = date('Y-m-d H:i:s');*/
+
                         if ($model->validate()) {
 
                             $model->save();
 
-                            /*$guest->ticketId = $model->id;
-                            $guest->rawPassword = null;
-                            $guest->save(true, ['ticketId', 'rawPassword']);*/
                             Yii::$app->response->cookies->add(new \yii\web\Cookie([
                                 'name' => 'ticket',
                                 'value' => $model->id,
@@ -256,9 +239,7 @@ class SupportController extends Controller
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
-
                             return $this->redirect (['ticket', 'id' => $model->id]);
-
                         }
                     }
                 } else {
@@ -316,8 +297,6 @@ class SupportController extends Controller
 
                         return $this->redirect (['ticket', 'id' => $model->id]);
 
-                       /* Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
-                        return $this->redirect('index');*/
                     }
                     if (!empty($userticket) && $userticket->is_delete == 0 && $userticket->password == md5($model->password)) {
 
@@ -339,7 +318,6 @@ class SupportController extends Controller
                     $login->email = $model->email;
                     $login->loginNoActive();
                 }
-
                 // user is not a guest
                 $model->status = SupportTicket::STATUS_NEW;
                 $model->is_private = 1;
@@ -370,7 +348,6 @@ class SupportController extends Controller
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
                     return $this->redirect (['ticket', 'id' => $model->id]);
-
                 }
             }
         }
@@ -399,7 +376,6 @@ class SupportController extends Controller
                             }
                         }
 
-
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
@@ -422,7 +398,6 @@ class SupportController extends Controller
                     }
                 }
                 return $this->render('ticket', ['model' => $model]);
-
             }
         }
 
@@ -439,12 +414,6 @@ class SupportController extends Controller
                 $status->status = SupportTicket::STATUS_COMPLETED;
                 $status->date_completed = date('Y-m-d H:i:s');
                 if($status->validate() && $status->save()){
-                    //return $this->refresh();
-                   /* Yii::$app->mailer->compose()
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($status->assignet_to)->email)
-                        ->setSubject('New ticket' . $status->id)
-                        ->send();*/
                     if($status->assignet_to != null){
                     Yii::$app->mailer->compose("ticket", [
                         "id"        =>  $status->id
@@ -475,7 +444,6 @@ class SupportController extends Controller
                 }
             }
         }
-
     }
     public function actionCancel()
     {
@@ -512,7 +480,7 @@ class SupportController extends Controller
                             "success" => true,
                             "date" =>  Yii::$app->formatter->asDatetime($status->date_cancelled, 'y-MM-d H:i')
                         ];
-                }else{
+                } else {
                     return[
                         "success" =>false,
                     ];
@@ -549,9 +517,7 @@ class SupportController extends Controller
                         "success" =>false,
                     ];
                 }
-
             }
-
         }
     }
     public function actionLogin()
@@ -559,7 +525,6 @@ class SupportController extends Controller
         $model = new LoginForm();
         /** Put the user's mail input if mail is not empty */
         if (($email = Yii::$app->request->get('email')) && ($id = Yii::$app->request->get('id'))) {
-
             /** @var  $user User*/
             if( $user = User::findOne(['email' => $email]) ) {
 
@@ -576,16 +541,13 @@ class SupportController extends Controller
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t("app", "Welcome to Skynix, you have successfully activated your account", false));
                 }
-
                 $model->email = $email;
                 if ($model->loginNoActive()) {
 
                     return $this->redirect(['ticket', 'id' => $id]);
 
                 }
-
             }
-
         }
     }
 }

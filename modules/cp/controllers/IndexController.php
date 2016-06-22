@@ -60,7 +60,6 @@ class IndexController extends DefaultController
             ],
         ];
     }
-
     /** Testing email */
     public function actionTest()
     {
@@ -72,7 +71,6 @@ class IndexController extends DefaultController
             ->send();
         Yii::$app->end();
     }
-
     public function actionIndex()
     {
         $model = new Report();
@@ -102,7 +100,7 @@ class IndexController extends DefaultController
 
             $oldhours = 0;
             $hours = 0;
-            if(isset($data->id)) {
+           /* if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
                 if(floor($model->hours)>0) {
@@ -114,7 +112,7 @@ class IndexController extends DefaultController
                 }
                 $oldhours = $oldhours/60;
 
-            }
+            }*/
             if($data->project_id != null) {
 
                 $model->project_id = $data->project_id;
@@ -132,14 +130,14 @@ class IndexController extends DefaultController
                 ) {
 
                     if ($model->validate()) {
-                        if(floor($data->hours)>0) {
+                        /*if(floor($data->hours)>0) {
                             $hours = floor($data->hours)*60;
 
                         }
                         if(($mun = $data->hours - floor($data->hours))>0.0) {
                             $hours = $hours + $mun*100;
                         }
-                        $hours = $hours/60;
+                        $hours = $hours/60;*/
 
                         if (($totalHoursOfThisDay - $oldhours + $hours) <= 12) {
 
@@ -192,7 +190,6 @@ class IndexController extends DefaultController
         }
         return $this->render('index', ['model' => $model]);
     }
-
     /** Delete developer`s report */
     public function actionDelete()    {
 
@@ -228,10 +225,8 @@ class IndexController extends DefaultController
                     "errors"  => [ "field" =>  $model->id, "message" => "You can't delete this report as invoice has been generated" ]
                 ]);
             }
-
         }
     }
-
     /** Add new report */
     public function actionSave()
     {

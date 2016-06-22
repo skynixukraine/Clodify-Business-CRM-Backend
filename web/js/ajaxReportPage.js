@@ -100,7 +100,7 @@ var ajaxReportPageModule = (function() {
                     ///////Remove error messages,from under input
                     thisInput.click(function() {
                         $('.ajax-error').remove();
-                    })
+                    });
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
                     thisInput.change(function() {

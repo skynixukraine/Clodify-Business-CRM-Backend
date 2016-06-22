@@ -62,12 +62,6 @@ class SupportTicketComment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SupportTicket::className(), ['support_ticket_id' => 'id']);
     }
-   /* public static function AssigneTo($id){
-        return self::find()
-            ->leftJoin(SupportTicket::tableName(), SupportTicket::tableName() . ".id=support_ticket_id")
-            ->leftJoin(User::tableName(), User::tableName() . ".id=" . SupportTicket::tableName() . ".assignet_to")
-            ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one();
-    }*/
     public function afterSave($insert, $changedAttributes)
     {
         if(SupportTicket::findOne($this->support_ticket_id)->assignet_to != null) {
