@@ -99,7 +99,7 @@ class IndexController extends DefaultController
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
             $oldhours = 0;
-            $hours = 0;
+            //$hours = 0;
            /* if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
@@ -121,26 +121,23 @@ class IndexController extends DefaultController
                 $model->hours = $data->hours;
                 $model->user_id = Yii::$app->user->id;
 
-                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDayV2(Yii::$app->user->id, $model->date_report);
+                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
 
                 $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
 
                 if ($date_end == null || $model->date_report == null ||
                     DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
                 ) {
+                    if( $model->hours < 0.1){
 
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'hours', "message" => "You can not add/edit this report. Minimum total hours is 0.1"]
+                        ]);
+                    }
                     if ($model->validate()) {
-                        /*if(floor($data->hours)>0) {
-                            $hours = floor($data->hours)*60;
-
-                        }
-                        if(($mun = $data->hours - floor($data->hours))>0.0) {
-                            $hours = $hours + $mun*100;
-                        }
-                        $hours = $hours/60;*/
-
-                        if (($totalHoursOfThisDay - $oldhours + $hours) <= 12) {
-
+                        if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
                                 return json_encode([
