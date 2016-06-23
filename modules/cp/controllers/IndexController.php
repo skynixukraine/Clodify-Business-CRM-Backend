@@ -104,25 +104,9 @@ class IndexController extends DefaultController
                 $oldhours = $model->hours;
 
             } else {
-                
+
                 $oldhours = 0;
             }
-
-
-            //$hours = 0;
-           /* if(isset($data->id)) {
-
-                $model = Report::findOne( $data->id );
-                if(floor($model->hours)>0) {
-                    $oldhours = floor($model->hours)*60;
-
-                }
-                if(($mun = $model->hours - floor($model->hours))>0.0) {
-                    $oldhours = $oldhours + $mun*100;
-                }
-                $oldhours = $oldhours/60;
-
-            }*/
             if($data->project_id != null) {
 
                 $model->project_id = $data->project_id;
@@ -144,6 +128,12 @@ class IndexController extends DefaultController
                             "success" => false,
                             "id" => $model->id,
                             "errors" => ["field" => 'hours', "message" => "You can not add/edit this report. Minimum total hours is 0.1"]
+                        ]);
+                    }
+                    if( $model->hours > 0.1) {
+                        return json_encode([
+                            "success" => true,
+                            "id" => $model->id
                         ]);
                     }
                     if ($model->validate()) {
