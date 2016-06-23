@@ -295,7 +295,7 @@ var ajaxReportPageModule = (function() {
 
                     thisChange.change(function() {
                         var thisInput = $(this);
-                        if (thisInput.hasClass('report-text') && thisInput.val().length < 20 && thisInput.val().length > 0) {
+                        if (thisInput.hasClass('report-text') && thisInput.val().length <= 20 && thisInput.val().length > 0) {
                             if (thisInput.closest('td').hasClass("has-error")) {
                                 deleteHelpBlock(thisInput);
                             }

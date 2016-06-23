@@ -127,9 +127,18 @@ class IndexController extends DefaultController
                         return json_encode([
                             "success" => false,
                             "id" => $model->id,
-                            "errors" => ["field" => 'hours', "message" => "You can not add/edit this report. Minimum total hours is 0.1"]
+                            "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
                         ]);
                     }
+
+                   /* if( strlen(trim($model->task))<20) {
+
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
+                        ]);
+                    }*/
                     if ($model->validate()) {
                         if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                             Yii::$app->user->getIdentity()->last_name;
