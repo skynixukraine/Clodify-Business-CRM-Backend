@@ -122,7 +122,7 @@ class IndexController extends DefaultController
                 if ($date_end == null || $model->date_report == null ||
                     DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
                 ) {
-                    if( $model->hours < 0.1){
+                    if( $model->hours < 0.1) {
 
                         return json_encode([
                             "success" => false,
@@ -130,20 +130,17 @@ class IndexController extends DefaultController
                             "errors" => ["field" => 'hours', "message" => "You can not add/edit this report. Minimum total hours is 0.1"]
                         ]);
                     }
-                    if( $model->hours > 0.1) {
-                        return json_encode([
-                            "success" => true,
-                            "id" => $model->id
-                        ]);
-                    }
                     if ($model->validate()) {
                         if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
-                                return json_encode([
-                                    "success" => true,
-                                    "id" => $model->id
-                                ]);
+                                if($model->hours >= 0.1) {
+                                    return json_encode([
+                                        "success" => true,
+                                        "id" => $model->id
+                                    ]);
+                                }
+
                             } else {
                                 return json_encode([
                                     "success" => false,
