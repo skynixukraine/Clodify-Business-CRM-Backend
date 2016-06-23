@@ -8,9 +8,9 @@ use app\models\Upload;
 
 $this->title = 'Welcome to the Skynix - software development company';
 ?>
-<canvas id="canvas1" width="100%"></canvas>
-<canvas id="canvas2" width="100%"></canvas>
-<canvas id="canvas3" width="100%"></canvas>
+<canvas id="canvas1"></canvas>
+<canvas id="canvas2"></canvas>
+<canvas id="canvas3"></canvas>
 
 
 
@@ -130,7 +130,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://marketplace.skynix.solutions/" data-images="m2_marketplace_extension.jpg" rel="nofollow">
-                <img src="../images/btn-marketplace-extension.jpg" width="289" height="214" />
+                <img src="../images/btn-marketplace-extension.jpg" width="289" height="214" alt="marketplace extension"/>
                 <div class="mask"></div>
                 <h3 class="name">Magento 2 Marketplace Extension</h3>
             </a>
@@ -168,7 +168,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="https://handmade.works/" data-images="handmadeworks.jpg" rel="nofollow">
-                <img src="../images/btn-handmade-works.jpg" width="289" height="214" />
+                <img src="../images/btn-handmade-works.jpg" width="289" height="214" alt="handmade works"/>
                 <div class="mask"></div>
                 <h3 class="name">Magento 2 Marketplace - Handmade Theme</h3>
             </a>
@@ -207,7 +207,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://www.aftereden.nl/" data-images="after_eden_table_extension.png" rel="nofollow">
-                <img src="../images/btn-after_eden .png" width="289" height="214" />
+                <img src="../images/btn-after_eden.png" width="289" height="214" alt="after eden"/>
                 <div class="mask"></div>
                 <h3 class="name">After Eden - Sizes Table Magento 1.x Extension</h3>
             </a>
@@ -234,7 +234,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="https://skynix.solutions/" data-images="skynix_solutions_theme.png" rel="nofollow">
-                <img src="../images/btn-skynix_theme.png" width="289" height="214" />
+                <img src="../images/btn-skynix_theme.png" width="289" height="214" alt="skynix theme"/>
                 <div class="mask"></div>
                 <h3 class="name">Magento 2 Skynix Solutions Theme</h3>
             </a>
@@ -262,7 +262,7 @@ $this->title = 'Welcome to the Skynix - software development company';
          </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://infinite-beginnings.p.skynix.co/" data-images="infinite_beginnings1.jpg" rel="nofollow">
-                <img src="../images/btn-infinite-beginnings.jpg" width="289" height="214" />
+                <img src="../images/btn-infinite-beginnings.jpg" width="289" height="214" alt="infinite beginnings"/>
                 <div class="mask"></div>
                 <h3 class="name">Infinite Beginnings</h3>
             </a>
@@ -303,7 +303,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://fisherman-id.p.skynix.co/" data-images="fisherman_id.jpg" rel="nofollow">
-                <img src="../images/btn-fisherman.jpg" width="289" height="214" />
+                <img src="../images/btn-fisherman.jpg" width="289" height="214" alt="fisherman"/>
                 <div class="mask"></div>
                 <h3 class="name">Fisherman ID</h3>
             </a>
@@ -340,7 +340,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="https://www.citrix.com/" data-images="citrix_cynergy.jpg" rel="nofollow">
-                <img src="../images/btn-citrix-synergy.jpg" width="289" height="214" />
+                <img src="../images/btn-citrix-synergy.jpg" width="289" height="214" alt="citrix synergy"/>
                 <div class="mask"></div>
                 <h3 class="name">Citrix Synergy</h3>
             </a>
@@ -368,7 +368,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://www.castles.uk.com/" data-images="castles.jpg" rel="nofollow">
-                <img src="../images/btn-сastles_estate_agents.jpg" width="289" height="214" />
+                <img src="../images/btn-сastles_estate_agents.jpg" width="289" height="214" alt="сastles estate agents"/>
                 <div class="mask"></div>
                 <h3 class="name">Castles - Estate agents</h3>
             </a>
@@ -397,7 +397,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12 portfolio-sample">
             <a href="#" data-href="http://moticv.com/" data-images="motibu.png" rel="nofollow">
-                <img src="../images/btn-motibu-small.png" width="289" height="214" />
+                <img src="../images/btn-motibu-small.png" width="289" height="214" alt="motibu small"/>
                 <div class="mask"></div>
                 <h3 class="name">MotiBu - Professional Profiles</h3>
             </a>
@@ -436,7 +436,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-8 col-md-12 evaluation-txt">
-                            <p>Do you need to get a quote of your project or idea?</p>
+                            <h3>Do you need to get a quote of your project or idea?</h3>
                         </div>
                         <div class="col-lg-4 col-md-12">
                             <a href="<?=Url::to(["site/contact"])?>" class="en-btn">REQUEST A QUOTE</a>

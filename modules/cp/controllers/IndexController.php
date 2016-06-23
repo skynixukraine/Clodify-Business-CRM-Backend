@@ -60,7 +60,6 @@ class IndexController extends DefaultController
             ],
         ];
     }
-
     /** Testing email */
     public function actionTest()
     {
@@ -72,7 +71,6 @@ class IndexController extends DefaultController
             ->send();
         Yii::$app->end();
     }
-
     public function actionIndex()
     {
         $model = new Report();
@@ -96,73 +94,147 @@ class IndexController extends DefaultController
 
         }
 
-        if ( $model->load(Yii::$app->request->post()) ) {
+        if( ( Yii::$app->request->isAjax &&
+              Yii::$app->request->isPost &&
+              ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
-            $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, DateUtil::convertData($model->date_report));
+            if(isset($data->id)) {
 
-            $model->user_id = Yii::$app->user->id;
-            $model->date_report = DateUtil::convertData( $model->date_report );
-            $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+                $model = Report::findOne( $data->id );
+                $oldhours = $model->hours;
 
-            if( $date_end == null || $model->date_report == null ||
-            DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))){
+            } else {
 
-                if ($model->validate()) {
+                $oldhours = 0;
+            }
+            if($data->project_id != null) {
 
-                    if ($totalHoursOfThisDay + $model->hours <= 12) {
+                $model->project_id = $data->project_id;
+                $model->date_report = DateUtil::convertData($data->date_report);
+                $model->task = $data->task;
+                $model->hours = $data->hours;
+                $model->user_id = Yii::$app->user->id;
 
-                        Yii::$app->user->getIdentity()->last_name;
-                        $model->save();
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been added"));
-                        return $this->refresh();
-                    } else {
-                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
-                                                                                Maximum total hours is 12"));
-                        return $this->render('index', ['model' => $model]);
+                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
+
+                $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+
+                if ($date_end == null || $model->date_report == null ||
+                    DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
+                ) {
+                    if( $model->hours < 0.1) {
+
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                        ]);
                     }
+                    if( strlen(trim($model->task)) <= 20) {
+
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
+                        ]);
+                    }
+                    if ($model->validate()) {
+                        if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
+                            Yii::$app->user->getIdentity()->last_name;
+                            if ($model->save()) {
+                                if($model->hours >= 0.1) {
+                                    return json_encode([
+                                        "success" => true,
+                                        "id" => $model->id
+                                    ]);
+                                }
+                            if(trim(strlen($model->task)) > 20){
+                                return json_encode([
+                                    "success" => true,
+                                    "id" => $model->id
+                                ]);
+                            }
+
+                            } else {
+                                return json_encode([
+                                    "success" => false,
+                                    "id" => $model->id,
+                                    "errors" => ["field" => $model->id, "message" => "Report does not add"]
+                                ]);
+                            }
+
+                        } else {
+                            return json_encode([
+                                "success" => false,
+                                "id" => $model->id,
+                                "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
+                            ]);
+
+                        }
+                    } else {
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
+                        ]);
+                    }
+                } else {
+
+                    return json_encode([
+                        "success" => false,
+                        "id" => $model->id,
+                        "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
+                    ]);
+                }
+
+            }  else {
+
+                return json_encode([
+                    "success" => false,
+                    "id" => $model->id,
+                    "errors" => ["field" => 'project_id', "message" => "Please choose a project"]
+                ]);
+            }
+        }
+        return $this->render('index', ['model' => $model]);
+    }
+    /** Delete developer`s report */
+    public function actionDelete()    {
+
+        if( ( Yii::$app->request->isAjax &&
+            Yii::$app->request->isPost &&
+            ( $data = json_decode($_POST['jsonData']) ) &&
+             isset($data->id) ) ) {
+
+            /** @var  $model  Report*/
+            $model = Report::findOne( $data->id );
+
+            if($model->invoice_id == null) {
+
+                $model->is_delete = 1;
+                if($model->save(true, ['is_delete'])) {
+
+                    return json_encode([
+                        "success" => true,
+                        "id"      => $model->id
+                    ]);
+                } else {
+                    return json_encode([
+                        "success" => false,
+                        "id"      => $model->id,
+                        "errors"  => [ "field" =>  $model->project_id, "message" => "Data is not valid" ]
+                    ]);
                 }
             }else{
 
-                Yii::$app->getSession()->setFlash('error',
-                Yii::t("app", "Report can't be added as invoice has been created on this project"));
-                return $this->render('index', ['model' => $model]);
+                return json_encode([
+                    "success" => false,
+                    "id"      => $model->id,
+                    "errors"  => [ "field" =>  $model->id, "message" => "You can't delete this report as invoice has been generated" ]
+                ]);
             }
-
         }
-        return $this->render('index' ,['model' => $model]);
-
     }
-
-    /** Delete developer`s report */
-    public function actionDelete()
-    {
-        //if( User::hasPermission( [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM ] ) ){
-
-            if( ( $id =  Yii::$app->request->get("id") ) ){
-
-                /** @var  $model  Report*/
-                $model = Report::findOne( $id );
-                if($model->invoice_id == null) {
-
-                    $model->is_delete = 1;
-                    $model->save(true, ['is_delete']);
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Your report has been deleted"));
-                    return $this->render('index' ,['model' => $model]);
-                }else{
-
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can't delete this report as
-                                                                                invoice has been generated"));
-                    return $this->redirect('index' ,['model' => $model]);
-                }
-            }
-        //}else{
-
-        //    throw new \Exception('Ooops, you do not have priviledes for this action');
-
-       // }
-        return $this->redirect(['index']);
-    }
-
     /** Add new report */
     public function actionSave()
     {
@@ -187,8 +259,6 @@ class IndexController extends DefaultController
                 $model->task = $task;
                 $model->hours = $hours;
 
-
-
                 if( $totalHoursOfThisDay + $hours <= 12 ) {
 
                     if ($model->save(true, ['id', 'task', 'hours'])) {
@@ -203,20 +273,19 @@ class IndexController extends DefaultController
                         ]);
                     }
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add  this report.
                                                                             Maximum total hours is 12"));
                     return $this->redirect(['index']);
                 }
             }
         }
-        return $this->redirect(['index']);
+        return $this->render('index');
     }
 
     public function actionGetphoto()
     {
         $entry = Yii::$app->getRequest()->get('entry');
         $filename = realpath($entry);
-
         $file_extension = strtolower(substr(strrchr($filename,"."),1));
 
         switch ($file_extension) {
@@ -248,7 +317,4 @@ class IndexController extends DefaultController
         set_time_limit(0);
         @readfile("$filename") or die("File not found.");
     }
-
-
-
 }

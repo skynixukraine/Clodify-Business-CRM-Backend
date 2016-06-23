@@ -82,5 +82,20 @@ class DateUtil
             }
         }
     }
+    public static function convertDatetimeWithoutSecund( $date )
+    {
+        if( $date ) {
+            $date_explode = explode(" ", trim($date));
+
+
+            if( ( $time = explode(":", $date_explode[1]) ) && count($time) == 3 ) {
+
+                $datetime = [$time[0], $time[1]];
+                $date_explode[1] = implode(":", $datetime);
+            }
+            $date = self::convertData($date_explode[0] ) . " " . $date_explode[1];
+        }
+        return $date;
+    }
 
 }

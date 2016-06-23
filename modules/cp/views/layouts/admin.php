@@ -60,16 +60,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <?php endif;?>
 
             <?php if ( isset( $this->params['menu'] ) && count($this->params['menu']) ) :?>
-
                 <ul class="nav navbar-nav">
-
                     <?php foreach ( $this->params['menu'] as $item ) : ?>
                         <li <?=isset($item['active']) ? 'class="active"':''?>><a href="<?=$item['url'];?>"><?= $item['label'] ?> <span class="sr-only"></span></a></li>
                     <?php endforeach;?>
                 </ul>
 
             <?php endif;?>
-            
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
@@ -77,24 +74,38 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <?php //var_dump(Yii::$app->user->identity->photo);die();?>
-                           <!-- <img src="/img/avatar.png" class="user-image" alt="User Image"/>-->
-                            <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="user-image" alt="User Image"/>
+
+                            <?php if (Yii::$app->user->identity->photo != null):?>
+                                <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                                    '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="user-image" alt="User Image"/>
+                            <?php else:?>
+                                 <img src="/img/avatar.png" class="user-image" alt="User Image"/>
+                            <?php endif;?>
                             <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
+
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="User Image" />
+                                <?php if (Yii::$app->user->identity->photo != null):?>
+                                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                                    '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+                                <?php else:?>
+                                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+                                <?php endif;?>
                                 <p>
                                     <?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?>
-                                    <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php if (Yii::$app->user->identity->photo != null):?>
+                                         <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php else:?>
+                                        <small><?=Yii::t('app', 'Member since')?> <?=date("d M.Y", strtotime(Yii::$app->user->identity->date_signup))?></small>
+                                    <?php endif;?>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
-                                        <a href="<?=Url::to(["site/logout"])?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
+                                        <a href="<?=Url::to(["/site/logout"])?>" class="btn btn-default btn-flat"><?=Yii::t('app', 'Sign out')?></a>
                                 </div>
                             </li>
                         </ul>
@@ -111,7 +122,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').'/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php if (Yii::$app->user->identity->photo != null):?>
+                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                        '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php else:?>
+                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <?php endif?>
                 </div>
                 <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
                     <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>
@@ -125,7 +141,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <li class="header"><?=Yii::t('app', 'MAIN NAVIGATION')?></li>
                 <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "index" || Yii::$app->controller->id == "index" ? " active" : "")?>">
-                    <a href="<?=Url::to(['index/index']);?>">
+                    <a href="<?=Url::to(['/cp/index/index']);?>">
                         <i class="fa fa-home"></i> <span><?=Yii::t('app', "My Report")?></span>
                     </a>
                 </li>
@@ -133,7 +149,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
-                      <a href="<?=Url::to(['user/index']);?>">
+                      <a href="<?=Url::to(['/cp/user/index']);?>">
                         <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Users')?></span>
                     </a>
                 </li>
@@ -141,7 +157,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
-                    <a href="<?=Url::to(['teammate/index']);?>">
+                    <a href="<?=Url::to(['/cp/teammate/index']);?>">
                         <i class="fa fa-wechat"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
                     </a>
                 </li>
@@ -149,7 +165,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_PM]) && Team::hasTeam(Yii::$app->user->id) ) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teams" ? " active" : "")?>">
-                        <a href="<?=Url::to(['teams/index']);?>">
+                        <a href="<?=Url::to(['/cp/teams/index']);?>">
                             <i class="fa fa-users"></i> <span><?=Yii::t('app', 'My Team')?></span>
                         </a>
                 </li>
@@ -157,42 +173,49 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
 
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
-                    <a href="<?=Url::to(['project/index']);?>">
+                    <a href="<?=Url::to(['/cp/project/index']);?>">
                         <i class="fa fa-edit"></i> <span><?=Yii::t('app', 'Manage Projects')?></span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "report" ? " active" : "")?>">
-                    <a href="<?=Url::to(['report/index']);?>">
+                    <a href="<?=Url::to(['/cp/report/index']);?>">
                         <i class="fa fa-puzzle-piece"></i> <span><?=Yii::t('app', 'Reports')?></span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "invoice" ? " active" : "")?>">
-                    <a href="<?=Url::to(['invoice/index']);?>">
+                    <a href="<?=Url::to(['/cp/invoice/index']);?>">
                         <i class="fa fa-money"></i> <span>Invoices</span>
                     </a>
                 </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
-                        <a href="<?=Url::to(['surveys/index']);?>">
+                        <a href="<?=Url::to(['/cp/surveys/index']);?>">
                             <i class="fa  fa-question"></i> <span>Manage Surveys</span>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                    <li class="treeview<?=( Yii::$app->controller->id == "extension" ? " active" : "")?>">
+                        <a href="<?=Url::to(['/ExtensionPackager/extension/index']);?>">
+                            <i class="fa fa-file-text-o"></i> <span>Manage Extensions</span>
                         </a>
                     </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "setting" ? " active" : "")?>">
-                        <a href="<?=Url::to(['setting/index']);?>">
+                        <a href="<?=Url::to(['/cp/setting/index']);?>">
                             <i class="fa fa-gears"></i> <span>My Profile</span>
                         </a>
                     </li>
                 <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "tool" ? " active" : "")?>">
-                        <a href="<?=Url::to(['tool/emailtester']);?>">
+                        <a href="<?=Url::to(['/cp/tool/emailtester']);?>">
                             <i class="fa fa-mail-forward"></i> <span>Email Tester</span>
                         </a>
                     </li>
@@ -201,7 +224,6 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
         </section>
         <!-- /.sidebar -->
     </aside>
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -247,7 +269,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 1.2
+            <b>Version</b> <?=Yii::$app->params['version']?>
         </div>
         <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'Skynix Ltd. All rights reserved.')?>
     </footer>

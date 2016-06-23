@@ -13,7 +13,6 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\AccessRule;
-//use yii\web\User;
 use app\models\User;
 use app\models\Project;
 use yii\web\UploadedFile;
@@ -57,10 +56,7 @@ class SettingController extends DefaultController
 
     public function actionIndex()
     {
-        $model = User::find()
-            ->where('id=:ID', [
-                ':ID' => Yii::$app->user->id
-            ])->one();
+        $model = User::findOne(Yii::$app->user->id);
         $model->scenario = 'settings';
 
         if ($model->load(Yii::$app->request->post())) {
@@ -81,62 +77,8 @@ class SettingController extends DefaultController
                             'defaultSing' => $defaultSing]);
     }
 
-
-   /* public function actionSuspend()
-    {
-        if (( $id = Yii::$app->request->get("id") ) ) {
-            $model =  ProjectDeveloper::find()
-                ->where('project_id=:Id',[
-                    ':Id' => $id,
-                ])
-                ->one();
-
-            $model->status = ProjectDeveloper::STATUS_INACTIVE;
-            if($model->validate()){
-
-                $model->save();
-            }
-            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
-        }
-        return $this->redirect(['setting/index']);
-    }*/
-
-    /**
-     * @return string
-     */
-    /*public function actionActivate()
-    {
-        if (( $id = Yii::$app->request->get("id") ) ) {
-            $model =  ProjectDeveloper::find()
-                ->where('project_id=:Id',[
-                    ':Id' => $id,
-                ])
-                ->one();
-            $model->status = ProjectDeveloper::STATUS_ACTIVE;
-            if($model->validate()){
-
-                $model->save();
-            }
-            $projects = [];
-            foreach ($projects as $project) {
-
-                /** @var $customer ProjectCustomer */
-                //$model->projects[] = $project->user_id;
-
-           // }
-            /*Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activsted project " . $id));*/
-        //}
-        /*return $this->redirect(['setting/index']);*/
-        /*return $this->render('index',
-            [
-                'model' => $model,
-                'title' => 'Edit the project #' . $model->id
-            ]
-        );
-    }*/
     public function actionUpload()
     {
-
         $fileName = 'file';
         $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
         if (!file_exists($uploadPath))
@@ -153,9 +95,6 @@ class SettingController extends DefaultController
 
         if (isset($_FILES[$fileName])) {
             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
-
-            //Print file data
-            //print_r($file);
 
             if ($file->saveAs($uploadPath . '/' . $file->name)) {
                 //Now save file data to database
@@ -175,35 +114,30 @@ class SettingController extends DefaultController
      */
     public function actionUploaded()
     {
+        $fileName = 'file';
+        $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+            chmod($path, 0777);
+        }
+        $path = $path . 'sing/';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+            chmod($path, 0777);
 
-            $fileName = 'file';
-            $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-                chmod($path, 0777);
+        }
+
+        if (isset($_FILES[$fileName])) {
+            $file = \yii\web\UploadedFile::getInstanceByName($fileName);
+
+            if ($file->saveAs($path  . '/' . $file->name)) {
+                //Now save file data to database
+
+                echo \yii\helpers\Json::encode($file);
+            } else {
+                return $this->render('index');
             }
-            $path = $path . 'sing/';
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-                chmod($path, 0777);
-
-            }
-
-            if (isset($_FILES[$fileName])) {
-                $file = \yii\web\UploadedFile::getInstanceByName($fileName);
-
-                //Print file data
-                //print_r($file);
-
-                if ($file->saveAs($path  . '/' . $file->name)) {
-                    //Now save file data to database
-
-                    echo \yii\helpers\Json::encode($file);
-                } else {
-                    return $this->render('index');
-                }
-            }
-
+        }
     }
 
     /**
@@ -220,7 +154,6 @@ class SettingController extends DefaultController
             $result['error'] = $e->getMessage();
         }
         return json_encode($result);
-
     }
 
     /**
@@ -237,7 +170,6 @@ class SettingController extends DefaultController
             $result['error'] = $e->getMessage();
         }
         return json_encode($result);
-
     }
 
     protected function assignToProject()
@@ -253,6 +185,5 @@ class SettingController extends DefaultController
             }
         }
     }
-
 
 }

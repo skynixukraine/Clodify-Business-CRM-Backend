@@ -18,7 +18,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
+// $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 $this->title                    = Yii::t("app", "My Profile");
@@ -30,7 +30,7 @@ $this->params['menu'] = [
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
         <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
-        <li><a href="#tab_3" data-toggle="tab">Sing</a></li>
+        <li><a href="#tab_3" data-toggle="tab">Sign</a></li>
         <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
             <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
         <?php endif?>
@@ -48,8 +48,8 @@ $this->params['menu'] = [
                                 <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                                 <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>
-                            <span>You are joined Skynix on <?php echo  Yii::$app->formatter->asDate($model->date_signup,'d/mm/Y') ?></span><br/>
-                            <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/mm/Y H:i')?></span><br/>
+                            <span>You are joined Skynix on <?php echo  Yii::$app->formatter->asDate($model->date_signup,'d/MM/Y') ?></span><br/>
+                            <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/MM/Y HH:mm')?></span><br/>
                             <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
                         </div>
                     </div>
@@ -103,7 +103,9 @@ $this->params['menu'] = [
                             <?php echo $form->field( $model, 'company' )->textInput();?>
                         <?php endif?>
                         <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
-                        <?php echo $form->field( $model, 'about' )->textarea()->label('About Me');?>
+                        <?php echo $form->field( $model, 'about', [
+                            'options' => ['style' => 'max-width: 500px'],
+                             ])->textarea(['style'=>'max-height: 300px'])->label('About Me');?>
                     </fieldset>
                 </div>
             </div>
@@ -129,13 +131,13 @@ $this->params['menu'] = [
                             imgPr.css('border','0');
                             $('.dz-preview').css('border','0');
                             $(this).css('border', '3px solid blue');
-                            
+
                         })
                         $('#tab_2 .dz-image img').click(function(){
                             var img = $(file.previewElement);
                             $(img).css('border', '0');
                         })
-                       
+
 
                     }",
                     'removedfile' => "function(file){alert(file.name + ' is removed')}"
@@ -179,12 +181,12 @@ $this->params['menu'] = [
                         $('.singuser').val(sing);
                     };
 
-                    
+
                     $('#tab_2 .dz-image img').click(function() {
-                    setBorder(this, '#tab_2 img');
+                        setBorder(this, '#tab_2 img');
                     });
-                                                        
-                   
+
+
                     $('#tab_3 .dz-image img').click(function() {
                         setBorder(this, '#tab_3 img');
                     });
@@ -216,7 +218,7 @@ $this->params['menu'] = [
                             imgPr.css('border','0');
                             $('.dz-preview').css('border','0');
                             $(this).css('border', '3px solid blue');
-                            
+
                         })
                         $('#tab_3 .dz-image img').click(function(){
                             var img = $(file.previewElement);
@@ -230,7 +232,7 @@ $this->params['menu'] = [
             ?>
         </div>
         <div id="tab_4" class="tab-pane">
-            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])):?>
+            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
                 <div class="box-header with-border">
                     <div class="box-body">
                         <table class="table box">
@@ -247,9 +249,9 @@ $this->params['menu'] = [
                                 <tbody>
                                 <tr>
                                     <?php /** @var $project Project */?>
-                                    <td><?= Html::encode($project->getCustomers()->one()->first_name  . $project->getCustomers()->one()->last_name)?></td>
+                                    <td><?= Html::encode($project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name)?></td>
                                     <td><?= Html::encode($project->name)?></td>
-                                    <td><?= Html::encode($project->getProjectDevelopers()->one()->status)?></td>
+                                    <td><?= Html::encode($project->getProjectDevelopers()->one()->status )?></td>
                                     <?php $active = ($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)?>
                                     <td>
                                         <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
@@ -269,6 +271,7 @@ $this->params['menu'] = [
                 </div>
             <?php endif;?>
         </div>
+        </div>
         <?php ActiveForm::end();?>
     </div>
 </div>
@@ -287,9 +290,12 @@ $this->params['menu'] = [
             var check = $(this);
             if(!check.prop('checked')){
                 check.parent().parent('tr').css("color", "grey");
+                check.parent().parent('tr').css('color','grey');
             }
             else{
                 check.parent().parent('tr').css("background-color", "white");
+                check.parent().parent('tr').css('color','black');
+
             }
         })
     });
