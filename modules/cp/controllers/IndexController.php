@@ -98,7 +98,17 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
-            $oldhours = 0;
+            if(isset($data->id)) {
+
+                $model = Report::findOne( $data->id );
+                $oldhours = $model->hours;
+
+            } else {
+                
+                $oldhours = 0;
+            }
+
+
             //$hours = 0;
            /* if(isset($data->id)) {
 
@@ -262,7 +272,7 @@ class IndexController extends DefaultController
                         ]);
                     }
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add  this report.
                                                                             Maximum total hours is 12"));
                     return $this->redirect(['index']);
                 }
