@@ -269,7 +269,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 1.4
+            <b>Version</b> <?=Yii::$app->params['version']?>
         </div>
         <strong><?=Yii::t('app', 'Copyright')?> &copy; <?=date("Y")?> <?=Yii::t('app', 'Skynix Ltd. All rights reserved.')?>
     </footer>
