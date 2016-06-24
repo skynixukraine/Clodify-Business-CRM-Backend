@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail'        => 'admin@skynix.co',
+    'adminEmail'        => 'maryt@skynix.co',
     'applicationName'   => 'Skynix',
     'ua_site'           => 'https://ua.skynix.company',
     'en_site'           => 'https://skynix.company',
