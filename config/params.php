@@ -8,5 +8,6 @@ return [
     'in_site'           => 'http://in.skynix.company',
     'port'              => "",
     'success'           => true,
-    'invoice_cc_email'  => false
+    'invoice_cc_email'  => false,
+    'version'           => '1.5'
 ];
