@@ -215,11 +215,11 @@ class SupportController extends Controller
 
                             $model->save();
 
-                            Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                           /* Yii::$app->response->cookies->add(new \yii\web\Cookie([
                                 'name' => 'ticket',
                                 'value' => $model->id,
 
-                            ]));
+                            ]));*/
                             Yii::$app->mailer->compose("ticket", [
                                 "id"        =>  $model->id
                             ])
@@ -237,9 +237,9 @@ class SupportController extends Controller
                                 ->setTo(User::ClientTo($model->id))
                                 ->setSubject('Your Skynix ticket# ' . $model->id)
                                 ->send();
-                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
-
-                            return $this->redirect (['ticket', 'id' => $model->id]);
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review
+                            your request and get back to you soon! Please, activate your account through a confirm email link."));
+                            return $this-> redirect(['site/index']);
                         }
                     }
                 } else {
