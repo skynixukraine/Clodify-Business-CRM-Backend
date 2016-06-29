@@ -118,6 +118,7 @@ class SupportController extends Controller
         }
 
         return $this->render('index', ['model' => $model]);
+
     }
 
     public function actionSubmitRequest()
@@ -340,7 +341,7 @@ class SupportController extends Controller
                             Yii::$app->mailer->compose("newTicket", [
                                 "active"    => $user->is_active,
                                 "email"     => $user->email,
-                                "id"        =>  $model->id
+                                "id"        => $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::findOne($model->client_id)->email)
