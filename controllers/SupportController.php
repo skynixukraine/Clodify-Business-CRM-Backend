@@ -341,7 +341,7 @@ class SupportController extends Controller
                             Yii::$app->mailer->compose("newTicket", [
                                 "active"    => $user->is_active,
                                 "email"     => $user->email,
-                                "id"        => $model->id
+                                "id"        =>  $model->id
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::findOne($model->client_id)->email)
@@ -534,35 +534,35 @@ class SupportController extends Controller
         if (($email = Yii::$app->request->get('email')) && ($id = Yii::$app->request->get('id'))) {
             /** @var  $user User*/
             if( $user = User::findOne(['email' => $email]) ) {
+                if ($user->is_active == 1){
+                    if($user->invite_hash != null) {
 
-                if($user->invite_hash != null) {
+                        $user->is_active = 1;
+                        $user->invite_hash = null;
 
-                    $user->is_active = 1;
-                    $user->invite_hash = null;
+                        $user->save(true, ['is_active', 'invite_hash']);
+                        if (Yii::$app->user->id != null) {
 
-                    $user->save(true, ['is_active', 'invite_hash']);
-                    if( Yii::$app->user->id != null ){
+                            Yii::$app->user->logout();
+                        }
+                        if ($user->is_active == 0) {
 
-                        Yii::$app->user->logout();
-                    }
-                    if($user->is_active == 0) {
+                            Yii::$app->getSession()->setFlash('success',
+                                Yii::t("app", "Welcome to Skynix, you have successfully activated your account."));
+                        }
+                        $model->email = $email;
+                        if ($model->loginNoActive()) {
 
+                            return $this->redirect(['ticket', 'id' => $id]);
+
+                        }
+                    } else {
                         Yii::$app->getSession()->setFlash('success',
-                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account."));
+                            Yii::t("app", "This link is expired. Please, log in."));
+                        return $this->redirect(["site/index"]);
                     }
-                    $model->email = $email;
-                    if ($model->loginNoActive()) {
-
-                        return $this->redirect(['ticket', 'id' => $id]);
-
-                    }
-                } else {
-                    Yii::$app->getSession()->setFlash('success',
-                        Yii::t("app", "This link is expired. Please, log in."));
-                    return $this->redirect(["site/index"]);
-
                 }
-
+                return $this->redirect(['ticket', 'id' => $id]);
             }
         }
     }
