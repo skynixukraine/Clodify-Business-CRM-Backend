@@ -118,6 +118,8 @@ a.desc:after {
 .my-upper{
     text-transform: uppercase;
 }
+
+
 @media (max-width: 768px){
 
     .alert.alert-danger{
