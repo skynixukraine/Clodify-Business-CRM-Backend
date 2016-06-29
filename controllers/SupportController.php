@@ -533,25 +533,34 @@ class SupportController extends Controller
             /** @var  $user User*/
             if( $user = User::findOne(['email' => $email]) ) {
 
-                $user->is_active = 1;
-                $user->invite_hash = null;
+                if($user->invite_hash != null) {
 
-                $user->save(true, ['is_active', 'invite_hash']);
-                if( Yii::$app->user->id != null ){
+                    $user->is_active = 1;
+                    $user->invite_hash = null;
 
-                    Yii::$app->user->logout();
-                }
-                if($user->is_active == 0) {
+                    $user->save(true, ['is_active', 'invite_hash']);
+                    if( Yii::$app->user->id != null ){
 
+                        Yii::$app->user->logout();
+                    }
+                    if($user->is_active == 0) {
+
+                        Yii::$app->getSession()->setFlash('success',
+                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account."));
+                    }
+                    $model->email = $email;
+                    if ($model->loginNoActive()) {
+
+                        return $this->redirect(['ticket', 'id' => $id]);
+
+                    }
+                } else {
                     Yii::$app->getSession()->setFlash('success',
-                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account", false));
-                }
-                $model->email = $email;
-                if ($model->loginNoActive()) {
-
-                    return $this->redirect(['ticket', 'id' => $id]);
+                        Yii::t("app", "This link is expired. Please, log in."));
+                    return $this->redirect(["site/index"]);
 
                 }
+
             }
         }
     }
