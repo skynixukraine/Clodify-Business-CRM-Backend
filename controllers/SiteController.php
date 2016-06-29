@@ -103,41 +103,38 @@ class SiteController extends Controller
                             ':Email' => $model->getUser()->email
                         ])
                     ->one();
-                if ($modelUserLogins->role == User::ROLE_GUEST) {
+                if ($modelUserLogins->role == User::ROLE_GUEST ) {
+                    if($modelUserLogins->is_active == 1) {
+                        if ($model->loginNoActive()) {
 
-                    if ($model->loginNoActive()) {
+                            if (User::hasPermission([User::ROLE_GUEST])) {
 
-                        if (User::hasPermission([User::ROLE_GUEST])) {
-                            if($modelUserLogins->is_active == 1) {
+                                    if ($modelUserLogins->date_login == null && $user->is_active == 0) {
 
-                                if ($modelUserLogins->date_login == null && $user->is_active == 0) {
+                                        Yii::$app->getSession()->setFlash('success',
+                                            Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                                    }
+                                    $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                                    $modelUserLogins->save();
 
-                                    Yii::$app->getSession()->setFlash('success',
-                                        Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
-                                }
-                                $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                                $modelUserLogins->save();
+                                    if (($id = Yii::$app->request->get('id'))) {
 
-                                if (($id = Yii::$app->request->get('id'))) {
+                                        return $this->redirect(["support/ticket", 'id' => $id]);
+                                    } else {
 
-                                    return $this->redirect(["support/ticket", 'id' => $id]);
-                                } else {
-
-                                    /** @var $quest SupportTicket */
-                                    $ticket = SupportTicket::lastTicket($modelUserLogins->id);
-                                    //exit();
-                                    return $this->redirect(["support/ticket", 'id' => $ticket]);
-                                }
-
-
-                            } else {
-                                Yii::$app->getSession()->setFlash('success',
-                                    Yii::t("app", "Please, activate your account through a confirm email link."));
-                                return $this->redirect(["site/index"]);
+                                        /** @var $quest SupportTicket */
+                                        $ticket = SupportTicket::lastTicket($modelUserLogins->id);
+                                        //exit();
+                                        return $this->redirect(["support/ticket", 'id' => $ticket]);
+                                    }
                             }
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
                         }
-                        $modelUserLogins->date_login = date('Y-m-d H:i:s');
-                        $modelUserLogins->save();
+                    } else {
+                        Yii::$app->getSession()->setFlash('success',
+                            Yii::t("app", "Please, activate your account through a confirm email link."));
+                        return $this->redirect(["site/index"]);
                     }
                 } else {
 

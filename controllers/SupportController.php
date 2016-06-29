@@ -350,7 +350,7 @@ class SupportController extends Controller
 
                             return $this->redirect (['ticket', 'id' => $model->id]);
                         }
-                    
+
             } else {
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t("app", "Thank You, our team will review your request and get back to you soon! Please, activate your account through a confirm email link."));
