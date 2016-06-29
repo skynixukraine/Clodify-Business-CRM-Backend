@@ -536,7 +536,7 @@ class SupportController extends Controller
 
                     Yii::$app->user->logout();
                 }
-                if($user->is_active == 0){
+                if($user->is_active == 0) {
 
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t("app", "Welcome to Skynix, you have successfully activated your account", false));
