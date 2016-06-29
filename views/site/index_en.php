@@ -20,7 +20,7 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
-                        <h1 class="en">ABOUT SKYNIX</h1>
+                        <h1 class="en my-upper">about skynix</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
                         Skynix is a company that believes in making distinctive, lasting and substantial improvements
@@ -41,7 +41,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 <section class="container" id="working_fields">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <h2>WE OPERATE IN THE FOLLOWING AREAS:</h2>
+            <h2 class = "my-upper">we operate in the following areas:</h2>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-6 web-network">
             <div>Corporate<br>Websites</div>
@@ -70,8 +70,8 @@ $this->title = 'Welcome to the Skynix - software development company';
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <h3>
-                <span class="brand-name">SKYNIX</span> strives to enrich and challenge your life with the
-                <span class="brand-name">BEST</span> of <span class="brand-name">TECHNOLOGY</span>.<br>
+                <span class="brand-name my-upper">skynix</span> strives to enrich and challenge your life with the
+                <span class="brand-name my-upper">best</span> of <span class="brand-name my-upper">technology</span>.<br>
             </h3>
         </div>
         <div class="col-lg-12 col-xs-12 technology-txt">
@@ -81,9 +81,9 @@ $this->title = 'Welcome to the Skynix - software development company';
     <div class="row scheme">
         <div class="col-lg-12 col-xs-12 ">
             <div class="backend">
-                <strong>BACKEND DEVELOPMENT</strong><br>
+                <strong class="my-upper">backend development</strong><br>
                 <ul>
-                    <li>PHP5</li>
+                    <li class="my-upper">php5</li>
                     <li>Yii Framework 2</li>
                     <li>Zend Framework 2</li>
                     <li>Magento 1</li>
@@ -103,10 +103,10 @@ $this->title = 'Welcome to the Skynix - software development company';
                 </div>
             </div>
             <div class="frontend">
-                <strong>FRONTEND DEVELOPMENT</strong><br>
+                <strong class="my-upper">frontend development</strong><br>
                 <ul>
-                    <li>HTML5</li>
-                    <li>CSS3</li>
+                    <li class="my-upper">html5</li>
+                    <li class="my-upper">css3</li>
                     <li>jQuery</li>
                     <li>Sencha ExtJS</li>
                     <li>AngularJS</li>
@@ -123,7 +123,7 @@ $this->title = 'Welcome to the Skynix - software development company';
         <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
             <div class="line"></div>
         </div>
-        <div class="col-lg-6 col-sm-8 col-xs-10 portfolio-header"><h2>PROJECTS WE HAVE DONE</h2></div>
+        <div class="col-lg-6 col-sm-8 col-xs-10 portfolio-header"><h2 class="my-upper">projects we have done</h2></div>
         <div class="col-lg-3 col-sm-2 col-xs-1 portfolio-header">
             <div class="line"></div>
         </div>
@@ -137,8 +137,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Extension <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Magento 2.x Extension <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
 
                 <div class="col-lg-6 col-sm-12">
@@ -175,8 +175,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Marketplace Theme <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Magento 2.x Marketplace Theme <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The Handmade theme is designed for a Magento 2 Marketplace extension.
@@ -213,8 +213,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 1.x Extension <strong class="padding-l-30">CLIENT: </strong>After Eden</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Magento 1.x Extension <strong class="padding-l-30 my-upper">client: </strong>After Eden</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The Sizes Table Magento 1.9 extension lets customers easily select a
@@ -240,8 +240,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Magento 2.x Theme <strong class="padding-l-30">CLIENT: </strong>Skynix Solutions</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Magento 2.x Theme <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The Skynix Solutions theme is designed for a Magento 2 platform.
@@ -268,8 +268,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong> Wordpress Theme <strong class="padding-l-30">CLIENT: </strong> Web Mission Control Inc.</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong> Wordpress Theme <strong class="padding-l-30 my-upper">client: </strong> Web Mission Control Inc.</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The Infinite Beginnings Wordpress theme is compatible with all
@@ -309,8 +309,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Mobile App: iOS & Android <strong class="padding-l-30">CLIENT: </strong>Fisherman UK ltd.</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Mobile App: iOS & Android <strong class="padding-l-30 my-upper">client: </strong>Fisherman UK ltd.</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The mobile application is intended to help for specific groups of
@@ -346,8 +346,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>CMS & Web <strong class="padding-l-30">CLIENT: </strong>Citrix Systems</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>CMS & Web <strong class="padding-l-30 my-upper">client: </strong>Citrix Systems</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>This informational announcement site for events at Citrix is
@@ -374,8 +374,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong class="padding-l-30">CLIENT: </strong>Castles Estate Agents ltd.</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">client: </strong>Castles Estate Agents ltd.</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The website is a wordpress + custom plugin that provide a catalog
@@ -403,8 +403,8 @@ $this->title = 'Welcome to the Skynix - software development company';
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong>CATEGORY: </strong>Wordpress Plugin <strong class="padding-l-30">CLIENT: </strong>UOU ltd.</p>
-                    <p><strong>DESCRIPTION: </strong></p><br>
+                    <p><strong class="my-upper">category: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">client: </strong>UOU ltd.</p>
+                    <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <p>The website is a wordpress + custom plugin that helps people to
@@ -439,7 +439,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                             <h3>Do you need to get a quote of your project or idea?</h3>
                         </div>
                         <div class="col-lg-4 col-md-12">
-                            <a href="<?=Url::to(["site/contact"])?>" class="en-btn">REQUEST A QUOTE</a>
+                            <a href="<?=Url::to(["site/contact"])?>" class="en-btn my-upper">request a quote</a>
                         </div>
                     </div>
                 </div>
@@ -595,7 +595,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <textarea rows="8" cols="45" name="description" placeholder="project description..." required></textarea>
 
                     <label class="file_upload">
-                        <span class="button">UPLOAD FILE</span>
+                        <span class="button my-upper">upload file</span>
                        <input type="file" id="file" name="file">
                     </label>
                     <p class="message"></p>
@@ -625,11 +625,11 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 </div>
                 <div class = "col-lg-2 col-sm-2 col-xs-4">
-                    <button class="btn btn-link back"><strong>&lt; BACK</strong></button>
+                    <button class="btn btn-link back"><strong class="my-upper">&lt; back</strong></button>
                 </div>
                 <div class = "col-lg-10 col-sm-10 col-xs-8">
-                    <button class="btn btn-primary next">NEXT</button>
-                    <button class="btn btn-primary quotes">GET MY QUOTES</button>
+                    <button class="btn btn-primary next my-upper">next</button>
+                    <button class="btn btn-primary quotes my-upper">get my quotes</button>
                 </div>
             </div>
 
@@ -639,7 +639,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
         <div class="answer-ajax">
             <p>Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes</p>
-            <button class="btn btn btn-primary close-popap close">CLOSE</button>
+            <button class="btn btn btn-primary close-popap close my-upper">close</button>
 
         </div>
     </div>
@@ -664,11 +664,11 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <div>
                             <a class="prev" href="javascript:void(0);">
 
-                                <div class="hidden768">
-                                    PREV<br>PROJECT
+                                <div class="hidden768 my-upper">
+                                    prev<br>project
                                 </div>
-                                <div class="visible768">
-                                    PREV PROJECT
+                                <div class="visible768 my-upper">
+                                    prev project
                                 </div>
 
                             </a>
@@ -683,11 +683,11 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <div>
                             <a class="next" href="javascript:void(0);">
 
-                                <div class="hidden768">
-                                    NEXT<br>PROJECT
+                                <div class="hidden768 my-upper">
+                                    next<br>project
                                 </div>
-                                <div class="visible768">
-                                    NEXT PROJECT
+                                <div class="visible768 my-upper">
+                                    next project
                                 </div>
 
                             </a>
@@ -702,7 +702,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 </div>
                 <div class="col-lg-12">
-                    <a href="#" class="btn read-more" target = "_blank" rel="nofollow">VISIT WEBSITE</a>
+                    <a href="#" class="btn read-more my-upper" target = "_blank" rel="nofollow">visit website</a>
                 </div>
 
             </div>
