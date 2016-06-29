@@ -310,45 +310,50 @@ class SupportController extends Controller
                         return $this->redirect('submit-request');
                     }
                 }
+            if($userticket->is_active == 1){
+                if(!Yii::$app->user->isGuest || ($userticket != null && $userticket->is_delete == 0)){
 
-            if(!Yii::$app->user->isGuest || ($userticket != null && $userticket->is_delete == 0)){
+                    if(Yii::$app->user->id == null) {
+                        $login = new LoginForm();
+                        $login->email = $model->email;
+                        $login->loginNoActive();
+                    }
+                    // user is not a guest
+                    $model->status = SupportTicket::STATUS_NEW;
+                    $model->is_private = 1;
+                    $model->date_added = date('Y-m-d H:i:s');
+                    $model->client_id = Yii::$app->user->id;
 
-                if(Yii::$app->user->id == null) {
-                    $login = new LoginForm();
-                    $login->email = $model->email;
-                    $login->loginNoActive();
+                    if ($model->validate()) {
+
+                        $model->save();
+
+                        Yii::$app->mailer->compose("ticket", [
+                            "id"        =>  $model->id
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo(Yii::$app->params['adminEmail'])
+                            ->setSubject('New ticket #' . $model->id)
+                            ->send();
+                        $user = User::findOne($model->client_id);
+                        Yii::$app->mailer->compose("newTicket", [
+                            "active"    => $user->is_active,
+                            "email"     => $user->email,
+                            "id"        =>  $model->id
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo(User::findOne($model->client_id)->email)
+                            ->setSubject('Your Skynix ticket# ' . $model->id)
+                            ->send();
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
+
+                        return $this->redirect (['ticket', 'id' => $model->id]);
+                    }
                 }
-                // user is not a guest
-                $model->status = SupportTicket::STATUS_NEW;
-                $model->is_private = 1;
-                $model->date_added = date('Y-m-d H:i:s');
-                $model->client_id = Yii::$app->user->id;
-
-                if ($model->validate()) {
-
-                    $model->save();
-
-                    Yii::$app->mailer->compose("ticket", [
-                        "id"        =>  $model->id
-                    ])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(Yii::$app->params['adminEmail'])
-                        ->setSubject('New ticket #' . $model->id)
-                        ->send();
-                    $user = User::findOne($model->client_id);
-                    Yii::$app->mailer->compose("newTicket", [
-                        "active"    => $user->is_active,
-                        "email"     => $user->email,
-                        "id"        =>  $model->id
-                    ])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo(User::findOne($model->client_id)->email)
-                        ->setSubject('Your Skynix ticket# ' . $model->id)
-                        ->send();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
-
-                    return $this->redirect (['ticket', 'id' => $model->id]);
-                }
+            }else{
+                Yii::$app->getSession()->setFlash('success',
+                    Yii::t("app", "Thank You, our team will review your request and get back to you soon! Please, activate your account through a confirm email link."));
+                return $this->redirect(["site/index"]);
             }
         }
     }
