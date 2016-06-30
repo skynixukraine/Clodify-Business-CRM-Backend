@@ -90,6 +90,90 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="shadow-bottom"></div>
                 <button class="btn read-more">READ MORE &gt; &gt;</button>
             </article>
+            <article >
+                <div class="txt">
+                    <h3>YOU ARE WELCOME TO OBTAIN A MAGENTO & PHP DEVELOPER POSITION.</h3>
+                    <p>
+                        In this role you will work with CMS Magento and Magento 2.
+
+                    </p>
+
+                    <h3>REQUIREMENTS TO A CANDIDATE:</h3>
+                    <ul>
+                        <li>Higher education;</li>
+                        <li>Basic knowledge of English;</li>
+                        <li>Good knowledge of the PHP language;</li>
+                        <li>Knowledge of OOP principles and patterns;</li>
+                        <li>Basic knowledge of database modeling (ER diagrams and SQL);</li>
+                        <li>Basic knowledge of Magento 1.x and/or Magento 2.x architectures;</li>
+                        <li>Creative and analytical thinking.</li>
+                    </ul>
+
+                    <h3>JOB RESPONSIBILITIES:</h3>
+                    <ul>
+                        <li>Team working;</li>
+                        <li>Task analysis and evaluation;</li>
+                        <li>Tasks implementation (mainly Magento extensions development);</li>
+                        <li>Working with project management system Jira Agile.</li>
+                    </ul>
+
+                    <h3>WILL BE A PLUS:</h3>
+                    <ul>
+                        <li>Magento Developer Certificate;</li>
+                        <li>Knowledge of Magento 2.x;</li>
+                        <li>Knowledge of HTML/CSS /Javascript;</li>
+                        <li>Spoken English;</li>
+                        <li>SCRUM skills;</li>
+                        <li>Work experience as a web developer.</li>
+                    </ul>
+
+                </div>
+                <div class="shadow-bottom"></div>
+                <button class="btn read-more">READ MORE &gt; &gt;</button>
+            </article>
+
+            <article >
+                <div class="txt">
+                    <h3>YOU ARE WELCOME TO OBTAIN A BACKEND PHP DEVELOPER POSITION.</h3>
+                    <p>
+                        In this role you will work with a variety of projects.
+                    </p>
+
+                    <h3>REQUIREMENTS TO A CANDIDATE:</h3>
+                    <ul>
+                        <li>Higher education;</li>
+                        <li>Basic knowledge of English;</li>
+                        <li>Good knowledge of the PHP language;</li>
+                        <li>Knowledge of OOP principles and patterns;</li>
+                        <li>Basic knowledge of database modeling (ER diagrams and SQL);</li>
+                        <li>Creative and analytical thinking.</li>
+
+                    </ul>
+
+                    <h3>JOB RESPONSIBILITIES:</h3>
+                    <ul>
+                        <li>Team working;</li>
+                        <li>Task analysis and evaluation;</li>
+                        <li>Tasks implementation (work with databases, API and PHP frameworks);</li>
+                        <li>Working with project management system Jira Software.</li>
+                    </ul>
+
+                    <h3>WILL BE A PLUS:</h3>
+                    <ul>
+                        <li>Knowledge of Yii Framework;</li>
+                        <li>Knowledge of Zend Framework;</li>
+                        <li>Knowledge of Wordpress;</li>
+                        <li>Knowledge of other PHP frameworks;</li>
+                        <li>Knowledge of HTML/CSS /Javascript;</li>
+                        <li>Spoken English;</li>
+                        <li>SCRUM skills;</li>
+                        <li>Work experience as a web developer.</li>
+                    </ul>
+
+                </div>
+                <div class="shadow-bottom"></div>
+                <button class="btn read-more">READ MORE &gt; &gt;</button>
+            </article>
 
 
         </div>

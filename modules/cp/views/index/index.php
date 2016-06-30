@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/ajaxReportPage.js');
 $this->title                    = Yii::t("app", "My Report");
 $this->params['breadcrumbs'][]  = $this->title;
 
@@ -23,9 +23,10 @@ $this->params['menu'] = [
 
 ];
 ?>
-<?php $form = ActiveForm::begin(['options' => [
-                                                'class' => 'horizontal'
-                                            ]]);
+<?php $form = ActiveForm::begin([
+                'options' => [
+                                'class' => 'horizontal'
+                                ]]);
 /** @var $model Report */?>
     <?php echo $form->field( $model, 'dateFilter', [
 
@@ -45,48 +46,36 @@ $this->params['menu'] = [
             'display' => 'none'
         ]
     ]);?>
-
-
     <?php if($model->dateFilter == 1):?>
         <label style="visibility: hidden"></label>
     <?php else:?>
         <label>Your reports from <?php echo $model->dateStartReport?> to <?php echo $model->dateEndReport?></label>
     <?php endif;?>
+
 <?php ActiveForm::end();?>
 
-<!--<label>Reports</label>-->
 <div class = "box">
     <div class = "box-body no-padding">
-        <table class = "table load">
-            <!--<thead>
-            <tr>
-                <th>ID</th>
-                <th>Project</th>
-                <th>Task</th>
-                <th>Hours</th>
-                <th>Date Report</th>
-                <th>Actions</th>
-            </tr>
-            </thead>-->
+        <table class = "table load load-table">
+
             <?php $reports = Report::getReports(Yii::$app->user->id, $model->dateFilter);
             /** @var  $report Report */
             foreach($reports->each() as $report):?>
             <tbody>
             <tr>
-                <td><?= Html::encode($report->id)?></td>
+                <td class = "report-id"><?= Html::encode($report->id)?></td>
                 <td><?= Html::encode($report->getProject()->one()->name)?></td>
-                <td  style="white-space: normal; word-break: break-all;"><?= Html::encode($report->task)?></td>               
-                <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
                 <td><?= Html::encode($report->date_report)?></td>
+                <td><?= Html::encode($report->task)?></td>
+                <td class="hour"><?= Html::encode(round($report->hours, 2))?></td>
                 <td>
                     <?php if($report->invoice_id == null):?>
-                       <i class="fa fa-edit edit" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Edit"></i>                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
                     <?php if($report->invoice_id != null):?>
-                       <i class="fa fa-edit edit" style="cursor: pointer; visibility: hidden" data-toggle="tooltip" data-placement="top" title="Edit"></i>
-                       <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                        <i class="fa fa-times delete" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="Delete"></i>
                     <?php endif;?>
-               </td>
+                </td>
             </tr>
             </tbody>
             <?php endforeach;?>
@@ -98,14 +87,12 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-6">
         </div>
-        <div class="col-lg-6">
-            <label id="totalHours"></label>
+        <div class="col-lg-6 text-right">
+            <label id="totalHours" class = "text-right col-xs-12"></label>
         </div>
     </div>
 
 </div>
-
-<!--<h4 class = "box-title" style="text-align: center">NEW REPORT</h4>-->
 
 <?php $form = ActiveForm::begin();
 /** @var $model Report */?>
@@ -136,39 +123,36 @@ $this->params['menu'] = [
                                     'type'=>'text', 'id'=>"date_report"]);?>
             </div>
 
-            <div class="col-xs-5  col-sm-6 col-md-6 field-task">
+            <div class="col-xs-5  col-sm-6 col-md-7 field-task">
                 <?php echo $form->field( $model, 'task', [
 
-                        'options' => [
+                        'options' => []
 
-                    ]
                 ])->textInput([
-                    'pattern' => '^(\S+\s{0,1})+$'
+                    /*'pattern' => '^(\S+\s{0,1})+$',*/ /*'maxlength'=>'500', 'size' => '500'*/
                 ])->label( 'Text field with task description' );?>
             </div>
 
             <div class="col-xs-1 " >
                 <?php echo $form->field( $model, 'hours', [
 
-                        'options' => [
+                        'options' => []
 
-                        ]
                 ])->textInput();?>
             </div>
-            <div class="col-xs-12 col-md-1" style="top: 24px; padding-left: 0px;">
-                <button type = "submit" class = "btn btn-primary"><?= Yii::t('app', 'Submit')?></button>
-            </div>
+            
         </div>
     </div>
 <?php ActiveForm::end();?>
 <script>
     $(function(){
+
         reportModule.init({
-            deleteUrl: '<?=Url::toRoute(['index/delete'])?>',
-            saveUrl: '<?=Url::to(['index/save'])?>',
-            indexUrl: '<?=Url::to(['index/index'])?>'
-        })
-        // ajaxReportPageModule.init();
+            deleteUrl:  '<?=Url::toRoute(['index/delete'])?>',
+            saveUrl:    '<?=Url::to(['index/save'])?>',
+            indexUrl:   '<?=Url::to(['index/index'])?>'
+        });
+        ajaxReportPageModule.init();
 
 })
 </script> 

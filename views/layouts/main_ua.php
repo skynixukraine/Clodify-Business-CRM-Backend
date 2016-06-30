@@ -57,10 +57,10 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'КОНТАКТИ', 'url' => ['site/contact']],
-            ['label' => 'КАР\'ЄРА', 'url' => ['site/career']],
-            ['label' => 'МАГАЗИН РІШЕНЬ', 'url' => 'https://ua.skynix.solutions'],
-            ['label' => 'БЛОГ', 'url' => '/blog'],
+            ['label' => 'контакти', 'url' => ['site/contact']],
+            ['label' => 'кар'єра', 'url' => ['site/career']],
+            ['label' => 'магазин рішень', 'url' => 'https://ua.skynix.solutions'],
+            ['label' => 'блог', 'url' => '/blog'],
 
         ],
     ]);
@@ -106,17 +106,21 @@ AppAsset::register($this);
         <div class="col-lg-2 col-xs-2 link">
             <?php
             if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
-                <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>">cp</a>
-                <a href="<?=Url::to(['site/logout'])?>">вийти</a>
+                <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>" rel="nofollow">cp</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
                 <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
-                <a href="<?=Url::to(['site/logout'])?>">вийти</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
+            <?php endif;?>
+            <?php
+            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_GUEST])):?>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id ==null ):?>
-                <a href="<?=Url::to(['site/login'])?>">увійти</a>
+                <a href="<?=Url::to(['site/login'])?>" rel="nofollow">увійти</a>
 
             <?php endif;?>
 
