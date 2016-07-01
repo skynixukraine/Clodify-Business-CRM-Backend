@@ -63,6 +63,23 @@
 .datepicker td.day.disabled {
   color: #eeeeee;
 }
+
+.datepicker td.day.today:not(.active){
+  background-color: #FDD99A;
+  background-image: -moz-linear-gradient(top, #FDD99A, #FDF49A);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FDD99A), to(#FDF49A));
+  background-image: -webkit-linear-gradient(top, #FDD99A, #FDF49A);
+  background-image: -o-linear-gradient(top, #FDD99A, #FDF49A);
+  background-image: linear-gradient(to bottom, #FDD99A, #FDF49A);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FDD99A', endColorstr='#FDF49A', GradientType=0);
+ /* border-color: #FDF49A #FDF49A #FDD99A;*/
+  *background-color: #FDF49A;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #342E1F;
+  text-shadow: 0 -1px 0 rgba(100, 100, 100, 0.25);
+}
 .datepicker td.old,
 .datepicker td.new {
   color: #999999;

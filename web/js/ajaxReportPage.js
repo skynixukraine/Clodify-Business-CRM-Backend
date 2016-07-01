@@ -65,8 +65,10 @@ var ajaxReportPageModule = (function() {
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy',
                                     defaultViewDate: currentDay,
-                                    endDate: currentDay
+                                    endDate: currentDay,
+                                    todayHighlight: true
                                 }).datepicker("setDate", thisValue);
+                                console.log('date');
                                 break
                                 //////Changing task cell
                             case 3:
@@ -119,11 +121,14 @@ var ajaxReportPageModule = (function() {
                             }
                             ///////When count = 4 (all inputs in create-report form filled), send ajax
                             if (count == 4) {
+
                                 report = JSON.stringify(dataArr);
+                                console.log(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -219,7 +224,9 @@ var ajaxReportPageModule = (function() {
                 }
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
+
                     dataArr.task = reportTask;
+                    console.log(dataArr.task);
                 } else {
                     dataArr.task = "";
                 }
@@ -267,10 +274,11 @@ var ajaxReportPageModule = (function() {
                         })
                         if (count == 5) {
                             report = JSON.stringify(dataArr);
+                            console.log(escape(report));
                             $.ajax({
                                 type: "POST",
                                 url: "index",
-                                data: 'jsonData=' + report,
+                                data: 'jsonData=' + encodeURIComponent(report),
                                 dataType: 'json',
                                 success: function(data) {
                                     if (data.success) {
@@ -352,7 +360,7 @@ var ajaxReportPageModule = (function() {
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -403,7 +411,7 @@ var ajaxReportPageModule = (function() {
                     $.ajax({
                         type: "POST",
                         url: "/cp/index/delete",
-                        data: 'jsonData=' + report,
+                        data: 'jsonData=' + escape(report),
                         dataType: 'json',
                         success: function(data) {
                             if (data.success) {
