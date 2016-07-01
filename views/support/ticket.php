@@ -190,9 +190,9 @@ use app\models\SupportTicket;
             url: 'develop',
             data: 'query=' + id + '&ticket=' + <?php echo $model->id?>,
             dataType: 'json',
-            beforeSend: function(){
-            },
+
             success: function(response) {
+                location.reload();
                 $('#butt').text('Status: ASSIGNED');
                     return response;
             }
