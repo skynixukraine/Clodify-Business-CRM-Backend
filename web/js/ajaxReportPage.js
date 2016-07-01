@@ -65,8 +65,10 @@ var ajaxReportPageModule = (function() {
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy',
                                     defaultViewDate: currentDay,
-                                    endDate: currentDay
+                                    endDate: currentDay,
+                                    todayHighlight: true
                                 }).datepicker("setDate", thisValue);
+                                console.log('date');
                                 break
                                 //////Changing task cell
                             case 3:
@@ -222,7 +224,7 @@ var ajaxReportPageModule = (function() {
                 }
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
-                    
+
                     dataArr.task = reportTask;
                     console.log(dataArr.task);
                 } else {

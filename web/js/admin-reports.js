@@ -79,7 +79,8 @@ var adminReportModule = (function() {
             filterDateStartSelect = $( filterDateStartSelect );
             filterDateStartSelect.datepicker({
                 format : 'dd/mm/yyyy',
-                autoclose: true
+                autoclose: true,
+                todayHighlight: true
             }).on("hide", function( event ){
                 var startDate = filterDateStartSelect.val();
                 dataFilter['date_start'] = startDate;
@@ -91,7 +92,8 @@ var adminReportModule = (function() {
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
                 format : 'dd/mm/yyyy',
-                autoclose: true
+                autoclose: true,
+                todayHighlight: true
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['date_end'] = endDate;
