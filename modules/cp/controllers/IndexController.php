@@ -98,6 +98,12 @@ class IndexController extends DefaultController
               Yii::$app->request->isPost &&
               ( $data = json_decode($_POST['jsonData']) ) ) ) {
 
+
+                return json_encode([
+                    "success" => false,
+                    "errors" => [ "message" => "Dato dont read"]
+                ]);
+
             if(isset($data->id)) {
 
                 $model = Report::findOne( $data->id );
