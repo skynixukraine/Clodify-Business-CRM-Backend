@@ -23,11 +23,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <h1 class="en my-upper">about skynix</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
-                        Skynix is a company that believes in making distinctive, lasting and substantial improvements
-                        in IT World. We have only one goal in mind - to develop, excite and foster changes through our
-                        solutions. Our professional team always takes into account the wishes and opinions of customers
-                        and leverage on latest technology practices to deliver high quality and <span>cost-effective
-                        solutions.</span>
+                        Skynix is a company that believes in making distinctive, lasting and substantial improvements in IT World. The only goal is to develop, excite and foster changes through new solutions. Our professional team always takes into account the wishes and opinions of customers and leverage on latest software development practices to deliver high quality and cost-effective solutions.</span>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt2">
                         Our company develops innovative businesses software solutions that work.
@@ -70,12 +66,11 @@ $this->title = 'Welcome to the Skynix - software development company';
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <h3>
-                <span class="brand-name my-upper">skynix</span> strives to enrich and challenge your life with the
-                <span class="brand-name my-upper">best</span> of <span class="brand-name my-upper">technology</span>.<br>
+            If you strive to enrich your life with the <span class="brand-name my-upper">best</span>of <span class="brand-name my-upper">technology, skynix ukraine</span> is the <span class="brand-name my-upper">№1</span> choice.<br>
             </h3>
         </div>
         <div class="col-lg-12 col-xs-12 technology-txt">
-            We support a range of programming languages and some of our everyday programming languages  are:
+            We support a range of programming languages, and some that we use everyday are:
         </div>
     </div>
     <div class="row scheme">
