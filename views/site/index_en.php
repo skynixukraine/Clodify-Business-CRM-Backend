@@ -66,7 +66,7 @@ $this->title = 'Welcome to the Skynix - software development company';
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <h3>
-            If you strive to enrich your life with the <span class="brand-name my-upper">best</span>of <span class="brand-name my-upper">technology, skynix ukraine</span> is the <span class="brand-name my-upper">№1</span> choice.<br>
+            If you strive to enrich your life with the <span class="brand-name my-upper">best</span>of <span class="brand-name my-upper">technology, skynix ukraine</span> is the <span class="brand-name my-upper">№1 choice.</span><br>
             </h3>
         </div>
         <div class="col-lg-12 col-xs-12 technology-txt">
