@@ -258,7 +258,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function hasPermission($roles)
     {
 
+        if(isset(Yii::$app->user->identity->role)){
+
         $role = Yii::$app->user->identity->role;
+    } else {
+            return false;
+        }
 
         if (in_array($role, $roles)) {
 

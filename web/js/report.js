@@ -37,6 +37,7 @@ var reportModule = (function(){
                 format : 'dd/mm/yyyy',
                 autoclose: true,
                 defaultViewDate: currentDay,
+                todayHighlight: true,
                 endDate : currentDay
             }).datepicker("setDate", currentDay);
 

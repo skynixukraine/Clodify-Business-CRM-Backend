@@ -170,4 +170,10 @@
     .form-add-report>div:nth-child(4) {
         width: 19%;
     }
+    .load-table tbody tr td:nth-child(4) {
+        width: 25%;
+    }
+    .load-table tbody tr td:nth-child(5) {
+        width: 6%;
+    }
 }

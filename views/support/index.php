@@ -17,14 +17,6 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
 <?php $form = ActiveForm::begin()?>
 <header>
     <h1>Skynix Support</h1>
-   <!-- <nav class ="center_nav">
-        <ul class="nav nav-pills" >
-            <li>
-                <a href="#"><h3>вернуться на главную страницу</h3></a>
-            </li>
-
-        </ul>
-    </nav>-->
 </header>
 <?php /*var_dump(SupportTicket::supportSearch());exit();*/?>
 <div class="container-fluid">
@@ -39,7 +31,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             'type'=>'text',
 
                         ]
-                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text'))->label( false );?>
+                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus'))->label( false );?>
 
                 </div><br>
                 <table id="table-result">
@@ -64,13 +56,19 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
         var thisSup = $(this);
         var saveButton = $('.off-button');
         if(thisSup.val() == ""){
-           // saveButton.removeAttr('disabled').css('background', '#337ab7');
+
         }
     });
+    $(document).keydown(function(e){
+        if (e.keyCode == 9 ) {
 
+            return false;
+        }
+    });
         var input = '#supportticket-subject';
-        //console.log($(input).val());
         $("input").on('change keydown paste input', function (event) {
+
+            var saveButton = $('.off-button');
                 $.ajax({
                     type: "GET",
                     url: '',
@@ -79,17 +77,25 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     beforeSend: function () {
                     },
                     success: function (response) {
-
                         var subjects = '';
                         if (response.error) {
-                            var saveButton = $('.off-button');
+                            $(document).keydown(function(e){
+                                console.log(e.keyCode);
+                                saveButton.attr('href', '/support/submit-request');
+                                if (e.keyCode == 9 ) {
+                                    return false;
+                                }
+                                if (e.keyCode == 13 ) {
+//                                    saveButton.attr('href', '/support/submit-request');
+                                    window.location.pathname = '/support/submit-request';
+                                }
+                            });
                             saveButton.removeAttr('disabled').css('background', '#337ab7');
-                            saveButton.attr('href', '/support/submit-request');
                             $('#table-result').html('');
                             return;
                         }
                         $.each(response, function (e, i) {
-                            subjects += '<p><a href="support/ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
+                            subjects += '<p><a href="ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
 
                         });
                         $('#table-result').html(subjects).prepend('<span>Are you looking for the following subject?</span>');
@@ -97,11 +103,10 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                     },
                     error: function (response) {
                         var saveButton = $('.off-button');
-                        saveButton.removeAttr('disabled').css('background', '#337ab7');
+                        //saveButton.removeAttr('disabled').css('background', '#337ab7');
+                        saveButton.attr('disabled', 'disabled');
                         console.log('error');
                     }
                 });
             });
-
-
 </script>

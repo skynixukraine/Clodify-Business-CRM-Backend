@@ -60,7 +60,6 @@ class IndexController extends DefaultController
             ],
         ];
     }
-
     /** Testing email */
     public function actionTest()
     {
@@ -72,7 +71,6 @@ class IndexController extends DefaultController
             ->send();
         Yii::$app->end();
     }
-
     public function actionIndex()
     {
         $model = new Report();
@@ -97,17 +95,19 @@ class IndexController extends DefaultController
         }
 
         if( ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost &&
-              ( $data = json_decode($_POST['jsonData']) ) ) ) {
+              Yii::$app->request->isPost ) ) {
+            if ($data = json_decode($_POST['jsonData'])) {
 
-            $oldhours = 0;
-            if(isset($data->id)) {
+            if (isset($data->id)) {
 
-                $model = Report::findOne( $data->id );
+                $model = Report::findOne($data->id);
                 $oldhours = $model->hours;
 
+            } else {
+
+                $oldhours = 0;
             }
-            if($data->project_id != null) {
+            if ($data->project_id != null) {
 
                 $model->project_id = $data->project_id;
                 $model->date_report = DateUtil::convertData($data->date_report);
@@ -122,17 +122,39 @@ class IndexController extends DefaultController
                 if ($date_end == null || $model->date_report == null ||
                     DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
                 ) {
+                    if ($model->hours < 0.1) {
 
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                        ]);
+                    }
+                    if (strlen(trim($model->task)) <= 20) {
+
+                        return json_encode([
+                            "success" => false,
+                            "id" => $model->id,
+                            "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
+                        ]);
+                    }
                     if ($model->validate()) {
-
-                        if ($totalHoursOfThisDay - $oldhours + $data->hours <= 12) {
-
+                        if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
-                                return json_encode([
-                                    "success" => true,
-                                    "id" => $model->id
-                                ]);
+                                if ($model->hours >= 0.1) {
+                                    return json_encode([
+                                        "success" => true,
+                                        "id" => $model->id
+                                    ]);
+                                }
+                                if (trim(strlen($model->task)) > 20) {
+                                    return json_encode([
+                                        "success" => true,
+                                        "id" => $model->id
+                                    ]);
+                                }
+
                             } else {
                                 return json_encode([
                                     "success" => false,
@@ -165,7 +187,7 @@ class IndexController extends DefaultController
                     ]);
                 }
 
-            }  else {
+            } else {
 
                 return json_encode([
                     "success" => false,
@@ -173,10 +195,15 @@ class IndexController extends DefaultController
                     "errors" => ["field" => 'project_id', "message" => "Please choose a project"]
                 ]);
             }
-        }
+        } else {
+                return json_encode([
+                    "success" => false,
+                    "errors" => ["message" => "can not read data"]
+                ]);
+            }
+    }
         return $this->render('index', ['model' => $model]);
     }
-
     /** Delete developer`s report */
     public function actionDelete()    {
 
@@ -212,10 +239,8 @@ class IndexController extends DefaultController
                     "errors"  => [ "field" =>  $model->id, "message" => "You can't delete this report as invoice has been generated" ]
                 ]);
             }
-
         }
     }
-
     /** Add new report */
     public function actionSave()
     {
@@ -254,7 +279,7 @@ class IndexController extends DefaultController
                         ]);
                     }
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add this report.
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You can not add  this report.
                                                                             Maximum total hours is 12"));
                     return $this->redirect(['index']);
                 }

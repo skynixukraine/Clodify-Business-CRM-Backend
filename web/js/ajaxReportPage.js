@@ -65,8 +65,10 @@ var ajaxReportPageModule = (function() {
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy',
                                     defaultViewDate: currentDay,
-                                    endDate: currentDay
+                                    endDate: currentDay,
+                                    todayHighlight: true
                                 }).datepicker("setDate", thisValue);
+                                console.log('date');
                                 break
                                 //////Changing task cell
                             case 3:
@@ -77,7 +79,15 @@ var ajaxReportPageModule = (function() {
                             case 4:
                                 thisTd.empty();
                                 var time = +thisValue;
-                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time.toFixed(2) + '">')
+                                time = time.toFixed(2);
+                                //  var timeString = time.toString();
+                                //  var timeArr = timeString.split('.');
+                                //  if(timeArr[1] > 59){
+                                //  timeArr[1] = timeArr[1]%60;
+                                //  timeArr[0] = (timeArr[1]/60).toFixed(0);
+                                // }
+                                // time = timeArr.join('.');
+                                thisTd.append('<input class="form-control report-hour" type = "text" value = "' + time + '">')
                                 break
                         }
                     })
@@ -92,7 +102,7 @@ var ajaxReportPageModule = (function() {
                     ///////Remove error messages,from under input
                     thisInput.click(function() {
                         $('.ajax-error').remove();
-                    })
+                    });
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
                     thisInput.change(function() {
@@ -102,20 +112,23 @@ var ajaxReportPageModule = (function() {
                         saveDataInObject();
                         $.each(dataArr, function(i) {
                             if (i == "project_id") {
-                                if (dataArr.project_id.length == 0) {
-                                    count++;
-                                }
+                                // if (dataArr.project_id.length == 0) {
+                                //     count++;
+                                // }
                             }
                             if (dataArr[i].length > 0) {
                                 count++;
                             }
                             ///////When count = 4 (all inputs in create-report form filled), send ajax
                             if (count == 4) {
+
                                 report = JSON.stringify(dataArr);
+                                console.log(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -141,6 +154,35 @@ var ajaxReportPageModule = (function() {
                                         ajaxSuccessFunc(errorMsg, data);
                                     }
                                 })
+                            } else {
+                                var closerInput = thisInput.closest('.row').find('input, select');
+                                console.log(closerInput);
+                                $.each(closerInput, function() {
+                                    var thisCloserInput = $(this);
+                                    console.log(thisCloserInput.attr('id'));
+                                    if (thisCloserInput.attr('id') == "report-project_id" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            thisCloserInput.closest('div').removeClass("has-error")
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+
+                                    }
+                                    if (thisCloserInput.attr('id') == "report-task" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            thisCloserInput.closest('div').removeClass("has-error")
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+
+                                    }
+                                    if (thisCloserInput.attr('id') == "report-hours" && thisCloserInput.val() == "") {
+                                        if (thisCloserInput.closest('div').hasClass("has-error")) {
+                                            thisCloserInput.closest('div').removeClass("has-error")
+                                        }
+                                        thisCloserInput.closest('div').addClass("has-error");
+
+                                    }
+                                })
+
                             }
                         })
                     })
@@ -182,7 +224,9 @@ var ajaxReportPageModule = (function() {
                 }
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
+
                     dataArr.task = reportTask;
+                    console.log(dataArr.task);
                 } else {
                     dataArr.task = "";
                 }
@@ -216,9 +260,9 @@ var ajaxReportPageModule = (function() {
                 tableLoadRow.each(function() {
                     var thisChange = $(this).find('td input,td select').not('td .date input');
                     var datepickerDate = $(this).find('td .date');
-                   
-                   //Event for date
-                   datepickerDate.datepicker().on('changeDate', function() {
+
+                    //Event for date
+                    datepickerDate.datepicker().on('changeDate', function() {
                         var thisInput = $(this).find('input');
                         deleteHelpBlock(thisInput, "all");
                         var count = 0;
@@ -230,10 +274,11 @@ var ajaxReportPageModule = (function() {
                         })
                         if (count == 5) {
                             report = JSON.stringify(dataArr);
+                            console.log(escape(report));
                             $.ajax({
                                 type: "POST",
                                 url: "index",
-                                data: 'jsonData=' + report,
+                                data: 'jsonData=' + encodeURIComponent(report),
                                 dataType: 'json',
                                 success: function(data) {
                                     if (data.success) {
@@ -258,7 +303,7 @@ var ajaxReportPageModule = (function() {
 
                     thisChange.change(function() {
                         var thisInput = $(this);
-                        if (thisInput.hasClass('report-text') && thisInput.val().length < 20 && thisInput.val().length > 0) {
+                        if (thisInput.hasClass('report-text') && thisInput.val().length <= 20 && thisInput.val().length > 0) {
                             if (thisInput.closest('td').hasClass("has-error")) {
                                 deleteHelpBlock(thisInput);
                             }
@@ -315,7 +360,7 @@ var ajaxReportPageModule = (function() {
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -366,7 +411,7 @@ var ajaxReportPageModule = (function() {
                     $.ajax({
                         type: "POST",
                         url: "/cp/index/delete",
-                        data: 'jsonData=' + report,
+                        data: 'jsonData=' + escape(report),
                         dataType: 'json',
                         success: function(data) {
                             if (data.success) {
@@ -422,6 +467,7 @@ var ajaxReportPageModule = (function() {
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
+                            //console.log(totalHours);
                             totalHours = countMinutes(totalHours);
                         }
                     })
@@ -498,7 +544,27 @@ var ajaxReportPageModule = (function() {
                     })
                 }
                 var showTotalHours = $('#totalHours');
-                showTotalHours.text("Total: " + totalHours.toFixed(2) + " hours");
+
+                totalHours = totalHours.toFixed(2);
+                console.log(totalHours);
+                totalHours = totalHours.toString();
+                var totalArr = totalHours.split('.');
+                if (totalArr[1] < 10) {
+                    totalArr[1] = totalArr[1] / 10;
+                }
+                totalArr[1] = (totalArr[1] * 60) / 100;
+                if (totalArr[1] < 10) {
+                    totalArr[1] = "0" + totalArr[1];
+                }
+                var minutes = +totalArr[1];
+                minutes = minutes.toFixed(0);
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                totalArr[1] = minutes;
+                console.log(totalArr);
+                totalHours = totalArr.join(':');
+                showTotalHours.text("Total: " + totalHours + " hours");
             }
 
             //function gets date for monday of the week
@@ -516,13 +582,13 @@ var ajaxReportPageModule = (function() {
                 var hour = +splitHour[0];
                 var minutes = +splitHour[1];
                 var time;
-                if (minutes > 59) {
+                if (minutes > 99) {
                     hour += 1;
                     splitHour[0] = hour;
-                    minutes = minutes % 60;
-                    if (minutes < 10) {
-                        minutes = "0" + minutes;
-                    }
+                    minutes = minutes % 100;
+                    // if (minutes < 10) {
+                    //     minutes = "0" + minutes;
+                    // }
                     splitHour[1] = minutes;
                     time = splitHour.join('.');
                 }

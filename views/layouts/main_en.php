@@ -19,8 +19,10 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Skynix Ukraine, software development, software solutions, frontend development, backend development">
+    <meta name="description" content="Skynix Ukraine is a team of professional developers that provides innovative software solutions and high quality improvements in all IT areas. Only the latest technologies in front end and back end development.">
     <?= Html::csrfMetaTags() ?>
-    <title><?= ($this->title ? Html::encode($this->title) : '') ?> - Skynix Ukraine</title>
+    <title>Skynix Ukraine - software development company</title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
@@ -57,8 +59,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'CONTACT US', 'url' => ['site/contact']],
-            ['label' => 'CAREERS', 'url' => ['site/career']],
+            ['label' => 'contact us', 'url' => ['site/contact']],
+            ['label' => 'careers', 'url' => ['site/career']],
             ['label' => 'Solutions Store', 'url' => 'https://skynix.solutions'],
             ['label' => 'Blog', 'url' => '/blog'],
 
@@ -106,21 +108,21 @@ AppAsset::register($this);
         <div class="col-lg-2 col-xs-2 link">
             <?php
                 if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
-                    <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>">cp</a>
-                    <a href="<?=Url::to(['site/logout'])?>">log out</a>
+                    <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>" rel="nofollow">cp</a>
+                    <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
                 <?php endif;?>
             <?php
                 if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
                 <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
-                <a href="<?=Url::to(['site/logout'])?>">log out</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_GUEST])):?>
-                <a href="<?=Url::to(['site/logout'])?>">log out</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id ==null ):?>
-                    <a href="<?=Url::to(['site/login'])?>">log in</a>
+                    <a href="<?=Url::to(['site/login'])?>" rel="nofollow">log in</a>
 
             <?php endif;?>
 
