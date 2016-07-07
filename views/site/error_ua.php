@@ -16,7 +16,7 @@ $this->title = $name;
     <div class="alert alert-danger">
         <!--<?= nl2br(Html::encode($message)) ?>-->
     </div>
-    <h1><!--<?= Html::encode($this->title) ?>-->Page Not Found (#404)</h1>
+    <h1><!--<?= Html::encode($this->title) ?>-->Страница не найдена (#404)</h1>
 
     <p>
         Сталася помилка під час вище веб-сервер обробки вашого запиту.
