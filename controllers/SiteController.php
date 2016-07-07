@@ -46,14 +46,20 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            /*'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
+
+            ],*/
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionError(){
+        //var_dump(Language::getLanguage());die();
+        return $this->render('error_' . Language::getLanguage());
     }
     public function beforeAction($action)
     {

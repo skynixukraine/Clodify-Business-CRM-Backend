@@ -58,7 +58,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
             ['label' => 'контакти', 'url' => ['site/contact']],
-            ['label' => 'кар'єра', 'url' => ['site/career']],
+            ['label' => 'кар\'єра', 'url' => ['site/career']],
             ['label' => 'магазин рішень', 'url' => 'https://ua.skynix.solutions'],
             ['label' => 'блог', 'url' => '/blog'],
 
