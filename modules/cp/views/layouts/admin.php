@@ -45,7 +45,8 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.png')?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
+        <!--<nav class="navbar navbar-static-top" role="navigation">-->
+        <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>

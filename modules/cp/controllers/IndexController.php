@@ -61,7 +61,7 @@ class IndexController extends DefaultController
         ];
     }
     /** Testing email */
-    public function actionTest()
+    /*public function actionTest()
     {
         Yii::$app->mailer->compose('test',
             ['username' => "Oleksii"])
@@ -70,7 +70,7 @@ class IndexController extends DefaultController
             ->setSubject( "This is a subject of the test email" )
             ->send();
         Yii::$app->end();
-    }
+    }*/
     public function actionIndex()
     {
         $model = new Report();

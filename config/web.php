@@ -84,11 +84,12 @@ $config = [
             'translations' => [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    //'basePath' => '@app/messages',
-                    //'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'ua-UA',
                     'fileMap' => [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
+
                     ],
                 ],
             ],
