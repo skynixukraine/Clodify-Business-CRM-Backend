@@ -248,7 +248,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <ul>
                         <li>All Magento 2.x features</li>
                         <li>Mobile Responsive</li>
-                        <li>Shoping cart</li>
+                        <li>Shopping cart</li>
                         <li>Customer Account</li>
                     </ul>
                     Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
