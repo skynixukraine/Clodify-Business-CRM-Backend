@@ -15,12 +15,14 @@ AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="uk">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= ($this->title ? Html::encode($this->title) : '') ?> - Скайнікс Україна</title>
+    <meta name="description" content="Скайнікс Україна - це команда професійних розробників, що займається створенням інноваційних програмних рішень у всіх областях IT. Тільки найновіші технології.">
+    <meta name="keywords" content="Скайнікс Україна, розробка програмного забезпечення">
+    <title><?= ($this->title ? Html::encode($this->title) : '') ?></title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
