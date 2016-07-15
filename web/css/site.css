@@ -138,6 +138,15 @@ a.desc:after {
     text-transform: uppercase;
 }
 
+
+#view_portfolio .slider_portfolio .ua-box>div>a{
+    font-size: 12px;
+}
+
+.ua-visit>a{
+    font-size: 18px;
+}
+
 @media (max-width: 768px){
 
     /*.alert.alert-danger{
@@ -149,6 +158,10 @@ a.desc:after {
     .site-error .alert.alert-danger{
         height: 290px;
         background-size: contain;
+    }
+    #view_portfolio .slider_portfolio .ua-box>div>a{
+    font-size: 10px;
+    line-height: 4;
     }
 }
 @media (max-width: 600px){

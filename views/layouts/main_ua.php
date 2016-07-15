@@ -134,6 +134,7 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
+<?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
 <?php $this->registerJs('localStorageModule.storageFunction();'); ?>
 <?php $this->registerJsFile('/js/local-storage.js'); ?>
 

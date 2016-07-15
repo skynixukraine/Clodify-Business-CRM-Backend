@@ -20,10 +20,10 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
-                        <h1 class="en my-upper">about skynix</h1>
+                        <h1 class="en my-upper">skynix ukraine</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
-                        Skynix is a company that believes in making distinctive, lasting and substantial improvements in IT World. The only goal is to develop, excite and foster changes through new solutions. Our professional team always takes into account the wishes and opinions of customers and leverage on latest software development practices to deliver high quality and cost-effective solutions.</span>
+                        Skynix is a company that believes in making distinctive, lasting and substantial improvements in IT World. The only goal is to develop, excite and foster changes through new software solutions. Our professional team always takes into account the wishes and opinions of customers and leverage on latest software development practices to deliver high quality and cost-effective solutions.</span>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt2">
                         Our company develops innovative businesses software solutions that work.

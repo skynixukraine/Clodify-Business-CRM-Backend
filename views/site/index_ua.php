@@ -1,16 +1,18 @@
 <?php
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 /* @var $this yii\web\View
  */
 
 $this->title = 'Скайнікс Україна - розробка програмного забезпечення';
 ?>
 
+
 <canvas id="canvas1"></canvas>
 <canvas id="canvas2"></canvas>
 <canvas id="canvas3"></canvas>
 
-    <section class="container-fluid" id="about_skynix">
+    <section class="container-fluid skynix-ua-sec" id="about_skynix">
         <div class="row">
             <div class="col-lg-12 col-xs-12">
                 <div class="container">
@@ -119,36 +121,30 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="http://marketplace.skynix.solutions/" data-images="m2_marketplace_extension.jpg" rel="nofollow">
                 <img src="../images/btn-marketplace-extension.jpg" width="289" height="214" alt="marketplace extension"/>
                 <div class="mask"></div>
-                <h3 class="name">Magento 2 Marketplace Extension</h3>
+                <h3 class="name">Розширення Magento 2 Marketplace</h3>
             </a>
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Magento 2.x Extension <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Magento 2.x Extension <strong class="padding-l-30 my-upper">клієнт: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
 
                 <div class="col-lg-6 col-sm-12">
 
-                    <p>The Magento 2 Marketplace extension intended to create specific
-                        markets based on Magento 2 ecommerce.
-                        It shares Magento 2 functionality between different vendors and promotes their products under
-                        one catalog (marketplace).
-                        Every seller in the specific market can sign up and sell the products easily.
-                        The platform easily converts any Magento 2.x instance to a rich featured marketplace like
-                        Amazon or eBay
+                    <p>Magento 2 Marketplace значно збільшує можливості стандартної площадки Magento 2. Завдяки цьому розширенню з’явилася змога розподілити функціональність магазину між багатьма продавцями, що працюють незалежно один від одного. Кожен охочий може зареєструватися й почати торгувати. Цей додаток перетворює звичайний інтернет-магазин на потужну платформу, таку як Amazon чи eBay.
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Features:<br>
+                    Особливості:<br>
                     <ul>
-                        <li>All Magento 2.x features</li>
-                        <li>Mobile Responsive</li>
-                        <li>Seller profile with reviews and ratings</li>
-                        <li>Seller sign up page</li>
-                        <li>Payment systems like PayPal and Braintree</li>
+                        <li>Усі переваги Magento 2</li>
+                        <li>Адаптивний дизайн</li>
+                        <li>Унікальний профайл для кожного продавця із власним рейтингом та можливістю залишати відгуки</li>
+                        <li>Сторінка реєстрації продавця</li>
+                        <li>Підтримка платіжних систем PayPal та Braintree</li>
                     </ul>
-                    Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Використані технології: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
 
                 </div>
             </div>
@@ -157,38 +153,35 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="https://handmade.works/" data-images="handmadeworks.jpg" rel="nofollow">
                 <img src="../images/btn-handmade-works.jpg" width="289" height="214" alt="handmade works"/>
                 <div class="mask"></div>
-                <h3 class="name">Magento 2 Marketplace - Handmade Theme</h3>
+                <h3 class="name">Magento 2 Marketplace - Тема Handmade</h3>
             </a>
             <div class="info-box-hidden row" >
 
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Magento 2.x Marketplace Theme <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Magento 2.x Marketplace Theme <strong class="padding-l-30 my-upper">клієнт: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">опис: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The Handmade theme is designed for a Magento 2 Marketplace extension.
-                        This theme completely covers functionality of the M2 Marketplace Extension
-                        that shares Magento 2 functionality between different vendors and promotes their products under
-                        one catalog (marketplace).
+                    <p>Тема Handmade - спеціально розроблений унікальний дизайн для Magento 2 Marketplace. Це розширення перетворює звичайний інтернет-магазин на багатофункціональну торгову платформу, що підтримує необмежену кількість незалежних один від одного продавців.
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Features:<br>
+                    Особливості:<br>
                     <ul>
                         <li>
-                            All Magento 2.x features
+                            Усі переваги Magento 2
                         </li>
                         <li>
-                            Mobile Responsive
+                            Адаптивний дизайн
                         </li>
                         <li>
-                            Seller profile with reviews and ratings
+                            Унікальний профайл для кожного продавця із власним рейтингом та можливістю залишати відгуки
                         </li>
-                        <li>Seller sign up page</li>
-                        <li>Shopping cart</li>
-                        <li>Customer Account</li>
+                        <li>Сторінка реєстрації продавця</li>
+                        <li>Корзина</li>
+                        <li>Аккаунт покупця</li>
                     </ul>
-                    Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Використані технології: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
                 </div>
             </div>
         </div>
@@ -196,26 +189,24 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="http://www.aftereden.nl/" data-images="after_eden_table_extension.png" rel="nofollow">
                 <img src="../images/btn-after_eden.png" width="289" height="214" alt="after eden"/>
                 <div class="mask"></div>
-                <h3 class="name">After Eden - Sizes Table Magento 1.x Extension</h3>
+                <h3 class="name">After Eden - Таблиця розмірів для Magento 1.x </h3>
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Magento 1.x Extension <strong class="padding-l-30 my-upper">client: </strong>After Eden</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Magento 1.x Extension <strong class="padding-l-30 my-upper">клієнт: </strong>After Eden</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The Sizes Table Magento 1.9 extension lets customers easily select a
-                        necessary size of the product based on available stock.
-                        The extension is universal and can be easily installed on any version of Magento 1.x
+                    <p>Таблиця розмірів для Magento 1.9 надає покупцям змогу легко обирати необхідний розмір товару з тих, що є у магазині. Це розширення є універсальним та може бути легко встановлене на будь-яку версію Magento 1.x. 
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Features:<br>
+                    Особливості:<br>
                     <ul>
-                        <li>Product page improvement</li>
-                        <li>Mobile Responsive</li>
+                        <li>Більш зручна сторінка продукту</li>
+                        <li>Адаптивний дизайн</li>
                     </ul>
-                    Technologies: Magento 1.x, HTML5, CSS3, Bootstrap, jQuery 1.x
+                    Використані технології: Magento 1.x, HTML5, CSS3, Bootstrap, jQuery 1.x
                 </div>
             </div>
         </div>
@@ -223,27 +214,26 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="https://skynix.solutions/" data-images="skynix_solutions_theme.png" rel="nofollow">
                 <img src="../images/btn-skynix_theme.png" width="289" height="214" alt="skynix theme"/>
                 <div class="mask"></div>
-                <h3 class="name">Magento 2 Skynix Solutions Theme</h3>
+                <h3 class="name">Magento 2 Тема Skynix Solutions</h3>
             </a>
             <div class="info-box-hidden row">
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Magento 2.x Theme <strong class="padding-l-30 my-upper">client: </strong>Skynix Solutions</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Magento 2.x Theme <strong class="padding-l-30 my-upper">клієнт: </strong>Skynix Solutions</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The Skynix Solutions theme is designed for a Magento 2 platform.
-                        This theme completely covers functionality of the Magento and meets a corporate style.
+                    <p>Тема Skynix Solutions розроблена спеціально для Magento 2. Зберігаючи усі функціональні переваги платформи, вона повністю відповідає корпоративному стилю.
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Features:<br>
+                    Особливості:<br>
                     <ul>
-                        <li>All Magento 2.x features</li>
-                        <li>Mobile Responsive</li>
-                        <li>Shoping cart</li>
-                        <li>Customer Account</li>
+                        <li>Усі переваги Magento 2.x</li>
+                        <li>Адаптивний дизайн</li>
+                        <li>Корзина</li>
+                        <li>Аккаунт покупця</li>
                     </ul>
-                    Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Використані технології: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x 
                 </div>
             </div>
          </div>
@@ -255,36 +245,31 @@ $this->title = 'Скайнікс Україна - розробка програ�
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong> Wordpress Theme <strong class="padding-l-30 my-upper">client: </strong> Web Mission Control Inc.</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong> Wordpress Theme <strong class="padding-l-30 my-upper">клієнт: </strong> Web Mission Control Inc.</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The Infinite Beginnings Wordpress theme is compatible with all
-                        recent versions of Wordpress and is based on Bootstrap (mobile responsive project) and is a
-                        child theme of the premium Enfold theme.<br>
+                    <p>Infinite Beginnings це тема для Wordpress, що є сумісною з усіма наявними версіями системи. Створена на базі Bootstrap (це означає цілковиту адаптивність), вона є дочірньою до теми Enfold.<br>
 
-                        This means that the theme has all features of Wordpress Enfold theme and the set of additional
-                        custom features formed under the child theme. This theme is good for business, church,
-                        construction, corporate, ecommerce, fashion, hotel, multi purpose, one page, parallax,
-                        photography, portfolio, restaurant, retina, travel web sites.
+                        Маючи усі переваги теми Wordpress Enfold, Infinite Beginnings має низку власних корисних особливостей. Ця тема добре підійде для бізнесу, будівництва, моди, електронної комерції, фотографії, портфоліо або туристичного сайту.
+
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Custom features of the Infinite Beginnings Theme:
+                    Особливості:
                     <ul>
                         <li>
-                            Created custom post types and appropriate backend features for managing: events, services,
-                            resources and people
+                            Створено можливість додавання власних типів постів та відповідні функції управління: події, послуги, ресурси та люди
+
                         </li>
                         <li>
-                            Created custom registration form and implemented custom registration workflow
+                            Створено форму реєстрації замовлення та реалізовано його процес 
                         </li>
                         <li>
-                            Created smart Javascript application, that supplies users with the most suitable content
-                            according to their behavior.
+                            Розроблено невеличкий Javascript додаток, що забезпечує користувачів найбільш потрібним контентом у залежності від їх поведінки на сайті 
                         </li>
                     </ul>
-                    Technologies: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Використані технології: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
                 </div>
             </div>
         </div>
@@ -296,28 +281,23 @@ $this->title = 'Скайнікс Україна - розробка програ�
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Mobile App: iOS & Android <strong class="padding-l-30 my-upper">client: </strong>Fisherman UK ltd.</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Mobile App: iOS & Android <strong class="padding-l-30 my-upper">клієнт: </strong>Fisherman UK ltd.</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The mobile application is intended to help for specific groups of
-                        people to get their aims.
-                        Fishermen can plan the trips and share the results.
-                        Local equipment shops can advertise their products based on fishermen trips.
-                        Basically this application consists from three parts, it is a social network, a reporting system
-                        and an advertisement system.
+                    <p>Цей мобільний додаток створений, щоб зробити життя певної групи людей, а саме рибалок, набагато зручнішим. Fisherman ID надає змогу планувати поїздки та ділитися досягнутими результатами. Магазини із продажу відповідного спорядження можуть ефективно рекламувати свою продукцію. Складається із трьох частин: соціальна мережа, звітна система та реклама. 
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    The App has been developed using the most modern technologies.<br>
-                    Application solution:<br>
+                    Додаток було створено із використанням найсучасніших технологій:<br>
+                    Використані технології:<br>
                     <ul>
                         <li>HTML5, CSS3, Javascript</li>
                         <li>AngularJS</li>
                         <li>Twitter Bootstrap</li>
                         <li>Phonegap (iOS + Android)</li>
                     </ul>
-                    Server-side solution:<br>
+                    Із серверної сторони:<br>
                     <ul>
                         <li>Yii2 Framework</li>
                         <li>MySQL Database</li>
@@ -333,21 +313,18 @@ $this->title = 'Скайнікс Україна - розробка програ�
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>CMS & Web <strong class="padding-l-30 my-upper">client: </strong>Citrix Systems</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>CMS & Web <strong class="padding-l-30 my-upper">клієнт: </strong>Citrix Systems</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>This informational announcement site for events at Citrix is
-                        developed using flexible CMS Adobe CQ.
-                        CMS allows administrators of the site to manage content by multiple admins with different
-                        privilege levels.
+                    <p>Цей інформаційний сайт було розроблено із використанням гнучкої CMS Adobe CQ. CMS дозволяє створювати для керування контентом різні ролі із різними рівнями доступу.
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    The CMS has been developed using the following technologies:<br>
+                    Було використано наступні технології:<br>
                     <ul>
-                        <li>Adobe CQ 5.6  - the most modern content management system on Java</li>
-                        <li>Foundation - responsive framework for creating mobile friendly web sites</li>
+                        <li>Adobe CQ 5.6 - найсучасніша система управління контентом на Java</li>
+                        <li>Foundation - платформа, що дозволяє створювати адаптивні сторінки</li>
                         <li>HTML5, CSS3, Javascript</li>
                     </ul>
                 </div>
@@ -357,28 +334,25 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="http://www.castles.uk.com/" data-images="castles.jpg" rel="nofollow">
                 <img src="../images/btn-сastles_estate_agents.jpg" width="289" height="214" alt="сastles estate agents"/>
                 <div class="mask"></div>
-                <h3 class="name">Castles - Estate agents</h3>
+                <h3 class="name">Castles - Агент з нерухомості</h3>
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">client: </strong>Castles Estate Agents ltd.</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">клієнт: </strong>Castles Estate Agents ltd.</p>
+                    <p><strong class="my-upper">опис </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The website is a wordpress + custom plugin that provide a catalog
-                        of available properties.
-                        The list of properties is fetched from external feed through ExpertAgent API.
-                        Every property has own rich featured details pages.
+                    <p>Вебсайт створено на Wordpress із використанням спеціального розширення, що додає на сайт каталог нерухомості. Список вилучається зовні за допомогою ExpertAgent API. Для кожної одиниці нерухомого майна створюється власна сторінка із багатьма функціями. 
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Technical details of the Wordpress Plugin:<br>
+                    Технічні деталі додатку:<br>
                     <ul>
-                        <li>Custom post type</li>
+                        <li>Можливість створення власних типів постів</li>
                         <li>ExpertAgent API</li>
-                        <li>Custom Request an Agent Feature</li>
+                        <li>Користувальницький запит за характеристиками</li>
                     </ul>
-                    Technologies: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 1.x
+                    Використані технології: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 1.x 
                 </div>
             </div>
         </div>
@@ -386,101 +360,33 @@ $this->title = 'Скайнікс Україна - розробка програ�
             <a href="#" data-href="http://moticv.com/" data-images="motibu.png" rel="nofollow">
                 <img src="../images/btn-motibu-small.png" width="289" height="214" alt="motibu small"/>
                 <div class="mask"></div>
-                <h3 class="name">MotiBu - Professional Profiles</h3>
+                <h3 class="name">MotiBu - Професійні портфоліо</h3>
             </a>
             <div class="info-box-hidden row" >
                 <div class="col-lg-12 txt-center">
-                    <p><strong class="my-upper">category: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">client: </strong>UOU ltd.</p>
-                    <p><strong class="my-upper">description: </strong></p><br>
+                    <p><strong class="my-upper">категорія: </strong>Wordpress Plugin <strong class="padding-l-30 my-upper">клієнт: </strong>UOU ltd.</p>
+                    <p><strong class="my-upper">опис</strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The website is a wordpress + custom plugin that helps people to
-                        create professional profiles.
-                        People can easily install the plugin on own web site or create a profile on the centralized
-                        moticv system.
-                        The plugin creates CVs according to all requirements of European Commission.
+                    <p>Сайт створено на Wordpress із використанням плагіна, що допомагає людям створювати професійні резюме. Користувачі можуть без зайвих зусиль встановити плагін на власний сайт або створити профіль у централізованій системі. Додаток створює CV у відповідності до всіх вимог Європейської комісії. 
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    Technical details of the Wordpress Plugin:<br>
+                    Технічні деталі додатку:<br>
                     <ul>
-                        <li>Custom Post Type</li>
-                        <li>EAUC API (soft/hard skills)</li>
+                        <li>Можливість створення власних типів постів</li>
+                        <li>EAUC API (комуникативні/професійні навички)</li>
                         <li>Javascript CV Builder</li>
-                        <li>Standardized profile page</li>
+                        <li>Уніфікована сторінка профілю</li>
                     </ul>
-                    Technologies: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Використані технології: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x 
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!--****   Popup portfolio   ****-->
-<div id="view_portfolio" >
-    <div class="masks-back"></div>
-    <div class="popup">
-        <div class="close"></div>
-        <div class="header-popap">Infinite Beginnings</div>
-        <div class="container-fluid">
-            <div class="row body-popap">
-                <div class="slider_portfolio col-lg-12">
-
-                    <div class="prev-box">
-
-                        <div>
-                            <a class="prev" href="javascript:void(0);">
-
-                                <div class="hidden768 my-upper">
-                                    prev<br>project
-                                </div>
-                                <div class="visible768 my-upper">
-                                    prev project
-                                </div>
-
-                            </a>
-                        </div>
-
-                    </div>
-                    <div class="viewport">
-
-                    </div>
-                    <div class="next-box">
-
-                        <div>
-                            <a class="next" href="javascript:void(0);">
-
-                                <div class="hidden768 my-upper">
-                                    next<br>project
-                                </div>
-                                <div class="visible768 my-upper">
-                                    next project
-                                </div>
-
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-lg-12">
-
-                    <div class="container-fluid info-box"></div>
-
-                </div>
-                <div class="col-lg-12">
-                    <a href="#" class="btn read-more my-upper" target = "_blank" rel="nofollow">visit website</a>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-    <div class="front-mask"></div>
-</div>
-
-
-    <section class="container-fluid" id="evaluation">
+<section class="container-fluid" id="evaluation">
         <div class="row">
             <div class="col-lg-12">
                 <div class="box-evaluation">
@@ -501,8 +407,260 @@ $this->title = 'Скайнікс Україна - розробка програ�
     </section>
 
 
-    <!--****   End Popup portfolio   ****-->
-<?php $this->registerJsFile('/js/jquery.tinycarousel.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+<!--****   Popup REQUEST a QUOTE modals   ****-->
+<div id="request-quote-modals">
+    <div class="masks-back"></div>
+    <div class="popup">
+        <div class="close"></div>
+        <div class="header-popap">Receive the quote from our technical leader who knows the field the best.</div>
+
+
+        <!-- <form action="site/request" class="container-fluid" method="post">-->
+        <?php $form = ActiveForm::begin(['action' => "site/request", 'options' => ['enctype' => 'multipart/form-data', 'class' => "container-fluid", 'method' => "post"]]) ?>
+
+
+
+
+        <div class="row body-popap">
+
+                <div class = "col-lg-12 step step1">
+                    <div class="question">What is your website/application state?</div>
+                    <div class="option-group">
+                        <input type="radio" value="Active site application" name="website_state" id="active" required>
+                        <label for="active">Active site/application</label>
+                    </div>
+
+                    <div class="option-group right-elem">
+                        <input type="radio" value="Only technical specification" name="website_state" id="technical"  required>
+                        <label for="technical">Only technical specification</label>
+
+
+
+
+                    </div>
+
+                    <div class="option-group">
+                        <input type="radio" value="Only concept" name="website_state" id="concept"  required>
+                        <label for="concept">Only concept</label>
+                    </div>
+
+                    <div class="option-group right-elem">
+                        <input type="radio" value="In development" name="website_state" id="development"  required>
+                        <label for="development">In development</label>
+                    </div>
+                </div>
+
+                <div class = "col-lg-12 step step2">
+                    <div class="question">What is your platform?</div>
+                    <div class="input-group-btn select">
+
+                        <select class="dropdown-toggle form-control" name="platform" required>
+                            <option value="">Select ...</option>
+                            <option value="Magento 1.x">Magento 1.x</option>
+                            <option value="Magento 2.x">Magento 2.x</option>
+                            <option value="Wordpress">Wordpress</option>
+                            <option value="Yii 1, Yii 2">Yii 1, Yii 2</option>
+                            <option value="ZF 1, ZF2">ZF 1, ZF2</option>
+                            <option value="HTML/CSS/Javascript">HTML/CSS/Javascript</option>
+                            <option value="Other">Other</option>
+                        </select>
+
+                    </div>
+                    <div class="question margin-text">What kind of services do you need?</div>
+                    <div class="option-group">
+                        <input type="checkbox" value="New module, plugin, extension" name="services[]" id="module_plugin" required>
+                        <label for="module_plugin"><span class="hidden-xs">New module,<br> plugin, extension</span><span class="visible-xs">New module, plugin, extension</span></label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Existing code adjustments" name="services[]" id="code_adjustments" required>
+                        <label for="code_adjustments"><span class="hidden-xs">Existing code<br> adjustments</span><span class="visible-xs">Existing code adjustments</span></label>
+                    </div>
+                    <div class="option-group">
+                        <input type="checkbox" value="New graphic design" name="services[]" id="graphic_design" required>
+                        <label for="graphic_design"><span class="hidden-xs">New<br> graphic design</span><span class="visible-xs">New graphic design</span></label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Optimization" name="services[]" id="optimization" required>
+                        <label for="optimization">Optimization</label>
+                    </div>
+                    <div class="option-group">
+                        <input type="checkbox" value="Redesign" name="services[]" id="redesign" required>
+                        <label for="redesign">Redesign</label>
+                    </div>
+                    <div class="option-group right-elem">
+                        <input type="checkbox" value="Server Administration" name="services[]" id="server_administration" required>
+                        <label for="server_administration"><span class="hidden-xs">Server<br> Administration</span><span class="visible-xs">Server Administration</span></label>
+                    </div>
+                </div>
+
+                <div class = "col-lg-12 step step3">
+                    <div class="question">What is your prefered backend platform?</div>
+                    <div class="input-group-btn select">
+
+                        <select class="dropdown-toggle form-control" name="backend_platform" required>
+                            <option value="">Select ...</option>
+                            <option value="Magento 1.x">Magento 1.x</option>
+                            <option value="Magento 2.x">Magento 2.x</option>
+                            <option value="Wordpress">Wordpress</option>
+                            <option value="Yii 2">Yii 2</option>
+                            <option value="Zend Framework 2">Zend Framework 2</option>
+                            <option value="HTML/CSS/Javascript">HTML/CSS/Javascript</option>
+                            <option value="No need for a backend">No need for a backend</option>
+                        </select>
+                    </div>
+                    <div class="question margin-text">What is your prefered frontend platform?</div>
+                    <div class="input-group-btn select">
+
+                        <select class="dropdown-toggle form-control" name="frontend_platform" required>
+                            <option value="">Select ...</option>
+                            <option value="Twitter Bootstrap template">Twitter Bootstrap template</option>
+                            <option value="HTML5, CSS3 template">HTML5, CSS3 template</option>
+                            <option value="jQuery application">jQuery application</option>
+                            <option value="AngularJS application">AngularJS application</option>
+                            <option value="No need for a frontend">No need for a frontend</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class = "col-lg-12 step step4">
+                    <div class="question"> When are you looking to start?</div>
+                    <div class="input-group-btn select">
+
+                        <select class="dropdown-toggle form-control" name="when_start" required>
+                            <option value="">Select ...</option>
+                            <option value="Immediately">Immediately</option>
+                            <option value="1-2 weeks">1-2 weeks</option>
+                            <option value="3-4 weeks">3-4 weeks</option>
+                            <option value="in 1-2 months">in 1-2 months</option>
+                        </select>
+
+
+                    </div>
+                    <div class="question margin-text">What is your budget?</div>
+                    <div class="input-group-btn select">
+
+                        <select class="dropdown-toggle form-control" name="budget" required>
+                            <option value="">Select ...</option>
+                            <option value="&lt; $300">&lt; $300</option>
+                            <option value="$300 - $1000">$300 - $1000</option>
+                            <option value="$1000 - $5000">$1000 - $5000</option>
+                            <option value="&gt; $5000">&gt; $5000</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class = "col-lg-12 step step5">
+                    <textarea rows="8" cols="45" name="description" placeholder="project description..." required></textarea>
+
+                    <label class="file_upload">
+                        <span class="button my-upper">upload file</span>
+                       <input type="file" id="file" name="file">
+                    </label>
+                    <p class="message"></p>
+
+
+                </div>
+
+                <div class = "col-lg-12 step step6">
+                    <input type="text" placeholder="Name" name="name" autocomplete="on" required >
+                    <input type="email" placeholder="Email Address" name="email" autocomplete="on" pattern="[^ @]*@[^ @]*" required >
+                    <input type="text" placeholder="Company" name="company" autocomplete="on" required>
+                    <input type="text" placeholder="Country" name="country" autocomplete="on" required>
+                </div>
+
+            </div>
+
+            <div class="row footer-popap">
+                <div class = "col-lg-12">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class = "col-lg-12">
+                    <p class="answer-ajax-error"></p>
+
+                </div>
+                <div class = "col-lg-2 col-sm-2 col-xs-4">
+                    <button class="btn btn-link back"><strong class="my-upper">&lt; back</strong></button>
+                </div>
+                <div class = "col-lg-10 col-sm-10 col-xs-8">
+                    <button class="btn btn-primary next my-upper">next</button>
+                    <button class="btn btn-primary quotes my-upper">get my quotes</button>
+                </div>
+            </div>
+
+            <!-- </form>-->
+            <?php ActiveForm::end() ?>
+
+
+        <div class="answer-ajax">
+            <p>Thank You for your effort, Skynix team will process your request as soon as possible and get back to you with quotes</p>
+            <button class="btn btn btn-primary close-popap close my-upper">close</button>
+
+        </div>
+    </div>
+    <div class="front-mask"></div>
+
+
+</div>
+<!--****   End Popup REQUEST a QUOTE modals   ****-->
+
+
+<!--****   Popup portfolio   ****-->
+<div id="view_portfolio" >
+    <div class="masks-back"></div>
+    <div class="popup">
+        <div class="close"></div>
+        <div class="header-popap">Infinite Beginnings</div>
+        <div class="container-fluid">
+            <div class="row body-popap">
+                <div class="slider_portfolio col-lg-12">
+                    <div class="prev-box ua-box">
+                        <div>
+                            <a class="prev" href="javascript:void(0);">
+                                <div class="hidden768 my-upper">
+                                    Попередній<br>проект
+                                </div>
+                                <div class="visible768 my-upper">
+                                    Попередній проект
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="viewport">
+                    </div>
+                    <div class="next-box ua-box">
+                        <div>
+                            <a class="next" href="javascript:void(0);">
+
+                                <div class="hidden768 my-upper">
+                                    Наступний<br>проект
+                                </div>
+                                <div class="visible768 my-upper">
+                                    Наступний проект
+                                </div>
+
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="container-fluid info-box"></div>
+                </div>
+                <div class="col-lg-12 ua-visit">
+                    <a href="#" class="btn read-more my-upper" target = "_blank" rel="nofollow">відвідати сайт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="front-mask"></div>
+</div>
+<!--****   End Popup portfolio   ****-->
+
+    
 <?php $this->registerJsFile('/js/popup-request-quote-modals.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/portfolio.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('/js/canvas.js', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+
