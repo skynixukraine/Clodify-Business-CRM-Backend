@@ -173,6 +173,9 @@ a.desc:after {
         height: 230px;
 
     }
+    #view_portfolio .slider_portfolio .ua-box>div>a{
+        line-height: 2;
+    }
 }
 @media (max-width: 480px ) {
 
