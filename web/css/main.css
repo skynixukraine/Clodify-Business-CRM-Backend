@@ -563,33 +563,6 @@ footer .link a:hover {
     padding-top: 120px;
 }
 
-@media (max-width: 1200px) {
-    #about_skynix.skynix-ua-sec h1 {
-        padding-top: 100px;
-    }
-}
-
-@media (max-width: 991px) {
-    #about_skynix.skynix-ua-sec h1 {
-        padding-top: 75px;
-    }
-}
-
-@media (max-width: 626px) {
-    #about_skynix.skynix-ua-sec h1 {
-        font-size: 50px;
-    }
-}
-
-@media (max-width: 700px) {
-    #about_skynix.skynix-ua-sec .about-txt1 {
-        font-size: 26px;
-    }
-    #about_skynix.skynix-ua-sec .about-txt2 {
-        font-size: 22.66px;
-    }
-}
-
 #about_skynix h1 {
     padding: 152px 0 7px 0;
     font-size: 60px;
@@ -2544,6 +2517,19 @@ a.active {
     display: block;
 }
 
+@media (max-width: 1200px) {
+    #about_skynix.skynix-ua-sec h1 {
+        padding-top: 100px;
+    }
+}
+
+@media (max-width: 991px) {
+    #about_skynix.skynix-ua-sec h1 {
+        padding-top: 75px;
+    }
+}
+
+
 @media (max-width: 949px) {
     .page {
         margin: 127px auto 0 auto;
@@ -2562,9 +2548,45 @@ a.active {
     }
 }
 
+@media (max-width: 700px) {
+    #about_skynix.skynix-ua-sec .about-txt1 {
+        font-size: 26px;
+    }
+    #about_skynix.skynix-ua-sec .about-txt2 {
+        font-size: 22.66px;
+    }
+}
+
+@media (max-width: 643px) {
+    #about_skynix.skynix-ua-sec h1 {
+        font-size: 45px;
+    }
+}
+
 @media (max-width: 600px) {
     h1 {
         font-size: 40px;
+    }
+    #about_skynix.skynix-ua-sec h1 {
+        padding-top: 50px;
+    }
+}
+
+
+@media (max-width: 532px) {
+    #about_skynix.skynix-ua-sec h1 {
+        font-size: 40px;
+    }
+    #about_skynix.skynix-ua-sec .about-txt1 {
+        font-size: 24px;
+    }
+    #about_skynix.skynix-ua-sec .about-txt2 {
+        font-size: 20.66px;
+    }
+}
+@media (max-width: 484px) {
+    #about_skynix.skynix-ua-sec h1 {
+        font-size: 42px;
     }
 }
 
@@ -2583,25 +2605,9 @@ a.active {
     }
 }
 
-@media (max-width: 532px) {
-    #about_skynix.skynix-ua-sec h1 {
-        font-size: 45px;
-    }
-    #about_skynix.skynix-ua-sec .about-txt1 {
-        font-size: 24px;
-    }
-    #about_skynix.skynix-ua-sec .about-txt2 {
-        font-size: 20.66px;
-    }
-}
 
-@media (max-width: 484px) {
-    #about_skynix.skynix-ua-sec h1 {
-        font-size: 42px;
-    }
-}
 
-@media (max-width: 374px) {
+@media (max-width: 375px) {
     #about_skynix.skynix-ua-sec h1 {
         font-size: 26px;
         padding-top: 35px;
@@ -2614,13 +2620,8 @@ a.active {
     }
 }
 
-@media (max-width: 613px) and (min-width: 481px) {
-    #about_skynix h1.en {
-        padding-top: 65px;
-    }
-}
 
-@media (max-width: 330px) {
+@media (max-width: 347px) {
     #about_skynix h1.en {
         font-size: 29px
     }

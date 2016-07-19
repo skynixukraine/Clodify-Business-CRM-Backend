@@ -103,7 +103,7 @@ AppAsset::register($this);
 <footer class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-10 footer-txt">
-            <?= date('Y') ?> Усі права захищені. Скайнікс.
+            <?= date('Y') ?> Усі права захищені. Скайнікс Україна.
         </div>
         <div class="col-lg-2 col-xs-2 link">
             <?php
