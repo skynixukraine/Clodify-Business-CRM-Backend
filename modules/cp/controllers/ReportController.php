@@ -206,10 +206,9 @@ class ReportController extends DefaultController
                 $model->task,
                 $model->date_added,
                 $model->getProject()->one()->name,
-                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
-                    ( $aliasUser != null ?
-                    $model->reporter_name . '(' . $aliasUser->first_name . ' ' .
-                        $aliasUser->last_name . ')' : $model->reporter_name  ,
+                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && 
+                    $aliasUser != null ?
+                    $model->reporter_name . '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' : $model->reporter_name,
                     $model->date_report,
                     ( $model->invoice_id == null ? "No" : "Yes" ),
                     $model->hours
