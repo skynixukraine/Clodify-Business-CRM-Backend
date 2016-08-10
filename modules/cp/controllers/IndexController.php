@@ -107,6 +107,7 @@ class IndexController extends DefaultController
 
                 $oldhours = 0;
             }
+
             if ($data->project_id != null) {
 
                 $model->project_id = $data->project_id;
@@ -118,6 +119,17 @@ class IndexController extends DefaultController
                 $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
 
                 $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+                $dte = Project::findOne(['id' => $model->project_id])->date_start;
+                //var_dump(strtotime($dte));die();
+                //var_dump($dte . ' ' . $model->date_report);die();
+                 if ( DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($dte) ) ) {
+
+                     return json_encode([
+                         "success" => false,
+                         "id" => $model->id,
+                         "errors" => ["field" => 'hours', "message" => "wrong date"]
+                     ]);
+                 }
 
                 if ($date_end == null || $model->date_report == null ||
                     DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
@@ -257,7 +269,8 @@ class IndexController extends DefaultController
             /** @var  $model Report */
             $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $date);
             $totalHoursOfThisDay = $totalHoursOfThisDay - $lastH;
-            
+            $project = Project::getProjectDevelopers()->one();
+
             if( $model->id == $reportId ) {
 
                 /** @var $model Report */
