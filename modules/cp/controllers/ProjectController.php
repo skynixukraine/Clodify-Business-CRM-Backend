@@ -153,7 +153,7 @@ class ProjectController extends DefaultController
                         $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
                     }
                 } else {
-                    $developersNames[] = $developer->first_name;
+                    $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
                 }
                 //$aliases[$developer->user_id] = $developer->alias_user_id;
 
