@@ -193,22 +193,26 @@ class ReportController extends DefaultController
 
         $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
                         'project_id' => $model->getProject()->one()->id ]);
+        //    var_dump($pD);die();
                         
         $aliasUser = null;
         if ( $pD && $pD->alias_user_id ) {
         
             $aliasUser = User::findOne( $pD->alias_user_id );
         
-        }                
-                        
+        }
+        //var_dump($aliasUser->first_name);die();
+
             $list[] = [
                 $model->id,
                 $model->task,
                 $model->date_added,
                 $model->getProject()->one()->name,
-                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && 
-                    $aliasUser != null ?
-                    $model->reporter_name . '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' : $model->reporter_name),
+                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
+                ($aliasUser != null) ?
+                    User::findOne($model->user_id)->first_name . " " .
+                    User::findOne($model->user_id)->last_name .
+                    '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' : $model->reporter_name),
                     $model->date_report,
                     ( $model->invoice_id == null ? "No" : "Yes" ),
                     $model->hours
