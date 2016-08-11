@@ -85,7 +85,10 @@ $this->params['menu'] = [
             <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $model->id]) ?>
         <?php endif;?>
 
-        <p><?= Html::submitButton( Yii::t('app', 'Send Now'), ['class' => 'btn btn-primary']) ?></p>
+        <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
+                <p><?= Html::submitButton( Yii::t('app', 'Send Now'), ['class' => 'btn btn-link', 'style' => 'text-decoration: none']) ?></p>
+        <?php endif;?>
+
     <?php ActiveForm::end();?>
 
 
