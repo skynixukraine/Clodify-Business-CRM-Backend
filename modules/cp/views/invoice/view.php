@@ -63,15 +63,15 @@ $this->params['menu'] = [
                         ->textInput(['style' => 'display: none'])
                         ->label(null,['style' => 'display: none']);?>
 
-        <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
-            <?php $payMethods = PaymentMethod::find()->all();
+       <!-- <?php /*if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):*/?>
+            --><?php /*$payMethods = PaymentMethod::find()->all();
             $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name' );
 
             echo $form->field( $model, 'method')
                       ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
-                      ->label('Pay Methods');?>
-            <?= Html::submitButton( Yii::t('app', 'SEND'), ['class' => 'btn btn-primary']) ?>
-        <?php endif;?>
+                      ->label('Pay Methods');*/?>
+
+       <!-- --><?php /*endif;*/?>
 
         <?php if($model->date_sent != null &&
                 (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])) &&
@@ -85,6 +85,7 @@ $this->params['menu'] = [
             <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $model->id]) ?>
         <?php endif;?>
 
+        <p><?= Html::submitButton( Yii::t('app', 'Send Now'), ['class' => 'btn btn-primary']) ?></p>
     <?php ActiveForm::end();?>
 
 

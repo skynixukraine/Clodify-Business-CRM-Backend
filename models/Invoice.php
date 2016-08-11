@@ -57,7 +57,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['id', 'user_id', 'contract_number', 'act_of_work'], 'integer'],
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
-            [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
+            [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method', 'payment_method_id'], 'safe'],
             [['status', 'note'], 'string']
         ];
     }

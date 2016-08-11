@@ -13,6 +13,7 @@ use app\models\Invoice;
 use app\models\User;
 use app\models\Report;
 use app\models\ProjectCustomer;
+use app\models\PaymentMethod;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -73,6 +74,13 @@ $this->params['menu'] = [
             <?php echo $form->field( $model, 'total')->textInput();?>
             <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
+
+            <?php $payMethods = PaymentMethod::find()->all();
+            $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name');
+
+            echo $form->field( $model, 'payment_method_id')
+                ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
+                ->label('Pay Methods');?>
 
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
