@@ -237,7 +237,7 @@ class SupportController extends Controller
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::ClientTo($model->id))
-                                ->setSubject('Your Skynix ticket# ' . $model->id)
+                                ->setSubject('Your support ticket #' . $model->id . ' ' . ' is opened')
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review
                             your request and get back to you soon! Please, activate your account through a confirm email link."));

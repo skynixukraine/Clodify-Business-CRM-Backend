@@ -42,7 +42,7 @@ use yii\helpers\Url;
         <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
      font-weight: normal; text-align: center;">You can check the status or reply to this request online at: <a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $id])?>">
-                https://skynix.company/support/ticket?id=<?=$id?>.</a>Mail to: admin@skynix.co.</td>
+                https://skynix.company/support/ticket?id=<?=$id?>.</a> Mail to: admin@skynix.co.</td>
         <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
     <tr>
@@ -55,18 +55,17 @@ use yii\helpers\Url;
     <tr>
         <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
         font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
-            THANK YOU FOR YOUR COLLABORATION WE APPRECIATE YOUR BUSINESS </td>
+            THANK YOU FOR YOUR COLLABORATION  </td>
+
+        </tr>
+    <tr>
+        <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
+        font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
+            WE APPRECIATE YOUR BUSINESS </td>
     </tr>
 
     <tr>
         <td colspan = "5"  height="13" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
-    </tr>
-    <tr>
-        <td width = "29" style="padding: 0; margin: 0;"></td>
-        <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
-     font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-     font-weight: normal; text-align: center;">The letter subject should be "Your support ticket #<?=$id?> is opened".</td>
-        <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
 
 
