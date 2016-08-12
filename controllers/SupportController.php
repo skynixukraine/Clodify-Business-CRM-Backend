@@ -287,12 +287,13 @@ class SupportController extends Controller
                         Yii::$app->mailer->compose("newTicket", [
                             "active"    => $userticket->is_active,
                             "email"     => $userticket->email,
-                            "ticket"    => $userticket->id,
-                            "id"        => $userticket->id
+                            "id"        => $userticket->id,
+                            "username"  => $userticket->first_name,
+                            "subject"   => $model->subject
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo(User::ClientTo($model->id))
-                            ->setSubject('Your Skynix ticket# ' . $model->id)
+                            ->setSubject('Your support ticket #' . $model->id . ' ' . ' is opened')
                             ->send();
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
@@ -342,11 +343,13 @@ class SupportController extends Controller
                             Yii::$app->mailer->compose("newTicket", [
                                 "active"    => $user->is_active,
                                 "email"     => $user->email,
-                                "id"        =>  $model->id
+                                "id"        =>  $model->id,
+                                "username"  => $user->first_name,
+                                "subject"   => $model->subject
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::findOne($model->client_id)->email)
-                                ->setSubject('Your Skynix ticket# ' . $model->id)
+                                ->setSubject('Your support ticket #' . $model->id . ' ' . ' is opened')
                                 ->send();
                             Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, our team will review your request and get back to you soon!"));
 
@@ -387,7 +390,7 @@ class SupportController extends Controller
                     return $this->render('ticket', ['model' => $model]);
 
                 }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket"));
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
                     return $this->redirect(['index']);
 
                 }
@@ -434,11 +437,13 @@ class SupportController extends Controller
                     Yii::$app->mailer->compose("newTicket", [
                         "active"    => User::findOne($status->client_id)->is_active,
                         "email"     => User::findOne($status->client_id)->email,
-                        "id"        =>  $status->id
+                        "id"        =>  $status->id,
+                        "username"  => User::findOne($status->client_id)->first_name,
+                        "subject"   => $status->subject
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo(User::findOne($status->client_id)->email)
-                        ->setSubject(('Your Skynix ticket# ' . $status->id))
+                        ->setSubject(('Your support ticket #' . $status->id . ' ' . ' is opened'))
                         ->send();
 
                     return [
@@ -478,11 +483,13 @@ class SupportController extends Controller
                         Yii::$app->mailer->compose("newTicket", [
                             "active"    => User::findOne($status->client_id)->is_active,
                             "email"     => User::findOne($status->client_id)->email,
-                            "id"        =>  $status->id
+                            "id"        =>  $status->id,
+                            "username"  => User::findOne($status->client_id)->first_name,
+                            "subject"   => $status->subject
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo(User::findOne($status->client_id)->email)
-                            ->setSubject('Your Skynix ticket# ' . $status->id)
+                            ->setSubject('Your support ticket #' . $status->id . ' ' . ' is opened')
                             ->send();
                         return [
                             "success" => true,

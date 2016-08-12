@@ -34,7 +34,7 @@ use yii\helpers\Url;
         <td width = "29" style="padding: 0; margin: 0;"></td>
         <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-     font-weight: normal; text-align: center;">Your request #<?=$id?> with subject <b>"<?=$subject?>"</b> has been received and our specialists are working on the answer to your question.</td>
+     font-weight: normal; text-align: center;">Your request #<b><?=$id?></b> with subject <b>"<?=$subject?>"</b> has been received and our specialists are working on the answer to your question.</td>
         <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
     <tr>
@@ -55,13 +55,9 @@ use yii\helpers\Url;
     <tr>
         <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
         font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
-            THANK YOU FOR YOUR COLLABORATION  </td>
+            THANK YOU FOR YOUR COLLABORATION <br>WE APPRECIATE YOUR BUSINESS </td>
 
-        </tr>
-    <tr>
-        <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
-        font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
-            WE APPRECIATE YOUR BUSINESS </td>
+
     </tr>
 
     <tr>
