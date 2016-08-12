@@ -228,7 +228,8 @@ class SupportController extends Controller
                                 ->setTo(Yii::$app->params['adminEmail'])
                                 ->setSubject('New ticket# ' . $model->id)
                                 ->send();
-                            Yii::$app->mailer->compose("newTicket", [
+                            Yii::$app->mailer->htmlLayout = 'layouts/support';
+                            Yii::$app->mailer->compose( "newTicket", [
                                 "active"    => $guest->is_active,
                                 "email"     => $guest->email,
                                 "id"        => $model->id,
@@ -284,6 +285,8 @@ class SupportController extends Controller
                             ->setTo(Yii::$app->params['adminEmail'])
                             ->setSubject('New ticket# ' . $model->id)
                             ->send();
+
+                        Yii::$app->mailer->htmlLayout = 'layouts/support';
                         Yii::$app->mailer->compose("newTicket", [
                             "active"    => $userticket->is_active,
                             "email"     => $userticket->email,
@@ -340,6 +343,7 @@ class SupportController extends Controller
                                 ->setSubject('New ticket #' . $model->id)
                                 ->send();
                             $user = User::findOne($model->client_id);
+                            Yii::$app->mailer->htmlLayout = 'layouts/support';
                             Yii::$app->mailer->compose("newTicket", [
                                 "active"    => $user->is_active,
                                 "email"     => $user->email,
@@ -434,6 +438,7 @@ class SupportController extends Controller
                         ->setSubject(('New ticket# ' . $status->id))
                         ->send();
                     }
+                    Yii::$app->mailer->htmlLayout = 'layouts/support';
                     Yii::$app->mailer->compose("newTicket", [
                         "active"    => User::findOne($status->client_id)->is_active,
                         "email"     => User::findOne($status->client_id)->email,
@@ -480,6 +485,7 @@ class SupportController extends Controller
                             ->setSubject('New ticket# ' . $status->id)
                             ->send();
                         }
+                        Yii::$app->mailer->htmlLayout = 'layouts/support';
                         Yii::$app->mailer->compose("newTicket", [
                             "active"    => User::findOne($status->client_id)->is_active,
                             "email"     => User::findOne($status->client_id)->email,
