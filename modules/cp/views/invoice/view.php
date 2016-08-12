@@ -86,7 +86,12 @@ $this->params['menu'] = [
         <?php endif;?>
 
         <?php if(($model->status) == (Invoice::STATUS_NEW) && $model->date_sent == null):?>
-                <p><?= Html::submitButton( Yii::t('app', 'Send Now'), ['class' => 'btn btn-link', 'style' => 'text-decoration: none']) ?></p>
+
+            <?= Html::a('Send Now', ['invoice/send' ], [
+                'data' => [
+                    'method' => 'post',
+                   ]
+            ]) ?>
         <?php endif;?>
 
     <?php ActiveForm::end();?>
