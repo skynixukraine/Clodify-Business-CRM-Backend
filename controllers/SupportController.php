@@ -231,8 +231,9 @@ class SupportController extends Controller
                             Yii::$app->mailer->compose("newTicket", [
                                 "active"    => $guest->is_active,
                                 "email"     => $guest->email,
-                                "ticket"    => $model->id,
-                                "id"        => $model->id
+                                "id"        => $model->id,
+                                "username"  => $guest->first_name,
+                                "subject"   => $model->subject
                             ])
                                 ->setFrom(Yii::$app->params['adminEmail'])
                                 ->setTo(User::ClientTo($model->id))
