@@ -136,6 +136,7 @@ class ProjectController extends DefaultController
 
             $developers = $model->getDevelopers()->all();
             $developersNames = [];
+            $develop = [];
             /*  @var $developer \app\models\User */
             foreach($developers as $developer){
 
@@ -152,9 +153,12 @@ class ProjectController extends DefaultController
                         $developer->id == $alias_user ? $developersNames[] = $aliases:
                         $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
                     }
-                } else {
-                    $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
-                }
+                    elseif (User::hasPermission([User::ROLE_CLIENT] )){
+                        $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
+                    }
+                    } else {
+                        $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
+                    }
                 //$aliases[$developer->user_id] = $developer->alias_user_id;
 
             }
