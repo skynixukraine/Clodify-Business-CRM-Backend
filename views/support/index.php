@@ -31,7 +31,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             'type'=>'text',
 
                         ]
-                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus'))->label( false );?>
+                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus', 'autocomplete'=>'off'))->label( false );?>
 
                 </div><br>
                 <table id="table-result">
