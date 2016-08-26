@@ -117,6 +117,8 @@ class IndexController extends DefaultController
                 $model->user_id = Yii::$app->user->id;
 
                 $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
+                $project = Project::findOne($model->project_id);
+                $project->total_logged_hours += $model->hours;
 
                 $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
                 $dte = Project::findOne(['id' => $model->project_id])->date_start;
@@ -154,6 +156,9 @@ class IndexController extends DefaultController
                         if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
+                                if($project->validate()){
+                                    $project->save(true, ["total_logged_hours"]);
+                                }
                                 if ($model->hours >= 0.1) {
                                     return json_encode([
                                         "success" => true,
