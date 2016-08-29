@@ -153,6 +153,11 @@ class ProjectController extends DefaultController
                         $developer->id == $alias_user ? $developersNames[] = $aliases:
                         $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
                     }
+                    elseif (User::hasPermission([User::ROLE_CLIENT] )){
+                        $developer->id == $alias_user ?
+                        $developersNames[] = $developer->first_name . ' ' . $developer->last_name:
+                        $developersNames[] = $aliases;
+                    }
                     } else {
                         $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
                     }
