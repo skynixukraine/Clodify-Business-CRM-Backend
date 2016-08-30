@@ -216,15 +216,16 @@ class ReportController extends DefaultController
                     User::findOne($model->user_id)->first_name . " " .
                     User::findOne($model->user_id)->last_name),*/
 
-                ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
+              ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
                 ($aliasUser != null) ?
                     $aliasUser->first_name . ' ' .
                     $aliasUser->last_name .
                     '(' . User::findOne($model->user_id)->first_name . ' ' .
                           User::findOne($model->user_id)->last_name . ')' :
-                    User::findOne($model->user_id)->first_name . ' ' .
-                    User::findOne($model->user_id)->last_name ),
-
+                        ( User::hasPermission([User::ROLE_CLIENT]) ?
+                        $aliasUser->first_name . ' ' . $aliasUser->last_name :
+                        User::findOne($model->user_id)->first_name . ' ' .
+                        User::findOne($model->user_id)->last_name )),
 
                     $model->date_report,
                     ( $model->invoice_id == null ? "No" : "Yes" ),
