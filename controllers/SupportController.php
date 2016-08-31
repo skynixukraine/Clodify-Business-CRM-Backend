@@ -580,7 +580,7 @@ class SupportController extends Controller
                     }
                 } else {
                     Yii::$app->getSession()->setFlash('success',
-                        Yii::t("app", "This link is expired. Please, log in."));
+                        Yii::t("app", "You cannot see this ticket. Please, log in"));
                     return $this->redirect(["site/index"]);
 
                 }
