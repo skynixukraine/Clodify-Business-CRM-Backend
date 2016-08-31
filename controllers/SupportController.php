@@ -370,20 +370,24 @@ class SupportController extends Controller
     public function actionTicket()
     {
         /** @var  $model SupportTicket*/
-        if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
-            if($model->is_private == 1  ){
-                if(((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM])  ||
-                    (isset($model->client_id) && $model->client_id == Yii::$app->user->id))) ||  Yii::$app->request->cookies['ticket'] ||
-                    (User::hasPermission([User::ROLE_DEV]) && $model->assignet_to == Yii::$app->user->id)){
+        if(isset(Yii::$app->user->id)) {
+            /** @var $user User */
+            $user = User::findOne(Yii::$app->user->id);
+            if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
+                if ($model->is_private == 1) {
+                    if (((isset(Yii::$app->user->identity->role) && User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) ||
+                            (isset($model->client_id) && $model->client_id == Yii::$app->user->id))) || Yii::$app->request->cookies['ticket'] ||
+                        (User::hasPermission([User::ROLE_DEV]) && $model->assignet_to == Yii::$app->user->id)
+                    ) {
 
                         Yii::$app->response->cookies->remove('ticket');
-                        if($model->load(Yii::$app->request->post())) {
+                        if ($model->load(Yii::$app->request->post())) {
                             $modelComment = new SupportTicketComment();
                             $modelComment->comment = $model->comment;
                             $modelComment->date_added = date('Y-m-d H:i:s');
                             $modelComment->user_id = Yii::$app->user->id;
                             $modelComment->support_ticket_id = $model->id;
-                            if($modelComment->validate()){
+                            if ($modelComment->validate()) {
                                 $modelComment->save();
 
                                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
@@ -391,29 +395,36 @@ class SupportController extends Controller
                             }
                         }
 
-                    return $this->render('ticket', ['model' => $model]);
+                        return $this->render('ticket', ['model' => $model]);
 
-                }else{
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
-                    return $this->redirect(['index']);
+                    } elseif ($user->is_active == 0) {
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, activate your account."));
+                        return $this->redirect(['index']);
+                    } else {
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
+                        return $this->redirect(['index']);
 
-                }
-            }else{
-                if($model->load(Yii::$app->request->post())) {
-
-                    $modelComment = new SupportTicketComment();
-                    $modelComment->comment = $model->comment;
-                    $modelComment->date_added = date('Y-m-d H:i:s');
-                    $modelComment->user_id = Yii::$app->user->id;
-                    $modelComment->support_ticket_id = $model->id;
-                    if($modelComment->validate()){
-                        $modelComment->save();
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
-                        return $this->refresh();
                     }
+                } else {
+                    if ($model->load(Yii::$app->request->post())) {
+
+                        $modelComment = new SupportTicketComment();
+                        $modelComment->comment = $model->comment;
+                        $modelComment->date_added = date('Y-m-d H:i:s');
+                        $modelComment->user_id = Yii::$app->user->id;
+                        $modelComment->support_ticket_id = $model->id;
+                        if ($modelComment->validate()) {
+                            $modelComment->save();
+                            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You, you add comment"));
+                            return $this->refresh();
+                        }
+                    }
+                    return $this->render('ticket', ['model' => $model]);
                 }
-                return $this->render('ticket', ['model' => $model]);
             }
+        } else {
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
+            return $this->redirect(['index']);
         }
 
     }
