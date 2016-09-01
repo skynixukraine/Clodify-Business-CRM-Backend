@@ -396,6 +396,10 @@ class SupportController extends Controller
 
                         return $this->render('ticket', ['model' => $model]);
 
+                    } elseif ($user->is_active == 0) {
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, activate your account."));
+                        return $this->redirect(['index']);
+
                     } else {
                         Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
                         return $this->redirect(['index']);
@@ -419,7 +423,7 @@ class SupportController extends Controller
                 }
             }
         } else {
-            Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, activate your account."));
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
             return $this->redirect(['index']);
         }
 
