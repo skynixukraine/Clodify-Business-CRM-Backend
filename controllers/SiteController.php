@@ -94,6 +94,19 @@ class SiteController extends Controller
         if (($email = Yii::$app->request->get('email'))) {
 
             $model->email = $email;
+            if (($password = Yii::$app->request->get('password'))) {
+
+                $model->password = $password;
+
+                if (($ticket = Yii::$app->request->get('id'))) {
+
+                    if ($model->login()) {
+                        return $this->redirect(['support/ticket', 'id' => $ticket]);
+                    }
+                    //$model->password = $password;
+
+                }
+            }
 
         }
         if ( $model->load(Yii::$app->request->post()) ) {

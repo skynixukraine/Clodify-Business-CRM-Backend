@@ -30,7 +30,6 @@ class SupportController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
                 'rules' => [
                     [
                         'actions' => ['index', 'submit-request', 'upload', 'us', 'create', 'ticket', 'complete', 'cancel', 'develop', 'login'],
@@ -573,11 +572,11 @@ class SupportController extends Controller
                             Yii::t("app", "Welcome to Skynix, you have successfully activated your account."));
                     }
                     $model->email = $email;
-                    if ($model->loginNoActive()) {
-
+                    return $this->redirect(['site/login', 'email'=>$model->email, 'password'=>$model->password, 'id' => $id]);
+                    /*if ($model->loginNoActive()) {
                         return $this->redirect(['ticket', 'id' => $id]);
 
-                    }
+                    }*/
                 } else {
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t("app", "You cannot see this ticket. Please, log in"));
