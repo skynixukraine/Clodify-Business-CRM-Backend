@@ -423,6 +423,12 @@ class SupportController extends Controller
                 }
             }
         } else {
+            if (($idTicket = Yii::$app->request->get('id')) && ($model = SupportTicket::findOne($idTicket)) != null) {
+                if ($model->is_private == 0) {
+
+                    return $this->render('ticket', ['model' => $model]);
+                }
+            }
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "You cannot see this ticket. Please, log in."));
             return $this->redirect(['index']);
         }
