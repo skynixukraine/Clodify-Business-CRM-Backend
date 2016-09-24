@@ -1,3 +1,14 @@
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
 var ajaxReportPageModule = (function() {
 
     return {
@@ -35,7 +46,7 @@ var ajaxReportPageModule = (function() {
                     var tableArr = [];
                     thisRowTd.each(function(i) {
                         var thisTd = $(this);
-                        var thisValue = thisTd.text();
+                        var thisValue = escapeHtml(thisTd.text());
                         switch (i) {
                             //////Changing project-id cell
                             case 1:
