@@ -11,9 +11,11 @@ use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\Report;
+use app\models\Invoice;
 use app\models\SiteUser;
 use app\models\Visit;
 use Yii;
+use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\DataTable;
@@ -78,6 +80,7 @@ class ProjectController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
+
 
         if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])){
         $query         = Project::find()

@@ -235,7 +235,7 @@ class IndexController extends DefaultController
             if($model->invoice_id == null) {
 
                 $model->is_delete = 1;
-                if($model->save(true, ['is_delete'])) {
+                if($model->save(true, ['is_delete']) && $model->hoursDelete()) {
 
                     return json_encode([
                         "success" => true,
