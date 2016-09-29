@@ -146,6 +146,10 @@ $this->params['menu'] = [
                                             <?=($model->isInDevelopers($developer->id))
                                                 ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
+                                    <td><input type="radio" title=""  name="Project[is_sales]"
+                                            <?=($model->isPm($developer->id))
+                                                ?'checked':''?>  value = "<?=$developer->id?>">
+                                    </td>
                                     <td><input type="radio" title=""  name="Project[is_pm]"
                                             <?=($model->isPm($developer->id))
                                                 ?'checked':''?>  value = "<?=$developer->id?>">
@@ -154,7 +158,7 @@ $this->params['menu'] = [
                                     <td>
                                         <?php
                                         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
-                                            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+                                            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '", "'  .  User::ROLE_SALES . '")
                                              AND is_delete=0 AND is_active=1 AND id != ' . $developer->id)->all();
                                             $listUsers = User::getCustomersDropDown( $users, 'id' );
                                             $listUser = ArrayHelper::merge([], $listUsers);

@@ -46,7 +46,7 @@ class UserController extends DefaultController {
                     [
                         'actions'   => [ 'find', 'index', 'loginback'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => ['loginback'],
@@ -99,7 +99,7 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM, User::ROLE_SALES])) {
 
             $query = User::find();
         }

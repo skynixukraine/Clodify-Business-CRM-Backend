@@ -157,7 +157,7 @@ class IndexController extends DefaultController
                             Yii::$app->user->getIdentity()->last_name;
                             if ($model->save()) {
                                 if($project->validate()){
-                                    $project->save(true, ["total_logged_hours"]);
+                                    $project->save(true, ["total_logged_hours", "total_paid_hours"]);
                                 }
                                 if ($model->hours >= 0.1) {
                                     return json_encode([

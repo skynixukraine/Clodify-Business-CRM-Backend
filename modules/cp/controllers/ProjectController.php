@@ -42,7 +42,7 @@ class ProjectController extends DefaultController
                     [
                         'actions'   => [ 'index', 'find'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => [ 'create', 'edit', 'delete', 'activate', 'suspend', 'update'],
@@ -80,9 +80,10 @@ class ProjectController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
+        
 
 
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])){
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id");
@@ -130,6 +131,12 @@ class ProjectController extends DefaultController
             $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
+
+        if( User::hasPermission([User::ROLE_SALES]) ){
+
+            $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
+
+        }
            $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
@@ -152,7 +159,7 @@ class ProjectController extends DefaultController
                                User::find()
                                 ->where('id=:alias', [
                                     ':alias' => $alias_user])->one()->last_name;
-                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN] )){
+                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_SALES] )){
                         $developer->id == $alias_user ? $developersNames[] = $aliases:
                         $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
                     }

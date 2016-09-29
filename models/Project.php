@@ -137,10 +137,11 @@ class Project extends \yii\db\ActiveRecord
             WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
-            ':role'     => User::ROLE_DEV,
+            ':role'      => User::ROLE_DEV,
             ':roleA'     => User::ROLE_ADMIN,
+            ':roleS'     => User::ROLE_SALES,
             ':roleP'     => User::ROLE_PM,
-            ':userId'   => $userId
+            ':userId'    => $userId
         ])->all();
     }
 
@@ -201,6 +202,7 @@ class Project extends \yii\db\ActiveRecord
                         ->insert(ProjectDeveloper::tableName(), [
                             'project_id' => $this->id,
                             'user_id' => $developer->id,
+                            'is_sales'=> ($this->is_sales==$developer->id),
                             'is_pm' => ($this->is_pm==$developer->id),
                             'alias_user_id' => isset($this->alias[$developer->id]) ? $this->alias[$developer->id] : null
                         ])->execute();

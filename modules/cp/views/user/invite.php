@@ -52,7 +52,8 @@ $this->params['menu'] = [
                     User::ROLE_DEV      => 'DEV',
                     User::ROLE_FIN      => 'FIN',
                     User::ROLE_CLIENT   => 'CLIENT',
-                    User::ROLE_PM       => 'PM'
+                    User::ROLE_PM       => 'PM',
+                    User::ROLE_SALES    => 'SALES',
                 ],
                   ['prompt' => 'Choose...']
                 );?>
