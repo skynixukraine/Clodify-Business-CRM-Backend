@@ -39,6 +39,7 @@ class Project extends \yii\db\ActiveRecord
     public $developers;
     public $invoice_received;
     public $is_pm;
+    public $is_sales;
     public $alias =[];
     /**
      * @inheritdoc
@@ -56,7 +57,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'status'], 'required'],
-            [['customers', 'developers','invoice_received', 'is_pm'], 'required', 'on' => 'admin'],
+            [['customers', 'developers','invoice_received', 'is_pm', 'is_sales'], 'required', 'on' => 'admin'],
             [['invoice_received', 'is_pm', 'is_delete'], 'integer'],
             [['total_logged_hours', 'total_paid_hours'], 'number'],
             [['status'], 'string'],
@@ -133,7 +134,7 @@ class Project extends \yii\db\ActiveRecord
             ' projects.status
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
-            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP )
+            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleS OR users.role=:roleP )
             WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
@@ -197,7 +198,7 @@ class Project extends \yii\db\ActiveRecord
 
             /* Add to ProjectDevelopers*/
             foreach (User::allDevelopers() as $developer) {
-                if ($this->is_pm == $developer->id || in_array($developer->id, $this->developers)) {
+                if ($this->is_pm == $developer->id && $this->is_sales == $developer->id || in_array($developer->id, $this->developers)) {
                     $connection->createCommand()
                         ->insert(ProjectDeveloper::tableName(), [
                             'project_id' => $this->id,
@@ -275,6 +276,17 @@ class Project extends \yii\db\ActiveRecord
         }
         foreach ($this->projectDevelopers as $projectDeveloper){
             if($projectDeveloper->is_pm && $projectDeveloper->user_id == $user_id){
+                return true;
+            }
+        }
+        return false;
+    }
+    public function isSales($user_id){
+        if(!is_array($this->projectDevelopers)){
+            return false;
+        }
+        foreach ($this->projectDevelopers as $projectDeveloper){
+            if($projectDeveloper->is_sales && $projectDeveloper->user_id == $user_id){
                 return true;
             }
         }

@@ -126,17 +126,12 @@ class ProjectController extends DefaultController
             $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
         }
 
-        if( User::hasPermission([User::ROLE_PM]) ){
+        if( User::hasPermission([User::ROLE_PM, User::ROLE_SALES]) ){
 
             $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
 
-        if( User::hasPermission([User::ROLE_SALES]) ){
-
-            $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
-
-        }
            $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
