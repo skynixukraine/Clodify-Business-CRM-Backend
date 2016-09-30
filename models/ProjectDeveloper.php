@@ -52,7 +52,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
     {
         return self::find()
 
-            ->where (ProjectDeveloper::tableName() . '.user_id=:userId AND '. ProjectDeveloper::tableName() .'.is_pm=1 ', [':userId' => $salesId])
+            ->where (ProjectDeveloper::tableName() . '.user_id=:userId AND '. ProjectDeveloper::tableName() .'.is_sales=1 ', [':userId' => $salesId])
             ->all();
 
     }
