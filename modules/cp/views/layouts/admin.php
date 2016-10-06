@@ -140,7 +140,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="header"><?=Yii::t('app', 'MAIN NAVIGATION')?></li>
-                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "index" || Yii::$app->controller->id == "index" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/index/index']);?>">
                         <i class="fa fa-home"></i> <span><?=Yii::t('app', "My Report")?></span>
@@ -148,7 +148,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['/cp/user/index']);?>">
                         <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Users')?></span>
@@ -172,21 +172,21 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN,  User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/project/index']);?>">
                         <i class="fa fa-edit"></i> <span><?=Yii::t('app', 'Manage Projects')?></span>
                     </a>
                 </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "report" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/report/index']);?>">
                         <i class="fa fa-puzzle-piece"></i> <span><?=Yii::t('app', 'Reports')?></span>
                     </a>
                 </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "invoice" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/invoice/index']);?>">
                         <i class="fa fa-money"></i> <span>Invoices</span>
