@@ -182,7 +182,7 @@ class ProjectController extends DefaultController
                 '; ' . $model->jira_code .
                 '; ' . $model->total_logged_hours;
 
-            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
                 $row = $row .  '; ' . $model->total_paid_hours;
             }

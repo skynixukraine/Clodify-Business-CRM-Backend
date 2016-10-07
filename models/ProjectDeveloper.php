@@ -56,6 +56,16 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
             ->all();
 
     }
+    public static function getReportsOfSales($salesId)
+    {
+        return self::find()
+            ->where(ProjectDeveloper::tableName() . ".user_id=:sId AND is_sales=1" , [
+
+                ':sId' => $salesId
+            ])
+            ->all();
+
+    }
 
 
     /**

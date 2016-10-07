@@ -272,6 +272,11 @@ class Report extends \yii\db\ActiveRecord
         //exit();
 
     }
+    public static function reportsSales()
+    {
+        return self::find()
+            ->where (Report::tableName() . ".is_delete=0 AND " . "user_id =:Id",  [':Id' => Yii::$app->user->id])->all();
+    }
     /*the total amount report for the current week*/
     public static function getReportHours($currUser)
     {
@@ -299,5 +304,6 @@ class Report extends \yii\db\ActiveRecord
         }
         return false;
     }
+
 
 }
