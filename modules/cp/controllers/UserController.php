@@ -99,11 +99,39 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM, User::ROLE_SALES])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
 
             $query = User::find();
         }
 
+        if( User::hasPermission([User::ROLE_SALES])) {
+
+            /* get all project id for asigned to sales */
+            $all_project_ids = ProjectDeveloper::find()->where('user_id=:id AND is_sales=true',
+                [
+                    ':id' => Yii::$app->user->id
+                ]
+            )->all();
+
+        /** array with all project id wich asigned to sales*/
+        $projectId = [];
+            foreach($all_project_ids as $project){
+
+                $projectId[] = $project->project_id;
+
+            }
+        if(!empty($projectId)) {
+            $devUser = implode(', ' , $projectId);
+        }
+        else{
+            $devUser = 'null';
+        }
+
+        $query = User::find()
+            ->leftJoin(ProjectDeveloper::tableName(),
+                ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')');
+        }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
             $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
@@ -120,7 +148,7 @@ class UserController extends DefaultController {
             }
 
             $query = User::find()
-            ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
+                    ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
         }
         $columns        = [
             'id',
