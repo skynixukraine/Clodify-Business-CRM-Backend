@@ -200,7 +200,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                         </a>
                     </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "extension" ? " active" : "")?>">
                         <a href="<?=Url::to(['/ExtensionPackager/extension/index']);?>">
                             <i class="fa fa-file-text-o"></i> <span>Manage Extensions</span>
