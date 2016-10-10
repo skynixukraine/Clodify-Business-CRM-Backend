@@ -1,7 +1,6 @@
 <?php
 use yii\web\View;
 use yii\helpers\Url;
-use app\models\Country;
 
 $this->title = Yii::t('app', 'Update the user #{0}', [$model->id]);
 $this->params['breadcrumbs'][] = $this->title;

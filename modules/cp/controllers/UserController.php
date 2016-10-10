@@ -39,7 +39,7 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback'],
+                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
@@ -63,6 +63,7 @@ class UserController extends DefaultController {
                     'invite'    => ['get', 'post'],
                     'loginas'   => ['get', 'post'],
                     'loginback' => ['get', 'post'],
+                    'update'    => ['get', 'post'],
                 ],
             ],
         ];
@@ -160,6 +161,7 @@ class UserController extends DefaultController {
             'date_login',
             'date_signup',
             'is_active',
+            'salary',
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -196,6 +198,7 @@ class UserController extends DefaultController {
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
+                $model->salary,
                 $model->is_delete
             ];
         }
@@ -316,5 +319,29 @@ class UserController extends DefaultController {
 
         }
         $this->redirect('user/index');
+    }
+
+    public function actionUpdate()
+    {
+        /** @var $user User */
+        if (( $id = Yii::$app->request->get("id") ) &&
+            ( $user = User::findOne($id) ) ) {
+            $user->scenario = 'settings';
+            if ($user->load(Yii::$app->request->post())) {
+
+                if ($user->validate()) {
+                    $user->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::$app->getSession()->setFlash('error',
+                        Yii::t("app", "Data is not valid!!!"));
+                }
+            }
+        }
+
+        return $this->render('edit', [
+            'model' => $user
+        ]);
     }
 }
