@@ -114,11 +114,43 @@ class IndexController extends DefaultController
             }
 
             if ($data->project_id != null) {
-
+                if (!$model->id) {
+                    $curl = curl_init('http://jira.skynix.company:8070/rest/api/2/project');
+                    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                    $jiraData = curl_exec($curl);
+                    curl_close($curl);
+                    $jiraData = json_decode($jiraData);
+                    $jiraName = Project::findOne($data->project_id)->name;
+                    foreach ($jiraData as $jiraItem) {
+                        if ($jiraItem->name == $jiraName) {
+                            $jiraKey = $jiraItem->key;
+                            break;
+                        }
+                    }
+                    $pattern = "/([{$jiraKey}]+-\d+)/";
+                    preg_match_all($pattern, $data->task, $matches);
+                    $model->hours = 0;
+                    foreach ($matches[0] as $issueKey) {
+                        $curl = curl_init("http://jira.skynix.company:8070/rest/api/2/issue/{$issueKey}");
+                        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                        $issue = curl_exec($curl);
+                        curl_close($curl);
+                        $issue = json_decode($issue);
+                        if (!property_exists($issue, 'errors') && property_exists($issue, 'fields')) {
+                            $model->hours += $issue->fields->timespent / 3600;
+                        }
+                    }
+                } else {
+                    $model->hours = $data->hours;
+                }
+                if (!$model->hours) {
+                    $model->hours = $data->hours;
+                }
                 $model->project_id = $data->project_id;
                 $model->date_report = DateUtil::convertData($data->date_report);
                 $model->task = $data->task;
-                $model->hours = $data->hours;
                 $model->user_id = Yii::$app->user->id;
 
                 $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
