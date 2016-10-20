@@ -80,7 +80,7 @@ class IndexController extends DefaultController
     }*/
     public function actionTest  ()
     {
-        // unknown error with routing. following code duplicated in index action.
+        // unknown error with routing.  OAuth source here http://goo.gl/2S998t   Original URL: bitbucket.org/atlassian_tutorial/atlassian-oauth-examples/src/0c6b54f6fefe996535fb0bdb87ad937e5ffc402d/php
         $app = new Silex\Application();
         $app['debug'] = true;
         $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -168,93 +168,6 @@ class IndexController extends DefaultController
 
     public function actionIndex()
     {
-        //OAuth. source here http://goo.gl/2S998t   Original URL: bitbucket.org/atlassian_tutorial/atlassian-oauth-examples/src/0c6b54f6fefe996535fb0bdb87ad937e5ffc402d/php
-        $app = new Silex\Application();
-        $app['debug'] = true;
-        $app->register(new Silex\Provider\TwigServiceProvider(), array(
-            'twig.path' => __DIR__ . '/../views',
-        ));
-        $app->register(new Silex\Provider\SessionServiceProvider());
-        $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-
-
-
-        $app['oauth'] = $app->share(function() use($app){
-            $oauth = new Atlassian\OAuthWrapper('http://skynix.local');
-            $oauth->setPrivateKey('/home/dmytro/myrsakey.pem')
-                ->setConsumerKey('SDJCS632X')
-                ->setConsumerSecret('Hxh8sw00xsh6F')
-                ->setRequestTokenUrl('http://jira.skynix.company:8070/plugins/servlet/oauth/request-token')
-                ->setAuthorizationUrl('http://jira.skynix.company:8070/plugins/servlet/oauth/authorize?oauth_token=%s')
-                ->setAccessTokenUrl('http://jira.skynix.company:8070/plugins/servlet/oauth/access-token')
-                ->setCallbackUrl(
-                    $app['url_generator']->generate('callback', array(), true)
-                );
-            ;
-            return $oauth;
-        });
-        $app->get('/', function() use($app){
-            $oauth = $app['session']->get('oauth');
-
-            if (empty($oauth)) {
-                $priorities = null;
-            } else {
-                $priorities = $app['oauth']->getClient(
-                    $oauth['oauth_token'],
-                    $oauth['oauth_token_secret']
-                )->get('rest/api/2/priority')->send()->json();
-            }
-
-            return $app['twig']->render('layout.twig', array(
-                'oauth' => $oauth,
-                'priorities' => $priorities,
-            ));
-        })->bind('home');
-
-        $app->get('/connect', function() use($app){
-            $token = $app['oauth']->requestTempCredentials();
-
-            $app['session']->set('oauth', $token);
-
-            return $app->redirect(
-                $app['oauth']->makeAuthUrl()
-            );
-        })->bind('connect');
-
-        $app->get('/callback', function() use($app){
-            $verifier = $app['request']->get('oauth_verifier');
-
-            if (empty($verifier)) {
-                throw new \InvalidArgumentException("There was no oauth verifier in the request");
-            }
-
-            $tempToken = $app['session']->get('oauth');
-
-            $token = $app['oauth']->requestAuthCredentials(
-                $tempToken['oauth_token'],
-                $tempToken['oauth_token_secret'],
-                $verifier
-            );
-
-            $app['session']->set('oauth', $token);
-
-            return $app->redirect(
-                $app['url_generator']->generate('home')
-            );
-        })->bind('callback');
-
-        $app->get('/reset', function() use($app){
-            $app['session']->set('oauth', null);
-
-            return $app->redirect(
-                $app['url_generator']->generate('home')
-            );
-        })->bind('reset');
-
-        $app->run();
-
-        // end of OAuth
-
         $model = new Report();
         $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
         $date = new DateTime;
@@ -277,112 +190,120 @@ class IndexController extends DefaultController
         }
 
         if( ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost ) ) {
+            Yii::$app->request->isPost ) ) {
             if ($data = json_decode($_POST['jsonData'])) {
 
-            if (isset($data->id)) {
+                if (isset($data->id)) {
 
-                $model = Report::findOne($data->id);
-                $oldhours = $model->hours;
+                    $model = Report::findOne($data->id);
+                    $oldhours = $model->hours;
 
-            } else {
+                } else {
 
-                $oldhours = 0;
-            }
+                    $oldhours = 0;
+                }
 
-            if ($data->project_id != null) {
-                if (!$model->id) {
-                    $curl = curl_init('http://jira.skynix.company:8070/rest/api/2/project');
-                    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                    $jiraData = curl_exec($curl);
-                    curl_close($curl);
-                    $jiraData = json_decode($jiraData);
-                    $jiraName = Project::findOne($data->project_id)->name;
-                    foreach ($jiraData as $jiraItem) {
-                        if ($jiraItem->name == $jiraName) {
-                            $jiraKey = $jiraItem->key;
-                            break;
-                        }
-                    }
-                    $pattern = "/([{$jiraKey}]+-\d+)/";
-                    preg_match_all($pattern, $data->task, $matches);
-                    $model->hours = 0;
-                    foreach ($matches[0] as $issueKey) {
-                        $curl = curl_init("http://jira.skynix.company:8070/rest/api/2/issue/{$issueKey}");
+                if ($data->project_id != null) {
+                    if (!$model->id) {
+                        $curl = curl_init('http://jira.skynix.company:8070/rest/api/2/project');
                         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
                         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                        $issue = curl_exec($curl);
+                        $jiraData = curl_exec($curl);
                         curl_close($curl);
-                        $issue = json_decode($issue);
-                        if (!property_exists($issue, 'errors') && property_exists($issue, 'fields')) {
-                            $model->hours += $issue->fields->timespent / 3600;
+                        $jiraData = json_decode($jiraData);
+                        $jiraName = Project::findOne($data->project_id)->name;
+                        foreach ($jiraData as $jiraItem) {
+                            if ($jiraItem->name == $jiraName) {
+                                $jiraKey = $jiraItem->key;
+                                break;
+                            }
                         }
+                        $pattern = "/([{$jiraKey}]+-\d+)/";
+                        preg_match_all($pattern, $data->task, $matches);
+                        $model->hours = 0;
+                        foreach ($matches[0] as $issueKey) {
+                            $curl = curl_init("http://jira.skynix.company:8070/rest/api/2/issue/{$issueKey}");
+                            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                            $issue = curl_exec($curl);
+                            curl_close($curl);
+                            $issue = json_decode($issue);
+                            if (!property_exists($issue, 'errors') && property_exists($issue, 'fields')) {
+                                $model->hours += $issue->fields->timespent / 3600;
+                            }
+                        }
+                    } else {
+                        $model->hours = $data->hours;
                     }
-                } else {
-                    $model->hours = $data->hours;
-                }
-                if (!$model->hours) {
-                    $model->hours = $data->hours;
-                }
-                $model->project_id = $data->project_id;
-                $model->date_report = DateUtil::convertData($data->date_report);
-                $model->task = $data->task;
-                $model->user_id = Yii::$app->user->id;
+                    if (!$model->hours) {
+                        $model->hours = $data->hours;
+                    }
+                    $model->project_id = $data->project_id;
+                    $model->date_report = DateUtil::convertData($data->date_report);
+                    $model->task = $data->task;
+                    $model->user_id = Yii::$app->user->id;
 
-                $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
-                $project = Project::findOne($model->project_id);
-                $project->total_logged_hours += $model->hours;
+                    $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
+                    $project = Project::findOne($model->project_id);
+                    $project->total_logged_hours += $model->hours;
 
-                $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
-                $dte = Project::findOne(['id' => $model->project_id])->date_start;
-                //var_dump(strtotime($dte));die();
-                //var_dump($dte . ' ' . $model->date_report);die();
-                 if ( DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($dte) ) ) {
-
-                     return json_encode([
-                         "success" => false,
-                         "id" => $model->id,
-                         "errors" => ["field" => 'hours', "message" => "wrong date"]
-                     ]);
-                 }
-
-                if ($date_end == null || $model->date_report == null ||
-                    DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
-                ) {
-                    if ($model->hours < 0.1) {
+                    $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+                    $dte = Project::findOne(['id' => $model->project_id])->date_start;
+                    //var_dump(strtotime($dte));die();
+                    //var_dump($dte . ' ' . $model->date_report);die();
+                    if ( DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($dte) ) ) {
 
                         return json_encode([
                             "success" => false,
                             "id" => $model->id,
-                            "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                            "errors" => ["field" => 'hours', "message" => "wrong date"]
                         ]);
                     }
-                    if (strlen(trim($model->task)) <= 20) {
 
-                        return json_encode([
-                            "success" => false,
-                            "id" => $model->id,
-                            "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
-                        ]);
-                    }
-                    if ($model->validate()) {
-                        if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
-                            Yii::$app->user->getIdentity()->last_name;
-                            if ($model->save()) {
-                                if($project->validate()){
-                                    $project->save(true, ["total_logged_hours", "total_paid_hours"]);
-                                }
-                                if ($model->hours >= 0.1) {
+                    if ($date_end == null || $model->date_report == null ||
+                        DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
+                    ) {
+                        if ($model->hours < 0.1) {
+
+                            return json_encode([
+                                "success" => false,
+                                "id" => $model->id,
+                                "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                            ]);
+                        }
+                        if (strlen(trim($model->task)) <= 20) {
+
+                            return json_encode([
+                                "success" => false,
+                                "id" => $model->id,
+                                "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
+                            ]);
+                        }
+                        if ($model->validate()) {
+                            if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
+                                Yii::$app->user->getIdentity()->last_name;
+                                if ($model->save()) {
+                                    if($project->validate()){
+                                        $project->save(true, ["total_logged_hours", "total_paid_hours"]);
+                                    }
+                                    if ($model->hours >= 0.1) {
+                                        return json_encode([
+                                            "success" => true,
+                                            "id" => $model->id
+                                        ]);
+                                    }
+                                    if (trim(strlen($model->task)) > 20) {
+                                        return json_encode([
+                                            "success" => true,
+                                            "id" => $model->id
+                                        ]);
+                                    }
+
+                                } else {
                                     return json_encode([
-                                        "success" => true,
-                                        "id" => $model->id
-                                    ]);
-                                }
-                                if (trim(strlen($model->task)) > 20) {
-                                    return json_encode([
-                                        "success" => true,
-                                        "id" => $model->id
+                                        "success" => false,
+                                        "id" => $model->id,
+                                        "errors" => ["field" => $model->id, "message" => "Report does not add"]
                                     ]);
                                 }
 
@@ -390,49 +311,41 @@ class IndexController extends DefaultController
                                 return json_encode([
                                     "success" => false,
                                     "id" => $model->id,
-                                    "errors" => ["field" => $model->id, "message" => "Report does not add"]
+                                    "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
                                 ]);
-                            }
 
+                            }
                         } else {
                             return json_encode([
                                 "success" => false,
                                 "id" => $model->id,
-                                "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
+                                "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
                             ]);
-
                         }
                     } else {
+
                         return json_encode([
                             "success" => false,
                             "id" => $model->id,
-                            "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
+                            "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
                         ]);
                     }
+
                 } else {
 
                     return json_encode([
                         "success" => false,
                         "id" => $model->id,
-                        "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
+                        "errors" => ["field" => 'project_id', "message" => "Please choose a project"]
                     ]);
                 }
-
             } else {
-
-                return json_encode([
-                    "success" => false,
-                    "id" => $model->id,
-                    "errors" => ["field" => 'project_id', "message" => "Please choose a project"]
-                ]);
-            }
-        } else {
                 return json_encode([
                     "success" => false,
                     "errors" => ["message" => "can not read data"]
                 ]);
             }
-    }
+        }
         return $this->render('index', ['model' => $model]);
     }
     /** Delete developer`s report */
@@ -441,7 +354,7 @@ class IndexController extends DefaultController
         if( ( Yii::$app->request->isAjax &&
             Yii::$app->request->isPost &&
             ( $data = json_decode($_POST['jsonData']) ) &&
-             isset($data->id) ) ) {
+            isset($data->id) ) ) {
 
             /** @var  $model  Report*/
             $model = Report::findOne( $data->id );
@@ -476,12 +389,12 @@ class IndexController extends DefaultController
     public function actionSave()
     {
         if( ( Yii::$app->request->isAjax &&
-              Yii::$app->request->isPost &&
-            ( $reportId = Yii::$app->request->post('id') ) &&
-            ( $task = Yii::$app->request->post('task') ) &&
-            ( $hours = Yii::$app->request->post('hours') ) &&
-            ( $lastH = Yii::$app->request->post('lastH') ) &&
-            ( $date = Yii::$app->request->post('date') )) || true ){
+                Yii::$app->request->isPost &&
+                ( $reportId = Yii::$app->request->post('id') ) &&
+                ( $task = Yii::$app->request->post('task') ) &&
+                ( $hours = Yii::$app->request->post('hours') ) &&
+                ( $lastH = Yii::$app->request->post('lastH') ) &&
+                ( $date = Yii::$app->request->post('date') )) || true ){
 
             $model = Report::findOne( $reportId );
             $model->dateFilter = (Yii::$app->request->get('dateFilter', 1));
