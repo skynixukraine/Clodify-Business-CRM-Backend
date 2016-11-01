@@ -56,7 +56,13 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             </a>
             <?php if( Yii::$app->request->cookies['admin'] ):?>
                 <div style="float: right; padding-right: 10px;padding-top: 10px;">
-                    <?php echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);?>
+                    <?php
+                    if ($_SERVER['REQUEST_URI'] == '/ExtensionPackager/extension/index') {
+                        echo Html::a('Login Back', ['/cp/user/loginback'], ['class' => 'btn btn-block btn-default']);;
+                    } else {
+                        echo Html::a('Login Back', ['user/loginback'], ['class' => 'btn btn-block btn-default']);
+                    }
+                    ?>
                 </div>
             <?php endif;?>
 
