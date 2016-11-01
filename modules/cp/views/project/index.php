@@ -32,7 +32,7 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
                 <th><?=Yii::t('app', 'Name')?></th>
                 <th><?=Yii::t('app', 'JIRA')?></th>
                 <th><?=Yii::t('app', 'Total Logged, h')?></th>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])):?>
                 <th id="role"><?=Yii::t('app', 'Total Paid, h')?></th>
                 <?php endif;?>
                 <th><?=Yii::t('app', 'Date Start')?></th>
