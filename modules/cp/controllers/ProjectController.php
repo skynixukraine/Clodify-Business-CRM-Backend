@@ -233,10 +233,9 @@ class ProjectController extends DefaultController
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->status = Project::STATUS_NEW;
-
-                if ($model->validate()) {
-
-                    if( $model->save() ) {
+                $is_sales = User::findOne($model->is_sales);
+                if ($model->validate() && $is_sales->role != "DEV") {
+                if( $model->save() ) {
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                         return $this->redirect(['index']);
                     } else {
@@ -248,7 +247,6 @@ class ProjectController extends DefaultController
                     }
 
                 } else {
-
                     $model->status = null;
                     Yii::$app->getSession()->setFlash('error',
                         Yii::t("app", "Fields with customers and developers are required"));
