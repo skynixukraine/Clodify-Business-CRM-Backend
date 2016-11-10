@@ -65,6 +65,13 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
             [['customers', 'developers', 'alias'], 'safe'],
+            ['is_sales', function() {
+                if ($user = User::findOne($this->is_sales)) {
+                    if ($user->role == 'DEV') {
+                        $this->addError(Yii::t('yii', 'Developer can not be sales'));
+                    }
+                }
+            }]
         ];
     }
 
