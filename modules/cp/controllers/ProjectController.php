@@ -235,9 +235,7 @@ class ProjectController extends DefaultController
                 if ($model->validate() && $model->save()) {
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
-                } else {
-                    return $this->render('create', ['model' => $model, 'title' => 'Create a new project']);
-                }
+                } 
             }
             return $this->render('create', ['model' => $model,
                                             'title' => 'Create a new project']);
