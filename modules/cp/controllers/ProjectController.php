@@ -229,7 +229,6 @@ class ProjectController extends DefaultController
             $model = new Project();
 
             $model->scenario = "admin";
-
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->status = Project::STATUS_NEW;
@@ -237,18 +236,7 @@ class ProjectController extends DefaultController
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
                 } else {
-                    $errors = [];
-                    foreach ($model->getErrors() as $key=>$value) {
-                        $errors[] = $value[0];
-                    }
-                    $errorList = '';
-                    foreach ($errors as $error) {
-                        $errorList .= $error;
-                    }
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", $errorList));
-                    return $this->render('create', ['model' => $model,
-                        'title' => 'Create a new project']);
-
+                    return $this->render('create', ['model' => $model, 'title' => 'Create a new project']);
                 }
             }
             return $this->render('create', ['model' => $model,
