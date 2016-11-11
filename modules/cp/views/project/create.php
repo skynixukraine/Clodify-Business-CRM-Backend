@@ -36,7 +36,8 @@ $this->params['menu'] = [
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
             <div class="form-group">
-                <?php echo $form->field( $model, 'name', [
+                <?php echo $form->errorSummary($model);
+                echo $form->field( $model, 'name', [
 
                     'options' => [
 
