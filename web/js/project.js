@@ -35,15 +35,7 @@ var projectModule = (function() {
             }
 
         });
-        $(".two input[type='checkbox']").click(function () {
 
-            if( $(".two input[type='radio']:checked").length == 1 ){
-                return ;
-            }
-            else {
-                $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
-            }
-        });
 
 
     function actionEdit( id )
