@@ -161,7 +161,7 @@ class SiteController extends Controller
 
                         /** Save date login when user login */
                         /** @var $modelUserLogins User */
-                        if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) {
+                        if (User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_SALES])) {
                             if ($modelUserLogins->date_login == null) {
 
                                 //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
