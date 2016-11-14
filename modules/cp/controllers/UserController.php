@@ -198,7 +198,7 @@ class UserController extends DefaultController {
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
-                $model->salary,
+                User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
                 $model->is_delete
             ];
         }
