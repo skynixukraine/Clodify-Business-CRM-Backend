@@ -128,7 +128,7 @@ $this->params['menu'] = [
         </div>
                 <div class = "box">
                     <div class = "box-body no-padding">
-                        <table class = "table load two">
+                        <table class = "table load ">
                             <thead>
                             <tr>
                                 <th>Assign</th>
