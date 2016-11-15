@@ -179,10 +179,7 @@ class UserController extends DefaultController {
 
         $dataTable->setFilter('is_delete=0');
 
-        if(User::hasPermission([User::ROLE_PM]))
-        {
-            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
-        }
+
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
