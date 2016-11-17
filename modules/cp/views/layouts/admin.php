@@ -220,7 +220,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                         </a>
                     </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "tool" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/tool/emailtester']);?>">
                             <i class="fa fa-mail-forward"></i> <span>Email Tester</span>

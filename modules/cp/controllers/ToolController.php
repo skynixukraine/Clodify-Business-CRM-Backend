@@ -33,7 +33,7 @@ class ToolController extends DefaultController {
                     [
                         'actions' => [ 'emailtester'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES, User::ROLE_CLIENT, User::ROLE_FIN],
                     ]
                 ],
             ],
