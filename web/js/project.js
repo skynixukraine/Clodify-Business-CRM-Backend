@@ -14,7 +14,7 @@ var projectModule = (function() {
             canActivate : null,
             canSuspend  : null,
             canSeeHours : null,
-            canFunck    : null
+            canFunck    : null,
         },
         dataTable,
         dataFilter = {
@@ -35,7 +35,18 @@ var projectModule = (function() {
             }
 
         });
-
+        count = 0;
+        $(".two input[type='checkbox']").click(function () {
+            if (count == 0) {
+                if ($(".two input[type='radio']:checked").length == 1) {
+                    return;
+                }
+                else {
+                    $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
+                }
+                count++;
+            }
+        });
 
 
     function actionEdit( id )
