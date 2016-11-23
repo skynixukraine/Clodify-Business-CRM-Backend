@@ -35,18 +35,21 @@ var projectModule = (function() {
             }
 
         });
-        count = 0;
         $(".two input[type='checkbox']").click(function () {
-            if (count == 0) {
-                if ($(".two input[type='radio']:checked").length == 1) {
-                    return;
+
+            if ($(".two input[type='checkbox']:checked").length == 1) {
+
+                if( $(".two input[type='radio']:checked").length == 1 ){
+                    return ;
                 }
                 else {
                     $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
                 }
-                count++;
+
             }
+
         });
+
 
 
     function actionEdit( id )
