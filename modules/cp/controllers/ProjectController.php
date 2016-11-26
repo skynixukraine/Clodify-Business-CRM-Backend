@@ -176,7 +176,7 @@ class ProjectController extends DefaultController
             /*  @var $customer \app\models\User */
             foreach($customers as $customer){
 
-                $customersNames[] = $customer->first_name;
+                $customersNames[] = $customer->first_name . " " .  $customer->last_name;
             }
             /* @var $model \app\models\Project */
             $row = '' . $model->id .
