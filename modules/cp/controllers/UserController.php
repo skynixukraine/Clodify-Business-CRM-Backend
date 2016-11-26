@@ -131,7 +131,8 @@ class UserController extends DefaultController {
         $query = User::find()
             ->leftJoin(ProjectDeveloper::tableName(),
                 ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
-            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')');
+            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')')
+            ->groupBy('user_id');
         }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
