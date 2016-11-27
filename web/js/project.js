@@ -14,7 +14,7 @@ var projectModule = (function() {
             canActivate : null,
             canSuspend  : null,
             canSeeHours : null,
-            canFunck    : null
+            canFunck    : null,
         },
         dataTable,
         dataFilter = {
@@ -27,6 +27,20 @@ var projectModule = (function() {
 
                 if( $(".one input[type='radio']:checked").length == 1 ){
                    return ;
+                }
+                else {
+                    $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
+                }
+
+            }
+
+        });
+        $(".two input[type='checkbox']").click(function () {
+
+            if ($(".two input[type='checkbox']:checked").length == 1) {
+
+                if( $(".two input[type='radio']:checked").length == 1 ){
+                    return ;
                 }
                 else {
                     $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
