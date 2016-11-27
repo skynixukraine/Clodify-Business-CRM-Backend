@@ -236,7 +236,7 @@ var projectModule = (function() {
                 "bLengthChange": false,
                 "bFilter": true,
                 "bSort": true,
-                "pageLength": 25,
+                "pageLength": 20,
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
