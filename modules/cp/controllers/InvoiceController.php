@@ -37,7 +37,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download', 'downloadreports'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => ['index', 'find', 'view', 'download', 'downloadreports'],
@@ -47,7 +47,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['delete', 'download', 'downloadreports'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                 ],
             ],
