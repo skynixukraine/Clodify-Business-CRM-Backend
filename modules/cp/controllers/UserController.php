@@ -100,12 +100,12 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $query = User::find();
         }
 
-        if( User::hasPermission([User::ROLE_SALES])) {
+        if( User::hasPermission([User::ROLE_SALES, User::ROLE_PM])) {
 
             /* get all project id for asigned to sales */
             $all_project_ids = ProjectDeveloper::find()->where('user_id=:id AND is_sales=true',
