@@ -41,15 +41,16 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php $customers = User::allCustomersWhithReceive();
-            $listCustomers = User::getCustomersDropDown( $customers, 'id');
-            /** @var $model Invoice */
-            echo $form->field($model, 'user_id')
-                      ->dropDownList( $listCustomers,  [
-                          'prompt' => 'Choose...',
-                      ] )
-                      ->label( 'Customers' );
-
+            <?php if (User::hasPermission([User::ROLE_ADMIN])) {
+                $customers = User::allCustomersWhithReceive();
+                $listCustomers = User::getCustomersDropDown($customers, 'id');
+                /** @var $model Invoice */
+                echo $form->field($model, 'user_id')
+                    ->dropDownList($listCustomers, [
+                        'prompt' => 'Choose...',
+                    ])
+                    ->label('Customers');
+            }
             ?>
 
             <?php $projects = (Project::ProjectsCurrentUser(Yii::$app->user->id));

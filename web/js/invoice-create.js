@@ -13,7 +13,16 @@ var invoiceCreateModule = (function() {
         dataFilter = {
         },
         deleteModal;
+    $( "#project_id" ).click(function() {
 
+        $('#invoice-user_id').attr('disabled', 'disabled')
+
+    });
+    $( "#invoice-user_id" ).click(function() {
+
+        $('#project_id').attr('disabled', 'disabled')
+
+    });
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
 
