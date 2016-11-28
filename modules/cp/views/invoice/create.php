@@ -14,6 +14,8 @@ use app\models\User;
 use app\models\Report;
 use app\models\ProjectCustomer;
 use app\models\PaymentMethod;
+use app\models\Project;
+use app\models\ProjectDeveloper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -47,6 +49,19 @@ $this->params['menu'] = [
                           'prompt' => 'Choose...',
                       ] )
                       ->label( 'Customers' );
+
+            ?>
+
+            <?php $projects = (Project::ProjectsCurrentUser(Yii::$app->user->id));
+            $listProjects = [];
+            foreach ($projects as $project) {
+                $listProjects[$project->id] = $project->name;
+            }
+            echo $form->field($model, 'user_id')
+                ->dropDownList( $listProjects,  [
+                    'prompt' => 'Choose...', 'id' => 'project_id'
+                ] )
+                ->label( 'Projects' );
 
             ?>
 
