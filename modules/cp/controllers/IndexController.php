@@ -204,41 +204,8 @@ class IndexController extends DefaultController
                 }
 
                 if ($data->project_id != null) {
-                    $paid_hours = 0;
-                    if (!$model->id) {
-                        $curl = curl_init('http://jira.skynix.company:8070/rest/api/2/project');
-                        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=23551609DF7D4B6D2AD9EA41DED9F98A"));
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                        $jiraData = curl_exec($curl);
-                        curl_close($curl);
-                        $jiraData = json_decode($jiraData);
-                        $jiraName = Project::findOne($data->project_id)->name;
-                        foreach ($jiraData as $jiraItem) {
-                            if ($jiraItem->name == $jiraName) {
-                                $jiraKey = $jiraItem->key;
-                                break;
-                            }
-                        }
-                        $pattern = "/([{$jiraKey}]+-\d+)/";
-                        preg_match_all($pattern, $data->task, $matches);
-                        foreach ($matches[0] as $issueKey) {
-                            $curl = curl_init("http://jira.skynix.company:8070/rest/api/2/issue/{$issueKey}");
-                            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=23551609DF7D4B6D2AD9EA41DED9F98A"));
-                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                            $issue = curl_exec($curl);
-                            curl_close($curl);
-                            $issue = json_decode($issue);
-                            if (!property_exists($issue, 'errors') && property_exists($issue, 'fields')) {
-                                $paid_hours += $issue->fields->timespent / 3600;
-                                $model->hours = $paid_hours;
-                            }
-                        }
-                    } else {
-                        $model->hours = $data->hours;
-                    }
-                    if (!$model->hours) {
-                        $model->hours = $data->hours;
-                    }
+
+                    $model->hours = $data->hours;
                     $model->project_id = $data->project_id;
                     $model->date_report = DateUtil::convertData($data->date_report);
                     $model->task = $data->task;
@@ -247,7 +214,6 @@ class IndexController extends DefaultController
                     $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
                     $project = Project::findOne($model->project_id);
                     $project->total_logged_hours += $model->hours;
-                    $project->total_paid_hours += $paid_hours;
 
                     $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
                     $dte = Project::findOne(['id' => $model->project_id])->date_start;
