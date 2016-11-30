@@ -279,7 +279,7 @@ class UserController extends DefaultController {
                     $model = new LoginForm();
                     $model->loginUser($user);
 
-                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
 
                         return $this->redirect(['user/index']);
 
