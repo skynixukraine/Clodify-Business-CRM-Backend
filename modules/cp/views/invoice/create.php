@@ -54,11 +54,7 @@ $this->params['menu'] = [
             ?>
 
             <?php
-            if ($customersProjects = Yii::$app->request->getQueryParam('customersProjects')) {
-                $projects = Project::ProjectsCurrentClient($customersProjects);
-            } else {
-                $projects = (Project::ProjectsCurrentUser(Yii::$app->user->id));
-            }
+            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
             $listProjects = [];
             foreach ($projects as $project) {
                 $listProjects[$project->id] = $project->name;
@@ -124,7 +120,8 @@ $this->params['menu'] = [
     $(function(){
 
         invoiceCreateModule.init({
-            findUrl     : '<?=Url::to(['report/find'])?>'
+            findUrl     : '<?=Url::to(['report/find'])?>',
+            findProjects     : '<?=Url::to(['invoice/get-projects'])?>'
         })
     });
 </script>

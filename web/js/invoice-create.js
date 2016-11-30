@@ -5,6 +5,7 @@
 var invoiceCreateModule = (function() {
     var cfg = {
             findUrl     : '',
+            findProjects : ''
         },
         dataTable,
         filterProjectsSelect = "#invoice-user_id",
@@ -17,7 +18,13 @@ var invoiceCreateModule = (function() {
 
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
-
+    function changeDropdown(item, index) {
+        if (index == 0) {
+            $(filterOneProjectSelect).empty();
+        }
+        $(filterOneProjectSelect).append($('<option value=' + item.id + '>' + item.name + '</option>'));
+        console.log(item);
+    }
     return {
         init: function( config ){
 
@@ -28,6 +35,14 @@ var invoiceCreateModule = (function() {
                 var id = $(this).val();
                 dataFilter['user_id'] = id;
                 if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
+                    $.ajax({
+                        url: cfg.findProjects + '?customer=' + id,
+                        success: function(data){
+                            data.forEach(changeDropdown);
+                            // console.log(data)
+                        }
+                    });
+
                     dataTable.api().ajax.reload();
                 }
             });
