@@ -4,25 +4,17 @@
 
 var invoiceCreateModule = (function() {
     var cfg = {
-            findUrl     : ''
+            findUrl     : '',
         },
         dataTable,
         filterProjectsSelect = "#invoice-user_id",
+        filterOneProjectSelect = "#invoice-project_id",
         filterDateStartSelect = "#date_start",
         filterDateEndSelect = "#date_end",
         dataFilter = {
         },
         deleteModal;
-    $( "#project_id" ).click(function() {
 
-        $('#invoice-user_id').attr('disabled', 'disabled')
-
-    });
-    $( "#invoice-user_id" ).click(function() {
-
-        $('#project_id').attr('disabled', 'disabled')
-
-    });
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
 
@@ -35,6 +27,15 @@ var invoiceCreateModule = (function() {
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
                 dataFilter['user_id'] = id;
+                if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
+                    dataTable.api().ajax.reload();
+                }
+            });
+
+            filterOneProjectSelect = $( filterOneProjectSelect );
+            filterOneProjectSelect.change(function(){
+                var id = $(this).val();
+                dataFilter['project_id'] = id;
                 if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
                     dataTable.api().ajax.reload();
                 }

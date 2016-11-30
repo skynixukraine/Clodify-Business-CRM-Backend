@@ -53,14 +53,19 @@ $this->params['menu'] = [
             }
             ?>
 
-            <?php $projects = (Project::ProjectsCurrentUser(Yii::$app->user->id));
+            <?php
+            if ($customersProjects = Yii::$app->request->getQueryParam('customersProjects')) {
+                $projects = Project::ProjectsCurrentClient($customersProjects);
+            } else {
+                $projects = (Project::ProjectsCurrentUser(Yii::$app->user->id));
+            }
             $listProjects = [];
             foreach ($projects as $project) {
                 $listProjects[$project->id] = $project->name;
             }
-            echo $form->field($model, 'user_id')
+            echo $form->field($model, 'project_id')
                 ->dropDownList( $listProjects,  [
-                    'prompt' => 'Choose...', 'id' => 'project_id'
+                    'prompt' => 'Choose...',
                 ] )
                 ->label( 'Projects' );
 
