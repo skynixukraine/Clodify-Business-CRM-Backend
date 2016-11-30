@@ -23,7 +23,6 @@ var invoiceCreateModule = (function() {
             $(filterOneProjectSelect).empty();
         }
         $(filterOneProjectSelect).append($('<option value=' + item.id + '>' + item.name + '</option>'));
-        console.log(item);
     }
     return {
         init: function( config ){
@@ -39,7 +38,6 @@ var invoiceCreateModule = (function() {
                         url: cfg.findProjects + '?customer=' + id,
                         success: function(data){
                             data.forEach(changeDropdown);
-                            // console.log(data)
                         }
                     });
 
