@@ -45,6 +45,4 @@ $this->params['menu'] = [
         <?php $form = ActiveForm::end(); ?>
     </div>
 </div>
-
-
 </div>
