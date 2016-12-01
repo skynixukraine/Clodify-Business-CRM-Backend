@@ -239,7 +239,7 @@ class IndexController extends DefaultController
                                 "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
                             ]);
                         }
-                        if (strlen(trim($model->task)) <= 20) {
+                        if (strlen(trim($model->task)) <= 19) {
 
                             return json_encode([
                                 "success" => false,
