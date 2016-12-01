@@ -24,10 +24,24 @@ $this->params['menu'] = [
 
 ?>
 <div class="container profile">
-    <v class="row">
+
+    <div class="row">
         <div class="col-lg-12">
             <h1><?=Yii::t('app', 'Profile')?></h1>
         </div>
+    </div>
+    <div class="row profile-public">
+       <div class="im-centered">
+            <div class="col-lg-12">
+                <?php if ($user->photo != null):?>
+                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                        '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                <?php else:?>
+                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                <?php endif?>
+            </div>
+       </div>
+     </div>
         <?php $form = ActiveForm::begin(); ?>
                 <div class="my-profile-form col-lg-12">
                     <div class="row">
