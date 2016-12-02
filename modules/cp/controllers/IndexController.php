@@ -314,6 +314,7 @@ class IndexController extends DefaultController
                 ]);
             }
         }
+        
         return $this->render('index', ['model' => $model]);
     }
     /** Delete developer`s report */
@@ -332,6 +333,11 @@ class IndexController extends DefaultController
                 $model->is_delete = 1;
                 if($model->save(true, ['is_delete']) && $model->hoursDelete()) {
 
+                    $project = Project::findOne($model->project_id);
+                    $user = User::findOne(Yii::$app->user->id);
+                    //Delete the cost of project after report removing
+                    $project->cost -= ($model->hours * ($user->salary / Report::SALARY_HOURS));
+                    $project->save();
                     return json_encode([
                         "success" => true,
                         "id"      => $model->id
