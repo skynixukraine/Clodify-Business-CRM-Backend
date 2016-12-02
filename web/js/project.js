@@ -1,6 +1,7 @@
 /**
  * Created by Oleksii on 09.06.2015.
  */
+
 var projectModule = (function() {
 
     var cfg = {
@@ -134,15 +135,15 @@ var projectModule = (function() {
                 {
                     "targets"   : 3,
                     "orderable" : true
+                },
+                {
+                    "targets"   : 4,
+                    "orderable" : true
                 }
-            ], index = 3;
+            ], index = 4;
 
             if( cfg.canSeeHours){
                 columns.push({
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
                         "targets"   : 4,
                         "orderable" : true
                     },
@@ -153,6 +154,33 @@ var projectModule = (function() {
                     {
                         "targets"   : 6,
                         "orderable" : true
+                    },
+                    {
+                        "targets"   : 7,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 8,
+                        "orderable" : false
+                    },
+                    {
+                        "targets"   : 9,
+                        "orderable" : false
+                    });
+            }
+            if( !cfg.canSeeHours){
+                columns.push(
+                    {
+                        "targets"   : 4,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 5,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 6,
+                        "orderable" : false
                     },
                     {
                         "targets"   : 7,
@@ -163,34 +191,11 @@ var projectModule = (function() {
                         "orderable" : false
                     });
             }
-            if( !cfg.canSeeHours){
-                columns.push(
-                    {
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 5,
-                        "orderable" : false
-                    },
-                    {
-                        "targets"   : 6,
-                        "orderable" : false
-                    },
-                    {
-                        "targets"   : 7,
-                        "orderable" : false
-                    });
-            }
 
             if(cfg.canActivate || cfg.canSuspend || cfg.canDelete || cfg.canEdit || cfg.canPaid)
             columns.push(
                 {
-                    "targets"   : 10,
+                    "targets"   : 11,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
 

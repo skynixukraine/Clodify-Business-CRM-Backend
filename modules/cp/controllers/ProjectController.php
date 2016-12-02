@@ -80,7 +80,7 @@ class ProjectController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        
+
 
 
         if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
@@ -100,7 +100,8 @@ class ProjectController extends DefaultController
             'id',
             'name',
             'jira_code',
-            'total_logged_hours',];
+            'total_logged_hours',
+            'cost'];
         if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
             $columns[] = 'total_paid_hours';
@@ -182,7 +183,8 @@ class ProjectController extends DefaultController
             $row = '' . $model->id .
                 '; ' . $model->name .
                 '; ' . $model->jira_code .
-                '; ' . $model->total_logged_hours;
+                '; ' . $model->total_logged_hours .
+                '; ' . $model->cost;
 
             if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 

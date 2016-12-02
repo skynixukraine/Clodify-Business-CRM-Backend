@@ -19,7 +19,7 @@ use yii\filters\RateLimiter;
  * @property string $date_start
  * @property string $date_end
  * @property integer $is_delete
- *
+ * @property integer $cost
  * @property ProjectCustomers[] $projectCustomers
  * @property Users[] $users
  * @property ProjectDevelopers[] $projectDevelopers
@@ -91,6 +91,7 @@ class Project extends \yii\db\ActiveRecord
             'date_end'          => 'Date End',
             'is_delete'         => 'Is Delete',
             'alias'             => 'Alias',
+            'cost'              => 'Cost'
         ];
     }
 
