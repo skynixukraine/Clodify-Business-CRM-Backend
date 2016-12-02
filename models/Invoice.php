@@ -53,7 +53,14 @@ class Invoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'date_start', 'date_end', 'total', 'payment_method_id'], 'required'],
+            ['user_id', 'required', 'when' => function($model) {
+                return $model->project_id == '';
+            }],
+            ['user_id', 'required', 'when' => function($model) {
+                return $model->project_id == '';
+            }],
+
+            [['date_end', 'total', 'payment_method_id'], 'required'],
             [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id'], 'integer'],
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],

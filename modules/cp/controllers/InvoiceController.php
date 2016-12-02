@@ -120,12 +120,14 @@ class InvoiceController extends DefaultController
 
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
-
-            $client = $model->getUser()->one();
+            $name = null;
+            if ( $client = $model->getUser()->one() ) {
+                $name = $client->first_name . ' ' . $client->last_name;
+            }
 
             $list[] = [
                 $model->id,
-                $client->first_name . ' ' . $client->last_name,
+                $name,
                 "C#" . $model->contract_number . ", Act#" . $model->act_of_work .
                     "<br> (" . $model->date_start . '~' . $model->date_end .')',
                 '$' . ($model->subtotal > 0 ? $model->subtotal : 0),
@@ -169,6 +171,7 @@ class InvoiceController extends DefaultController
                 $model->total = ( $model->subtotal - $model->discount );
 
             }
+
             if ($model->validate()) {
 
                 $model->save();
