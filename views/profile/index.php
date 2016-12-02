@@ -15,12 +15,8 @@ use app\models\Report;
 use app\components\DateUtil;
 use kato\DropZone;
 
+$this->title  = Yii::t("app", "Profile");
 
-$this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
-$this->title                    = Yii::t("app", "My Profile");
-$this->params['breadcrumbs'][]  = $this->title;
-$this->params['menu'] = [
-];
 
 ?>
 <div class="container profile">
@@ -35,7 +31,7 @@ $this->params['menu'] = [
             <div class="col-lg-12">
                 <?php if ($user->photo != null):?>
                     <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
-                        '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                        '/data/'.$user->id.'/photo/'.$user->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
                 <?php else:?>
                     <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
                 <?php endif?>
@@ -57,6 +53,4 @@ $this->params['menu'] = [
                     </div>
                 </div>
         <?php $form = ActiveForm::end(); ?>
-    </div>
-</div>
-</div>
+   </div>
