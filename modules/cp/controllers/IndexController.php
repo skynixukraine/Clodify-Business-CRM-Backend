@@ -213,8 +213,7 @@ class IndexController extends DefaultController
 
                     $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
                     $project = Project::findOne($model->project_id);
-                    $project->total_logged_hours += $model->hours;
-
+					
                     $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
                     $dte = Project::findOne(['id' => $model->project_id])->date_start;
                     //var_dump(strtotime($dte));die();
@@ -314,6 +313,7 @@ class IndexController extends DefaultController
                 ]);
             }
         }
+        
         return $this->render('index', ['model' => $model]);
     }
     /** Delete developer`s report */
@@ -331,7 +331,6 @@ class IndexController extends DefaultController
 
                 $model->is_delete = 1;
                 if($model->save(true, ['is_delete']) && $model->hoursDelete()) {
-
                     return json_encode([
                         "success" => true,
                         "id"      => $model->id

@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by WebAIS Company.
- * URL: webais.company
+ * Created by Skynix Company.
+ * URL: skynix.company
  * Developer: alekseyyp
  * Date: 02.01.16
  * Time: 10:08
