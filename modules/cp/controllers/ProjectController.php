@@ -184,7 +184,7 @@ class ProjectController extends DefaultController
                 '; ' . $model->name .
                 '; ' . $model->jira_code .
                 '; ' . $model->total_logged_hours .
-                '; ' . $model->cost;
+                '; ' . '$' . number_format( $model->cost, 2, ',	', '.');
 
             if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 

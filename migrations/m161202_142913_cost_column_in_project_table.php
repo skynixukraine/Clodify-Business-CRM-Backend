@@ -5,7 +5,7 @@ class m161202_142913_cost_column_in_project_table extends Migration
 {
     public function up()
     {
-        $this->addColumn('projects', 'cost', $this->float());
+        $this->addColumn('projects', 'cost', $this->decimal(10,2)->defaultValue('0'));
 		$this->db->createCommand('
 			UPDATE projects p
 			LEFT JOIN (SELECT
