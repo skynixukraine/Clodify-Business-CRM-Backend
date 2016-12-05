@@ -1642,7 +1642,10 @@ footer .link a:hover {
     font-size: 14px;
   }
 }
-.career h2 {
+.profile-page {
+  border: 1px solid #b7d4ee
+}
+.career h2, .profile-page h2 {
   margin: 6px 0 0 0;
   padding: 22px 0 0 0;
   border-top: 1px solid #b7d4ee;
@@ -1670,9 +1673,13 @@ footer .link a:hover {
   color: #000000;
 }
 .career .right-panel,
-.career .left-panel {
+.career .left-panel,
+.career .left-panel
+{
   margin: 21px 0 0 0;
+
 }
+
 .career .right-panel > div,
 .career .left-panel > div {
   padding: 15px 27px;
@@ -1680,10 +1687,20 @@ footer .link a:hover {
 .career .right-panel > div,
 .career .left-panel > div,
 .career .right-panel article,
-.career .left-panel article {
+.career .left-panel article
+{
   margin: 12px 0;
   border: 1px solid #b7d4ee;
 }
+.profile-page  .right-panel > div {
+  text-align: center;
+  margin: 0 auto;
+}
+.profile-page  .right-panel > div {
+  margin: 12px 0;
+  margin-top:10px;
+}
+
 .career .right-panel ul,
 .career .left-panel ul {
   padding: 0 0 0 18px;
@@ -2291,34 +2308,26 @@ a.active {
   }
 }
 
-.profile input,
-.profile textarea,
-.profile .has-success .form-control,
-.profile textarea:focus,
-.profile .form-control:focus{
-  margin: 12px 0;
-  padding: 20px 27px;
-  border: 1px solid #b7d4ee;
-  border-color: #b7d4ee;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-  border-radius: 0;
-  font-size: 16px;
-  font-family: 'Raleway-Regular', sans-serif;
-  color: #000000;
-
-}
-.profile .control-label{
-  margin: 20px 0 5px 0;
-  font-size: 17px;
-  font-family: 'Raleway-Bold', sans-serif;
-  text-transform: uppercase;
-  text-align: left;
-  color: #000000;
-  text-transform: uppercase;
-}
-.profile .profile-public img{
+.profile-page img{
   float: none;
   display:block;
   margin: 0 auto;
+  padding-bottom: 5px;
+}
+.profile-page .profile-image {
+  border-bottom: 1px solid #b7d4ee;
+}
+.profile-page article {
+  margin-top:10px;
+  font-size: 20px;
+}
+.profile-page .left-panel{
+  text-align:end;
+}
+.profile-page .right-panel {
+  text-align:start;
+  padding-right:5px;
+}
+.profile-page {
+  padding:20px;
 }

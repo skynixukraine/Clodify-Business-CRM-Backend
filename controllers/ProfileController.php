@@ -21,20 +21,6 @@ class ProfileController extends Controller
                             ->andWhere(['last_name' => ucfirst(strtolower($initials[1]))])
                             ->andWhere(['public_profile_key' => $public_key])->one();
         $this->layout = "main_en";
-        $defaultPhoto = User::getUserPhoto();
-        $defaultSing = User::getUserSing();
-        return $this->render("index", ['user' => $user,
-            'defaultPhoto' => $defaultPhoto,
-            'defaultSing' => $defaultSing]);
-
-       /* $user->andWhere(['public_profile_key' => $public_key]);
-        $defaultPhoto = User::getUserPhoto();
-
-        $defaultSing = User::getUserSing();
-        $this->layout = "main_en";
-
-        return $this->render("index", ['model' => $user,
-            'defaultPhoto' => $defaultPhoto,
-            'defaultSing' => $defaultSing]); */
+        return $this->render("index", ['user' => $user ]);
     }
 }

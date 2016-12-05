@@ -16,18 +16,15 @@ use app\components\DateUtil;
 use kato\DropZone;
 
 $this->title  = Yii::t("app", "Profile");
-
-
 ?>
-<div class="container profile">
-
+<div class="container profile-page">
     <div class="row">
         <div class="col-lg-12">
             <h1><?=Yii::t('app', 'Profile')?></h1>
         </div>
     </div>
-    <div class="row profile-public">
-       <div class="im-centered">
+    <div class="row profile-image">
+        <div class="im-centered">
             <div class="col-lg-12">
                 <?php if ($user->photo != null):?>
                     <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
@@ -36,21 +33,58 @@ $this->title  = Yii::t("app", "Profile");
                     <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
                 <?php endif?>
             </div>
-       </div>
-     </div>
-        <?php $form = ActiveForm::begin(); ?>
-                <div class="my-profile-form col-lg-12">
-                    <div class="row">
-                        <fieldset class = "col-lg-6">
-                            <?php /** @var $model User */?>
-                            <?php echo $form->field( $user, 'first_name' )->textInput(['readonly' => true]);?>
-                            <?php echo $form->field( $user, 'last_name' )->textInput(['readonly' => true]);?>
-                        </fieldset>
-                        <fieldset class = "col-lg-6">
-                            <?php echo $form->field( $user, 'tags' )->textInput(['readonly' => true])->label( 'Your primary skills' );?>
-                            <?php echo $form->field( $user , 'about')->textArea(['readonly' => true]);?>
-                        </fieldset>
-                    </div>
-                </div>
-        <?php $form = ActiveForm::end(); ?>
-   </div>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-6  left-panel">
+                <article >
+                     First name :
+                </article>
+            </div>
+            <div class="col-lg-6  right-panel">
+                <article>
+                     <?php echo $user->first_name ?>
+                </article>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6  left-panel">
+            <article >
+                Last name :
+            </article>
+        </div>
+        <div class="col-lg-6  right-panel">
+            <article>
+                <?php echo $user->last_name ?>
+            </article>
+        </div>
+    </div>
+<?php if($user->tags) { ?>
+    <div class="row">
+        <div class="col-lg-6  left-panel">
+            <article >
+                Primary skills :
+            </article>
+        </div>
+        <div class="col-lg-6  right-panel">
+            <article>
+                <?php echo $user->tags ?>
+            </article>
+        </div>
+    </div>
+    <?php }?>
+    <?php if($user->about) { ?>
+    <div class="row">
+        <div class="col-lg-6  left-panel">
+            <article >
+                About :
+            </article>
+        </div>
+        <div class="col-lg-6  right-panel">
+            <article>
+                <?php echo $user->about ?>
+            </article>
+        </div>
+    </div>
+    <?php }?>
+</div>
