@@ -11,6 +11,7 @@ use Yii;
  * @property integer $project_id
  * @property integer $alias_user_id
  * @property integer $is_pm
+ * @property integer $is_sales
  * @property string $status
  *
  * @property Project $project
@@ -36,7 +37,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'project_id'], 'required'],
-            [['user_id', 'project_id', 'alias_user_id', 'is_pm'], 'integer'],
+            [['user_id', 'project_id', 'alias_user_id', 'is_pm', 'is_sales'], 'integer'],
             [['status'], 'string']
         ];
     }
@@ -46,6 +47,24 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
 
             ->where (ProjectDeveloper::tableName() . '.user_id=:userId AND '. ProjectDeveloper::tableName() .'.is_pm=1 ', [':userId' => $pmId])
             ->all();
+    }
+    public static function allSalesUsers($salesId)
+    {
+        return self::find()
+
+            ->where (ProjectDeveloper::tableName() . '.user_id=:userId AND '. ProjectDeveloper::tableName() .'.is_sales=1 ', [':userId' => $salesId])
+            ->all();
+
+    }
+    public static function getReportsOfSales($salesId)
+    {
+        return self::find()
+            ->where(ProjectDeveloper::tableName() . ".user_id=:sId AND is_sales=1" , [
+
+                ':sId' => $salesId
+            ])
+            ->all();
+
     }
 
 
@@ -59,6 +78,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
             'project_id' => 'Project ID',
             'alias_user_id' => 'Alias User ID',
             'is_pm' => 'Is Pm',
+            'is_sales'  => 'Is Sales',
             'status' => 'Status',
         ];
     }

@@ -13,6 +13,9 @@ use app\models\Invoice;
 use app\models\User;
 use app\models\Report;
 use app\models\ProjectCustomer;
+use app\models\PaymentMethod;
+use app\models\Project;
+use app\models\ProjectDeveloper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -38,14 +41,29 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php $customers = User::allCustomersWhithReceive();
-            $listCustomers = User::getCustomersDropDown( $customers, 'id');
-            /** @var $model Invoice */
-            echo $form->field($model, 'user_id')
-                      ->dropDownList( $listCustomers,  [
-                          'prompt' => 'Choose...',
-                      ] )
-                      ->label( 'Customers' );
+            <?php if (User::hasPermission([User::ROLE_ADMIN])) {
+                $customers = User::allCustomersWhithReceive();
+                $listCustomers = User::getCustomersDropDown($customers, 'id');
+                /** @var $model Invoice */
+                echo $form->field($model, 'user_id')
+                    ->dropDownList($listCustomers, [
+                        'prompt' => 'Choose...',
+                    ])
+                    ->label('Customers');
+            }
+            ?>
+
+            <?php
+            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+            $listProjects = [];
+            foreach ($projects as $project) {
+                $listProjects[$project->id] = $project->name;
+            }
+            echo $form->field($model, 'project_id')
+                ->dropDownList( $listProjects,  [
+                    'prompt' => 'Choose...',
+                ] )
+                ->label( 'Projects' );
 
             ?>
 
@@ -74,6 +92,13 @@ $this->params['menu'] = [
             <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
+            <?php $payMethods = PaymentMethod::find()->all();
+            $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name');
+
+            echo $form->field( $model, 'payment_method_id')
+                ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
+                ->label('Pay Methods');?>
+
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
@@ -95,7 +120,8 @@ $this->params['menu'] = [
     $(function(){
 
         invoiceCreateModule.init({
-            findUrl     : '<?=Url::to(['report/find'])?>'
+            findUrl     : '<?=Url::to(['report/find'])?>',
+            findProjects     : '<?=Url::to(['invoice/get-projects'])?>'
         })
     });
 </script>

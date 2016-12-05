@@ -38,8 +38,9 @@ class ReportController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'edit', 'delete'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
+
                 ],
             ],
             'verbs' => [
@@ -65,6 +66,7 @@ class ReportController extends DefaultController
         $projectId          = Yii::$app->request->getQueryParam("project_id");
         $usersId            = Yii::$app->request->getQueryParam("user_develop");
         $customerId         = Yii::$app->request->getQueryParam("user_id");
+        $salesId            = Yii::$app->request->getQueryParam("user_id");
         $dateStart          = Yii::$app->request->getQueryParam("date_start");
         $dateEnd            = Yii::$app->request->getQueryParam("date_end");
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
@@ -151,6 +153,29 @@ class ReportController extends DefaultController
 
             }
         }
+        if(User::hasPermission([User::ROLE_SALES])) {
+
+            $salesid = Yii::$app->user->id;
+
+            if($salesid && $salesid != null){
+
+                $projectsDeveloper = ProjectDeveloper::getReportsOfSales($salesid );
+                $projectId = [];
+                foreach($projectsDeveloper as $project){
+
+                    $projectId[] = $project->project_id;
+
+                }
+                if($projectId && $projectId != null) {
+
+                    $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+                }else{
+
+                    $dataTable->setFilter('project_id IN (null) ');
+                }
+
+            }
+        }
             if(User::hasPermission([User::ROLE_PM])) {
 
                 $teammates = [];
@@ -193,22 +218,40 @@ class ReportController extends DefaultController
 
         $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
                         'project_id' => $model->getProject()->one()->id ]);
+        //    var_dump($pD);die();
                         
         $aliasUser = null;
         if ( $pD && $pD->alias_user_id ) {
         
             $aliasUser = User::findOne( $pD->alias_user_id );
         
-        }                
-                        
+        }
+        //var_dump($aliasUser->first_name);die();
+
             $list[] = [
                 $model->id,
                 $model->task,
                 $model->date_added,
                 $model->getProject()->one()->name,
-                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && 
-                    $aliasUser != null ?
-                    $model->reporter_name . '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' : $model->reporter_name),
+                /*(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
+                ($aliasUser != null) ?
+                    User::findOne($model->user_id)->first_name . " " .
+                    User::findOne($model->user_id)->last_name .
+                    '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' :
+                    User::findOne($model->user_id)->first_name . " " .
+                    User::findOne($model->user_id)->last_name),*/
+
+              ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_SALES]) &&
+                ($aliasUser != null) ?
+                    $aliasUser->first_name . ' ' .
+                    $aliasUser->last_name .
+                    '(' . User::findOne($model->user_id)->first_name . ' ' .
+                          User::findOne($model->user_id)->last_name . ')' :
+                        ( User::hasPermission([User::ROLE_CLIENT]) ?
+                        $aliasUser->first_name . ' ' . $aliasUser->last_name :
+                        User::findOne($model->user_id)->first_name . ' ' .
+                        User::findOne($model->user_id)->last_name )),
+
                     $model->date_report,
                     ( $model->invoice_id == null ? "No" : "Yes" ),
                     $model->hours

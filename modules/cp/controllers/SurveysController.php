@@ -35,7 +35,7 @@ class SurveysController extends DefaultController
                     [
                         'actions'   => ['index', 'results', 'find', 'create', 'delete', 'edit', 'code'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES],
                     ],
                     [
 

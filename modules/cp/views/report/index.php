@@ -30,7 +30,7 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
-             if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+             if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
                  $projects = Project::find()
                      ->where('is_delete=0')
                      ->all();
@@ -98,7 +98,7 @@ $this->params['menu'] = [
                 <th class="date-col"><?=Yii::t('app', 'Date added')?></th>
                 <th><?=Yii::t('app', 'Reporter name')?></th>
                 <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])):?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])):?>
                     <th><?=Yii::t('app', 'Is invoiced')?></th>
                 <?php endif;?>
             </tr>
@@ -124,7 +124,7 @@ exit();*/
             findUrl     : '<?=Url::to(['report/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN]) ? 'true' : 'false')?>
+            canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
     });
 

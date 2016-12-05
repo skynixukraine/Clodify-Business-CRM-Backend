@@ -14,7 +14,7 @@ var projectModule = (function() {
             canActivate : null,
             canSuspend  : null,
             canSeeHours : null,
-            canFunck    : null
+            canFunck    : null,
         },
         dataTable,
         dataFilter = {
@@ -37,13 +37,19 @@ var projectModule = (function() {
         });
         $(".two input[type='checkbox']").click(function () {
 
-            if( $(".two input[type='radio']:checked").length == 1 ){
-                return ;
+            if ($(".two input[type='checkbox']:checked").length == 1) {
+
+                if( $(".two input[type='radio']:checked").length == 1 ){
+                    return ;
+                }
+                else {
+                    $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
+                }
+
             }
-            else {
-                $(this).parent().parent().find(" input[type='radio']").attr("checked", "checked")
-            }
+
         });
+
 
 
     function actionEdit( id )
@@ -230,7 +236,7 @@ var projectModule = (function() {
                 "bLengthChange": false,
                 "bFilter": true,
                 "bSort": true,
-                "pageLength": 25,
+                "pageLength": 20,
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],

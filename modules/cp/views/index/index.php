@@ -101,7 +101,7 @@ $this->params['menu'] = [
         <div class="row form-add-report">
             <div class="col-xs-3 col-sm-2 " ">
 
-                <?php $projects = \app\models\Project::getDevOrAdminOrPmProjects( Yii::$app->user->id );
+                <?php $projects = \app\models\Project::getDevOrAdminOrPmOrSalesProjects( Yii::$app->user->id );
                 $listReport = \yii\helpers\ArrayHelper::map( $projects, 'id', 'name' );
                 echo $form->field( $model, 'project_id', [
 

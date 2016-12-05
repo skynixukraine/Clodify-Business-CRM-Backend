@@ -94,6 +94,19 @@ class SiteController extends Controller
         if (($email = Yii::$app->request->get('email'))) {
 
             $model->email = $email;
+            if (($password = Yii::$app->request->get('password'))) {
+
+                $model->password = $password;
+
+                if (($ticket = Yii::$app->request->get('id'))) {
+
+                    if ($model->login()) {
+                        return $this->redirect(['support/ticket', 'id' => $ticket]);
+                    }
+                    //$model->password = $password;
+
+                }
+            }
 
         }
         if ( $model->load(Yii::$app->request->post()) ) {
@@ -166,6 +179,26 @@ class SiteController extends Controller
                                 return $this->redirect(Language::getDefaultUrl() . '/cp/index');
                             }
                         }
+
+                        if (User::hasPermission([User::ROLE_SALES])) {
+                            if ($modelUserLogins->date_login == null) {
+
+                                //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                                Yii::$app->getSession()->setFlash('success',
+                                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            }
+
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
+                            if(($idticket = Yii::$app->request->get('ticket'))){
+
+                                return $this->redirect(["support/ticket", 'id' => $idticket]);
+
+                            }else {
+                                return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                            }
+                        }
+
                         if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                             if ($modelUserLogins->date_login == null) {
 

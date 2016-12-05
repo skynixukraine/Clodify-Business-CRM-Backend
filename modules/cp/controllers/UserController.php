@@ -39,14 +39,14 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback'],
+                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
                     [
                         'actions'   => [ 'find', 'index', 'loginback'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => ['loginback'],
@@ -63,6 +63,7 @@ class UserController extends DefaultController {
                     'invite'    => ['get', 'post'],
                     'loginas'   => ['get', 'post'],
                     'loginback' => ['get', 'post'],
+                    'update'    => ['get', 'post'],
                 ],
             ],
         ];
@@ -99,11 +100,40 @@ class UserController extends DefaultController {
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $query = User::find();
         }
 
+        if( User::hasPermission([User::ROLE_SALES, User::ROLE_PM])) {
+
+            /* get all project id for asigned to sales */
+            $all_project_ids = ProjectDeveloper::find()->where('user_id=:id AND is_sales=true',
+                [
+                    ':id' => Yii::$app->user->id
+                ]
+            )->all();
+
+        /** array with all project id wich asigned to sales*/
+        $projectId = [];
+            foreach($all_project_ids as $project){
+
+                $projectId[] = $project->project_id;
+
+            }
+        if(!empty($projectId)) {
+            $devUser = implode(', ' , $projectId);
+        }
+        else{
+            $devUser = 'null';
+        }
+
+        $query = User::find()
+            ->leftJoin(ProjectDeveloper::tableName(),
+                ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')')
+            ->groupBy('user_id');
+        }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
             $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
@@ -120,7 +150,7 @@ class UserController extends DefaultController {
             }
 
             $query = User::find()
-            ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
+                    ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
         }
         $columns        = [
             'id',
@@ -132,6 +162,7 @@ class UserController extends DefaultController {
             'date_login',
             'date_signup',
             'is_active',
+            'salary',
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -149,10 +180,7 @@ class UserController extends DefaultController {
 
         $dataTable->setFilter('is_delete=0');
 
-        if(User::hasPermission([User::ROLE_PM]))
-        {
-            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
-        }
+
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -168,6 +196,7 @@ class UserController extends DefaultController {
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
+                User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
                 $model->is_delete
             ];
         }
@@ -250,7 +279,7 @@ class UserController extends DefaultController {
                     $model = new LoginForm();
                     $model->loginUser($user);
 
-                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
 
                         return $this->redirect(['user/index']);
 
@@ -288,5 +317,29 @@ class UserController extends DefaultController {
 
         }
         $this->redirect('user/index');
+    }
+
+    public function actionUpdate()
+    {
+        /** @var $user User */
+        if (( $id = Yii::$app->request->get("id") ) &&
+            ( $user = User::findOne($id) ) ) {
+            $user->scenario = 'settings';
+            if ($user->load(Yii::$app->request->post())) {
+
+                if ($user->validate()) {
+                    $user->save();
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::$app->getSession()->setFlash('error',
+                        Yii::t("app", "Data is not valid!!!"));
+                }
+            }
+        }
+
+        return $this->render('edit', [
+            'model' => $user
+        ]);
     }
 }

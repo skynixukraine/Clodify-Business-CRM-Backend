@@ -137,7 +137,7 @@ var adminReportModule = (function() {
                 },
                 {
                     "targets"   : ++index,
-                    "orderable" : true,
+                    "orderable" : false,
                     "render"    : function (data, type, row) {
                         return row[2];
                     }

@@ -7,6 +7,7 @@
  */
 namespace app\modules\cp\controllers;
 
+use app\models\Project;
 use app\models\Report;
 use Yii;
 use yii\filters\AccessControl;
@@ -35,9 +36,11 @@ class InvoiceController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download', 'downloadreports'],
+                        'actions'   => ['index', 'find', 'create', 'view', 'send', 'paid', 'canceled', 'download', 'downloadreports',
+                            'get-projects'
+                        ],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => ['index', 'find', 'view', 'download', 'downloadreports'],
@@ -47,7 +50,7 @@ class InvoiceController extends DefaultController
                     [
                         'actions'   => ['delete', 'download', 'downloadreports'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                 ],
             ],
@@ -204,7 +207,7 @@ class InvoiceController extends DefaultController
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
 
-            if (!empty($model->id) && !empty($model->method)) {
+            if (!empty($model->id)) {
 
                 $dataPdf = Invoice::findOne($model->id);
 
@@ -223,7 +226,7 @@ class InvoiceController extends DefaultController
                         'dataTo' => date('j F', strtotime($dataPdf->date_end)),
                         'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->method])->description,
+                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->payment_method_id]),
                         'idCustomer' => $dataPdf->getUser()->one()->id,
                         'notes'      => $dataPdf->note,
                         'sing'       => $dataPdf->getUser()->one()->sing
@@ -414,6 +417,25 @@ class InvoiceController extends DefaultController
             return $this->redirect(['index']);
         }
 
+    }
+
+    public function actionGetProjects()
+    {
+        if ($customer = Yii::$app->request->getQueryParam('customer')) {
+            $data[] = [
+                'id' => '',             // zero element of dropdown list
+                'name' => 'Choose...'];
+            if ($projects = Project::ProjectsCurrentClient($customer)) {
+                foreach ($projects as $project) {
+                    $data[] = [
+                        'id'    => $project->id,
+                        'name'  => $project->name
+                    ];
+                }
+            }
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->content = json_encode($data);
+        }
     }
 
 }

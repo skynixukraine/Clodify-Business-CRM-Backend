@@ -55,6 +55,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_CLIENT = "CLIENT";
     const ROLE_FIN = "FIN";
     const ROLE_GUEST = "GUEST";
+    const ROLE_SALES = "SALES";
 
     public $rawPassword;
     public $status = [];
@@ -367,7 +368,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
-                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "')")
+                User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "','" .
+                                                    User::ROLE_SALES . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }

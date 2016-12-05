@@ -9,7 +9,8 @@ var userModule = (function() {
             findUrl     : '',
         loginAsUserUrl  : '',
             canDelete   : null,
-            canLoginAs  : null
+            canLoginAs  : null,
+            canEdit     : null
         },
         dataTable,
         dataFilter = {
@@ -123,6 +124,10 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 8,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 9,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
                             var icons = [];
@@ -134,6 +139,12 @@ var userModule = (function() {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+                            }
+
+                            if ( cfg.canEdit ) {
+
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
                             }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
@@ -186,6 +197,13 @@ var userModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+
+                });
+
+                dataTable.find("i[class*=edit]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionEdit( id );
 
                 });
 
