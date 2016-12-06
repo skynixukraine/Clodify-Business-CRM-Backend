@@ -204,40 +204,8 @@ class IndexController extends DefaultController
                 }
 
                 if ($data->project_id != null) {
-                    if (!$model->id) {
-                        $curl = curl_init('http://jira.skynix.company:8070/rest/api/2/project');
-                        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                        $jiraData = curl_exec($curl);
-                        curl_close($curl);
-                        $jiraData = json_decode($jiraData);
-                        $jiraName = Project::findOne($data->project_id)->name;
-                        foreach ($jiraData as $jiraItem) {
-                            if ($jiraItem->name == $jiraName) {
-                                $jiraKey = $jiraItem->key;
-                                break;
-                            }
-                        }
-                        $pattern = "/([{$jiraKey}]+-\d+)/";
-                        preg_match_all($pattern, $data->task, $matches);
-                        $model->hours = 0;
-                        foreach ($matches[0] as $issueKey) {
-                            $curl = curl_init("http://jira.skynix.company:8070/rest/api/2/issue/{$issueKey}");
-                            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=E24851FE850FD9B1CC6E94645F2695A0"));
-                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                            $issue = curl_exec($curl);
-                            curl_close($curl);
-                            $issue = json_decode($issue);
-                            if (!property_exists($issue, 'errors') && property_exists($issue, 'fields')) {
-                                $model->hours += $issue->fields->timespent / 3600;
-                            }
-                        }
-                    } else {
-                        $model->hours = $data->hours;
-                    }
-                    if (!$model->hours) {
-                        $model->hours = $data->hours;
-                    }
+
+                    $model->hours = $data->hours;
                     $model->project_id = $data->project_id;
                     $model->date_report = DateUtil::convertData($data->date_report);
                     $model->task = $data->task;
@@ -245,8 +213,7 @@ class IndexController extends DefaultController
 
                     $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
                     $project = Project::findOne($model->project_id);
-                    $project->total_logged_hours += $model->hours;
-
+					
                     $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
                     $dte = Project::findOne(['id' => $model->project_id])->date_start;
                     //var_dump(strtotime($dte));die();
@@ -271,7 +238,7 @@ class IndexController extends DefaultController
                                 "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
                             ]);
                         }
-                        if (strlen(trim($model->task)) <= 20) {
+                        if (strlen(trim($model->task)) <= 19) {
 
                             return json_encode([
                                 "success" => false,
@@ -346,6 +313,7 @@ class IndexController extends DefaultController
                 ]);
             }
         }
+        
         return $this->render('index', ['model' => $model]);
     }
     /** Delete developer`s report */
@@ -363,7 +331,6 @@ class IndexController extends DefaultController
 
                 $model->is_delete = 1;
                 if($model->save(true, ['is_delete']) && $model->hoursDelete()) {
-
                     return json_encode([
                         "success" => true,
                         "id"      => $model->id

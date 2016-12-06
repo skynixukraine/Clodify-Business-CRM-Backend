@@ -31,7 +31,7 @@ $this->params['menu'] = [
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
         <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
         <li><a href="#tab_3" data-toggle="tab">Sign</a></li>
-        <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
+        <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES])):?>
             <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
         <?php endif?>
         <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
@@ -45,12 +45,12 @@ $this->params['menu'] = [
                         <div class="box-body">
                             <span>Hello <?php echo $model->first_name?>
                                 <?php if ( User::hasPermission([ User::ROLE_CLIENT])):?><br><?php endif?>
-                                <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                                <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES])):?>
                                 <?php echo Yii::$app->user->identity->role?> </span><br/>
                             <?php endif?>
                             <span>You are joined Skynix on <?php echo  Yii::$app->formatter->asDate($model->date_signup,'d/MM/Y') ?></span><br/>
                             <span>Last time you visited Skynix on <?php echo Yii::$app->formatter->asDate($model->date_login, 'd/MM/Y HH:mm')?></span><br/>
-                            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV])):?>
+                            <?php if ( User::hasPermission([ User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES])):?>
                         </div>
                     </div>
                 </div>
@@ -232,7 +232,7 @@ $this->params['menu'] = [
             ?>
         </div>
         <div id="tab_4" class="tab-pane">
-            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM])):?>
+            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES])):?>
                 <div class="box-header with-border">
                     <div class="box-body">
                         <table class="table box">

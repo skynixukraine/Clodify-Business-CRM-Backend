@@ -80,26 +80,29 @@ class ProjectController extends DefaultController
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-        
+
 
 
         if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
-                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id");
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                            ->groupBy('id');
         }
         if(User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])){
         $query         = Project::find()
                             ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
-                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id");
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                            ->groupBy('id');
         }
 
         $columns        = [
             'id',
             'name',
             'jira_code',
-            'total_logged_hours',];
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+            'total_logged_hours',
+            'cost'];
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
             $columns[] = 'total_paid_hours';
         }
@@ -174,13 +177,14 @@ class ProjectController extends DefaultController
             /*  @var $customer \app\models\User */
             foreach($customers as $customer){
 
-                $customersNames[] = $customer->first_name;
+                $customersNames[] = $customer->first_name . " " .  $customer->last_name;
             }
             /* @var $model \app\models\Project */
             $row = '' . $model->id .
                 '; ' . $model->name .
                 '; ' . $model->jira_code .
-                '; ' . $model->total_logged_hours;
+                '; ' . $model->total_logged_hours .
+                '; ' . '$' . number_format( $model->cost, 2, ',	', '.');
 
             if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
@@ -229,33 +233,13 @@ class ProjectController extends DefaultController
             $model = new Project();
 
             $model->scenario = "admin";
-
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->status = Project::STATUS_NEW;
-
-                if ($model->validate()) {
-
-                    if( $model->save() ) {
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
-                        return $this->redirect(['index']);
-                    } else {
-                        $model = new Project();
-                        Yii::$app->getSession()->setFlash('error',
-                            Yii::t("app", "Fields with customers and developers are required"));
-                        return $this->render('create', ['model' => $model,
-                            'title' => 'Create a new project']);
-                    }
-
-                } else {
-
-                    $model->status = null;
-                    Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "Fields with customers and developers are required"));
-                    return $this->render('create', ['model' => $model,
-                        'title' => 'Create a new project']);
-
-                }
+                if ($model->validate() && $model->save()) {
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                    return $this->redirect(['index']);
+                } 
             }
             return $this->render('create', ['model' => $model,
                                             'title' => 'Create a new project']);

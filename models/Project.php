@@ -19,7 +19,7 @@ use yii\filters\RateLimiter;
  * @property string $date_start
  * @property string $date_end
  * @property integer $is_delete
- *
+ * @property integer $cost
  * @property ProjectCustomers[] $projectCustomers
  * @property Users[] $users
  * @property ProjectDevelopers[] $projectDevelopers
@@ -65,6 +65,13 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
             [['customers', 'developers', 'alias'], 'safe'],
+            ['is_sales', function() {
+                if ($user = User::findOne($this->is_sales)) {
+                    if ($user->role == 'DEV') {
+                        $this->addError('error', Yii::t('yii', 'Developer can not be sales'));
+                    }
+                }
+            }]
         ];
     }
 
@@ -84,6 +91,7 @@ class Project extends \yii\db\ActiveRecord
             'date_end'          => 'Date End',
             'is_delete'         => 'Is Delete',
             'alias'             => 'Alias',
+            'cost'              => 'Cost'
         ];
     }
 
@@ -128,19 +136,20 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
-    public static function getDevOrAdminOrPmProjects($userId)
+    public static function getDevOrAdminOrPmOrSalesProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
             ' projects.status
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
-            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP )
+            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS )
             WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
             ':role'      => User::ROLE_DEV,
             ':roleA'     => User::ROLE_ADMIN,
             ':roleP'     => User::ROLE_PM,
+            ':roleS'     => User::ROLE_SALES,
             ':userId'    => $userId
         ])->all();
     }
