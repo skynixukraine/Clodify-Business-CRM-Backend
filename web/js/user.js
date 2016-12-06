@@ -131,20 +131,21 @@ var userModule = (function() {
                         "orderable" : false,
                         "render"    : function (data, type, row) {
                             var icons = [];
+                            
+                            if ( cfg.canEdit ) {
+
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+                            }
                             if ( cfg.canLoginAs ) {
 
-                                icons.push('<button data-placement="top" title="Login" class = "btn btn-primary">Login as This user</button>');
+                                icons.push('<i class="fa fa-sign-in" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Login as this user"></i>');
                             }
                             if ( cfg.canDelete ) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-                            }
-
-                            if ( cfg.canEdit ) {
-
-                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
                             }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
@@ -186,7 +187,7 @@ var userModule = (function() {
                     }
                 });
 
-                dataTable.find("button[class*=btn]").click(function(){
+                dataTable.find("i[class*=sign-in]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
                     actionLogin(id);
