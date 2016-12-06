@@ -32,6 +32,8 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     <div class="form-group">
         <?php echo $form->field( $model, 'first_name')->textInput(["class" => "form-control"])->label( 'First Name' );?>
         <?php echo $form->field( $model, 'last_name')->textInput(["class" => "form-control"])->label( 'Last Name' );?>
+        <?php echo $form->field( $model, 'password')->passwordInput(["class" => "form-control", 'value' => ''])->label( 'Password' );?>
+
         <?php echo $form->field($model, 'role')->dropDownList([
 
             User::ROLE_ADMIN      => 'ADMIN',
