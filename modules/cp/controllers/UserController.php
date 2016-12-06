@@ -336,7 +336,14 @@ class UserController extends DefaultController {
                 } else {
                     $post['User']['password'] = md5($post['User']['password']);
                 }
+
+                if(!empty($post['User']['salary'])) {
+                    if($post['User']['salary']!= $user->salary){
+                        $user->date_salary_up = date("Y-m-d");
+                    }
+                }
             }
+
             if ($user->load($post)) {
                 if ($user->validate()) {
                     $user->save();
