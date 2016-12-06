@@ -327,24 +327,7 @@ class UserController extends DefaultController {
         if (( $id = Yii::$app->request->get("id") ) &&
             ( $user = User::findOne($id) ) ) {
             $user->scenario = 'settings';
-
-            $post = Yii::$app->request->post();
-
-            if( !empty($post) ) {
-                if (empty($post['User']['password'])) {
-                    $post['User']['password'] = $user->password;
-                } else {
-                    $post['User']['password'] = md5($post['User']['password']);
-                }
-
-                if(!empty($post['User']['salary'])) {
-                    if($post['User']['salary']!= $user->salary){
-                        $user->date_salary_up = date("Y-m-d");
-                    }
-                }
-            }
-
-            if ($user->load($post)) {
+            if ($user->load(Yii::$app->request->post())) {
                 if ($user->validate()) {
                     $user->save();
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));

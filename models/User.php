@@ -302,6 +302,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->date_signup = date('Y-m-d H:i:s');
             $this->date_login = null;
             //$this->getCustomers()->one()->receive_invoices = 1;
+        } else {
+            $current = self::findOne($this->id);
+            if( ($this->salary) && ($current->salary != $this->salary )) {
+                $this->date_salary_up = date("Y-m-d");
+            } else {
+                $this->salary = $current->salary;
+            }
+            if( !$this->password ) {
+
+                $this->password = $current->password;
+
+            } else {
+                $this->password = md5($this->password);
+            }
         }
         /*else
             $this->modified = new Expression('NOW()');*/
@@ -310,6 +324,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function afterSave($insert, $changedAttributes)
     {
+    
         if($this->role == User::ROLE_GUEST){
             if ($this->rawPassword) {
 
