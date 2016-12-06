@@ -3,10 +3,9 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use app\models\User;
 /**
- * Created by PhpStorm.
- * User: olha
- * Date: 29.01.16
- * Time: 9:27
+ * Created by Skynix Team.
+ * Date: 06.12.16
+ * Time: 15:27
  */
 /** @var  $model User */
 ?>
