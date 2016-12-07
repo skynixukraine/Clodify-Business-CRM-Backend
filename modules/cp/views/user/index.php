@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Url;
 use app\models\User;
+use yii\widgets\ActiveForm;
+
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -17,6 +20,26 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     ];
 }
 
+?>
+<?php
+$form = ActiveForm::begin();
+$items = [
+    'ALL USERS' => 'ALL USERS',
+    'PM'        => 'PM',
+    'ADMIN'     => 'ADMIN',
+    'SALES'     => 'SALES',
+    'FIN'       => 'FIN',
+    'PM'        => 'PM',
+    'DEV'       => 'DEV',
+    'CLIENT'    => 'CLIENT'
+];
+echo $form->field($model, 'role',[
+    'options' => [
+        'style' => [
+            'width'=>"170px"
+        ]
+    ]])->dropDownList($items);
+ActiveForm::end();
 ?>
 
 <table id="user-table" class="table table-hover box">
