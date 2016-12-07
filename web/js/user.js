@@ -104,11 +104,21 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 3,
-                        "orderable" : true
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            return '<a href="mailto:' + data + '">' + data +'</a>';
+                        }
                     },
                     {
                         "targets"   : 4,
-                        "orderable" : true
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            if( data) {
+                                return '<a href="tel:+38' + data + '">' + data + '</a>';
+                            } else {
+                                return '';
+                            }
+                        }
                     },
                     {
                         "targets"   : 5,
