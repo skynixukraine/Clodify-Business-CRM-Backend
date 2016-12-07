@@ -56,8 +56,8 @@ class Invoice extends \yii\db\ActiveRecord
             ['user_id', 'required', 'when' => function($model) {
                 return $model->project_id == '';
             }],
-            ['user_id', 'required', 'when' => function($model) {
-                return $model->project_id == '';
+            ['project_id', 'required', 'when' => function($model) {
+                return $model->user_id == '';
             }],
 
             [['date_end', 'total', 'payment_method_id'], 'required'],
