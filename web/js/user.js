@@ -112,13 +112,6 @@ var userModule = (function() {
                     {
                         "targets"   : 4,
                         "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            if( data) {
-                                return '<a href="tel:+38' + data + '">' + data + '</a>';
-                            } else {
-                                return '';
-                            }
-                        }
                     },
                     {
                         "targets"   : 5,
@@ -138,6 +131,10 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 9,
+                        "orderable" : true
+                    },
+                    {
+                        "targets"   : 10,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
                             var icons = [];

@@ -163,6 +163,7 @@ class UserController extends DefaultController {
             'date_signup',
             'is_active',
             'salary',
+            'date_salary_up',
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -186,7 +187,11 @@ class UserController extends DefaultController {
         $list = array();
         /* @var $model \app\models\User */
         foreach ( $activeRecordsData as $model ) {
-
+            if ($model->date_salary_up){
+                $salary_up = date('d/m/Y', strtotime($model->date_salary_up));
+            } else {
+                $salary_up = '';
+            }
             $list[] = [
                 $model->id,
                 $model->first_name . " " . $model->last_name,
@@ -197,6 +202,7 @@ class UserController extends DefaultController {
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
                 ( $model->is_active == 1 ? "Yes " : "No" ),
                 User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
                 $model->is_delete
             ];
         }

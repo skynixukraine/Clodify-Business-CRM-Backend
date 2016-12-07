@@ -349,7 +349,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ->setTo($this->email)
                     ->setSubject('Your email was changed.')
                     ->send();
-            }
+            } 
 
             if ($this->role == User::ROLE_GUEST) {
                 if ($this->rawPassword) {
