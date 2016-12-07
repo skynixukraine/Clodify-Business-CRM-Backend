@@ -338,6 +338,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ->send();
             }
         } else {
+            if( !$insert && isset( $changedAttributes['email'] )) {
+                Yii::$app->mailer->compose('changeEmail', [
+                    'user' => $this->first_name,
+                    'email' => $this->email,
+                    'password' => $this->rawPassword,
+                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($this->email)
+                    ->setSubject('Your email was changed.')
+                    ->send();
+            }
 
             if ($this->role == User::ROLE_GUEST) {
                 if ($this->rawPassword) {
