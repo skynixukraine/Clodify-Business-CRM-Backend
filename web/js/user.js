@@ -72,7 +72,7 @@ var userModule = (function() {
                           ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
-       
+
         deleteModal.show();
         deleteModal.getWin().find("button[class*=confirm]").click(function () {
             deleteRequest();
@@ -168,7 +168,13 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 4,
-                        "orderable" : true
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            if(!data) {
+                                data = '';
+                            }
+                            return '<a href="tel:' + data + '">' + data +'</a>';
+                        }
                     },
                     {
                         "targets"   : 5,
