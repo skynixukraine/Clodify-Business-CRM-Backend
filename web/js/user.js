@@ -6,16 +6,21 @@ var userModule = (function() {
     var cfg = {
             editUrl     : '',
             deleteUrl   : '',
+            activateUrl : '',
             findUrl     : '',
-        loginAsUserUrl  : '',
+            loginAsUserUrl  : '',
             canDelete   : null,
             canLoginAs  : null,
             canEdit     : null
         },
         dataTable,
+        filterUsersSelect       = "select[name=roles]",
+        filterActiveOnlySelect  = "input[name=is_active]",
         dataFilter = {
+            'is_active': true
         },
-        deleteModal;
+        deleteModal,
+        activateModal;
 
     function actionEdit( id )
     {
@@ -67,9 +72,48 @@ var userModule = (function() {
                           ' Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
+       
         deleteModal.show();
         deleteModal.getWin().find("button[class*=confirm]").click(function () {
             deleteRequest();
+        });
+
+    }
+    
+    function actionSuspend(id, action, dataTable) 
+    {
+        function suspendRequest()
+        {
+            var params = {
+                url: cfg.activateUrl,
+                data: {id: id, action: action},
+                dataType: 'json',
+                type: 'POST',
+                success: function (response) {
+                    dataTable.api().ajax.reload();
+                }
+            };
+            $.ajax(params);
+        }
+
+        if (action == 'active') {
+            var title = 'Account Suspending.',
+                    body = 'Are you sure you wish suspend the account?';
+        } else {
+            var title = 'Account activation.',
+                    body = 'Are you sure you wish activate an account?';
+        }
+
+        deleteModal = new ModalBootstrap({
+            title: title,
+            body: body,
+            winAttrs: {class: 'modal delete'}
+        });
+
+        deleteModal.show();
+        deleteModal.getWin().find("button[class*=confirm]").click(function (e) {
+            e.preventDefault();
+            suspendRequest();
         });
 
     }
@@ -79,6 +123,19 @@ var userModule = (function() {
 
 
             cfg = $.extend(cfg, config);
+            filterUsersSelect = $( filterUsersSelect );
+            filterUsersSelect.change(function(){
+                var role = $(this).val();
+                dataFilter['role'] = role;
+                dataTable.api().ajax.reload();
+            });
+            
+            filterActiveOnlySelect = $( filterActiveOnlySelect );
+            filterActiveOnlySelect.change(function(){
+                var is_active = $(this).is(':checked');
+                dataFilter['is_active'] = is_active;
+                dataTable.api().ajax.reload();
+            });
             dataTable = $('#user-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -111,7 +168,7 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 4,
-                        "orderable" : true,
+                        "orderable" : true
                     },
                     {
                         "targets"   : 5,
@@ -123,7 +180,10 @@ var userModule = (function() {
                     },
                     {
                         "targets"   : 7,
-                        "orderable" : true
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
+                        }
                     },
                     {
                         "targets"   : 8,
@@ -214,9 +274,15 @@ var userModule = (function() {
                     actionEdit( id );
 
                 });
-
+                
+                
+                dataTable.find('a.active, a.suspended').on('click', (function(e){
+                    e.preventDefault();
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        action = $(this).attr('class');
+                    actionSuspend(id, action, dataTable);
+                }));
             });
-
         }
     };
 

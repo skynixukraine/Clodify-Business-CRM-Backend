@@ -39,7 +39,7 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update'],
+                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update', 'activate'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
@@ -64,6 +64,7 @@ class UserController extends DefaultController {
                     'loginas'   => ['get', 'post'],
                     'loginback' => ['get', 'post'],
                     'update'    => ['get', 'post'],
+                    'activate'  => ['post'],
                 ],
             ],
         ];
@@ -91,6 +92,23 @@ class UserController extends DefaultController {
         }
     }
 
+    /** Activate/Suspend user from Manage Users */
+    public function actionActivate()
+    {
+        if (( $id = Yii::$app->request->post("id") ) ) {
+			
+			$action = Yii::$app->request->post("action");
+			
+            /** @var  $model User */
+            $model  = User::findOne($id);
+			$model->is_active = $action == 'active' ? 0 : 1;
+            $model->save(true, ['is_active', 'date_login', 'date_login']);
+            return json_encode([
+                "is_active"   => $model->is_active,
+            ]);
+        }
+    }
+
     /** Value table (Manage Users) fields, filters, search */
     public function actionFind()
     {
@@ -99,7 +117,9 @@ class UserController extends DefaultController {
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-
+		$role			= Yii::$app->request->getQueryParam("role");
+		$active			= Yii::$app->request->getQueryParam("is_active");
+		
         if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $query = User::find();
@@ -127,7 +147,7 @@ class UserController extends DefaultController {
         else{
             $devUser = 'null';
         }
-
+		
         $query = User::find()
             ->leftJoin(ProjectDeveloper::tableName(),
                 ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
@@ -180,8 +200,14 @@ class UserController extends DefaultController {
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter('is_delete=0');
-
-
+			
+		if ($role && $role != null && isset(User::getRoles()[$role])){
+			$dataTable->setFilter('role=\'' . $role . '\'');
+        }
+		
+		if ($active && $active == 'true'){
+			$dataTable->setFilter('is_active=1');
+        }
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
@@ -200,7 +226,7 @@ class UserController extends DefaultController {
                 $model->phone,
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
-                ( $model->is_active == 1 ? "Yes " : "No" ),
+                ( $model->is_active == 1 ? "Active" : "Suspended" ),
                 User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
                 $model->is_delete

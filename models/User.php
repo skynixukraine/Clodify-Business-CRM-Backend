@@ -601,5 +601,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
     }
+	/**
+	 * 
+	 * @return array
+	 */
+	public static function getRoles(){
+		return [
+			self::ROLE_ADMIN => 'ADMIN',
+			self::ROLE_DEV => 'DEV',
+			self::ROLE_FIN => 'FIN',
+			self::ROLE_CLIENT => 'CLIENT',
+			self::ROLE_PM => 'PM',
+			self::ROLE_SALES => 'SALES'
+		];
+	}
 
 }
