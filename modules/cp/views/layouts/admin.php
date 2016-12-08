@@ -151,12 +151,23 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['/cp/user/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=Yii::t('app', 'Manage Users')?></span>
+                        <i class="fa fa-users"></i> <span>
+                            <?php if ( Yii::$app->user->identity->role == User::ROLE_CLIENT) :    ?>
+
+                                <?=Yii::t('app', 'My Developers')?>
+
+                            <?php else: ?>
+
+                                <?=Yii::t('app', 'Manage Users')?>
+
+                            <?php endif;?>
+
+                          </span>
                     </a>
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_PM])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "teammate" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/teammate/index']);?>">
                         <i class="fa fa-wechat"></i> <span><?=Yii::t('app', 'Company Teams ')?></span>
@@ -175,7 +186,17 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/project/index']);?>">
-                        <i class="fa fa-edit"></i> <span><?=Yii::t('app', 'Manage Projects')?></span>
+                        <i class="fa fa-edit"></i> <span>
+                            <?php if ( Yii::$app->user->identity->role == User::ROLE_CLIENT) :    ?>
+
+                                <?=Yii::t('app', 'My Projects')?>
+
+                            <?php else: ?>
+
+                                <?=Yii::t('app', 'Manage Projects')?>
+
+                            <?php endif;?>
+                        </span>
                     </a>
                 </li>
                 <?php endif;?>
@@ -196,7 +217,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/surveys/index']);?>">
-                            <i class="fa  fa-question"></i> <span>Manage Surveys</span>
+                            <i class="fa  fa-question"></i> <span>My Surveys</span>
                         </a>
                     </li>
                 <?php endif;?>
