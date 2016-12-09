@@ -18,7 +18,10 @@ var invoiceCreateModule = (function() {
 
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
-    document.getElementById("invoice-user_id").required = true;
+    if ( document.getElementById("invoice-user_id")){
+        // this field isn't available for SALES role, so it caused an error("Cannot set property 'required' of null")
+        document.getElementById("invoice-user_id").required = true;
+    }
     document.getElementById("invoice-project_id").required = true;
     $(filterProjectsSelect).click(function () {
        if ($(filterProjectsSelect).val() != '') {
