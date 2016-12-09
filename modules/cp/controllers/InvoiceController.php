@@ -115,6 +115,12 @@ class InvoiceController extends DefaultController
 
             $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
         }
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+            foreach ($projects as $project) {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id=' . $project->id);
+            }
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
