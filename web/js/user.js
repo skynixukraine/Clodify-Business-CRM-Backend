@@ -4,47 +4,43 @@
 var userModule = (function() {
 
     var cfg = {
-            editUrl     : '',
-            deleteUrl   : '',
-            activateUrl : '',
-            findUrl     : '',
-            loginAsUserUrl  : '',
-            canDelete   : null,
-            canLoginAs  : null,
-            canEdit     : null
+            editUrl: '',
+            deleteUrl: '',
+            activateUrl: '',
+            findUrl: '',
+            loginAsUserUrl: '',
+            canDelete: null,
+            canLoginAs: null,
+            canEdit: null
         },
         dataTable,
-        filterUsersSelect       = "select[name=roles]",
-        filterActiveOnlySelect  = "input[name=is_active]",
+        filterUsersSelect = "select[name=roles]",
+        filterActiveOnlySelect = "input[name=is_active]",
         dataFilter = {
             'is_active': true
         },
         deleteModal,
         activateModal;
 
-    function actionEdit( id )
-    {
+    function actionEdit(id) {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
 
-    function actionLogin( id )
-    {
+    function actionLogin(id) {
         document.location.href = cfg.loginAsUserUrl + "?id=" + id;
     }
 
-    function actionDelete( id, name, dataTable )
-    {
+    function actionDelete(id, name, dataTable) {
 
-        function deleteRequest(  )
-        {
+        function deleteRequest() {
             var params = {
-                url     : cfg.deleteUrl,
-                data    : {id : id},
+                url: cfg.deleteUrl,
+                data: {id: id},
                 dataType: 'json',
-                type    : 'DELETE',
-                success : function ( response ) {
+                type: 'DELETE',
+                success: function (response) {
 
-                    if ( response.message ) {
+                    if (response.message) {
 
                         var win = new ModalBootstrap({
                             title: 'Message',
@@ -62,15 +58,15 @@ var userModule = (function() {
                 }
             };
 
-            $.ajax( params );
+            $.ajax(params);
 
         }
 
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
-            body        : 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
-                          ' Are you sure you wish to delete it?',
-            winAttrs    : { class : 'modal delete'}
+            title: 'Delete ' + name + "?",
+            body: 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
+            ' Are you sure you wish to delete it?',
+            winAttrs: {class: 'modal delete'}
         });
 
         deleteModal.show();
@@ -79,11 +75,9 @@ var userModule = (function() {
         });
 
     }
-    
-    function actionSuspend(id, action, dataTable) 
-    {
-        function suspendRequest()
-        {
+
+    function actionSuspend(id, action, dataTable) {
+        function suspendRequest() {
             var params = {
                 url: cfg.activateUrl,
                 data: {id: id, action: action},
@@ -98,20 +92,20 @@ var userModule = (function() {
 
         if (action == 'active') {
             var title = 'Account Suspending.',
-                    body = 'Are you sure you wish suspend the account?';
+                body = 'Are you sure you wish suspend the account?';
         } else {
             var title = 'Account activation.',
-                    body = 'Are you sure you wish activate an account?';
+                body = 'Are you sure you wish activate an account?';
         }
 
-        deleteModal = new ModalBootstrap({
+        suspendModal = new ModalBootstrap({
             title: title,
             body: body,
             winAttrs: {class: 'modal delete'}
         });
 
-        deleteModal.show();
-        deleteModal.getWin().find("button[class*=confirm]").click(function (e) {
+        suspendModal.show();
+        suspendModal.getWin().find("button[class*=confirm]").click(function (e) {
             e.preventDefault();
             suspendRequest();
         });
@@ -247,8 +241,8 @@ var userModule = (function() {
             });
 
             var id="", name, a = [];
-            dataTable.on( 'draw.dt', function (e, settings, data) {
 
+            dataTable.on( 'draw.dt', function (e, settings, data) {
                 dataTable.find("td").click(function(){
 
                     dataTable.find("tr[class*=active]").removeClass( "active" );
@@ -284,8 +278,8 @@ var userModule = (function() {
                     actionEdit( id );
 
                 });
-                
-                
+                dataTable.find('td:contains("Suspend")').parent('tr').addClass('suspend');
+                dataTable.find('td:contains("Active")').parent('tr').removeClass('suspend');
                 dataTable.find('a.active, a.suspended').on('click', (function(e){
                     e.preventDefault();
                     var id     = $(this).parents("tr").find("td").eq(0).text(),

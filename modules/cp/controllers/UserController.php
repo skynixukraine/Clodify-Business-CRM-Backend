@@ -98,11 +98,10 @@ class UserController extends DefaultController {
         if (( $id = Yii::$app->request->post("id") ) ) {
 			
 			$action = Yii::$app->request->post("action");
-			
             /** @var  $model User */
             $model  = User::findOne($id);
 			$model->is_active = $action == 'active' ? 0 : 1;
-            $model->save(true, ['is_active', 'date_login', 'date_login']);
+            $model->save(true, ['is_active']);
             return json_encode([
                 "is_active"   => $model->is_active,
             ]);

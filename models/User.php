@@ -370,7 +370,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 }
 
             } else {
-                if ($this->role != User::ROLE_GUEST) {
+                if (($this->role != User::ROLE_GUEST) && (!isset($changedAttributes['is_active']))) {
                     if ($this->rawPassword) {
 
                         Yii::$app->mailer->compose('inviteUser', [
