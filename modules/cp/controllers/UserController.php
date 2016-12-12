@@ -229,7 +229,8 @@ class UserController extends DefaultController {
                 ( $model->is_active == 1 ? "Active" : "Suspended" ),
                 User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
-                $model->is_delete
+                $model->is_delete,
+                $model->public_profile_key
             ];
         }
 
