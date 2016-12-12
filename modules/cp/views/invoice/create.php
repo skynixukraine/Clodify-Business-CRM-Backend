@@ -45,7 +45,7 @@ $this->params['menu'] = [
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
-                echo $form->field($model, 'user_id')
+                echo $form->field($model, 'user_id', ['enableClientValidation' => false])
                     ->dropDownList($listCustomers, [
                         'prompt' => 'Choose...',
                     ])
@@ -59,7 +59,7 @@ $this->params['menu'] = [
             foreach ($projects as $project) {
                 $listProjects[$project->id] = $project->name;
             }
-            echo $form->field($model, 'project_id')
+            echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
                     'prompt' => 'Choose...',
                 ] )
