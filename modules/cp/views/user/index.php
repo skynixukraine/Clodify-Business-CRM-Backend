@@ -1,6 +1,10 @@
 <?php
 use yii\helpers\Url;
 use app\models\User;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -17,7 +21,26 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     ];
 }
 
-?>
+  $form = ActiveForm::begin();
+        /** @var $model User */ ?>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+            <?php 
+			echo Html::label('Roles:');
+			$roles = ArrayHelper::merge(['' => 'All Roles'], User::getRoles());
+			echo Html::dropDownList('roles', null, $roles, ['class'=>"form-control"]);
+			?>
+		</div>
+		<div class="col-lg-2">
+			<?php echo Html::label('Active Only: ');?>
+			<div class="is_active"> <?php echo Html::checkbox('is_active', true ); ?> </div>
+			
+		</div>
+    </div>
+</div>
+
+<?php ActiveForm::end();?>
 
 <table id="user-table" class="table table-hover box">
     <thead>
@@ -32,6 +55,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
         <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) : ?>
         <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
+          <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
         <?php endif;?>
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
         <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
@@ -48,6 +72,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             deleteUrl       : '<?=Url::to(['user/delete'])?>',
             findUrl         : '<?=Url::to(['user/find'])?>',
             loginAsUserUrl  : '<?=Url::to(['user/loginas'])?>',
+            activateUrl     : '<?=Url::to(['user/activate'])?>',
             canDelete       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canLoginAs      : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit         : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>

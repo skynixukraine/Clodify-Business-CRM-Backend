@@ -282,7 +282,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
-
             if (!$this->invite_hash) {
 
                 $this->invite_hash = md5(time());
@@ -302,6 +301,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->date_signup = date('Y-m-d H:i:s');
             $this->date_login = null;
             //$this->getCustomers()->one()->receive_invoices = 1;
+        } else {
+            $current = self::findOne($this->id);
+            if( ($this->salary) && ($current->salary != $this->salary )) {
+                $this->date_salary_up = date("Y-m-d");
+            } else {
+                $this->salary = $current->salary;
+            }
+            if( $this->password ) {
+                $this->rawPassword = $this->password;
+               $this->password = md5($this->password);
+            } else {
+                $this->password = $current->password;
+            }
         }
         /*else
             $this->modified = new Expression('NOW()');*/
@@ -310,35 +322,45 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function afterSave($insert, $changedAttributes)
     {
-        if($this->role == User::ROLE_GUEST){
+        if( !$insert && isset( $changedAttributes['password'] ))  {
             if ($this->rawPassword) {
 
-                Yii::$app->mailer->compose('newticketUser', [
+                Yii::$app->mailer->compose('newPassword', [
 
                     'user' => $this->first_name,
                     'email' => $this->email,
                     'password' => $this->rawPassword,
-                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company',
-                    'ticket' => $this->ticketId
-
+                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Welcome to Skynix company. Please activate your account.')
+                    ->setSubject('Your password was changed.')
                     ->send();
             }
-
         } else {
-            if($this->role != User::ROLE_GUEST){
+            if( !$insert && isset( $changedAttributes['email'] )) {
+                Yii::$app->mailer->compose('changeEmail', [
+                    'user' => $this->first_name,
+                    'email' => $this->email,
+                    'password' => $this->rawPassword,
+                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($this->email)
+                    ->setSubject('Your email was changed.')
+                    ->send();
+            } 
+
+            if ($this->role == User::ROLE_GUEST) {
                 if ($this->rawPassword) {
 
-                    Yii::$app->mailer->compose('inviteUser', [
+                    Yii::$app->mailer->compose('newticketUser', [
 
                         'user' => $this->first_name,
                         'email' => $this->email,
                         'password' => $this->rawPassword,
                         'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company',
-                        'hash' => $this->invite_hash
+                        'ticket' => $this->ticketId
 
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
@@ -346,10 +368,29 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                         ->setSubject('Welcome to Skynix company. Please activate your account.')
                         ->send();
                 }
+
+            } else {
+                if (($this->role != User::ROLE_GUEST) && (!isset($changedAttributes['is_active']))) {
+                    if ($this->rawPassword) {
+
+                        Yii::$app->mailer->compose('inviteUser', [
+
+                            'user' => $this->first_name,
+                            'email' => $this->email,
+                            'password' => $this->rawPassword,
+                            'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company',
+                            'hash' => $this->invite_hash
+
+                        ])
+                            ->setFrom(Yii::$app->params['adminEmail'])
+                            ->setTo($this->email)
+                            ->setSubject('Welcome to Skynix company. Please activate your account.')
+                            ->send();
+                    }
+                }
+
             }
-
         }
-
         parent::afterSave($insert, $changedAttributes); // TODO: Change the autogenerated stub
     }
 
@@ -560,5 +601,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
     }
+	/**
+	 * 
+	 * @return array
+	 */
+	public static function getRoles(){
+		return [
+			self::ROLE_ADMIN => 'ADMIN',
+			self::ROLE_DEV => 'DEV',
+			self::ROLE_FIN => 'FIN',
+			self::ROLE_CLIENT => 'CLIENT',
+			self::ROLE_PM => 'PM',
+			self::ROLE_SALES => 'SALES'
+		];
+	}
 
 }
