@@ -74,10 +74,44 @@ let LoginPage = (function(){
 
 })();
 
+
 $(function(){
 
   LoginPage.init();
+  // hideTextScroll.init();
+  Ember.$(".content-logo").animated("slideInDown");
+  Ember.$(".content-title").animated("slideInUp");
+  Ember.$(".section-1__title").animated("fadeIn");
 
+
+
+    Ember.$(".section-1").waypoint(function () {
+    Ember.$(".software-block__items").each(function (index) {
+      let ths = $(this);
+      setInterval(function () {
+        ths.addClass("on");
+      }, 200 * index);
+    });
+  },{
+    offset: "30%"
+  });
+
+
+  var hideText = Ember.$('.header__content');
+
+  Ember.$(window).scroll(function() {
+    if(hideText){
+      if ( Ember.$(window).scrollTop() > hideText.offset().top - 120) {
+       hideText.css({"opacity": "0"});
+        // if (!houseImg.attr('src')) {
+        //   houseImg.attr('src', 'img/popularity/house-2.gif')
+        // }
+      }else{
+        hideText.css({"opacity": "1"});
+      }
+
+    }
+  });
 
 
 });
