@@ -3,12 +3,17 @@
   z-index: 9999
   top: 0
 
+.on
+  opacity: 1!important
+  transform: translateY(0)!important
+
 .header
   height: 1089px
   position: relative
   background-image: url("../backend/assets/img/header/header.jpg")
   background-position: center center
   background-repeat: no-repeat
+  background-attachment: fixed
 
 .header__content
   max-width: 1200px
@@ -18,6 +23,7 @@
   left: 50%
   transform: translate(-50%, -50%)
   text-align: center
+  transition: opacity .1s ease
 
 .content-title
   padding-top: 57px
@@ -50,7 +56,10 @@
   font-size: 38px
   padding-left: 50px
   color: #fff
-
+.software-block__items
+  opacity: 0
+  transition: .3s ease
+  transform: translateY(100px)
 .top-panel__menu
   position: absolute
   top: 50%
