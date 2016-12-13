@@ -1,0 +1,24 @@
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+body
+  min-width: 320px
+  font-family: "Roboto-Light", sans-serif
+  line-height: 1.6
+.container
+  max-width: 1920px
+  width: 100%
+  margin: 0 auto
+
+.container-content
+  max-width: 1634px
+  width: 100%
+  margin: 0 auto
+
+@mixin clearfix
+  &:after
+    content: ""
+    display: table
+    clear: both

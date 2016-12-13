@@ -1,0 +1,124 @@
+.panel-fixed
+  position: fixed
+  z-index: 9999
+  top: 0
+
+.header
+  height: 1089px
+  position: relative
+  background-image: url("../backend/assets/img/header/header.jpg")
+  background-position: center center
+  background-repeat: no-repeat
+
+.header__content
+  max-width: 1200px
+  width: 100%
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  text-align: center
+
+.content-title
+  padding-top: 57px
+  font-size: 24px
+  text-align: center
+  color: #ffffff
+
+.header__top-panel
+  position: relative
+  height: 98px
+  @include clearfix
+  transition: height .3s ease
+  max-width: 1634px
+  width: 100%
+  margin: 0 auto
+
+.top-panel__logo
+  position: absolute
+  top: 50%
+  left: 0
+  transform: translateY(-50%)
+
+.logo
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+.logo-desc
+  display: inline-block
+  font-size: 38px
+  padding-left: 50px
+  color: #fff
+
+.top-panel__menu
+  position: absolute
+  top: 50%
+  right: 0
+  transform: translateY(-50%)
+
+.nav-menu__list
+  float: left
+  list-style: none
+  @include clearfix
+
+.nav-social__list
+  float: left
+  list-style: none
+
+.nav-menu__item
+  float: left
+
+.nav-social__item
+  display: inline-block
+  padding: 0 9px
+
+.fix-height
+  height: 60px !important
+
+.nav__link
+  display: block
+  text-decoration: none
+  font-size: 19px
+  color: #fff
+  height: 98px
+  line-height: 98px
+  text-align: center
+  padding: 0 35px 0 21px
+
+.nav__link-animMod
+  color: #615F5F
+  height: 60px
+  line-height: 60px
+
+.active
+  background: #51cbff
+
+.nav-social__link
+  display: block
+  height: 98px
+  width: 23px
+  position: relative
+
+.link-img
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+.rrr
+  display: block
+  width: 25px
+  height: 25px
+  border-radius: 50%
+  background: #fff
+  position: relative
+  i
+    &:before
+      speak: none
+      font-style: normal
+      font-weight: 400
+      font-variant: normal
+      text-transform: none
+      line-height: 1
+      -webkit-font-smoothing: antialiased
+      content: "\ea90"
