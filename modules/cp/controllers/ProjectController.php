@@ -183,12 +183,12 @@ class ProjectController extends DefaultController
             $row = '' . $model->id .
                 '; ' . $model->name .
                 '; ' . $model->jira_code .
-                '; ' . $model->total_logged_hours .
+                '; ' . gmdate('H:i', floor($model->total_logged_hours * 3600)) .
                 '; ' . '$' . number_format( $model->cost, 2, ',	', '.');
 
             if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
-                $row = $row .  '; ' . $model->total_paid_hours;
+                $row = $row .  '; ' . gmdate('H:i', floor($model->total_paid_hours * 3600));
             }
             $row = $row . '; ' . $model->date_start .
                 '; ' . $model->date_end .
