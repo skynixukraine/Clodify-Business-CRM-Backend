@@ -177,24 +177,30 @@ class ReportController extends DefaultController
             }
         }
             if(User::hasPermission([User::ROLE_PM])) {
-
-                $teammates = [];
-                if ( ( $pmTeammates = Report::reportsPM() ) ) {
-
-                    foreach($pmTeammates as $teammate) {
-
-                        $teammates[] = $teammate->user_id;
-
-                    }
+                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                $projectId = [];
+                foreach ($projects as $project) {
+                    $projectId[] = $project->id;
                 }
-                if( $teammates && count($teammates) ) {
+                $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
 
-                    $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
-                }else{
-
-                    $dataTable->setFilter('user_id IN (null) ');
-
-                }
+//                $teammates = [];
+//                if ( ( $pmTeammates = Report::reportsPM() ) ) {
+//
+//                    foreach($pmTeammates as $teammate) {
+//
+//                        $teammates[] = $teammate->user_id;
+//
+//                    }
+//                }
+//                if( $teammates && count($teammates) ) {
+//
+//                    $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
+//                }else{
+//
+//                    $dataTable->setFilter('user_id IN (null) ');
+//
+//                }
             }
 
             if($dateStart && $dateStart != null){
