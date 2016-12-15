@@ -58,7 +58,9 @@ $this->params['menu'] = [
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
                 foreach ($projects as $project) {
-                    $listProjects[$project->project_id] = $project->project->name;
+                    if ($project->project->is_delete == 0) {
+                        $listProjects[$project->project_id] = $project->project->name;
+                    }
                 }
             } else {
                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
