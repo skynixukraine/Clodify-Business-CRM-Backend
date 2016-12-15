@@ -18,6 +18,23 @@ var invoiceCreateModule = (function() {
 
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
+    if ( document.getElementById("invoice-user_id")){
+        // this field isn't available for SALES role, so it caused an error("Cannot set property 'required' of null")
+        document.getElementById("invoice-user_id").required = true;
+    }
+    document.getElementById("invoice-project_id").required = true;
+    $(filterProjectsSelect).click(function () {
+       if ($(filterProjectsSelect).val() != '') {
+           document.getElementById("invoice-project_id").required = false;
+       }
+    });
+
+    $(filterOneProjectSelect).click(function () {
+        if ($(filterOneProjectSelect).val() != '') {
+            document.getElementById("invoice-user_id").required = false;
+        }
+    });
+
     function changeDropdown(item, index) {
         if (index == 0) {
             $(filterOneProjectSelect).empty();

@@ -115,17 +115,25 @@ class InvoiceController extends DefaultController
 
             $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
         }
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+            foreach ($projects as $project) {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id=' . $project->id);
+            }
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
-
-            $client = $model->getUser()->one();
+            $name = null;
+            if ( $client = $model->getUser()->one() ) {
+                $name = $client->first_name . ' ' . $client->last_name;
+            }
 
             $list[] = [
                 $model->id,
-                $client->first_name . ' ' . $client->last_name,
+                $name,
                 "C#" . $model->contract_number . ", Act#" . $model->act_of_work .
                     "<br> (" . $model->date_start . '~' . $model->date_end .')',
                 '$' . ($model->subtotal > 0 ? $model->subtotal : 0),
@@ -169,6 +177,7 @@ class InvoiceController extends DefaultController
                 $model->total = ( $model->subtotal - $model->discount );
 
             }
+
             if ($model->validate()) {
 
                 $model->save();
@@ -181,7 +190,7 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES] ) ) {
             if (($id = Yii::$app->request->get("id"))) {
 
                 $model = Invoice::find()

@@ -33,22 +33,25 @@ $this->params['menu'] = [
 
 <div>
     <ul>
-        <?php /** @var $model Invoice */?>
-        <li>Invoice #        <?php echo $model->id;?></li>
-        <li>Customer Name:   <?php echo $model->getUser()->one()->first_name . ' ' .
-                                        $model->getUser()->one()->last_name;?></li>
-        <li>Customer Email:  <?php echo $model->getUser()->one()->email;?></li>
+
+            <li>Invoice #        <?php echo $model->id;?></li>
+        <?php /** @var $model Invoice */
+        if ($model->getUser()->one()) : ?>
+            <li>Customer Name:   <?php echo $model->getUser()->one()->first_name . ' ' .
+                                            $model->getUser()->one()->last_name;?></li>
+            <li>Customer Email:  <?php echo $model->getUser()->one()->email;?></li>
+        <?php endif;?>
         <li>Start Date:      <?php echo $model->date_start;?></li>
-        <li>End Date:        <?php echo $model->date_end;?></li>
-        <li>Total hours:     <?php echo $model->total_hours;?></li>
-        <li>Sub total:       <?php echo '$' . $model->subtotal;?></li>
-        <li>Discount:        <?php echo '$' . $model->discount;?></li>
-        <li>Total:           <?php echo '$' . $model->total;?></li>
-        <li>Notes:           <?php echo $model->note;?></li>
-        <li>Create date:     <?php echo $model->date_created;?></li>
-        <li>Sent date:       <?php echo $model->date_sent;?></li>
-        <li>Paid date:       <?php echo $model->date_paid;?></li>
-        <li>Status:          <?php echo $model->status;?></li>
+            <li>End Date:        <?php echo $model->date_end;?></li>
+            <li>Total hours:     <?php echo $model->total_hours;?></li>
+            <li>Sub total:       <?php echo '$' . $model->subtotal;?></li>
+            <li>Discount:        <?php echo '$' . $model->discount;?></li>
+            <li>Total:           <?php echo '$' . $model->total;?></li>
+            <li>Notes:           <?php echo $model->note;?></li>
+            <li>Create date:     <?php echo $model->date_created;?></li>
+            <li>Sent date:       <?php echo $model->date_sent;?></li>
+            <li>Paid date:       <?php echo $model->date_paid;?></li>
+            <li>Status:          <?php echo $model->status;?></li>
     </ul>
 </div>
 <label style="display: none"></label>

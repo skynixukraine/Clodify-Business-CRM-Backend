@@ -62,7 +62,7 @@ User::hasPermission([User::ROLE_ADMIN]) ? $this->params['menu'] = [
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
             canActivate : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
             canSuspend  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT]) ? 'true' : 'false')?>,
-            canSeeHours : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN]) ? 'true' : 'false')?>
+            canSeeHours : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
     });
 
