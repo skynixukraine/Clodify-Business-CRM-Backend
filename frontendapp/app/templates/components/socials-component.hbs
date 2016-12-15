@@ -1,0 +1,9 @@
+<ul class="nav-social__list">
+  {{#each socials as |social|}}
+    <li class="nav-social__item">
+      <a href="{{social.link}}" class="nav-social__link">
+        <img src="{{social.img}}" alt="" class="nav-social__pic">
+      </a>
+    </li>
+  {{/each}}
+</ul>

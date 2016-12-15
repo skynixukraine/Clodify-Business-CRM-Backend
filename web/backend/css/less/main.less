@@ -1,0 +1,203 @@
+
+@import "base.less";
+@import "header-footer.less";
+@import "home.less";
+@import "contact-form.less";
+@import "request-quote-modals.less";
+@import "career.less";
+@import "portfolio.less";
+@import "profile.less";
+
+
+
+
+html,
+body{
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+h1{
+    font-family: 'Raleway-Bold', sans-serif;
+    font-size: 55px;
+    text-align: center;
+}
+h2{
+    font-size: 30px;
+    font-family: 'Raleway-Regular', sans-serif;
+}
+a,
+a:hover,
+a:active,
+a:focus,
+button,
+button:hover,
+button:active,
+button:focus,
+input
+input:hover,
+input:active,
+input:focus,
+textarea,
+textarea:hover,
+textarea:active,
+textarea:focus{
+    outline: 0!important;
+}
+
+a.active{
+    cursor: default;
+}
+.page{
+
+    //margin: 120px auto 0 auto;
+    margin: 157px auto 0 auto;
+}
+.btn-primary{
+    background: rgba(247, 102, 12, 0.85);
+    border: none;
+    border-radius: 0;
+    float: right;
+    font-size: 23px;
+    font-family: 'Raleway-SemiBold', sans-serif;
+
+
+    &:hover,
+    &:focus{
+        background: #F7660C!important;
+    }
+}
+.read-more{
+    border: 1px solid #F7660C;
+    border-radius: 0;
+    background: #ffffff;
+    font-family: 'Raleway-Medium', sans-serif;
+    font-size: 20px;
+    color: #F7660C;
+
+
+    &:hover{
+        background: rgb(255, 250, 246);
+        color: #F7660C;
+    }
+    &:active{
+        webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.125);
+    }
+
+}
+.blue-txt{
+    color: #7fb4f8;
+
+    &:hover{
+        color: @color-a-hover;
+    }
+
+}
+
+
+
+.fix-height .page{
+
+    margin: 78px auto 0 auto;
+}
+.close{
+    width: 16px;
+    height: 15px;
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    background: url(../img/x.png) no-repeat;
+    opacity: .5;
+    filter: alpha(opacity=50);
+
+    &:hover{
+
+        opacity: 1;
+        filter: alpha(opacity=1);
+    }
+}
+.masks-back{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.24);
+    z-index: 1000;
+}
+.front-mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    background: rgba(0,0,0,0.5);
+    z-index: 20000;
+
+    &:before{
+        width: 64px;
+        height: 64px;
+        margin: auto;
+        position: relative;
+        top: 35%;
+        content: "";
+        background: url(../img/ajax-loader100_2.gif) no-repeat 0 0;
+        display: block;
+    }
+
+}
+
+@media (max-width: 949px ) {
+
+    .page{
+
+        margin: 127px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 63px auto 0 auto;
+    }
+}
+@media (max-width: 768px){
+
+    .page{
+
+        margin: 65px auto 0 auto;
+    }
+    .fix-height .page{
+
+        margin: 32px auto 0 auto;
+    }
+}
+
+
+@media (max-width: 600px ) {
+
+    h1 {
+        font-size: 40px;
+    }
+}
+
+
+
+@media (max-width: 480px ) {
+
+    #about_skynix {
+        margin: 64px 0 0 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

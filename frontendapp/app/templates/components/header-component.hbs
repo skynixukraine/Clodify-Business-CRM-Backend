@@ -1,0 +1,12 @@
+<div class="container">
+  {{#link-to 'index' class ="logo__link"}}
+    <div class="link-content_center">
+      <img src="/assets/img/home-page/section-1/headerlogo.png" alt="" class="link-content__pic">
+      <span class="link-content__title">Skynix</span>
+    </div>
+  {{/link-to}}
+  <div class="navigation">
+    {{nav-component routes=model.routes}}
+    {{socials-component socials=model.socials}}
+  </div>
+</div>

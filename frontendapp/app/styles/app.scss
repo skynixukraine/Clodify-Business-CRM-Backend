@@ -1,0 +1,37 @@
+@import "fonts";
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+body{
+  min-width: 320px;
+  font-family: "Roboto-Regular", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.container{
+  max-width: 1654px;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  margin: auto;
+}
+@import "header-component";
+@import "nav-component";
+@import "socials-component";
+@import "home-page";
+.app {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+

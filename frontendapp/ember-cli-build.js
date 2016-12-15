@@ -5,7 +5,14 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
+    sassOptions: {
+      includePaths: [
+        'app/styles/'
+      ]
+    }
   });
+  app.import('../../../node_modules/animate.css/animate.min.css');
+  app.import('../../../node_modules/waypoints/lib/jquery.waypoints.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
