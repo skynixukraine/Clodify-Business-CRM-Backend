@@ -191,8 +191,8 @@ class ProjectController extends DefaultController
                 $row = $row .  '; ' . $model->total_paid_hours;
             }
             //formatting date
-            $newDateStart = date("d-m-Y", strtotime($model->date_start));
-            $newDateEnd = date("d-m-Y", strtotime($model->date_end));
+            $newDateStart = date("d/m/Y", strtotime($model->date_start));
+            $newDateEnd = date("d/m/Y", strtotime($model->date_end));
 
             $row = $row . '; ' .$newDateStart .
                 '; ' . $newDateEnd .
