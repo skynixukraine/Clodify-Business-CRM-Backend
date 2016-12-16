@@ -13,7 +13,6 @@ use app\models\User;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/report.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ajaxReportPage.js');
 $this->title                    = Yii::t("app", "My Report");
@@ -147,12 +146,11 @@ $this->params['menu'] = [
 <script>
     $(function(){
 
-        reportModule.init({
+        ajaxReportPageModule.init({
             deleteUrl:  '<?=Url::toRoute(['index/delete'])?>',
             saveUrl:    '<?=Url::to(['index/save'])?>',
             indexUrl:   '<?=Url::to(['index/index'])?>'
         });
-        ajaxReportPageModule.init();
 
 })
 </script> 
