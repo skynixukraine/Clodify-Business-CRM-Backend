@@ -54,10 +54,19 @@ $this->params['menu'] = [
             ?>
 
             <?php
-            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
             $listProjects = [];
-            foreach ($projects as $project) {
-                $listProjects[$project->id] = $project->name;
+            if (User::hasPermission([User::ROLE_SALES])) {
+                $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
+                foreach ($projects as $project) {
+                    if ($project->project->is_delete == 0) {
+                        $listProjects[$project->project_id] = $project->project->name;
+                    }
+                }
+            } else {
+                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
+                }
             }
             echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
