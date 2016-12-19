@@ -12,6 +12,7 @@ use app\models\Project;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\components\DateUtil;
+use app\models\ProjectDeveloper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -30,24 +31,24 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
-             if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                  $projects = Project::find()
                      ->where('is_delete=0')
                      ->all();
-                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
-                 $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
+             } else if (User::hasPermission([User::ROLE_SALES])) {
+                 $projects = Project::find()
+                     ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                     ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                     ->andWhere(Project::tableName() . '.is_delete=0')
+                     ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
+                     ->all();
              }
+                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
 
-            if ( User::hasPermission([User::ROLE_PM])){
-                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
-                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
-                 $listReport = ArrayHelper::merge(['' => 'ownprojects'], $listReport);
-             }
-            if (User::hasPermission([User::ROLE_CLIENT])){
-                $projects = Project::ProjectsCurrentClient(Yii::$app->user->id);
-                $listReport = ArrayHelper::map( $projects, 'id', 'name' );
-                $listReport = ArrayHelper::merge(['' => 'ownprojects'], $listReport);
-            }
+                 $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
+
+
+
 
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
         </div>
@@ -55,7 +56,20 @@ $this->params['menu'] = [
             <?php echo Html::label('Users:');
             $users = User::find()
                 ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
-                 AND is_delete=0 AND is_active=1')->groupBy(User::tableName() . '.id ')->all();
+             AND is_delete=0 AND is_active=1')->groupBy(User::tableName() . '.id ')->all();
+            if (User::hasPermission([User::ROLE_SALES])) {
+                $projectIDs = [];
+                foreach ($projects as $project) {
+                    $projectIDs[] = $project->id;
+                }
+                $users = User::find()
+                    ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+             AND is_delete=0 AND is_active=1')
+                    ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.user_id=' . User::tableName() . '.id')
+                    ->where([ProjectDeveloper::tableName() . '.project_id' => $projectIDs])
+                    ->groupBy(User::tableName() . '.id ')
+                    ->all();
+            }
             $listUsers = User::getCustomersDropDown( $users, 'id' );
             $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);
             echo Html::dropDownList('users', null, $listUsers, ['class'=>"form-control"])
