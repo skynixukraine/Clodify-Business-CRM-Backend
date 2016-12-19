@@ -226,11 +226,16 @@ class ReportController extends DefaultController
             $aliasUser = User::findOne( $pD->alias_user_id );
         
         }
+        if (strlen($model->task) >= 35) {
+            $task = substr($model->task, 0, 35) . '...';
+        } else {
+            $task = $model->task;
+        }
         //var_dump($aliasUser->first_name);die();
 
             $list[] = [
                 $model->id,
-                $model->task,
+                $task,
                 $model->date_added,
                 $model->getProject()->one()->name,
                 /*(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
