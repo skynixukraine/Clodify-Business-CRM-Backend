@@ -11,8 +11,9 @@ module.exports = function(defaults) {
       ]
     }
   });
+
   app.import('../../../node_modules/animate.css/animate.min.css');
-  app.import('../../../node_modules/waypoints/lib/jquery.waypoints.js');
+  app.import('../../../bower_components/waypoints/lib/jquery.waypoints.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

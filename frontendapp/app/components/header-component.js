@@ -5,7 +5,8 @@ export default Ember.Component.extend({
 
   didRender() {
 
-    // let element = Ember.$(this.element);
+    Ember.$(".section-1__pic").animated("slideInDown");
+    Ember.$(".section-1__desc").animated("slideInUp");
 
 
     Ember.$(document).scroll(function () {
@@ -35,6 +36,18 @@ export default Ember.Component.extend({
         Ember.$(".nav-social__pic:eq(3)").attr('src', '/assets/img/home-page/section-1/instagram.png');
 
       }
+    });
+    Ember.$(document).scroll(function () {
+
+      let headerP = Ember.$('.header-component').height() + 160;
+
+      if(scrollY >= headerP){
+        Ember.$(".section-1__title").addClass("opacity");
+      }else{
+        Ember.$(".section-1__title").removeClass("opacity");
+      }
+
+
     });
   }
 });

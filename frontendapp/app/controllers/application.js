@@ -34,7 +34,7 @@ let socials = [
   },
   {
     img: '/assets/img/home-page/section-1/Instagram.png',
-    link: 'https://www.instagram.com/skynixukraine/'
+    link: 'https://www.linkedin.com/company/skynix'
   }
 ];
 
@@ -43,4 +43,5 @@ export default Ember.Controller.extend({
     routes: routes,
     socials: socials
   }
+
 });

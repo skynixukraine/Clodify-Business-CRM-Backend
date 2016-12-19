@@ -21,10 +21,11 @@ Ember.$.fn.animated = function(inEffect) {
         ths.addClass(inEffect).css("opacity", "1");
       }
     }, {
-      offset: "90"
+      offset: "90%"
     });
 
   });
 };
 
 export default Router;
+
