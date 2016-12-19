@@ -12,7 +12,7 @@ function escapeHtml(text) {
 var ajaxReportPageModule = (function() {
 
     return {
-        init: function() {
+        init: function(config) {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
@@ -421,7 +421,7 @@ var ajaxReportPageModule = (function() {
                     report = JSON.stringify(dataArr);
                     $.ajax({
                         type: "POST",
-                        url: "/cp/index/delete",
+                        url: config.deleteUrl,
                         data: 'jsonData=' + escape(report),
                         dataType: 'json',
                         success: function(data) {
