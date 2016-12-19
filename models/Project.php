@@ -206,7 +206,7 @@ class Project extends \yii\db\ActiveRecord
 
             /* Add to ProjectDevelopers*/
             foreach (User::allDevelopers() as $developer) {
-                if ($this->is_pm == $developer->id || (($this->is_sales == $developer->id) && (in_array($this->is_sales, $this->developers))) || in_array($developer->id, $this->developers)) {
+                if ($this->is_pm == $developer->id || $this->is_sales == $developer->id || in_array($developer->id, $this->developers)) {
                     $connection->createCommand()
                         ->insert(ProjectDeveloper::tableName(), [
                             'project_id' => $this->id,
