@@ -199,6 +199,20 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,  User::ROLE_SALES])) : ?>
+                    <li class="treeview<?=( Yii::$app->controller->id == "contract" ? " active" : "")?>">
+                        <a href="<?=Url::to(['/cp/contract/index']);?>">
+                            <i class="fa fa-file"></i> <span>Manage Contracts</span>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if ( User::hasPermission([User::ROLE_CLIENT])) : ?>
+                    <li class="treeview<?=( Yii::$app->controller->id == "contract" ? " active" : "")?>">
+                        <a href="<?=Url::to(['/cp/contract/index']);?>">
+                            <i class="fa fa-file"></i> <span>My Contracts</span>
+                        </a>
+                    </li>
+                <?php endif;?>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/surveys/index']);?>">
