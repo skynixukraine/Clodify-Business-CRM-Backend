@@ -38,7 +38,7 @@ class ReportController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'edit', 'delete'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
 
                 ],
