@@ -120,7 +120,7 @@ class ProjectController extends DefaultController
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
-                ['like', 'first_name', $keyword],
+                ['like', 'name', $keyword],
                 ['like', 'jira_code', $keyword]
             ]);
 
