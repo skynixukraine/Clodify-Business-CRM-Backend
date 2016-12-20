@@ -345,7 +345,7 @@ class UserController extends DefaultController {
             $form = new LoginForm();
             $form->loginUser( $user );
             Yii::$app->response->cookies->remove('admin');
-            return $this->redirect('/cp/index');
+            return $this->redirect('/backend/cp/index');
 
         }
         $this->redirect('user/index');
