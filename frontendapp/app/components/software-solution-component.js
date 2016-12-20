@@ -31,7 +31,7 @@ let solution = [
   },
   {
     img: "/assets/img/home-page/section-2/software-icon-3.png",
-    title: "Smart browser caching",
+    title: "Responsive UI / UX",
     desc: [
       {
         description: "• Adaptation to every possible display size, from as little as 320px"
@@ -100,6 +100,21 @@ export default Ember.Component.extend({
   model: {
     solution: solution,
     description: description,
+  },
+  didRender(){
+
+    $(".section-2__title").animated("slideInDown");
+
+    $(".section-1").waypoint(function() {
+      $(".solution__item").each(function(index) {
+        let ths = $(this);
+        setInterval(function() {
+          ths.addClass("on");
+        }, 200*index);
+      });
+    }, {
+      offset : "-50%"
+    });
   }
 });
 

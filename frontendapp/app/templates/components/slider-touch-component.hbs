@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="slider">
+    <div class="slider__list">
+      {{#each model.slider as |slider|}}
+        <div class="slider__item">
+          <div class="slider-image">
+            <img src="{{slider.img}}" alt="" class="slider__img">
+          </div>
+          <div class="slider-title">
+            <h2 class="slider-title__title">
+              Why <span>Skynix</span>
+            </h2>
+            <p class="slider-title__desc">
+              {{slider.description}}
+            </p>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    <div class="slider__navigation">
+      <a href="#" class="slider__pager slider__pager_previous">left</a>
+      <a href="#" class="slider__pager slider__pager_next">right</a>
+    </div>
+  </div>
+</div>
