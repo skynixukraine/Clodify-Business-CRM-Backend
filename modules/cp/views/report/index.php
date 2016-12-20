@@ -98,20 +98,21 @@ $this->params['menu'] = [
 <?php ActiveForm::end();?>
 
 <div id="total-hours" style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
-    Total Hours: <span style="font-weight: bold;"></span> hours
+    <?= Html::a('Download PDF', ['report/download?id=']) ?>
+    Total Hours: <span style="font-weight: bold;"></span> hours,
+    Cost: <span style="font-weight: bold;"></span>
 </div>
     <table id="report-table" class="table table-hover box ">
         <thead>
             <tr>
                 <th class="id-col"><?=Yii::t('app', 'Report ID')?></th>
                 <th><?=Yii::t('app', 'Task')?></th>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
-                    <th id="role"><?=Yii::t('app', 'Hours')?></th>
-                <?php endif;?>
+                <th id="role"><?=Yii::t('app', 'Hours')?></th>
+                <th id="role"><?=Yii::t('app', 'Cost')?></th>
                 <th><?=Yii::t('app', 'Project')?></th>
-                <th class="date-col"><?=Yii::t('app', 'Date added')?></th>
-                <th><?=Yii::t('app', 'Reporter name')?></th>
-                <th class="date-col"><?=Yii::t('app', 'Date report')?></th>
+                <th class="date-col"><?=Yii::t('app', 'Added')?></th>
+                <th><?=Yii::t('app', 'Reporter')?></th>
+                <th class="date-col"><?=Yii::t('app', 'Reported')?></th>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])):?>
                     <th><?=Yii::t('app', 'Is invoiced')?></th>
                 <?php endif;?>

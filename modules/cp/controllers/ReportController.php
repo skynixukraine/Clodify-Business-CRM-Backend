@@ -231,13 +231,13 @@ class ReportController extends DefaultController
         } else {
             $task = $model->task;
         }
+        $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id);
         //var_dump($aliasUser->first_name);die();
-
             $list[] = [
                 $model->id,
                 $task,
-                $model->date_added,
-                $model->getProject()->one()->name,
+                date("d/m/Y", strtotime($model->date_added)),
+                $customer->user->first_name . ' ' . $customer->user->last_name . '<br>' . $model->getProject()->one()->name,
                 /*(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
                 ($aliasUser != null) ?
                     User::findOne($model->user_id)->first_name . " " .
@@ -246,8 +246,7 @@ class ReportController extends DefaultController
                     User::findOne($model->user_id)->first_name . " " .
                     User::findOne($model->user_id)->last_name),*/
 
-              ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_SALES]) &&
-                ($aliasUser != null) ?
+              ( ($aliasUser != null) ?
                     $aliasUser->first_name . ' ' .
                     $aliasUser->last_name .
                     '(' . User::findOne($model->user_id)->first_name . ' ' .
@@ -257,13 +256,14 @@ class ReportController extends DefaultController
                         User::findOne($model->user_id)->first_name . ' ' .
                         User::findOne($model->user_id)->last_name )),
 
-                    $model->date_report,
+                date("d/m/Y", strtotime($model->date_report)),
                     ( $model->invoice_id == null ? "No" : "Yes" ),
-                    $model->hours
+                gmdate('H:i', floor($model->hours * 3600))
             ];
         }
 
-        $totalHours = $query->sum(Report::tableName() . '.hours');
+        $totalHours = gmdate('H:i', floor($query->sum(Report::tableName() . '.hours') * 3600));
+
 
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
