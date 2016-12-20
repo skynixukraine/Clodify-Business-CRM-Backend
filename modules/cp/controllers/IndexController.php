@@ -247,6 +247,8 @@ class IndexController extends DefaultController
                             ]);
                         }
                         if ($model->validate()) {
+                            $user = User::findOne(Yii::$app->user->id);
+                            $model->cost = $model->hours * ($user->salary / Report::SALARY_HOURS );
                             if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
                                 Yii::$app->user->getIdentity()->last_name;
                                 if ($model->save()) {

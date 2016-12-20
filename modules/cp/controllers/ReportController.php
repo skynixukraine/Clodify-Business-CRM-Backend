@@ -222,7 +222,7 @@ class ReportController extends DefaultController
                         
         $aliasUser = null;
         if ( $pD && $pD->alias_user_id ) {
-        
+
             $aliasUser = User::findOne( $pD->alias_user_id );
         
         }
@@ -258,11 +258,13 @@ class ReportController extends DefaultController
 
                 date("d/m/Y", strtotime($model->date_report)),
                     ( $model->invoice_id == null ? "No" : "Yes" ),
-                gmdate('H:i', floor($model->hours * 3600))
+                gmdate('H:i', floor($model->hours * 3600)),
+                '$' . number_format( $model->cost, 2)
             ];
         }
 
         $totalHours = gmdate('H:i', floor($query->sum(Report::tableName() . '.hours') * 3600));
+        $totalCost = '$' . $query->sum(Report::tableName() . '.cost');
 
 
         $data = [
@@ -270,6 +272,7 @@ class ReportController extends DefaultController
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
             "totalHours"        => $totalHours,
+            "totalCost"         => $totalCost,
             "data"              => $list
         ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

@@ -97,10 +97,10 @@ $this->params['menu'] = [
 </div>
 <?php ActiveForm::end();?>
 
-<div id="total-hours" style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
-    <?= Html::a('Download PDF', ['report/download?id=']) ?>
-    Total Hours: <span style="font-weight: bold;"></span> hours,
-    Cost: <span style="font-weight: bold;"></span>
+<div style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
+<!--    --><?//= Html::a('Download PDF', ['report/download?id=']) ?>
+    Total Hours: <span id="hours" style="font-weight: bold;"></span> hours,
+    Total Cost: <span id="cost" style="font-weight: bold;"></span>
 </div>
     <table id="report-table" class="table table-hover box ">
         <thead>
@@ -110,8 +110,8 @@ $this->params['menu'] = [
                 <th id="role"><?=Yii::t('app', 'Hours')?></th>
                 <th id="role"><?=Yii::t('app', 'Cost')?></th>
                 <th><?=Yii::t('app', 'Project')?></th>
-                <th class="date-col"><?=Yii::t('app', 'Added')?></th>
                 <th><?=Yii::t('app', 'Reporter')?></th>
+                <th class="date-col"><?=Yii::t('app', 'Added')?></th>
                 <th class="date-col"><?=Yii::t('app', 'Reported')?></th>
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])):?>
                     <th><?=Yii::t('app', 'Is invoiced')?></th>

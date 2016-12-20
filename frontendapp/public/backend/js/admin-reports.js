@@ -118,18 +118,25 @@ var adminReportModule = (function() {
                 index++;
                 console.log(index);
                 columns.push(
-                {
-                    "targets"   : 2,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        return row[7];
-                    }
-                });
+                    {
+                        "targets"   : 2,
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            return row[7];
+                        }
+                    });
             }
             index++;
             columns.push(
                 {
                     "targets"   : index,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        return row[8];
+                    }
+                },
+                {
+                    "targets"   : ++index,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
                         return row[3];
@@ -139,14 +146,14 @@ var adminReportModule = (function() {
                     "targets"   : ++index,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
-                        return row[2];
+                        return row[4];
                     }
                 },
                 {
                     "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
-                        return row[4];
+                        return row[2];
                     }
                 },
                 {
@@ -163,7 +170,7 @@ var adminReportModule = (function() {
                 columns.push(
                     {
                         "targets": ++index,
-                        "orderable": true,
+                        "orderable": false,
                         "render": function (data, type, row) {
                             return row[6];
                         }
@@ -201,8 +208,10 @@ var adminReportModule = (function() {
                     }
                 });
                 totalHours = settings.json.totalHours || '0';
-                $('#total-hours span').text(Math.round(totalHours*100)/100);
+                $('#hours').text(totalHours);
 
+                totalCost = settings.json.totalCost || '0';
+                $('#cost').text(totalCost);
 
                 dataTable.find("img[class*=edit]").click(function(){
                     var id = $(this).parents("tr").find("td").eq(0).text();
