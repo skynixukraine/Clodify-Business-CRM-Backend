@@ -6,14 +6,15 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
     sassOptions: {
+      extension: 'sass',
       includePaths: [
         'app/styles/'
       ]
     }
   });
 
-  app.import('../../../node_modules/animate.css/animate.min.css');
-  app.import('../../../bower_components/waypoints/lib/jquery.waypoints.js');
+  app.import('../../node_modules/animate.css/animate.min.css');
+  app.import('../../bower_components/waypoints/lib/jquery.waypoints.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
@@ -30,3 +31,4 @@ module.exports = function(defaults) {
 
   return app.toTree();
 };
+

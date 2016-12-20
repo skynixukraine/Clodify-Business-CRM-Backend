@@ -3,14 +3,16 @@
     <div class="slider__list">
       {{#each model.slider as |slider|}}
         <div class="slider__item">
-          <img src="{{slider.img}}" alt="" class="slider__img">
+          <div class="slider-image">
+            <img src="{{slider.img}}" alt="" class="slider__img">
+          </div>
           <div class="slider-title">
-            <div class="slider-title__title">
+            <h2 class="slider-title__title">
               Why <span>Skynix</span>
-            </div>
-            <div class="slider-title__desc">
+            </h2>
+            <p class="slider-title__desc">
               {{slider.description}}
-            </div>
+            </p>
           </div>
         </div>
       {{/each}}
