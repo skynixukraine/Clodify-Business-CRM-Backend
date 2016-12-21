@@ -82,6 +82,7 @@ class Report extends \yii\db\ActiveRecord
             'date_paid'     => 'Date Paid',
             'status'        => 'Status',
             'is_delete'     => 'Is Delete',
+            'cost'          => 'Cost'
         ];
     }
 
