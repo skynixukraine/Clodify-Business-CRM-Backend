@@ -1,10 +1,17 @@
-DirectoryIndex index.html index.php
+<IfModule mod_headers.c>
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+Header always set Access-Control-Max-Age "1000"
+Header always set Access-Control-Allow-Headers "x-requested-with, Content-Type, origin, accept, fe-access-token"
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+
 RewriteEngine on
-    php_value xdebug.remote_enable 1
-    php_value xdebug.remote_connect_back 1
-# if a directory or a file exists, use it directly
+
+# If a directory or a file exists, use the request directly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# otherwise forward it to index.php
+# Otherwise forward the request to index.php
 RewriteRule . index.php

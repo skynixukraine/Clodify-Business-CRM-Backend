@@ -1,0 +1,28 @@
+<IfModule mod_headers.c>
+    <filesMatch "\.(html|htm|js|css|png|jpg)$">
+        FileETag None
+        Header unset ETag
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+    </filesMatch>
+</IfModule>
+<IfModule mod_expires.c>
+   # Enable expirations.
+   ExpiresActive On
+
+   # Cache all files for 2 weeks after access (A).
+   ExpiresDefault A1209600
+
+  <FilesMatch (html|htm|js|css|png|jpg)$>
+     ExpiresActive Off
+  </FilesMatch>
+ </IfModule>
+
+RewriteEngine on
+
+# If a directory or a file exists, use the request directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Otherwise forward the request to index.php
+RewriteRule . index.html

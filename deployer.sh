@@ -8,8 +8,6 @@ npm install
 
 bower install
 
-sass app/styles/sass/app.sass app/styles/app.css
-
 ember build --environment development
 
 cd ..
@@ -19,3 +17,6 @@ composer install
 
 echo "\n\n Appling migrations \n";
 ./yii migrate --interactive=0
+
+echo "9. Let write to dist/assets, chmod -R 0777 dist/assets \n"
+chmod -R 0777 web/backend/assets
