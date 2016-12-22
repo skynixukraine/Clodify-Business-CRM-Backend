@@ -10,17 +10,16 @@ export default Ember.Component.extend({
 
 
 
-    Ember.$(".section-4__title").animated("slideInDown");
-    Ember.$(".section-4__subtitle").animated("slideInUp");
-    Ember.$(".section-4__desc").animated("slideInUp");
-    Ember.$(".section-4__subtitle-mod").animated("slideInUp");
+    Ember.$(".section-business-solutions__title").animated("slideInDown");
+    Ember.$(".section-business-solutions__subtitle").animated("slideInUp");
+    Ember.$(".section-business-solutions__desc").animated("slideInUp");
+    Ember.$(".section-business-solutions__subtitle-mod").animated("slideInUp");
 
-// console.log("@@@", element.find(".solution__item"));
 
 
     element.waypoint(function () {
       element.find(".solution__item").each(function (index) {
-        let ths = $(this);
+        let ths = Ember.$(this);
         setInterval(function () {
           ths.addClass("on");
         }, 200 * index);
@@ -29,16 +28,16 @@ export default Ember.Component.extend({
       offset: "50%"
     });
 
-    Ember.$(".section-2__title").animated("slideInDown");
+    Ember.$(".section-software-solution__title").animated("slideInDown");
 
 
     element.find(".enhancement").waypoint(function () {
       element.find(".solution__item").each(function (index) {
-        let ths = $(this);
+        let ths = Ember.$(this);
         setInterval(function () {
           ths.addClass("on");
         }, 200 * index);
-      })
+      });
     }, {
       offset: "50%"
     });

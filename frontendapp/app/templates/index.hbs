@@ -1,44 +1,47 @@
-<section class="section-1">
-  <div class="content-center section-1__title">
-    <img src="{{model.headerTitle.img}}" alt="" class="section-1__pic">
-    <h2 class="section-1__desc">{{model.headerTitle.description}}</h2>
+<section class="section-header">
+  <div class="content-center section-header__title">
+    <img src="{{model.headerTitle.img}}" alt="" class="section-header__pic">
+    <h2 class="section-header__desc">{{model.headerTitle.description}}</h2>
   </div>
 </section>
-<section class="section-2">
+<section class="section-software-solution">
   <div class="container">
-    <div class="section-2__title">{{model.solution.desc_solution}}</div>
+    <div class="section-software-solution__title">{{model.solution.desc_solution}}</div>
     {{software-solution-component solution=model.solution.solution class="software-solution-component"}}
   </div>
 </section>
-<section class="section-3">
+<section class="section-why-skynix">
   {{slider-touch-component slider = model.sliderSection_3 class="content-center slider-touch-component"}}
 </section>
-<section class="section-4">
+<section class="section-business-solutions">
   <div class="container">
-    <div class="content-center section-4_width">
-      <h2 class="section-4__title">
+    <div class="content-center section-business-solutions_width">
+      <h2 class="section-business-solutions__title">
         How can we enhance your IT business today?
       </h2>
-      <h4 class="section-4__subtitle">Skynix Ukraine is equipped to deliver revolutionary IT solutions for the most
+      <h4 class="section-business-solutions__subtitle">Skynix Ukraine is equipped to deliver revolutionary IT solutions for the most
         complex business models.</h4>
-      <p class="section-4__desc">
+      <p class="section-business-solutions__desc">
         We will tailor our approach to your task depending on your specific requirements
       </p>
-      <p class="section-4__desc">
+      <p class="section-business-solutions__desc">
         We will take the weight off your shoulders by providing you with expert technological advice in a way you
         understand it.
       </p>
-      <p class="section-4__desc">
+      <p class="section-business-solutions__desc">
         You’ll be informed and in control on each stage of the development.
       </p>
-      <p class="section-4__desc">
+      <p class="section-business-solutions__desc">
         We will create all the conditions for making our partnership with you mutually rewarding.
       </p>
-      <h4 class="section-4__subtitle-mod">Who do we serve?</h4>
+      <h4 class="section-business-solutions__subtitle-mod">Who do we serve?</h4>
       {{software-solution-component solution=model.solution.enhancement class="enhancement"}}
     </div>
   </div>
 </section>
-<section class="section-5">
-  {{!slider-touch-component slider = model.sliderSection_5 class="content-center slider-touch-component"}}
+<section class="section-testimonials">
+  <div class="section-testimonials__title">
+    Read some testimonials from our customers to learn more about us
+  </div>
+  {{slider-touch-component slider = model.sliderSection_5 class="content-center slider-touch-component-section-5"}}
 </section>

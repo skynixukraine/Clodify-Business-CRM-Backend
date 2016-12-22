@@ -1,0 +1,86 @@
+.slider-touch-component-section-5
+  width: 100%
+  .slider
+    position: relative
+    overflow: hidden
+  .slider-item__wrap
+    display: flex
+    flex-direction: column
+  .slider__item
+    display: inline-block
+    max-width: 1634px
+    *
+      font-size: 16px
+  .slider-image
+    width: 100%
+    text-align: center
+    padding-top: 160px
+  .slider__img
+    height: 100%
+
+  .slider__list
+    font-size: 0
+    white-space: nowrap
+    transition: margin .7s ease-out
+  .slider-title
+    overflow: hidden
+    white-space: initial
+    text-align: center
+    padding: 50px 155px
+  .slider-title__title
+    display: none
+
+  .slider-title__desc
+    font-family: "Roboto-Light"
+    font-size: 16px
+    color: #fff
+    line-height: 20px
+  .slider-title__subtitle
+    font-family: "Roboto-Light"
+    font-size: 24px
+    color: #fff
+    padding-top: 50px
+  .slider__pager_previous
+    position: absolute
+    left: 0
+    top: 0
+    height: 100%
+    width: 70px
+    &::before
+      content: ''
+      @include centerCenter
+      width: 26px
+      height: 51px
+      background: url("/assets/img/home-page/section-5/arrow-left.png")
+  .slider__pager_next
+    position: absolute
+    right: 0
+    top: 0
+    width: 70px
+    height: 100%
+    &::before
+      content: ''
+      @include centerCenter
+      width: 26px
+      height: 51px
+      background: url("/assets/img/home-page/section-5/arrow-right.png")
+  .slider__pagination
+    height: 18px
+    position: absolute
+    bottom: 0
+    left: 50%
+    transform: translateX(-50%)
+  .slider__pagination
+    list-style-type: none
+    .slider__pagination-item
+      display: inline-block
+    .slider__pagination-link
+      display: block
+      width: 14px
+      height: 14px
+      border-radius: 50%
+      border: 2px solid #fff
+
+    .slider__pagination-link
+      &.active
+        background: #fff

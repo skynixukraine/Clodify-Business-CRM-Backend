@@ -100,18 +100,29 @@ let sliderSection_3 = [
 let sliderSection_5 = [
   {
     img: "/assets/img/home-page/section-5/pic-1.png",
-    title: "",
-    description: "At Skynix we understand that a company website, whether it’s an enterprise portal or an online store, is a reflection of a brand, and 9 times out of 10 visitors make their decision on whether they are going to trust the establishment based on its look, feel and functionality."
+    title: "David Martin",
+    description: "I have always enjoyed a pleasant and productive working relationship with Oleksii, the tech leader of Skynix. " +
+    "I have worked with him on numerous projects from dynamic websites to responsive, fault tolerant and user friendly mobile applications. During every project Oleksii took the time to understand exactly what was required from the end goal down to the finest detail. " +
+    " As a result Oleksii provided accurate estimations of time and resources to achieve the required goals.  During every project his performance exceeded my expectations. " +
+    " Oleksii embraced my ideas and nurtured the projects as if they were his own. Admittedly I initially had reservations about working with an overseas, non english speaking developer."
   },
   {
     img: "/assets/img/home-page/section-5/pic-1.png",
-    title: "",
-    description: "At Skynix we understand that a company website, whether it’s an enterprise portal or an online store, is a reflection of a brand, and 9 times out of 10 visitors make their decision on whether they are going to trust the establishment based on its look, feel and functionality."
+    title: "David Martin",
+    description: "I have always enjoyed a pleasant and productive working relationship with Oleksii, the tech leader of Skynix. " +
+    "I have worked with him on numerous projects from dynamic websites to responsive, fault tolerant and user friendly mobile applications. During every project Oleksii took the time to understand exactly what was required from the end goal down to the finest detail. " +
+    " As a result Oleksii provided accurate estimations of time and resources to achieve the required goals.  During every project his performance exceeded my expectations. " +
+    " Oleksii embraced my ideas and nurtured the projects as if they were his own. Admittedly I initially had reservations about working with an overseas, non english speaking developer."
+
   },
   {
     img: "/assets/img/home-page/section-5/pic-1.png",
-    title: "",
-    description: "At Skynix we understand that a company website, whether it’s an enterprise portal or an online store, is a reflection of a brand, and 9 times out of 10 visitors make their decision on whether they are going to trust the establishment based on its look, feel and functionality."
+    title: "David Martin",
+    description: "I have always enjoyed a pleasant and productive working relationship with Oleksii, the tech leader of Skynix. " +
+    "I have worked with him on numerous projects from dynamic websites to responsive, fault tolerant and user friendly mobile applications. During every project Oleksii took the time to understand exactly what was required from the end goal down to the finest detail. " +
+    " As a result Oleksii provided accurate estimations of time and resources to achieve the required goals.  During every project his performance exceeded my expectations. " +
+    " Oleksii embraced my ideas and nurtured the projects as if they were his own. Admittedly I initially had reservations about working with an overseas, non english speaking developer."
+
   }
 ];
 export default Ember.Route.extend({
@@ -121,7 +132,7 @@ export default Ember.Route.extend({
       solution: solution,
       sliderSection_3: sliderSection_3,
       sliderSection_5: sliderSection_5
-    }
+    };
   },
 });
 
