@@ -1,27 +1,9 @@
 import Ember from 'ember';
-let slider = [
-  {
-    img: "/assets/img/home-page/section-3/slide-1.png",
-    title: "",
-    description: "At Skynix we understand that a company website, whether it’s an enterprise portal or an online store, is a reflection of a brand, and 9 times out of 10 visitors make their decision on whether they are going to trust the establishment based on its look, feel and functionality."
-  },
-  {
-    img: "/assets/img/home-page/section-3/slide-1.png",
-    title: "",
-    description: "It only takes a few seconds to convert your casual bypasser into a potential customer or to lose them forever. With a badly optimised site, most of this time you risk to have them spending on simply loading the page. The primary objective of every software solution Skynix creates is to win every nanosecond there is, and to enable you make that first impression develop into loyalty."
-  },
-  {
-    img: "/assets/img/home-page/section-3/slide-1.png",
-    title: "",
-    description: "In a modern world, however, having a practical, fast and sophisticated public-facing website or app isn’t enough in the long run, this is why we back our every IT solution up with a stable, reliable yet scalable architecture, and ensure the optimum security and support is in place for you not to worry about losing your entire business overnight to a single attack."
-  },
-];
+
 
 export default Ember.Component.extend({
-  classNames: ['slider-touch-component'],
-  model: {
-    slider: slider,
-  },
+  // classNames: ['slider-touch-component'],
+
   didRender(){
     let element = Ember.$(this.element);
 
@@ -60,7 +42,7 @@ export default Ember.Component.extend({
         paginationNode.find('.active').removeClass('active');
         let elem = paginationNode.children()[currentSlideIndex];
 
-        $(elem).find('a').addClass('active');
+        Ember.$(elem).find('a').addClass('active');
 
       };
       prevSliderNode.on('click', function (e) {
@@ -105,13 +87,13 @@ export default Ember.Component.extend({
       };
       sliderItemNode.on('touchstart mousedown', function (e) {
         e.preventDefault();
-        if (e.type == "touchstart") {
+        if (e.type === "touchstart") {
           touchPageX = e.changedTouches[0].pageX;
         } else {
           mousePageX = e.pageX;
         }
         sliderItemNode.on('touchmove mousemove', function (e) {
-          if (e.type == "touchmove") {
+          if (e.type === "touchmove") {
             touchMove = e.changedTouches[0].pageX;
           } else {
             mouseMove = e.pageX;
@@ -119,16 +101,16 @@ export default Ember.Component.extend({
         });
       });
       sliderItemNode.on('touchend mouseup', function (e) {
-        if (e.type == "touchend") {
+        if (e.type === "touchend") {
           touchSize = touchPageX - touchMove;
-          if (touchSize == 0) {
+          if (touchSize === 0) {
             sliderItemNode.off('touchmove');
           } else {
             __self.swipeSlider(touchSize);
           }
         } else {
           size = mousePageX - mouseMove;
-          if (size == 0) {
+          if (size === 0) {
             sliderItemNode.off('mousemove');
           } else {
             __self.swipeSlider(size);

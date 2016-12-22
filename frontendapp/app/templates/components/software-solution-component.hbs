@@ -1,7 +1,7 @@
-<div class="container">
-  <div class="section-2__title">{{model.description}}</div>
-  <div class="solution__list">
-    {{#each model.solution as |solution|}}
+<!--<div class="container">-->
+    <!--&lt;!&ndash;<div class="section-2__title">{{!solution.desc_solution}}</div>&ndash;&gt;-->
+    <div class="solution__list">
+    {{#each solution as |solution|}}
       <div class="solution__item">
         <div class="solution-img__img">
           <img src="{{solution.img}}" alt="" class="solution-img__pic">
@@ -11,10 +11,11 @@
         </div>
         <ul class="solution__builds">
           {{#each solution.desc as |build|}}
-            <li class="builds__item">{{build.description}}</li>
+            <li class="builds__item">{{build}}</li>
           {{/each}}
         </ul>
+        <a href="#" class="solution__link">{{solution.link}}</a>
       </div>
     {{/each}}
   </div>
-</div>
+<!--</div>-->
