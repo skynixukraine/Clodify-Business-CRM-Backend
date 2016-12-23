@@ -26,7 +26,8 @@ class Contract extends ActiveRecord
         return [
             [['customer_id', 'act_number'], 'integer'],
             ['total', 'number'],
-            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date'], 'required']
+            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date'], 'required'],
+            ['act_number', 'unique']
         ];
     }
 
@@ -38,6 +39,7 @@ class Contract extends ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id'          => 'ID',
             'customer_id' => 'Customer ID',
             'act_number'  => 'Act number',
             'total'       => 'Total price',

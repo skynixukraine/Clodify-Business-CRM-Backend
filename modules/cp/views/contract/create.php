@@ -29,8 +29,12 @@ $this->params['menu'] = [
 $form = ActiveForm::begin([
     'options' => ['class' => 'form-horizontal'],
 ]) ?>
+
 <?php
-    /** @var $model Contract*/
+/** @var $model Contract*/
+echo $form->field( $model, 'id')->textInput(['readonly' => true,'value' => Contract::find()->max('id') + 1]);?>
+
+<?php
     if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
         $customers = User::allCustomersWhithReceive();
         $listCustomers = User::getCustomersDropDown($customers, 'id');
@@ -63,7 +67,7 @@ $form = ActiveForm::begin([
     }
 ?>
 
-<?php echo $form->field( $model, 'act_number')->textInput();?>
+<?php echo $form->field( $model, 'act_number')->textInput(['value' => Contract::find()->max('act_number') + 1]);?>
 <?php echo $form->field( $model, 'start_date', [
 
     'template' => '{label} ' .
