@@ -8,6 +8,9 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
+use app\models\Contract;
+use app\models\Project;
+use app\models\ProjectCustomer;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -27,14 +30,38 @@ $form = ActiveForm::begin([
     'options' => ['class' => 'form-horizontal'],
 ]) ?>
 <?php
-    $customers = User::allCustomersWhithReceive();
-    $listCustomers = User::getCustomersDropDown($customers, 'id');
-    echo $form->field($model, 'customer_id')
-        ->dropDownList($listCustomers, [
-            'prompt' => 'Choose...',
-        ])
-        ->label('Customer');
-        ?>
+    /** @var $model Contract*/
+    if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        $customers = User::allCustomersWhithReceive();
+        $listCustomers = User::getCustomersDropDown($customers, 'id');
+        echo $form->field($model, 'customer_id')
+            ->dropDownList($listCustomers, [
+                'prompt' => 'Choose...',
+            ])
+            ->label('Customer');
+    }
+?>
+
+<?php
+    if (User::hasPermission([User::ROLE_SALES])) {
+        $projectsID = [];
+        $customers = [];
+        $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+        foreach ($projects as $project) {
+            $projectsID[] = $project->id;
+        }
+        $projectCustomers = ProjectCustomer::getProjectCustomer($projectsID);
+        foreach ($projectCustomers as $customer) {
+            $customers[] = $customer->user;
+        }
+        $listCustomers = User::getCustomersDropDown($customers, 'id');
+        echo $form->field($model, 'customer_id')
+            ->dropDownList($listCustomers, [
+                'prompt' => 'Choose...',
+            ])
+            ->label('Customer');
+    }
+?>
 
 <?php echo $form->field( $model, 'act_number')->textInput();?>
 <?php echo $form->field( $model, 'start_date', [
