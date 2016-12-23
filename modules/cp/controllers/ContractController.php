@@ -25,7 +25,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'save'],
+                        'actions' => [ 'index', 'create'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
                     ],
