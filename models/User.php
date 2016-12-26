@@ -305,14 +305,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $current = self::findOne($this->id);
             if( ($this->salary) && ($current->salary != $this->salary )) {
                 $this->date_salary_up = date("Y-m-d");
-            } else {
-                $this->salary = $current->salary;
-            }
-            if( $this->password ) {
-                $this->rawPassword = $this->password;
-               $this->password = md5($this->password);
-            } else {
-                $this->password = $current->password;
             }
         }
         /*else
