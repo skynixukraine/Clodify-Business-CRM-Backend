@@ -1,30 +1,23 @@
-<div class="container">
+<div class="slider-container">
+  <div class="slider-control left inactive"></div>
+  <div class="slider-control right"></div>
+  <ul class="slider-pagi"></ul>
   <div class="slider">
-    <div class="slider__list">
-      {{#each model.slider as |slider|}}
-        <div class="slider__item">
-          <div class="slider-item__wrap">
-            <div class="slider-image">
-              <img src="{{slider.img}}" alt="" class="slider__img">
-            </div>
-            <div class="slider-title">
-              <h2 class="slider-title__title">
-                Why <span>Skynix</span>
-              </h2>
-              <p class="slider-title__desc">
-                {{slider.description}}
-              </p>
+    {{#each model as |slider|}}
+      <div class="slide">
+        <div class="slide__content">
+          <div class="slide__img">
+            <img src="{{slider.img}}" alt="" class="slide__img-pic">
+          </div>
+          <div class="slide__text">
+            <div class="slide__text-wrap">
+              <h2 class="slide__text-heading">Why <span>Skynix</span></h2>
+              <p class="slide__text-desc">{{slider.description}}</p>
+              <div class="slide__text-subtitle">{{slider.title}}</div>
             </div>
           </div>
         </div>
-      {{/each}}
-    </div>
-      <a href="#" class="slider__pager slider__pager_previous"></a>
-      <a href="#" class="slider__pager slider__pager_next"></a>
-      <ul class="slider__pagination">
-        <li class="slider__pagination-item slider__pagination-item_tmpl"><a href="#" data-slider__item="0" class="active slider__pagination-link"></a></li>
-        <li class="slider__pagination-item slider__pagination-item_tmpl"><a href="#" data-slider__item="1" class="slider__pagination-link"></a></li>
-        <li class="slider__pagination-item slider__pagination-item_tmpl"><a href="#" data-slider__item="2" class="slider__pagination-link"></a></li>
-      </ul>
+      </div>
+    {{/each}}
   </div>
 </div>

@@ -1,20 +1,19 @@
-<div class="container">
-  <div class="section-2__title">{{model.description}}</div>
-  <div class="solution__list">
-    {{#each model.solution as |solution|}}
-      <div class="solution__item">
-        <div class="solution-img__img">
-          <img src="{{solution.img}}" alt="" class="solution-img__pic">
-        </div>
-        <div class="solution__title">
-          {{solution.title}}
-        </div>
-        <ul class="solution__builds">
-          {{#each solution.desc as |build|}}
-            <li class="builds__item">{{build.description}}</li>
-          {{/each}}
-        </ul>
+<div class="item-list">
+  {{#each model as |item|}}
+    <div class="item">
+      <div class="item__img">
+        <img src="{{item.img}}" alt="" class="item__img-pic">
       </div>
-    {{/each}}
-  </div>
+      <div class="item-title">
+        {{item.title}}
+      </div>
+
+      <ul class="item__desc">
+        {{#each item.desc as |text|}}
+          <li class="item__desc-text"><span>&bull;&nbsp;</span>{{text}}</li>
+        {{/each}}
+      </ul>
+      <a href="#" class="item-link">{{item.link}}</a>
+    </div>
+  {{/each}}
 </div>

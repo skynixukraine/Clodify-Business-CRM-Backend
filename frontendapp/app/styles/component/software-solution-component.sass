@@ -1,0 +1,50 @@
+.software-solution-component
+  height: 70.61%
+  width: 100%
+  position: relative
+  margin-top: 33px
+  .item-list
+    @include centerCenter
+    width: 97%
+    height: 100%
+    @include clearfix
+  .item
+    float: left
+    width: 16.6%
+    height: 100%
+    opacity: 0
+    transform: translateY(150px)
+    transition: transform .3s ease
+
+  .item__img
+    height: 116px
+    position: relative
+    width: 100%
+
+  .item__img-pic
+    position: absolute
+    bottom: 0
+    left: 50%
+    transform: translate(-50%, 0%)
+
+  .item-title
+    text-align: center
+    font-family: "Roboto-Medium"
+    font-size: 20px
+    padding-top: 12px
+
+  .on
+    opacity: 1
+    transform: translateY(0px)
+    transition: transform .3s ease
+
+  .item__desc
+    list-style-type: none
+    font-size: 15px
+    padding: 15px 16px 0 30px
+
+  .item__desc-text
+    font-family: "Roboto Regular"
+    font-size: 15px
+
+

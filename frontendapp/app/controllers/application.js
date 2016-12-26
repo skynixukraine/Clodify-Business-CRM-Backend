@@ -43,5 +43,4 @@ export default Ember.Controller.extend({
     routes: routes,
     socials: socials
   }
-
 });
