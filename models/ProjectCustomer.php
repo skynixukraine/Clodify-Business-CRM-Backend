@@ -97,8 +97,8 @@ class ProjectCustomer extends \yii\db\ActiveRecord
     public static function getProjectCustomer($projectId)
     {
         return self::find()
-            ->where(ProjectCustomer::tableName() . '.project_id=' . $projectId)
+            ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
             ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1')
-            ->one();
+            ->all();
     }
 }
