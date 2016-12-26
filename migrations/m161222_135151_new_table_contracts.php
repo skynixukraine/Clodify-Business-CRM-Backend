@@ -10,6 +10,7 @@ class m161222_135151_new_table_contracts extends Migration
     {
         $this->createTable('contracts', [
             'id' => $this->primaryKey(),
+            'contract_id' => $this->integer(),
             'customer_id' => $this->integer(),
             'act_number' => $this->integer(),
             'start_date' => $this->date(),

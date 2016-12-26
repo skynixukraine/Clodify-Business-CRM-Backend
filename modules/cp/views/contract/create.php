@@ -32,7 +32,7 @@ $form = ActiveForm::begin([
 
 <?php
 /** @var $model Contract*/
-echo $form->field( $model, 'id')->textInput(['readonly' => true,'value' => Contract::find()->max('id') + 1]);?>
+echo $form->field( $model, 'contract_id')->textInput(['value' => Contract::find()->max('contract_id') + 1]);?>
 
 <?php
     if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
