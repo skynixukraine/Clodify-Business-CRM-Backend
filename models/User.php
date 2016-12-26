@@ -310,7 +310,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             }
             if( $this->password ) {
                 $this->rawPassword = $this->password;
-               $this->password = md5($this->password);
             } else {
                 $this->password = $current->password;
             }
