@@ -5,9 +5,6 @@ export default Ember.Component.extend({
 
   didRender() {
 
-    Ember.$(".section-header__pic").animated("slideInDown");
-    Ember.$(".section-header__desc").animated("slideInUp");
-
 
     Ember.$(document).scroll(function () {
       let scrollY = Ember.$(window).scrollTop();
@@ -37,18 +34,7 @@ export default Ember.Component.extend({
 
       }
     });
-    Ember.$(document).scroll(function () {
 
-      let headerP = Ember.$('.header-component').height() + 160;
-
-      if(scrollY >= headerP){
-        Ember.$(".section-header__title").addClass("opacity");
-      }else{
-        Ember.$(".section-header__title").removeClass("opacity");
-      }
-
-
-    });
   }
 });
 

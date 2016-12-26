@@ -1,0 +1,59 @@
+<section class="section-header">
+  <div class="container">
+    <div class="content-center title">
+      <img src="{{model.headerTitle.img}}" alt="" class="title-pic">
+      <h2 class="title-desc">{{model.headerTitle.description}}</h2>
+    </div>
+  </div>
+</section>
+<section class="section-software-solution">
+  <div class="container">
+    <div class="title">
+      <h2 class="title-text">Every software solution Skynix builds is:</h2>
+    </div>
+    {{software-solution-component model=model.sectionSoftware_solution}}
+  </div>
+</section>
+<section class="section-why-skynix">
+  <div class="container">
+    {{slider-touch-component model = model.sliderSection_why_skynix}}
+  </div>
+</section>
+<section class="section-business-solutions">
+  <div class="container">
+    <div class="content-wrap">
+      <div class="content">
+        <h2 class="content-title ">
+          How can we enhance your IT business today?
+        </h2>
+        <h4 class="content-subtitle">Skynix Ukraine is equipped to deliver revolutionary IT solutions
+          for the most
+          complex business models.</h4>
+        <p class="content-desc">
+          We will tailor our approach to your task depending on your specific requirements
+        </p>
+        <p class="content-desc">
+          We will take the weight off your shoulders by providing you with expert technological advice in a way you
+          understand it.
+        </p>
+        <p class="content-desc">
+          You’ll be informed and in control on each stage of the development.
+        </p>
+        <p class="content-desc">
+          We will create all the conditions for making our partnership with you mutually rewarding.
+        </p>
+        <h4 class="content-subtitle-mod">Who do we serve?</h4>
+      </div>
+    </div>
+    {{software-solution-component model=model.sectionBusiness_solution class="enhancement"}}
+  </div>
+</section>
+<section class="section-testimonials">
+  <div class="container">
+    <div class="title">
+      Read some testimonials from our customers to learn more about us
+    </div>
+    {{slider-touch-component model = model.sliderSection_testimonials class="slider-touch-component2"}}
+  </div>
+</section>
+
