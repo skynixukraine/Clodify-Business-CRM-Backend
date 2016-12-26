@@ -69,7 +69,7 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
 ?>
 
 <?php
-$actNumber = $model->act_number ? $model->act_number : Contract::find()->max('contract_id') + 1;
+$actNumber = $model->act_number ? $model->act_number : Contract::find()->max('act_number') + 1;
 echo $form->field( $model, 'act_number')->textInput(['value' => $actNumber]);?>
 <?php echo $form->field( $model, 'start_date', [
 
