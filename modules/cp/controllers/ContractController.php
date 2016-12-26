@@ -42,6 +42,7 @@ class ContractController extends DefaultController
     public function actionCreate()
     {
         $model = new Contract();
+        $model->created_by = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
             if ($model->validate()) {
@@ -70,6 +71,11 @@ class ContractController extends DefaultController
         }
         return $this->render('create', ['model' => $model]
         );
+    }
+
+    public function actionFind()
+    {
+        // here will be created json data.
     }
 
 }
