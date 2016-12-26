@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "contracts".
  * @property  integer customer_id
+ * @property  integer contract_id
  * @property integer act_number
  * @property number total
  * @property string start_date

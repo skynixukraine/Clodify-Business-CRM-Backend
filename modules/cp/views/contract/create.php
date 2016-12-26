@@ -32,7 +32,8 @@ $form = ActiveForm::begin([
 
 <?php
 /** @var $model Contract*/
-echo $form->field( $model, 'contract_id')->textInput(['value' => Contract::find()->max('contract_id') + 1]);?>
+$contractId = $model->contract_id ? $model->contract_id : Contract::find()->max('contract_id') + 1;
+echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?>
 
 <?php
     if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
@@ -67,7 +68,9 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => Contract::find(
     }
 ?>
 
-<?php echo $form->field( $model, 'act_number')->textInput(['value' => Contract::find()->max('act_number') + 1]);?>
+<?php
+$actNumber = $model->act_number ? $model->act_number : Contract::find()->max('contract_id') + 1;
+echo $form->field( $model, 'act_number')->textInput(['value' => $actNumber]);?>
 <?php echo $form->field( $model, 'start_date', [
 
     'template' => '{label} ' .
@@ -93,7 +96,7 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => Contract::find(
 
 
 
-<?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
+<?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
 
 <?php ActiveForm::end() ?>
 <script>

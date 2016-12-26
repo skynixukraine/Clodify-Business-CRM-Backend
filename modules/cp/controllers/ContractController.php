@@ -25,7 +25,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create'],
+                        'actions' => [ 'index', 'create', 'edit'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
                     ],
@@ -47,9 +47,29 @@ class ContractController extends DefaultController
             if ($model->validate()) {
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->id));
+                return $this->redirect(['index']);
             }
         }
         return $this->render('create', ['model' => $model]);
+    }
+
+    public function actionEdit()
+    {
+        if( $id = Yii::$app->request->get('id') ) {
+            $model  = Contract::findOne($id);
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->validate()) {
+                    $model->save();
+                    if(Yii::$app->request->post('updated')) {
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract " . $id));
+                    }
+                    return $this->redirect(['index']);
+
+                }
+            }
+        }
+        return $this->render('create', ['model' => $model]
+        );
     }
 
 }
