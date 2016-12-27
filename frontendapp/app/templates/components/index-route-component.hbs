@@ -1,15 +1,15 @@
 <section class="section-header">
   <div class="container">
-    <div class="content-center title">
-      <img src="{{model.headerTitle.img}}" alt="" class="title-pic">
-      <h2 class="title-desc">{{model.headerTitle.description}}</h2>
+    <div class="content-center header-title">
+      <img src="{{model.headerTitle.img}}" alt="" class="header-pic">
+      <h2 class="header-desc">{{model.headerTitle.description}}</h2>
     </div>
   </div>
 </section>
 <section class="section-software-solution">
   <div class="container">
-    <div class="title">
-      <h2 class="title-text">Every software solution Skynix builds is:</h2>
+    <div class="solution-title">
+      <h2 class="solution-text">Every software solution Skynix builds is:</h2>
     </div>
     {{software-solution-component model=model.sectionSoftware_solution}}
   </div>
@@ -50,7 +50,7 @@
 </section>
 <section class="section-testimonials">
   <div class="container">
-    <div class="title">
+    <div class="testimonials-title">
       Read some testimonials from our customers to learn more about us
     </div>
     {{slider-touch-component model = model.sliderSection_testimonials class="slider-touch-component2"}}
