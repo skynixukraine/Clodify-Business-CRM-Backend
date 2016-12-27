@@ -1,8 +1,0 @@
-{
-  "name": "ecommerce-custom-solutions",
-  "dependencies": {
-    "ember": "~2.9.0",
-    "ember-cli-shims": "0.1.3",
-    "waypoints": "^4.0.1"
-  }
-}

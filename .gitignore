@@ -1,4 +1,4 @@
 .sass-cache
 .idea
 vendor
-/web
+.DS_Store
