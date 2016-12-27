@@ -6,20 +6,21 @@
   position: relative
   padding-top: 100px
 
-  .title
+  .header-title
     max-width: 1214px
     width: 100%
     text-align: center
     transition: opacity .2s linear
-
-  .title-pic
-    padding-bottom: 70px
-
-  .title-desc
-    font-family: "Roboto-Light", sans-serif
-    font-size: 24px
-    color: #fff
-    font-weight: 500
-    line-height: 46px
+    @include desktop
+      max-width: 84%
+    .header-pic
+      padding-top: 26px
+    .header-desc
+      padding-top: 70px
+      font-family: "Roboto-Light", sans-serif
+      font-size: 24px
+      color: #fff
+      font-weight: 500
+      line-height: 46px
 
 

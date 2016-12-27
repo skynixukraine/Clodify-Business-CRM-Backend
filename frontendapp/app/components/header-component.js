@@ -5,6 +5,14 @@ export default Ember.Component.extend({
 
   didRender() {
 
+    Ember.$(".burger-menu").click(function () {
+
+      Ember.$(this).toggleClass("menu-on");
+      Ember.$(".navigation").toggleClass("nav-on");
+
+
+    });
+
 
     Ember.$(document).scroll(function () {
       let scrollY = Ember.$(window).scrollTop();

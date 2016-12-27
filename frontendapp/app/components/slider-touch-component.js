@@ -14,8 +14,6 @@ export default Ember.Component.extend({
       numOfSlides = element.find(".slide").length-1,
       animating = false,
       animTime = 500,
-      autoSlideTimeout,
-      autoSlideDelay = 6000,
       $pagination = element.find(".slider-pagi");
 
     function createBullets() {
@@ -37,26 +35,11 @@ export default Ember.Component.extend({
 
     slideChild();
 
-    function manageControls() {
-      $(".slider-control").removeClass("inactive");
-      if (!curSlide) $(".slider-control.left").addClass("inactive");
-      if (curSlide === numOfSlides) $(".slider-control.right").addClass("inactive");
-    };
-
-    function autoSlide() {
-      autoSlideTimeout = setTimeout(function() {
-        curSlide++;
-        if (curSlide > numOfSlides) curSlide = 0;
-        changeSlides();
-      }, autoSlideDelay);
-    };
-
-    // autoSlide();
 
     function changeSlides(instant) {
       if (!instant) {
         animating = true;
-        // manageControls();
+
         $slider.addClass("animating");
         $slider.css("top");
         $(".slide").removeClass("active");
@@ -66,12 +49,12 @@ export default Ember.Component.extend({
           animating = false;
         }, animTime);
       }
-      window.clearTimeout(autoSlideTimeout);
+
       element.find(".slider-pagi__elem").removeClass("active");
       element.find(".slider-pagi__elem-"+curSlide).addClass("active");
       $slider.css("transform", "translate3d("+ -curSlide*100 +"%,0,0)");
       diff = 0;
-      // autoSlide();
+
     }
 
     function navigateLeft() {
@@ -89,7 +72,7 @@ export default Ember.Component.extend({
     element.on("mousedown touchstart", ".slider", function(e) {
       e.preventDefault();
       if (animating) return;
-      window.clearTimeout(autoSlideTimeout);
+
 
       let startX = e.pageX || e.originalEvent.touches[0].pageX,
         winW = element.find(".slider-container").width();
