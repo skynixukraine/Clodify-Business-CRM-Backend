@@ -83,10 +83,11 @@ class ContractController extends DefaultController
         $query = Contract::find()
             ->groupBy('id');
 
+
         $columns = [
             'id',
-            'initator',
-            'customer',
+            'created_by',
+            'customer_id',
             'act_number',
             'start_date',
             'end_date',
@@ -103,8 +104,8 @@ class ContractController extends DefaultController
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
                 ['like', 'id', $keyword],
-                ['like', 'initator', $keyword],
-                ['like', 'customer', $keyword],
+                ['like', 'created_by', $keyword],
+                ['like', 'customer_id', $keyword],
                 ['like', 'act_number', $keyword],
                 ['like', 'start_date', $keyword],
                 ['like', 'end_date', $keyword],
@@ -127,7 +128,7 @@ class ContractController extends DefaultController
                 $model->start_date,
                 $model->end_date,
                 $model->act_date,
-                $model->total,
+                '$' . number_format($model->total, 2),
                 'total_hours_value',
                 'expenses_value'
             ];
