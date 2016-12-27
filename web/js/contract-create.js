@@ -4,13 +4,19 @@
 var contractCreateModule = (function() {
     var cfg = {
             findUrl     : '',
+            editUrl     : '',
+            deleteUrl   : '',
+            canDelete   : '',
+            canEdit     : '',
+            canInvoice  : '',
+            canView     : ''
         },
         dataFilter = {
 
         },
         filterDateStartSelect = "#contract-start_date",
         filterDateEndSelect = "#contract-end_date";
-    filterDateActSelect = "#contract-act_date";
+        filterDateActSelect = "#contract-act_date";
     return {
         init:function (config) {
             cfg = $.extend(cfg, config);
@@ -35,7 +41,7 @@ var contractCreateModule = (function() {
                     },
                     {
                         "targets"   : 2,
-                        "orderable" : false
+                        "orderable" : true
                     },
                     {
                         "targets"   : 3,
@@ -59,57 +65,25 @@ var contractCreateModule = (function() {
                     },
                     {
                         "targets"   : 8,
-                        "orderable" : true
+                        "orderable" : false
                     },
                     {
                         "targets"   : 9,
-                        "orderable" : true
+                        "orderable" : false
                     },
                     {
                         "targets"   : 10,
                         "orderable" : false,
                         "render"    : function (data, type, row) {
 
-                            var icons   = [],
-                                status  =  row[9];
-
-                            if( status == "NEW") {
-
-                                if (cfg.canPaid) {
-
-                                    icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Mark Invoice as Paid"></i>');
-
-                                }
-
+                            var icons   = [];
+                            if (cfg.canView) {
+                                icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="View"></i>');
                             }
-                            if( status == "NEW" ) {
-
-                                if (cfg.canCanceled) {
-
-                                    icons.push('<i class="fa fa-arrows-alt canceled" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Cancel the invoice"></i>');
-
-                                }
-
-                            }
-
-                            if( status == "NEW" || status == "PAID" || status == "CANCELED" ) {
-                                if (cfg.canView) {
-
-                                    icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="View"></i>');
-
-                                }
-                            }
-                            if( status == "NEW" || status == "CANCELED" ){
-
-                                if (cfg.canDelete) {
-
-                                    icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                        'data-toggle="tooltip" data-placement="top" title="Delete the invoice"></i>');
-
-                                }
+                            if (cfg.canDelete) {
+                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Delete the invoice"></i>');
                             }
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
@@ -227,3 +201,4 @@ var contractCreateModule = (function() {
 
 
 })();
+
