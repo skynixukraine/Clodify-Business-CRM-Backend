@@ -64,12 +64,6 @@ class SiteController extends Controller
     public function beforeAction($action)
     {
 
-        if ( ( $url = Language::getRedirectUrl() ) ) {
-
-            $this->redirect($url);
-
-        }
-
         $this->layout = "main_" . Language::getLanguage();
         //var_dump( $this->layout); exit;
         return parent::beforeAction($action);
@@ -176,7 +170,7 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-                                return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                                return $this->redirect(['cp/index/index']);
                             }
                         }
 
@@ -195,7 +189,7 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-                                return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                                return $this->redirect(['cp/user/index']);
                             }
                         }
 
@@ -207,7 +201,7 @@ class SiteController extends Controller
                             }
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
                             $modelUserLogins->save();
-                            return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                            return $this->redirect(['cp/user/index']);
                         }
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();

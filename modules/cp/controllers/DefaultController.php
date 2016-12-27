@@ -15,11 +15,6 @@ class DefaultController extends Controller
     public function beforeAction( $action )
     {
 
-        if ( ( $url = Language::getCpRedirectUrl() ) ) {
-
-            return $this->redirect($url);
-
-        }
         Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
         Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
         Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
