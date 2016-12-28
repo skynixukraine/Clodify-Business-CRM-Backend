@@ -13,6 +13,7 @@ use app\components\AccessRule;
 use app\models\Contract;
 use Yii;
 use app\components\DataTable;
+use yii\filters\VerbFilter;
 
 class ContractController extends DefaultController
 {
@@ -26,10 +27,16 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete'    => ['delete'],
                 ],
             ],
         ];
@@ -144,6 +151,19 @@ class ContractController extends DefaultController
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
 
+    }
+
+    public function actionDelete()
+    {
+        if ( ( $id = Yii::$app->request->post("id") ) ) {
+            /** @var  $model Contract */
+            $model  = Contract::findOne( $id );
+            $model->delete();
+            return json_encode([
+                "message"   => Yii::t("app", "You deleted project " . $id),
+                "success"   => true
+            ]);
+        }
     }
 
 }

@@ -16,7 +16,7 @@ var contractCreateModule = (function() {
         },
         filterDateStartSelect = "#contract-start_date",
         filterDateEndSelect = "#contract-end_date";
-        filterDateActSelect = "#contract-act_date";
+    filterDateActSelect = "#contract-act_date";
     return {
         init:function (config) {
             cfg = $.extend(cfg, config);
@@ -139,8 +139,79 @@ var contractCreateModule = (function() {
 
             });
 
+            function actionDelete( id, name, dataTable )
+            {
+
+                function deleteRequest(  )
+                {
+                    var params = {
+                        url     : cfg.deleteUrl,
+                        data    : {id : id},
+                        dataType: 'json',
+                        type    : 'DELETE',
+                        success : function ( response ) {
+
+                            if ( response.message ) {
+
+                                var win = new ModalBootstrap({
+                                    title: 'Message',
+                                    body: response.message,
+                                    buttons: [
+                                        {class: 'btn-default confirm', text: 'Ok'}
+                                    ]
 
 
+                                });
+                                win.show();
+                            }
+                            dataTable.api().ajax.reload();
+
+                        }
+                    };
+
+                    $.ajax( params );
+
+                }
+
+                deleteModal = new ModalBootstrap({
+                    title       : 'Delete ' + name + "?",
+                    body        : 'All data related to this contract will be deleted.',
+                    winAttrs    : { class : 'modal delete'}
+                });
+                deleteModal.show();
+                deleteModal.getWin().find("button[class*=confirm]").click(function () {
+                    deleteRequest();
+                });
+
+            }
+            dataTable.on( 'draw.dt', function (e, settings, data) {
+
+                dataTable.find("i[class*=edit]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionEdit( id );
+
+                });
+                dataTable.find("i[class*=delete]").click(function(){
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        name   = $(this).parents("tr").find("td").eq(1).text();
+                    actionDelete( id, name, dataTable );
+
+                });
+                dataTable.find("i[class*=activate]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionActivate( id );
+
+                });
+                dataTable.find("i[class*=suspend]").click(function(){
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+                    actionSuspend( id );
+
+                });
+
+            });
 
             var date = new Date();
             var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -201,4 +272,3 @@ var contractCreateModule = (function() {
 
 
 })();
-
