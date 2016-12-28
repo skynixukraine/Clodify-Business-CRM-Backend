@@ -45,6 +45,7 @@ $this->params['menu'] = [
             editUrl     : '<?=Url::to(['contract/edit'])?>',
             deleteUrl   : '<?=Url::to(['contract/delete'])?>',
             findUrl     : '<?=Url::to(['contract/find'])?>',
+            viewUrl     : '<?=Url::to(['contract/view'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canInvoice  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,

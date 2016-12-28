@@ -6,6 +6,7 @@ var contractCreateModule = (function() {
             findUrl     : '',
             editUrl     : '',
             deleteUrl   : '',
+            viewUrl     : '',
             canDelete   : '',
             canEdit     : '',
             canInvoice  : '',
@@ -17,6 +18,14 @@ var contractCreateModule = (function() {
         filterDateStartSelect = "#contract-start_date",
         filterDateEndSelect = "#contract-end_date";
     filterDateActSelect = "#contract-act_date";
+    function actionEdit( id )
+    {
+        document.location.href = cfg.editUrl + "?id=" + id;
+    }
+    function actionView( id )
+    {
+        document.location.href = cfg.viewUrl + "?id=" + id;
+    }
     return {
         init:function (config) {
             cfg = $.extend(cfg, config);
@@ -78,13 +87,24 @@ var contractCreateModule = (function() {
 
                             var icons   = [];
                             if (cfg.canView) {
+
                                 icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="View"></i>');
+
+                            }
+                            if (cfg.canEdit) {
+
+                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+
                             }
                             if (cfg.canDelete) {
+
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete the invoice"></i>');
+                                    'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
+
                             }
+
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
@@ -107,38 +127,6 @@ var contractCreateModule = (function() {
                 "processing": true,
                 "serverSide": true
             });
-
-            dataTable.on( 'draw.dt', function (e, settings, data) {
-
-                dataTable.find("i[class*=delete]").click(function(){
-
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
-
-                });
-
-                dataTable.find("i[class*=view]").click(function(){
-
-                    var id     = $(this).parents("tr").find("td").eq(0).text();
-                    actionView( id );
-
-                });
-                dataTable.find("i[class*=paid]").click(function(){
-
-                    var id     = $(this).parents("tr").find("td").eq(0).text();
-                    actionPaid( id );
-
-                });
-                dataTable.find("i[class*=canceled]").click(function(){
-
-                    var id     = $(this).parents("tr").find("td").eq(0).text();
-                    actionCanceled( id );
-
-                });
-
-            });
-
             function actionDelete( id, name, dataTable )
             {
 
@@ -164,12 +152,12 @@ var contractCreateModule = (function() {
                                 });
                                 win.show();
                             }
-                            dataTable.api().ajax.reload();
 
                         }
                     };
 
                     $.ajax( params );
+                    dataTable.api().ajax.reload();
 
                 }
 
@@ -184,34 +172,37 @@ var contractCreateModule = (function() {
                 });
 
             }
+
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                dataTable.find("i[class*=edit]").click(function(){
-
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionEdit( id );
-
-                });
                 dataTable.find("i[class*=delete]").click(function(){
+
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
 
                 });
-                dataTable.find("i[class*=activate]").click(function(){
 
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionActivate( id );
+                dataTable.find("i[class*=view]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        name   = $(this).parents("tr").find("td").eq(1).text();
+                    actionView( id, name, dataTable );
 
                 });
-                dataTable.find("i[class*=suspend]").click(function(){
 
-                    var id = $(this).parents("tr").find("td").eq(0).text();
-                    actionSuspend( id );
+                dataTable.find("i[class*=edit]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        name   = $(this).parents("tr").find("td").eq(1).text();
+                    actionEdit( id, name, dataTable );
 
                 });
 
             });
+
+
+
 
             var date = new Date();
             var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());

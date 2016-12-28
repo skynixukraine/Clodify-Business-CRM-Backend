@@ -17,6 +17,9 @@ use yii\filters\VerbFilter;
 
 class ContractController extends DefaultController
 {
+    public $enableCsrfValidation = false;
+    public $layout = "admin";
+
     public function behaviors()
     {
         return [
@@ -27,7 +30,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
                     ],
@@ -132,9 +135,9 @@ class ContractController extends DefaultController
                 $initiator->first_name . ' ' . $initiator->last_name,
                 $customer->first_name . ' ' . $customer->last_name,
                 $model->act_number,
-                $model->start_date,
-                $model->end_date,
-                $model->act_date,
+                date("d/m/Y", strtotime($model->start_date)),
+                date("d/m/Y", strtotime($model->end_date)),
+                date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
                 'total_hours_value',
                 'expenses_value'
@@ -156,14 +159,23 @@ class ContractController extends DefaultController
     public function actionDelete()
     {
         if ( ( $id = Yii::$app->request->post("id") ) ) {
+            echo 1;
             /** @var  $model Contract */
             $model  = Contract::findOne( $id );
             $model->delete();
             return json_encode([
-                "message"   => Yii::t("app", "You deleted project " . $id),
+                "message"   => Yii::t("app", "You deleted contract " . $id),
                 "success"   => true
             ]);
         }
+    }
+
+    public function actionView()
+    {
+        $id = Yii::$app->request->get("id");
+        $model = Contract::findOne($id);
+        return $this->render('view', ['model' => $model,
+            'title' => 'You watch contract #' . $model->id]);
     }
 
 }
