@@ -7,6 +7,7 @@
 
 namespace app\modules\cp\controllers;
 
+use app\models\Report;
 use yii\filters\AccessControl;
 use app\models\User;
 use app\components\AccessRule;
@@ -14,6 +15,7 @@ use app\models\Contract;
 use Yii;
 use app\components\DataTable;
 use yii\filters\VerbFilter;
+use app\models\Project;
 
 class ContractController extends DefaultController
 {
@@ -128,8 +130,26 @@ class ContractController extends DefaultController
         $list = [];
         /* @var $model Contract*/
         foreach ($activeRecordsData as $model) {
+            $total_hours = 0;
+            $expenses = 0;
+            $user = null;
+            $projectIDs = [];
             $initiator = User::findOne($model->created_by);
             $customer = User::findOne($model->customer_id);
+            $projects = Project::ProjectsCurrentClient($customer->id);
+            foreach ($projects as $project) {
+                $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
+                $projectIDs[] = $project->id;
+            }
+            $reports = Report::getReportsOfCurrentProjects($projectIDs);
+            foreach ($reports as $report) {
+                 if (!$user || $user != $report->user_id) {
+                     $user = $report->user_id;
+                     $salary = User::findOne($user)->salary;
+                 }
+                 $expenses += round($report->hours * ($salary / Report::SALARY_HOURS), 2);
+            }
+
             $list[] = [
                 $model->id,
                 $initiator->first_name . ' ' . $initiator->last_name,
@@ -139,8 +159,8 @@ class ContractController extends DefaultController
                 date("d/m/Y", strtotime($model->end_date)),
                 date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
-                'total_hours_value',
-                'expenses_value'
+                $total_hours,
+                $expenses
             ];
         }
 

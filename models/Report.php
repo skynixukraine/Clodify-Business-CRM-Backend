@@ -317,6 +317,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return self::find()
             ->where([Report::tableName() . '.project_id' =>  $projects])
+            ->andWhere([Report::tableName() . '.is_delete' => 0])
             ->orderBy('user_id')
             ->all();
     }
