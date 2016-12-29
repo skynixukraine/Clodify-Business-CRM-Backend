@@ -98,6 +98,14 @@ var contractCreateModule = (function() {
                                     'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
 
                             }
+
+                            if (cfg.canInvoice) {
+
+                                icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Invoice"></i>');
+
+                            }
+
                             if (cfg.canDelete) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +

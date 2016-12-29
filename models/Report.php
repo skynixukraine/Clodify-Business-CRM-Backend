@@ -313,14 +313,7 @@ class Report extends \yii\db\ActiveRecord
     }
 
 
-    public static function getReportsOfCurrentProjects($projects)
-    {
-        return self::find()
-            ->where([Report::tableName() . '.project_id' =>  $projects])
-            ->andWhere([Report::tableName() . '.is_delete' => 0])
-            ->orderBy('user_id')
-            ->all();
-    }
+
     /*public static function getUserAlias($user_id)
     {
         return self::find()
