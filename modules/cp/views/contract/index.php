@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\models\User;
+use app\models\Contract;
+use yii\helpers\ArrayHelper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -18,6 +20,20 @@ $this->params['menu'] = [
     ]
 ];
 ?>
+<?php echo Html::label('Customers:');
+if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+    $customers = User::find()
+        ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+            User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "')")
+        ->groupBy(User::tableName() . ".id")
+        ->rightJoin(Contract::tableName(), Contract::tableName() . '.customer_id=' . User::tableName() . '.id')
+        ->all();
+} else if (User::hasPermission([User::ROLE_SALES])) {
+   // will be soon implemented
+}
+$listReport = User::getCustomersDropDown( $customers, 'id' );
+$listReport = ArrayHelper::merge(['' => 'allcustomers'], $listReport);
+echo Html::dropDownList('Customers', null, $listReport, ['class'=>"form-control"]) ?>
 
 <table class="table table-hover box " id="contract_table">
     <thead>
