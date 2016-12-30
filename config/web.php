@@ -63,7 +63,9 @@ $config = [
 		'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
 		'<module>/<controller>/<action>/<id:\d+>' => 'cp/<module>/<controller>/<action>/<id:\d+>',
 		'<controller>/<action>'             	  => 'cp/<controller>/<action>',
-                'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index'
+                'invoice/create/<id:\d+>'  	      => 'cp/invoice/create',
+                'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
+
             ],
         ],
         'log' => [
