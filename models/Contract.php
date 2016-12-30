@@ -19,13 +19,14 @@ use yii\db\ActiveRecord;
  * @property string start_date
  * @property string end_date
  * @property string act_date
+ * @property integer created_by
  */
 class Contract extends ActiveRecord
 {
     public function rules()
     {
         return [
-            [['customer_id', 'act_number', 'contract_id'], 'integer'],
+            [['customer_id', 'act_number', 'contract_id', 'created_by'], 'integer'],
             ['total', 'number'],
             [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id'], 'required'],
             [['act_number', 'contract_id'], 'unique']
