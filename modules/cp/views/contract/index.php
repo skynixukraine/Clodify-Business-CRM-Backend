@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use app\models\User;
 use app\models\Contract;
 use yii\helpers\ArrayHelper;
+use app\models\ProjectCustomer;
+use app\models\ProjectDeveloper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -32,7 +34,19 @@ if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
         ->rightJoin(Contract::tableName(), Contract::tableName() . '.customer_id=' . User::tableName() . '.id')
         ->all();
 } else if (User::hasPermission([User::ROLE_SALES])) {
-   // will be soon implemented
+    // for sales role displays not all customers, but only customers, that was assigned on common with SALES projects
+    // with checked receive_invoices
+    $customers = User::find()
+        ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
+            User::tableName() . ".role IN ('" . User::ROLE_CLIENT . "')")
+        ->groupBy(User::tableName() . ".id")
+        ->rightJoin(Contract::tableName(), Contract::tableName() . '.customer_id=' . User::tableName() . '.id')
+        ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.user_id=' . User::tableName() . '.id')
+        ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.user_id=' . Yii::$app->user->id)
+        ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+        ->andWhere([ProjectCustomer::tableName() . '.receive_invoices' => 1])
+        ->andWhere(ProjectCustomer::tableName() . '.project_id=' . ProjectDeveloper::tableName() . '.project_id')
+        ->all();
 }
 $listReport = User::getCustomersDropDown( $customers, 'id' );
 $listReport = ArrayHelper::merge(['' => 'allcustomers'], $listReport);
