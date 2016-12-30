@@ -70,7 +70,7 @@ class ContractController extends DefaultController
     public function actionEdit()
     {
         if( $id = Yii::$app->request->get('id') ) {
-            $model  = Contract::findOne($id);
+            $model  = Contract::findOne(['contract_id' => $id]);
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
                     $model->save();
@@ -88,6 +88,7 @@ class ContractController extends DefaultController
 
     public function actionFind()
     {
+        $customerId     = Yii::$app->request->getQueryParam("customer_id");
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
@@ -123,7 +124,10 @@ class ContractController extends DefaultController
                 ['like', 'end_date', $keyword],
                 ['like', 'act_date', $keyword],
             ]);
+        if($customerId && $customerId != null){
 
+            $dataTable->setFilter('customer_id=' . $customerId);
+        }
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $activeRecordsData = $dataTable->getData();
@@ -143,7 +147,7 @@ class ContractController extends DefaultController
             }
 
             $list[] = [
-                $model->id,
+                $model->contract_id,
                 $initiator->first_name . ' ' . $initiator->last_name,
                 $customer->first_name . ' ' . $customer->last_name,
                 $model->act_number,

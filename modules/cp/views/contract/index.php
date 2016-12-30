@@ -20,6 +20,9 @@ $this->params['menu'] = [
     ]
 ];
 ?>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
 <?php echo Html::label('Customers:');
 if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
     $customers = User::find()
@@ -33,7 +36,10 @@ if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 }
 $listReport = User::getCustomersDropDown( $customers, 'id' );
 $listReport = ArrayHelper::merge(['' => 'allcustomers'], $listReport);
-echo Html::dropDownList('Customers', null, $listReport, ['class'=>"form-control"]) ?>
+echo Html::dropDownList('customers', null, $listReport, ['class'=>"form-control"]) ?>
+        </div>
+    </div>
+</div>
 
 <table class="table table-hover box " id="contract_table">
     <thead>

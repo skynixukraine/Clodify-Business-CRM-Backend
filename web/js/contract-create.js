@@ -15,6 +15,7 @@ var contractCreateModule = (function() {
         dataFilter = {
 
         },
+        filterCustomersSelect = "select[name=customers]",
         filterDateStartSelect = "#contract-start_date",
         filterDateEndSelect = "#contract-end_date";
     filterDateActSelect = "#contract-act_date";
@@ -29,6 +30,12 @@ var contractCreateModule = (function() {
     return {
         init:function (config) {
             cfg = $.extend(cfg, config);
+            filterCustomersSelect = $( filterCustomersSelect );
+            filterCustomersSelect.change(function(){
+                var id = $(this).val();
+                dataFilter['customer_id'] = id;
+                dataTable.api().ajax.reload();
+            });
             dataTable = $('#contract_table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
