@@ -311,6 +311,9 @@ class Report extends \yii\db\ActiveRecord
         return self::find()
             ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser])->sum('hours');
     }
+
+
+
     /*public static function getUserAlias($user_id)
     {
         return self::find()
