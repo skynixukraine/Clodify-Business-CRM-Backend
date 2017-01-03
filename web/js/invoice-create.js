@@ -5,7 +5,8 @@
 var invoiceCreateModule = (function() {
     var cfg = {
             findUrl     : '',
-            findProjects : ''
+            findProjects : '',
+            customerId : ''
         },
         dataTable,
         filterProjectsSelect = "#invoice-user_id",
@@ -15,7 +16,6 @@ var invoiceCreateModule = (function() {
         dataFilter = {
         },
         deleteModal;
-
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
     if ( document.getElementById("invoice-user_id")){
@@ -45,7 +45,6 @@ var invoiceCreateModule = (function() {
         init: function( config ){
 
             cfg = $.extend(cfg, config);
-
             filterProjectsSelect = $( filterProjectsSelect );
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
@@ -61,7 +60,9 @@ var invoiceCreateModule = (function() {
                     dataTable.api().ajax.reload();
                 }
             });
-
+            if (cfg.customerId) {
+                dataFilter['user_id'] = cfg.customerId;
+            }
             filterOneProjectSelect = $( filterOneProjectSelect );
             filterOneProjectSelect.change(function(){
                 var id = $(this).val();

@@ -98,7 +98,6 @@ class ProjectCustomer extends \yii\db\ActiveRecord
     {
         return self::find()
             ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
-            ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1')
-            ->all();
+            ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1');
     }
 }

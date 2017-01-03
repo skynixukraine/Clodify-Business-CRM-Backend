@@ -41,7 +41,7 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php if (User::hasPermission([User::ROLE_ADMIN])) {
+            <?php if (User::hasPermission([User::ROLE_ADMIN]) && !Yii::$app->request->getQueryParam('id')) {
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
@@ -54,6 +54,7 @@ $this->params['menu'] = [
             ?>
 
             <?php
+            $id = null;
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
@@ -61,6 +62,11 @@ $this->params['menu'] = [
                     if ($project->project->is_delete == 0) {
                         $listProjects[$project->project_id] = $project->project->name;
                     }
+                }
+            } elseif (User::hasPermission([User::ROLE_ADMIN]) && ($id = Yii::$app->request->getQueryParam('id'))) {
+                $projects = Project::ProjectsCurrentClient($id);
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
                 }
             } else {
                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
@@ -70,7 +76,7 @@ $this->params['menu'] = [
             }
             echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
-                    'prompt' => 'Choose...',
+                    'prompt' => $id ? 'All Projects' : 'Choose...',
                 ] )
                 ->label( 'Projects' );
 
@@ -130,7 +136,8 @@ $this->params['menu'] = [
 
         invoiceCreateModule.init({
             findUrl     : '<?=Url::to(['report/find'])?>',
-            findProjects     : '<?=Url::to(['invoice/get-projects'])?>'
+            findProjects     : '<?=Url::to(['invoice/get-projects'])?>',
+            customerId  : '<?=$id?>'
         })
     });
 </script>
