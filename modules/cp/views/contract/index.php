@@ -82,6 +82,7 @@ echo Html::dropDownList('customers', null, $listReport, ['class'=>"form-control"
             deleteUrl   : '<?=Url::to(['contract/delete'])?>',
             findUrl     : '<?=Url::to(['contract/find'])?>',
             viewUrl     : '<?=Url::to(['contract/view'])?>',
+            invoiceUrl  : '<?=Url::to(['invoice/create'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canInvoice  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,

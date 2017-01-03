@@ -156,7 +156,8 @@ class ContractController extends DefaultController
                 date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
                 $total_hours . 'h',
-                '$' . $expenses
+                '$' . $expenses,
+                $customer->id
             ];
         }
 
