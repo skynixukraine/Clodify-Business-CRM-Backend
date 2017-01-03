@@ -7,12 +7,16 @@ var contractCreateModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             viewUrl     : '',
+            invoiceUrl  : '',
             canDelete   : '',
             canEdit     : '',
             canInvoice  : '',
             canView     : ''
         },
         dataFilter = {
+
+        },
+        customerIDs = {
 
         },
         filterCustomersSelect = "select[name=customers]",
@@ -22,6 +26,11 @@ var contractCreateModule = (function() {
     function actionEdit( id )
     {
         document.location.href = cfg.editUrl + "?id=" + id;
+    }
+    function actionInvoice( contractId )
+    {
+        customerId = customerIDs[contractId];
+        document.location.href = cfg.invoiceUrl + "/" + customerId;
     }
     function actionView( id )
     {
@@ -119,7 +128,7 @@ var contractCreateModule = (function() {
                                     'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
 
                             }
-
+                            customerIDs[row[0]] = row[10];
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
@@ -211,6 +220,13 @@ var contractCreateModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionEdit( id, name, dataTable );
+
+                });
+
+                dataTable.find("i[class*=paid]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionInvoice(id);
 
                 });
 
