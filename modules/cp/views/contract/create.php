@@ -27,9 +27,10 @@ $this->params['menu'] = [
     ]
 ];
 $form = ActiveForm::begin([
-    'options' => ['class' => 'form-horizontal'],
+    'options' => ['class' => 'horizontal'],
 ]) ?>
-
+<div class="row">
+    <div class="col-md-6 box box-primary box-body">
 <?php
 /** @var $model Contract*/
 $contractId = $model->contract_id ? $model->contract_id : Contract::find()->max('contract_id') + 1;
@@ -97,7 +98,8 @@ echo $form->field( $model, 'act_number')->textInput(['value' => $actNumber]);?>
 
 
 <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
-
+    </div>
+</div>
 <?php ActiveForm::end() ?>
 <script>
     $(function(){
