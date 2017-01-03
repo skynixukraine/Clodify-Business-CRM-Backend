@@ -41,7 +41,7 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php if (User::hasPermission([User::ROLE_ADMIN])) {
+            <?php if (User::hasPermission([User::ROLE_ADMIN]) && !Yii::$app->request->getQueryParam('id')) {
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
@@ -61,6 +61,11 @@ $this->params['menu'] = [
                     if ($project->project->is_delete == 0) {
                         $listProjects[$project->project_id] = $project->project->name;
                     }
+                }
+            } elseif (User::hasPermission([User::ROLE_ADMIN]) && ($id = Yii::$app->request->getQueryParam('id'))) {
+                $projects = Project::ProjectsCurrentClient($id);
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
                 }
             } else {
                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
