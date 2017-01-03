@@ -55,7 +55,7 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
         foreach ($projects as $project) {
             $projectsID[] = $project->id;
         }
-        $projectCustomers = ProjectCustomer::getProjectCustomer($projectsID);
+        $projectCustomers = ProjectCustomer::getProjectCustomer($projectsID)->all();
         foreach ($projectCustomers as $customer) {
             $customers[] = $customer->user;
         }

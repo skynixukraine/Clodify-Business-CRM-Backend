@@ -54,6 +54,7 @@ $this->params['menu'] = [
             ?>
 
             <?php
+            $id = null;
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
@@ -75,7 +76,7 @@ $this->params['menu'] = [
             }
             echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
-                    'prompt' => 'Choose...',
+                    'prompt' => $id ? 'All Projects' : 'Choose...',
                 ] )
                 ->label( 'Projects' );
 
@@ -135,7 +136,8 @@ $this->params['menu'] = [
 
         invoiceCreateModule.init({
             findUrl     : '<?=Url::to(['report/find'])?>',
-            findProjects     : '<?=Url::to(['invoice/get-projects'])?>'
+            findProjects     : '<?=Url::to(['invoice/get-projects'])?>',
+            customerId  : '<?=$id?>'
         })
     });
 </script>

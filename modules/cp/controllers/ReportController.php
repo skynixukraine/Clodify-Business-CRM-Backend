@@ -237,7 +237,7 @@ class ReportController extends DefaultController
         } else {
             $task = $model->task;
         }
-        $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id);
+        $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
         //var_dump($aliasUser->first_name);die();
             $list[] = [
                 $model->id,
