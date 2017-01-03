@@ -2,21 +2,23 @@
 
 $params = require(__DIR__ . '/params.php');
 
-
 $config = [
     'id' => 'basic',
-    'basePath'  => dirname(__DIR__),
+    'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'modules'   => [
+    'modules' => [
         'cp' => [
             'class' => 'app\modules\cp\ControlPanel',
         ],
         'ExtensionPackager' => [
             'class' => 'app\modules\ExtensionPackager\ExtensionPackager',
         ],
+        'api' => [
+            'class' => 'app\modules\api\Module',
+     ],
     ],
 
-    'timeZone'=> 'Europe/Kiev',
+    'timeZone' => 'Europe/Kiev',
     'language' => 'en-US',
     'components' => [
         'assetManager' => [
@@ -29,6 +31,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'bCRKiFqWufwrIeZGQ7dRApKddnf6xszA',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -58,13 +63,15 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '/' => '/cp/default/index',
+                 'api/auth'          => '/api/auth/index',
                 //'/s/<shortcode>' => '/site/survey',
-		'site/<action>'                           => 'site/<action>',
-		'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
-		'<module>/<controller>/<action>/<id:\d+>' => 'cp/<module>/<controller>/<action>/<id:\d+>',
-		'<controller>/<action>'             	  => 'cp/<controller>/<action>',
-                'invoice/create/<id:\d+>'  	      => 'cp/invoice/create',
-                'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
+                'site/<action>' => 'site/<action>',
+                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
+                '<module>/<controller>/<action>/<id:\d+>'=> 'cp/<module>/<controller>/<action>/<id:\d+>',
+                '<controller>/<action>' => 'cp/<controller>/<action>',
+                'invoice/create/<id:\d+>' => 'cp/invoice/create',
+                'profile/<name:\w+\-\w+>/<public_key:\w+>' => 'profile/index',
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/auth', 'pluralize' => false],
 
             ],
         ],
@@ -113,14 +120,14 @@ if (YII_ENV_DEV) {
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class'         => 'yii\gii\Module',
-        'allowedIPs'    => ['127.0.0.1', '*']
+        'class' => 'yii\gii\Module',
+        'allowedIPs' => ['127.0.0.1', '*']
     ];
 }
-if ( file_exists(__DIR__ . '/local.php') ) {
+if (file_exists(__DIR__ . '/local.php')) {
 
-    $localConfig    = include( __DIR__ . '/local.php');
-    $config         = array_replace_recursive($config, $localConfig);
+    $localConfig = include(__DIR__ . '/local.php');
+    $config = array_replace_recursive($config, $localConfig);
 
 }
 return $config;
