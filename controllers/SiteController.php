@@ -229,6 +229,10 @@ class SiteController extends Controller
         return $this->redirect( Language::getUrl() );
     }
 
+    /**
+     * @deprecated 
+     * @return string|Response
+     */
     public function actionContact()
     {
         $model = new ContactForm();
@@ -242,17 +246,27 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * @deprecated 
+     * @return string
+     */
     public function actionCareer()
     {
         return $this->render('career_' . Language::getLanguage());
     }
 
+    /**
+     * @deprecated 
+     * @return string
+     */
     public function actionPrivacy()
     {
         return $this->render('privacy_' . Language::getLanguage());
     }
 
-    /** Invited user activated */
+    /**
+     * @deprecated  
+     * Invited user activated */
     public function actionInvite( $hash )
     {
         /** @var  $model User */
@@ -285,7 +299,9 @@ class SiteController extends Controller
         }
         return $this->redirect(['site/index']);
     }
-    /* pass the post option, and send a letter request */
+    /**
+     * @deprecated 
+     * pass the post option, and send a letter request */
     public function actionRequest()
     {
         $model = new Upload();
@@ -352,6 +368,13 @@ class SiteController extends Controller
 
 
     }
+
+    /**
+     * @deprecated 
+     * @param $shortcode
+     * @return string|Response
+     * @throws NotFoundHttpException
+     */
     public function actionSurvey($shortcode)
     {
         /** @var  $model Survey*/
@@ -403,6 +426,10 @@ class SiteController extends Controller
             }
     }
 
+    /**
+     * @deprecated 
+     * @throws \yii\base\ExitException
+     */
     public function actionSubmitSurvey()
     {
         $data = ['success' => false];
