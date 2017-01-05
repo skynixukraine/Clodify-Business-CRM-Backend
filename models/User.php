@@ -281,6 +281,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
+
         if ($this->isNewRecord) {
             if (!$this->invite_hash) {
 
@@ -306,6 +307,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             if( ($this->salary) && ($current->salary != $this->salary )) {
                 $this->date_salary_up = date("Y-m-d");
             }
+
+            if ($this->password) {
+                $this->rawPassword = $this->password;
+                $this->password = md5($this->password);
+            }
         }
         /*else
             $this->modified = new Expression('NOW()');*/
@@ -316,7 +322,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if( !$insert && isset( $changedAttributes['password'] ))  {
             if ($this->rawPassword) {
-
                 Yii::$app->mailer->compose('newPassword', [
 
                     'user' => $this->first_name,
