@@ -623,7 +623,7 @@ var ajaxReportPageModule = (function() {
                 if (er == "error") {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
-                    lastForm.append('<p class = "ajax-error">' + data + '</p>')
+                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
                 } else {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
