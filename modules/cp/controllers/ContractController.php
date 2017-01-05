@@ -129,7 +129,9 @@ class ContractController extends DefaultController
             $dataTable->setFilter('customer_id=' . $customerId);
         }
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $dataTable->setFilter(Contract::tableName() . '.created_by=' . Yii::$app->user->id);
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
         /* @var $model Contract*/
