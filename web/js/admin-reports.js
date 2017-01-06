@@ -7,8 +7,6 @@ var adminReportModule = (function() {
             deleteUrl   : '',
             findUrl     : '',
             canDelete   : null,
-            canSeeHours : null,
-            canSeeInvoice : null
         },
         dataTable,
         filterProjectsSelect = "select[name=project]",
@@ -114,18 +112,16 @@ var adminReportModule = (function() {
                     }
                 }
             ], index=1;
-            if( cfg.canSeeHours){
-                index++;
-                console.log(index);
-                columns.push(
-                    {
-                        "targets"   : 2,
-                        "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            return row[7];
-                        }
-                    });
-            }
+            index++;
+            console.log(index);
+            columns.push(
+                {
+                    "targets"   : 2,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return row[7];
+                    }
+                });
             index++;
             columns.push(
                 {
@@ -165,17 +161,15 @@ var adminReportModule = (function() {
                 }
 
             );
-            if( cfg.canSeeInvoice){
-                console.log(index);
-                columns.push(
-                    {
-                        "targets": ++index,
-                        "orderable": false,
-                        "render": function (data, type, row) {
-                            return row[6];
-                        }
-                    });
-            }
+            console.log(index);
+            columns.push(
+                {
+                    "targets": ++index,
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        return row[6];
+                    }
+                });
             dataTable = $('#report-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,

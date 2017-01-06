@@ -145,8 +145,6 @@ exit();*/
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
     });
 
