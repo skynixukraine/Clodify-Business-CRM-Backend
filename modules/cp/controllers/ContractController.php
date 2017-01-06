@@ -42,7 +42,7 @@ class ContractController extends DefaultController
                         'roles' => [User::ROLE_SALES],
                     ],
                     [
-                        'actions' => ['index', 'find','view'],
+                        'actions' => ['index', 'find'],
                         'allow' => true,
                         'roles' => [User::ROLE_CLIENT]
                     ]
