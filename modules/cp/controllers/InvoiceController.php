@@ -203,7 +203,7 @@ class InvoiceController extends DefaultController
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));
             }
-            return $this->redirect('view?id=' . $model->id);
+            return $this->redirect(['view?id=' . $model->id]);
         } elseif ($post = Yii::$app->request->post()) {
             $model->contract_number = $post['contractNumber'];
             $model->act_of_work = $post['actNumber'];
