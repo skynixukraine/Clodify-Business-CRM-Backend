@@ -73,6 +73,7 @@ $this->params['menu'] = [
                 $projects = Project::find()
                     ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
                     ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                    ->where([Project::tableName() . '.is_delete' => 0])
                     ->groupBy('id')
                     ->all();
                 foreach ($projects as $project) {
