@@ -174,8 +174,10 @@ var userModule = (function() {
                     "orderable" : true
                 }
             ];
-            
-            if (cfg.showSales) {
+            if (cfg.showUserStatus) {
+                if (cfg.showSales && ! cfg.showUserStatus) {
+
+                }
                 columnDefs.push(
                 {
                     "targets"   : 7,
@@ -186,17 +188,20 @@ var userModule = (function() {
                         }
                         return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
                     }
-                },
-                {
-                    "targets"   : 8,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 9,
-                    "orderable" : true
                 });
             }
-            
+
+
+            if (cfg.showSales) {
+                    columnDefs.push({
+                            "orderable" : true
+                    });
+                    columnDefs.push(
+                    {
+                            "orderable" : true
+                    });
+                }
+
             if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
                 columnDefs.push({
                     "targets"   : 10,

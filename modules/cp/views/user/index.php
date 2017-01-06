@@ -52,8 +52,10 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Login Date')?></th>
         <th class="date-col"><?=Yii::t('app', 'Signup Date')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) : ?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
             <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
+        <?php endif;?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) : ?>
             <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
             <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
         <?php endif;?>
@@ -76,8 +78,8 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             canDelete       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canLoginAs      : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit         : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            showSales       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            
+            showSales       : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            showUserStatus  : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 
