@@ -120,8 +120,9 @@ class InvoiceController extends DefaultController
             foreach ($projects as $project) {
                 $projectIDs[] = $project->id;
             }
-
-            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
+            }
         }
         if (User::hasPermission([User::ROLE_SALES])) {
             $projects = Project::find()
