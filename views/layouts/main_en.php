@@ -59,10 +59,6 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'contact us', 'url' => ['site/contact']],
-            ['label' => 'careers', 'url' => ['site/career']],
-            ['label' => 'Solutions Store', 'url' => 'https://skynix.solutions'],
-            ['label' => 'Blog', 'url' => '/blog'],
 
         ],
     ]);

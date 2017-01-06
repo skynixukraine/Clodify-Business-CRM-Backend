@@ -68,6 +68,16 @@ $this->params['menu'] = [
                 foreach ($projects as $project) {
                     $listProjects[$project->id] = $project->name;
                 }
+            } else if (User::hasPermission([User::ROLE_FIN])) {
+                // query from ProjectController for FIN ROLE
+                $projects = Project::find()
+                    ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                    ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                    ->groupBy('id')
+                    ->all();
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
+                }
             } else {
                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
                 foreach ($projects as $project) {

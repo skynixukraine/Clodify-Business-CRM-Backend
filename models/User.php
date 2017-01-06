@@ -281,6 +281,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
+
         if ($this->isNewRecord) {
             if (!$this->invite_hash) {
 
@@ -302,9 +303,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->date_login = null;
             //$this->getCustomers()->one()->receive_invoices = 1;
         } else {
-            $current = self::findOne($this->id);
-            if( ($this->salary) && ($current->salary != $this->salary )) {
+            $oldData = $this->getOldAttributes();
+            if ($this->salary && $this->salary != $oldData['salary']) {
                 $this->date_salary_up = date("Y-m-d");
+            }
+            
+            if ($this->password && $this->password != $oldData['password']) {
+                $this->rawPassword = $this->password;
+                $this->password = md5($this->password);
+            } else {
+                unset($this->password);
             }
         }
         /*else
@@ -316,7 +324,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if( !$insert && isset( $changedAttributes['password'] ))  {
             if ($this->rawPassword) {
-
                 Yii::$app->mailer->compose('newPassword', [
 
                     'user' => $this->first_name,

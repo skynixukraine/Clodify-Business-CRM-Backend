@@ -157,7 +157,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['/cp/user/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=User::hasPermission([User::ROLE_SALES]) ? Yii::t('app', 'Developers') : Yii::t('app', 'Manage Users')?></span>
+                        <i class="fa fa-users"></i> <span><?=User::hasPermission([User::ROLE_SALES, User::ROLE_CLIENT]) ? Yii::t('app', 'Developers') : Yii::t('app', 'Manage Users')?></span>
                     </a>
                 </li>
                 <?php endif;?>
@@ -181,7 +181,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN,  User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "project" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/project/index']);?>">
-                        <i class="fa fa-edit"></i> <span><?=User::hasPermission([User::ROLE_SALES]) ? Yii::t('app', 'Projects') : Yii::t('app', 'Manage Projects')?></span>
+                        <i class="fa fa-edit"></i> <span><?=User::hasPermission([User::ROLE_SALES, User::ROLE_CLIENT]) ? Yii::t('app', 'Projects') : Yii::t('app', 'Manage Projects')?></span>
                     </a>
                 </li>
                 <?php endif;?>
@@ -199,17 +199,10 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,  User::ROLE_SALES])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,  User::ROLE_SALES, User::ROLE_CLIENT])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "contract" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/contract/index']);?>">
-                            <i class="fa fa-file"></i> <span>Manage Contracts</span>
-                        </a>
-                    </li>
-                <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_CLIENT])) : ?>
-                    <li class="treeview<?=( Yii::$app->controller->id == "contract" ? " active" : "")?>">
-                        <a href="<?=Url::to(['/cp/contract/index']);?>">
-                            <i class="fa fa-file"></i> <span>My Contracts</span>
+                            <i class="fa fa-file"></i> <span><?=User::hasPermission([User::ROLE_CLIENT]) ? Yii::t('app', 'My Contracts') : Yii::t('app', 'Manage Contracts')?></span>
                         </a>
                     </li>
                 <?php endif;?>
@@ -234,7 +227,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                         </a>
                     </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES, User::ROLE_CLIENT, User::ROLE_FIN])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES, User::ROLE_FIN])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "tool" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/tool/emailtester']);?>">
                             <i class="fa fa-mail-forward"></i> <span>Email Tester</span>

@@ -225,8 +225,8 @@ class UserController extends DefaultController {
                 $model->phone,
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
-                ( $model->is_active == 1 ? "Active" : "Suspended" ),
-                User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
+                User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ?  '$' . number_format($model->salary) : null,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
                 $model->is_delete,
                 $model->public_profile_key
@@ -278,7 +278,6 @@ class UserController extends DefaultController {
                 } else {
                     /** Invite new user*/
                     if ($model->validate()) {
-
                         $model->save();
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                         return $this->redirect('index');

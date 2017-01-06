@@ -20,6 +20,7 @@ use app\models\User;
 use app\models\ProjectCustomer;
 use app\models\PaymentMethod;
 use mPDF;
+use app\models\ProjectDeveloper;
 
 class InvoiceController extends DefaultController
 {
@@ -84,7 +85,6 @@ class InvoiceController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         $query          = Invoice::find()->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' );
-
         $columns        = [
             'id',
             'first_name',
@@ -98,7 +98,7 @@ class InvoiceController extends DefaultController
             'status',
 
         ];
-
+        $projectIDs = [];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -112,14 +112,34 @@ class InvoiceController extends DefaultController
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
-
-            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+            $projects = Project::find()
+                ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
+                ->all();
+            foreach ($projects as $project) {
+                $projectIDs[] = $project->id;
+            }
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+            }
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-            $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+            $projects = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([Project::tableName() . '.is_delete' => 0])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->andWhere([ProjectDeveloper::tableName() . ".user_id" => Yii::$app->user->id])
+                ->groupBy('id')
+                ->all();
             foreach ($projects as $project) {
-                $dataTable->setFilter(Invoice::tableName() . '.project_id=' . $project->id);
+                $projectIDs[] = $project->id;
             }
+            $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ')' );
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -183,7 +203,7 @@ class InvoiceController extends DefaultController
                 $model->save();
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));
             }
-            return $this->redirect('view?id=' . $model->id);
+            return $this->redirect(['view?id=' . $model->id]);
         } elseif ($post = Yii::$app->request->post()) {
             $model->contract_number = $post['contractNumber'];
             $model->act_of_work = $post['actNumber'];

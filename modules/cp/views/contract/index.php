@@ -15,17 +15,20 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/check-form.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/contract-create.js');
 
-$this->params['menu'] = [
-    [
-        'label' => Yii::t('app', 'Create a Contract'),
-        'url' => Url::to(['contract/create'])
-    ]
-];
+if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+    $this->params['menu'] = [
+        [
+            'label' => Yii::t('app', 'Create a Contract'),
+            'url' => Url::to(['contract/create'])
+        ]
+    ];
+}
 ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-2">
-<?php echo Html::label('Customers:');
+<?php
+echo '<br>'; // without this tag "Home > cp" behind the table. Will fix styles later.
 if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
     $customers = User::find()
         ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
@@ -48,9 +51,13 @@ if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
         ->andWhere(ProjectCustomer::tableName() . '.project_id=' . ProjectDeveloper::tableName() . '.project_id')
         ->all();
 }
-$listReport = User::getCustomersDropDown( $customers, 'id' );
-$listReport = ArrayHelper::merge(['' => 'allcustomers'], $listReport);
-echo Html::dropDownList('customers', null, $listReport, ['class'=>"form-control"]) ?>
+if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+    echo Html::label('Customers:');
+    $listReport = User::getCustomersDropDown($customers, 'id');
+    $listReport = ArrayHelper::merge(['' => 'allcustomers'], $listReport);
+    echo Html::dropDownList('customers', null, $listReport, ['class' => "form-control"]);
+}
+?>
         </div>
     </div>
 </div>
@@ -68,7 +75,9 @@ echo Html::dropDownList('customers', null, $listReport, ['class'=>"form-control"
         <th><?=Yii::t('app', 'Total')?></th>
         <th><?=Yii::t('app', 'Total Hours')?></th>
         <th><?=Yii::t('app', 'Expenses')?></th>
+        <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN])) : ?>
         <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+        <?php endif;?>
     </tr>
     </thead>
 </table>

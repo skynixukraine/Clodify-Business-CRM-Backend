@@ -38,7 +38,7 @@ class ReportController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'edit', 'delete'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT],
                     ],
 
                 ],
@@ -257,7 +257,7 @@ class ReportController extends DefaultController
                     $aliasUser->last_name .
                     '(' . User::findOne($model->user_id)->first_name . ' ' .
                           User::findOne($model->user_id)->last_name . ')' :
-                        ( User::hasPermission([User::ROLE_CLIENT]) ?
+                        ( User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
                         $aliasUser->first_name . ' ' . $aliasUser->last_name :
                         User::findOne($model->user_id)->first_name . ' ' .
                         User::findOne($model->user_id)->last_name )),
