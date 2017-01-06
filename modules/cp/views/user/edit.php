@@ -34,8 +34,8 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <?php echo $form->field( $model, 'last_name')->textInput(["class" => "form-control"])->label( 'Last Name' );?>
         <?php echo $form->field( $model, 'middle_name')->textInput(["class" => "form-control"])->label( 'Middle Name' );?>
         <?php echo $form->field( $model, 'company')->textInput(["class" => "form-control"])->label( 'Company' );?>
-        <?php echo $form->field( $model, 'salary')->textInput(["class" => "form-control"])->label( 'Salary' );?>
-        <?php echo $form->field( $model, 'password')->passwordInput(["class" => "form-control", 'value' => ''])->label( 'Password' );?>
+        <?php echo $form->field( $model, 'salary', ['inputOptions' => ['autocomplete' => 'off']])->textInput(["class" => "form-control"])->label( 'Salary' );?>
+        <?php echo $form->field( $model, 'password', ['inputOptions' => ['autocomplete' => 'off']])->passwordInput(["class" => "form-control", 'value' => ''])->label( 'Password' );?>
 
 
         <?php echo $form->field($model, 'role')->dropDownList([
