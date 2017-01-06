@@ -180,7 +180,7 @@ class Invoice extends \yii\db\ActiveRecord
                     foreach ($projects as $project) {
                         $IDs[] = $project->id;
                     }
-                    $invoices = Invoice::find()->where(['project_id' => $projects])
+                    $invoices = Invoice::find()->where(['project_id' => $IDs])
                         ->andWhere(['status' => self::STATUS_PAID])->all();
                     $totalPaid = 0;
                     if ($invoices) {
@@ -188,8 +188,10 @@ class Invoice extends \yii\db\ActiveRecord
                             $totalPaid += $invoice->total_hours;
                         }
                         if ($totalPaid) {
-                            $project->total_paid_hours = $totalPaid;
-                            $project->save();
+                            foreach ($projects as $project) {
+                                $project->total_paid_hours = $totalPaid;
+                                $project->save();
+                            }
                         }
                     }
                 }
