@@ -152,10 +152,14 @@ class ContractController extends DefaultController
             $total_hours = 0;
             $expenses = 0;
             $user = null;
+            $createdByCurrentUser = null;
             $projectIDs = [];
             $initiator = User::findOne($model->created_by);
             $customer = User::findOne($model->customer_id);
             $projects = Project::ProjectsCurrentClient($customer->id);
+            if (User::hasPermission([User::ROLE_ADMIN]) || $model->created_by == Yii::$app->user->id) {
+                $createdByCurrentUser = true;
+            }
             foreach ($projects as $project) {
                 $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
                 $expenses += $project->cost;
@@ -172,8 +176,10 @@ class ContractController extends DefaultController
                 '$' . number_format($model->total, 2),
                 $total_hours . 'h',
                 '$' . $expenses,
-                $customer->id
+                $customer->id,
+                $createdByCurrentUser
             ];
+
         }
 
         $data = [

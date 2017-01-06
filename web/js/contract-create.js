@@ -138,7 +138,7 @@ var contractCreateModule = (function() {
 
                             }
 
-                            if (cfg.canDelete) {
+                            if (row[11]) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
