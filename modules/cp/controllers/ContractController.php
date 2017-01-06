@@ -34,8 +34,18 @@ class ContractController extends DefaultController
                     [
                         'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
+                    [
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_SALES],
+                    ],
+                    [
+                        'actions' => ['index', 'find','view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_CLIENT]
+                    ]
                 ],
             ],
             'verbs' => [
@@ -131,6 +141,9 @@ class ContractController extends DefaultController
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
         if (User::hasPermission([User::ROLE_SALES])) {
             $dataTable->setFilter(Contract::tableName() . '.created_by=' . Yii::$app->user->id);
+        }
+        if (User::hasPermission([User::ROLE_CLIENT])) {
+            $dataTable->setFilter((Contract::tableName() . '.customer_id=' . Yii::$app->user->id));
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
