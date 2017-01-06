@@ -122,6 +122,8 @@ class InvoiceController extends DefaultController
             }
             if ($projectIDs) {
                 $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
             }
         }
         if (User::hasPermission([User::ROLE_SALES])) {
