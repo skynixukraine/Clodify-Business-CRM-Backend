@@ -52,13 +52,13 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Login Date')?></th>
         <th class="date-col"><?=Yii::t('app', 'Signup Date')?></th>
-        <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
         <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) : ?>
-        <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
-          <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
+            <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
+            <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
+            <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
         <?php endif;?>
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-        <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
+            <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
         <?php endif;?>
     </tr>
     </thead>
@@ -75,7 +75,9 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             activateUrl     : '<?=Url::to(['user/activate'])?>',
             canDelete       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canLoginAs      : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canEdit         : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            canEdit         : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            showSales       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            
         })
     });
 
