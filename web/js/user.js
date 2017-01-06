@@ -167,7 +167,22 @@ var userModule = (function() {
                 },
                 {
                     "targets"   : 5,
-                    "orderable" : true
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(data ) {
+                            var i = 0, dataLength = data.length;
+                            for(i; i < dataLength; i++) {
+                                data = data.replace('-', '/');
+                            }
+                            var index = data.indexOf(' ');
+                            var date = data.substr(0, index);
+                            var time = data.substr(index);
+                            return date + "<br>"+ time ;
+                        } else {
+                            return '';
+                        }
+
+                    }
                 },
                 {
                     "targets"   : 6,
@@ -190,8 +205,6 @@ var userModule = (function() {
                     }
                 });
             }
-
-
             if (cfg.showSales) {
                     columnDefs.push({
                             "orderable" : true
