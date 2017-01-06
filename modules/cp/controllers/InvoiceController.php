@@ -98,7 +98,7 @@ class InvoiceController extends DefaultController
             'status',
 
         ];
-
+        $projectIDs = [];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -112,11 +112,18 @@ class InvoiceController extends DefaultController
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
+            $projects = Project::find()
+                ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
+                ->all();
+            foreach ($projects as $project) {
+                $projectIDs[] = $project->id;
+            }
 
-            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-            $projectIDs = [];
             $projects = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
