@@ -126,7 +126,7 @@ class ContractController extends DefaultController
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
-                ['like', 'id', $keyword],
+                ['like', 'contract_id', $keyword],
                 ['like', 'created_by', $keyword],
                 ['like', 'customer_id', $keyword],
                 ['like', 'act_number', $keyword],
@@ -177,7 +177,8 @@ class ContractController extends DefaultController
                 $total_hours . 'h',
                 '$' . $expenses,
                 $customer->id,
-                $createdByCurrentUser
+                $createdByCurrentUser,
+                $model->id
             ];
 
         }

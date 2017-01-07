@@ -4,6 +4,8 @@
  * User: olha
  * Date: 16.02.16
  * Time: 14:20
+ * 
+ * @var $contract \app\models\Contract
  */
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -41,7 +43,7 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php if (User::hasPermission([User::ROLE_ADMIN]) && !Yii::$app->request->getQueryParam('id')) {
+            <?php if (User::hasPermission([User::ROLE_ADMIN]) && !$contract) {
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
@@ -50,6 +52,9 @@ $this->params['menu'] = [
                         'prompt' => 'Choose...',
                     ])
                     ->label('Customers');
+            } else {
+
+                echo $form->field($model, 'user_id')->label(false)->hiddenInput();
             }
             ?>
 
@@ -63,8 +68,8 @@ $this->params['menu'] = [
                         $listProjects[$project->project_id] = $project->project->name;
                     }
                 }
-            } elseif (User::hasPermission([User::ROLE_ADMIN]) && ($id = Yii::$app->request->getQueryParam('id'))) {
-                $projects = Project::ProjectsCurrentClient($id);
+            } elseif (User::hasPermission([User::ROLE_ADMIN]) && $contract ) {
+                $projects = Project::ProjectsCurrentClient( $contract->customer_id );
                 foreach ($projects as $project) {
                     $listProjects[$project->id] = $project->name;
                 }
@@ -87,7 +92,7 @@ $this->params['menu'] = [
             }
             echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
-                    'prompt' => $id ? 'All Projects' : 'Choose...',
+                    'prompt' => 'All Projects',
                 ] )
                 ->label( 'Projects' );
 
@@ -109,7 +114,10 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
+            ])->textInput( [
+                'class'=>'form-control pull-right active', 
+                'type'=>'text', 
+                'id'=>"date_end"] );?>
 
             <?php echo $model->contract_number ? $form->field( $model, 'contract_number')->textInput(['readonly' => true]) :
                 $form->field( $model, 'contract_number')->textInput();?>

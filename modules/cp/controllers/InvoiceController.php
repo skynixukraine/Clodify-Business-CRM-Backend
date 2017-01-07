@@ -7,6 +7,7 @@
  */
 namespace app\modules\cp\controllers;
 
+use app\models\Contract;
 use app\models\Project;
 use app\models\Report;
 use Yii;
@@ -180,8 +181,20 @@ class InvoiceController extends DefaultController
 
     public function actionCreate()
     {
-        $model = new Invoice();
+        $model      = new Invoice();
+        $contract   = null;
+        if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
+            ( $contract = Contract::findOne( $id ))) {
 
+            $model->contract_id     = $contract->id;
+            $model->contract_number = $contract->contract_id;
+            $model->act_of_work     = $contract->act_number;
+            $model->date_start      = $contract->start_date;
+            $model->date_end        = $contract->end_date;
+            $model->total           = $contract->total;
+            $model->user_id         = $contract->customer_id;
+
+        }
         if ($model->load(Yii::$app->request->post())) {
 
             /** Invoice - total logic */
@@ -201,15 +214,16 @@ class InvoiceController extends DefaultController
             if ($model->validate()) {
 
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));
+                Yii::$app->getSession()
+                            ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }
             return $this->redirect(['view?id=' . $model->id]);
-        } elseif ($post = Yii::$app->request->post()) {
-            $model->contract_number = $post['contractNumber'];
-            $model->act_of_work = $post['actNumber'];
-            return $this->render('create', ['model' => $model]);
         }
-        return $this->render('create', ['model' => $model]);
+        return $this->render('create', 
+                [
+                    'model'     => $model,
+                    'contract'  => $contract
+                ]);
     }
 
     public function actionView()
