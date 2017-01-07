@@ -191,6 +191,8 @@ class InvoiceController extends DefaultController
             $model->act_of_work     = $contract->act_number;
             $model->date_start      = $contract->start_date;
             $model->date_end        = $contract->end_date;
+            $model->total           = $contract->total;
+            $model->user_id         = $contract->customer_id;
 
         }
         if ($model->load(Yii::$app->request->post())) {

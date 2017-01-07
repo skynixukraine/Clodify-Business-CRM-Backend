@@ -54,7 +54,7 @@ $this->params['menu'] = [
                     ->label('Customers');
             } else {
 
-                echo $form->field($model, 'user_id')->hiddenInput();
+                echo $form->field($model, 'user_id')->label(false)->hiddenInput();
             }
             ?>
 
@@ -92,7 +92,7 @@ $this->params['menu'] = [
             }
             echo $form->field($model, 'project_id', ['enableClientValidation' => false])
                 ->dropDownList( $listProjects,  [
-                    'prompt' => $id ? 'All Projects' : 'Choose...',
+                    'prompt' => 'All Projects',
                 ] )
                 ->label( 'Projects' );
 
