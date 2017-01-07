@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'adminEmail'        => 'maryt@skynix.co',
-    'applicationName'   => 'Skynix',
+    'adminEmail'        => 'admin@skynix.co',
+    'applicationName'   => 'Skynix Ukraine',
     'ua_site'           => 'https://skynix.co',
     'en_site'           => 'https://skynix.co',
     'in_site'           => 'https://skynix.co',
