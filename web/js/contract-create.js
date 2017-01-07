@@ -27,25 +27,10 @@ var contractCreateModule = (function() {
     {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
-    function actionInvoice( contractNumber, actNumber )
+    function actionInvoice( contractId )
     {
-        customerId = customerIDs[contractNumber];
-        var form = document.createElement('form');
-        form.method = 'post';
-        form.action = cfg.invoiceUrl + "/" + customerId;
-        var input1 = document.createElement('input'),
-            input2 = document.createElement('input');
-        input1.type = 'text';
-        input1.name = 'contractNumber';
-        input1.value = contractNumber;
 
-        input2.type = 'text';
-        input2.name = 'actNumber';
-        input2.value = actNumber;
-
-        form.appendChild(input1);
-        form.appendChild(input2);
-        form.submit();
+        document.location.href = cfg.invoiceUrl + "/" + contractId;
 
     }
     function actionView( id )
@@ -134,7 +119,7 @@ var contractCreateModule = (function() {
                             if (cfg.canInvoice) {
 
                                 icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Invoice"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="'+row[12]+'" title="Invoice"></i>');
 
                             }
 
@@ -241,9 +226,7 @@ var contractCreateModule = (function() {
 
                 dataTable.find("i[class*=paid]").click(function(){
 
-                    var contractNumber     = $(this).parents("tr").find("td").eq(0).text(),
-                        actNumber          = $(this).parents("tr").find("td").eq(3).text();
-                    actionInvoice(contractNumber, actNumber);
+                    actionInvoice( $(this).data('id') );
 
                 });
 
