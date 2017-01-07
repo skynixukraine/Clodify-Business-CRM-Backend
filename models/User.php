@@ -341,7 +341,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Your password was changed.')
+                    ->setSubject('Skynix CRM: You have a new password')
                     ->send();
             }
         } else {
@@ -354,7 +354,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Your email was changed.')
+                    ->setSubject('Skynix CRM: Your email is changed')
                     ->send();
             } 
 
@@ -372,7 +372,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo($this->email)
-                        ->setSubject('Welcome to Skynix company. Please activate your account.')
+                        ->setSubject('Welcome to Skynix CRM, Please activate your account')
                         ->send();
                 }
 
@@ -391,7 +391,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo($this->email)
-                            ->setSubject('Welcome to Skynix company. Please activate your account.')
+                            ->setSubject('Welcome to Skynix CRM, Please activate your account')
                             ->send();
                     }
                 }
