@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-$this->title = "Кар'єра в компанії Скайнікс";
+$this->title = "Кар’єра у компанії - Скайнікс Україна";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container career">

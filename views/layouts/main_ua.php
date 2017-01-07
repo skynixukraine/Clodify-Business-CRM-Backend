@@ -15,12 +15,14 @@ AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="uk">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= ($this->title ? Html::encode($this->title) : '') ?> - Скайнікс Україна</title>
+    <meta name="description" content="Скайнікс Україна - це команда професійних розробників, що займається створенням інноваційних програмних рішень у всіх областях IT. Тільки найновіші технології.">
+    <meta name="keywords" content="Скайнікс Україна, розробка програмного забезпечення">
+    <title><?= ($this->title ? Html::encode($this->title) : '') ?></title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
@@ -100,10 +102,10 @@ AppAsset::register($this);
 
 <footer class="container">
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-10 footer-txt">
-            <?= date('Y') ?> Усі права захищені. Скайнікс.
+        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-9 footer-txt">
+            <?= date('Y') ?> Усі права захищені. Скайнікс Україна.
         </div>
-        <div class="col-lg-2 col-xs-2 link">
+        <div class="col-lg-2 col-xs-3 link">
             <?php
             if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
                 <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>" rel="nofollow">cp</a>
@@ -132,6 +134,7 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 <?php $this->registerJsFile('/js/layouts.js'); ?>
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
+<?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
 <?php $this->registerJs('localStorageModule.storageFunction();'); ?>
 <?php $this->registerJsFile('/js/local-storage.js'); ?>
 

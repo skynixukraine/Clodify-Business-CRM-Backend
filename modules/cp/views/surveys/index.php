@@ -19,7 +19,7 @@ $this->title                    = Yii::t("app", "Surveys List");
 
 $this->params['breadcrumbs'][]  = $this->title;
 
-if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
+if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_SALES] ) ) {
     $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'Create survey'),
@@ -38,7 +38,7 @@ if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User:
         <th><?=Yii::t('app', 'Date End')?></th>
         <th><?=Yii::t('app', 'Is Private?')?></th>
         <th><?=Yii::t('app', 'Votes')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM ])) : ?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES ])) : ?>
             <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
         <?php endif;?>
 
@@ -52,9 +52,9 @@ if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User:
             deleteUrl   : '<?=Url::to(['surveys/delete'])?>',
             editUrl     : '<?=Url::to(['surveys/edit'])?>',
             codeUrl     : '<?=Yii::$app->params['en_site'].Yii::$app->urlManager->createUrl(['/s'])?>',
-            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
-            canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
-            canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM]) ? 'true' : 'false')?>,
+            canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
+            canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
+            canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
         })
     });
 

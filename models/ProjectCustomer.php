@@ -93,4 +93,11 @@ class ProjectCustomer extends \yii\db\ActiveRecord
             ->groupBy(ProjectDeveloper::tableName() . '.user_id')
             ->all();
     }
+
+    public static function getProjectCustomer($projectId)
+    {
+        return self::find()
+            ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
+            ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1');
+    }
 }

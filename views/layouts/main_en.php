@@ -59,10 +59,6 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'contact us', 'url' => ['site/contact']],
-            ['label' => 'careers', 'url' => ['site/career']],
-            ['label' => 'Solutions Store', 'url' => 'https://skynix.solutions'],
-            ['label' => 'Blog', 'url' => '/blog'],
 
         ],
     ]);
@@ -135,7 +131,6 @@ AppAsset::register($this);
 <?php $this->registerJsFile('/js/layouts.js'); ?>
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
 <?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
-
 <?php $this->registerJs('localStorageModule.storageFunction();'); ?>
 <?php $this->registerJsFile('/js/local-storage.js'); ?>
 

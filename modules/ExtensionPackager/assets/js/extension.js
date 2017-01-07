@@ -60,8 +60,7 @@ var extensionModule = (function() {
 
         deleteModal = new ModalBootstrap({
             title       : 'Delete ' + name + "?",
-            body        : 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
-            ' Are you sure you wish to delete it?',
+            body        : 'Are you sure you wish to delete it?',
             winAttrs    : { class : 'modal delete'}
         });
         deleteModal.show();

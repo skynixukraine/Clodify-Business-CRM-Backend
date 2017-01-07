@@ -38,8 +38,9 @@ class ReportController extends DefaultController
                     [
                         'actions'   => ['index', 'find', 'edit', 'delete'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT],
                     ],
+
                 ],
             ],
             'verbs' => [
@@ -65,6 +66,7 @@ class ReportController extends DefaultController
         $projectId          = Yii::$app->request->getQueryParam("project_id");
         $usersId            = Yii::$app->request->getQueryParam("user_develop");
         $customerId         = Yii::$app->request->getQueryParam("user_id");
+        $salesId            = Yii::$app->request->getQueryParam("user_id");
         $dateStart          = Yii::$app->request->getQueryParam("date_start");
         $dateEnd            = Yii::$app->request->getQueryParam("date_end");
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
@@ -151,38 +153,67 @@ class ReportController extends DefaultController
 
             }
         }
-            if(User::hasPermission([User::ROLE_PM])) {
+        if(User::hasPermission([User::ROLE_SALES])) {
 
-                $teammates = [];
-                if ( ( $pmTeammates = Report::reportsPM() ) ) {
+            $salesid = Yii::$app->user->id;
 
-                    foreach($pmTeammates as $teammate) {
+            if($salesid && $salesid != null){
 
-                        $teammates[] = $teammate->user_id;
+                $projectsDeveloper = ProjectDeveloper::getReportsOfSales($salesid );
+                $projectId = [];
+                foreach($projectsDeveloper as $project){
 
-                    }
+                    $projectId[] = $project->project_id;
+
                 }
-                if( $teammates && count($teammates) ) {
+                if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
+                    $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
                 }else{
 
-                    $dataTable->setFilter('user_id IN (null) ');
-
+                    $dataTable->setFilter('project_id IN (null) ');
                 }
-            }
-
-            if($dateStart && $dateStart != null){
-
-               $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
 
             }
-
-            if($dateEnd && $dateEnd != null){
-
-                $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
-
+        }
+        if(User::hasPermission([User::ROLE_PM])) {
+            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+            $projectId = [];
+            foreach ($projects as $project) {
+                $projectId[] = $project->id;
             }
+            $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+
+//                $teammates = [];
+//                if ( ( $pmTeammates = Report::reportsPM() ) ) {
+//
+//                    foreach($pmTeammates as $teammate) {
+//
+//                        $teammates[] = $teammate->user_id;
+//
+//                    }
+//                }
+//                if( $teammates && count($teammates) ) {
+//
+//                    $dataTable->setFilter('user_id IN (' . implode(', ', $teammates) . ") ");
+//                }else{
+//
+//                    $dataTable->setFilter('user_id IN (null) ');
+//
+//                }
+        }
+
+        if($dateStart && $dateStart != null){
+
+            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
+
+        }
+
+        if($dateEnd && $dateEnd != null){
+
+            $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
+
+        }
 
         $dataTable->setFilter('is_delete=0');
 
@@ -191,39 +222,64 @@ class ReportController extends DefaultController
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
 
-        $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
-                        'project_id' => $model->getProject()->one()->id ]);
-                        
-        $aliasUser = null;
-        if ( $pD && $pD->alias_user_id ) {
-        
-            $aliasUser = User::findOne( $pD->alias_user_id );
-        
-        }                
-                        
+            $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
+                'project_id' => $model->getProject()->one()->id ]);
+            //    var_dump($pD);die();
+
+            $aliasUser = null;
+            if ( $pD && $pD->alias_user_id ) {
+
+                $aliasUser = User::findOne( $pD->alias_user_id );
+
+            }
+            if (strlen($model->task) >= 35) {
+                $task = substr($model->task, 0, 35) . '...';
+            } else {
+                $task = $model->task;
+            }
+            $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
+            //var_dump($aliasUser->first_name);die();
             $list[] = [
                 $model->id,
-                $model->task,
-                $model->date_added,
-                $model->getProject()->one()->name,
-                (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) && 
-                    $aliasUser != null ?
-                    $model->reporter_name . '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' :
-                    ( $aliasUser != null ? $aliasUser->first_name . ' ' . $aliasUser->last_name : $model->reporter_name )
-                    ),
-                    $model->date_report,
-                    ( $model->invoice_id == null ? "No" : "Yes" ),
-                    $model->hours
+                $task,
+                date("d/m/Y", strtotime($model->date_added)),
+                $customer->user->first_name . ' ' . $customer->user->last_name . '<br>' . $model->getProject()->one()->name,
+                /*(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
+                ($aliasUser != null) ?
+                    User::findOne($model->user_id)->first_name . " " .
+                    User::findOne($model->user_id)->last_name .
+                    '(' . $aliasUser->first_name . ' ' . $aliasUser->last_name . ')' :
+                    User::findOne($model->user_id)->first_name . " " .
+                    User::findOne($model->user_id)->last_name),*/
+
+                ( ($aliasUser != null) ?
+                    $aliasUser->first_name . ' ' .
+                    $aliasUser->last_name .
+                    '(' . User::findOne($model->user_id)->first_name . ' ' .
+                    User::findOne($model->user_id)->last_name . ')' :
+                    ( User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
+                        $aliasUser->first_name . ' ' . $aliasUser->last_name :
+                        User::findOne($model->user_id)->first_name . ' ' .
+                        User::findOne($model->user_id)->last_name )),
+
+                date("d/m/Y", strtotime($model->date_report)),
+                ( $model->invoice_id == null ? "No" : "Yes" ),
+                gmdate('H:i', floor($model->hours * 3600)),
+                '$' . number_format( $model->cost, 2),
+                $model->getProject()->one()->id
             ];
         }
 
-        $totalHours = $query->sum(Report::tableName() . '.hours');
+        $totalHours = gmdate('H:i', floor($query->sum(Report::tableName() . '.hours') * 3600));
+        $totalCost = '$' . $query->sum(Report::tableName() . '.cost');
+
 
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
             "totalHours"        => $totalHours,
+            "totalCost"         => $totalCost,
             "data"              => $list
         ];
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

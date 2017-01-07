@@ -34,7 +34,7 @@ class ExtensionController extends DefaultController {
                     [
                         'actions' => [ 'index', 'create', 'find', 'delete', 'download'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_SALES],
                     ]
                 ],
             ],

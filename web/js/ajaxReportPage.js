@@ -1,10 +1,32 @@
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
 var ajaxReportPageModule = (function() {
 
     return {
-        init: function() {
+        init: function(config) {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
+
+            var date = new Date();
+            var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('.date').datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true,
+                defaultViewDate: currentDay,
+                todayHighlight: true,
+                endDate : currentDay
+            }).datepicker("setDate", currentDay);
+
 
             var projectId = $(".form-add-report #report-project_id"),
                 report,
@@ -17,7 +39,7 @@ var ajaxReportPageModule = (function() {
                 'project_id': '',
                 'date_report': '',
                 'task': '',
-                'hours': '',
+                'hours': ''
             };
             var lastForm = $('form:last'),
                 errorMsg = "error",
@@ -35,7 +57,7 @@ var ajaxReportPageModule = (function() {
                     var tableArr = [];
                     thisRowTd.each(function(i) {
                         var thisTd = $(this);
-                        var thisValue = thisTd.text();
+                        var thisValue = escapeHtml(thisTd.text());
                         switch (i) {
                             //////Changing project-id cell
                             case 1:
@@ -146,7 +168,7 @@ var ajaxReportPageModule = (function() {
                                         } else {
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
-                                            ajaxSuccessFunc(successMsg);
+                                            ajaxSuccessFunc(errorMsg, data);
                                             lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },
@@ -410,7 +432,7 @@ var ajaxReportPageModule = (function() {
                     report = JSON.stringify(dataArr);
                     $.ajax({
                         type: "POST",
-                        url: "/cp/index/delete",
+                        url: config.deleteUrl,
                         data: 'jsonData=' + escape(report),
                         dataType: 'json',
                         success: function(data) {

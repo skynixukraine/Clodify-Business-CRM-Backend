@@ -7,8 +7,6 @@ var adminReportModule = (function() {
             deleteUrl   : '',
             findUrl     : '',
             canDelete   : null,
-            canSeeHours : null,
-            canSeeInvoice : null
         },
         dataTable,
         filterProjectsSelect = "select[name=project]",
@@ -114,10 +112,9 @@ var adminReportModule = (function() {
                     }
                 }
             ], index=1;
-            if( cfg.canSeeHours){
-                index++;
-                console.log(index);
-                columns.push(
+            index++;
+            console.log(index);
+            columns.push(
                 {
                     "targets"   : 2,
                     "orderable" : true,
@@ -125,14 +122,27 @@ var adminReportModule = (function() {
                         return row[7];
                     }
                 });
-            }
             index++;
             columns.push(
                 {
                     "targets"   : index,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
+                        return row[8];
+                    }
+                },
+                {
+                    "targets"   : ++index,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
                         return row[3];
+                    }
+                },
+                {
+                    "targets"   : ++index,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        return row[4];
                     }
                 },
                 {
@@ -146,29 +156,20 @@ var adminReportModule = (function() {
                     "targets"   : ++index,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
-                        return row[4];
-                    }
-                },
-                {
-                    "targets"   : ++index,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
                         return row[5];
                     }
                 }
 
             );
-            if( cfg.canSeeInvoice){
-                console.log(index);
-                columns.push(
-                    {
-                        "targets": ++index,
-                        "orderable": true,
-                        "render": function (data, type, row) {
-                            return row[6];
-                        }
-                    });
-            }
+            console.log(index);
+            columns.push(
+                {
+                    "targets": ++index,
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        return row[6];
+                    }
+                });
             dataTable = $('#report-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -201,8 +202,10 @@ var adminReportModule = (function() {
                     }
                 });
                 totalHours = settings.json.totalHours || '0';
-                $('#total-hours span').text(Math.round(totalHours*100)/100);
+                $('#hours').text(totalHours);
 
+                totalCost = settings.json.totalCost || '0';
+                $('#cost').text(totalCost);
 
                 dataTable.find("img[class*=edit]").click(function(){
                     var id = $(this).parents("tr").find("td").eq(0).text();

@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/invoice.js');
 $this->title                    = Yii::t("app", "Invoices");
-if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
+if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES] )) {
     $this->params['breadcrumbs'][] = $this->title;
 
     $this->params['menu'] = [
@@ -59,8 +59,8 @@ if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN] )) {
             viewUrl     : '<?=Url::to(['invoice/view'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             canView     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
-            canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
-            canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>
+            canPaid     : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canCanceled : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
         })
     });
 

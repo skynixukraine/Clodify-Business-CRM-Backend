@@ -31,7 +31,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             'type'=>'text',
 
                         ]
-                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus'))->label( false );?>
+                    ])->textInput(array('placeholder' => 'Enter the subject or your question', 'type'=>'text', 'autofocus'=>'autofocus', 'autocomplete'=>'off'))->label( false );?>
 
                 </div><br>
                 <table id="table-result">
@@ -95,7 +95,7 @@ $this->registerJsFile('/js/jQuery-2.1.4.min.js');
                             return;
                         }
                         $.each(response, function (e, i) {
-                            subjects += '<p><a href="ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
+                            subjects += '<p><a href="/support/ticket?id=' + e + '">Ticket ' + i + ' ' + e + '</a></p>';
 
                         });
                         $('#table-result').html(subjects).prepend('<span>Are you looking for the following subject?</span>');

@@ -20,10 +20,10 @@ $this->title = 'Welcome to the Skynix - software development company';
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
-                        <h1 class="en my-upper">about skynix</h1>
+                        <h1 class="en my-upper">skynix ukraine</h1>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt1-en">
-                        Skynix is a company that believes in making distinctive, lasting and substantial improvements in IT World. The only goal is to develop, excite and foster changes through new solutions. Our professional team always takes into account the wishes and opinions of customers and leverage on latest software development practices to deliver high quality and cost-effective solutions.</span>
+                        Skynix is a company that believes in making distinctive, lasting and substantial improvements in IT World. The only goal is to develop, excite and foster changes through new software solutions. Our professional team always takes into account the wishes and opinions of customers and leverage on latest software development practices to deliver high quality and cost-effective solutions.</span>
                     </div>
                     <div class="col-lg-12 col-xs-12 about-txt2">
                         Our company develops innovative businesses software solutions that work.
@@ -138,7 +138,7 @@ $this->title = 'Welcome to the Skynix - software development company';
 
                 <div class="col-lg-6 col-sm-12">
 
-                    <p>The Magento 2 Marketplace extension intended to create specific
+                    <p>The Magento 2 Marketplace extension from Skynix Ukraine intended to create specific
                         markets based on Magento 2 ecommerce.
                         It shares Magento 2 functionality between different vendors and promotes their products under
                         one catalog (marketplace).
@@ -156,7 +156,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <li>Seller sign up page</li>
                         <li>Payment systems like PayPal and Braintree</li>
                     </ul>
-                    Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Software development technologies:: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
 
                 </div>
             </div>
@@ -196,7 +196,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <li>Shopping cart</li>
                         <li>Customer Account</li>
                     </ul>
-                    Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Technologies used: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
                 </div>
             </div>
         </div>
@@ -212,7 +212,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The Sizes Table Magento 1.9 extension lets customers easily select a
+                    <p>The Sizes Table Magento 1.9 extension from Skynix Ukraine developers lets customers easily select a
                         necessary size of the product based on available stock.
                         The extension is universal and can be easily installed on any version of Magento 1.x
                     </p>
@@ -223,7 +223,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <li>Product page improvement</li>
                         <li>Mobile Responsive</li>
                     </ul>
-                    Technologies: Magento 1.x, HTML5, CSS3, Bootstrap, jQuery 1.x
+                    Software development technologies: Magento 1.x, HTML5, CSS3, Bootstrap, jQuery 1.x
                 </div>
             </div>
         </div>
@@ -248,7 +248,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <ul>
                         <li>All Magento 2.x features</li>
                         <li>Mobile Responsive</li>
-                        <li>Shoping cart</li>
+                        <li>Shopping cart</li>
                         <li>Customer Account</li>
                     </ul>
                     Technologies: Magento 2.x, PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
@@ -308,7 +308,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     <p><strong class="my-upper">description: </strong></p><br>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    <p>The mobile application is intended to help for specific groups of
+                    <p>The mobile application from Skynix Ukraine is intended to help for specific groups of
                         people to get their aims.
                         Fishermen can plan the trips and share the results.
                         Local equipment shops can advertise their products based on fishermen trips.
@@ -317,7 +317,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                     </p>
                 </div>
                 <div class="col-lg-6 col-sm-12">
-                    The App has been developed using the most modern technologies.<br>
+                    The App has been developed using the most modern software development technologies.<br>
                     Application solution:<br>
                     <ul>
                         <li>HTML5, CSS3, Javascript</li>
@@ -417,7 +417,7 @@ $this->title = 'Welcome to the Skynix - software development company';
                         <li>Javascript CV Builder</li>
                         <li>Standardized profile page</li>
                     </ul>
-                    Technologies: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
+                    Software development technologies: PHP 5.6, MySQL 5.6, HTML5, CSS3, Bootstrap, jQuery 2.x
                 </div>
             </div>
         </div>
