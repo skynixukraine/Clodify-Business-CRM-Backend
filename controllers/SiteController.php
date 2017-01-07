@@ -73,7 +73,7 @@ class SiteController extends Controller
     {
         if ( !Yii::$app->user->isGuest ) {
 
-            return $this->redirect(['cp/index']);
+            return $this->redirect(['cp/default/index']);
 
         }
         return $this->redirect('https://skynix.company/');
