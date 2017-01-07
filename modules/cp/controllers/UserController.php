@@ -227,7 +227,7 @@ class UserController extends DefaultController {
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
                 User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ?  '$' . number_format($model->salary) : null,
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ? $salary_up:null,
                 $model->is_delete,
                 $model->public_profile_key
             ];
