@@ -76,7 +76,7 @@ class SiteController extends Controller
             return $this->redirect(['cp/index']);
 
         }
-        return $this->redirect(['site/login']);
+        return $this->redirect('https://skynix.company/');
     }
 
     /** New or invited user login  */
