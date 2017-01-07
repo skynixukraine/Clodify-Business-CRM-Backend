@@ -350,24 +350,34 @@ class UserController extends DefaultController {
         $this->redirect('user/index');
     }
 
+    /**
+     * Edit user action
+     * @return string|\yii\web\Response
+     * @throws \Exception
+     */
     public function actionUpdate()
     {
         /** @var $user User */
-        if (( $id = Yii::$app->request->get("id") ) &&
-            ( $user = User::findOne($id) ) ) {
-            $user->scenario = 'settings';
-            if ($user->load(Yii::$app->request->post())) {
-                if ($user->validate()) {
-                    $user->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
-                    return $this->redirect(['index']);
-                } else {
-                    Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "Data is not valid!!!"));
-                }
-            }
-        }
+        if (!( $id = Yii::$app->request->get("id") ) ||
+            !( $user = User::findOne($id) ) ) {
 
+            throw new \Exception('The user does not exist');
+
+        }
+        $user->scenario = 'settings';
+        if ( Yii::$app->request->isPost &&
+                $user->load(Yii::$app->request->post()) &&
+                $user->validate() ) {
+            if ( $user->xHsluIp ) {
+
+                $user->password = $user->xHsluIp;
+                
+            }
+            $user->save();
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
+            return $this->redirect(['index']);
+
+        }
         return $this->render('edit', [
             'model' => $user
         ]);
