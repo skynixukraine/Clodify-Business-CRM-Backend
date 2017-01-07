@@ -38,7 +38,7 @@ $config = [
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name' => 'skynix',
-                'domain' => '.skynix.company',
+                'domain' => '.skynix.co',
                 'path' => '/',
             ]
         ],
@@ -83,7 +83,7 @@ $config = [
         'session' => [
             'cookieParams' => [
                 'path' => '/',
-                'domain' => '.skynix.company'
+                'domain' => '.skynix.co'
             ],
         ],
         'i18n' => [
