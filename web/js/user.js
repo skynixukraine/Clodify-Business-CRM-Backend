@@ -209,10 +209,6 @@ var userModule = (function() {
                     columnDefs.push({
                             "orderable" : true
                     });
-                    columnDefs.push(
-                    {
-                            "orderable" : true
-                    });
                 }
 
             if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
