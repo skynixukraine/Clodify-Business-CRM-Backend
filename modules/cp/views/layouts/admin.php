@@ -158,7 +158,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['/cp/user/index']);?>">
                         <i class="fa fa-users"></i> <span><?=User::hasPermission([User::ROLE_SALES, User::ROLE_CLIENT]) ? Yii::t('app', 'Developers') : Yii::t('app', 'Manage Users')?></span>
-                    </a>
+                      </a>
                 </li>
                 <?php endif;?>
 
@@ -209,7 +209,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                     <li class="treeview<?=( Yii::$app->controller->id == "surveys" ? " active" : "")?>">
                         <a href="<?=Url::to(['/cp/surveys/index']);?>">
-                            <i class="fa  fa-question"></i> <span>Manage Surveys</span>
+                            <i class="fa  fa-question"></i> <span>My Surveys</span>
                         </a>
                     </li>
                 <?php endif;?>

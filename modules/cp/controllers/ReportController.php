@@ -176,13 +176,13 @@ class ReportController extends DefaultController
 
             }
         }
-            if(User::hasPermission([User::ROLE_PM])) {
-                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
-                $projectId = [];
-                foreach ($projects as $project) {
-                    $projectId[] = $project->id;
-                }
-                $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+        if(User::hasPermission([User::ROLE_PM])) {
+            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+            $projectId = [];
+            foreach ($projects as $project) {
+                $projectId[] = $project->id;
+            }
+            $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
 
 //                $teammates = [];
 //                if ( ( $pmTeammates = Report::reportsPM() ) ) {
@@ -201,19 +201,19 @@ class ReportController extends DefaultController
 //                    $dataTable->setFilter('user_id IN (null) ');
 //
 //                }
-            }
+        }
 
-            if($dateStart && $dateStart != null){
+        if($dateStart && $dateStart != null){
 
-               $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
+            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
 
-            }
+        }
 
-            if($dateEnd && $dateEnd != null){
+        if($dateEnd && $dateEnd != null){
 
-                $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
+            $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
 
-            }
+        }
 
         $dataTable->setFilter('is_delete=0');
 
@@ -222,23 +222,23 @@ class ReportController extends DefaultController
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
 
-        $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
-                        'project_id' => $model->getProject()->one()->id ]);
-        //    var_dump($pD);die();
-                        
-        $aliasUser = null;
-        if ( $pD && $pD->alias_user_id ) {
+            $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
+                'project_id' => $model->getProject()->one()->id ]);
+            //    var_dump($pD);die();
 
-            $aliasUser = User::findOne( $pD->alias_user_id );
-        
-        }
-        if (strlen($model->task) >= 35) {
-            $task = substr($model->task, 0, 35) . '...';
-        } else {
-            $task = $model->task;
-        }
-        $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
-        //var_dump($aliasUser->first_name);die();
+            $aliasUser = null;
+            if ( $pD && $pD->alias_user_id ) {
+
+                $aliasUser = User::findOne( $pD->alias_user_id );
+
+            }
+            if (strlen($model->task) >= 35) {
+                $task = substr($model->task, 0, 35) . '...';
+            } else {
+                $task = $model->task;
+            }
+            $customer =ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
+            //var_dump($aliasUser->first_name);die();
             $list[] = [
                 $model->id,
                 $task,
@@ -252,18 +252,18 @@ class ReportController extends DefaultController
                     User::findOne($model->user_id)->first_name . " " .
                     User::findOne($model->user_id)->last_name),*/
 
-              ( ($aliasUser != null) ?
+                ( ($aliasUser != null) ?
                     $aliasUser->first_name . ' ' .
                     $aliasUser->last_name .
                     '(' . User::findOne($model->user_id)->first_name . ' ' .
-                          User::findOne($model->user_id)->last_name . ')' :
-                        ( User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
+                    User::findOne($model->user_id)->last_name . ')' :
+                    ( User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
                         $aliasUser->first_name . ' ' . $aliasUser->last_name :
                         User::findOne($model->user_id)->first_name . ' ' .
                         User::findOne($model->user_id)->last_name )),
 
                 date("d/m/Y", strtotime($model->date_report)),
-                    ( $model->invoice_id == null ? "No" : "Yes" ),
+                ( $model->invoice_id == null ? "No" : "Yes" ),
                 gmdate('H:i', floor($model->hours * 3600)),
                 '$' . number_format( $model->cost, 2),
                 $model->getProject()->one()->id
