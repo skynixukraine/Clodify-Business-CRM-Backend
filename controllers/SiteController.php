@@ -46,23 +46,23 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            /*'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
+
+            ],*/
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
     }
+
+    public function actionError(){
+        //var_dump(Language::getLanguage());die();
+        return $this->render('error_' . Language::getLanguage());
+    }
     public function beforeAction($action)
     {
-
-        if ( ( $url = Language::getRedirectUrl() ) ) {
-
-            $this->redirect($url);
-
-        }
 
         $this->layout = "main_" . Language::getLanguage();
         //var_dump( $this->layout); exit;
@@ -88,6 +88,19 @@ class SiteController extends Controller
         if (($email = Yii::$app->request->get('email'))) {
 
             $model->email = $email;
+            if (($password = Yii::$app->request->get('password'))) {
+
+                $model->password = $password;
+
+                if (($ticket = Yii::$app->request->get('id'))) {
+
+                    if ($model->login()) {
+                        return $this->redirect(['support/ticket', 'id' => $ticket]);
+                    }
+                    //$model->password = $password;
+
+                }
+            }
 
         }
         if ( $model->load(Yii::$app->request->post()) ) {
@@ -157,9 +170,29 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-                                return $this->redirect(Language::getDefaultUrl() . '/cp/index');
+                                return $this->redirect(['cp/index/index']);
                             }
                         }
+
+                        if (User::hasPermission([User::ROLE_SALES])) {
+                            if ($modelUserLogins->date_login == null) {
+
+                                //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
+                                Yii::$app->getSession()->setFlash('success',
+                                    Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            }
+
+                            $modelUserLogins->date_login = date('Y-m-d H:i:s');
+                            $modelUserLogins->save();
+                            if(($idticket = Yii::$app->request->get('ticket'))){
+
+                                return $this->redirect(["support/ticket", 'id' => $idticket]);
+
+                            }else {
+                                return $this->redirect(['cp/user/index']);
+                            }
+                        }
+
                         if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
                             if ($modelUserLogins->date_login == null) {
 
@@ -168,7 +201,7 @@ class SiteController extends Controller
                             }
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
                             $modelUserLogins->save();
-                            return $this->redirect(Language::getDefaultUrl() . '/cp/user/index');
+                            return $this->redirect(['cp/user/index']);
                         }
                         $modelUserLogins->date_login = date('Y-m-d H:i:s');
                         $modelUserLogins->save();
@@ -196,6 +229,10 @@ class SiteController extends Controller
         return $this->redirect( Language::getUrl() );
     }
 
+    /**
+     * @deprecated 
+     * @return string|Response
+     */
     public function actionContact()
     {
         $model = new ContactForm();
@@ -209,17 +246,27 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * @deprecated 
+     * @return string
+     */
     public function actionCareer()
     {
         return $this->render('career_' . Language::getLanguage());
     }
 
+    /**
+     * @deprecated 
+     * @return string
+     */
     public function actionPrivacy()
     {
         return $this->render('privacy_' . Language::getLanguage());
     }
 
-    /** Invited user activated */
+    /**
+     * @deprecated  
+     * Invited user activated */
     public function actionInvite( $hash )
     {
         /** @var  $model User */
@@ -252,7 +299,9 @@ class SiteController extends Controller
         }
         return $this->redirect(['site/index']);
     }
-    /* pass the post option, and send a letter request */
+    /**
+     * @deprecated 
+     * pass the post option, and send a letter request */
     public function actionRequest()
     {
         $model = new Upload();
@@ -319,6 +368,13 @@ class SiteController extends Controller
 
 
     }
+
+    /**
+     * @deprecated 
+     * @param $shortcode
+     * @return string|Response
+     * @throws NotFoundHttpException
+     */
     public function actionSurvey($shortcode)
     {
         /** @var  $model Survey*/
@@ -370,6 +426,10 @@ class SiteController extends Controller
             }
     }
 
+    /**
+     * @deprecated 
+     * @throws \yii\base\ExitException
+     */
     public function actionSubmitSurvey()
     {
         $data = ['success' => false];

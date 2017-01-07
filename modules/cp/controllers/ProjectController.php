@@ -11,9 +11,11 @@ use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\Report;
+use app\models\Invoice;
 use app\models\SiteUser;
 use app\models\Visit;
 use Yii;
+use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\components\DataTable;
@@ -40,7 +42,7 @@ class ProjectController extends DefaultController
                     [
                         'actions'   => [ 'index', 'find'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => [ 'create', 'edit', 'delete', 'activate', 'suspend', 'update'],
@@ -79,23 +81,36 @@ class ProjectController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])){
+        if (User::hasPermission([User::ROLE_ADMIN])) {
+            $query         = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->groupBy('id');
+        }
+
+        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
-                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id");
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                            ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                            ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                            ->groupBy('id');
         }
         if(User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])){
         $query         = Project::find()
                             ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
-                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id");
+                            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                            ->groupBy('id');
         }
 
         $columns        = [
             'id',
             'name',
             'jira_code',
-            'total_logged_hours',];
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+            'total_logged_hours',
+            'cost'];
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
             $columns[] = 'total_paid_hours';
         }
@@ -111,7 +126,7 @@ class ProjectController extends DefaultController
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
-                ['like', 'first_name', $keyword],
+                ['like', 'name', $keyword],
                 ['like', 'jira_code', $keyword]
             ]);
 
@@ -122,11 +137,12 @@ class ProjectController extends DefaultController
             $dataTable->setFilter( ProjectCustomer::tableName() . ".user_id=" . Yii::$app->user->id );
         }
 
-        if( User::hasPermission([User::ROLE_PM]) ){
+        if( User::hasPermission([User::ROLE_PM, User::ROLE_SALES]) ){
 
             $dataTable->setFilter( ProjectDeveloper::tableName() . ".user_id=" . Yii::$app->user->id );
 
         }
+
            $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
@@ -136,6 +152,7 @@ class ProjectController extends DefaultController
 
             $developers = $model->getDevelopers()->all();
             $developersNames = [];
+            $develop = [];
             /*  @var $developer \app\models\User */
             foreach($developers as $developer){
 
@@ -148,13 +165,18 @@ class ProjectController extends DefaultController
                                User::find()
                                 ->where('id=:alias', [
                                     ':alias' => $alias_user])->one()->last_name;
-                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN] )){
+                    if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_SALES] )){
                         $developer->id == $alias_user ? $developersNames[] = $aliases:
                         $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
                     }
-                } else {
-                    $developersNames[] = $developer->first_name;
-                }
+                    elseif (User::hasPermission([User::ROLE_CLIENT] )){
+                        $developer->id == $alias_user ?
+                        $developersNames[] = $developer->first_name . ' ' . $developer->last_name:
+                        $developersNames[] = $aliases;
+                    }
+                    } else {
+                        $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
+                    }
                 //$aliases[$developer->user_id] = $developer->alias_user_id;
 
             }
@@ -163,20 +185,25 @@ class ProjectController extends DefaultController
             /*  @var $customer \app\models\User */
             foreach($customers as $customer){
 
-                $customersNames[] = $customer->first_name;
+                $customersNames[] = $customer->first_name . " " .  $customer->last_name;
             }
             /* @var $model \app\models\Project */
             $row = '' . $model->id .
                 '; ' . $model->name .
                 '; ' . $model->jira_code .
-                '; ' . $model->total_logged_hours;
+                '; ' . gmdate('H:i', floor($model->total_logged_hours * 3600)) .
+                '; ' . '$' . number_format( $model->cost, 2, ',	', '.');
 
-            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN])){
+            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
 
-                $row = $row .  '; ' . $model->total_paid_hours;
+                $row = $row .  '; ' . gmdate('H:i', floor($model->total_paid_hours * 3600));
             }
-            $row = $row . '; ' . $model->date_start .
-                '; ' . $model->date_end .
+            //formatting date
+            $newDateStart = date("d/m/Y", strtotime($model->date_start));
+            $newDateEnd = date("d/m/Y", strtotime($model->date_end));
+
+            $row = $row . '; ' .$newDateStart .
+                '; ' . $newDateEnd .
                 '; ' . implode(", ", $developersNames) .
                 '; ' . implode(", ", $customersNames) .
                 '; ' . $model->status;
@@ -218,33 +245,13 @@ class ProjectController extends DefaultController
             $model = new Project();
 
             $model->scenario = "admin";
-
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->status = Project::STATUS_NEW;
-
-                if ($model->validate()) {
-
-                    if( $model->save() ) {
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
-                        return $this->redirect(['index']);
-                    } else {
-                        $model = new Project();
-                        Yii::$app->getSession()->setFlash('error',
-                            Yii::t("app", "Fields with customers and developers are required"));
-                        return $this->render('create', ['model' => $model,
-                            'title' => 'Create a new project']);
-                    }
-
-                } else {
-
-                    $model->status = null;
-                    Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "Fields with customers and developers are required"));
-                    return $this->render('create', ['model' => $model,
-                        'title' => 'Create a new project']);
-
-                }
+                if ($model->validate() && $model->save()) {
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                    return $this->redirect(['index']);
+                } 
             }
             return $this->render('create', ['model' => $model,
                                             'title' => 'Create a new project']);

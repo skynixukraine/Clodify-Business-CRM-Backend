@@ -36,7 +36,8 @@ $this->params['menu'] = [
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
             <div class="form-group">
-                <?php echo $form->field( $model, 'name', [
+                <?php echo $form->errorSummary($model);
+                echo $form->field( $model, 'name', [
 
                     'options' => [
 
@@ -127,10 +128,11 @@ $this->params['menu'] = [
         </div>
                 <div class = "box">
                     <div class = "box-body no-padding">
-                        <table class = "table load two">
+                        <table class = "table load two  ">
                             <thead>
                             <tr>
                                 <th>Assign</th>
+                                <th>Sales</th>
                                 <th>PM</th>
                                 <th>Developer Name</th>
                                 <th class = "alias-name">Alias Name</th>
@@ -146,6 +148,10 @@ $this->params['menu'] = [
                                             <?=($model->isInDevelopers($developer->id))
                                                 ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
+                                    <td><input type="radio" title=""  name="Project[is_sales]"
+                                            <?=($model->isSales($developer->id))
+                                                ?'checked':''?>  value = "<?=$developer->id?>">
+                                    </td>
                                     <td><input type="radio" title=""  name="Project[is_pm]"
                                             <?=($model->isPm($developer->id))
                                                 ?'checked':''?>  value = "<?=$developer->id?>">
@@ -153,8 +159,8 @@ $this->params['menu'] = [
                                     <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
                                     <td>
                                         <?php
-                                        if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV])) {
-                                            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+                                        if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])) {
+                                            $users = User::find()->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '", "'  .  User::ROLE_SALES . '")
                                              AND is_delete=0 AND is_active=1 AND id != ' . $developer->id)->all();
                                             $listUsers = User::getCustomersDropDown( $users, 'id' );
                                             $listUser = ArrayHelper::merge([], $listUsers);

@@ -23,7 +23,10 @@
         "symfony/css-selector": "2.8",
         "wbraganca/yii2-dynamicform": "2.0.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "perminder-klair/yii2-dropzone": "dev-master"
+        "perminder-klair/yii2-dropzone": "dev-master",
+        "guzzle/guzzle": "3.0.*",
+        "silex/silex": "1.0.*",
+        "twig/twig": "1.*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

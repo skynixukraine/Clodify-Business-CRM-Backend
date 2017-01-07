@@ -57,9 +57,15 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '/cp' => '/cp/default/index',
-                '/s/<shortcode>' => '/site/survey',
-                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>'
+                '/' => '/cp/default/index',
+                //'/s/<shortcode>' => '/site/survey',
+		'site/<action>'                           => 'site/<action>',
+		'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
+		'<module>/<controller>/<action>/<id:\d+>' => 'cp/<module>/<controller>/<action>/<id:\d+>',
+		'<controller>/<action>'             	  => 'cp/<controller>/<action>',
+                'invoice/create/<id:\d+>'  	      => 'cp/invoice/create',
+                'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
+
             ],
         ],
         'log' => [
@@ -84,11 +90,12 @@ $config = [
             'translations' => [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    //'basePath' => '@app/messages',
-                    //'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'ua-UA',
                     'fileMap' => [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
+
                     ],
                 ],
             ],

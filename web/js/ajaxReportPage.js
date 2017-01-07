@@ -1,10 +1,32 @@
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
 var ajaxReportPageModule = (function() {
 
     return {
-        init: function() {
+        init: function(config) {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
+
+            var date = new Date();
+            var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('.date').datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true,
+                defaultViewDate: currentDay,
+                todayHighlight: true,
+                endDate : currentDay
+            }).datepicker("setDate", currentDay);
+
 
             var projectId = $(".form-add-report #report-project_id"),
                 report,
@@ -17,7 +39,7 @@ var ajaxReportPageModule = (function() {
                 'project_id': '',
                 'date_report': '',
                 'task': '',
-                'hours': '',
+                'hours': ''
             };
             var lastForm = $('form:last'),
                 errorMsg = "error",
@@ -35,7 +57,7 @@ var ajaxReportPageModule = (function() {
                     var tableArr = [];
                     thisRowTd.each(function(i) {
                         var thisTd = $(this);
-                        var thisValue = thisTd.text();
+                        var thisValue = escapeHtml(thisTd.text());
                         switch (i) {
                             //////Changing project-id cell
                             case 1:
@@ -65,8 +87,10 @@ var ajaxReportPageModule = (function() {
                                 $(input).datepicker({
                                     format: 'dd/mm/yyyy',
                                     defaultViewDate: currentDay,
-                                    endDate: currentDay
+                                    endDate: currentDay,
+                                    todayHighlight: true
                                 }).datepicker("setDate", thisValue);
+                                console.log('date');
                                 break
                                 //////Changing task cell
                             case 3:
@@ -119,11 +143,14 @@ var ajaxReportPageModule = (function() {
                             }
                             ///////When count = 4 (all inputs in create-report form filled), send ajax
                             if (count == 4) {
+
                                 report = JSON.stringify(dataArr);
+                                console.log(dataArr);
+                                console.log(report);
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -141,7 +168,7 @@ var ajaxReportPageModule = (function() {
                                         } else {
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
-                                            ajaxSuccessFunc(successMsg);
+                                            ajaxSuccessFunc(errorMsg, data);
                                             lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },
@@ -219,7 +246,9 @@ var ajaxReportPageModule = (function() {
                 }
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
+
                     dataArr.task = reportTask;
+                    console.log(dataArr.task);
                 } else {
                     dataArr.task = "";
                 }
@@ -267,10 +296,11 @@ var ajaxReportPageModule = (function() {
                         })
                         if (count == 5) {
                             report = JSON.stringify(dataArr);
+                            console.log(escape(report));
                             $.ajax({
                                 type: "POST",
                                 url: "index",
-                                data: 'jsonData=' + report,
+                                data: 'jsonData=' + encodeURIComponent(report),
                                 dataType: 'json',
                                 success: function(data) {
                                     if (data.success) {
@@ -352,7 +382,7 @@ var ajaxReportPageModule = (function() {
                                 $.ajax({
                                     type: "POST",
                                     url: "index",
-                                    data: 'jsonData=' + report,
+                                    data: 'jsonData=' + encodeURIComponent(report),
                                     dataType: 'json',
                                     success: function(data) {
                                         if (data.success) {
@@ -402,8 +432,8 @@ var ajaxReportPageModule = (function() {
                     report = JSON.stringify(dataArr);
                     $.ajax({
                         type: "POST",
-                        url: "/cp/index/delete",
-                        data: 'jsonData=' + report,
+                        url: config.deleteUrl,
+                        data: 'jsonData=' + escape(report),
                         dataType: 'json',
                         success: function(data) {
                             if (data.success) {

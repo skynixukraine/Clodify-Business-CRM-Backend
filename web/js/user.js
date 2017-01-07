@@ -4,41 +4,43 @@
 var userModule = (function() {
 
     var cfg = {
-            editUrl     : '',
-            deleteUrl   : '',
-            findUrl     : '',
-        loginAsUserUrl  : '',
-            canDelete   : null,
-            canLoginAs  : null
+            editUrl: '',
+            deleteUrl: '',
+            activateUrl: '',
+            findUrl: '',
+            loginAsUserUrl: '',
+            canDelete: null,
+            canLoginAs: null,
+            canEdit: null
         },
         dataTable,
+        filterUsersSelect = "select[name=roles]",
+        filterActiveOnlySelect = "input[name=is_active]",
         dataFilter = {
+            'is_active': true
         },
-        deleteModal;
+        deleteModal,
+        activateModal;
 
-    function actionEdit( id )
-    {
+    function actionEdit(id) {
         document.location.href = cfg.editUrl + "?id=" + id;
     }
 
-    function actionLogin( id )
-    {
+    function actionLogin(id) {
         document.location.href = cfg.loginAsUserUrl + "?id=" + id;
     }
 
-    function actionDelete( id, name, dataTable )
-    {
+    function actionDelete(id, name, dataTable) {
 
-        function deleteRequest(  )
-        {
+        function deleteRequest() {
             var params = {
-                url     : cfg.deleteUrl,
-                data    : {id : id},
+                url: cfg.deleteUrl,
+                data: {id: id},
                 dataType: 'json',
-                type    : 'DELETE',
-                success : function ( response ) {
+                type: 'DELETE',
+                success: function (response) {
 
-                    if ( response.message ) {
+                    if (response.message) {
 
                         var win = new ModalBootstrap({
                             title: 'Message',
@@ -56,19 +58,56 @@ var userModule = (function() {
                 }
             };
 
-            $.ajax( params );
+            $.ajax(params);
 
         }
 
         deleteModal = new ModalBootstrap({
-            title       : 'Delete ' + name + "?",
-            body        : 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
-                          ' Are you sure you wish to delete it?',
-            winAttrs    : { class : 'modal delete'}
+            title: 'Delete ' + name + "?",
+            body: 'The user will be unavailable anymore, but all his data reports and project will be left in the system.' +
+            ' Are you sure you wish to delete it?',
+            winAttrs: {class: 'modal delete'}
         });
+
         deleteModal.show();
         deleteModal.getWin().find("button[class*=confirm]").click(function () {
             deleteRequest();
+        });
+
+    }
+
+    function actionSuspend(id, action, dataTable) {
+        function suspendRequest() {
+            var params = {
+                url: cfg.activateUrl,
+                data: {id: id, action: action},
+                dataType: 'json',
+                type: 'POST',
+                success: function (response) {
+                    dataTable.api().ajax.reload();
+                }
+            };
+            $.ajax(params);
+        }
+
+        if (action == 'active') {
+            var title = 'Account Suspending.',
+                body = 'Are you sure you wish suspend the account?';
+        } else {
+            var title = 'Account activation.',
+                body = 'Are you sure you wish activate an account?';
+        }
+
+        suspendModal = new ModalBootstrap({
+            title: title,
+            body: body,
+            winAttrs: {class: 'modal delete'}
+        });
+
+        suspendModal.show();
+        suspendModal.getWin().find("button[class*=confirm]").click(function (e) {
+            e.preventDefault();
+            suspendRequest();
         });
 
     }
@@ -78,6 +117,132 @@ var userModule = (function() {
 
 
             cfg = $.extend(cfg, config);
+            filterUsersSelect = $( filterUsersSelect );
+            filterUsersSelect.change(function(){
+                var role = $(this).val();
+                dataFilter['role'] = role;
+                dataTable.api().ajax.reload();
+            });
+            
+            filterActiveOnlySelect = $( filterActiveOnlySelect );
+            filterActiveOnlySelect.change(function(){
+                var is_active = $(this).is(':checked');
+                dataFilter['is_active'] = is_active;
+                dataTable.api().ajax.reload();
+            });
+            
+            columnDefs = [
+                {
+                    "targets"   : 0,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 1,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return '<a href="/profile/' + data.toLowerCase().replace(' ', '-')+'/'+row[11] + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 2,
+                    "orderable" : true
+
+                },
+                {
+                    "targets"   : 3,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return '<a href="mailto:' + data + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 4,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(!data) {
+                            data = '';
+                        }
+                        return '<a href="tel:' + data + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 5,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(data ) {
+                            var i = 0, dataLength = data.length;
+                            for(i; i < dataLength; i++) {
+                                data = data.replace('-', '/');
+                            }
+                            var index = data.indexOf(' ');
+                            var date = data.substr(0, index);
+                            var time = data.substr(index);
+                            return date + "<br>"+ time ;
+                        } else {
+                            return '';
+                        }
+
+                    }
+                },
+                {
+                    "targets"   : 6,
+                    "orderable" : true
+                }
+            ];
+            if (cfg.showUserStatus) {
+                if (cfg.showSales && ! cfg.showUserStatus) {
+
+                }
+                columnDefs.push(
+                {
+                    "targets"   : 7,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(!data) {
+                            return '';
+                        }
+                        return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
+                    }
+                });
+            }
+            if (cfg.showSales) {
+                    columnDefs.push({
+                            "orderable" : true
+                    });
+                    columnDefs.push(
+                    {
+                            "orderable" : true
+                    });
+                }
+
+            if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
+                columnDefs.push({
+                    "targets"   : 10,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        var icons = [];
+
+                        if ( cfg.canEdit ) {
+
+                            icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+                        }
+                        if ( cfg.canLoginAs ) {
+
+                            icons.push('<i class="fa fa-sign-in" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Login as this user"></i>');
+                        }
+                        if ( cfg.canDelete ) {
+
+                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+                        }
+
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+                    }
+                });
+            }
+            
             dataTable = $('#user-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -87,60 +252,7 @@ var userModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-                "columnDefs": [
-
-                    {
-                        "targets"   : 0,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 1,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 2,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 3,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 5,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 6,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 7,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 8,
-                        "orderable" : false,
-                        "render"    : function (data, type, row) {
-                            var icons = [];
-                            if ( cfg.canLoginAs ) {
-
-                                icons.push('<button data-placement="top" title="Login" class = "btn btn-primary">Login as This user</button>');
-                            }
-                            if ( cfg.canDelete ) {
-
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-                            }
-
-                            return '<div class="actions">' + icons.join(" ") + '</div>';
-                        }
-                    }
-
-                ],
+                "columnDefs": columnDefs,
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {
@@ -158,8 +270,8 @@ var userModule = (function() {
             });
 
             var id="", name, a = [];
-            dataTable.on( 'draw.dt', function (e, settings, data) {
 
+            dataTable.on( 'draw.dt', function (e, settings, data) {
                 dataTable.find("td").click(function(){
 
                     dataTable.find("tr[class*=active]").removeClass( "active" );
@@ -175,7 +287,7 @@ var userModule = (function() {
                     }
                 });
 
-                dataTable.find("button[class*=btn]").click(function(){
+                dataTable.find("i[class*=sign-in]").click(function(){
 
                     var id = $(this).parents("tr").find("td").eq(0).text();
                     actionLogin(id);
@@ -189,8 +301,21 @@ var userModule = (function() {
 
                 });
 
-            });
+                dataTable.find("i[class*=edit]").click(function(){
 
+                    var id     = $(this).parents("tr").find("td").eq(0).text();
+                    actionEdit( id );
+
+                });
+                dataTable.find('td:contains("Suspend")').parent('tr').addClass('suspend');
+                dataTable.find('td:contains("Active")').parent('tr').removeClass('suspend');
+                dataTable.find('a.active, a.suspended').on('click', (function(e){
+                    e.preventDefault();
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        action = $(this).attr('class');
+                    actionSuspend(id, action, dataTable);
+                }));
+            });
         }
     };
 

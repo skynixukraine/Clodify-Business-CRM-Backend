@@ -4,28 +4,53 @@
 
 var invoiceCreateModule = (function() {
     var cfg = {
-            findUrl     : ''
+            findUrl     : '',
+            findProjects : '',
+            customerId : ''
         },
         dataTable,
         filterProjectsSelect = "#invoice-user_id",
+        filterOneProjectSelect = "#invoice-project_id",
         filterDateStartSelect = "#date_start",
         filterDateEndSelect = "#date_end",
         dataFilter = {
         },
         deleteModal;
-
     document.getElementById("date_start").required = true;
     document.getElementById("date_end").required = true;
-
+   
+    function changeDropdown(item, index) {
+        if (index == 0) {
+            $(filterOneProjectSelect).empty();
+        }
+        $(filterOneProjectSelect).append($('<option value=' + item.id + '>' + item.name + '</option>'));
+    }
     return {
         init: function( config ){
 
             cfg = $.extend(cfg, config);
-
             filterProjectsSelect = $( filterProjectsSelect );
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
                 dataFilter['user_id'] = id;
+                if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
+                    $.ajax({
+                        url: cfg.findProjects + '?customer=' + id,
+                        success: function(data){
+                            data.forEach(changeDropdown);
+                        }
+                    });
+
+                    dataTable.api().ajax.reload();
+                }
+            });
+            if (cfg.customerId) {
+                dataFilter['user_id'] = cfg.customerId;
+            }
+            filterOneProjectSelect = $( filterOneProjectSelect );
+            filterOneProjectSelect.change(function(){
+                var id = $(this).val();
+                dataFilter['project_id'] = id;
                 if(filterDateEndSelect.val() != '' && filterDateStartSelect.val() != '') {
                     dataTable.api().ajax.reload();
                 }
@@ -144,6 +169,7 @@ var invoiceCreateModule = (function() {
 
                 }
             });
+            dataTable.api().ajax.reload();
         }
     };
 })();

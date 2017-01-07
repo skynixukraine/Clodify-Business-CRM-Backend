@@ -39,14 +39,14 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback'],
+                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update', 'activate'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
                     [
                         'actions'   => [ 'find', 'index', 'loginback'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN],
+                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
                     [
                         'actions'   => ['loginback'],
@@ -63,6 +63,8 @@ class UserController extends DefaultController {
                     'invite'    => ['get', 'post'],
                     'loginas'   => ['get', 'post'],
                     'loginback' => ['get', 'post'],
+                    'update'    => ['get', 'post'],
+                    'activate'  => ['post'],
                 ],
             ],
         ];
@@ -90,6 +92,22 @@ class UserController extends DefaultController {
         }
     }
 
+    /** Activate/Suspend user from Manage Users */
+    public function actionActivate()
+    {
+        if (( $id = Yii::$app->request->post("id") ) ) {
+			
+			$action = Yii::$app->request->post("action");
+            /** @var  $model User */
+            $model  = User::findOne($id);
+			$model->is_active = $action == 'active' ? 0 : 1;
+            $model->save(true, ['is_active']);
+            return json_encode([
+                "is_active"   => $model->is_active,
+            ]);
+        }
+    }
+
     /** Value table (Manage Users) fields, filters, search */
     public function actionFind()
     {
@@ -98,12 +116,43 @@ class UserController extends DefaultController {
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
-
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM])) {
+		$role			= Yii::$app->request->getQueryParam("role");
+		$active			= Yii::$app->request->getQueryParam("is_active");
+		
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $query = User::find();
         }
 
+        if( User::hasPermission([User::ROLE_SALES, User::ROLE_PM])) {
+
+            /* get all project id for asigned to sales */
+            $all_project_ids = ProjectDeveloper::find()->where('user_id=:id AND is_sales=true',
+                [
+                    ':id' => Yii::$app->user->id
+                ]
+            )->all();
+
+        /** array with all project id wich asigned to sales*/
+        $projectId = [];
+            foreach($all_project_ids as $project){
+
+                $projectId[] = $project->project_id;
+
+            }
+        if(!empty($projectId)) {
+            $devUser = implode(', ' , $projectId);
+        }
+        else{
+            $devUser = 'null';
+        }
+		
+        $query = User::find()
+            ->leftJoin(ProjectDeveloper::tableName(),
+                ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')')
+            ->groupBy('user_id');
+        }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
             $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
@@ -120,7 +169,7 @@ class UserController extends DefaultController {
             }
 
             $query = User::find()
-            ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
+                    ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
         }
         $columns        = [
             'id',
@@ -132,6 +181,8 @@ class UserController extends DefaultController {
             'date_login',
             'date_signup',
             'is_active',
+            'salary',
+            'date_salary_up',
         ];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
@@ -148,17 +199,24 @@ class UserController extends DefaultController {
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
         $dataTable->setFilter('is_delete=0');
-
-        if(User::hasPermission([User::ROLE_PM]))
-        {
-            $dataTable->setFilter('role="' . User::ROLE_DEV . '"');
+			
+		if ($role && $role != null && isset(User::getRoles()[$role])){
+			$dataTable->setFilter('role=\'' . $role . '\'');
+        }
+		
+		if ($active && $active == 'true'){
+			$dataTable->setFilter('is_active=1');
         }
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
         /* @var $model \app\models\User */
         foreach ( $activeRecordsData as $model ) {
-
+            if ($model->date_salary_up){
+                $salary_up = date('d/m/Y', strtotime($model->date_salary_up));
+            } else {
+                $salary_up = '';
+            }
             $list[] = [
                 $model->id,
                 $model->first_name . " " . $model->last_name,
@@ -167,8 +225,11 @@ class UserController extends DefaultController {
                 $model->phone,
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
-                ( $model->is_active == 1 ? "Yes " : "No" ),
-                $model->is_delete
+                User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ?  '$' . number_format($model->salary) : null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
+                $model->is_delete,
+                $model->public_profile_key
             ];
         }
 
@@ -217,7 +278,6 @@ class UserController extends DefaultController {
                 } else {
                     /** Invite new user*/
                     if ($model->validate()) {
-
                         $model->save();
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                         return $this->redirect('index');
@@ -250,7 +310,7 @@ class UserController extends DefaultController {
                     $model = new LoginForm();
                     $model->loginUser($user);
 
-                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])) {
+                    if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
 
                         return $this->redirect(['user/index']);
 
@@ -284,9 +344,42 @@ class UserController extends DefaultController {
             $form = new LoginForm();
             $form->loginUser( $user );
             Yii::$app->response->cookies->remove('admin');
-            return $this->redirect('/cp/index');
+            return $this->redirect(['index']);
 
         }
         $this->redirect('user/index');
+    }
+
+    /**
+     * Edit user action
+     * @return string|\yii\web\Response
+     * @throws \Exception
+     */
+    public function actionUpdate()
+    {
+        /** @var $user User */
+        if (!( $id = Yii::$app->request->get("id") ) ||
+            !( $user = User::findOne($id) ) ) {
+
+            throw new \Exception('The user does not exist');
+
+        }
+        $user->scenario = 'settings';
+        if ( Yii::$app->request->isPost &&
+                $user->load(Yii::$app->request->post()) &&
+                $user->validate() ) {
+            if ( $user->xHsluIp ) {
+
+                $user->password = $user->xHsluIp;
+                
+            }
+            $user->save();
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
+            return $this->redirect(['index']);
+
+        }
+        return $this->render('edit', [
+            'model' => $user
+        ]);
     }
 }

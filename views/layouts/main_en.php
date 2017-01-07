@@ -19,8 +19,10 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Skynix Ukraine, software development, software solutions, frontend development, backend development">
+    <meta name="description" content="Skynix Ukraine is a team of professional developers that provides innovative software solutions and high quality improvements in all IT areas. Only the latest technologies in front end and back end development.">
     <?= Html::csrfMetaTags() ?>
-    <title><?= ($this->title ? Html::encode($this->title) : '') ?> - Skynix Ukraine</title>
+    <title>Skynix Ukraine - software development company</title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
@@ -57,10 +59,6 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'contact us', 'url' => ['site/contact']],
-            ['label' => 'careers', 'url' => ['site/career']],
-            ['label' => 'Solutions Store', 'url' => 'https://skynix.solutions'],
-            ['label' => 'Blog', 'url' => '/blog'],
 
         ],
     ]);
@@ -133,7 +131,6 @@ AppAsset::register($this);
 <?php $this->registerJsFile('/js/layouts.js'); ?>
 <?php $this->registerJsFile('/js/jquery.cookie.js'); ?>
 <?php $this->registerJsFile('/js/jquery.tinycarousel.js'); ?>
-
 <?php $this->registerJs('localStorageModule.storageFunction();'); ?>
 <?php $this->registerJsFile('/js/local-storage.js'); ?>
 

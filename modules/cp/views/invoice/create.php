@@ -4,6 +4,8 @@
  * User: olha
  * Date: 16.02.16
  * Time: 14:20
+ * 
+ * @var $contract \app\models\Contract
  */
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -13,6 +15,9 @@ use app\models\Invoice;
 use app\models\User;
 use app\models\Report;
 use app\models\ProjectCustomer;
+use app\models\PaymentMethod;
+use app\models\Project;
+use app\models\ProjectDeveloper;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -38,14 +43,58 @@ $this->params['menu'] = [
 ?>
 <div class="row">
     <div class="col-md-6 box box-primary box-body">
-            <?php $customers = User::allCustomersWhithReceive();
-            $listCustomers = User::getCustomersDropDown( $customers, 'id');
-            /** @var $model Invoice */
-            echo $form->field($model, 'user_id')
-                      ->dropDownList( $listCustomers,  [
-                          'prompt' => 'Choose...',
-                      ] )
-                      ->label( 'Customers' );
+            <?php if (User::hasPermission([User::ROLE_ADMIN]) && !$contract) {
+                $customers = User::allCustomersWhithReceive();
+                $listCustomers = User::getCustomersDropDown($customers, 'id');
+                /** @var $model Invoice */
+                echo $form->field($model, 'user_id', ['enableClientValidation' => false])
+                    ->dropDownList($listCustomers, [
+                        'prompt' => 'Choose...',
+                    ])
+                    ->label('Customers');
+            } else {
+
+                echo $form->field($model, 'user_id')->label(false)->hiddenInput();
+            }
+            ?>
+
+            <?php
+            $id = null;
+            $listProjects = [];
+            if (User::hasPermission([User::ROLE_SALES])) {
+                $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
+                foreach ($projects as $project) {
+                    if ($project->project->is_delete == 0) {
+                        $listProjects[$project->project_id] = $project->project->name;
+                    }
+                }
+            } elseif (User::hasPermission([User::ROLE_ADMIN]) && $contract ) {
+                $projects = Project::ProjectsCurrentClient( $contract->customer_id );
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
+                }
+            } else if (User::hasPermission([User::ROLE_FIN])) {
+                // query from ProjectController for FIN ROLE
+                $projects = Project::find()
+                    ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                    ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                    ->where([Project::tableName() . '.is_delete' => 0])
+                    ->groupBy('id')
+                    ->all();
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
+                }
+            } else {
+                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                foreach ($projects as $project) {
+                    $listProjects[$project->id] = $project->name;
+                }
+            }
+            echo $form->field($model, 'project_id', ['enableClientValidation' => false])
+                ->dropDownList( $listProjects,  [
+                    'prompt' => 'All Projects',
+                ] )
+                ->label( 'Projects' );
 
             ?>
 
@@ -65,14 +114,26 @@ $this->params['menu'] = [
                     ' <span class="input-group-addon"><i class="fa fa-calendar"></i></span> </div> ' .
                     ' {error}'
 
-            ])->textInput( ['class'=>'form-control pull-right active', 'type'=>'text', 'id'=>"date_end"] );?>
+            ])->textInput( [
+                'class'=>'form-control pull-right active', 
+                'type'=>'text', 
+                'id'=>"date_end"] );?>
 
-            <?php echo $form->field( $model, 'contract_number')->textInput();?>
-            <?php echo $form->field( $model, 'act_of_work')->textInput();?>
+            <?php echo $model->contract_number ? $form->field( $model, 'contract_number')->textInput(['readonly' => true]) :
+                $form->field( $model, 'contract_number')->textInput();?>
+            <?php echo $model->act_of_work ? $form->field( $model, 'act_of_work')->textInput(['readonly' => true]) :
+                $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>
             <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
+
+            <?php $payMethods = PaymentMethod::find()->all();
+            $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name');
+
+            echo $form->field( $model, 'payment_method_id')
+                ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
+                ->label('Pay Methods');?>
 
             <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
@@ -95,7 +156,9 @@ $this->params['menu'] = [
     $(function(){
 
         invoiceCreateModule.init({
-            findUrl     : '<?=Url::to(['report/find'])?>'
+            findUrl     : '<?=Url::to(['report/find'])?>',
+            findProjects     : '<?=Url::to(['invoice/get-projects'])?>',
+            customerId  : '<?=$id?>'
         })
     });
 </script>
