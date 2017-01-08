@@ -55,11 +55,9 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
             <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
         <?php endif;?>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) : ?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
             <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
-            <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
-                <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
-            <?php endif;?>
+            <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
         <?php endif;?>
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
             <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
