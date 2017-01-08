@@ -205,11 +205,6 @@ var userModule = (function() {
                     }
                 });
             }
-            if (cfg.showSales) {
-                    columnDefs.push({
-                            "orderable" : true
-                    });
-                }
 
             if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
                 columnDefs.push({
