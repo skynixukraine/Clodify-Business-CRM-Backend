@@ -168,7 +168,8 @@ var adminReportModule = (function() {
                     "orderable": false,
                     "render": function (data, type, row) {
                         if (row[10] && row[6] == 'Yes') {
-                            return '<a href=' + config.invoiceUrl + row[10] + '>' + row[6] + '</a>'
+                            $a = "<a href='" + config.invoiceUrl + row[10] + "'>" + row[6] + "</a>";
+                            console.log($a);
                         }
                         return row[6];
                     }
