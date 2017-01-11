@@ -134,8 +134,7 @@ $this->params['menu'] = [
             echo $form->field( $model, 'payment_method_id')
                 ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
                 ->label('Pay Methods');?>
-
-            <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton( Yii::t('app', $contract ? 'Invoice the customer' : 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 
