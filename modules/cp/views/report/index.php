@@ -144,6 +144,7 @@ exit();*/
             editUrl     : '<?=Url::to(['report/index'])?>',
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
+            invoiceUrl  : '<?=Url::to(['invoice/view?id='])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
         })
     });
