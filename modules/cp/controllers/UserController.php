@@ -133,25 +133,33 @@ class UserController extends DefaultController {
                 ]
             )->all();
 
-        /** array with all project id wich asigned to sales*/
-        $projectId = [];
-            foreach($all_project_ids as $project){
+            /** array with all project id wich asigned to sales*/
+            $projectId = [];
+                foreach($all_project_ids as $project){
 
-                $projectId[] = $project->project_id;
+                    $projectId[] = $project->project_id;
 
+                }
+            if(!empty($projectId)) {
+                $devUser = implode(', ' , $projectId);
             }
-        if(!empty($projectId)) {
-            $devUser = implode(', ' , $projectId);
-        }
-        else{
-            $devUser = 'null';
-        }
-		
-        $query = User::find()
-            ->leftJoin(ProjectDeveloper::tableName(),
-                ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
-            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')')
-            ->groupBy('user_id');
+            else{
+                $devUser = 'null';
+            }
+            if (User::hasPermission([User::ROLE_PM])) {
+                $query = User::find()
+                    ->leftJoin(ProjectDeveloper::tableName(),
+                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
+                    ->andWhere([User::tableName() . '.role' => User::ROLE_DEV])
+                    ->groupBy('user_id');
+            } else {
+                $query = User::find()
+                    ->leftJoin(ProjectDeveloper::tableName(),
+                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
+                    ->groupBy('user_id');
+            }
         }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
