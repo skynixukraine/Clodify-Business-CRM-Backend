@@ -11,6 +11,8 @@ use app\models\User;
 use app\models\Contract;
 use app\models\Project;
 use app\models\ProjectCustomer;
+use app\models\ContractTemplates;
+use app\models\PaymentMethod;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -67,6 +69,24 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
             ])
             ->label('Customer');
     }
+?>
+
+<?php
+    $listTemplates = ContractTemplates::getAllTemplatesDropdown();
+    echo $form->field($model, 'contract_template_id')
+        ->dropDownList($listTemplates, [
+            'prompt' => 'Choose...',
+        ])
+        ->label('Template');
+?>
+
+<?php
+    $listMethods = PaymentMethod::getAllMethodsDropdown();
+    echo $form->field($model, 'contract_payment_method_id')
+        ->dropDownList($listMethods, [
+            'prompt' => 'Choose...',
+        ])
+        ->label('Payment Method');
 ?>
 
 <?php
