@@ -98,7 +98,7 @@ class ProjectController extends DefaultController
                             ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                             ->groupBy('id');
         }
-        if( User::ROLE_SALES ) {
+        if (User::hasPermission([User::ROLE_SALES])) {
             $query         = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
