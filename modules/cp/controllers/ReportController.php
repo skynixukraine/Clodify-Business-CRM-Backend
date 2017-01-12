@@ -266,7 +266,8 @@ class ReportController extends DefaultController
                 ( $model->invoice_id == null ? "No" : "Yes" ),
                 gmdate('H:i', floor($model->hours * 3600)),
                 '$' . number_format( $model->cost, 2),
-                $model->getProject()->one()->id
+                $model->getProject()->one()->id,
+                $model->invoice_id == null ? '' : $model->invoice_id
             ];
         }
 

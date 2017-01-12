@@ -167,6 +167,9 @@ var adminReportModule = (function() {
                     "targets": ++index,
                     "orderable": false,
                     "render": function (data, type, row) {
+                        if (row[10] && row[6] == 'Yes') {
+                            return "<a href='" + config.invoiceUrl + row[10] + "'>" + row[6] + "</a>";
+                        }
                         return row[6];
                     }
                 });
@@ -215,6 +218,11 @@ var adminReportModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+                });
+                $("tr").each(function (){
+                    if ($(this).find("td").eq(8).text() == 'Yes') {
+                        $(this).addClass('invoicedReport');
+                    }
                 });
             });
         }
