@@ -1,45 +1,37 @@
 <?php
 /**
  * Created by Skynix Team
- * Date: 03.01.17
- * Time: 17:37
+ * Date: 9/5/16
+ * Time: 21:15
  */
 
 namespace app\modules\api\controllers;
 
 use Yii;
-use app\models\User;
-use app\models\LoginForm;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use yii\rest\ActiveController;
+use app\modules\api\components\ApiProcessor\ApiProcessor;
+use app\models\Contact;
 
-class AuthController extends ActiveController
+class AuthController extends DefaultController
 {
-    public $modelClass = 'app\models\User';
-
-    public function behaviors()
+    /*public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::className(),
-                'actions' => [
-                    'login'  => ['post']
-                ],
-            ],
-        ];
-    }
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator']['except'] = ['index'];
+        return $behaviors;
+    }*/
+
+
     public function actionIndex(){
-        $loginForm = new LoginForm();
-        die('11111');
-        $json = Yii::$app->request->getRawBody();
-        $postData = @json_decode($json, true);
 
-        if($loginForm->validate()
-            && $loginForm->getUser()->is_delete == 0
-            && $loginForm->getUser()->is_active == 1
-        ) {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\Auth')
+            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
+                'methods'       => [ ApiProcessor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('ApiProcessor')
+            ->respond();
 
-        }
     }
 }

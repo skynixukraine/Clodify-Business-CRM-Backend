@@ -18,12 +18,13 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
-        parent::init();
-        // custom initialization code goes here
-        //Yii::setAlias('viewModel', Yii::getAlias("@app") . '/modules/api/view-models');
+		parent::init();	
 
-        // http://www.yiiframework.com/doc-2.0/guide-rest-authentication.html
-        //Yii::$app->user->enableSession = false;
-       // Yii::$app->user->loginUrl = null;
-    }
+        // custom initialization code goes here
+		Yii::setAlias('viewModel', Yii::getAlias("@app") . '/modules/api/view-models');
+
+		// http://www.yiiframework.com/doc-2.0/guide-rest-authentication.html
+		Yii::$app->user->enableSession = false;
+		Yii::$app->user->loginUrl = null;
+	}
 }
