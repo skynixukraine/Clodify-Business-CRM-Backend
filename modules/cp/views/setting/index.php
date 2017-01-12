@@ -20,7 +20,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 // $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
+$this->registerJsFile('http://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js', ['position' => yii\web\View::POS_BEGIN]);
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
+
 $this->title                    = Yii::t("app", "My Profile");
 $this->params['breadcrumbs'][]  = $this->title;
 $this->params['menu'] = [
@@ -33,6 +35,9 @@ $this->params['menu'] = [
         <li><a href="#tab_3" data-toggle="tab">Sign</a></li>
         <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES])):?>
             <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
+        <?php endif?>
+        <?php if(User::hasPermission([User::ROLE_CLIENT])):?>
+            <li><a href="#tab_5" data-toggle="tab">Bank Account</a></li>
         <?php endif?>
         <?= Html::submitButton( Yii::t('app', 'Save'), (['class' => 'btn btn-primary submit-form','disabled' => 'disabled', 'form' => 'w0', 'style' => ' background: gray;'])) ?>
     </ul>
@@ -267,6 +272,46 @@ $this->params['menu'] = [
                                 </tbody>
                             <?php endforeach;?>
                         </table>
+                    </div>
+                </div>
+            <?php endif;?>
+        </div>
+        <div id="tab_5" class="tab-pane">
+            <?php if(User::hasPermission([User::ROLE_CLIENT])):?>
+                <div class="my-profile-form col-sm-12">
+                    <div class="row">
+                        <fieldset class = "col-sm-6">
+                            <h3>Bank Account(English)</h3>
+                            <textarea cols="80" id="editorLeft" name="editorLeft" rows="10" >
+	                        </textarea>
+                            <script>
+                                toolbarConfig = [
+                                    { name: 'clipboard', groups: [ 'clipboard' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
+                                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+                                    { name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
+                                    { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+                                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+                                ];
+                                CKEDITOR.replace( 'editorLeft', {
+                                    height: 260,
+                                    toolbar: toolbarConfig
+                                } );
+
+                            </script>
+                        </fieldset>
+                        <fieldset class = "col-sm-6">
+                            <h3>Bank Account(English)</h3>
+                            <textarea cols="80" id="editorRight" name="editorRight" rows="10" >
+	                        </textarea>
+                            <script>
+                                CKEDITOR.replace( 'editorRight', {
+                                    height: 260,
+                                    toolbar: toolbarConfig
+                                } );
+
+                            </script>
+                        </fieldset>
                     </div>
                 </div>
             <?php endif;?>
