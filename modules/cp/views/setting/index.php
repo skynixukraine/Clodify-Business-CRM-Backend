@@ -301,7 +301,7 @@ $this->params['menu'] = [
                             </script>
                         </fieldset>
                         <fieldset class = "col-sm-6">
-                            <h3>Bank Account(English)</h3>
+                            <h3>Bank Account(Ukrainian)</h3>
                             <textarea cols="80" id="editorRight" name="editorRight" rows="10" >
 	                        </textarea>
                             <script>
