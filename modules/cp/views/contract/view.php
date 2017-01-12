@@ -34,7 +34,7 @@ $this->params['menu'] = [
         <li>Start Date: <?=date("d/m/Y", strtotime($model->start_date))?></li>
         <li>End Date: <?=date("d/m/Y", strtotime($model->end_date))?></li>
         <li>Act Date: <?=date("d/m/Y", strtotime($model->act_date))?></li>
-        <li>Total: <?=$model->total?></li>
+        <li>Total: <?='$' . number_format($model->total, 2)?></li>
         <li>Created By: <?=$createdBy->first_name . ' ' . $createdBy->last_name?></li>
     </ul>
 </div>
