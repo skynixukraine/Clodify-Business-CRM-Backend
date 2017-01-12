@@ -133,25 +133,33 @@ class UserController extends DefaultController {
                 ]
             )->all();
 
-        /** array with all project id wich asigned to sales*/
-        $projectId = [];
-            foreach($all_project_ids as $project){
+            /** array with all project id wich asigned to sales*/
+            $projectId = [];
+                foreach($all_project_ids as $project){
 
-                $projectId[] = $project->project_id;
+                    $projectId[] = $project->project_id;
 
+                }
+            if(!empty($projectId)) {
+                $devUser = implode(', ' , $projectId);
             }
-        if(!empty($projectId)) {
-            $devUser = implode(', ' , $projectId);
-        }
-        else{
-            $devUser = 'null';
-        }
-		
-        $query = User::find()
-            ->leftJoin(ProjectDeveloper::tableName(),
-                ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
-            ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser  . ')')
-            ->groupBy('user_id');
+            else{
+                $devUser = 'null';
+            }
+            if (User::hasPermission([User::ROLE_PM])) {
+                $query = User::find()
+                    ->leftJoin(ProjectDeveloper::tableName(),
+                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
+                    ->andWhere([User::tableName() . '.role' => User::ROLE_DEV])
+                    ->groupBy('user_id');
+            } else {
+                $query = User::find()
+                    ->leftJoin(ProjectDeveloper::tableName(),
+                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
+                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
+                    ->groupBy('user_id');
+            }
         }
         if( User::hasPermission([User::ROLE_CLIENT])){
 
@@ -225,9 +233,9 @@ class UserController extends DefaultController {
                 $model->phone,
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
                 DateUtil::convertDatetimeWithoutSecund($model->date_signup),
-                ( $model->is_active == 1 ? "Active" : "Suspended" ),
-                User::hasPermission([User::ROLE_PM]) ? null : $model->salary,
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ]) ? $salary_up:null,
+                User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ?  '$' . number_format($model->salary) : null,
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ? $salary_up:null,
                 $model->is_delete,
                 $model->public_profile_key
             ];
@@ -278,7 +286,6 @@ class UserController extends DefaultController {
                 } else {
                     /** Invite new user*/
                     if ($model->validate()) {
-
                         $model->save();
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have created and sent the invitation for the new user"));
                         return $this->redirect('index');
@@ -351,24 +358,34 @@ class UserController extends DefaultController {
         $this->redirect('user/index');
     }
 
+    /**
+     * Edit user action
+     * @return string|\yii\web\Response
+     * @throws \Exception
+     */
     public function actionUpdate()
     {
         /** @var $user User */
-        if (( $id = Yii::$app->request->get("id") ) &&
-            ( $user = User::findOne($id) ) ) {
-            $user->scenario = 'settings';
-            if ($user->load(Yii::$app->request->post())) {
-                if ($user->validate()) {
-                    $user->save();
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
-                    return $this->redirect(['index']);
-                } else {
-                    Yii::$app->getSession()->setFlash('error',
-                        Yii::t("app", "Data is not valid!!!"));
-                }
-            }
-        }
+        if (!( $id = Yii::$app->request->get("id") ) ||
+            !( $user = User::findOne($id) ) ) {
 
+            throw new \Exception('The user does not exist');
+
+        }
+        $user->scenario = 'settings';
+        if ( Yii::$app->request->isPost &&
+                $user->load(Yii::$app->request->post()) &&
+                $user->validate() ) {
+            if ( $user->xHsluIp ) {
+
+                $user->password = $user->xHsluIp;
+                
+            }
+            $user->save();
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited user " . $id));
+            return $this->redirect(['index']);
+
+        }
         return $this->render('edit', [
             'model' => $user
         ]);

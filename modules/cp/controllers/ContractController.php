@@ -34,8 +34,18 @@ class ContractController extends DefaultController
                     [
                         'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view'],
                         'allow' => true,
-                        'roles' => [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES ],
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
+                    [
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_SALES],
+                    ],
+                    [
+                        'actions' => ['index', 'find'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_CLIENT]
+                    ]
                 ],
             ],
             'verbs' => [
@@ -60,8 +70,8 @@ class ContractController extends DefaultController
 
             if ($model->validate()) {
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->id));
-                return $this->redirect(['index']);
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->contract_id));
+                return $this->redirect(['view?id=' . $model->contract_id]);
             }
         }
         return $this->render('create', ['model' => $model]);
@@ -116,7 +126,7 @@ class ContractController extends DefaultController
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
             ->setSearchParams([ 'or',
-                ['like', 'id', $keyword],
+                ['like', 'contract_id', $keyword],
                 ['like', 'created_by', $keyword],
                 ['like', 'customer_id', $keyword],
                 ['like', 'act_number', $keyword],
@@ -129,7 +139,12 @@ class ContractController extends DefaultController
             $dataTable->setFilter('customer_id=' . $customerId);
         }
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
-
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $dataTable->setFilter(Contract::tableName() . '.created_by=' . Yii::$app->user->id);
+        }
+        if (User::hasPermission([User::ROLE_CLIENT])) {
+            $dataTable->setFilter((Contract::tableName() . '.customer_id=' . Yii::$app->user->id));
+        }
         $activeRecordsData = $dataTable->getData();
         $list = [];
         /* @var $model Contract*/
@@ -137,10 +152,14 @@ class ContractController extends DefaultController
             $total_hours = 0;
             $expenses = 0;
             $user = null;
+            $createdByCurrentUser = null;
             $projectIDs = [];
             $initiator = User::findOne($model->created_by);
             $customer = User::findOne($model->customer_id);
             $projects = Project::ProjectsCurrentClient($customer->id);
+            if (User::hasPermission([User::ROLE_ADMIN]) || $model->created_by == Yii::$app->user->id) {
+                $createdByCurrentUser = true;
+            }
             foreach ($projects as $project) {
                 $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
                 $expenses += $project->cost;
@@ -156,8 +175,12 @@ class ContractController extends DefaultController
                 date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
                 $total_hours . 'h',
-                '$' . $expenses
+                '$' . $expenses,
+                $customer->id,
+                $createdByCurrentUser,
+                $model->id
             ];
+
         }
 
         $data = [
@@ -177,7 +200,7 @@ class ContractController extends DefaultController
         if ( ( $id = Yii::$app->request->post("id") ) ) {
             echo 1;
             /** @var  $model Contract */
-            $model  = Contract::findOne( $id );
+            $model  = Contract::findOne(['contract_id' => $id]);
             $model->delete();
             return json_encode([
                 "message"   => Yii::t("app", "You deleted contract " . $id),
@@ -189,9 +212,9 @@ class ContractController extends DefaultController
     public function actionView()
     {
         $id = Yii::$app->request->get("id");
-        $model = Contract::findOne($id);
+        $model = Contract::findOne(['contract_id' => $id]);
         return $this->render('view', ['model' => $model,
-            'title' => 'You watch contract #' . $model->id]);
+            'title' => 'You watch contract #' . $model->contract_id]);
     }
 
 }

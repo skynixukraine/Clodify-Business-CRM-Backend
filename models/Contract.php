@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "contracts".
+ * @property integer id
  * @property  integer customer_id
  * @property  integer contract_id
  * @property integer act_number
@@ -26,7 +27,7 @@ class Contract extends ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'act_number', 'contract_id', 'created_by'], 'integer'],
+            [['customer_id', 'act_number', 'contract_id', 'created_by', 'id'], 'integer'],
             ['total', 'number'],
             [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id'], 'required'],
             [['act_number', 'contract_id'], 'unique']

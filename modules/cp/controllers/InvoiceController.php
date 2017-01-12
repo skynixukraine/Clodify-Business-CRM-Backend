@@ -7,6 +7,7 @@
  */
 namespace app\modules\cp\controllers;
 
+use app\models\Contract;
 use app\models\Project;
 use app\models\Report;
 use Yii;
@@ -20,6 +21,7 @@ use app\models\User;
 use app\models\ProjectCustomer;
 use app\models\PaymentMethod;
 use mPDF;
+use app\models\ProjectDeveloper;
 
 class InvoiceController extends DefaultController
 {
@@ -84,7 +86,6 @@ class InvoiceController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
         $query          = Invoice::find()->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' );
-
         $columns        = [
             'id',
             'first_name',
@@ -98,7 +99,7 @@ class InvoiceController extends DefaultController
             'status',
 
         ];
-
+        $projectIDs = [];
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -112,14 +113,34 @@ class InvoiceController extends DefaultController
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
-
-            $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+            $projects = Project::find()
+                ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
+                ->all();
+            foreach ($projects as $project) {
+                $projectIDs[] = $project->id;
+            }
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id . ' OR ' . Invoice::tableName() . '.project_id IN (' . implode(',', $projectIDs) . ')');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.user_id=' . Yii::$app->user->id);
+            }
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-            $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+            $projects = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([Project::tableName() . '.is_delete' => 0])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->andWhere([ProjectDeveloper::tableName() . ".user_id" => Yii::$app->user->id])
+                ->groupBy('id')
+                ->all();
             foreach ($projects as $project) {
-                $dataTable->setFilter(Invoice::tableName() . '.project_id=' . $project->id);
+                $projectIDs[] = $project->id;
             }
+            $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ')' );
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -160,8 +181,20 @@ class InvoiceController extends DefaultController
 
     public function actionCreate()
     {
-        $model = new Invoice();
+        $model      = new Invoice();
+        $contract   = null;
+        if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
+            ( $contract = Contract::findOne( $id ))) {
 
+            $model->contract_id     = $contract->id;
+            $model->contract_number = $contract->contract_id;
+            $model->act_of_work     = $contract->act_number;
+            $model->date_start      = $contract->start_date;
+            $model->date_end        = $contract->end_date;
+            $model->total           = $contract->total;
+            $model->user_id         = $contract->customer_id;
+
+        }
         if ($model->load(Yii::$app->request->post())) {
 
             /** Invoice - total logic */
@@ -181,11 +214,16 @@ class InvoiceController extends DefaultController
             if ($model->validate()) {
 
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new invoices " . $model->id));
+                Yii::$app->getSession()
+                            ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }
-            return $this->redirect('view?id=' . $model->id);
+            return $this->redirect(['view?id=' . $model->id]);
         }
-        return $this->render('create', ['model' => $model]);
+        return $this->render('create', 
+                [
+                    'model'     => $model,
+                    'contract'  => $contract
+                ]);
     }
 
     public function actionView()

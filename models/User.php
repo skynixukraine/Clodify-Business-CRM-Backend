@@ -58,6 +58,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_SALES = "SALES";
 
     public $rawPassword;
+
+    /**
+     * Passoword for Edit User Form
+     * @var $xHsluIp
+     */
+    public $xHsluIp;
+
     public $status = [];
     private $auth_key = "XnM";
     public $ticketId;
@@ -85,11 +92,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
             [['phone','company' ], 'string', 'max' => 25],
             [['email'], 'string', 'max' => 150],
-            [['password', 'first_name', 'last_name', 'middle_name', 'invite_hash'], 'string', 'max' => 45],
+            [['password', 'first_name', 'last_name', 'middle_name', 'invite_hash', 'xHsluIp'], 'string', 'max' => 45],
             [['tags'], 'string', 'max' => 500],
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
-            ['password', 'match', 'pattern' => '/^\S*$/i'],
+            [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
 
         ];
     }
@@ -100,30 +107,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'role' => 'Role',
-            'phone' => 'Phone',
-            'email' => 'Email',
-            'password' => 'Password',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'middle_name' => 'Middle Name',
-            'company' => 'Company',
-            'tags' => 'Tags',
-            'about' => 'About',
-            'date_signup' => 'Date Signup',
-            'date_login' => 'Date Login',
+            'id'            => 'ID',
+            'role'          => 'Role',
+            'phone'         => 'Phone',
+            'email'         => 'Email',
+            'password'      => 'Password',
+            'xHsluIp'       => 'Enter New Password',
+            'first_name'    => 'First Name',
+            'last_name'     => 'Last Name',
+            'middle_name'   => 'Middle Name',
+            'company'       => 'Company',
+            'tags'          => 'Tags',
+            'about'         => 'About',
+            'date_signup'   => 'Date Signup',
+            'date_login'    => 'Date Login',
             'date_salary_up' => 'Date Salary Up',
-            'is_active' => 'Is Active',
-            'salary' => 'Salary',
-            'month_logged_hours' => 'Month Logged Hours',
-            'year_logged_hours' => 'Year Logged Hours',
-            'total_logged_hours' => 'Total Logged Hours',
-            'month_paid_hours' => 'Month Paid Hours',
-            'year_paid_hours' => 'Year Paid Hours',
-            'total_paid_hours' => 'Total Paid Hours',
-            'invite_hash' => 'Invite Hash',
-            'is_delete' => 'Is Delete'
+            'is_active'     => 'Is Active',
+            'salary'        => 'Salary',
+            'month_logged_hours'    => 'Month Logged Hours',
+            'year_logged_hours'     => 'Year Logged Hours',
+            'total_logged_hours'    => 'Total Logged Hours',
+            'month_paid_hours'      => 'Month Paid Hours',
+            'year_paid_hours'       => 'Year Paid Hours',
+            'total_paid_hours'      => 'Total Paid Hours',
+            'invite_hash'           => 'Invite Hash',
+            'is_delete'             => 'Is Delete'
         ];
     }
 
@@ -281,6 +289,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
+
         if ($this->isNewRecord) {
             if (!$this->invite_hash) {
 
@@ -302,9 +311,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->date_login = null;
             //$this->getCustomers()->one()->receive_invoices = 1;
         } else {
-            $current = self::findOne($this->id);
-            if( ($this->salary) && ($current->salary != $this->salary )) {
+            $oldData = $this->getOldAttributes();
+            if ($this->salary && $this->salary != $oldData['salary']) {
                 $this->date_salary_up = date("Y-m-d");
+            }
+            
+            if ($this->password && $this->password != $oldData['password']) {
+                $this->rawPassword = $this->password;
+                $this->password = md5($this->password);
+            } else {
+                unset($this->password);
             }
         }
         /*else
@@ -316,7 +332,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if( !$insert && isset( $changedAttributes['password'] ))  {
             if ($this->rawPassword) {
-
                 Yii::$app->mailer->compose('newPassword', [
 
                     'user' => $this->first_name,
@@ -326,7 +341,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Your password was changed.')
+                    ->setSubject('Skynix CRM: You have a new password')
                     ->send();
             }
         } else {
@@ -339,7 +354,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Your email was changed.')
+                    ->setSubject('Skynix CRM: Your email is changed')
                     ->send();
             } 
 
@@ -357,7 +372,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo($this->email)
-                        ->setSubject('Welcome to Skynix company. Please activate your account.')
+                        ->setSubject('Welcome to Skynix CRM, Please activate your account')
                         ->send();
                 }
 
@@ -376,7 +391,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo($this->email)
-                            ->setSubject('Welcome to Skynix company. Please activate your account.')
+                            ->setSubject('Welcome to Skynix CRM, Please activate your account')
                             ->send();
                     }
                 }

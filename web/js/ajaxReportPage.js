@@ -16,6 +16,24 @@ var ajaxReportPageModule = (function() {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
+            $('#dateFilter'). click(function () {
+                if (this.value == 1) {
+                    document.location.href =config.indexUrl;
+                } else {
+                    document.location.href = config.indexUrl + '?dateFilter=' + this.value;
+                }
+            });
+
+            var date = new Date();
+            var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('.date').datepicker({
+                format : 'dd/mm/yyyy',
+                autoclose: true,
+                defaultViewDate: currentDay,
+                todayHighlight: true,
+                endDate : currentDay
+            }).datepicker("setDate", currentDay);
+
 
             var projectId = $(".form-add-report #report-project_id"),
                 report,
@@ -28,7 +46,7 @@ var ajaxReportPageModule = (function() {
                 'project_id': '',
                 'date_report': '',
                 'task': '',
-                'hours': '',
+                'hours': ''
             };
             var lastForm = $('form:last'),
                 errorMsg = "error",
@@ -157,7 +175,7 @@ var ajaxReportPageModule = (function() {
                                         } else {
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
-                                            ajaxSuccessFunc(successMsg);
+                                            ajaxSuccessFunc(errorMsg, data);
                                             lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },

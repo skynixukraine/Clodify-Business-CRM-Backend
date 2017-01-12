@@ -81,9 +81,16 @@ class ProjectController extends DefaultController
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 
+        if (User::hasPermission([User::ROLE_ADMIN])) {
+            $query         = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->groupBy('id');
+        }
 
-
-        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
+        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")

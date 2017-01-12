@@ -21,7 +21,7 @@ class DefaultController extends Controller
         return parent::beforeAction( $action );
     }
 
-   public function behaviors()
+    public function behaviors()
     {
         return [
             'access' => [

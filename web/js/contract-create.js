@@ -7,12 +7,16 @@ var contractCreateModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             viewUrl     : '',
+            invoiceUrl  : '',
             canDelete   : '',
             canEdit     : '',
             canInvoice  : '',
             canView     : ''
         },
         dataFilter = {
+
+        },
+        customerIDs = {
 
         },
         filterCustomersSelect = "select[name=customers]",
@@ -22,6 +26,12 @@ var contractCreateModule = (function() {
     function actionEdit( id )
     {
         document.location.href = cfg.editUrl + "?id=" + id;
+    }
+    function actionInvoice( contractId )
+    {
+
+        document.location.href = cfg.invoiceUrl + "/" + contractId;
+
     }
     function actionView( id )
     {
@@ -109,17 +119,17 @@ var contractCreateModule = (function() {
                             if (cfg.canInvoice) {
 
                                 icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Invoice"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="'+row[12]+'" title="Invoice"></i>');
 
                             }
 
-                            if (cfg.canDelete) {
+                            if (row[11]) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
 
                             }
-
+                            customerIDs[row[0]] = row[10];
 
                             return '<div class="actions">' + icons.join(" ") + '</div>';
 
@@ -211,6 +221,12 @@ var contractCreateModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionEdit( id, name, dataTable );
+
+                });
+
+                dataTable.find("i[class*=paid]").click(function(){
+
+                    actionInvoice( $(this).data('id') );
 
                 });
 

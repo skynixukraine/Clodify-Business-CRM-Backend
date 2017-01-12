@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'adminEmail'        => 'maryt@skynix.co',
-    'applicationName'   => 'Skynix',
-    'ua_site'           => 'https://backend.skynix.company',
-    'en_site'           => 'https://backend.skynix.company',
-    'in_site'           => 'https://backend.skynix.company',
+    'adminEmail'        => 'admin@skynix.co',
+    'applicationName'   => 'Skynix Ukraine',
+    'ua_site'           => 'https://skynix.co',
+    'en_site'           => 'https://skynix.co',
+    'in_site'           => 'https://skynix.co',
     'port'              => "",
     'success'           => true,
     'invoice_cc_email'  => false,
-    'version'           => '1.5'
+    'version'           => '1.10.0'
 ];

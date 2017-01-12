@@ -130,6 +130,110 @@ var userModule = (function() {
                 dataFilter['is_active'] = is_active;
                 dataTable.api().ajax.reload();
             });
+            
+            columnDefs = [
+                {
+                    "targets"   : 0,
+                    "orderable" : true
+                },
+                {
+                    "targets"   : 1,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return '<a href="/profile/' + data.toLowerCase().replace(' ', '-')+'/'+row[11] + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 2,
+                    "orderable" : true
+
+                },
+                {
+                    "targets"   : 3,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        return '<a href="mailto:' + data + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 4,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(!data) {
+                            data = '';
+                        }
+                        return '<a href="tel:' + data + '">' + data +'</a>';
+                    }
+                },
+                {
+                    "targets"   : 5,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(data ) {
+                            var i = 0, dataLength = data.length;
+                            for(i; i < dataLength; i++) {
+                                data = data.replace('-', '/');
+                            }
+                            var index = data.indexOf(' ');
+                            var date = data.substr(0, index);
+                            var time = data.substr(index);
+                            return date + "<br>"+ time ;
+                        } else {
+                            return '';
+                        }
+
+                    }
+                },
+                {
+                    "targets"   : 6,
+                    "orderable" : true
+                }
+            ];
+            if (cfg.showUserStatus) {
+                if (cfg.showSales && ! cfg.showUserStatus) {
+
+                }
+                columnDefs.push(
+                {
+                    "targets"   : 7,
+                    "orderable" : true,
+                    "render"    : function (data, type, row) {
+                        if(!data) {
+                            return '';
+                        }
+                        return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
+                    }
+                });
+            }
+
+            if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
+                columnDefs.push({
+                    "targets"   : 10,
+                    "orderable" : false,
+                    "render"    : function (data, type, row) {
+                        var icons = [];
+
+                        if ( cfg.canEdit ) {
+
+                            icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+                        }
+                        if ( cfg.canLoginAs ) {
+
+                            icons.push('<i class="fa fa-sign-in" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Login as this user"></i>');
+                        }
+                        if ( cfg.canDelete ) {
+
+                            icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+                        }
+
+                        return '<div class="actions">' + icons.join(" ") + '</div>';
+                    }
+                });
+            }
+            
             dataTable = $('#user-table').dataTable({
                 "bPaginate": true,
                 "bLengthChange": false,
@@ -139,91 +243,7 @@ var userModule = (function() {
                 "bInfo": false,
                 "bAutoWidth": false,
                 "order": [[ 0, "desc" ]],
-                "columnDefs": [
-
-                    {
-                        "targets"   : 0,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 1,
-                        "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            return '<a href="/profile/' + data.toLowerCase().replace(' ', '-')+'/'+row[11] + '">' + data +'</a>';
-                        }
-                    },
-                    {
-                        "targets"   : 2,
-                        "orderable" : true
-
-                    },
-                    {
-                        "targets"   : 3,
-                        "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            return '<a href="mailto:' + data + '">' + data +'</a>';
-                        }
-                    },
-                    {
-                        "targets"   : 4,
-                        "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            if(!data) {
-                                data = '';
-                            }
-                            return '<a href="tel:' + data + '">' + data +'</a>';
-                        }
-                    },
-                    {
-                        "targets"   : 5,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 6,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 7,
-                        "orderable" : true,
-                        "render"    : function (data, type, row) {
-                            return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
-                        }
-                    },
-                    {
-                        "targets"   : 8,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 9,
-                        "orderable" : true
-                    },
-                    {
-                        "targets"   : 10,
-                        "orderable" : false,
-                        "render"    : function (data, type, row) {
-                            var icons = [];
-                            
-                            if ( cfg.canEdit ) {
-
-                                icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
-                            }
-                            if ( cfg.canLoginAs ) {
-
-                                icons.push('<i class="fa fa-sign-in" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Login as this user"></i>');
-                            }
-                            if ( cfg.canDelete ) {
-
-                                icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
-                            }
-
-                            return '<div class="actions">' + icons.join(" ") + '</div>';
-                        }
-                    }
-
-                ],
+                "columnDefs": columnDefs,
                 "ajax": {
                     "url"   :  cfg.findUrl,
                     "data"  : function( data, settings ) {

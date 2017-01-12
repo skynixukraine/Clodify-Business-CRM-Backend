@@ -43,7 +43,14 @@ use app\models\User;
     <td width = "29" style="padding: 0; margin: 0;"></td>
     <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-     font-weight: normal; text-align: center;">Your password was changed by <?= $adminName ?>Your password is <strong><?= $password?></strong></td>
+     font-weight: normal; text-align: center;">Your password was changed by <?= $adminName ?></td>
+    <td width = "29" style="padding: 0; margin: 0;"></td>
+</tr>
+<tr>
+    <td width = "29" style="padding: 0; margin: 0;"></td>
+    <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
+     font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
+     font-weight: normal; text-align: center;">Your new password is <strong><?= $password?></strong></td>
     <td width = "29" style="padding: 0; margin: 0;"></td>
 </tr>
 <tr>

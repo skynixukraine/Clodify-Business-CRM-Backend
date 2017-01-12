@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\components\DateUtil;
 use app\models\ProjectDeveloper;
+use app\models\ProjectCustomer;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -41,6 +42,12 @@ $this->params['menu'] = [
                      ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                      ->andWhere(Project::tableName() . '.is_delete=0')
                      ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
+                     ->all();
+             } else if (User::hasPermission([User::ROLE_CLIENT])) {
+                 $projects = Project::find()
+                     ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
+                     ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
+                     ->andWhere(Project::tableName() . '.is_delete=0')
                      ->all();
              }
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
@@ -137,9 +144,8 @@ exit();*/
             editUrl     : '<?=Url::to(['report/index'])?>',
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
+            invoiceUrl  : '<?=Url::to(['invoice/view?id='])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeHours: <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            canSeeInvoice : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
     });
 
