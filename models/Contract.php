@@ -31,7 +31,8 @@ class Contract extends ActiveRecord
             [['customer_id', 'act_number', 'contract_id', 'created_by', 'id', 'contract_template_id',
                 'contract_payment_method_id'], 'integer'],
             ['total', 'number'],
-            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id'], 'required'],
+            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id',
+                'contract_template_id', 'contract_payment_method_id'], 'required'],
             [['act_number', 'contract_id'], 'unique']
         ];
     }
