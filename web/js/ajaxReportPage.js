@@ -16,7 +16,7 @@ var ajaxReportPageModule = (function() {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
-            $('#dateFilter'). click(function () {
+            $('#dateFilter').change(function () {
                 if (this.value == 1) {
                     document.location.href =config.indexUrl;
                 } else {
