@@ -265,7 +265,7 @@ class ReportController extends DefaultController
                 date("d/m/Y", strtotime($model->date_report)),
                 ( $model->invoice_id == null ? "No" : "Yes" ),
                 gmdate('H:i', floor($model->hours * 3600)),
-                '$' . number_format( $model->cost, 2),
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? '$' . number_format( $model->cost, 2) : null,
                 $model->getProject()->one()->id,
                 $model->invoice_id == null ? '' : $model->invoice_id
             ];
