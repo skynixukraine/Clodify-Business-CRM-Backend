@@ -21,15 +21,18 @@ use yii\db\ActiveRecord;
  * @property string end_date
  * @property string act_date
  * @property integer created_by
+ * @property integer contract_template_id
  */
 class Contract extends ActiveRecord
 {
     public function rules()
     {
         return [
-            [['customer_id', 'act_number', 'contract_id', 'created_by', 'id'], 'integer'],
+            [['customer_id', 'act_number', 'contract_id', 'created_by', 'id', 'contract_template_id',
+                'contract_payment_method_id'], 'integer'],
             ['total', 'number'],
-            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id'], 'required'],
+            [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id',
+                'contract_template_id', 'contract_payment_method_id'], 'required'],
             [['act_number', 'contract_id'], 'unique']
         ];
     }
@@ -48,7 +51,9 @@ class Contract extends ActiveRecord
             'total'       => 'Total price',
             'start_date'  => 'Start date',
             'end_date'    => 'End date',
-            'act_date'    => 'Act date'
+            'act_date'    => 'Act date',
+            'contract_template_id'          => 'Template',
+            'contract_payment_method_id'    => 'Payment Method',
         ];
     }
 

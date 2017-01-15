@@ -90,13 +90,22 @@ class ProjectController extends DefaultController
                 ->groupBy('id');
         }
 
-        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
+        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV] )){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                             ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                             ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                             ->groupBy('id');
+        }
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $query         = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+                ->groupBy('id');
         }
         if(User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])){
         $query         = Project::find()
@@ -247,7 +256,6 @@ class ProjectController extends DefaultController
 
             $model->scenario = "admin";
             if ($model->load(Yii::$app->request->post())) {
-
                 $model->status = Project::STATUS_NEW;
                 if ($model->validate() && $model->save()) {
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));

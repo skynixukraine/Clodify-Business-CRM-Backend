@@ -45,4 +45,15 @@ class PaymentMethod extends \yii\db\ActiveRecord
             'description' => 'Description',
         ];
     }
+
+    public static function getAllMethodsDropdown()
+    {
+        $result = [];
+        $records = self::find()->all();
+        foreach ($records as $record) {
+            $result[$record->id] = $record->name;
+        }
+        return $result;
+    }
+
 }
