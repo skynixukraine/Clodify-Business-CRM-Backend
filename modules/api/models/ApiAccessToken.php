@@ -64,7 +64,7 @@ class ApiAccessToken extends \yii\db\ActiveRecord
     {
         $accessToken = new ApiAccessToken();
         $accessToken->user_id = $user->id;
-        $accessToken->access_token = Yii::$app->security->generateRandomString();
+        $accessToken->access_token = Yii::$app->security->generateRandomString(39);
         $accessToken->exp_date = date('Y-m-d H:i:s', strtotime("now +" . self::EXPIRATION_PERIOD ));
         $accessToken->save();
         return $accessToken;

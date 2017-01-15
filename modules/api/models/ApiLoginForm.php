@@ -28,8 +28,7 @@ class ApiLoginForm extends LoginForm
         if (isset($clientIpAddress)) {
           //  $user->ip = $clientIpAddress;
         }*/
-
-        $user->save(false, ['date_login']);
+        
 
         if( !($accessToken = ApiAccessToken::find()->where(['user_id' => $user->id])->one()) ||
             ( ( strtotime( $accessToken->exp_date ) < strtotime("now -" . ApiAccessToken::EXPIRATION_PERIOD ) ) ) ) {
@@ -37,6 +36,7 @@ class ApiLoginForm extends LoginForm
             $accessToken = ApiAccessToken::generateNewToken( $user );
 
         }
+        $user->save(false, ['date_login']);
         return $accessToken;
 
     }
