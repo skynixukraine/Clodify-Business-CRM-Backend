@@ -2,12 +2,10 @@
 
 namespace app\modules\api\controllers;
 
-use app\modules\api\components\ApiProcessor\ApiProcessor;
+use app\modules\api\components\Api\Processor;
 use yii\web\Controller;
 use yii;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use app\components\AccessRule;
+
 /**
  * Default controller for the `api` module
  */
@@ -31,10 +29,6 @@ class DefaultController extends Controller
         Yii::$app->response->headers->add('Access-Control-Max-Age', 1000);
         
 		$behaviors = parent::behaviors();
-		$behaviors['authenticator'] = [
-			'class' => \app\modules\api\components\ApiProcessor\ApiCustomAuth::className(),
-			'except' => ['error'],
-		];
 		return $behaviors;
 	}
 
@@ -50,14 +44,11 @@ class DefaultController extends Controller
 	public function beforeAction($action)
     {
 
-        //if (!parent::beforeAction($action)) {
-           // return false;
-       //}
         $this->di = new yii\di\Container();
         $this->di
-            ->setSingleton('ApiProcessor', 'app\modules\api\components\ApiProcessor\ApiProcessor')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccessInterface',
-                    'app\modules\api\components\ApiProcessor\ApiProcessorAccess');
+            ->setSingleton('ApiProcessor', 'app\modules\api\components\Api\Processor')
+            ->set('app\modules\api\components\Api\AccessInterface',
+                    'app\modules\api\components\Api\ProcessorAccess');
 
         return true;
 
@@ -75,11 +66,15 @@ class DefaultController extends Controller
             $message = Yii::t('yii', 'An internal server error occurred.');
 
         }
-
         Yii::$app->response->format     = \yii\web\Response::FORMAT_JSON;
-        Yii::$app->response->content    = json_encode( [
-            ApiProcessor::CODE_TEHNICAL_ISSUE => $message
-        ] );
+        Yii::$app->response->content    = json_encode([
+            'data'      => null,
+            'errors'    => [
+                'param'     => Processor::CODE_TEHNICAL_ISSUE,
+                'message' => $message
+            ],
+            'success'   => false
+        ]);
 
     }
    

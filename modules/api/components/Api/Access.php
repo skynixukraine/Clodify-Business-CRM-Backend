@@ -1,14 +1,13 @@
 <?php
 /**
  * Created by Skynix Team
- * Date: 8/6/16
- * Time: 13:04
+ * Date: 12/17/16
+ * Time: 07:29
  */
+namespace app\modules\api\components\Api;
 
-namespace app\modules\api\components\ApiProcessor;
 
-
-class ApiProcessorAccess implements ApiProcessorAccessInterface
+class Access implements AccessInterface
 {
 
     public $methods;

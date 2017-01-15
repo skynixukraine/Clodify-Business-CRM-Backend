@@ -9,7 +9,7 @@ namespace viewModel;
 
 use Yii;
 use app\modules\api\components\Message;
-use app\modules\api\components\ApiProcessor\ApiProcessor;
+use app\modules\api\components\Api\Processor;
 use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;
 
@@ -50,24 +50,20 @@ abstract class ViewModelAbstract implements ViewModelInterface
             } catch (\Exception $e ) {
 
                 $this->data = null;
-                $this->addError(ApiProcessor::CODE_TEHNICAL_ISSUE, $e->getMessage());
-
-            }
-            if ( count($this->errors) ) {
-
-                $this->data = $this->errors;
-
-            } else {
-
-                Yii::$app->response->statusCode = ApiProcessor::STATUS_CODE_SUCCESS;
+                $this->addError(Processor::CODE_TEHNICAL_ISSUE, $e->getMessage());
 
             }
 
         }
+        Yii::$app->response->statusCode = Processor::STATUS_CODE_SUCCESS;
         Yii::$app->response->format     = \yii\web\Response::FORMAT_JSON;
         if ( $this->data !== null ) {
 
-            Yii::$app->response->content    = json_encode( $this->data );
+            Yii::$app->response->content    = json_encode([
+                'data'      => $this->data,
+                'errors'    => $this->errors,
+                'success'   => count($this->errors) == 0 ? true : false
+            ]);
 
         }
 
@@ -105,10 +101,10 @@ abstract class ViewModelAbstract implements ViewModelInterface
 
     public function addError( $code, $message = null )
     {
-        $error          = new \stdClass();
-        $error->$code   = ( $message == null ? Message::get( $code ) : $message );
-        $this->errors[] = $error;
-        Yii::$app->response->statusCode = ApiProcessor::STATUS_CODE_UNPROCESSABLE;
+        $this->errors[] = [
+            'param'     => $code,
+            'message'   => $message
+        ];
         return $this;
     }
 
