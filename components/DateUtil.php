@@ -89,4 +89,10 @@ class DateUtil
         return $newDate;
     }
 
+    public static function convertDateTimeWithoutHours($date) {
+        $timestamp = strtotime($date);
+        $newDate = date('d/m/Y', $timestamp);
+        return $newDate;
+    }
+
 }
