@@ -199,34 +199,30 @@ class ProjectController extends DefaultController
             }
             /* @var $model \app\models\Project */
             $cost = null;
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_SALES])) {
-                $cost = '$' . number_format( $model->cost, 2, ',	', '.');
-            }
-            $row = '' . $model->id .
-                '; ' . $model->name .
-                '; ' . $model->jira_code .
-                '; ' . gmdate('H:i', floor($model->total_logged_hours * 3600));
-            $cost = null;
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_SALES])) {
-                $cost = '$' . number_format( $model->cost, 2, ',	', '.');
-                $row .= '; ' . $cost;
-            }
-
-            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
-
-                $row = $row .  '; ' . gmdate('H:i', floor($model->total_paid_hours * 3600));
-            }
+            $row = [];
             //formatting date
             $newDateStart = date("d/m/Y", strtotime($model->date_start));
             $newDateEnd = date("d/m/Y", strtotime($model->date_end));
 
-            $row = $row . '; ' .$newDateStart .
-                '; ' . $newDateEnd .
-                '; ' . implode(", ", $developersNames) .
-                '; ' . implode(", ", $customersNames) .
-                '; ' . $model->status;
+            $row = [
+                $model->id,
+                $model->name,
+                $model->jira_code,
+                gmdate('H:i', floor($model->total_logged_hours * 3600)),
+            ];
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+                $row[] = '$' . number_format( $model->cost, 2, ',	', '.');
+            }
+            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
+                $row[] = gmdate('H:i', floor($model->total_paid_hours * 3600));
+            }
+            $row[] = $newDateStart;
+            $row[] = $newDateEnd;
+            $row[] = implode(", ", $developersNames);
+            $row[] = implode(", ", $customersNames);
+            $row[] = $model->status;
 
-            $list[] =   explode("; ", $row);
+            $list[] = $row;
         }
 
         $data = [
