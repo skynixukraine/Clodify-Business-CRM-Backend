@@ -232,7 +232,7 @@ class UserController extends DefaultController {
                 $model->email,
                 $model->phone,
                 DateUtil::convertDatetimeWithoutSecund($model->date_login),
-                DateUtil::convertDatetimeWithoutSecund($model->date_signup),
+                DateUtil::convertDateTimeWithoutHours($model->date_signup),
                 User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ?  '$' . number_format($model->salary) : null,
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ? $salary_up:null,
