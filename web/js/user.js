@@ -138,10 +138,7 @@ var userModule = (function() {
                 },
                 {
                     "targets"   : 1,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        return '<a href="/profile/' + data.toLowerCase().replace(' ', '-')+'/'+row[11] + '">' + data +'</a>';
-                    }
+                    "orderable" : true
                 },
                 {
                     "targets"   : 2,
