@@ -123,14 +123,21 @@ var adminReportModule = (function() {
                     }
                 });
             index++;
-            columns.push(
-                {
+            costColumn =  false;
+            if (cfg.canSeeCost) {
+                costColumn =  {
                     "targets"   : index,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
                         return row[8];
                     }
-                },
+                };
+            } else {
+                index--;
+            }
+
+            columns.push(
+                costColumn,
                 {
                     "targets"   : ++index,
                     "orderable" : false,
