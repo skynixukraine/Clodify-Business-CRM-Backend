@@ -8,7 +8,7 @@
 namespace viewModel;
 
 use Yii;
-use app\modules\api\components\Message;
+use app\modules\api\components\Api\Message;
 use app\modules\api\components\Api\Processor;
 use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;
@@ -123,7 +123,7 @@ abstract class ViewModelAbstract implements ViewModelInterface
             return true;
 
         }
-        Yii::$app->response->statusCode = ApiProcessor::STATUS_CODE_UNPROCESSABLE;
+        Yii::$app->response->statusCode = Processor::STATUS_CODE_UNPROCESSABLE;
         if ( ( $errors = $this->model->getErrors() ) ) {
 
             foreach ( $errors as $key => $error ) {

@@ -20,15 +20,19 @@ class Auth extends ViewModelAbstract
 
     public function define()
     {
+        $data = [];
+        $this->model->scenario = 'api-login';
 
-        if( $this->model->validate() &&
-            ($token = $this->model->login() ) ) {
+        $loginForm = new ApiLoginForm();
+        $loginForm->email = $this->model->email;
 
-            $this->setData([
-                'access_token' => $token->access_token
-            ]);
+        if( $this->validate() &&
+            ($token =  $loginForm->login() ) ) {
+            $data[
+                'access_token'] = $token->access_token;
 
         }
+        $this->setData($data);
 
     }
 }

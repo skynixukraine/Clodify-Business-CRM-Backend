@@ -6,10 +6,10 @@
  */
 namespace app\modules\api\components\Api;
 
-use app\components\Message;
+use app\modules\api\components\Message;
 use Yii;
-use ViewModel\ViewModelAbstract;
-use ViewModel\ViewModelInterface;
+use viewModel\ViewModelAbstract;
+use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
 
 class Processor
