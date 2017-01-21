@@ -8,6 +8,7 @@
 namespace app\modules\cp\controllers;
 
 use app\models\Contract;
+use app\models\ContractTemplates;
 use app\models\Project;
 use app\models\Report;
 use Yii;
@@ -211,9 +212,10 @@ class InvoiceController extends DefaultController
 
             }
 
-            if ($model->validate()) {
-
-                $model->save();
+            if ($model->validate() && $model->save()) {
+                $contract = Contract::findOne($model->contract_id);
+                $contract->is_invoiced = 1;
+                $contract->save();
                 Yii::$app->getSession()
                             ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }

@@ -38,6 +38,8 @@ use yii\web\UploadedFile;
  * @property integer $is_delete
  * @property string $photo
  * @property string $sing
+ * @property string $bank_account_en
+ * @property string $bank_account_ua
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -97,6 +99,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
+            [['bank_account_ua', 'bank_account_en'], 'string']
 
         ];
     }

@@ -282,8 +282,14 @@ $this->params['menu'] = [
                     <div class="row">
                         <fieldset class = "col-sm-6">
                             <h3>Bank Account(English)</h3>
-                            <textarea cols="80" id="editorLeft" name="editorLeft" rows="10" >
+                            <form action="" method="post">
+                            <textarea cols="80" id="editorEn" name="editorEn" rows="10" >
+                                <?php if ($bank_account_en) {
+                                    echo $bank_account_en;
+                                }
+                                ?>
 	                        </textarea>
+                            <input type="submit" value = 'Save'>
                             <script>
                                 toolbarConfig = [
                                     { name: 'clipboard', groups: [ 'clipboard' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
@@ -292,8 +298,9 @@ $this->params['menu'] = [
                                     { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
                                     { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
                                     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+                                    { name: 'save', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
                                 ];
-                                CKEDITOR.replace( 'editorLeft', {
+                                CKEDITOR.replace( 'editorEn', {
                                     height: 260,
                                     toolbar: toolbarConfig
                                 } );
@@ -302,15 +309,20 @@ $this->params['menu'] = [
                         </fieldset>
                         <fieldset class = "col-sm-6">
                             <h3>Bank Account(Ukrainian)</h3>
-                            <textarea cols="80" id="editorRight" name="editorRight" rows="10" >
-	                        </textarea>
-                            <script>
-                                CKEDITOR.replace( 'editorRight', {
+                            <textarea cols="80" id="editorUa" name="editorUa" rows="10" >
+                                   <?php if ($bank_account_ua) {
+                                       echo $bank_account_ua;
+                                   }
+                                   ?>
+                            </textarea>
+                                <script>
+                                CKEDITOR.replace( 'editorUa', {
                                     height: 260,
                                     toolbar: toolbarConfig
                                 } );
 
                             </script>
+                            </form>
                         </fieldset>
                     </div>
                 </div>

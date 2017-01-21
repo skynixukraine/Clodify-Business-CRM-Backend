@@ -16,6 +16,7 @@ use Yii;
 use app\components\DataTable;
 use yii\filters\VerbFilter;
 use app\models\Project;
+use mPDF;
 
 class ContractController extends DefaultController
 {
@@ -32,17 +33,17 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'view'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'view', 'downloadcontract'],
                         'allow' => true,
                         'roles' => [User::ROLE_SALES],
                     ],
                     [
-                        'actions' => ['index', 'find'],
+                        'actions' => ['index', 'find', 'downloadcontract'],
                         'allow' => true,
                         'roles' => [User::ROLE_CLIENT]
                     ]
@@ -68,9 +69,23 @@ class ContractController extends DefaultController
         $model->created_by = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->validate()) {
-                $model->save();
+            if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->contract_id));
+                // Generating PDF
+                $html = $this->renderPartial('contractPDF', [
+
+                    'contract_id' => $model->contract_id,
+                    'start_date' => $model->start_date,
+                    'total' => $model->total,
+                    'contract_template_id' => $model->contract_template_id,
+                    'contract_payment_method_id' => $model->contract_payment_method_id,
+                    'customer_id' => $model->customer_id
+                ]);
+
+                $pdf = new mPDF();
+                $pdf->WriteHTML($html);
+                $pdf->Output('../data/contracts/' . $model->contract_id . '.pdf', 'F');
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have sent the invoice to the client"));
                 return $this->redirect(['view?id=' . $model->contract_id]);
             }
         }
@@ -215,6 +230,22 @@ class ContractController extends DefaultController
         $model = Contract::findOne(['contract_id' => $id]);
         return $this->render('view', ['model' => $model,
             'title' => 'You watch contract #' . $model->contract_id]);
+    }
+
+    public function actionDownloadcontract()
+    {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne(['contract_id' => $id]) ) ) {
+
+            if (file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf'))) {
+                /*$this->downloadFile($path);*/
+
+                header("Content-type:application/pdf"); //for pdf file
+                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+                header('Content-Length: ' . filesize($path));
+                readfile($path);
+                Yii::$app->end();
+            }
+        }
     }
 
 }

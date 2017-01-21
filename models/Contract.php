@@ -22,6 +22,7 @@ use yii\db\ActiveRecord;
  * @property string act_date
  * @property integer created_by
  * @property integer contract_template_id
+ * @property integer is_invoiced
  */
 class Contract extends ActiveRecord
 {
@@ -29,7 +30,7 @@ class Contract extends ActiveRecord
     {
         return [
             [['customer_id', 'act_number', 'contract_id', 'created_by', 'id', 'contract_template_id',
-                'contract_payment_method_id'], 'integer'],
+                'contract_payment_method_id', 'is_invoiced'], 'integer'],
             ['total', 'number'],
             [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id',
                 'contract_template_id', 'contract_payment_method_id'], 'required'],

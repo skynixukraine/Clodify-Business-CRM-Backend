@@ -37,6 +37,10 @@ $this->params['menu'] = [
         <li>Total: $<?=number_format($model->total, 2)?></li>
         <li>Created By: <?=$createdBy->first_name . ' ' . $createdBy->last_name?></li>
     </ul>
+    <?php
+    if ($model->is_invoiced && file_exists( Yii::getAlias('@app/data/contracts/' . $model->contract_id . '.pdf'))):?>
+            <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->contract_id]) ?>
+    <?php endif;?>
 </div>
 
 
