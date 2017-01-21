@@ -8,7 +8,7 @@
 namespace viewModel;
 
 use Yii;
-use app\modules\api\components\Message;
+use app\modules\api\components\Api\Message;
 use app\modules\api\components\Api\Processor;
 use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;

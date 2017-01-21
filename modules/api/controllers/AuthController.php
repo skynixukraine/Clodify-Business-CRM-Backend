@@ -21,7 +21,7 @@ class AuthController extends DefaultController
                 'methods'       => [ Processor::METHOD_POST ],
                 'checkAccess'   => true
             ])
-            ->get('ApiProcessor')
+            ->get('Processor')
             ->respond();
 
     }
