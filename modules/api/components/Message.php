@@ -7,7 +7,7 @@
 
 namespace app\modules\api\components;
 use Yii;
-use app\modules\api\components\ApiProcessor\ApiProcessor;
+use app\modules\api\components\Api\Processor;
 
 class Message
 {
@@ -20,58 +20,58 @@ class Message
         $message = "";
          switch ( $code ) {
 
-             case ApiProcessor::CODE_SUCCESS :
+             case Processor::CODE_SUCCESS :
 
                  $message = Yii::t("yii", "Successful response");
                  break;
 
-             case ApiProcessor::CODE_TOKEN_EXPIRED :
+             case Processor::CODE_TOKEN_EXPIRED :
 
                  $message = Yii::t("yii", "Your token is expired");
                  break;
 
-             case ApiProcessor::CODE_TOKEN_UNDEFINED :
+             case Processor::CODE_TOKEN_UNDEFINED :
 
                  $message = Yii::t("yii", "Your token is undefined");
                  break;
 
-             case ApiProcessor::CODE_METHOD_NOT_ALLOWED :
+             case Processor::CODE_METHOD_NOT_ALLOWED :
 
                  $message = Yii::t("yii", "This HTTP method disallowed");
                  break;
 
-             case ApiProcessor::CODE_NOT_ATHORIZED :
+             case Processor::CODE_NOT_ATHORIZED :
 
                  $message = Yii::t("yii", "You are not authorized to access this action");
                  break;
 
 
-             case ApiProcessor::CODE_TEHNICAL_ISSUE :
+             case Processor::CODE_TEHNICAL_ISSUE :
 
                  $message = Yii::t("yii", "Please contact technical support");
                  break;
 
-             case ApiProcessor::CODE_UNPROCESSABLE_JSON :
+             case Processor::CODE_UNPROCESSABLE_JSON :
 
                  $message = Yii::t("yii", "Your JSON data can not be processed by our server");
                  break;
 
-             case ApiProcessor::CODE_DELETE_ERROR :
+             case Processor::CODE_DELETE_ERROR :
 
                  $message = Yii::t("yii", "You can not delete entry using this request");
                  break;
 
-             case ApiProcessor::CODE_INSERT_ERROR :
+             case Processor::CODE_INSERT_ERROR :
 
                  $message = Yii::t("yii", "You can not insert entry using this request");
                  break;
 
-             case ApiProcessor::CODE_UPDATE_ERROR :
+             case Processor::CODE_UPDATE_ERROR :
 
                  $message = Yii::t("yii", "You can not update entry using this request");
                  break;
 
-             case ApiProcessor::CODE_ACTION_RESTRICTED :
+             case Processor::CODE_ACTION_RESTRICTED :
 
                  $message = Yii::t("yii", "The action is not allowed for you");
                  break;

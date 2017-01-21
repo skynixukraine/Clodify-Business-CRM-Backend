@@ -37,11 +37,7 @@ abstract class ViewModelAbstract implements ViewModelInterface
     public function render()
     {
 
-        if ( count($this->errors) ) {
-
-            $this->data = $this->errors;
-
-        } else {
+        if ( count($this->errors) == 0 ) {
 
             try {
 
@@ -54,18 +50,18 @@ abstract class ViewModelAbstract implements ViewModelInterface
 
             }
 
+        } else {
+
+            $this->data = null;
+
         }
         Yii::$app->response->statusCode = Processor::STATUS_CODE_SUCCESS;
         Yii::$app->response->format     = \yii\web\Response::FORMAT_JSON;
-        if ( $this->data !== null ) {
-
-            Yii::$app->response->content    = json_encode([
-                'data'      => $this->data,
-                'errors'    => $this->errors,
-                'success'   => count($this->errors) == 0 ? true : false
-            ]);
-
-        }
+        Yii::$app->response->content    = json_encode([
+            'data'      => $this->data,
+            'errors'    => $this->errors,
+            'success'   => count($this->errors) == 0 ? true : false
+        ]);
 
     }
 
@@ -103,7 +99,7 @@ abstract class ViewModelAbstract implements ViewModelInterface
     {
         $this->errors[] = [
             'param'     => $code,
-            'message'   => $message
+            'message'   => ($message ? $message : Message::get($code))
         ];
         return $this;
     }
@@ -123,7 +119,6 @@ abstract class ViewModelAbstract implements ViewModelInterface
             return true;
 
         }
-        Yii::$app->response->statusCode = ApiProcessor::STATUS_CODE_UNPROCESSABLE;
         if ( ( $errors = $this->model->getErrors() ) ) {
 
             foreach ( $errors as $key => $error ) {
