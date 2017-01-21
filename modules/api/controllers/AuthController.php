@@ -15,7 +15,7 @@ class AuthController extends DefaultController
     public function actionIndex(){
 
         $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\modules\api\models\ApiLoginForm')
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\Auth')
             ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
                 'methods'       => [ Processor::METHOD_POST ],

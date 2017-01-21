@@ -15,15 +15,17 @@ use app\modules\api\models\ApiLoginForm;
 class Auth extends ViewModelAbstract
 {
 
-    /** @var  \app\modules\api\models\ApiLoginForm */
+    /** @var  \app\models\User */
     public $model;
 
     public function define()
     {
         $this->model->scenario = 'api-login';
 
-        //$loginForm = new ApiLoginForm();
-        //$loginForm->email = $this->model->email;
+        $loginForm = new ApiLoginForm();
+        $loginForm->email       = $this->model->email;
+        $loginForm->password    = $this->model->password;
+        $this->model            = $loginForm;
 
         if( $this->validate() &&
             ($token =  $this->model->login() ) ) {
