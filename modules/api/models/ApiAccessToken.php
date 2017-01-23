@@ -15,6 +15,7 @@ use Yii;
 class ApiAccessToken extends \yii\db\ActiveRecord
 {
 
+    const ACCESS_TOKEN_LENGTH = 39;
     const EXPIRATION_PERIOD = "30 days";
     /**
      * @inheritdoc
@@ -50,6 +51,17 @@ class ApiAccessToken extends \yii\db\ActiveRecord
         ];
     }
     
+    public function isAccessTokenValid()
+    {
+        if ( strlen( $this->access_token ) == self::ACCESS_TOKEN_LENGTH &&
+            ( strtotime( $this->exp_date ) >= strtotime("now") ) ) {
+
+            return true;
+
+        }
+        return false;
+    }
+    
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::findOne(['access_token' => $token]);
@@ -62,10 +74,10 @@ class ApiAccessToken extends \yii\db\ActiveRecord
      */
     public static function generateNewToken( \app\models\User $user )
     {
-        $accessToken = new ApiAccessToken();
-        $accessToken->user_id = $user->id;
-        $accessToken->access_token = Yii::$app->security->generateRandomString(39);
-        $accessToken->exp_date = date('Y-m-d H:i:s', strtotime("now +" . self::EXPIRATION_PERIOD ));
+        $accessToken                = new ApiAccessToken();
+        $accessToken->user_id       = $user->id;
+        $accessToken->access_token  = Yii::$app->security->generateRandomString( self::ACCESS_TOKEN_LENGTH );
+        $accessToken->exp_date      = date('Y-m-d H:i:s', strtotime("now +" . self::EXPIRATION_PERIOD ));
         $accessToken->save();
         return $accessToken;
     }

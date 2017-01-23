@@ -34,7 +34,7 @@ class DefaultController extends Controller
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => [ User::ROLE_ADMIN ],
+                        'roles' => [ '@' ],
                     ],
                 ],
             ],
@@ -43,6 +43,18 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
+        if (User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
+            
+            return $this->redirect(['index/index']);
+            
+        } elseif (User::hasPermission([User::ROLE_SALES, User::ROLE_CLIENT, User::ROLE_FIN])) {
+           
+            return $this->redirect(['report/index']);
+            
+        } elseif (User::hasPermission([User::ROLE_ADMIN])) {
+            
+            return $this->redirect(['user/index']);
+        }
         return $this->redirect(['index/index']);
     }
 }

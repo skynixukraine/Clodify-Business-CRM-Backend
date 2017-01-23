@@ -49,13 +49,16 @@ use yii\web\UploadedFile;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    const ROLE_ADMIN = "ADMIN";
-    const ROLE_PM = "PM";
-    const ROLE_DEV = "DEV";
-    const ROLE_CLIENT = "CLIENT";
-    const ROLE_FIN = "FIN";
-    const ROLE_GUEST = "GUEST";
-    const ROLE_SALES = "SALES";
+    const ROLE_ADMIN    = "ADMIN";
+    const ROLE_PM       = "PM";
+    const ROLE_DEV      = "DEV";
+    const ROLE_CLIENT   = "CLIENT";
+    const ROLE_FIN      = "FIN";
+    const ROLE_GUEST    = "GUEST";
+    const ROLE_SALES    = "SALES";
+    
+    const ACTIVE_USERS  = 1;
+    const DELETED_USERS = 1;
 
     public $rawPassword;
 
