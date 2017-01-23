@@ -10,7 +10,20 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/user.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
-$this->title                    = Yii::t("app", "Manage Users");
+
+if( User::hasPermission( [User::ROLE_ADMIN ]) ){
+    $this->title = Yii::t("app", "Manage Users");
+}
+
+if( User::hasPermission( [User::ROLE_FIN, User::ROLE_SALES, User::ROLE_PM, User::ROLE_DEV ]) ){
+    $this->title = Yii::t("app", "Co-workers");
+}
+
+if( User::hasPermission( [User::ROLE_CLIENT ]) ){
+    $this->title = Yii::t("app", "Employees");
+}
+
+
 $this->params['breadcrumbs'][]  = $this->title;
 if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     $this->params['menu'] = [
