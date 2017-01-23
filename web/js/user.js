@@ -171,6 +171,24 @@ var userModule = (function() {
                     "orderable" : true
                 }
             ];
+            if (cfg.showSales && cfg.showUserStatus == false) {
+                columnDefs.push(
+                    {
+                        "targets": 7,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            return row[8];
+                        }
+                    },
+                    {
+                        "targets": 8,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            return row[9];
+                        }
+                    }
+                );
+            }
             if (cfg.showUserStatus) {
                 if (cfg.showSales && ! cfg.showUserStatus) {
 
