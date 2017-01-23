@@ -5,13 +5,31 @@ use app\models\User;
 
 $contract_template = ContractTemplates::findOne($contract_template_id);
 $payment_template = PaymentMethod::findOne($contract_payment_method_id);
-$bank_account = User::findOne($customer_id);
+$user = User::findOne($customer_id);
 
 $total = number_format($total, 2);
-$start_date_eng = date("j F Y", strtotime($start_date));
-$start_date_ukr = Yii::t('app', $start_date_eng, [], 'ua-UA'); // does not work translation of month to ukrainian
-$search = ['var_contract_id', 'var_start_date_eng', 'var_start_date_ukr', 'var_total'];
-$replace = [$contract_id, $start_date_eng, $start_date_ukr, $total];
+$companyName = $user->company;
+$signatureProzhoga = Yii::getAlias('@app') . '/data/signatureProzhoga.png';
+$signatureProzhoga = (string) $signatureProzhoga;
+$start_date = date("d/m/Y", strtotime($start_date));
+$search = ['var_contract_id', 'var_start_date', 'var_total', 'var_company_name'];
+$replace = [$contract_id, $start_date, $total, $companyName];
 
-echo str_replace($search, $replace, $contract_template->content) . $payment_template->description .
-    $bank_account->bank_account_en . $bank_account->bank_account_ua ;
+echo str_replace($search, $replace, $contract_template->content) .
+    str_replace('var_signature_Prozhoga', $signatureProzhoga, $payment_template->description) .
+    $user->bank_account_en . $user->bank_account_ua;
+
+if ($user->sing) :?>
+
+<table width="570" style=" margin-left: auto; margin-right: auto; border-collapse: collapse;">
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
+        <td style =" vertical-align: top; border: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px;">
+    <img src="<?=$user->getUserSingPath()?>" width="285">
+        </td>
+        <td style =" vertical-align: top; border: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px;">
+            <img src="<?=$user->getUserSingPath()?>" width="285">
+        </td>
+    </tr>
+</table>
+
+<?php endif; ?>

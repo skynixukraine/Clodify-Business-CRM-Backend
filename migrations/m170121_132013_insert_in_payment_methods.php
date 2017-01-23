@@ -25,7 +25,7 @@ class m170121_132013_insert_in_payment_methods extends Migration
             <p>Рахунок у банку-кореспонденту: <strong>001-1-000080</strong></p>
             <p>SWIFT код кореспондента: <strong>CHASUS33</strong></p>
             <p>Прожога О.Ю.</p>
-            <img src="signatureProzhoga.png" width="250px" height="150px">
+            <img src="var_signature_Prozhoga" width="250px" height="150px">
             <p>Підпис</p>
         </td>
         <td style =" vertical-align: top; border-collapse: collapse; border: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px;">
@@ -43,13 +43,12 @@ class m170121_132013_insert_in_payment_methods extends Migration
             <p>CORRESPONDENT ACCOUNT: <strong>001-1-000080</strong></p>
             <p>SWIFT Code of correspondent bank: <strong>CHASUS33</strong></p>
             <p>Prozhoga O.Y.</p>
-            <img src="signatureProzhoga.png" width="250px" height="150px">
+            <img src="var_signature_Prozhoga" width="250px" height="150px">
             <p>Signature</p>
         </td>
     </tr>
 
 </table>
-</body>
         ';
         $this->insert('payment_methods', [
            'name' => 'Default payment method',

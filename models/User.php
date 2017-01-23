@@ -555,6 +555,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    public function getUserSingPath()
+    {
+        return Yii::getAlias('@app') .  '/data/' . $this->id . '/sing/' . $this->sing;
+    }
+
     public static function assignProject($project)
     {
         $data = [

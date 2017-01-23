@@ -23,7 +23,6 @@ use yii\db\ActiveRecord;
  * @property string act_date
  * @property integer created_by
  * @property integer contract_template_id
- * @property integer is_invoiced
  * @property integer contract_payment_method_id
  */
 class Contract extends ActiveRecord
@@ -32,7 +31,7 @@ class Contract extends ActiveRecord
     {
         return [
             [['customer_id', 'act_number', 'contract_id', 'created_by', 'id', 'contract_template_id',
-                'contract_payment_method_id', 'is_invoiced'], 'integer'],
+                'contract_payment_method_id'], 'integer'],
             ['total', 'number'],
             [['customer_id', 'act_number', 'total', 'start_date', 'end_date', 'act_date', 'contract_id',
                 'contract_template_id', 'contract_payment_method_id'], 'required'],
@@ -60,9 +59,10 @@ class Contract extends ActiveRecord
         ];
     }
 
+    /* checking if invoice was created for current contract */
     public function hasInvoices()
     {
-        if (Invoice::find()->where(['contract_id' => $this->id])->one()) {
+        if (Invoice::find()->where(['contract_id' => $this->id])->count()) {
             return true;
         }
     }

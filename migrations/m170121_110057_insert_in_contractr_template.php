@@ -23,9 +23,9 @@ class m170121_110057_insert_in_contractr_template extends Migration
         <td style =" vertical-align: top; border: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px;">
             <p style="text-align: center; margin: 0;"><strong>КОНТРАКТ №var_contract_id</strong></p>
             <p style="text-align: center; margin: 0;"><strong>НА НАДАННЯ ПОСЛУГ</strong></p>
-            <p style="text-align: right">var_start_date_ukr</p>
+            <p style="text-align: right">var_start_date</p>
             <p>
-                Компанія "Colourways Limited"(UK) далі
+                Компанія "var_company_name" далі
                 по тексту "Замовник" і Компанія ФОП Прожога О.Ю.,
                 Україна,в особі Прожоги Олексія Юрійовича,
                 діючого на підставі реєстрації
@@ -93,10 +93,10 @@ class m170121_110057_insert_in_contractr_template extends Migration
                 <strong>FOR SERVICES</strong>
             </p>
             <p style="text-align: right">
-                var_start_date_eng
+                var_start_date
             </p>
             <p>
-                The company "Colourways Limited"(UK)
+                The company "var_company_name"
                 hereinafter referred to as "Customer" and the
                 company "<strong>FOP Prozhoga O.Y.</strong>" Ukraine,
                 represented by Prozhoga Oleksii Yuriyovich, who is
