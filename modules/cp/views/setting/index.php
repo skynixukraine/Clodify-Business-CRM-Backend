@@ -284,10 +284,9 @@ $this->params['menu'] = [
                             <h3>Bank Account(English)</h3>
                             <form action="" method="post">
                             <textarea cols="80" id="editorEn" name="editorEn" rows="10" >
-                                <?php if ($bank_account_en) {
-                                    echo $bank_account_en;
-                                }
-                                ?>
+                                <?php if ($bank_account_en):?>
+                                    <?=$bank_account_en?>
+                                <?php endif;?>
 	                        </textarea>
                             <input type="submit" value = 'Save'>
                             <script>
@@ -310,10 +309,9 @@ $this->params['menu'] = [
                         <fieldset class = "col-sm-6">
                             <h3>Bank Account(Ukrainian)</h3>
                             <textarea cols="80" id="editorUa" name="editorUa" rows="10" >
-                                   <?php if ($bank_account_ua) {
-                                       echo $bank_account_ua;
-                                   }
-                                   ?>
+                                     <?php if ($bank_account_ua):?>
+                                         <?=$bank_account_ua?>
+                                     <?php endif;?>
                             </textarea>
                                 <script>
                                 CKEDITOR.replace( 'editorUa', {

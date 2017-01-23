@@ -6,6 +6,7 @@
  */
 
 namespace app\models;
+use app\models\Invoice;
 
 
 use yii\db\ActiveRecord;
@@ -23,6 +24,7 @@ use yii\db\ActiveRecord;
  * @property integer created_by
  * @property integer contract_template_id
  * @property integer is_invoiced
+ * @property integer contract_payment_method_id
  */
 class Contract extends ActiveRecord
 {
@@ -56,6 +58,13 @@ class Contract extends ActiveRecord
             'contract_template_id'          => 'Template',
             'contract_payment_method_id'    => 'Payment Method',
         ];
+    }
+
+    public function hasInvoices()
+    {
+        if (Invoice::find()->where(['contract_id' => $this->id])->one()) {
+            return true;
+        }
     }
 
 

@@ -71,21 +71,6 @@ class ContractController extends DefaultController
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->contract_id));
-                // Generating PDF
-                $html = $this->renderPartial('contractPDF', [
-
-                    'contract_id' => $model->contract_id,
-                    'start_date' => $model->start_date,
-                    'total' => $model->total,
-                    'contract_template_id' => $model->contract_template_id,
-                    'contract_payment_method_id' => $model->contract_payment_method_id,
-                    'customer_id' => $model->customer_id
-                ]);
-
-                $pdf = new mPDF();
-                $pdf->WriteHTML($html);
-                $pdf->Output('../data/contracts/' . $model->contract_id . '.pdf', 'F');
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have sent the invoice to the client"));
                 return $this->redirect(['view?id=' . $model->contract_id]);
             }
         }
@@ -234,17 +219,33 @@ class ContractController extends DefaultController
 
     public function actionDownloadcontract()
     {
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne(['contract_id' => $id]) ) ) {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne(['contract_id' => $id]) )
+            && ($model->hasInvoices()) ) {
+            // Generating PDF
+            $html = $this->renderPartial('contractPDF', [
 
-            if (file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf'))) {
-                /*$this->downloadFile($path);*/
+                'contract_id' => $model->contract_id,
+                'start_date' => $model->start_date,
+                'total' => $model->total,
+                'contract_template_id' => $model->contract_template_id,
+                'contract_payment_method_id' => $model->contract_payment_method_id,
+                'customer_id' => $model->customer_id
+            ]);
 
+            $pdf = new mPDF();
+            $pdf->WriteHTML($html);
+            $pdf->Output('../data/contracts/' . $model->contract_id . '.pdf', 'F');
+
+            if ((file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf')))) {
                 header("Content-type:application/pdf"); //for pdf file
                 header('Content-Disposition: attachment; filename="' . basename($path) . '"');
                 header('Content-Length: ' . filesize($path));
                 readfile($path);
                 Yii::$app->end();
             }
+        } else {
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contract #" . $model->contract_id . " is not available for downloading."));
+            return $this->redirect(['view', 'id' => $id]);
         }
     }
 
