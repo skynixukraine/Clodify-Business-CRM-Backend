@@ -59,6 +59,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     <thead>
     <tr>
         <th class="id-col"><?=Yii::t('app', 'ID')?></th>
+        <th><?=Yii::t('app', 'Photo')?></th>
         <th><?=Yii::t('app', 'Name')?></th>
         <th><?=Yii::t('app', 'Role')?></th>
         <th><?=Yii::t('app', 'Email')?></th>
@@ -66,7 +67,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
         <th class="date-col"><?=Yii::t('app', 'Last Login')?></th>
         <th class="date-col"><?=Yii::t('app', 'Joined')?></th>
         <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-            <th class="date-col"><?=Yii::t('app', 'Is Active')?></th>
+            <th class="date-col"><?=Yii::t('app', 'Status')?></th>
         <?php endif;?>
         <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
             <th class="date-col"><?=Yii::t('app', 'Salary')?></th>

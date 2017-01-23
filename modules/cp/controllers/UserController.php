@@ -23,6 +23,7 @@ use app\models\User;
 use app\models\Language;
 use app\models\LoginForm;
 use yii\web\Cookie;
+use yii\helpers\Url;
 
 class UserController extends DefaultController {
 
@@ -181,6 +182,7 @@ class UserController extends DefaultController {
         }
         $columns        = [
             'id',
+            'photo',
             'first_name',
             'role',
             'email',
@@ -225,8 +227,16 @@ class UserController extends DefaultController {
             } else {
                 $salary_up = '';
             }
+
+        if( $model->photo ) {
+            $photo  = urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
+                '/data/'.$model->id.'/photo/'.$model->photo ]));
+        } else {
+            $photo = "/img/avatar.png";
+        }
             $list[] = [
                 $model->id,
+                $photo,
                 $model->first_name . " " . $model->last_name,
                 $model->role,
                 $model->email,

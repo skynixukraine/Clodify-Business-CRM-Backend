@@ -138,22 +138,29 @@ var userModule = (function() {
                 },
                 {
                     "targets"   : 1,
-                    "orderable" : true
+                    "orderable" : false,
+                    "render"    :function(data, type, row) {
+                        return '<img src="' + data + '" class="img-circle" style="max-width: 100px; height: 100px; alt = "User Image" />';
+                    }
                 },
                 {
                     "targets"   : 2,
                     "orderable" : true
-
                 },
                 {
                     "targets"   : 3,
+                    "orderable" : true
+
+                },
+                {
+                    "targets"   : 4,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         return '<a href="mailto:' + data + '">' + data +'</a>';
                     }
                 },
                 {
-                    "targets"   : 4,
+                    "targets"   : 5,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         if(!data) {
@@ -163,11 +170,11 @@ var userModule = (function() {
                     }
                 },
                 {
-                    "targets"   : 5,
+                    "targets"   : 6,
                     "orderable" : true
                 },
                 {
-                    "targets"   : 6,
+                    "targets"   : 7,
                     "orderable" : true
                 }
             ];
@@ -177,7 +184,7 @@ var userModule = (function() {
                 }
                 columnDefs.push(
                 {
-                    "targets"   : 7,
+                    "targets"   : 8,
                     "orderable" : true,
                     "render"    : function (data, type, row) {
                         if(!data) {
@@ -190,7 +197,7 @@ var userModule = (function() {
 
             if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
                 columnDefs.push({
-                    "targets"   : 10,
+                    "targets"   : 11,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
                         var icons = [];
