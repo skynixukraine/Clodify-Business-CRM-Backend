@@ -243,7 +243,8 @@ class ReportController extends DefaultController
                 $model->id,
                 $task,
                 date("d/m/Y", strtotime($model->date_added)),
-                $customer->user->first_name . ' ' . $customer->user->last_name . '<br>' . $model->getProject()->one()->name,
+                $customer ? $customer->user->first_name . ' ' . $customer->user->last_name . '<br>' . $model->getProject()->one()->name
+                    : 'Customer NOT SET',
                 /*(User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM]) &&
                 ($aliasUser != null) ?
                     User::findOne($model->user_id)->first_name . " " .
