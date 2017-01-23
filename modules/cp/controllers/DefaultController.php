@@ -34,7 +34,7 @@ class DefaultController extends Controller
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => [ '@' ],
+                        'roles' => [ User::ROLE_DEV, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_CLIENT, User::ROLE_FIN ],
                     ],
                 ],
             ],
