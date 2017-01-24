@@ -42,7 +42,9 @@
 #w0[action="/user/index"] .container-fluid .col-lg-2 .is_active {
     display:inline-block;
 }
-
+.content .toolbar {
+    float:left;
+}
 .submit-form {
     float: right;
     margin: 10px 15px 0 10px;
