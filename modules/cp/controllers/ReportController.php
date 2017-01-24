@@ -272,7 +272,7 @@ class ReportController extends DefaultController
             ];
         }
 
-        $totalHours = gmdate('H:i', floor($query->sum(Report::tableName() . '.hours') * 3600));
+        $totalHours = self::timeLength($query->sum(Report::tableName() . '.hours') * 3600);
         $totalCost = '$' . $query->sum(Report::tableName() . '.cost');
 
 
@@ -287,6 +287,13 @@ class ReportController extends DefaultController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
+    }
+
+    public static function timeLength($sec)
+    {
+        $m=floor($sec / 60) % 60;
+        $h=floor($sec / 3600);
+        return $h.":".substr("0".$m,-2);
     }
 
 }
