@@ -234,6 +234,10 @@ class ContractController extends DefaultController
 
             $pdf = new mPDF();
             $pdf->WriteHTML($html);
+
+            if (!is_dir('../data/contracts/')) {
+                mkdir('../data/contracts/', 0777);
+            }
             $pdf->Output('../data/contracts/' . $model->contract_id . '.pdf', 'F');
 
             if ((file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf')))) {
