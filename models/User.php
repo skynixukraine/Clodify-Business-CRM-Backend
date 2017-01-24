@@ -38,6 +38,8 @@ use yii\web\UploadedFile;
  * @property integer $is_delete
  * @property string $photo
  * @property string $sing
+ * @property string $bank_account_en
+ * @property string $bank_account_ua
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -49,13 +51,16 @@ use yii\web\UploadedFile;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    const ROLE_ADMIN = "ADMIN";
-    const ROLE_PM = "PM";
-    const ROLE_DEV = "DEV";
-    const ROLE_CLIENT = "CLIENT";
-    const ROLE_FIN = "FIN";
-    const ROLE_GUEST = "GUEST";
-    const ROLE_SALES = "SALES";
+    const ROLE_ADMIN    = "ADMIN";
+    const ROLE_PM       = "PM";
+    const ROLE_DEV      = "DEV";
+    const ROLE_CLIENT   = "CLIENT";
+    const ROLE_FIN      = "FIN";
+    const ROLE_GUEST    = "GUEST";
+    const ROLE_SALES    = "SALES";
+    
+    const ACTIVE_USERS  = 1;
+    const DELETED_USERS = 1;
 
     public $rawPassword;
 
@@ -84,9 +89,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            [['password', 'email', 'first_name', 'last_name', 'role'], 'required', 'except'=>'settings'],
+            [['password', 'email'], 'required', 'except'=>'settings'],
+            [['first_name', 'last_name', 'role'], 'required', 'except'=>['settings','api-login']],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            [['email'], 'unique'],
+            [['email'], 'unique', 'except'=>'api-login'],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
@@ -97,6 +103,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
+            [['bank_account_ua', 'bank_account_en'], 'string']
 
         ];
     }
@@ -550,6 +557,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
 
+    }
+
+    public function getUserSingPath()
+    {
+        return Yii::getAlias('@app') .  '/data/' . $this->id . '/sing/' . $this->sing;
     }
 
     public static function assignProject($project)

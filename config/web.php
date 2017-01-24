@@ -1,7 +1,7 @@
 <?php
 
 $params = require(__DIR__ . '/params.php');
-
+$route = require(__DIR__ . '/route.php');
 
 $config = [
     'id' => 'basic',
@@ -13,6 +13,9 @@ $config = [
         ],
         'ExtensionPackager' => [
             'class' => 'app\modules\ExtensionPackager\ExtensionPackager',
+        ],
+        'api' => [
+            'class' => 'app\modules\api\Module',
         ],
     ],
 
@@ -56,17 +59,13 @@ $config = [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-                //'/' => '/cp/default/index',
-                //'/s/<shortcode>' => '/site/survey',
-		'site/<action>'                           => 'site/<action>',
-		'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
-		'<module>/<controller>/<action>/<id:\d+>' => 'cp/<module>/<controller>/<action>/<id:\d+>',
-		'<controller>/<action>'             	  => 'cp/<controller>/<action>',
-                'invoice/create/<id:\d+>'  	      => 'cp/invoice/create',
+            'rules' =>array_merge([
+                '<controller>/<action>'                     => '<controller>/<action>',
+                '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>/<id:\d+>',
+                '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>',
                 'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
 
-            ],
+            ], $route),
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
