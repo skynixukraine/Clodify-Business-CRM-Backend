@@ -180,12 +180,11 @@ class InvoiceController extends DefaultController
 
     }
 
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model      = new Invoice();
         $contract   = null;
-        if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
-            ( $contract = Contract::findOne( $id ))) {
+        if ( $id && ( $contract = Contract::findOne( $id )) ) {
 
             $model->contract_id     = $contract->id;
             $model->contract_number = $contract->contract_id;

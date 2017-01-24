@@ -61,9 +61,8 @@ $config = [
             'showScriptName' => false,
             'rules' =>array_merge([
                 '<controller>/<action>'                     => '<controller>/<action>',
-                '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>',
                 '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>/<id:\d+>',
-                'invoice/create/<id:\d+>'  	                => 'cp/invoice/create',
+                '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>',
                 'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
 
             ], $route),
