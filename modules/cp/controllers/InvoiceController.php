@@ -213,7 +213,6 @@ class InvoiceController extends DefaultController
             }
 
             if ($model->validate() && $model->save()) {
-                $contract->save();
                 Yii::$app->getSession()
                             ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }
