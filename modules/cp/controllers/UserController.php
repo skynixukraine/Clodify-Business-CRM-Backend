@@ -123,18 +123,32 @@ class UserController extends DefaultController {
             $query = User::find()->where(['is_active' => 1])->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
         }
 
-        //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN except of themselves
+        //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN, FIN except of themselves
         if( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
             $query = User::find()->where(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
                 ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
         }
 
-        //CLIENT can see only active users with roles DEV, SALES, PM
+        //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN
         if( User::hasPermission([User::ROLE_CLIENT])) {
-            $query = User::find()->where(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM]])
-                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
+            $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+            $arrayWorkers = [];
+            foreach($workers as $worker){
+                $arrayWorkers[]= $worker->user_id;
+            }
+            $devUser = '';
+            if(!empty($arrayWorkers)) {
+                $devUser = implode(', ' , $arrayWorkers);
+            }
+            else{
+                $devUser = 'null';
+            }
+
+            $query = User::find()
+                ->where(User::tableName() . '.id IN (' . $devUser . ')')
+                ->andWhere(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]]);
         }
 
         //column ID is shown only to ADMIN
@@ -193,9 +207,9 @@ class UserController extends DefaultController {
         foreach ( $activeRecordsData as $model ) {
                 $row = array();
                 if ($model->date_salary_up) {
-                    $salary_up = date('d/m/Y', strtotime($model->date_salary_up));
+                    $salary_up =  DateUtil:: convertDateTimeWithoutHours($model->date_salary_up);
                 } else {
-                    $salary_up = '';
+                    $salary_up = 'No Changes';
                 }
 
                 if ($model->photo) {
