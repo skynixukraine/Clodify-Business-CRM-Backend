@@ -47,13 +47,8 @@ class UserController extends DefaultController {
                     [
                         'actions'   => [ 'find', 'index', 'loginback'],
                         'allow'     => true,
-                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
-                    ],
-                    [
-                        'actions'   => ['loginback'],
-                        'allow'     => true,
-                        'roles'     => [User::ROLE_DEV],
-                    ],
+                        'roles'     => [User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_DEV],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -112,88 +107,59 @@ class UserController extends DefaultController {
     /** Value table (Manage Users) fields, filters, search */
     public function actionFind()
     {
-
-
         $order          = Yii::$app->request->getQueryParam("order");
         $search         = Yii::$app->request->getQueryParam("search");
         $keyword        = ( !empty($search['value']) ? $search['value'] : null);
 		$role			= Yii::$app->request->getQueryParam("role");
 		$active			= Yii::$app->request->getQueryParam("is_active");
-		
-        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+
+        //Admin can see all users (active & suspended)
+        if( User::hasPermission([User::ROLE_ADMIN])) {
 
             $query = User::find();
         }
-
-        if( User::hasPermission([User::ROLE_SALES, User::ROLE_PM])) {
-
-            /* get all project id for asigned to sales */
-            $all_project_ids = ProjectDeveloper::find()->where('user_id=:id AND is_sales=true',
-                [
-                    ':id' => Yii::$app->user->id
-                ]
-            )->all();
-
-            /** array with all project id wich asigned to sales*/
-            $projectId = [];
-                foreach($all_project_ids as $project){
-
-                    $projectId[] = $project->project_id;
-
-                }
-            if(!empty($projectId)) {
-                $devUser = implode(', ' , $projectId);
-            }
-            else{
-                $devUser = 'null';
-            }
-            if (User::hasPermission([User::ROLE_PM])) {
-                $query = User::find()
-                    ->leftJoin(ProjectDeveloper::tableName(),
-                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
-                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
-                    ->andWhere([User::tableName() . '.role' => User::ROLE_DEV])
-                    ->groupBy('user_id');
-            } else {
-                $query = User::find()
-                    ->leftJoin(ProjectDeveloper::tableName(),
-                        ProjectDeveloper::tableName() . '.user_id = ' . User::tableName() . '.id')
-                    ->where(ProjectDeveloper::tableName() . '.project_id IN (' . $devUser . ')')
-                    ->groupBy('user_id');
-            }
+        //FIN and SALES can see all active users (except of themselves)
+        if(User::hasPermission([User::ROLE_FIN, User::ROLE_SALES])) {
+            $query = User::find()->where(['is_active' => 1])->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
         }
-        if( User::hasPermission([User::ROLE_CLIENT])){
 
-            $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
-            $arrayWorkers = [];
-            foreach($workers as $worker){
-                $arrayWorkers[]= $worker->user_id;
-            }
-            $devUser = '';
-            if(!empty($arrayWorkers)) {
-                $devUser = implode(', ' , $arrayWorkers);
-            }
-            else{
-                $devUser = 'null';
-            }
-
-            $query = User::find()
-                    ->where(User::tableName() . '.id IN (' . $devUser . ')') ;
+        //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN except of themselves
+        if( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
+            $query = User::find()->where(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
         }
-        $columns        = [
-            'id',
-            'photo',
-            'first_name',
-            'role',
-            'email',
-            'company',
-            'phone',
-            'date_login',
-            'date_signup',
-            'is_active',
-            'salary',
-            'date_salary_up',
-        ];
+
+        //CLIENT can see only active users with roles DEV, SALES, PM
+        if( User::hasPermission([User::ROLE_CLIENT])) {
+            $query = User::find()->where(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
+        }
+
+        //column ID is shown only to ADMIN
+        if(  User::hasPermission([User::ROLE_ADMIN])) {
+            $columns [] = 'id';
+        }
+
+        $columns   []     = 'photo';
+        $columns   []     = 'first_name';
+
+        if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])){
+            $columns   []     = 'role';
+        }
+        $columns [] = 'email';
+        $columns [] = 'phone';
+        $columns [] = 'date_login';
+        $columns [] = 'date_signup';
+        if (User::hasPermission([User::ROLE_ADMIN])) {
+            $columns [] = 'is_active';
+        }
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            $columns[] = 'salary';
+            $columns[] = 'date_salary_up';
+        }
+
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -205,6 +171,7 @@ class UserController extends DefaultController {
                 ['like', 'phone', $keyword],
                 ['like', 'email', $keyword]
             ]);
+
 
         $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
 
@@ -220,36 +187,48 @@ class UserController extends DefaultController {
 
         $activeRecordsData = $dataTable->getData();
         $list = array();
+
+
         /* @var $model \app\models\User */
         foreach ( $activeRecordsData as $model ) {
-            if ($model->date_salary_up){
-                $salary_up = date('d/m/Y', strtotime($model->date_salary_up));
-            } else {
-                $salary_up = '';
-            }
+                $row = array();
+                if ($model->date_salary_up) {
+                    $salary_up = date('d/m/Y', strtotime($model->date_salary_up));
+                } else {
+                    $salary_up = '';
+                }
 
-        if( $model->photo ) {
-            $photo  = urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
-                '/data/'.$model->id.'/photo/'.$model->photo ]));
-        } else {
-            $photo = "/img/avatar.png";
-        }
-            $list[] = [
-                $model->id,
-                $photo,
-                $model->first_name . " " . $model->last_name,
-                $model->role,
-                $model->email,
-                $model->phone,
-                DateUtil::convertDatetimeWithoutSecund($model->date_login),
-                DateUtil::convertDateTimeWithoutHours($model->date_signup),
-                User::hasPermission([User::ROLE_ADMIN]) ? ( $model->is_active == 1 ? "Active" : "Suspended" ) : null,
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ?  '$' . number_format($model->salary) : null,
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN ]) ? $salary_up:null,
-                $model->is_delete,
-                $model->public_profile_key
-            ];
-        }
+                if ($model->photo) {
+                    $photo = urldecode(Url::to(['/cp/index/getphoto', 'entry' => Yii::getAlias('@app') .
+                        '/data/' . $model->id . '/photo/' . $model->photo]));
+                } else {
+                    $photo = "/img/avatar.png";
+                }
+
+                if (User::hasPermission([User::ROLE_ADMIN])) {
+                    $row[] = $model->id;
+                }
+                $row [] = $photo;
+                $row [] = $model->first_name . " " . $model->last_name;
+
+                if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+                    $row  [] = $model->role;
+                }
+
+                $row [] = $model->email;
+                $row [] = $model->phone;
+                $row [] = DateUtil::convertDatetimeWithoutSecund($model->date_login);
+                $row [] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
+                if (User::hasPermission([User::ROLE_ADMIN])) {
+                    $row [] = $model->is_active == 1 ? "Active" : "Suspended";
+                }
+                if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+                    $row [] = '$' . number_format($model->salary);
+                    $row [] = $salary_up;
+                }
+
+                $list[] = $row;
+            }
 
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),

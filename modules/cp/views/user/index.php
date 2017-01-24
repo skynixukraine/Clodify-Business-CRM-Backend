@@ -34,46 +34,30 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     ];
 }
 
-  $form = ActiveForm::begin();
-        /** @var $model User */ ?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-2">
-            <?php 
-			echo Html::label('Roles:');
-			$roles = ArrayHelper::merge(['' => 'All Roles'], User::getRoles());
-			echo Html::dropDownList('roles', null, $roles, ['class'=>"form-control"]);
-			?>
-		</div>
-		<div class="col-lg-2">
-			<?php echo Html::label('Active Only: ');?>
-			<div class="is_active"> <?php echo Html::checkbox('is_active', true ); ?> </div>
-			
-		</div>
-    </div>
-</div>
-
-<?php ActiveForm::end();?>
-
+?>
 <table id="user-table" class="table table-hover box">
     <thead>
     <tr>
-        <th class="id-col"><?=Yii::t('app', 'ID')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
+            <th><?=Yii::t('app', 'ID')?></th>
+        <?php endif;?>
         <th><?=Yii::t('app', 'Photo')?></th>
         <th><?=Yii::t('app', 'Name')?></th>
-        <th><?=Yii::t('app', 'Role')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])):?>
+            <th><?=Yii::t('app', 'Role')?></th>
+        <?php endif;?>
         <th><?=Yii::t('app', 'Email')?></th>
         <th><?=Yii::t('app', 'Phone')?></th>
         <th class="date-col"><?=Yii::t('app', 'Last Login')?></th>
         <th class="date-col"><?=Yii::t('app', 'Joined')?></th>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
-            <th class="date-col"><?=Yii::t('app', 'Status')?></th>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
+            <th><?=Yii::t('app', 'Status')?></th>
         <?php endif;?>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) : ?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])):?>
             <th class="date-col"><?=Yii::t('app', 'Salary')?></th>
             <th class="date-col"><?=Yii::t('app', 'Salary Up')?></th>
         <?php endif;?>
-        <?php if ( User::hasPermission([User::ROLE_ADMIN])) : ?>
+        <?php if ( User::hasPermission([User::ROLE_ADMIN])):?>
             <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
         <?php endif;?>
     </tr>
@@ -84,6 +68,8 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
     $(function(){
 
         userModule.init({
+            canSeeID        : '<?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>',
+            canSeeRole      : '<?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>',
             editUrl         : '<?=Url::to(['user/update'])?>',
             deleteUrl       : '<?=Url::to(['user/delete'])?>',
             findUrl         : '<?=Url::to(['user/find'])?>',
@@ -92,8 +78,11 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             canDelete       : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canLoginAs      : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canEdit         : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
-            showSales       : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN]) ? 'true' : 'false')?>,
-            showUserStatus  : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            showSales       : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
+            showUserStatus  : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canFilterByRole   : '<?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>',
+            canFilterByStatus : '<?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>'
+
         })
     });
 
