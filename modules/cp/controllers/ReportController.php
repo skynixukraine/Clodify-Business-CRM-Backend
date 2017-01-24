@@ -291,7 +291,7 @@ class ReportController extends DefaultController
 
     public static function timeLength($sec)
     {
-        $m=floor($sec / 60) % 60;
+        $m=floor(($sec / 60) % 60);
         $h=floor($sec / 3600);
         return $h.":".substr("0".$m,-2);
     }
