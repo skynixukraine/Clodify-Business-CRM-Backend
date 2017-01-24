@@ -62,7 +62,6 @@ $config = [
             'rules' =>array_merge([
                 '<controller>/<action>'                     => '<controller>/<action>',
                 '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>',
-                '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>/<id:\d+>',
                 'invoice/create/<id:\d+>'  	                => 'cp/invoice/create',
                 'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
 
