@@ -133,7 +133,7 @@ class UserController extends DefaultController {
         //CLIENT can see only active users with roles DEV, SALES, PM
         if( User::hasPermission([User::ROLE_CLIENT])) {
             $query = User::find()->where(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM]])
                 ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
         }
 
