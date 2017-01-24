@@ -219,7 +219,7 @@ class ProjectController extends DefaultController
             $row[] = $newDateStart;
             $row[] = $newDateEnd;
             $row[] = implode(", ", $developersNames);
-            $row[] = implode(", ", $customersNames);
+            $row[] = $customersNames ? implode(", ", $customersNames): "Customer Not Set";
             $row[] = $model->status;
 
             $list[] = $row;

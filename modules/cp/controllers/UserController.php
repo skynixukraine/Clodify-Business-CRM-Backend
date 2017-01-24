@@ -8,6 +8,7 @@
 
 namespace app\modules\cp\controllers;
 use app\components\DateUtil;
+use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\SiteUser;
 use app\models\Visit;
@@ -82,6 +83,15 @@ class UserController extends DefaultController {
             $model->date_login = null;
             $model->is_delete = 1;
             $model->save(true, ['is_delete', 'date_login', 'date_signup']);
+
+            $projectCustomer = ProjectCustomer::find()->where(['user_id' => $id])->all();
+            //When we are deleting client, we should delete all relations between this customer and his projects
+            if( $projectCustomer ) {
+                foreach ($projectCustomer as $projectCustomerRelation) {
+                    $projectCustomerRelation->delete();
+                }
+            }
+
             return json_encode([
                 "message"   => Yii::t("app", "User # " . $id ." has been deleted "),
             ]);
