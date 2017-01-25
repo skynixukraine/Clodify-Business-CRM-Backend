@@ -180,7 +180,7 @@ class InvoiceController extends DefaultController
 
     }
 
-    public function actionCreate($id)
+    public function actionCreate($id = null)
     {
         $model      = new Invoice();
         $contract   = null;
