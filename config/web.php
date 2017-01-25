@@ -22,6 +22,7 @@ $config = [
     'timeZone'=> 'Europe/Kiev',
     'language' => 'en-US',
     'components' => [
+        'Helper'    => 'app\components\Helper',
         'assetManager' => [
             'bundles' => [
                 'yii\bootstrap\BootstrapAsset' => [
