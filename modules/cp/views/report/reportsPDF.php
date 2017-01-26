@@ -47,16 +47,27 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
          font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 400; text-align: center;">
             <h1><strong>Reports </strong></h1><span>
             <?php
-                $generated  = ' is generated for ';
-                if(isset($filters['user_name'])) {
-                    echo $generated . ' user ' . $filters['user_name'];
-                }
-                if(isset($filters['project_name'])) {
-                    echo $generated . ' project '. $filters['project_name'];
-                }
-                if(isset($filters['keyword'])) {
-                    echo $generated . ' by keyword '. $filters['keyword'];
-                }
+
+                 if( (isset($filters['user_name']) || isset($filters['project_name']) || isset($filters['keyword']))) {
+                     $text = ' is generated for ';
+
+                     if(isset($filters['user_name'])) {
+                         $text .= ' user ' . $filters['user_name'] . ', ';
+                     }
+
+                     if(isset($filters['project_name'])) {
+                         $text .=  ' project '. $filters['project_name'] . ', ';
+                     }
+                     if(isset($filters['keyword'])) {
+                         $text .= ' keyword '. $filters['keyword'] . '.';
+                     }
+
+                     $text = trim($text);
+                     if(substr($text, -1) == ',') {
+                         $text[strlen($text)-1] = '.';
+                     }
+                     echo $text;
+                 }
             ?>
 
     </tr>
@@ -90,7 +101,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
         </td>
         <td colspan="1" width="100" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
              font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            <?= Html::encode($report['project'])?>
+            <?= $report['project']?>
         </td>
         <td colspan="1" width="80" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
              font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">

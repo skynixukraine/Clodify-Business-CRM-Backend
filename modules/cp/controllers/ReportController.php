@@ -96,7 +96,7 @@ class ReportController extends DefaultController
             $filters['keyword'] = $search;
         }
 
-        $fileName .'.pdf';
+        $fileName .= $fileName. '.pdf';
 
         $html = $this->renderPartial('reportsPDF', [
             'reportData' => $data['data'],
@@ -107,7 +107,6 @@ class ReportController extends DefaultController
 
         $pdf = new mPDF();
         $pdf->WriteHTML($html);
-
         $pdf->Output('../data/reports/'.$fileName, 'F');
 
         header("Content-type:application/pdf"); //for pdf file
