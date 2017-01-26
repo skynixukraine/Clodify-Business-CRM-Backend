@@ -125,7 +125,7 @@ $this->params['menu'] = [
                 $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>
-            <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
+            <?php echo $form->field( $model, 'total_hours', ['enableClientValidation' => false])->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?php $payMethods = PaymentMethod::find()->all();
