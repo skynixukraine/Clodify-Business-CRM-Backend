@@ -21,6 +21,8 @@ use app\components\AccessRule;
 use app\components\DataTable;
 use app\components\DateUtil;
 use mPDF;
+
+
 class ReportController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -364,7 +366,7 @@ class ReportController extends DefaultController
 
         }
 
-        $totalHours = gmdate('H:i', floor($query->sum(Report::tableName() . '.hours') * 3600));
+        $totalHours = Yii::$app->Helper->timeLength(($query->sum(Report::tableName() . '.hours') * 3600));
         $totalCost = '$' . $query->sum(Report::tableName() . '.cost');
 
 
