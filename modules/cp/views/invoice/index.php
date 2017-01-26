@@ -18,12 +18,12 @@ $this->title                    = Yii::t("app", "Invoices");
 if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES] )) {
     $this->params['breadcrumbs'][] = $this->title;
 
-    $this->params['menu'] = [
+/*    $this->params['menu'] = [
         [
             'label' => Yii::t('app', 'Create an Invoice'),
             'url' => Url::to(['invoice/create'])
         ]
-    ];
+    ];*/
 }
 ?>
 
