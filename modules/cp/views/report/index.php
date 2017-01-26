@@ -102,10 +102,11 @@ $this->params['menu'] = [
         </div>
     </div>
 </div>
+<?= Html::hiddenInput('data-reports', '', ['id' => 'data-reports']) ?>
 <?php ActiveForm::end();?>
 
 <div style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
-<!--    --><?//= Html::a('Download PDF', ['report/download?id=']) ?>
+<?= Html::a('Download PDF', ['report/download'], ['id' => 'download-reports']) ?>
     Total Hours: <span id="hours" style="font-weight: bold;"></span> hours
     <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) :?>
     , Total Cost: <span id="cost" style="font-weight: bold;"></span>
@@ -149,6 +150,7 @@ exit();*/
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
             invoiceUrl  : '<?=Url::to(['invoice/view?id='])?>',
+            downloadUrl : '<?=Url::to(['report/download'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canSeeCost  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
