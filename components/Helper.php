@@ -11,13 +11,25 @@ namespace app\components;
 class Helper
 {
 
-    /*  Formatting time in seconds to  hours:minutes look */
-    public function timeLength($sec)
+    /*
+    Formatting time in seconds to  06:30 look if parameter is integer
+    Formatting time  to 6.5 look if parameter is string
+    */
+    public function timeLength($time)
     {
-        $m=floor(($sec / 60) % 60);
-        $h=floor($sec / 3600);
+        if (is_string($time)) {
+            $timeArr = explode(':', $time);
+            $hours = $timeArr[0];
+            $minutes = round($timeArr[1]/60*100, 2);
 
-        return $h.":".substr("0".$m,-2);
+            return (float) $hours . '.' . $minutes;
+        } elseif (is_float($time)) {
+            $m=floor(($time / 60) % 60);
+            $h=floor($time / 3600);
+
+            return $h.":".substr("0".$m,-2);
+        }
+
     }
 
 }

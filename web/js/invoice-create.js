@@ -149,23 +149,30 @@ var invoiceCreateModule = (function() {
             });
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
-                var sum = 0;
                 var MyRows = $('#invoice-create-table').find('tr');
+                var minutes =0, hours = 0;
+
                 for (var i = 1; i < MyRows.length; i++){
 
-                    var hours = $(MyRows[i]).find('td:eq(5)').html();
-                    if(hours != '') {
-
-                        sum += parseFloat(hours);
-
+                    var timeLength = $(MyRows[i]).find('td:eq(5)').html();
+                    if(timeLength != '') {
+                        time = timeLength.split(':');
+                        hours += Number(time[0]);
+                        minutes += Number(time[1]);
+                        if (minutes >= 60) {
+                            hours += 1;
+                            minutes -= 60;
+                        }
+                        totalHours = hours + ':' + minutes;
                     }
 
                 }
-                if( isNaN(sum) || sum == null ) {
+                if( totalHours == null ) {
                     $(document).find('#invoice-total_hours').val('');
+                    console.log(1)
 
                 } else {
-                    $(document).find('#invoice-total_hours').val(sum.toFixed(2));
+                    $(document).find('#invoice-total_hours').val(totalHours);
 
                 }
             });
