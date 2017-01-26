@@ -17,13 +17,13 @@ class Helper
     */
     public function timeLength($time)
     {
-        if (gettype($time) == 'string') {
+        if (is_string($time)) {
             $timeArr = explode(':', $time);
             $hours = $timeArr[0];
             $minutes = round($timeArr[1]/60*100, 2);
 
             return (float) $hours . '.' . $minutes;
-        } elseif (gettype($time) == 'integer') {
+        } elseif (is_float($time)) {
             $m=floor(($time / 60) % 60);
             $h=floor($time / 3600);
 

@@ -120,8 +120,12 @@ class ReportController extends DefaultController
     //Prepare data for PDF and table formats
     public function prepareData( $data, $output = 'table' )
     {
-        $order              = $data["order"];
-        $search             = $data["search"];
+        $order = null;
+        $search = null;
+        if (isset($data['order']) && isset($data['search'])) {
+        $order = $data["order"];
+        $search = $data["search"];
+        }
         $projectId = $usersId = $salesId = $dateStart = $dateEnd = $customerId = null;
 
         if(isset($data["project_id"])) {
