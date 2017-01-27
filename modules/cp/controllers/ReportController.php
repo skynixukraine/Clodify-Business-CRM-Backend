@@ -304,11 +304,11 @@ class ReportController extends DefaultController
                 $aliasUser = User::findOne( $pD->alias_user_id );
 
             }
-            if (strlen($model->task) >= 35) {
-                $task = substr($model->task, 0, 35) . '...';
-            } else {
+            //if (strlen($model->task) >= 35) {
+              //  $task = substr($model->task, 0, 35) . '...';
+           // } else {
                 $task = $model->task;
-            }
+           // }
 
             $customer = ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
 
