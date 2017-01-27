@@ -146,7 +146,11 @@ class ReportController extends DefaultController
 
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
 
-        $query              = Report::find();
+        $query              = Report::find()
+            ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
+            ->where(Project::tableName() . '.status IN ("' . Project::STATUS_NEW . '", "' . Project::STATUS_INPROGRESS . '")')
+            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"');
 
         $columns        = [
             'id',
@@ -171,7 +175,7 @@ class ReportController extends DefaultController
 
         if( isset( $columns[$order[0]['column']]) ){
 
-            $dataTable->setOrder( $columns[$order[0]['column']], $order[0]['dir']);
+            $dataTable->setOrder(Report::tableName() . '.' . $columns[$order[0]['column']], $order[0]['dir']);
 
         }else{
 
@@ -291,7 +295,7 @@ class ReportController extends DefaultController
 
         }
 
-        $dataTable->setFilter('is_delete=0');
+        $dataTable->setFilter(Report::tableName() . '.is_delete=0');
 
         $activeRecordsData = $dataTable->getData();
         $list = [];

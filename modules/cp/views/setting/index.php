@@ -110,7 +110,7 @@ $this->params['menu'] = [
                         <?php echo $form->field( $model, 'tags' )->textInput()->label( 'Your primary skills' );?>
                         <?php echo $form->field( $model, 'about', [
                             'options' => ['style' => 'max-width: 500px'],
-                             ])->textarea(['style'=>'max-height: 300px'])->label('About Me');?>
+                        ])->textarea(['style'=>'max-height: 300px'])->label('About Me');?>
                     </fieldset>
                 </div>
             </div>
@@ -249,25 +249,36 @@ $this->params['menu'] = [
                                 <th><?=Yii::t('app', 'Actions')?></th>
                             </tr>
                             </thead>
-                            <?php $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                            <?php $projects = Project::ProjectsCurrentUserAllStatuses(Yii::$app->user->id);
                             foreach($projects as $project):?>
                                 <tbody>
                                 <tr>
-                                    <?php /** @var $project Project */?>
+                                    <?php /** @var $project Project */
+                                    $status = $project->status;
+                                    $statusProgress = $project->getProjectDevelopers()
+                                        ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])->one()->status
+                                    ?>
                                     <td><?= Html::encode($project->getCustomers()->one() ? $project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name : '')?></td>
                                     <td><?= Html::encode($project->name)?></td>
-                                    <td><?= Html::encode($project->getProjectDevelopers()->one()->status )?></td>
-                                    <?php $active = ($project->getProjectDevelopers()->one()->status) == (ProjectDeveloper::STATUS_ACTIVE)?>
-                                    <td>
-                                        <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
-                                        <input class="<?=$active?'activate':'suspend'?>" type="checkbox"
-                                            <?=$active ? 'checked' : '' ?> style="cursor: pointer"
-                                               name="Project[<?=$project->id?>]" data-toggle="tooltip"
-                                               data-placement="top" title="<?=Yii::t('app', $active
-                                            ? 'Untick the checkbox to hide the project from your lists'
-                                            : 'Tick the checkbox to start using the project for your reports')?>"
-                                        />
-                                    </td>
+                                    <td><?= Html::encode($statusProgress)?></td>
+                                    <?php $active = $statusProgress == (ProjectDeveloper::STATUS_ACTIVE);
+                                    if ($status == Project::STATUS_NEW || $status == Project::STATUS_INPROGRESS) : ?>
+                                        <td>
+                                            <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
+                                            <input class="activate" type="checkbox"
+                                                <?=$active ? 'checked' : '' ?> style="cursor: pointer"
+                                                   name="Project[<?=$project->id?>]" data-toggle="tooltip"
+                                                   data-placement="top" title="<?=Yii::t('app', $active
+                                                ? 'Untick the checkbox to hide the project from your lists'
+                                                : 'Tick the checkbox to start using the project for your reports')?>"
+                                            />
+                                        </td>
+                                    <?php else: ?>
+                                        <td>
+                                            <?=$status?>
+                                        </td>
+                                    <?php endif; ?>
+
                                 </tr>
                                 </tbody>
                             <?php endforeach;?>
@@ -288,23 +299,23 @@ $this->params['menu'] = [
                                     <?=$bank_account_en?>
                                 <?php endif;?>
 	                        </textarea>
-                            <input type="submit" value = 'Save'>
-                            <script>
-                                toolbarConfig = [
-                                    { name: 'clipboard', groups: [ 'clipboard' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
-                                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
-                                    { name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
-                                    { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
-                                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-                                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-                                    { name: 'save', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-                                ];
-                                CKEDITOR.replace( 'editorEn', {
-                                    height: 260,
-                                    toolbar: toolbarConfig
-                                } );
+                                <input type="submit" value = 'Save'>
+                                <script>
+                                    toolbarConfig = [
+                                        { name: 'clipboard', groups: [ 'clipboard' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
+                                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+                                        { name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
+                                        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+                                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+                                        { name: 'save', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+                                    ];
+                                    CKEDITOR.replace( 'editorEn', {
+                                        height: 260,
+                                        toolbar: toolbarConfig
+                                    } );
 
-                            </script>
+                                </script>
                         </fieldset>
                         <fieldset class = "col-sm-6">
                             <h3>Bank Account(Ukrainian)</h3>
@@ -313,7 +324,7 @@ $this->params['menu'] = [
                                          <?=$bank_account_ua?>
                                      <?php endif;?>
                             </textarea>
-                                <script>
+                            <script>
                                 CKEDITOR.replace( 'editorUa', {
                                     height: 260,
                                     toolbar: toolbarConfig
@@ -326,9 +337,9 @@ $this->params['menu'] = [
                 </div>
             <?php endif;?>
         </div>
-        </div>
-        <?php ActiveForm::end();?>
     </div>
+    <?php ActiveForm::end();?>
+</div>
 </div>
 <script>
     $(function() {

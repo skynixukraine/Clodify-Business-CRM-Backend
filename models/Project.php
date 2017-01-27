@@ -235,6 +235,17 @@ class Project extends \yii\db\ActiveRecord
                     Project::tableName() . '.status IN ("' . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_NEW . '")')
             ->all();
     }
+    // Returns projects with all available statuses
+    public static function ProjectsCurrentUserAllStatuses($curentUser)
+    {
+        return self::find()
+            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=id')
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=id')
+            ->where(Project::tableName() . '.is_delete=0 AND ' .
+                ProjectDeveloper::tableName() . '.user_id=' . $curentUser . ' AND ' .
+                ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
+            ->all();
+    }
     public static function ProjectsCurrentClient($curentClient)
     {
         return self::find()
