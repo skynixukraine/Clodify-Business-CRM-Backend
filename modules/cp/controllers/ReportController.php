@@ -96,7 +96,7 @@ class ReportController extends DefaultController
             $filters['keyword'] = $search;
         }
 
-        $fileName .= $fileName. '.pdf';
+        $fileName .=  '.pdf';
 
         $html = $this->renderPartial('reportsPDF', [
             'reportData' => $data['data'],
