@@ -137,7 +137,7 @@ var userModule = (function() {
                     "targets"   : target,
                     "orderable" : false,
                     "render"    :function(data, type, row) {
-                        return '<img src="' + data + '" class="img-circle" style="max-width: 40px; height: 40px; alt = "User Image" />';
+                        return '<img src="' + data + '" class="img-circle" style="width: 40px; height: 40px; alt = "User Image" />';
                     }
                 }
             );
