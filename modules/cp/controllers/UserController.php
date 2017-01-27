@@ -154,7 +154,7 @@ class UserController extends DefaultController {
             else{
                 $devUser = 'null';
             }
-
+            
             $query = User::find()
                 ->where(User::tableName() . '.id IN (' . $devUser . ')')
                 ->andWhere(['is_active' => 1])
