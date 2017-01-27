@@ -96,7 +96,7 @@ class ReportController extends DefaultController
             $filters['keyword'] = $search;
         }
 
-        $fileName .'.pdf';
+        $fileName .=  '.pdf';
 
         $html = $this->renderPartial('reportsPDF', [
             'reportData' => $data['data'],
@@ -107,7 +107,6 @@ class ReportController extends DefaultController
 
         $pdf = new mPDF();
         $pdf->WriteHTML($html);
-
         $pdf->Output('../data/reports/'.$fileName, 'F');
 
         header("Content-type:application/pdf"); //for pdf file
@@ -309,11 +308,11 @@ class ReportController extends DefaultController
                 $aliasUser = User::findOne( $pD->alias_user_id );
 
             }
-            if (strlen($model->task) >= 35) {
-                $task = substr($model->task, 0, 35) . '...';
-            } else {
+            //if (strlen($model->task) >= 35) {
+              //  $task = substr($model->task, 0, 35) . '...';
+           // } else {
                 $task = $model->task;
-            }
+           // }
 
             $customer = ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
 
