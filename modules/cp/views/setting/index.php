@@ -249,28 +249,36 @@ $this->params['menu'] = [
                                 <th><?=Yii::t('app', 'Actions')?></th>
                             </tr>
                             </thead>
-                            <?php $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                            <?php $projects = Project::ProjectsCurrentUserAllStatuses(Yii::$app->user->id);
                             foreach($projects as $project):?>
                                 <tbody>
                                 <tr>
                                     <?php /** @var $project Project */
-                                    $status = $project->getProjectDevelopers()
+                                    $status = $project->status;
+                                    $statusProgress = $project->getProjectDevelopers()
                                         ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])->one()->status
                                     ?>
                                     <td><?= Html::encode($project->getCustomers()->one() ? $project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name : '')?></td>
                                     <td><?= Html::encode($project->name)?></td>
-                                    <td><?= Html::encode($status)?></td>
-                                    <?php $active = $status == (ProjectDeveloper::STATUS_ACTIVE)?>
-                                    <td>
-                                        <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
-                                        <input class="<?=$active?'activate':'suspend'?>" type="checkbox"
-                                            <?=$active ? 'checked' : '' ?> style="cursor: pointer"
-                                               name="Project[<?=$project->id?>]" data-toggle="tooltip"
-                                               data-placement="top" title="<?=Yii::t('app', $active
-                                            ? 'Untick the checkbox to hide the project from your lists'
-                                            : 'Tick the checkbox to start using the project for your reports')?>"
-                                        />
-                                    </td>
+                                    <td><?= Html::encode($statusProgress)?></td>
+                                    <?php $active = $statusProgress == (ProjectDeveloper::STATUS_ACTIVE);
+                                    if ($status == Project::STATUS_NEW || $status == Project::STATUS_INPROGRESS) : ?>
+                                        <td>
+                                            <!--<a href='<?/*= Url::toRoute(['setting/suspend', 'id' => $project->id])*/?>'>-->
+                                            <input class="activate" type="checkbox"
+                                                <?=$active ? 'checked' : '' ?> style="cursor: pointer"
+                                                   name="Project[<?=$project->id?>]" data-toggle="tooltip"
+                                                   data-placement="top" title="<?=Yii::t('app', $active
+                                                ? 'Untick the checkbox to hide the project from your lists'
+                                                : 'Tick the checkbox to start using the project for your reports')?>"
+                                            />
+                                        </td>
+                                    <?php else: ?>
+                                        <td>
+                                            <?=$status?>
+                                        </td>
+                                    <?php endif; ?>
+
                                 </tr>
                                 </tbody>
                             <?php endforeach;?>
