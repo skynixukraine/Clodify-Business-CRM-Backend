@@ -59,7 +59,7 @@ $this->params['menu'] = [
             ?>
 
             <?php
-            $id = null;
+            $id = $model->user_id ? $model->user_id : null;
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);

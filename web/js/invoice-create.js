@@ -144,7 +144,7 @@ var invoiceCreateModule = (function() {
                         }
                     }
                 },
-                "processing": true,
+                "processing": false,
                 "serverSide": true
             });
             dataTable.on( 'draw.dt', function (e, settings, data) {
