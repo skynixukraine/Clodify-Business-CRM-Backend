@@ -299,9 +299,12 @@ class ReportController extends DefaultController
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
+        $totalHours = 0;
+        $totalCost = 0;
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
-
+            $totalHours += $model->hours;
+            $totalCost += $model->cost;
             $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
                 'project_id' => $model->getProject()->one()->id ]);
             //    var_dump($pD);die();
@@ -373,8 +376,8 @@ class ReportController extends DefaultController
 
         }
 
-        $totalHours = Yii::$app->Helper->timeLength(($query->sum(Report::tableName() . '.hours') * 3600));
-        $totalCost = '$' . $query->sum(Report::tableName() . '.cost');
+        $totalHours = Yii::$app->Helper->timeLength($totalHours * 3600);
+        $totalCost = '$' . $totalCost;
 
 
         $data = [

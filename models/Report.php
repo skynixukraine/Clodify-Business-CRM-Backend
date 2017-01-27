@@ -15,6 +15,7 @@ use yii\db\ActiveQuery;
  * @property string $reporter_name
  * @property integer $invoice_id
  * @property double $hours
+ * @property double $cost
  * @property string $task
  * @property string $date_added
  * @property string $date_paid
