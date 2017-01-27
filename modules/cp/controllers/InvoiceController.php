@@ -180,7 +180,7 @@ class InvoiceController extends DefaultController
 
     }
 
-    public function actionCreate($id)
+    public function actionCreate($id = null)
     {
         $model      = new Invoice();
         $contract   = null;
@@ -211,8 +211,11 @@ class InvoiceController extends DefaultController
 
             }
 
+            if ($model->total_hours) {
+                $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
+            }
+
             if ($model->validate() && $model->save()) {
-                $contract->save();
                 Yii::$app->getSession()
                             ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }

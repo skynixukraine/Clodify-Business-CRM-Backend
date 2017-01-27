@@ -26,7 +26,25 @@
 #w0[action="/cp/user/invite"] {
     width: 500px;
 }
+#w0[action="/user/index"] .container-fluid {
+    floadt:left;
+ }
 
+#w0[action="/user/index"] .container-fluid .col-lg-2 label {
+    margin-right:10px;
+}
+#w0[action="/user/index"] .container-fluid .col-lg-2{
+    width:230px;
+}
+#w0[action="/user/index"] .container-fluid .col-lg-2 .form-control{
+    min-width:150px;
+}
+#w0[action="/user/index"] .container-fluid .col-lg-2 .is_active {
+    display:inline-block;
+}
+.content .toolbar {
+    float:left;
+}
 .submit-form {
     float: right;
     margin: 10px 15px 0 10px;
@@ -181,5 +199,6 @@
     background-color:#d2d6de;
 }
 .invoicedReport {
+    background-color: #ffd706;
     background-color: #ffd706;
 }

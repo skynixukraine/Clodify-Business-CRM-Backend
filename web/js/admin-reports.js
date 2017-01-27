@@ -6,6 +6,7 @@ var adminReportModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             findUrl     : '',
+            downloadUrl : '',
             canDelete   : null,
         },
         dataTable,
@@ -58,6 +59,7 @@ var adminReportModule = (function() {
     return {
         init: function( config ){
             cfg = $.extend(cfg, config);
+            console.log(cfg);
             filterProjectsSelect = $( filterProjectsSelect );
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
@@ -196,6 +198,8 @@ var adminReportModule = (function() {
                         for (var i in dataFilter) {
                             data[i] = dataFilter[i];
                         }
+                        //Add data to build PDF report
+                        $('#download-reports').attr('href', cfg.downloadUrl + '?' + decodeURIComponent($.param(data)));
                     }
                 },
                 "processing": true,

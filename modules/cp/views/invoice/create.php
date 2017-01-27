@@ -47,7 +47,7 @@ $this->params['menu'] = [
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
-                echo $form->field($model, 'user_id', ['enableClientValidation' => false])
+                echo $form->field($model, 'user_id')
                     ->dropDownList($listCustomers, [
                         'prompt' => 'Choose...',
                     ])
@@ -90,7 +90,7 @@ $this->params['menu'] = [
                     $listProjects[$project->id] = $project->name;
                 }
             }
-            echo $form->field($model, 'project_id', ['enableClientValidation' => false])
+            echo $form->field($model, 'project_id')
                 ->dropDownList( $listProjects,  [
                     'prompt' => 'All Projects',
                 ] )
@@ -125,7 +125,7 @@ $this->params['menu'] = [
                 $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>
-            <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
+            <?php echo $form->field( $model, 'total_hours', ['enableClientValidation' => false])->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?php $payMethods = PaymentMethod::find()->all();

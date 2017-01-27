@@ -117,113 +117,137 @@ var userModule = (function() {
 
 
             cfg = $.extend(cfg, config);
-            filterUsersSelect = $( filterUsersSelect );
-            filterUsersSelect.change(function(){
-                var role = $(this).val();
-                dataFilter['role'] = role;
-                dataTable.api().ajax.reload();
-            });
-            
-            filterActiveOnlySelect = $( filterActiveOnlySelect );
-            filterActiveOnlySelect.change(function(){
-                var is_active = $(this).is(':checked');
-                dataFilter['is_active'] = is_active;
-                dataTable.api().ajax.reload();
-            });
-            
-            columnDefs = [
-                {
-                    "targets"   : 0,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 1,
-                    "orderable" : true
-                },
-                {
-                    "targets"   : 2,
-                    "orderable" : true
 
-                },
+            var columnDefs = [];
+
+            var target = 0;
+
+            //  ID column (only for ADMIN )
+            if (cfg.canSeeID == 'true') {
+                columnDefs.push(
                 {
-                    "targets"   : 3,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        return '<a href="mailto:' + data + '">' + data +'</a>';
-                    }
-                },
-                {
-                    "targets"   : 4,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        if(!data) {
-                            data = '';
-                        }
-                        return '<a href="tel:' + data + '">' + data +'</a>';
-                    }
-                },
-                {
-                    "targets"   : 5,
+                    "targets"   : target,
                     "orderable" : true
-                },
+                });
+                target++;
+             }
+            // Photo column
+            columnDefs.push(
                 {
-                    "targets"   : 6,
+                    "targets"   : target,
+                    "orderable" : false,
+                    "render"    :function(data, type, row) {
+                        return '<img src="' + data + '" class="img-circle" style="max-width: 40px; height: 40px; alt = "User Image" />';
+                    }
+                }
+            );
+            target++;
+
+            // Name column
+            columnDefs.push(
+                {
+                    "targets"   : target,
                     "orderable" : true
                 }
-            ];
-            if (cfg.showSales && cfg.showUserStatus == false) {
+            );
+            target++;
+            // Role is available for ADMIN, SALES and FIN
+            if (cfg.canSeeRole == 'true') {
                 columnDefs.push(
                     {
-                        "targets": 7,
-                        "orderable": true,
-                        "render": function (data, type, row) {
-                            return row[8];
-                        }
-                    },
-                    {
-                        "targets": 8,
-                        "orderable": true,
-                        "render": function (data, type, row) {
-                            return row[9];
-                        }
+                        "targets": target,
+                        "orderable": true
                     }
                 );
+                target++;
             }
-            if (cfg.showUserStatus) {
-                if (cfg.showSales && ! cfg.showUserStatus) {
 
-                }
-                columnDefs.push(
-                {
-                    "targets"   : 7,
-                    "orderable" : true,
-                    "render"    : function (data, type, row) {
-                        if(!data) {
-                            return '';
+            //Email column
+            columnDefs.push(
+                    {
+                        "targets": target,
+                        "orderable": true,
+                        "render"    : function (data, type, row) {
+                            return '<a href="mailto:' + data + '">' + data +'</a>';
                         }
-                        return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
                     }
-                });
+            );
+            target++;
+            //Phone column
+            columnDefs.push(
+                {
+                    "targets": target,
+                    "orderable": true
+                }
+            );
+            target++;
+            //Last Login column
+            columnDefs.push(
+                {
+                    "targets": target,
+                    "orderable": true
+                }
+            );
+            target++;
+            //Joined column
+            columnDefs.push(
+                {
+                    "targets": target,
+                    "orderable": true
+                }
+            );
+            target++;
+
+            //Status column (active or suspended)
+            if (cfg.showUserStatus) {
+                columnDefs.push(
+                    {
+                        "targets"   : target,
+                        "orderable" : true,
+                        "render"    : function (data, type, row) {
+                            if(!data) {
+                                return '';
+                            }
+                            return '<a href="#" class="' + data.toLowerCase() + '">' + data +'</a>';
+                        }
+                    });
+                target++;
             }
 
+            if (cfg.showSales) {
+                //Salary column
+                columnDefs.push(
+                    {
+                        "targets"   : target,
+                        "orderable" : true
+                    });
+                target++;
+                //Salary Up column
+                columnDefs.push(
+                    {
+                        "targets"   : target,
+                        "orderable" : true
+                    });
+            }
+            target++;
             if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
                 columnDefs.push({
-                    "targets"   : 10,
-                    "orderable" : false,
-                    "render"    : function (data, type, row) {
+                    "targets": target,
+                    "orderable": false,
+                    "render": function (data, type, row) {
                         var icons = [];
 
-                        if ( cfg.canEdit ) {
+                        if (cfg.canEdit) {
 
                             icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
                                 'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
                         }
-                        if ( cfg.canLoginAs ) {
+                        if (cfg.canLoginAs) {
 
                             icons.push('<i class="fa fa-sign-in" style="cursor: pointer" ' +
                                 'data-toggle="tooltip" data-placement="top" title="Login as this user"></i>');
                         }
-                        if ( cfg.canDelete ) {
+                        if (cfg.canDelete) {
 
                             icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                 'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
@@ -233,8 +257,37 @@ var userModule = (function() {
                     }
                 });
             }
+            var rolesHtml = '<form id="w0" action="/user/index" method="post">' +
+                '<div class="container-fluid">' +
+                ' <div class="row">' +
+                ' <div class="col-lg-2"> ' +
+                '<label>Roles: </label>' +
+                '<select class="form-control" name="roles"> ' +
+                '<option value="">All Roles</option> <option value="ADMIN">ADMIN</option>' +
+                ' <option value="DEV">DEV</option> <option value="FIN">FIN</option> ' +
+                '<option value="CLIENT">CLIENT</option> <option value="PM">' +
+                'PM</option> <option value="SALES">SALES</option> ' +
+                '</select>' +
+                '</div>';
+
+            var activeOnlyHtml = '   <div class="col-lg-2"><label>Active Only: </label>	<div class="is_active"> <input type="checkbox" name="is_active" value="1" checked=""> </div> </div>';
+
+
+            var resultHtml = '';
+
+            if( cfg.canFilterByRole == 'true') {
+                resultHtml += rolesHtml;
+            }
+            if( cfg.canFilterByStatus  =='true') {
+
+                resultHtml += activeOnlyHtml;
+            }
+            if((cfg.canFilterByRole == 'true') || ( cfg.canFilterByStatus == 'true')) {
+                resultHtml += '</form>';
+            }
             
             dataTable = $('#user-table').dataTable({
+                "dom": 'l<"toolbar">frtip',
                 "bPaginate": true,
                 "bLengthChange": false,
                 "bFilter": true,
@@ -257,8 +310,27 @@ var userModule = (function() {
                     }
                 },
                 "processing": true,
-                "serverSide": true
+                "serverSide": true,
+                "initComplete": function(){
+                    $("div.toolbar").html(resultHtml);
+                    filterUsersSelect = $( filterUsersSelect );
+                    filterUsersSelect.change(function(){
+                        var role = $(this).val();
+                        dataFilter['role'] = role;
+                        dataTable.api().ajax.reload();
+                    });
+
+                    filterActiveOnlySelect = $( filterActiveOnlySelect );
+                    filterActiveOnlySelect.change(function(){
+                        var is_active = $(this).is(':checked');
+                        dataFilter['is_active'] = is_active;
+                        dataTable.api().ajax.reload();
+                    });
+
+                }
             });
+
+
 
             var id="", name, a = [];
 

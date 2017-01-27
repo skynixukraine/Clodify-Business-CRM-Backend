@@ -257,7 +257,7 @@ $this->params['menu'] = [
                                     $status = $project->getProjectDevelopers()
                                         ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])->one()->status
                                     ?>
-                                    <td><?= Html::encode($project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name)?></td>
+                                    <td><?= Html::encode($project->getCustomers()->one() ? $project->getCustomers()->one()->first_name  . ' ' . $project->getCustomers()->one()->last_name : '')?></td>
                                     <td><?= Html::encode($project->name)?></td>
                                     <td><?= Html::encode($status)?></td>
                                     <?php $active = $status == (ProjectDeveloper::STATUS_ACTIVE)?>
