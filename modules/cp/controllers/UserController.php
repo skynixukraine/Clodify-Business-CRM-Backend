@@ -239,10 +239,10 @@ class UserController extends DefaultController {
                     $row  [] = $model->role;
                 }
 
-                $row []       = $model->email;
-                $row []       = $model->phone;
-                $row []       = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
-                $row []       = DateUtil::convertDateTimeWithoutHours($model->date_signup);
+                $row []  = $model->email;
+                $row []  = $model->phone;
+                $row []  = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
+                $row []  = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 if (User::hasPermission([User::ROLE_ADMIN])) {
                     $row [] = $model->is_active == 1 ? "Active" : "Suspended";
                 }
