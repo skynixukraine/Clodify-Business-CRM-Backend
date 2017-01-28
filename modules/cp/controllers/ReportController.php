@@ -150,7 +150,8 @@ class ReportController extends DefaultController
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
             ->where(Project::tableName() . '.status IN ("' . Project::STATUS_NEW . '", "' . Project::STATUS_INPROGRESS . '")')
-            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"');
+            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
+            ->groupBy(Report::tableName() . '.id');
 
         $columns        = [
             'id',
@@ -372,9 +373,9 @@ class ReportController extends DefaultController
 
         }
         $activeRecordInstance->limit(null)->offset(null);
-        $totalHours = Yii::$app->Helper->timeLength($activeRecordInstance->sum(Report::tableName() . '.hours') * 3600);
-        $totalCost = '$' . $activeRecordInstance->sum(Report::tableName() . '.cost');
-        
+        $totalHours = Yii::$app->Helper->timeLength($activeRecordInstance->sum('hours') * 3600);
+        $totalCost = '$' . $activeRecordInstance->sum('cost');
+
         $data = [
             "draw"              => DataTable::getInstance()->getDraw(),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
