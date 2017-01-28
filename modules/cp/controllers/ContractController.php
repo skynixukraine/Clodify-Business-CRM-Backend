@@ -17,6 +17,7 @@ use app\components\DataTable;
 use yii\filters\VerbFilter;
 use app\models\Project;
 use mPDF;
+use app\models\Invoice;
 
 class ContractController extends DefaultController
 {
@@ -33,7 +34,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract', 'downloadactofwork'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -43,7 +44,7 @@ class ContractController extends DefaultController
                         'roles' => [User::ROLE_SALES],
                     ],
                     [
-                        'actions' => ['index', 'find', 'downloadcontract'],
+                        'actions' => ['index', 'find', 'downloadcontract', 'downloadactofwork'],
                         'allow' => true,
                         'roles' => [User::ROLE_CLIENT]
                     ]
@@ -253,4 +254,39 @@ class ContractController extends DefaultController
         }
     }
 
+
+    public function actionDownloadactofwork() {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne(['contract_id' => $id]) )
+            && ($contract->hasInvoices()) ) {
+            $customer   = User::findOne($contract->customer_id);
+            $invoice    = Invoice::find()->where(['contract_id' => $contract->id])->one();
+            $contractor = User::findOne($contract->created_by);
+
+            $html = $this->renderPartial('actOfWorkPDF', [
+                'contractor'=> $contractor,
+                'customer'  => $customer,
+                'invoice'   => $invoice,
+                'contract'  => $contract
+            ]);
+
+            $pdf = new mPDF();
+            $pdf->WriteHTML($html);
+
+            if (!is_dir('../data/acts/')) {
+                mkdir('../data/acts/', 0777);
+            }
+            $pdf->Output('../data/acts/' . $contract->act_number. '.pdf', 'F');
+
+            if ((file_exists($path = Yii::getAlias('@app/data/acts/' . $contract->act_number . '.pdf')))) {
+                header("Content-type:application/pdf"); //for pdf file
+                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+                header('Content-Length: ' . filesize($path));
+                readfile($path);
+                Yii::$app->end();
+            }
+        } else {
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contact  #" . $id. " is not existed."));
+            return $this->redirect(['view', 'id' => $id]);
+        }
+    }
 }

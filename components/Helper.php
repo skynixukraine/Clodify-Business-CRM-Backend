@@ -17,7 +17,7 @@ class Helper
     */
     public function timeLength($time)
     {
-        if (is_string($time)) {
+        if (is_string($time) && strstr($time, ":")) {
             $timeArr = explode(':', $time);
             $hours = $timeArr[0];
             $minutes = round($timeArr[1]/60*100, 2);
@@ -28,6 +28,10 @@ class Helper
             $h=floor($time / 3600);
 
             return $h.":".substr("0".$m,-2);
+        } elseif (is_int($time)) {
+            $h=floor($time / 3600);
+
+            return $h.":00";
         }
 
     }
