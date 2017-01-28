@@ -85,17 +85,27 @@ class ProjectController extends DefaultController
             $query         = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                 ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
 
-        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV, User::ROLE_SALES])){
+        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV] )){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                             ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                             ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                             ->groupBy('id');
+        }
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $query         = Project::find()
+                ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
+                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+                ->groupBy('id');
         }
         if(User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])){
         $query         = Project::find()
@@ -188,27 +198,31 @@ class ProjectController extends DefaultController
                 $customersNames[] = $customer->first_name . " " .  $customer->last_name;
             }
             /* @var $model \app\models\Project */
-            $row = '' . $model->id .
-                '; ' . $model->name .
-                '; ' . $model->jira_code .
-                '; ' . gmdate('H:i', floor($model->total_logged_hours * 3600)) .
-                '; ' . '$' . number_format( $model->cost, 2, ',	', '.');
-
-            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])){
-
-                $row = $row .  '; ' . gmdate('H:i', floor($model->total_paid_hours * 3600));
-            }
+            $cost = null;
+            $row = [];
             //formatting date
             $newDateStart = date("d/m/Y", strtotime($model->date_start));
             $newDateEnd = date("d/m/Y", strtotime($model->date_end));
 
-            $row = $row . '; ' .$newDateStart .
-                '; ' . $newDateEnd .
-                '; ' . implode(", ", $developersNames) .
-                '; ' . implode(", ", $customersNames) .
-                '; ' . $model->status;
+            $row = [
+                $model->id,
+                $model->name,
+                $model->jira_code,
+                gmdate('H:i', floor($model->total_logged_hours * 3600)),
+            ];
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+                $row[] = '$' . number_format( $model->cost, 2, ',	', '.');
+            }
+            if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
+                $row[] = gmdate('H:i', floor($model->total_paid_hours * 3600));
+            }
+            $row[] = $newDateStart;
+            $row[] = $newDateEnd;
+            $row[] = implode(", ", $developersNames);
+            $row[] = $customersNames ? implode(", ", $customersNames): "Customer Not Set";
+            $row[] = $model->status;
 
-            $list[] =   explode("; ", $row);
+            $list[] = $row;
         }
 
         $data = [
@@ -246,7 +260,6 @@ class ProjectController extends DefaultController
 
             $model->scenario = "admin";
             if ($model->load(Yii::$app->request->post())) {
-
                 $model->status = Project::STATUS_NEW;
                 if ($model->validate() && $model->save()) {
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));

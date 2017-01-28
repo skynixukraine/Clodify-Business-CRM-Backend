@@ -60,6 +60,13 @@ class SettingController extends DefaultController
         $model->scenario = 'settings';
 
         if ($model->load(Yii::$app->request->post())) {
+
+            if ($editorUa = Yii::$app->request->post('editorUa')) {
+                $editorEn = Yii::$app->request->post('editorEn');
+                $model->bank_account_en = $editorEn;
+                $model->bank_account_ua = $editorUa;
+            }
+
             // Projects tab functionality
             $this->assignToProject();
 
@@ -74,7 +81,10 @@ class SettingController extends DefaultController
         $defaultSing = User::getUserSing();
         return $this->render("index", ['model' => $model,
                             'defaultPhoto' => $defaultPhoto,
-                            'defaultSing' => $defaultSing]);
+                            'defaultSing' => $defaultSing,
+                            'bank_account_en' => $model->bank_account_en,
+                            'bank_account_ua' => $model->bank_account_ua,
+        ]);
     }
 
     public function actionUpload()

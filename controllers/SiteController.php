@@ -20,6 +20,7 @@ use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
 use DateTimeInterface;
+use app\modules\api\models\ApiAccessToken;
 
 class SiteController extends Controller
 {
@@ -126,6 +127,10 @@ class SiteController extends Controller
 
                                         Yii::$app->getSession()->setFlash('success',
                                             Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                                    } else {
+
+                                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "Welcome to Skynix CRM"));
+
                                     }
                                     $modelUserLogins->date_login = date('Y-m-d H:i:s');
                                     $modelUserLogins->save();
@@ -161,6 +166,10 @@ class SiteController extends Controller
                                 //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
                                 Yii::$app->getSession()->setFlash('success',
                                     Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            } else {
+
+                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Welcome to Skynix CRM"));
+
                             }
 
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
@@ -180,6 +189,10 @@ class SiteController extends Controller
                                 //$modelUserLogins->date_signup = date('Y-m-d H:i:s');
                                 Yii::$app->getSession()->setFlash('success',
                                     Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            } else {
+
+                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Welcome to Skynix CRM"));
+
                             }
 
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
@@ -198,6 +211,10 @@ class SiteController extends Controller
 
                                 Yii::$app->getSession()->setFlash('success',
                                     Yii::t("app", "Welcome to Skynix, you have successfully activated your account"));
+                            } else {
+
+                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "Welcome to Skynix CRM"));
+
                             }
                             $modelUserLogins->date_login = date('Y-m-d H:i:s');
                             $modelUserLogins->save();
@@ -219,6 +236,25 @@ class SiteController extends Controller
             }
         }
         return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
+    }
+
+    public function actionLoginByAccessToken()
+    {
+        if ( ($accessToken = Yii::$app->request->get('accessToken')) &&
+            ( $apiAccessTokenModel = ApiAccessToken::findIdentityByAccessToken( $accessToken ) ) &&
+                $apiAccessTokenModel->isAccessTokenValid() &&
+            ( $user = User::findOne($apiAccessTokenModel->user_id) ) &&
+            $user->is_active == User::ACTIVE_USERS &&
+            $user->is_delete != User::DELETED_USERS ) {
+            
+            Yii::$app->user->login( $user );
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Welcome to Skynix CRM"));
+
+            return $this->redirect(['cp/default/index']);
+            
+        }
+        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Wrong Access Token"));
+        return $this->redirect(['site/index']);
     }
 
     /** Log out user*/

@@ -16,6 +16,7 @@ var projectModule = (function() {
             canSuspend  : null,
             canSeeHours : null,
             canFunck    : null,
+            canSeeCost  : '',
         },
         dataTable,
         dataFilter = {
@@ -191,11 +192,15 @@ var projectModule = (function() {
                         "orderable" : false
                     });
             }
-
+            // if cfg.canSeeCost == false - we have one less element in json, so another column index.
+            actionsColumnNumber = 10;
+            if (cfg.canSeeCost) {
+                actionsColumnNumber = 11;
+            }
             if(cfg.canActivate || cfg.canSuspend || cfg.canDelete || cfg.canEdit || cfg.canPaid)
             columns.push(
                 {
-                    "targets"   : 11,
+                    "targets"   : actionsColumnNumber,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
 

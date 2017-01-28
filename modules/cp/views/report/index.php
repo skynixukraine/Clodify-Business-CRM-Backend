@@ -102,12 +102,15 @@ $this->params['menu'] = [
         </div>
     </div>
 </div>
+<?= Html::hiddenInput('data-reports', '', ['id' => 'data-reports']) ?>
 <?php ActiveForm::end();?>
 
 <div style="margin-bottom: -35px; margin-top: 16px; margin-left: 16px;">
-<!--    --><?//= Html::a('Download PDF', ['report/download?id=']) ?>
-    Total Hours: <span id="hours" style="font-weight: bold;"></span> hours,
-    Total Cost: <span id="cost" style="font-weight: bold;"></span>
+<?= Html::a('Download PDF', ['report/download'], ['id' => 'download-reports']) ?>
+    Total Hours: <span id="hours" style="font-weight: bold;"></span> hours
+    <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) :?>
+    , Total Cost: <span id="cost" style="font-weight: bold;"></span>
+    <?php endif;?>
 </div>
     <table id="report-table" class="table table-hover box ">
         <thead>
@@ -115,7 +118,9 @@ $this->params['menu'] = [
                 <th class="id-col"><?=Yii::t('app', 'Report ID')?></th>
                 <th><?=Yii::t('app', 'Task')?></th>
                 <th id="role"><?=Yii::t('app', 'Hours')?></th>
-                <th id="role"><?=Yii::t('app', 'Cost')?></th>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])):?>
+                    <th id="role"><?=Yii::t('app', 'Cost')?></th>
+                <?php endif;?>
                 <th><?=Yii::t('app', 'Project')?></th>
                 <th><?=Yii::t('app', 'Reporter')?></th>
                 <th class="date-col"><?=Yii::t('app', 'Added')?></th>
@@ -144,7 +149,10 @@ exit();*/
             editUrl     : '<?=Url::to(['report/index'])?>',
             deleteUrl   : '<?=Url::to(['report/index'])?>',
             findUrl     : '<?=Url::to(['report/find'])?>',
+            invoiceUrl  : '<?=Url::to(['invoice/view?id='])?>',
+            downloadUrl : '<?=Url::to(['report/download'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
+            canSeeCost  : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>
         })
     });
 
