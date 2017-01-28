@@ -47,7 +47,7 @@ $this->params['menu'] = [
                 $customers = User::allCustomersWhithReceive();
                 $listCustomers = User::getCustomersDropDown($customers, 'id');
                 /** @var $model Invoice */
-                echo $form->field($model, 'user_id', ['enableClientValidation' => false])
+                echo $form->field($model, 'user_id')
                     ->dropDownList($listCustomers, [
                         'prompt' => 'Choose...',
                     ])
@@ -59,7 +59,7 @@ $this->params['menu'] = [
             ?>
 
             <?php
-            $id = null;
+            $id = $model->user_id ? $model->user_id : null;
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
@@ -90,7 +90,7 @@ $this->params['menu'] = [
                     $listProjects[$project->id] = $project->name;
                 }
             }
-            echo $form->field($model, 'project_id', ['enableClientValidation' => false])
+            echo $form->field($model, 'project_id')
                 ->dropDownList( $listProjects,  [
                     'prompt' => 'All Projects',
                 ] )
@@ -125,7 +125,7 @@ $this->params['menu'] = [
                 $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
             <?php echo $form->field( $model, 'total')->textInput();?>
-            <?php echo $form->field( $model, 'total_hours')->textInput(['readonly'=> true]);?>
+            <?php echo $form->field( $model, 'total_hours', ['enableClientValidation' => false])->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
             <?php $payMethods = PaymentMethod::find()->all();
@@ -134,8 +134,7 @@ $this->params['menu'] = [
             echo $form->field( $model, 'payment_method_id')
                 ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
                 ->label('Pay Methods');?>
-
-            <?= Html::submitButton( Yii::t('app', 'Create'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton( Yii::t('app', $contract ? 'Invoice the customer' : 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 

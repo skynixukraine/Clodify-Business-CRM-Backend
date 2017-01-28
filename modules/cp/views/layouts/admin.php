@@ -154,10 +154,25 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                 </li>
                 <?php endif;?>
 
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_DEV])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "user" ? " active" : "")?>">
                       <a href="<?=Url::to(['/cp/user/index']);?>">
-                        <i class="fa fa-users"></i> <span><?=User::hasPermission([User::ROLE_SALES, User::ROLE_CLIENT]) ? Yii::t('app', 'Developers') : Yii::t('app', 'Manage Users')?></span>
+                        <i class="fa fa-users"></i>
+                          <span>
+                              <?php
+                              if(User::hasPermission([User::ROLE_ADMIN])) {
+                                  echo Yii::t("app", "Manage Users");
+                              }
+
+                              if( User::hasPermission( [User::ROLE_FIN, User::ROLE_SALES, User::ROLE_PM, User::ROLE_DEV ]) ) {
+                                  echo Yii::t("app", "Co-workers");
+                              }
+
+                              if( User::hasPermission( [User::ROLE_CLIENT ]) ) {
+                                  echo Yii::t("app", "Employees");
+                              }
+                              ?>
+                          </span>
                       </a>
                 </li>
                 <?php endif;?>
@@ -185,7 +200,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     </a>
                 </li>
                 <?php endif;?>
-                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "report" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/report/index']);?>">
                         <i class="fa fa-puzzle-piece"></i> <span><?=Yii::t('app', 'Reports')?></span>

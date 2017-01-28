@@ -84,18 +84,15 @@ class DateUtil
     }
     public static function convertDatetimeWithoutSecund( $date )
     {
-        if( $date ) {
-            $date_explode = explode(" ", trim($date));
+        $timestamp = strtotime($date);
+        $newDate = date('d/m/Y<\b\r> H:m', $timestamp);
+        return $newDate;
+    }
 
-
-            if( ( $time = explode(":", $date_explode[1]) ) && count($time) == 3 ) {
-
-                $datetime = [$time[0], $time[1]];
-                $date_explode[1] = implode(":", $datetime);
-            }
-            $date = self::convertData($date_explode[0] ) . " " . $date_explode[1];
-        }
-        return $date;
+    public static function convertDateTimeWithoutHours($date) {
+        $timestamp = strtotime($date);
+        $newDate = date('d/m/Y', $timestamp);
+        return $newDate;
     }
 
 }

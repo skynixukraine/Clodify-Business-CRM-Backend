@@ -16,6 +16,13 @@ var ajaxReportPageModule = (function() {
             $('form').submit(function(event) {
                 event.preventDefault();
             });
+            $('#dateFilter').change(function () {
+                if (this.value == 1) {
+                    document.location.href =config.indexUrl;
+                } else {
+                    document.location.href = config.indexUrl + '?dateFilter=' + this.value;
+                }
+            });
 
             var date = new Date();
             var currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());

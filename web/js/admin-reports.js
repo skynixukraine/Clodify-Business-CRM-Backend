@@ -6,6 +6,7 @@ var adminReportModule = (function() {
             editUrl     : '',
             deleteUrl   : '',
             findUrl     : '',
+            downloadUrl : '',
             canDelete   : null,
         },
         dataTable,
@@ -58,6 +59,7 @@ var adminReportModule = (function() {
     return {
         init: function( config ){
             cfg = $.extend(cfg, config);
+            console.log(cfg);
             filterProjectsSelect = $( filterProjectsSelect );
             filterProjectsSelect.change(function(){
                 var id = $(this).val();
@@ -123,14 +125,21 @@ var adminReportModule = (function() {
                     }
                 });
             index++;
-            columns.push(
-                {
+            costColumn =  false;
+            if (cfg.canSeeCost) {
+                costColumn =  {
                     "targets"   : index,
                     "orderable" : false,
                     "render"    : function (data, type, row) {
                         return row[8];
                     }
-                },
+                };
+            } else {
+                index--;
+            }
+
+            columns.push(
+                costColumn,
                 {
                     "targets"   : ++index,
                     "orderable" : false,
@@ -167,6 +176,9 @@ var adminReportModule = (function() {
                     "targets": ++index,
                     "orderable": false,
                     "render": function (data, type, row) {
+                        if (row[10] && row[6] == 'Yes') {
+                            return "<a href='" + config.invoiceUrl + row[10] + "'>" + row[6] + "</a>";
+                        }
                         return row[6];
                     }
                 });
@@ -186,6 +198,8 @@ var adminReportModule = (function() {
                         for (var i in dataFilter) {
                             data[i] = dataFilter[i];
                         }
+                        //Add data to build PDF report
+                        $('#download-reports').attr('href', cfg.downloadUrl + '?' + decodeURIComponent($.param(data)));
                     }
                 },
                 "processing": true,
@@ -215,6 +229,11 @@ var adminReportModule = (function() {
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         name   = $(this).parents("tr").find("td").eq(1).text();
                     actionDelete( id, name, dataTable );
+                });
+                $("tr").each(function (){
+                    if ($(this).find("td").eq(8).text() == 'Yes') {
+                        $(this).addClass('invoicedReport');
+                    }
                 });
             });
         }

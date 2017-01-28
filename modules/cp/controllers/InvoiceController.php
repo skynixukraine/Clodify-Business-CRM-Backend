@@ -8,6 +8,7 @@
 namespace app\modules\cp\controllers;
 
 use app\models\Contract;
+use app\models\ContractTemplates;
 use app\models\Project;
 use app\models\Report;
 use Yii;
@@ -179,12 +180,11 @@ class InvoiceController extends DefaultController
 
     }
 
-    public function actionCreate()
+    public function actionCreate($id = null)
     {
         $model      = new Invoice();
         $contract   = null;
-        if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
-            ( $contract = Contract::findOne( $id ))) {
+        if ( $id && ( $contract = Contract::findOne( $id )) ) {
 
             $model->contract_id     = $contract->id;
             $model->contract_number = $contract->contract_id;
@@ -211,9 +211,11 @@ class InvoiceController extends DefaultController
 
             }
 
-            if ($model->validate()) {
+            if ($model->total_hours) {
+                $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
+            }
 
-                $model->save();
+            if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()
                             ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
             }
