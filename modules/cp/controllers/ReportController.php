@@ -180,17 +180,17 @@ class ReportController extends DefaultController
 
         }else{
 
-            $dataTable->setOrder( 'date_report', 'asc');
+            $dataTable->setOrder( Report::tableName() . '.date_report', 'asc');
         }
 
 
         if($projectId && $projectId != null){
 
-            $dataTable->setFilter('project_id=' . $projectId);
+            $dataTable->setFilter(Report::tableName() . '.project_id=' . $projectId);
         }
         if($usersId && $usersId != null){
 
-            $dataTable->setFilter('user_id=' . $usersId);
+            $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId);
         }
 
         if($customerId && $customerId != null){
@@ -204,10 +204,7 @@ class ReportController extends DefaultController
             }
             if($projectId && $projectId != null) {
 
-                $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
-            }else{
-
-                $dataTable->setFilter('project_id IN (null) ');
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
             }
 
         }
@@ -226,10 +223,7 @@ class ReportController extends DefaultController
                 }
                 if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
-                }else{
-
-                    $dataTable->setFilter('project_id IN (null) ');
+                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
                 }
 
             }
@@ -250,9 +244,6 @@ class ReportController extends DefaultController
                 if($projectId && $projectId != null) {
 
                     $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
-                }else{
-
-                    $dataTable->setFilter('project_id IN (null) ');
                 }
 
             }
@@ -263,7 +254,7 @@ class ReportController extends DefaultController
             foreach ($projects as $project) {
                 $projectId[] = $project->id;
             }
-            $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
 
 //                $teammates = [];
 //                if ( ( $pmTeammates = Report::reportsPM() ) ) {
@@ -286,13 +277,13 @@ class ReportController extends DefaultController
 
         if($dateStart && $dateStart != null){
 
-            $dataTable->setFilter('date_report >= "' . DateUtil::convertData($dateStart). '" ');
+            $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart). '" ');
 
         }
 
         if($dateEnd && $dateEnd != null){
 
-            $dataTable->setFilter('date_report <= "' . DateUtil::convertData($dateEnd). '"');
+            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd). '"');
 
         }
 
