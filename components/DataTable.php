@@ -76,6 +76,15 @@ class DataTable {
     }
 
     /**
+     * This function returns the current ActiveRecord
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
      * @param $searchParams
      * @return $this
      */
