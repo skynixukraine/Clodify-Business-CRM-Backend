@@ -364,11 +364,11 @@ class ReportController extends DefaultController
 
         }
         $activeRecordInstance->limit(null)->offset(null);
-        $totalHours = Yii::$app->Helper->timeLength($activeRecordInstance->sum('hours') * 3600);
+        $totalHours = Yii::$app->Helper->timeLength( $activeRecordInstance->sum('hours') * 3600);
         $totalCost = '$' . $activeRecordInstance->sum('cost');
 
         $data = [
-            "draw"              => DataTable::getInstance()->getDraw(),
+            "draw"              => DataTable::getInstance()->getDraw("reports"),
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "recordsFiltered"   => DataTable::getInstance()->getTotal(),
             "totalHours"        => $totalHours,
