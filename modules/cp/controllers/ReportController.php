@@ -243,7 +243,7 @@ class ReportController extends DefaultController
                 }
                 if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter('project_id IN (' . implode(', ', $projectId) . ") ");
+                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
                 }
 
             }
