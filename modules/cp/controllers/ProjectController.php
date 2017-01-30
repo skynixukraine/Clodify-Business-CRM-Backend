@@ -201,8 +201,8 @@ class ProjectController extends DefaultController
             $cost = null;
             $row = [];
             //formatting date
-            $newDateStart = date("d/m/Y", strtotime($model->date_start));
-            $newDateEnd = date("d/m/Y", strtotime($model->date_end));
+            $newDateStart =$model->date_start ? date("d/m/Y", strtotime($model->date_start)): "Date Start Not Set";
+            $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
 
             $row = [
                 $model->id,
@@ -217,7 +217,7 @@ class ProjectController extends DefaultController
                 $row[] = gmdate('H:i', floor($model->total_paid_hours * 3600));
             }
             $row[] = $newDateStart;
-            $row[] = $newDateEnd;
+            $row[] = $newDateEnd ;
             $row[] = implode(", ", $developersNames);
             $row[] = $customersNames ? implode(", ", $customersNames): "Customer Not Set";
             $row[] = $model->status;
