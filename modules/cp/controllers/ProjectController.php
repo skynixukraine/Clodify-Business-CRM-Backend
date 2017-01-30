@@ -86,7 +86,6 @@ class ProjectController extends DefaultController
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
 
@@ -95,7 +94,6 @@ class ProjectController extends DefaultController
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                             ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                            ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                             ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
@@ -103,7 +101,6 @@ class ProjectController extends DefaultController
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
                 ->groupBy('id');
         }

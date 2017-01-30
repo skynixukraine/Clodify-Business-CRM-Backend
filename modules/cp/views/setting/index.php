@@ -346,7 +346,6 @@ $this->params['menu'] = [
         MyProfileModule.init();
     });
     var inputCheck = $('input[type=checkbox]');
-
     inputCheck.each(function(){
         var thisCheck = $(this);
         if(!thisCheck.prop('checked')){
@@ -358,18 +357,12 @@ $this->params['menu'] = [
             if(!check.prop('checked')){
                 check.parent().parent('tr').css("color", "grey");
                 check.parent().parent('tr').css('color','grey');
-                console.log(check.parent().parent());
-                check.parent().prev('td').html('INACTIVE');
-
             }
             else{
                 check.parent().parent('tr').css("background-color", "white");
                 check.parent().parent('tr').css('color','black');
-                check.parent().prev('td').html('ACTIVE');
+
             }
-            $.post('/cp/setting/index', $('#w0').serialize() );
-           
         })
     });
-
 </script>
