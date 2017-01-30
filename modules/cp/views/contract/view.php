@@ -37,18 +37,31 @@ $this->params['menu'] = [
         <li>Total: $<?=number_format($model->total, 2)?></li>
         <li>Created By: <?=$createdBy->first_name . ' ' . $createdBy->last_name?></li>
     </ul>
-    <div>
-        <?php
-        if ($model->hasInvoices()):?>
-                <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->contract_id]) ?>
-        <?php endif;?>
-    </div>
-    <div>
-        <?php
-        if ($model->hasInvoices()):?>
+    <?php if ($model->hasInvoices()):?>
+        <div>
+            <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->contract_id]) ?>
+        </div>
+        <div>
             <?= Html::a('Download Act of Work', ['contract/downloadactofwork?id=' . $model->contract_id]) ?>
+        </div>
+        <?php
+        /* @var $invoice Invoice*/
+        if (($invoice = Invoice::findOne(['contract_id' => $model->id])) && ($invoice->date_sent != null)) :?>
+
+            <?php if (file_exists( Yii::getAlias('@app/data/invoices/' . $invoice->id . '.pdf'))) :?>
+                <div>
+                    <?= Html::a('Download PDF Invoice', ['invoice/download?id=' . $invoice->id]) ?>
+                </div>
+            <?php endif;?>
+
+            <?php if (file_exists( Yii::getAlias('@app/data/invoices/' . 'reports' . $invoice->id . '.pdf'))) :?>
+                <div>
+                    <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $invoice->id]) ?>
+                </div>
+            <?php endif;?>
+
         <?php endif;?>
-    </div>
+    <?php endif;?>
 </div>
 
 
