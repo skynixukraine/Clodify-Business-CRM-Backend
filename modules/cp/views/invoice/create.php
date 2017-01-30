@@ -128,12 +128,6 @@ $this->params['menu'] = [
             <?php echo $form->field( $model, 'total_hours', ['enableClientValidation' => false])->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
-            <?php $payMethods = PaymentMethod::find()->all();
-            $listMethods = \yii\helpers\ArrayHelper::map( $payMethods, 'id', 'name');
-
-            echo $form->field( $model, 'payment_method_id')
-                ->dropDownList( $listMethods, ['prompt' => 'Choose...'] )
-                ->label('Pay Methods');?>
             <?= Html::submitButton( Yii::t('app', $contract ? 'Invoice the customer' : 'Create'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>

@@ -255,7 +255,7 @@ class InvoiceController extends DefaultController
     {
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
-
+            $contract = Contract::findOne($model->contract_id);
             if (!empty($model->id)) {
 
                 $dataPdf = Invoice::findOne($model->id);
@@ -275,7 +275,7 @@ class InvoiceController extends DefaultController
                         'dataTo' => date('j F', strtotime($dataPdf->date_end)),
                         'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->payment_method_id]),
+                        'paymentMethod' => PaymentMethod::findOne(['id' => $contract->contract_payment_method_id]),
                         'idCustomer' => $dataPdf->getUser()->one()->id,
                         'notes'      => $dataPdf->note,
                         'sing'       => $dataPdf->getUser()->one()->sing
@@ -342,9 +342,6 @@ class InvoiceController extends DefaultController
 
                 }
 
-            } else {
-
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Please choose a payment method"));
             }
 
         }
