@@ -24,7 +24,6 @@ class m170130_130822_updated_payment_method_deleted_sign_from_template extends M
             <p><strong>Chase Bank, New York,USA</strong></p>
             <p>Рахунок у банку-кореспонденту: <strong>001-1-000080</strong></p>
             <p>SWIFT код кореспондента: <strong>CHASUS33</strong></p>
-            <p>Прожога О.Ю.</p>
         </td>
         <td style =" vertical-align: top; border-collapse: collapse; border: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px; border-bottom: none">
             <p><center><strong>Contractor</strong></center></p>
@@ -40,7 +39,6 @@ class m170130_130822_updated_payment_method_deleted_sign_from_template extends M
             <p><strong>Chase Bank, New York,USA</strong></p>
             <p>CORRESPONDENT ACCOUNT: <strong>001-1-000080</strong></p>
             <p>SWIFT Code of correspondent bank: <strong>CHASUS33</strong></p>
-            <p>Prozhoga O.Y.</p>
         </td>
     </tr>
 
