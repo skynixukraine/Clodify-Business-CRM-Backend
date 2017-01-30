@@ -207,7 +207,7 @@ var projectModule = (function() {
                         var icons = [];
 
                         //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                        if( row[9] == "INPROGRESS") {
+                        if( row[10] == "INPROGRESS") {
 
                             if ( cfg.canSuspend ) {
 
