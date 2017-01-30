@@ -79,7 +79,7 @@
         </td>
     </tr>
 
-    <?=$paymentMethod?>
+    <?=$paymentMethod->description?>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 35px 0 20px 0; margin: 0; font-size: 14px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
