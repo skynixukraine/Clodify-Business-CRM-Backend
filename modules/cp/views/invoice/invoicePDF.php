@@ -78,8 +78,11 @@
             Requisites/Реквізити
         </td>
     </tr>
-
-    <?=$paymentMethod->description?>
+    <?php
+    $signatureProzhoga = Yii::getAlias('@app') . '/data/signatureProzhoga.png';
+    $signatureProzhoga = (string) $signatureProzhoga;
+    echo  str_replace('var_signature_Prozhoga', $signatureProzhoga, $paymentMethod->description);
+    ?>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 35px 0 20px 0; margin: 0; font-size: 14px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
