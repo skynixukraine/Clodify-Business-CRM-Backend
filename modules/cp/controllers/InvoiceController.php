@@ -255,11 +255,10 @@ class InvoiceController extends DefaultController
     {
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
-            $contract = Contract::findOne($model->contract_id);
             if (!empty($model->id)) {
 
                 $dataPdf = Invoice::findOne($model->id);
-
+                $contract = Contract::findOne($dataPdf->contract_id);
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
 
@@ -275,7 +274,7 @@ class InvoiceController extends DefaultController
                         'dataTo' => date('j F', strtotime($dataPdf->date_end)),
                         'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne(['id' => $contract->contract_payment_method_id]),
+                        'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
                         'idCustomer' => $dataPdf->getUser()->one()->id,
                         'notes'      => $dataPdf->note,
                         'sing'       => $dataPdf->getUser()->one()->sing
