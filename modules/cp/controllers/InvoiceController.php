@@ -207,7 +207,6 @@ class InvoiceController extends DefaultController
 
             }
             if($model->total !=null && $model->discount != null){
-
                 $model->subtotal = $model->total;
                 $model->total = ( $model->subtotal - $model->discount );
 
@@ -244,6 +243,11 @@ class InvoiceController extends DefaultController
                         ])
                     ->one();
             }
+
+            $model->subtotal    = $model->subtotal > 0 ? $model->subtotal : 0;
+            $model->total       = $model->total > 0 ? $model->total : 0;
+            $model->discount    = $model->discount > 0 ? $model->discount : 0;
+
             /** @var $model Invoice */
             return $this->render('view', ['model' => $model,
                 'title' => 'You watch invoice #' . $model->id]);
