@@ -244,7 +244,7 @@ class ProjectController extends DefaultController
             $model->is_delete = 1;
             $model->save(true, ['is_delete']);
             return json_encode([
-                "message"   => Yii::t("app", "You deleted project " . $id),
+                "message"   => Yii::t("app", "You deleted project {id}", ['id' => $id]),
                 "success"   => true
             ]);
         }
@@ -259,7 +259,7 @@ class ProjectController extends DefaultController
             if ($model->load(Yii::$app->request->post())) {
                 $model->status = Project::STATUS_NEW;
                 if ($model->validate() && $model->save()) {
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project {id}", ['id' => $model->id]));
                     return $this->redirect(['index']);
                 } 
             }
@@ -294,7 +294,7 @@ class ProjectController extends DefaultController
                                    if(Yii::$app->request->post('updated')) {
 
                                        Yii::$app->getSession()->setFlash('success',
-                                       Yii::t("app", "You edited project " . $id));
+                                           Yii::t("app", "You edited project {id}", ['id' => $id]));
                                    }
                                    return $this->redirect(['index']);
 
@@ -372,7 +372,7 @@ class ProjectController extends DefaultController
 
                 $model->status = Project::STATUS_ONHOLD;
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project {id}", ['id' => $id]));
 
             } else {
 
