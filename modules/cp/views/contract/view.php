@@ -46,17 +46,13 @@ $this->params['menu'] = [
         </div>
         <?php if (($invoice = Invoice::findOne(['contract_id' => $model->id])) && ($invoice->date_sent != null)) :?>
 
-            <?php if (file_exists( Yii::getAlias('@app/data/invoices/' . $invoice->id . '.pdf'))) :?>
                 <div>
                     <?= Html::a('Download PDF Invoice', ['invoice/download?id=' . $invoice->id]) ?>
                 </div>
-            <?php endif;?>
 
-            <?php if (file_exists( Yii::getAlias('@app/data/invoices/' . 'reports' . $invoice->id . '.pdf'))) :?>
                 <div>
                     <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $invoice->id]) ?>
                 </div>
-            <?php endif;?>
 
         <?php endif;?>
     <?php endif;?>
