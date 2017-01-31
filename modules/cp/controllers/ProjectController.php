@@ -260,11 +260,13 @@ class ProjectController extends DefaultController
 
             $model->scenario = "admin";
             if ($model->load(Yii::$app->request->post())) {
-                $model->status = Project::STATUS_NEW;
+                if(! in_array($model->status, [ Project::STATUS_ONHOLD, Project::STATUS_DONE, Project::STATUS_CANCELED, Project::STATUS_INPROGRESS])) {
+                   $model->status = Project::STATUS_NEW;
+                }
                 if ($model->validate() && $model->save()) {
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
                     return $this->redirect(['index']);
-                } 
+                }
             }
             return $this->render('create', ['model' => $model,
                                             'title' => 'Create a new project']);
