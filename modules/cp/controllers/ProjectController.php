@@ -89,7 +89,7 @@ class ProjectController extends DefaultController
                 ->groupBy('id');
         }
 
-        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV] )){
+        if(User::hasPermission([User::ROLE_PM] )){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
@@ -349,7 +349,7 @@ class ProjectController extends DefaultController
 
                 $model->status = Project::STATUS_INPROGRESS;
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activated project " . $id));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activated project {id}", ['id' => $id]));
 
             }else{
 
