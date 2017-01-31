@@ -89,7 +89,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            [['password', 'email'], 'required', 'except'=>'settings'],
+            ['password', 'required', 'except' => 'edit-user'],
+            ['email', 'required', 'except'=>'settings'],
             [['first_name', 'last_name', 'role'], 'required', 'except'=>['settings','api-login']],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique', 'except'=>'api-login'],
@@ -563,7 +564,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::getAlias('@app') .  '/data/' . $this->id . '/sing/' . $this->sing;
     }
-
     public static function assignProject($project)
     {
         $data = [
