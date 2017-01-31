@@ -46,14 +46,8 @@ class IndexController extends DefaultController
                     [
                         'actions' => [ 'index', 'test', 'delete', 'save'],
                         'allow' => true,
-                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN],
+                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES],
                     ],
-                    [
-                        'actions'   => ['index'],
-                        'allow' =>  true,
-                        'roles' =>[User::ROLE_SALES],
-                    ],
-
                 ],
             ],
             'verbs' => [
