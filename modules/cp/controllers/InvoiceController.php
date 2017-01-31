@@ -205,10 +205,12 @@ class InvoiceController extends DefaultController
 
             }
             if($model->total !=null && $model->discount != null){
-
                 $model->subtotal = $model->total;
                 $model->total = ( $model->subtotal - $model->discount );
 
+            }
+            if($model->total !=null && $model->discount != null && $model->total < $model->discount) {
+                $model->total    = 0;
             }
 
             if ($model->total_hours) {
