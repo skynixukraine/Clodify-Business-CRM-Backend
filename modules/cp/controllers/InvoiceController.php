@@ -195,6 +195,8 @@ class InvoiceController extends DefaultController
             $model->user_id         = $contract->customer_id;
 
         }
+
+
         if ($model->load(Yii::$app->request->post())) {
 
             /** Invoice - total logic */
@@ -214,6 +216,8 @@ class InvoiceController extends DefaultController
             if ($model->total_hours) {
                 $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
             }
+            
+            $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()
