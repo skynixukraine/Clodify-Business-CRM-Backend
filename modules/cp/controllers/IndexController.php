@@ -34,11 +34,6 @@ class IndexController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'delete', 'save'],
-                        'allow' => true,
-                        'roles' => [User::ROLE_PM ],
-                    ],
-                    [
                         'actions'=>['getphoto'],
                         'allow'=>true,
                         'roles'=>[User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES ],
@@ -46,14 +41,8 @@ class IndexController extends DefaultController
                     [
                         'actions' => [ 'index', 'test', 'delete', 'save'],
                         'allow' => true,
-                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN],
+                        'roles' => [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_PM],
                     ],
-                    [
-                        'actions'   => ['index'],
-                        'allow' =>  true,
-                        'roles' =>[User::ROLE_SALES],
-                    ],
-
                 ],
             ],
             'verbs' => [
