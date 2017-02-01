@@ -101,19 +101,32 @@
        style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
 
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
-        <td style =" vertical-align: top; border: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="285" style ="width: 285px; vertical-align: top; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Роботу сдав (Work is done) </p>
             <!-- Прожога О.Ю. ( Prozhoga O.Y.) -->
             <p><strong><?= $contractor->company ?></strong></p>
             <p>від Виконавця (by Contractor) </p>
-            <img src="<?=$contractor->getUserSingPath()?>"width="250px" height="150px" style="max-width: 250px;">
-            <p>М.П./Підпис (Sign)</p>
+
         </td>
-        <td style =" vertical-align: top; border-collapse: collapse; border: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="285" style ="width: 285px; vertical-align: top; border-collapse: collapse; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Роботу прийняв (Work is accepted) </p>
             <p><strong><?= $customer->company ?></strong></p>
             <p>від Замовника (by Customer) </p>
-            <img src="<?=$customer->getUserSingPath()?>"width="250px" height="150px" style="max-width: 250px;">
+        </td>
+    </tr>
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
+        <td width="285" style ="width: 285px; vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+            <img src="<?=$contractor->getUserSingPath()?>" style="max-width: 120px;">
+
+        </td>
+        <td width="285" style ="width: 285px; vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+            <img src="<?=$customer->getUserSingPath()?>" style="max-width: 120px;">
+        </td>
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
+        <td width="285" style ="width: 285px; vertical-align: top; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+            <p>М.П./Підпис (Sign)</p>
+        </td>
+        <td width="285" style ="width: 285px; vertical-align: top; border-collapse: collapse; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>М.П./Підпис (Sign)</p>
         </td>
     </tr>
