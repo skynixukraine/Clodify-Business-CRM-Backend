@@ -207,7 +207,11 @@ var projectModule = (function() {
                         var icons = [];
 
                         //icons.push('<img class="action-icon edit" src="/img/icons/editicon.png">');
-                        if( row[9] == "INPROGRESS") {
+                        /*
+                        For ADMIN role project's status is on 10 row, for client - on 9.
+                        cfg.canDelete action available only for ADMIN
+                        */
+                        if(cfg.canDelete && row[10] == "INPROGRESS") {
 
                             if ( cfg.canSuspend ) {
 
@@ -216,7 +220,16 @@ var projectModule = (function() {
 
                             }
 
-                        }else {
+                        } else if (row[9] == "INPROGRESS") {
+
+                            if ( cfg.canSuspend ) {
+
+                                icons.push('<i class="fa fa-clock-o suspend" style="cursor: pointer" ' +
+                                    'data-toggle="tooltip" data-placement="top" title="Suspend"></i>');
+
+                            }
+
+                        } else {
 
                             if (cfg.canActivate) {
 
@@ -224,6 +237,7 @@ var projectModule = (function() {
                                     'data-toggle="tooltip" data-placement="top" title="Activate"></i>');
 
                             }
+
                         }
                         if ( cfg.canEdit ) {
 

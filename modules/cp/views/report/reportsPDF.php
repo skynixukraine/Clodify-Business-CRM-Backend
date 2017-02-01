@@ -8,7 +8,7 @@ use app\components\DateUtil;
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>&#9993;Skynix email template</title>
+    <title>Reports</title>
     <style>
         a,
         a:hover,

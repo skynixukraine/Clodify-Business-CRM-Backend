@@ -146,7 +146,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="header"><?=Yii::t('app', 'MAIN NAVIGATION')?></li>
-                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])) : ?>
+                <?php if ( User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM, User::ROLE_FIN, User::ROLE_SALES])) : ?>
                 <li class="treeview<?=( Yii::$app->controller->id == "index" || Yii::$app->controller->id == "index" ? " active" : "")?>">
                     <a href="<?=Url::to(['/cp/index/index']);?>">
                         <i class="fa fa-home"></i> <span><?=Yii::t('app', "My Report")?></span>
