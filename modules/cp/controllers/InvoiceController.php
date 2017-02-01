@@ -271,7 +271,7 @@ class InvoiceController extends DefaultController
                         'id' => $dataPdf->id,
                         'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
                             $dataPdf->getUser()->one()->last_name,
-                        'total' => $dataPdf->total,
+                        'total' => $dataPdf->total > 0 ?$dataPdf->total:0,
                         'numberContract' => $dataPdf->contract_number,
                         'actWork' => $dataPdf->act_of_work,
                         'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
