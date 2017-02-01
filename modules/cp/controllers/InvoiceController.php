@@ -233,7 +233,7 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT] ) ) {
             if (($id = Yii::$app->request->get("id"))) {
 
                 $model = Invoice::find()
@@ -248,6 +248,16 @@ class InvoiceController extends DefaultController
             $model->total       = $model->total > 0 ? $model->total : 0;
             $model->discount    = $model->discount > 0 ? $model->discount : 0;
 
+            if( User::hasPermission( [User::ROLE_CLIENT])   ) {
+                //Check if the current client can see this invoice from the reports menu.
+                $reportsForCurrentClient = Report::find()->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id = reports.project_id' )
+                    ->where(['reports.invoice_id' => $id])->andWhere(['project_customers.user_id'=>Yii::$app->user->id])->all();
+                if( ! $reportsForCurrentClient ) {
+                    /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
+                    return $this->redirect(['index']);
+                }
+            }
             /** @var $model Invoice */
             return $this->render('view', ['model' => $model,
                 'title' => 'You watch invoice #' . $model->id]);
