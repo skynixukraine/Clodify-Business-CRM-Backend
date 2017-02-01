@@ -39,7 +39,7 @@ class ContractController extends DefaultController
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'view', 'downloadcontract'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'view', 'downloadcontract', 'downloadactofwork'],
                         'allow' => true,
                         'roles' => [User::ROLE_SALES],
                     ],

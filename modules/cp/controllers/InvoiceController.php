@@ -195,6 +195,8 @@ class InvoiceController extends DefaultController
             $model->user_id         = $contract->customer_id;
 
         }
+
+
         if ($model->load(Yii::$app->request->post())) {
 
             /** Invoice - total logic */
@@ -205,7 +207,6 @@ class InvoiceController extends DefaultController
 
             }
             if($model->total !=null && $model->discount != null){
-
                 $model->subtotal = $model->total;
                 $model->total = ( $model->subtotal - $model->discount );
 
@@ -214,10 +215,12 @@ class InvoiceController extends DefaultController
             if ($model->total_hours) {
                 $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
             }
+            
+            $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()
-                            ->setFlash('success', Yii::t("app", "You created new invoice %s", [$model->id]));
+                            ->setFlash('success', Yii::t("app", "You created new invoice {id}", ['id' => $model->id]));
             }
             return $this->redirect(['view?id=' . $model->id]);
         }
@@ -240,6 +243,11 @@ class InvoiceController extends DefaultController
                         ])
                     ->one();
             }
+
+            $model->subtotal    = $model->subtotal > 0 ? $model->subtotal : 0;
+            $model->total       = $model->total > 0 ? $model->total : 0;
+            $model->discount    = $model->discount > 0 ? $model->discount : 0;
+
             /** @var $model Invoice */
             return $this->render('view', ['model' => $model,
                 'title' => 'You watch invoice #' . $model->id]);
@@ -255,11 +263,10 @@ class InvoiceController extends DefaultController
     {
         $model = new Invoice();
         if($model->load(Yii::$app->request->post())) {
-
             if (!empty($model->id)) {
 
                 $dataPdf = Invoice::findOne($model->id);
-
+                $contract = Contract::findOne($dataPdf->contract_id);
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
 
@@ -275,7 +282,7 @@ class InvoiceController extends DefaultController
                         'dataTo' => date('j F', strtotime($dataPdf->date_end)),
                         'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
                         'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne(['id' => $model->payment_method_id]),
+                        'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
                         'idCustomer' => $dataPdf->getUser()->one()->id,
                         'notes'      => $dataPdf->note,
                         'sing'       => $dataPdf->getUser()->one()->sing
@@ -342,9 +349,6 @@ class InvoiceController extends DefaultController
 
                 }
 
-            } else {
-
-                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Please choose a payment method"));
             }
 
         }

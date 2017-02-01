@@ -385,7 +385,9 @@ class UserController extends DefaultController {
             throw new \Exception('The user does not exist');
 
         }
-        $user->scenario = 'settings';
+        
+        $user->setScenario('edit-user');
+
         if ( Yii::$app->request->isPost &&
                 $user->load(Yii::$app->request->post()) &&
                 $user->validate() ) {
