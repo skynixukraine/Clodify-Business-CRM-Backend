@@ -52,16 +52,7 @@
             <strong><?= date_format(date_create($contract->act_date), 'd/m/Y' )?> р.</strong>
         </td>
     </tr>
-
-    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
-        <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-            <!-- contract _act date -->
-            <!--<strong> <?= date_format(date_create($contract->act_date), 'd F Y' ) ?></strong>
-            <br><br><span style="color: #ffffff;">.</span>-->
-        </td>
-    </tr>
-
-
+    
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
             Ми, хто нижче підписалися, представник Виконавця і представник Замовника,
