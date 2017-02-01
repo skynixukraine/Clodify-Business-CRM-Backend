@@ -32,7 +32,7 @@
 
     <tr>
         <td colspan = "8" width = "570"  valign="top" style="padding: 0; margin: 0;">
-            <a href="http://skynix.solutions/" title="logo Skynix" target="_blank">
+            <a href="http://skynix.co" title="logo Skynix" target="_blank">
                 <img src="http://cdn.skynix.co/skynix/logo_skynix.jpg" alt="Skynix" border="0" width="105" height="30" style="display: block; padding: 0px; margin: 0px; border: none;">
             </a>
         </td>
@@ -71,11 +71,70 @@
         </td>
     </tr>
 
-
+    <tr>
+        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
+            <span>Requisites/Реквізити</span><br>
+            <p><span style="color: #ffffff;">.</span></p>
+        </td>
+    </tr>
 
     <tr>
-        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 13px 0; margin: 0; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            Requisites/Реквізити
+        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 0; margin: 0;  border-top: 1px solid black; border-bottom: 1px solid black; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
+
+            <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
+
+                <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse;">
+                    <td width="285" style =" vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px; padding: 5px;">
+                        <table width="285" style="margin:0;border-collapse: collapse;border: 0;">
+                            <tr>
+                                <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">Виконавець</td>
+                            </tr>
+                            <tr>
+                                <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
+                                    <p><span style="color: #ffffff;">.</span></p>
+                                    <p>Бенефіциар: <strong>Прожога Олексій Юрійович</strong></p>
+                                    <p>Адреса бенефіциара: <strong>UA 08294</strong></p>
+                                    <p><strong>Київська обл., м. Буча</strong></p>
+                                    <p><strong>вул. Тарасiвська д.8а кв.128</strong></p>
+                                    <p>Рахунок бенефіциара: <strong>26002057002108</strong></p>
+                                    <p>SWIFT код: <strong>PBANUA2X</strong></p>
+                                    <p>Банк бенефіциара: <strong>Privatbank, Dnipropetrovsk, Ukraine</strong></p>
+                                    <p>IBAN Code: <strong>UA323515330000026002057002108</strong></p>
+                                    <p>Банк-корреспондент: <strong>JP Morgan</strong></p>
+                                    <p><strong>Chase Bank,New York ,USA</strong></p>
+                                    <p>Рахунок у банку-кореспонденту: <strong>001-1-000080</strong></p>
+                                    <p>SWIFT код кореспондента: <strong>CHASUS33</strong></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="284" style =" vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\'; font-size:10px; padding: 5px;">
+                        <table width="284" style="margin:0;border-collapse: collapse;border: 0;">
+                            <tr>
+                                <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">Contractor</td>
+                            </tr>
+                            <tr>
+                                <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
+                                    <p><span style="color: #ffffff;">.</span></p>
+                                    <p>BENEFICIARY: <strong>Prozhoga Oleksii Yuriyovich</strong></p>
+                                    <p>BENEFICIARY ADDRESS: <strong>UA 08294 Kiyv,</strong></p>
+                                    <p><strong>Bucha, Tarasivska st. 8a/128</strong></p>
+                                    <p><span style="color: #ffffff;">.</span></p>
+                                    <p>BENEFICIARY ACCOUNT: <strong>26002057002108</strong></p>
+                                    <p>SWIFT CODE: <strong>PBANUA2X</strong></p>
+                                    <p>BANK OF BENEFICIARY: <strong>Privatbank,</strong></p>
+                                    <p><strong>Dnipropetrovsk, Ukraine</strong></p>
+                                    <p>IBAN Code: <strong>UA323515330000026002057002108</strong></p>
+                                    <p>CORRESPONDENT BANK: <strong>JP Morgan</strong></p>
+                                    <p><strong>Chase Bank,New York ,USA</strong></p>
+                                    <p>CORRESPONDENT ACCOUNT: <strong>001-1-000080</strong></p>
+                                    <p>SWIFT Code of correspondent bank: <strong>CHASUS33</strong></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <?php
