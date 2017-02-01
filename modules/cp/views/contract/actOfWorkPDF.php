@@ -52,7 +52,7 @@
             <strong><?= date_format(date_create($contract->act_date), 'd/m/Y' )?> р.</strong>
         </td>
     </tr>
-    
+
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
             Ми, хто нижче підписалися, представник Виконавця і представник Замовника,
@@ -93,7 +93,7 @@
 
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td width="285" style ="width: 285px; vertical-align: top; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
-            <p>Роботу сдав (Work is done) </p>
+            <p>Роботу здав (Work is done) </p>
             <!-- Прожога О.Ю. ( Prozhoga O.Y.) -->
             <p><strong><?= $contractor->company ?></strong></p>
             <p>від Виконавця (by Contractor) </p>
