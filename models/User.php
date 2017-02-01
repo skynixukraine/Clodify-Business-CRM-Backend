@@ -295,7 +295,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /** Save the  field’s value in the database if this is s new record */
-    public function beforeSave($insert)
+    public function beforeSave($insert, $changedAttributes)
     {
 
         if ($this->isNewRecord) {
@@ -330,6 +330,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             } else {
                 unset($this->password);
             }
+        }
+        if( !$insert && isset( $changedAttributes['email'] )) {
+            $user = User::findOne($this->id);
+            Yii::$app->mailer->compose('changeEmail', [
+                'user' => $this->first_name,
+                'email' => $user->email,
+                'password' => $this->rawPassword,
+                'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+            ])
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo($this->email)
+                ->setSubject('Skynix CRM: Your email is changed')
+                ->send();
         }
         /*else
             $this->modified = new Expression('NOW()');*/
