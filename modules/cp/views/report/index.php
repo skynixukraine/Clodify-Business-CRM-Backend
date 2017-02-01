@@ -76,6 +76,25 @@ $this->params['menu'] = [
                     ->where([ProjectDeveloper::tableName() . '.project_id' => $projectIDs])
                     ->groupBy(User::tableName() . '.id ')
                     ->all();
+            } else if (User::hasPermission([User::ROLE_CLIENT])) {
+                $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+                $arrayWorkers = [];
+                foreach($workers as $worker){
+                    $arrayWorkers[]= $worker->user_id;
+                }
+                $devUser = '';
+                if(!empty($arrayWorkers)) {
+                    $devUser = implode(', ' , $arrayWorkers);
+                }
+                else{
+                    $devUser = 'null';
+                }
+                $users = User::find()
+                    ->where(User::tableName() . '.id IN (' . $devUser . ')')
+                    ->andWhere(['is_active' => 1])
+                    ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                    ->andWhere(User::tableName() . '.is_delete=0')
+                    ->all();
             }
             $listUsers = User::getCustomersDropDown( $users, 'id' );
             $listUsers = ArrayHelper::merge(['' => 'allusers'], $listUsers);

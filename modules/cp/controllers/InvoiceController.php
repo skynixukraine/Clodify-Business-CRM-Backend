@@ -195,6 +195,8 @@ class InvoiceController extends DefaultController
             $model->user_id         = $contract->customer_id;
 
         }
+
+
         if ($model->load(Yii::$app->request->post())) {
 
             /** Invoice - total logic */
@@ -213,6 +215,8 @@ class InvoiceController extends DefaultController
             if ($model->total_hours) {
                 $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
             }
+            
+            $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()
@@ -229,7 +233,7 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT] ) ) {
             if (($id = Yii::$app->request->get("id"))) {
 
                 $model = Invoice::find()
@@ -244,6 +248,16 @@ class InvoiceController extends DefaultController
             $model->total       = $model->total > 0 ? $model->total : 0;
             $model->discount    = $model->discount > 0 ? $model->discount : 0;
 
+            if( User::hasPermission( [User::ROLE_CLIENT])   ) {
+                //Check if the current client can see this invoice from the reports menu.
+                $reportsForCurrentClient = Report::find()->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id = reports.project_id' )
+                    ->where(['reports.invoice_id' => $id])->andWhere(['project_customers.user_id'=>Yii::$app->user->id])->all();
+                if( ! $reportsForCurrentClient ) {
+                    /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
+                    return $this->redirect(['index']);
+                }
+            }
             /** @var $model Invoice */
             return $this->render('view', ['model' => $model,
                 'title' => 'You watch invoice #' . $model->id]);
@@ -262,45 +276,10 @@ class InvoiceController extends DefaultController
             if (!empty($model->id)) {
 
                 $dataPdf = Invoice::findOne($model->id);
-                $contract = Contract::findOne($dataPdf->contract_id);
                 /** @var $dataPdf Invoice */
                 if( !empty( $dataPdf->getUser()->one()->email ) ){
-
-                    $html = $this->renderPartial('invoicePDF', [
-
-                        'id' => $dataPdf->id,
-                        'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
-                            $dataPdf->getUser()->one()->last_name,
-                        'total' => $dataPdf->total > 0 ?$dataPdf->total:0,
-                        'numberContract' => $dataPdf->contract_number,
-                        'actWork' => $dataPdf->act_of_work,
-                        'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
-                        'dataTo' => date('j F', strtotime($dataPdf->date_end)),
-                        'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
-                        'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                        'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
-                        'idCustomer' => $dataPdf->getUser()->one()->id,
-                        'notes'      => $dataPdf->note,
-                        'sing'       => $dataPdf->getUser()->one()->sing
-
-                    ]);
-
-                    $pdf = new mPDF();
-                    $pdf->WriteHTML($html);
-                    $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'F');
-                    $content = $pdf->Output('../data/invoices/' . $model->id . '.pdf', 'S');
-                    $model = Invoice::find()->where("id=:iD", [':iD' => $dataPdf->id])->one();
-                    $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
-                    $html2 = $this->renderPartial('invoiceReportPDF', [
-                        'model' => $model,
-                        'id' => $dataPdf->id,
-                        'r'  => $r,
-
-                    ]);
-                    $pdf = new mPDF();
-                    $pdf->WriteHTML($html2);
-                    $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
-                    $content2 = $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'S');
+                    $content = Yii::getAlias('@app') . '/data/invoices/' . $dataPdf->id . '.pdf';
+                    $content2 = Yii::getAlias('@app') . '/data/invoices/reports' . $dataPdf->id . '.pdf';;
 
                     if ($dataPdf->status == Invoice::STATUS_NEW && $dataPdf->date_sent == null) {
 
@@ -401,9 +380,31 @@ class InvoiceController extends DefaultController
     public function actionDownload()
     {
         /** @var $model Invoice */
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $dataPdf = Invoice::findOne($id) ) ) {
+            $contract = Contract::findOne($dataPdf->contract_id);
+            $html = $this->renderPartial('invoicePDF', [
 
-            if( ( $model->user_id == Yii::$app->user->id &&
+                'id' => $dataPdf->id,
+                'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+                    $dataPdf->getUser()->one()->last_name,
+                'total' => $dataPdf->total,
+                'numberContract' => $dataPdf->contract_number,
+                'actWork' => $dataPdf->act_of_work,
+                'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
+                'dataTo' => date('j F', strtotime($dataPdf->date_end)),
+                'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
+                'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
+                'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
+                'idCustomer' => $dataPdf->getUser()->one()->id,
+                'notes'      => $dataPdf->note,
+                'sing'       => $dataPdf->getUser()->one()->sing
+
+            ]);
+
+            $pdf = new mPDF();
+            $pdf->WriteHTML($html);
+            $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
+            if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
                  User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
 
@@ -436,7 +437,16 @@ class InvoiceController extends DefaultController
     {
         /** @var $model Invoice */
         if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
+            $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
+            $html2 = $this->renderPartial('invoiceReportPDF', [
+                'model' => $model,
+                'id' => $model->id,
+                'r'  => $r,
 
+            ]);
+            $pdf = new mPDF();
+            $pdf->WriteHTML($html2);
+            $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
             if( ( $model->user_id == Yii::$app->user->id &&
                     User::hasPermission([User::ROLE_CLIENT]) ) ||
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){

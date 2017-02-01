@@ -115,7 +115,13 @@ $this->params['menu'] = [
                                 <?=($model->isInCustomers($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
                             </td>
                             <td><input type="radio" title=""  name="Project[invoice_received]"
-                                <?=($model->isInvoiced($customer->id))?'checked':''?>  value = "<?=$customer->id?>">
+                                    <?php if($mode == 'create') {
+                                        echo ( ($model->invoice_received == $customer->id)
+                                            ?'checked':'');
+                                    } else {
+                                        echo ($model->isInvoiced($customer->id))
+                                            ?'checked':'';
+                                    } ?> value = "<?=$customer->id?>">
                             </td>
                             <td><?= Html::encode($customer->first_name . ' ' . $customer->last_name)?></td>
 
@@ -149,12 +155,23 @@ $this->params['menu'] = [
                                                 ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
                                     <td><input type="radio" title=""  name="Project[is_sales]"
-                                            <?=($model->isSales($developer->id))
-                                                ?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?php if($mode == 'create') {
+                                                echo ( ($model->is_sales == $developer->id)
+                                                    ?'checked':'');
+                                            } else {
+                                                echo ($model->isSales($developer->id))
+                                                    ?'checked':'';
+                                        } ?> value = "<?=$developer->id?>">
+
                                     </td>
                                     <td><input type="radio" title=""  name="Project[is_pm]"
-                                            <?=($model->isPm($developer->id))
-                                                ?'checked':''?>  value = "<?=$developer->id?>">
+                                            <?php if($mode == 'create') {
+                                                echo ( ($model->is_pm == $developer->id)
+                                                    ?'checked':'');
+                                            } else {
+                                                echo ($model->isPm($developer->id))
+                                                    ?'checked':'';
+                                            } ?> value = "<?=$developer->id?>">
                                     </td>
                                     <td><?= Html::encode($developer->first_name . ' ' . $developer->last_name)?></td>
                                     <td>

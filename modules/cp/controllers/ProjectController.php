@@ -86,16 +86,14 @@ class ProjectController extends DefaultController
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
 
-        if(User::hasPermission([User::ROLE_PM, User::ROLE_DEV] )){
+        if(User::hasPermission([User::ROLE_PM] )){
         $query         = Project::find()
                             ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                             ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                            ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                             ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
@@ -103,7 +101,6 @@ class ProjectController extends DefaultController
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
                 ->groupBy('id');
         }
@@ -247,7 +244,7 @@ class ProjectController extends DefaultController
             $model->is_delete = 1;
             $model->save(true, ['is_delete']);
             return json_encode([
-                "message"   => Yii::t("app", "You deleted project " . $id),
+                "message"   => Yii::t("app", "You deleted project {id}", ['id' => $id]),
                 "success"   => true
             ]);
         }
@@ -260,13 +257,16 @@ class ProjectController extends DefaultController
 
             $model->scenario = "admin";
             if ($model->load(Yii::$app->request->post())) {
-                $model->status = Project::STATUS_NEW;
+                if(! in_array($model->status, [ Project::STATUS_ONHOLD, Project::STATUS_DONE, Project::STATUS_CANCELED, Project::STATUS_INPROGRESS])) {
+                   $model->status = Project::STATUS_NEW;
+                }
+
                 if ($model->validate() && $model->save()) {
-                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project " . $model->id));
+                    Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project {id}", ['id' => $model->id]));
                     return $this->redirect(['index']);
                 } 
             }
-            return $this->render('create', ['model' => $model,
+            return $this->render('create', ['model' => $model, 'mode' => 'create',
                                             'title' => 'Create a new project']);
     }
 
@@ -297,7 +297,7 @@ class ProjectController extends DefaultController
                                    if(Yii::$app->request->post('updated')) {
 
                                        Yii::$app->getSession()->setFlash('success',
-                                       Yii::t("app", "You edited project " . $id));
+                                           Yii::t("app", "You edited project {id}", ['id' => $id]));
                                    }
                                    return $this->redirect(['index']);
 
@@ -337,7 +337,8 @@ class ProjectController extends DefaultController
                [
                    'model' => $model,
                    'aliases' => $aliases,
-                   'title' => 'Edit the project #' . $model->id
+                   'title' => 'Edit the project #' . $model->id,
+                   'mode' =>'edit'
                ]
            );
 
@@ -352,7 +353,7 @@ class ProjectController extends DefaultController
 
                 $model->status = Project::STATUS_INPROGRESS;
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activated project " . $id));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You activated project {id}", ['id' => $id]));
 
             }else{
 
@@ -375,7 +376,7 @@ class ProjectController extends DefaultController
 
                 $model->status = Project::STATUS_ONHOLD;
                 $model->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project " . $id));
+                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You suspended project {id}", ['id' => $id]));
 
             } else {
 

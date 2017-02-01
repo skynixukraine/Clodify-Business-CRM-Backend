@@ -20,7 +20,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js'
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/modal.bootstrap.js');
 // $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dropzone.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/myprofile.js');
-$this->registerJsFile('http://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js', ['position' => yii\web\View::POS_BEGIN]);
+$this->registerJsFile('https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js', ['position' => yii\web\View::POS_BEGIN]);
 $this->registerCssFile(Yii::$app->request->baseUrl.'/css/my-profile.css');
 
 $this->title                    = Yii::t("app", "My Profile");

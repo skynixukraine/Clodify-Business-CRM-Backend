@@ -89,7 +89,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            [['password', 'email'], 'required', 'except'=>'settings'],
+            ['password', 'required', 'except' => 'edit-user'],
+            ['email', 'required', 'except'=>'settings'],
             [['first_name', 'last_name', 'role'], 'required', 'except'=>['settings','api-login']],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique', 'except'=>'api-login'],
@@ -329,6 +330,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             } else {
                 unset($this->password);
             }
+            // sending letter to old email
+            Yii::$app->mailer->compose('changeEmail', [
+                'user' => $this->first_name,
+                'email' => $this->email,
+                'password' => $this->rawPassword,
+                'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+            ])
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo($oldData['email'])
+                ->setSubject('Skynix CRM: Your email is changed')
+                ->send();
         }
         /*else
             $this->modified = new Expression('NOW()');*/
@@ -424,7 +436,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                 User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "','" .
-                                                    User::ROLE_SALES . "')")
+                                                    User::ROLE_FIN . "','" . User::ROLE_SALES . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -563,7 +575,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::getAlias('@app') .  '/data/' . $this->id . '/sing/' . $this->sing;
     }
-
     public static function assignProject($project)
     {
         $data = [
