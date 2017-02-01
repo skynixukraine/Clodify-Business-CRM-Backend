@@ -260,7 +260,7 @@ class ContractController extends DefaultController
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
             $invoice    = Invoice::find()->where(['contract_id' => $contract->id])->one();
-            $contractor = User::findOne($contract->created_by);
+            $contractor = User::findOne(Yii::$app->params['contractorId']);
 
             $html = $this->renderPartial('actOfWorkPDF', [
                 'contractor'=> $contractor,
