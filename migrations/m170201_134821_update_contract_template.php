@@ -270,8 +270,8 @@ class m170201_134821_update_contract_template extends Migration
 </table>
 ';
 
-        $this->update('contract_templates', ['content' => $content], 'name=:name', [':name' => 'Default template']);
-        $this->update('payment_methods', ['description' => $description], 'name=:name', [':name' => 'Default payment method']);
+    $this->update('contract_templates', ['content' => $content], 'name=:name', [':name' => 'Default template']);
+    $this->update('payment_methods', ['description' => $description], 'name=:name', [':name' => 'Default payment method']);
 
 
     }
