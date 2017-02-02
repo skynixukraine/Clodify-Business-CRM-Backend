@@ -260,12 +260,13 @@ class ProjectController extends DefaultController
                 if(! in_array($model->status, [ Project::STATUS_ONHOLD, Project::STATUS_DONE, Project::STATUS_CANCELED, Project::STATUS_INPROGRESS])) {
                    $model->status = Project::STATUS_NEW;
                 }
+
                 if ($model->validate() && $model->save()) {
                     Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created project {id}", ['id' => $model->id]));
                     return $this->redirect(['index']);
                 } 
             }
-            return $this->render('create', ['model' => $model,
+            return $this->render('create', ['model' => $model, 'mode' => 'create',
                                             'title' => 'Create a new project']);
     }
 
@@ -336,7 +337,8 @@ class ProjectController extends DefaultController
                [
                    'model' => $model,
                    'aliases' => $aliases,
-                   'title' => 'Edit the project #' . $model->id
+                   'title' => 'Edit the project #' . $model->id,
+                   'mode' =>'edit'
                ]
            );
 
