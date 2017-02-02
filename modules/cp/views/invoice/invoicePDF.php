@@ -32,7 +32,7 @@
 
     <tr>
         <td colspan = "8" width = "570"  valign="top" style="padding: 0; margin: 0;">
-            <a href="http://skynix.solutions/" title="logo Skynix" target="_blank">
+            <a href="http://skynix.co" title="logo Skynix" target="_blank">
                 <img src="http://cdn.skynix.co/skynix/logo_skynix.jpg" alt="Skynix" border="0" width="105" height="30" style="display: block; padding: 0px; margin: 0px; border: none;">
             </a>
         </td>
@@ -71,18 +71,18 @@
         </td>
     </tr>
 
-
-
     <tr>
-        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 13px 0; margin: 0; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-            Requisites/Реквізити
+        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
+            <span>Requisites/Реквізити</span><br>
+            <p><span style="color: #ffffff;">.</span></p>
         </td>
     </tr>
-    <?php
-    $signatureProzhoga = Yii::getAlias('@app') . '/data/signatureProzhoga.png';
-    $signatureProzhoga = (string) $signatureProzhoga;
-    echo  str_replace('var_signature_Prozhoga', $signatureProzhoga, $paymentMethod->description);
-    ?>
+
+    <tr>
+        <td colspan = "8" width = "570" height="12" valign="top" style="padding: 0; margin: 0;  border-top: 1px solid black; border-bottom: 1px solid black; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
+            <?=$paymentMethod->description?>
+        </td>
+    </tr>
 
     <tr>
         <td colspan = "8" width = "570" height="12" valign="top" style="padding: 35px 0 20px 0; margin: 0; font-size: 14px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
@@ -95,7 +95,7 @@
             Contractor
         </td>
         <td colspan = "2" width = "286" height="12" valign="top" style="padding: 0 0 20px 5px; margin: 0; font-size: 14px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left;">
-            Prozhoga O.Y.
+            <?php echo $contractor->last_name . ' ' . $contractor->first_name . ' ' . $contractor->middle_name?>
         </td>
         <td colspan = "2" width = "57" height="12" valign="top" style="padding: 0 0 20px 0; margin: 0; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif;font-weight: 600; text-align: left;">
             Customer
@@ -107,12 +107,12 @@
 
     <tr>
         <td colspan = "3" width = "148" valign="middle" align="right" style="padding: 0; margin: 0; vertical-align: middle;">
-            <img src="<?=Yii::getAlias("@app")?>/data/signatures1.gif" alt="signatures contractor" border="0" width="77" height="62" style="padding: 0px; margin: 0px; border: none; display: block;">
+            <img src="<?=Yii::getAlias('@app') . '/data/' . $contractor->id . '/sing/' . $contractor->sing;?>" alt="signatures contractor" border="0"  style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
         </td>
         <td width = "203" height="75" style="padding: 0; margin: 0;"></td>
         <td colspan = "3" width = "167" valign="middle" align="right" style="padding: 0; margin: 0;">
             <?php if(file_exists ( Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing)):?>
-            <img src="<?= Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing?>" alt="signatures customer" border="0" width="96" height="46" style="padding: 0px; margin: 0px; border: none; display: block;">
+            <img src="<?= Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing?>" alt="signatures customer" border="0" style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
             <?php endif;?>
         </td>
         <td width = "52" style="padding: 0; margin: 0;">

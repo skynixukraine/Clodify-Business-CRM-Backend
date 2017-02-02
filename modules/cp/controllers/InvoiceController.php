@@ -397,7 +397,8 @@ class InvoiceController extends DefaultController
                 'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
                 'idCustomer' => $dataPdf->getUser()->one()->id,
                 'notes'      => $dataPdf->note,
-                'sing'       => $dataPdf->getUser()->one()->sing
+                'sing'       => $dataPdf->getUser()->one()->sing,
+                'contractor' => User::findOne(Yii::$app->params['contractorId'])
 
             ]);
 
