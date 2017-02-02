@@ -63,26 +63,29 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
 
 
 <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
-
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
-        <td width="285" style ="width: 285px; vertical-align: top;  border-top: 0px solid black; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="285" style ="width: 285px; vertical-align: top;  border-bottom: 0px solid black; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <img src="<?=$signatureProzhoga?>" style="max-width: 120px;">
         </td>
-        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse; border-bottom: 0px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <img src="<?=$signatureProzhoga?>" style="max-width: 120px;">
         </td>
-    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
-        <td width="285" style ="width: 285px; vertical-align: top; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 0px solid black;height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+    </tr>
+</table>
+<table width="570" style="max-width: 570px; margin-top: -1px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
+    <tr style = "height: 100%; padding: 0; box-sizing: border-box; border-collapse: collapse; ">
+        <td width="285" style ="width: 285px; vertical-align: top; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Підпис</p>
         </td>
-        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse;  border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Signature</p>
         </td>
     </tr>
 </table>
 
+<?php
 
-
+if ($user->sing) :?>
 <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
 
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse;">
@@ -94,10 +97,6 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
         </td>
     </tr>
 </table>
-
-<?php
-
-if ($user->sing) :?>
 
 <table width="570" style=" margin-left: auto; margin-right: auto; border-collapse: collapse;">
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
