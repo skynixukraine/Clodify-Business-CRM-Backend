@@ -39,8 +39,6 @@ $description = '<table width="570" style="max-width: 570px; margin-left: auto; m
                         <p><strong>Chase Bank,New York ,USA</strong></p>
                         <p>Рахунок у банку-кореспонденту: <strong>001-1-000080</strong></p>
                         <p>SWIFT код кореспондента: <strong>CHASUS33</strong></p>
-                        <p><br><span style="color: #ffffff;">.</span></p>
-                        <p>Прожога О.Ю.</p>
                     </td>
                 </tr>
             </table>
@@ -66,8 +64,6 @@ $description = '<table width="570" style="max-width: 570px; margin-left: auto; m
                         <p><strong>Chase Bank,New York ,USA</strong></p>
                         <p>CORRESPONDENT ACCOUNT: <strong>001-1-000080</strong></p>
                         <p>SWIFT Code of correspondent bank: <strong>CHASUS33</strong></p>
-                        <p><br><span style="color: #ffffff;">.</span></p>
-                        <p>Prozhoga O.Y.</p>
                     </td>
                 </tr>
             </table>
@@ -76,6 +72,43 @@ $description = '<table width="570" style="max-width: 570px; margin-left: auto; m
 </table>';
 echo str_replace($search, $replace, $contract_template->content) . $description;
 ?>
+
+
+
+
+
+
+
+<table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse;">
+        <td width="285" style =" vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px; padding: 5px;">
+            <table width="285" style="margin:0;border-collapse: collapse;border: 0;">
+                <tr>
+                    <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
+                        <p><br><span style="color: #ffffff;">.</span></p>
+                        <p>Прожога О.Ю.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width="284" style =" vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\'; font-size:10px; padding: 5px;">
+            <table width="284" style="margin:0;border-collapse: collapse;border: 0;">
+                <tr>
+                    <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
+                        <p><br><span style="color: #ffffff;">.</span></p>
+                        <p>Prozhoga O.Y.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
 
 
 
