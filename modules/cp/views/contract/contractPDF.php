@@ -33,7 +33,7 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
                 <tr>
                     <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
                         <p><br><span style="color: #ffffff;">.</span></p>
-                        <p>Прожога О.Ю.</p>
+                        <p><?php echo $contractor->last_name . ' ' . $contractor->first_name . ' ' . $contractor->middle_name?></p>
                     </td>
                 </tr>
             </table>
@@ -43,7 +43,7 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
                 <tr>
                     <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
                         <p><br><span style="color: #ffffff;">.</span></p>
-                        <p>Prozhoga O.Y.</p>
+                        <p><?php echo $contractor->last_name . ' ' . $contractor->first_name . ' ' . $contractor->middle_name?></p>
                     </td>
                 </tr>
             </table>
