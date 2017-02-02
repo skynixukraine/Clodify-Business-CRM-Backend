@@ -219,7 +219,7 @@ $content = '
                 <tr>
                     <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
                         2.3.In case of change of the sum of the Contract,
-                        the Party undertake to sign the additional
+                        the Parties undertake to sign the additional
                         agreement to the given Contract on increase or
                         reduction of a total sum of the Contract.</td>
                 </tr>

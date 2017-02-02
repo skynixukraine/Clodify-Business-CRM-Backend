@@ -12,23 +12,23 @@ class m170202_135748_update_contract_template_simply_edits extends Migration
     <td width="285" style =" vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px; padding: 5px;">
         <table width="285" style="margin:0;border-collapse: collapse;border: 0;">
             <tr>
-                <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">Виконавець</td>
+                <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">Р’РёРєРѕРЅР°РІРµС†СЊ</td>
             </tr>
             <tr>
                 <td align="justify" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;">
                     <p><span style="color: #ffffff;">.</span></p>
-                    <p>Бенефіциар: <strong>Прожога Олексій Юрійович</strong></p>
-                    <p>Адреса бенефіциара: <strong>UA 08294</strong></p>
-                    <p><strong>Київська обл., м. Буча</strong></p>
-                    <p><strong>вул. Тарасiвська д.8а кв.128</strong></p>
-                    <p>Рахунок бенефіциара: <strong>26002057002108</strong></p>
-                    <p>SWIFT код: <strong>PBANUA2X</strong></p>
-                    <p>Банк бенефіциара: <strong>Privatbank, Dnipropetrovsk, Ukraine</strong></p>
+                    <p>Р‘РµРЅРµС„С–С†РёР°СЂ: <strong>РџСЂРѕР¶РѕРіР° РћР»РµРєСЃС–Р№ Р®СЂС–Р№РѕРІРёС‡</strong></p>
+                    <p>РђРґСЂРµСЃР° Р±РµРЅРµС„С–С†РёР°СЂР°: <strong>UA 08294</strong></p>
+                    <p><strong>РљРёС—РІСЃСЊРєР° РѕР±Р»., Рј. Р‘СѓС‡Р°</strong></p>
+                    <p><strong>РІСѓР». РўР°СЂР°СЃiРІСЃСЊРєР° Рґ.8Р° РєРІ.128</strong></p>
+                    <p>Р Р°С…СѓРЅРѕРє Р±РµРЅРµС„С–С†РёР°СЂР°: <strong>26002057002108</strong></p>
+                    <p>SWIFT РєРѕРґ: <strong>PBANUA2X</strong></p>
+                    <p>Р‘Р°РЅРє Р±РµРЅРµС„С–С†РёР°СЂР°: <strong>Privatbank, Dnipropetrovsk, Ukraine</strong></p>
                     <p>IBAN Code: <strong>UA323515330000026002057002108</strong></p>
-                    <p>Банк-корреспондент: <strong>JP Morgan</strong></p>
+                    <p>Р‘Р°РЅРє-РєРѕСЂСЂРµСЃРїРѕРЅРґРµРЅС‚: <strong>JP Morgan</strong></p>
                     <p><strong>Chase Bank,New York ,USA</strong></p>
-                    <p>Рахунок у банку-кореспонденту: <strong>001-1-000080</strong></p>
-                    <p>SWIFT код кореспондента: <strong>CHASUS33</strong></p>
+                    <p>Р Р°С…СѓРЅРѕРє Сѓ Р±Р°РЅРєСѓ-РєРѕСЂРµСЃРїРѕРЅРґРµРЅС‚Сѓ: <strong>001-1-000080</strong></p>
+                    <p>SWIFT РєРѕРґ РєРѕСЂРµСЃРїРѕРЅРґРµРЅС‚Р°: <strong>CHASUS33</strong></p>
                 </td>
             </tr>
         </table>
@@ -74,10 +74,10 @@ $content = '
         <td style =" vertical-align: top; border: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px 4px 5px 4px;">
             <table width="285" style="margin:0;border-collapse: collapse;border: 0;">
                 <tr>
-                    <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;"><strong>КОНТРАКТ №var_contract_id</strong></strong></td>
+                    <td align="center" style="margin: 0; font-family:\'Times New Roman\';font-size:10px;"><strong>РљРћРќРўР РђРљРў в„–var_contract_id</strong></strong></td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>НА НАДАННЯ ПОСЛУГ</strong></td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>РќРђ РќРђР”РђРќРќРЇ РџРћРЎР›РЈР“</strong></td>
                 </tr>
                 <tr>
                     <td align="right" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">var_start_date</td>
@@ -88,89 +88,89 @@ $content = '
                 <tr>
                     <td align="justify" style="margin: 0;">
                         <p style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-                            <span style="color: #ffffff;">.....</span>Компанія "var_company_name" далі
-                            по тексту "Замовник" і Компанія ФОП Прожога О.Ю.,
-                            Україна,в особі Прожоги Олексія Юрійовича,
-                            діючого на підставі реєстрації
-                            №22570000000001891 від 01.05.2001р. далі по
-                            тексту "Виконавець", далі по тексту Сторони,
-                            уклали цей Контракт про наступне:<br><span style="color: #ffffff;">.</span><br>
+                            <span style="color: #ffffff;">.....</span>РљРѕРјРїР°РЅС–СЏ "var_company_name" РґР°Р»С–
+                            РїРѕ С‚РµРєСЃС‚Сѓ "Р—Р°РјРѕРІРЅРёРє" С– РљРѕРјРїР°РЅС–СЏ Р¤РћРџ РџСЂРѕР¶РѕРіР° Рћ.Р®.,
+                            РЈРєСЂР°С—РЅР°,РІ РѕСЃРѕР±С– РџСЂРѕР¶РѕРіРё РћР»РµРєСЃС–СЏ Р®СЂС–Р№РѕРІРёС‡Р°,
+                            РґС–СЋС‡РѕРіРѕ РЅР° РїС–РґСЃС‚Р°РІС– СЂРµС”СЃС‚СЂР°С†С–С—
+                            в„–22570000000001891 РІС–Рґ 01.05.2001СЂ. РґР°Р»С– РїРѕ
+                            С‚РµРєСЃС‚Сѓ "Р’РёРєРѕРЅР°РІРµС†СЊ", РґР°Р»С– РїРѕ С‚РµРєСЃС‚Сѓ РЎС‚РѕСЂРѕРЅРё,
+                            СѓРєР»Р°Р»Рё С†РµР№ РљРѕРЅС‚СЂР°РєС‚ РїСЂРѕ РЅР°СЃС‚СѓРїРЅРµ:<br><span style="color: #ffffff;">.</span><br>
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>1. Предмет Контракту</strong></td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>1. РџСЂРµРґРјРµС‚ РљРѕРЅС‚СЂР°РєС‚Сѓ</strong></td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"> 1.1.Виконавець зобов\'язується за завданням
-                        Замовника надати наступні послуги:
-                        Розробка програмного забезпечення(веб
-                        сайту)
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"> 1.1.Р’РёРєРѕРЅР°РІРµС†СЊ Р·РѕР±РѕРІ\'СЏР·СѓС”С‚СЊСЃСЏ Р·Р° Р·Р°РІРґР°РЅРЅСЏРј
+                        Р—Р°РјРѕРІРЅРёРєР° РЅР°РґР°С‚Рё РЅР°СЃС‚СѓРїРЅС– РїРѕСЃР»СѓРіРё:
+                        Р РѕР·СЂРѕР±РєР° РїСЂРѕРіСЂР°РјРЅРѕРіРѕ Р·Р°Р±РµР·РїРµС‡РµРЅРЅСЏ(РІРµР±
+                        СЃР°Р№С‚Сѓ)
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>2. Ціна і загальна сума Контракту</strong></td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>2. Р¦С–РЅР° С– Р·Р°РіР°Р»СЊРЅР° СЃСѓРјР° РљРѕРЅС‚СЂР°РєС‚Сѓ</strong></td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">2.1. Вартість послуги встановлюється в <strong>$var_total</strong></td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">2.1. Р’Р°СЂС‚С–СЃС‚СЊ РїРѕСЃР»СѓРіРё РІСЃС‚Р°РЅРѕРІР»СЋС”С‚СЊСЃСЏ РІ <strong>$var_total</strong></td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">2.2.  Загальна сума Контракту становить <strong>$var_total</strong></td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">2.2.  Р—Р°РіР°Р»СЊРЅР° СЃСѓРјР° РљРѕРЅС‚СЂР°РєС‚Сѓ СЃС‚Р°РЅРѕРІРёС‚СЊ <strong>$var_total</strong></td>
                 </tr>
                 <tr>
                     <td align="left" style="margin: 0;letter-spacing:0px;font-family:\'Times New Roman\';font-size:10px;">
-                        2.3.У разі зміни суми Контракту за згодою
-                        сторін, Сторони зобов\'язуються підписати додаткову угоду до даного Контракту про
-                        збільшення або зменшення загальної суми Контракту.<br><span style="color: #ffffff;">.</span></td>
+                        2.3.РЈ СЂР°Р·С– Р·РјС–РЅРё СЃСѓРјРё РљРѕРЅС‚СЂР°РєС‚Сѓ Р·Р° Р·РіРѕРґРѕСЋ
+                        СЃС‚РѕСЂС–РЅ, РЎС‚РѕСЂРѕРЅРё Р·РѕР±РѕРІ\'СЏР·СѓСЋС‚СЊСЃСЏ РїС–РґРїРёСЃР°С‚Рё РґРѕРґР°С‚РєРѕРІСѓ СѓРіРѕРґСѓ РґРѕ РґР°РЅРѕРіРѕ РљРѕРЅС‚СЂР°РєС‚Сѓ РїСЂРѕ
+                        Р·Р±С–Р»СЊС€РµРЅРЅСЏ Р°Р±Рѕ Р·РјРµРЅС€РµРЅРЅСЏ Р·Р°РіР°Р»СЊРЅРѕС— СЃСѓРјРё РљРѕРЅС‚СЂР°РєС‚Сѓ.<br><span style="color: #ffffff;">.</span></td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>3. Умови платежу</strong></td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>3. РЈРјРѕРІРё РїР»Р°С‚РµР¶Сѓ</strong></td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">3.1.Замовник здійснює оплату банківським
-                        переказом на рахунок Виконавця протягом 5
-                        календарних днів з моменту підписання Акту
-                        прийому-передачі наданих послуг.</td>
-                </tr>
-                <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-                        3.2. Банківські витрати оплачує замовник</td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">3.1.Р—Р°РјРѕРІРЅРёРє Р·РґС–Р№СЃРЅСЋС” РѕРїР»Р°С‚Сѓ Р±Р°РЅРєС–РІСЃСЊРєРёРј
+                        РїРµСЂРµРєР°Р·РѕРј РЅР° СЂР°С…СѓРЅРѕРє Р’РёРєРѕРЅР°РІС†СЏ РїСЂРѕС‚СЏРіРѕРј 5
+                        РєР°Р»РµРЅРґР°СЂРЅРёС… РґРЅС–РІ Р· РјРѕРјРµРЅС‚Сѓ РїС–РґРїРёСЃР°РЅРЅСЏ РђРєС‚Сѓ
+                        РїСЂРёР№РѕРјСѓ-РїРµСЂРµРґР°С‡С– РЅР°РґР°РЅРёС… РїРѕСЃР»СѓРі.</td>
                 </tr>
                 <tr>
                     <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-                        3.3. Валюта платежу – USD.</td>
+                        3.2. Р‘Р°РЅРєС–РІСЃСЊРєС– РІРёС‚СЂР°С‚Рё РѕРїР»Р°С‡СѓС” Р·Р°РјРѕРІРЅРёРє</td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>4. Умови надання послуг</strong></td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
+                        3.3. Р’Р°Р»СЋС‚Р° РїР»Р°С‚РµР¶Сѓ вЂ“ USD.</td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">4.1.Виконавець надає послуги на умовах
-                        цього Контракту і Додатків до нього.</td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>4. РЈРјРѕРІРё РЅР°РґР°РЅРЅСЏ РїРѕСЃР»СѓРі</strong></td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>5. Відповідальність сторін</strong></td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">4.1.Р’РёРєРѕРЅР°РІРµС†СЊ РЅР°РґР°С” РїРѕСЃР»СѓРіРё РЅР° СѓРјРѕРІР°С…
+                        С†СЊРѕРіРѕ РљРѕРЅС‚СЂР°РєС‚Сѓ С– Р”РѕРґР°С‚РєС–РІ РґРѕ РЅСЊРѕРіРѕ.</td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">5.1.Сторони зобов\'язуються нести
-                        відповідальність за невиконання або
-                        неналежне виконання зобов\'язань за цим
-                        Контрактом.</td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>5. Р’С–РґРїРѕРІС–РґР°Р»СЊРЅС–СЃС‚СЊ СЃС‚РѕСЂС–РЅ</strong></td>
                 </tr>
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>6. Претензії</strong></td>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">5.1.РЎС‚РѕСЂРѕРЅРё Р·РѕР±РѕРІ\'СЏР·СѓСЋС‚СЊСЃСЏ РЅРµСЃС‚Рё
+                        РІС–РґРїРѕРІС–РґР°Р»СЊРЅС–СЃС‚СЊ Р·Р° РЅРµРІРёРєРѕРЅР°РЅРЅСЏ Р°Р±Рѕ
+                        РЅРµРЅР°Р»РµР¶РЅРµ РІРёРєРѕРЅР°РЅРЅСЏ Р·РѕР±РѕРІ\'СЏР·Р°РЅСЊ Р·Р° С†РёРј
+                        РљРѕРЅС‚СЂР°РєС‚РѕРј.</td>
                 </tr>
                 <tr>
-                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">6.1 Претензії щодо якості наданих за даним
-                        Контрактом послуг можуть бути пред\'явлені
-                        не пізніше 3 робочих днів з дня підписання
-                        Акту прийому-передачі наданих послуг.</td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>6. РџСЂРµС‚РµРЅР·С–С—</strong></td>
+                </tr>
+                <tr>
+                    <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">6.1 РџСЂРµС‚РµРЅР·С–С— С‰РѕРґРѕ СЏРєРѕСЃС‚С– РЅР°РґР°РЅРёС… Р·Р° РґР°РЅРёРј
+                        РљРѕРЅС‚СЂР°РєС‚РѕРј РїРѕСЃР»СѓРі РјРѕР¶СѓС‚СЊ Р±СѓС‚Рё РїСЂРµРґ\'СЏРІР»РµРЅС–
+                        РЅРµ РїС–Р·РЅС–С€Рµ 3 СЂРѕР±РѕС‡РёС… РґРЅС–РІ Р· РґРЅСЏ РїС–РґРїРёСЃР°РЅРЅСЏ
+                        РђРєС‚Сѓ РїСЂРёР№РѕРјСѓ-РїРµСЂРµРґР°С‡С– РЅР°РґР°РЅРёС… РїРѕСЃР»СѓРі.</td>
                 </tr>
             </table>
         </td>
         <td style =" vertical-align: top; border-collapse: collapse; border: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px 4px 5px 4px;">
             <table width="285" style="margin:0;border-collapse: collapse;border: 0;">
                 <tr>
-                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>CONTRACT №var_contract_id</strong></td>
+                    <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>CONTRACT в„–var_contract_id</strong></td>
                 </tr>
                 <tr>
                     <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;"><strong>FOR SERVICES</strong></td>
@@ -188,10 +188,10 @@ $content = '
                             hereinafter referred to as "Customer" and the
                             company "<strong>FOP Prozhoga O.Y.</strong>" Ukraine,
                             represented by Prozhoga Oleksii Yuriyovich, who is
-                            authorized by check №22570000000001891 from
+                            authorized by check в„–22570000000001891 from
                             01.05.2001, hereinafter referred to as "Contractor",
                             and both Companies hereinafter referred to as
-                            "Parties", have cа яoncluded the present Contract as
+                            "Parties", have cР° СЏoncluded the present Contract as
                             follows:
                         </p>
                     </td>
