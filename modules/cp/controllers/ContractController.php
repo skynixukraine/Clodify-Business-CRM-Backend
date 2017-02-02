@@ -230,7 +230,8 @@ class ContractController extends DefaultController
                 'total' => $model->total,
                 'contract_template_id' => $model->contract_template_id,
                 'contract_payment_method_id' => $model->contract_payment_method_id,
-                'customer_id' => $model->customer_id
+                'customer_id' => $model->customer_id,
+                'contractor'=> User::findOne(Yii::$app->params['contractorId'])
             ]);
 
             $pdf = new mPDF();
