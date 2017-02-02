@@ -95,7 +95,7 @@
             Contractor
         </td>
         <td colspan = "2" width = "286" height="12" valign="top" style="padding: 0 0 20px 5px; margin: 0; font-size: 14px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left;">
-            Prozhoga O.Y.
+            <?php echo $contractor->last_name . ' ' . $contractor->first_name . ' ' . $contractor->middle_name?>
         </td>
         <td colspan = "2" width = "57" height="12" valign="top" style="padding: 0 0 20px 0; margin: 0; font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif;font-weight: 600; text-align: left;">
             Customer
