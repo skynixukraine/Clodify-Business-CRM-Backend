@@ -157,6 +157,10 @@ var projectModule = (function() {
                         "orderable" : true
                     },
                     {
+                        "targets"   : 7,
+                        "orderable" : cfg.canDelete ? true : false
+                    },
+                    {
                         "targets"   : 8,
                         "orderable" : false
                     },
@@ -164,19 +168,6 @@ var projectModule = (function() {
                         "targets"   : 9,
                         "orderable" : false
                     });
-                if (cfg.canDelete) {
-                    columns.push({
-                        "targets"   : 7,
-                        "orderable" : true
-
-                    });
-                } else {
-                    columns.push({
-                        "targets"   : 7,
-                        "orderable" : false
-
-                    });
-                }
             }
             if( !cfg.canSeeHours){
                 columns.push(
