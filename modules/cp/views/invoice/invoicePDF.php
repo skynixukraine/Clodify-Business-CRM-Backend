@@ -166,12 +166,12 @@
 
     <tr>
         <td colspan = "3" width = "148" valign="middle" align="right" style="padding: 0; margin: 0; vertical-align: middle;">
-            <img src="<?=Yii::getAlias("@app")?>/data/signatures1.gif" alt="signatures contractor" border="0" width="77" height="62" style="padding: 0px; margin: 0px; border: none; display: block;">
+            <img src="<?=Yii::getAlias("@app")?>/data/signatures1.gif" alt="signatures contractor" border="0"  style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
         </td>
         <td width = "203" height="75" style="padding: 0; margin: 0;"></td>
         <td colspan = "3" width = "167" valign="middle" align="right" style="padding: 0; margin: 0;">
             <?php if(file_exists ( Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing)):?>
-            <img src="<?= Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing?>" alt="signatures customer" border="0" width="96" height="46" style="padding: 0px; margin: 0px; border: none; display: block;">
+            <img src="<?= Yii::getAlias("@app") . "/data/" . $idCustomer . "/sing/" . $sing?>" alt="signatures customer" border="0" style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
             <?php endif;?>
         </td>
         <td width = "52" style="padding: 0; margin: 0;">
