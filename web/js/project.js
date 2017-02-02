@@ -158,7 +158,7 @@ var projectModule = (function() {
                     },
                     {
                         "targets"   : 7,
-                        "orderable" : true
+                        "orderable" : cfg.canDelete ? true : false
                     },
                     {
                         "targets"   : 8,
