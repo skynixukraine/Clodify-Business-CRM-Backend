@@ -62,7 +62,8 @@ $this->params['menu'] = [
         <div class="col-lg-2">
             <?php echo Html::label('Users:');
             $users = User::find()
-                ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+                ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV
+                    . '", "' . User::ROLE_FIN . '", "' . User::ROLE_SALES . '")
              AND is_delete=0 AND is_active=1')->groupBy(User::tableName() . '.id ')->all();
             if (User::hasPermission([User::ROLE_SALES])) {
                 $projectIDs = [];
@@ -70,7 +71,8 @@ $this->params['menu'] = [
                     $projectIDs[] = $project->id;
                 }
                 $users = User::find()
-                    ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV . '")
+                    ->where('role IN ( "' .  User::ROLE_ADMIN . '" , "' .  User::ROLE_PM . '", "'  .  User::ROLE_DEV
+                        . '", "' . User::ROLE_FIN . '", "' . User::ROLE_SALES . '")
              AND is_delete=0 AND is_active=1')
                     ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.user_id=' . User::tableName() . '.id')
                     ->where([ProjectDeveloper::tableName() . '.project_id' => $projectIDs])
@@ -92,7 +94,7 @@ $this->params['menu'] = [
                 $users = User::find()
                     ->where(User::tableName() . '.id IN (' . $devUser . ')')
                     ->andWhere(['is_active' => 1])
-                    ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                    ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
                     ->andWhere(User::tableName() . '.is_delete=0')
                     ->all();
             }
