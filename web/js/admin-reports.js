@@ -103,6 +103,9 @@ var adminReportModule = (function() {
             cfg = $.extend(cfg, config);
             var columns = [
                 {
+                    className: "task", "targets": [ 1 ]
+                },
+                {
                     "targets"   : 0,
                     "orderable" : true
                 },
@@ -110,18 +113,7 @@ var adminReportModule = (function() {
                     "targets"   : 1,
                     "orderable" : true,
                     "render" : function (data, type, row) {
-                        row[1] = row[1].replace(/(<([^>]+)>)/ig,"");
-                        if (row[1].length >= 35) {
-                            multiplier = Math.ceil(row[1].length/35);
-                            task = '';
-                            for (i = 0; i <= multiplier; i++) {
-                                task += row[1].substr(i*35,35) + '<br>';
-                            }
-                            return task;
-                        }
-
-                        return row[1];
-
+                        return row[1].replace(/(<([^>]+)>)/ig,"");
                     }
                 }
             ], index=1;
