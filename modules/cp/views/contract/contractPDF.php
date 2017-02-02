@@ -9,7 +9,7 @@ $user = User::findOne($customer_id);
 
 $total = number_format($total, 2);
 $companyName = $user->company;
-$signatureProzhoga = Yii::getAlias('@app') . '/data/signatureProzhoga.png';
+$signatureProzhoga = Yii::getAlias('@app') . '/data/' . $contractor->id . '/sing/' . $contractor->sing;
 $signatureProzhoga = (string) $signatureProzhoga;
 
 $start_date = date("d/m/Y", strtotime($start_date));
