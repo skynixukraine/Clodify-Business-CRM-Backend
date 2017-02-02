@@ -38,7 +38,7 @@
     </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-            <strong>прийому передачі виконаних робіт</strong>
+            <strong>'прийому передачі' виконаних робіт</strong>
         </td>
     </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
@@ -50,6 +50,11 @@
         <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
             <!-- contract _act date -->
             <strong><?= date_format(date_create($contract->act_date), 'd/m/Y' )?> р.</strong>
+        </td>
+    </tr>
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
+        <td align="center" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
+            <br> <span style="color: #ffffff;">.</span>
         </td>
     </tr>
 
