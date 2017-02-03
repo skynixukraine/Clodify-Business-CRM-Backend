@@ -103,6 +103,9 @@ var adminReportModule = (function() {
             cfg = $.extend(cfg, config);
             var columns = [
                 {
+                    className: "task", "targets": [ 1 ]
+                },
+                {
                     "targets"   : 0,
                     "orderable" : true
                 },
