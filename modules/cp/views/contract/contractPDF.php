@@ -3,6 +3,7 @@ use app\models\ContractTemplates;
 use app\models\PaymentMethod;
 use app\models\User;
 
+
 $contract_template = ContractTemplates::findOne($contract_template_id);
 $payment_template = PaymentMethod::findOne($contract_payment_method_id);
 $user = User::findOne($customer_id);
@@ -74,10 +75,10 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
 </table>
 <table width="570" style="max-width: 570px; margin-top: -1px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
     <tr style = "height: 100%; padding: 0; box-sizing: border-box; border-collapse: collapse; ">
-        <td width="285" style ="width: 285px; vertical-align: top; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="285" style ="width: 285px; vertical-align: top; border-bottom: none; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Підпис</p>
         </td>
-        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse;  border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
+        <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse;  border-bottom: none; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
             <p>Signature</p>
         </td>
     </tr>
@@ -87,12 +88,20 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
 
 if ($user->sing) :?>
 <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
-
+    <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; border-top:none">
+        <td align="center" width="285" style =" vertical-align: top; border-top: none; border-left: 1px solid black; border-right: 1px solid black;  height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:'Times New Roman';font-size:10px;">
+            Замовник
+        </td>
+        <td align="center" width="284" style =" vertical-align: top; border-bottom:none; border-collapse: collapse; border-top: none; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:'Times New Roman';font-size:10px;">
+            Customer
+        </td>
+    </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse;">
-        <td width="285" style =" vertical-align: top; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;  height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:'Times New Roman';font-size:10px;">
+        <td width="285" style =" vertical-align: top;  border-left: 1px solid black; border-right: 1px solid black;  height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:'Times New Roman';font-size:10px;">
+
             <?=$user->bank_account_ua?>
         </td>
-        <td width="284" style =" vertical-align: top; border-collapse: collapse; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:'Times New Roman';font-size:10px;">
+        <td width="284" style =" vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:'Times New Roman';font-size:10px;">
             <?=$user->bank_account_en?>
         </td>
     </tr>
