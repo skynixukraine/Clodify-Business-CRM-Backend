@@ -54,7 +54,7 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
     if (User::hasPermission([User::ROLE_SALES])) {
         $projectsID = [];
         $customers = [];
-        $projects = Project::getDevOrAdminOrPmOrSalesProjects(Yii::$app->user->id);
+        $projects = Project::getDevOrAdminOrPmOrSalesOrFinProjects(Yii::$app->user->id);
         foreach ($projects as $project) {
             $projectsID[] = $project->id;
         }
