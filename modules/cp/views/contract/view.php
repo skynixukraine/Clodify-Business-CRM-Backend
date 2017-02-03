@@ -44,7 +44,7 @@ $this->params['menu'] = [
         <div>
             <?= Html::a('Download Act of Work', ['contract/downloadactofwork?id=' . $model->contract_id]) ?>
         </div>
-        <?php if (($invoice = Invoice::findOne(['contract_id' => $model->id])) && ($invoice->date_sent != null)) :?>
+        <?php if ($invoice = Invoice::findOne(['contract_id' => $model->id])) :?>
 
                 <div>
                     <?= Html::a('Download PDF Invoice', ['invoice/download?id=' . $invoice->id]) ?>

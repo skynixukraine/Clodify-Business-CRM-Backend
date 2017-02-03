@@ -190,32 +190,28 @@ class Report extends \yii\db\ActiveRecord
         switch( $filter ){
 
             case 1:
-                $query->where('user_id=:userId AND date_added=CURDATE() AND projects.is_delete=0
-                               AND reports.is_delete=0',
+                $query->where('user_id=:userId AND date_added=CURDATE() AND reports.is_delete=0',
                 [
                     ':userId' => $userId
                 ]);
                 break;
             case 2:
                 $query->where('user_id=:userId AND WEEK(date_added)=WEEK(CURDATE())
-                                AND YEAR(date_added) = YEAR(CURDATE()) AND projects.is_delete=0
-                                AND reports.is_delete=0',
+                                AND YEAR(date_added) = YEAR(CURDATE()) AND reports.is_delete=0',
                     [
                         ':userId' => $userId
                     ]);
                 break;
             case 3:
                 $query->where('user_id=:userId AND MONTH(date_added)=MONTH(CURDATE())
-                                AND YEAR(date_added) = YEAR(CURDATE())  AND projects.is_delete=0
-                                AND reports.is_delete=0',
+                                AND YEAR(date_added) = YEAR(CURDATE())  AND reports.is_delete=0',
                     [
                         ':userId' => $userId
                     ]);
                 break;
             case 4:
                 $query->where('user_id=:userId AND MONTH(date_added)=MONTH(CURDATE() - INTERVAL 1 MONTH)
-                                AND YEAR(date_added) = YEAR(CURDATE()) AND projects.is_delete=0
-                                AND reports.is_delete=0',
+                                AND YEAR(date_added) = YEAR(CURDATE()) AND reports.is_delete=0',
                     [
                         ':userId' => $userId
                     ]);

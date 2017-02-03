@@ -230,7 +230,8 @@ class ContractController extends DefaultController
                 'total' => $model->total,
                 'contract_template_id' => $model->contract_template_id,
                 'contract_payment_method_id' => $model->contract_payment_method_id,
-                'customer_id' => $model->customer_id
+                'customer_id' => $model->customer_id,
+                'contractor'=> User::findOne(Yii::$app->params['contractorId'])
             ]);
 
             $pdf = new mPDF();
@@ -260,7 +261,7 @@ class ContractController extends DefaultController
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
             $invoice    = Invoice::find()->where(['contract_id' => $contract->id])->one();
-            $contractor = User::findOne($contract->created_by);
+            $contractor = User::findOne(Yii::$app->params['contractorId']);
 
             $html = $this->renderPartial('actOfWorkPDF', [
                 'contractor'=> $contractor,
