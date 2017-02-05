@@ -34,7 +34,11 @@ $this->params['menu'] = [
             <?php echo Html::label('Projects:');
              if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                  $projects = Project::find()
-                     ->where('is_delete=0')
+                     ->leftJoin(ProjectDeveloper::tableName() ,ProjectDeveloper::tableName() . '.project_id=' .
+                         Project::tableName() . '.id')
+                     ->where(Project::tableName() . 'is_delete=0')
+                     ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . Yii::$app->user->id)
+                     ->andWhere(ProjectDeveloper::tableName() . '.status=' . ProjectDeveloper::STATUS_ACTIVE)
                      ->all();
              } else if (User::hasPermission([User::ROLE_SALES])) {
                  $projects = Project::find()
@@ -42,6 +46,7 @@ $this->params['menu'] = [
                      ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                      ->andWhere(Project::tableName() . '.is_delete=0')
                      ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
+                     ->andWhere(ProjectDeveloper::tableName() . '.status=' . ProjectDeveloper::STATUS_ACTIVE)
                      ->all();
              } else if (User::hasPermission([User::ROLE_CLIENT])) {
                  $projects = Project::find()
