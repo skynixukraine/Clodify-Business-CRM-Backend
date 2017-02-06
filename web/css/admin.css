@@ -118,6 +118,13 @@
     color:red;
 }
 
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
 .form-add-report .form-control{
     padding:6px 2px;
 }
