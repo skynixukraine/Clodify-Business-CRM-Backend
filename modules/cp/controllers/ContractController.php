@@ -180,7 +180,7 @@ class ContractController extends DefaultController
                 $customer->id,
                 $createdByCurrentUser,
                 $model->id,
-                $model->hasInvoices() ? 'Invoiced' : 'Was not invoiced'
+                $model->hasInvoices()
             ];
 
         }
