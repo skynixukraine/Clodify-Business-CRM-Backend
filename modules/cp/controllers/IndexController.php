@@ -220,8 +220,8 @@ class IndexController extends DefaultController
                         ]);
                     }
 
-                    if ($date_end == null || $model->date_report == null || ($model->date_report <= $date_end &&
-                        DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report)))
+                    if ($date_end == null || $model->date_report == null || !$model->invoice_id ||
+                        DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
                     ) {
                         if ($model->hours < 0.1) {
 
