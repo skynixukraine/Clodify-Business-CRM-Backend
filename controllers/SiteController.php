@@ -230,13 +230,8 @@ class SiteController extends Controller
                     }
                 }
             } else {
-                if (!User::findOne(['email' => $model->email])) {
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Incorrect email"));
-                    return $this->refresh();
-                } else {
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Incorrect password"));
-                    return $this->refresh();
-                }
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Entered Email address or password is incorrect"));
+                return $this->refresh();
             }
         }
         return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
