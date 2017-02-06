@@ -206,7 +206,7 @@ class IndexController extends DefaultController
 
                     $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
                     $project = Project::findOne($model->project_id);
-					
+
                     $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
                     $dte = Project::findOne(['id' => $model->project_id])->date_start;
                     //var_dump(strtotime($dte));die();
@@ -220,9 +220,9 @@ class IndexController extends DefaultController
                         ]);
                     }
 
-                    if ($date_end == null || $model->date_report == null || !$model->invoice_id ||
-                        DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))
-                    ) {
+                    if (!$model->invoice_id && ($date_end == null || $model->date_report == null ||
+                            DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))) )
+                    {
                         if ($model->hours < 0.1) {
 
                             return json_encode([
