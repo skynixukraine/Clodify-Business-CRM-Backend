@@ -151,11 +151,12 @@ var invoiceCreateModule = (function() {
 
                 var MyRows = $('#invoice-create-table').find('tr');
                 var minutes =0, hours = 0;
+                var totalHours;
 
                 for (var i = 1; i < MyRows.length; i++){
 
                     var timeLength = $(MyRows[i]).find('td:eq(5)').html();
-                    if(timeLength != '') {
+                    if(timeLength != undefined) {
                         time = timeLength.split(':');
                         hours += Number(time[0]);
                         minutes += Number(time[1]);
@@ -169,11 +170,8 @@ var invoiceCreateModule = (function() {
                 }
                 if( totalHours == null ) {
                     $(document).find('#invoice-total_hours').val('');
-                    console.log(1)
-
                 } else {
                     $(document).find('#invoice-total_hours').val(totalHours);
-
                 }
             });
             dataTable.api().ajax.reload();
