@@ -177,7 +177,7 @@ var contractCreateModule = (function() {
                                 });
                                 win.show();
                             }
-
+                            dataTable.api().ajax.reload();
                         }
                     };
 
