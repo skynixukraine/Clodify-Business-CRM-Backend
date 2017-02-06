@@ -331,6 +331,10 @@ class ReportController extends DefaultController
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
             if ($output == 'table') {
+                $invoiceId = null;
+                if ($model->invoice_id && ($model->invoice->is_delete == 0)) {
+                    $invoiceId = $model->invoice_id;
+                }
                 $list[] = [
                     $model->id,
                     $task,
@@ -345,11 +349,11 @@ class ReportController extends DefaultController
                         User::findOne($model->user_id)->last_name),*/
                     $user,
                     $date_report,
-                    ($model->invoice_id == null ? "No" : "Yes"),
+                    ($invoiceId == null ? "No" : "Yes"),
                     $hours,
                     User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? '$' . number_format($model->cost, 2) : null,
                     $model->getProject()->one()->id,
-                    $model->invoice_id == null ? '' : $model->invoice_id
+                    $invoiceId
                 ];
 
             } else {
