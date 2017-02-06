@@ -74,7 +74,7 @@ var invoiceCreateModule = (function() {
                     dataTable.api().ajax.reload();
                 }
 
-            }).datepicker("setDate", firstDayOfCurrMonth);
+            });
 
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
@@ -88,7 +88,7 @@ var invoiceCreateModule = (function() {
                 if(endDate != '' && filterDateStartSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
-            }).datepicker("setDate", currentDay);
+            });
 
             dataFilter['date_start'] = filterDateStartSelect.val();
             dataFilter['date_end'] = filterDateEndSelect.val();
