@@ -339,7 +339,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($oldData['email'])
-                ->setSubject('Skynix CRM: Your email is changed')
+                ->setSubject('Skynix CRM: Your email address to access CRM is changed')
                 ->send();
         }
         /*else
@@ -373,7 +373,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Skynix CRM: Your email is changed')
+                    ->setSubject('Skynix CRM: Your email address to access CRM is changed')
                     ->send();
             } 
 
