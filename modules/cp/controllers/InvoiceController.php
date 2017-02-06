@@ -190,7 +190,7 @@ class InvoiceController extends DefaultController
             $model->act_of_work     = $contract->act_number;
             $model->date_start      = date('d/m/Y', strtotime($contract->start_date));
             $model->date_end        = date('d/m/Y', strtotime($contract->end_date));
-            $model->total           = $contract->total;
+            $model->total           = number_format($contract->total, 2);
             $model->user_id         = $contract->customer_id;
 
         }
