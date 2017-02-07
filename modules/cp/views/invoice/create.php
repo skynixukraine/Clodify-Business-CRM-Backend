@@ -124,7 +124,7 @@ $this->params['menu'] = [
             <?php echo $model->act_of_work ? $form->field( $model, 'act_of_work')->textInput(['readonly' => true]) :
                 $form->field( $model, 'act_of_work')->textInput();?>
             <?php echo $form->field( $model, 'discount')->textInput();?>
-            <?php echo $form->field( $model, 'total', ['enableClientValidation' => false])->textInput();?>
+            <?php echo $form->field( $model, 'total')->textInput();?>
             <?php echo $form->field( $model, 'total_hours', ['enableClientValidation' => false])->textInput(['readonly'=> true]);?>
             <?php echo $form->field( $model, 'note')->textarea();?>
 
