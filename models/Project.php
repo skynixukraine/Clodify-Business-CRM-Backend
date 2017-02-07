@@ -281,7 +281,7 @@ class Project extends \yii\db\ActiveRecord
         return self::find()
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
                 Project::tableName() . '.id')
-            ->where(Project::tableName() . 'is_delete=0')
+            ->where(Project::tableName() . '.is_delete=0')
             ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
             ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
                 . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
