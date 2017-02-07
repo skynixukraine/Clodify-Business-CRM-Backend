@@ -161,6 +161,9 @@ class ContractController extends DefaultController
             if (User::hasPermission([User::ROLE_ADMIN]) || $model->created_by == Yii::$app->user->id) {
                 $createdByCurrentUser = true;
             }
+            if(User::hasPermission([User::ROLE_SALES])) {
+                $createdByCurrentUser = false;
+            }
             foreach ($projects as $project) {
                 $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
                 $expenses += $project->cost;
