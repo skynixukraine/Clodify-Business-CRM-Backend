@@ -63,13 +63,7 @@ $this->params['menu'] = [
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 if ($id) {
-                    $projects = Project::find()
-                        ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
-                        ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
-                        ->where(ProjectCustomer::tableName() . ".user_id=" . $id)
-                        ->andWhere(Project::tableName() . '.is_delete=0')
-                        ->groupBy('id')
-                        ->all();
+                    $projects = Project::getClientProjects($id);
                     foreach ($projects as $project) {
                         $listProjects[$project->id] = $project->name;
                     }
@@ -88,13 +82,7 @@ $this->params['menu'] = [
                 }
             } else if (User::hasPermission([User::ROLE_FIN])) {
                 if ($id) {
-                    $projects = Project::find()
-                        ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
-                        ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
-                        ->where(ProjectCustomer::tableName() . ".user_id=" . $id)
-                        ->andWhere(Project::tableName() . '.is_delete=0')
-                        ->groupBy('id')
-                        ->all();
+                    $projects = Project::getClientProjects($id);
                     foreach ($projects as $project) {
                         $listProjects[$project->id] = $project->name;
                     }
