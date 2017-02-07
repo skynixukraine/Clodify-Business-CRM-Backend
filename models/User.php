@@ -330,17 +330,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             } else {
                 unset($this->password);
             }
-            // sending letter to old email
-            Yii::$app->mailer->compose('changeEmail', [
-                'user' => $this->first_name,
-                'email' => $this->email,
-                'password' => $this->rawPassword,
-                'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
-            ])
-                ->setFrom(Yii::$app->params['adminEmail'])
-                ->setTo($oldData['email'])
-                ->setSubject('Skynix CRM: Your email address to access CRM is changed')
-                ->send();
+            if ($this->email && $this->email != $oldData['email']) {
+                // sending letter to old email
+                Yii::$app->mailer->compose('changeEmail', [
+                    'user' => $this->first_name,
+                    'email' => $this->email,
+                    'password' => $this->rawPassword,
+                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($oldData['email'])
+                    ->setSubject('Skynix CRM: Your email address to access CRM is changed')
+                    ->send();
+            }
         }
         /*else
             $this->modified = new Expression('NOW()');*/
