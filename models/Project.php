@@ -136,13 +136,13 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
-    public static function getDevOrAdminOrPmOrSalesProjects($userId)
+    public static function getUsersProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
             ' projects.status
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
-            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS )
+            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS OR users.role=:roleF )
             WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
@@ -150,6 +150,7 @@ class Project extends \yii\db\ActiveRecord
             ':roleA'     => User::ROLE_ADMIN,
             ':roleP'     => User::ROLE_PM,
             ':roleS'     => User::ROLE_SALES,
+            ':roleF'     => User::ROLE_FIN,
             ':userId'    => $userId
         ])->all();
     }
