@@ -257,6 +257,22 @@ class Project extends \yii\db\ActiveRecord
                 ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
             ->all();
     }
+
+    public static function getClientProjectsDropdown($clientId)
+    {
+        $listProjects = [];
+        $projects = self::find()
+            ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+            ->where(ProjectCustomer::tableName() . ".user_id=" . $clientId)
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->groupBy('id')
+            ->all();
+        foreach ($projects as $project) {
+            $listProjects[$project->id] = $project->name;
+        }
+        return $listProjects;
+    }
     public static function projectsName($userId)
     {
         return self::find()
