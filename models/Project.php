@@ -136,7 +136,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
-    public static function getDevOrAdminOrPmOrSalesOrFinProjects($userId)
+    public static function getUsersProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
             ' projects.status
