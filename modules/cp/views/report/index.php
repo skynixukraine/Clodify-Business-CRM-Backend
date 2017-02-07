@@ -33,27 +33,11 @@ $this->params['menu'] = [
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
              if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-                 $projects = Project::find()
-                     ->leftJoin(ProjectDeveloper::tableName() ,ProjectDeveloper::tableName() . '.project_id=' .
-                         Project::tableName() . '.id')
-                     ->where(Project::tableName() . 'is_delete=0')
-                     ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . Yii::$app->user->id)
-                     ->andWhere(ProjectDeveloper::tableName() . '.status=' . ProjectDeveloper::STATUS_ACTIVE)
-                     ->all();
+                 $projects = Project::getProjectsDropdownForAdminAndFin(Yii::$app->user->id);
              } else if (User::hasPermission([User::ROLE_SALES])) {
-                 $projects = Project::find()
-                     ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
-                     ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                     ->andWhere(Project::tableName() . '.is_delete=0')
-                     ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
-                     ->andWhere(ProjectDeveloper::tableName() . '.status=' . ProjectDeveloper::STATUS_ACTIVE)
-                     ->all();
+                 $projects = Project::getProjectsDropdownForSales(Yii::$app->user->id);
              } else if (User::hasPermission([User::ROLE_CLIENT])) {
-                 $projects = Project::find()
-                     ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
-                     ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
-                     ->andWhere(Project::tableName() . '.is_delete=0')
-                     ->all();
+                 $projects = Project::getProjectsDropdownForClient(Yii::$app->user->id);
              }
                  $listReport = ArrayHelper::map( $projects, 'id', 'name' );
 
