@@ -62,10 +62,23 @@ $this->params['menu'] = [
             $id = $model->user_id ? $model->user_id : null;
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
-                $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
-                foreach ($projects as $project) {
-                    if ($project->project->is_delete == 0) {
-                        $listProjects[$project->project_id] = $project->project->name;
+                if ($id) {
+                    $projects = Project::find()
+                        ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                        ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                        ->where(ProjectCustomer::tableName() . ".user_id=" . $id)
+                        ->andWhere(Project::tableName() . '.is_delete=0')
+                        ->groupBy('id')
+                        ->all();
+                    foreach ($projects as $project) {
+                        $listProjects[$project->id] = $project->name;
+                    }
+                } else {
+                    $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
+                    foreach ($projects as $project) {
+                        if ($project->project->is_delete == 0) {
+                            $listProjects[$project->project_id] = $project->project->name;
+                        }
                     }
                 }
             } elseif (User::hasPermission([User::ROLE_ADMIN]) && $contract ) {
@@ -74,15 +87,28 @@ $this->params['menu'] = [
                     $listProjects[$project->id] = $project->name;
                 }
             } else if (User::hasPermission([User::ROLE_FIN])) {
-                // query from ProjectController for FIN ROLE
-                $projects = Project::find()
-                    ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
-                    ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
-                    ->where([Project::tableName() . '.is_delete' => 0])
-                    ->groupBy('id')
-                    ->all();
-                foreach ($projects as $project) {
-                    $listProjects[$project->id] = $project->name;
+                if ($id) {
+                    $projects = Project::find()
+                        ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                        ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                        ->where(ProjectCustomer::tableName() . ".user_id=" . $id)
+                        ->andWhere(Project::tableName() . '.is_delete=0')
+                        ->groupBy('id')
+                        ->all();
+                    foreach ($projects as $project) {
+                        $listProjects[$project->id] = $project->name;
+                    }
+                } else {
+                    // query from ProjectController for FIN ROLE
+                    $projects = Project::find()
+                        ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+                        ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                        ->where([Project::tableName() . '.is_delete' => 0])
+                        ->groupBy('id')
+                        ->all();
+                    foreach ($projects as $project) {
+                        $listProjects[$project->id] = $project->name;
+                    }
                 }
             } else {
                 $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
