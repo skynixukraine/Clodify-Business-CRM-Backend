@@ -63,10 +63,7 @@ $this->params['menu'] = [
             $listProjects = [];
             if (User::hasPermission([User::ROLE_SALES])) {
                 if ($id) {
-                    $projects = Project::getClientProjects($id);
-                    foreach ($projects as $project) {
-                        $listProjects[$project->id] = $project->name;
-                    }
+                    $listProjects = Project::getClientProjectsDropdown($id);
                 } else {
                     $projects = ProjectDeveloper::getReportsOfSales(Yii::$app->user->id);
                     foreach ($projects as $project) {
@@ -82,10 +79,7 @@ $this->params['menu'] = [
                 }
             } else if (User::hasPermission([User::ROLE_FIN])) {
                 if ($id) {
-                    $projects = Project::getClientProjects($id);
-                    foreach ($projects as $project) {
-                        $listProjects[$project->id] = $project->name;
-                    }
+                    $listProjects = Project::getClientProjectsDropdown($id);
                 } else {
                     // query from ProjectController for FIN ROLE
                     $projects = Project::find()

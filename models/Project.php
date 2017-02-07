@@ -257,15 +257,20 @@ class Project extends \yii\db\ActiveRecord
             ->all();
     }
 
-    public static function getClientProjects($clientId)
+    public static function getClientProjectsDropdown($clientId)
     {
-        return self::find()
+        $listProjects = [];
+        $projects = self::find()
             ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
             ->where(ProjectCustomer::tableName() . ".user_id=" . $clientId)
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy('id')
             ->all();
+        foreach ($projects as $project) {
+            $listProjects[$project->id] = $project->name;
+        }
+        return $listProjects;
     }
     public static function projectsName($userId)
     {
