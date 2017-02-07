@@ -57,7 +57,14 @@ class ReportController extends DefaultController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            $projects = Project::getProjectsDropdownForAdminAndFin(Yii::$app->user->id);
+        } else if (User::hasPermission([User::ROLE_SALES])) {
+            $projects = Project::getProjectsDropdownForSales(Yii::$app->user->id);
+        } else if (User::hasPermission([User::ROLE_CLIENT])) {
+            $projects = Project::getProjectsDropdownForClient(Yii::$app->user->id);
+        }
+        return $this->render('index', compact('projects'));
     }
 
     public function actionDownload() {

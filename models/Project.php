@@ -258,6 +258,35 @@ class Project extends \yii\db\ActiveRecord
             ->all();
     }
 
+    public static function getProjectsDropdownForSales($userId)
+    {
+        return self::find()
+            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->where([ProjectDeveloper::tableName() . '.user_id' => $userId])
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
+            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
+            ->all();
+    }
+    public static function getProjectsDropdownForClient($userId)
+    {
+        return self::find()
+            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
+            ->where([ProjectCustomer::tableName() . '.user_id' => $userId])
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->all();
+    }
+    public static function getProjectsDropdownForAdminAndFin($userId)
+    {
+        return self::find()
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
+                Project::tableName() . '.id')
+            ->where(Project::tableName() . '.is_delete=0')
+            ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->all();
+    }
     public static function getClientProjectsDropdown($clientId)
     {
         $listProjects = [];

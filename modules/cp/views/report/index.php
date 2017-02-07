@@ -32,30 +32,8 @@ $this->params['menu'] = [
     <div class="row">
         <div class="col-lg-2">
             <?php echo Html::label('Projects:');
-             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-                 $projects = Project::find()
-                     ->where('is_delete=0')
-                     ->all();
-             } else if (User::hasPermission([User::ROLE_SALES])) {
-                 $projects = Project::find()
-                     ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
-                     ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                     ->andWhere(Project::tableName() . '.is_delete=0')
-                     ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
-                     ->all();
-             } else if (User::hasPermission([User::ROLE_CLIENT])) {
-                 $projects = Project::find()
-                     ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
-                     ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
-                     ->andWhere(Project::tableName() . '.is_delete=0')
-                     ->all();
-             }
-                 $listReport = ArrayHelper::map( $projects, 'id', 'name' );
-
-                 $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
-
-
-
+            $listReport = ArrayHelper::map( $projects, 'id', 'name' );
+            $listReport = ArrayHelper::merge(['' => 'allprojects'], $listReport);
 
             echo Html::dropDownList('project', null, $listReport, ['class'=>"form-control"]) ?>
         </div>
