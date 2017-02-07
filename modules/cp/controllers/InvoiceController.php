@@ -197,7 +197,7 @@ class InvoiceController extends DefaultController
 
 
         if ($model->load(Yii::$app->request->post())) {
-
+            $model->total = floatval(preg_replace('/[^\d.]/', '', $model->total));
             /** Invoice - total logic */
             if($model->total != null && $model->discount == null){
 
