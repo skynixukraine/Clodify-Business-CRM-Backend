@@ -72,8 +72,8 @@ class Project extends \yii\db\ActiveRecord
             }],
             ['is_sales', function() {
                 if ($user = User::findOne($this->is_sales)) {
-                    if ($user->role == 'DEV') {
-                        $this->addError('is_sales', Yii::t('yii', 'Developer can not be sales'));
+                    if ($user->role != User::ROLE_SALES) {
+                        $this->addError('is_sales', Yii::t('yii', 'Selected user can not be sales'));
                     }
                 }
 
