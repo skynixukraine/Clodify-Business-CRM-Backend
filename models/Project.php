@@ -265,7 +265,8 @@ class Project extends \yii\db\ActiveRecord
             ->where([ProjectDeveloper::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
-            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForClient($userId)
@@ -274,6 +275,8 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
             ->where([ProjectCustomer::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForAdminAndFin($userId)
