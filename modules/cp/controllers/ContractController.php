@@ -262,7 +262,7 @@ class ContractController extends DefaultController
         if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne(['contract_id' => $id]) )
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
-            $invoice    = Invoice::find()->where(['contract_id' => $contract->id])->one();
+            $invoice    = Invoice::find()->where(['contract_id' => $contract->id, 'is_delete' => 0])->one();
             $contractor = User::findOne(Yii::$app->params['contractorId']);
 
             $html = $this->renderPartial('actOfWorkPDF', [
