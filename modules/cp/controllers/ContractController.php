@@ -85,6 +85,34 @@ class ContractController extends DefaultController
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
                     $model->save();
+                    if ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) {
+                        $invoice->contract_id     = $model->id;
+                        $invoice->contract_number = $model->contract_id;
+                        $invoice->act_of_work     = $model->act_number;
+                        $invoice->date_start      = $model->start_date;
+                        $invoice->date_end        = $model->end_date;
+                        $invoice->total           = $model->total;
+                        $invoice->user_id         = $model->customer_id;
+                        /** Invoice - total logic */
+                        if($invoice->total != null && $invoice->discount == null){
+
+                            $invoice->discount = 0;
+                            $invoice->subtotal = $invoice->total;
+
+                        }
+                        if($invoice->total !=null && $invoice->discount != null){
+                            $invoice->subtotal = $invoice->total;
+                            $invoice->total = ( $invoice->subtotal - $invoice->discount );
+
+                        }
+                        if ($invoice->validate() && $invoice->save()) {
+                            if(Yii::$app->request->post('updated')) {
+                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract "
+                                    . $id . " with related invoice " . $invoice->id));
+                            }
+                            return $this->redirect(['index']);
+                        }
+                    }
                     if(Yii::$app->request->post('updated')) {
                         Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract " . $id));
                     }
@@ -154,6 +182,7 @@ class ContractController extends DefaultController
             $expenses = 0;
             $user = null;
             $createdByCurrentUser = null;
+            $canInvoice = null;
             $projectIDs = [];
             $initiator = User::findOne($model->created_by);
             $customer = User::findOne($model->customer_id);
@@ -163,6 +192,10 @@ class ContractController extends DefaultController
             }
             if(User::hasPermission([User::ROLE_SALES])) {
                 $createdByCurrentUser = false;
+            }
+            if ($model->hasInvoices() && ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]))
+                && $invoice->status != Invoice::STATUS_CANCELED ) {
+                $canInvoice = true;
             }
             foreach ($projects as $project) {
                 $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
@@ -183,7 +216,7 @@ class ContractController extends DefaultController
                 $customer->id,
                 $createdByCurrentUser,
                 $model->id,
-                $model->hasInvoices()
+                $canInvoice
             ];
 
         }
@@ -262,7 +295,7 @@ class ContractController extends DefaultController
         if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne(['contract_id' => $id]) )
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
-            $invoice    = Invoice::find()->where(['contract_id' => $contract->id])->one();
+            $invoice    = Invoice::find()->where(['contract_id' => $contract->id, 'is_delete' => 0])->one();
             $contractor = User::findOne(Yii::$app->params['contractorId']);
 
             $html = $this->renderPartial('actOfWorkPDF', [
