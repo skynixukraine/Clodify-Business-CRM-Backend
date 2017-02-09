@@ -185,12 +185,11 @@ class InvoiceController extends DefaultController
         $model      = new Invoice();
         $contract   = null;
         if ( $id && ( $contract = Contract::findOne( $id )) ) {
-
             $model->contract_id     = $contract->id;
             $model->contract_number = $contract->contract_id;
             $model->act_of_work     = $contract->act_number;
-            $model->date_start      = $contract->start_date;
-            $model->date_end        = $contract->end_date;
+            $model->date_start      = date('d/m/Y', strtotime($contract->start_date));
+            $model->date_end        = date('d/m/Y', strtotime($contract->end_date));
             $model->total           = $contract->total;
             $model->user_id         = $contract->customer_id;
 

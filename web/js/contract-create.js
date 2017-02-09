@@ -116,14 +116,14 @@ var contractCreateModule = (function() {
 
                             }
 
-                            if (cfg.canInvoice) {
+                            if (cfg.canInvoice && !row[13]) {
 
                                 icons.push('<i class="fa fa-money paid" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" data-id="'+row[12]+'" title="Invoice"></i>');
 
                             }
 
-                            if (row[11]) {
+                            if (row[11] && !row[13]) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                     'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
@@ -177,7 +177,7 @@ var contractCreateModule = (function() {
                                 });
                                 win.show();
                             }
-
+                            dataTable.api().ajax.reload();
                         }
                     };
 

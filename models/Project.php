@@ -65,13 +65,23 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
             [['customers', 'developers', 'alias'], 'safe'],
+            ['is_pm', function() {
+                if(empty($this->developers && $this->is_pm) || ($this->developers && !in_array($this->is_pm, $this->developers))) {
+                    $this->addError('is_pm', Yii::t('yii', 'Pm was not assigned'));
+                }
+            }],
             ['is_sales', function() {
                 if ($user = User::findOne($this->is_sales)) {
-                    if ($user->role == 'DEV') {
-                        $this->addError('error', Yii::t('yii', 'Developer can not be sales'));
+                    if ($user->role != User::ROLE_SALES) {
+                        $this->addError('is_sales', Yii::t('yii', 'Selected user can not be sales'));
                     }
                 }
+
+                if(empty($this->developers && $this->is_sales) || ($this->developers && !in_array($this->is_sales, $this->developers))) {
+                    $this->addError('is_sales', Yii::t('yii', 'Sales was not assigned'));
+                }
             }]
+
         ];
     }
 
@@ -136,13 +146,13 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
-    public static function getDevOrAdminOrPmOrSalesProjects($userId)
+    public static function getUsersProjects($userId)
     {
         return self::findBySql('SELECT projects.id, projects.name, projects.jira_code, project_developers.status,'.
             ' projects.status
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
-            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS )
+            LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS OR users.role=:roleF )
             WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
@@ -150,6 +160,7 @@ class Project extends \yii\db\ActiveRecord
             ':roleA'     => User::ROLE_ADMIN,
             ':roleP'     => User::ROLE_PM,
             ':roleS'     => User::ROLE_SALES,
+            ':roleF'     => User::ROLE_FIN,
             ':userId'    => $userId
         ])->all();
     }
@@ -255,6 +266,54 @@ class Project extends \yii\db\ActiveRecord
                 ProjectCustomer::tableName() . '.user_id=' . $curentClient . ' AND ' .
                 ProjectDeveloper::tableName() . '.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '", "' . ProjectDeveloper::STATUS_INACTIVE . '")')
             ->all();
+    }
+
+    public static function getProjectsDropdownForSales($userId)
+    {
+        return self::find()
+            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->where([ProjectDeveloper::tableName() . '.user_id' => $userId])
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->all();
+    }
+    public static function getProjectsDropdownForClient($userId)
+    {
+        return self::find()
+            ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
+            ->where([ProjectCustomer::tableName() . '.user_id' => $userId])
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->all();
+    }
+    public static function getProjectsDropdownForAdminAndFin($userId)
+    {
+        return self::find()
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
+                Project::tableName() . '.id')
+            ->where(Project::tableName() . '.is_delete=0')
+            ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
+                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->all();
+    }
+    public static function getClientProjectsDropdown($clientId)
+    {
+        $listProjects = [];
+        $projects = self::find()
+            ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+            ->where(ProjectCustomer::tableName() . ".user_id=" . $clientId)
+            ->andWhere(Project::tableName() . '.is_delete=0')
+            ->groupBy('id')
+            ->all();
+        foreach ($projects as $project) {
+            $listProjects[$project->id] = $project->name;
+        }
+        return $listProjects;
     }
     public static function projectsName($userId)
     {
