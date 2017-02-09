@@ -65,13 +65,23 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
             [['customers', 'developers', 'alias'], 'safe'],
+            ['is_pm', function() {
+                if(empty($this->developers && $this->is_pm) || ($this->developers && !in_array($this->is_pm, $this->developers))) {
+                    $this->addError('is_pm', Yii::t('yii', 'Pm was not assigned'));
+                }
+            }],
             ['is_sales', function() {
                 if ($user = User::findOne($this->is_sales)) {
-                    if ($user->role == 'DEV') {
-                        $this->addError('error', Yii::t('yii', 'Developer can not be sales'));
+                    if ($user->role != User::ROLE_SALES) {
+                        $this->addError('is_sales', Yii::t('yii', 'Selected user can not be sales'));
                     }
                 }
+
+                if(empty($this->developers && $this->is_sales) || ($this->developers && !in_array($this->is_sales, $this->developers))) {
+                    $this->addError('is_sales', Yii::t('yii', 'Sales was not assigned'));
+                }
             }]
+
         ];
     }
 
