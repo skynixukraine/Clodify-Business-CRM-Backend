@@ -10,6 +10,8 @@ namespace viewModel;
 use app\models\ContactForm;
 use app\models\User;
 use Yii;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 class Contacts extends ViewModelAbstract
 {
@@ -18,7 +20,7 @@ class Contacts extends ViewModelAbstract
 
     public function define()
     {
-
+        $this->model->attachment = UploadedFile::getInstancesByName('attachment');
         if ($this->validate() && ($reciever = User::findOne(Yii::$app->params['contractorId']))) {
             $secret = Yii::$app->params['captchaSecret'];
             $ch = curl_init();

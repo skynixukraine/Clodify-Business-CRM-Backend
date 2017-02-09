@@ -27,19 +27,4 @@ class ContactsController extends DefaultController
 
     }
 
-    public function actionAttachment()
-    {
-
-        $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\models\ContactForm')
-            ->set('viewModel\ViewModelInterface', 'viewModel\ContactsAttachment')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
-                'methods'       => [ Processor::METHOD_POST ],
-                'checkAccess'   => false
-            ])
-            ->get('Processor')
-            ->respond();
-
-    }
-
 }

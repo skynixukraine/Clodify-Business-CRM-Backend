@@ -16,6 +16,7 @@ class ContactForm extends ActiveRecord
     public $subject;
     public $message;
     public $verifyCode;
+    public $attachment;
 
     /**
      * @return array the validation rules.
@@ -32,6 +33,8 @@ class ContactForm extends ActiveRecord
             [['name', 'subject'], 'string', 'max' => 45],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
+            // 10485760 bytes - 10 megabytes
+            [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760]
         ];
     }
 
@@ -57,8 +60,13 @@ class ContactForm extends ActiveRecord
                 ->setTo($email)
                 ->setFrom([$this->email => $this->name])
                 ->setSubject($this->subject)
-                ->setTextBody($this->message)
-                ->send();
+                ->setTextBody($this->message);
+            if ($this->attachment) {
+                foreach ($this->attachment as $attach) {
+                    Yii::$app->mailer->compose()->attach($attach);
+                }
+            }
+            Yii::$app->mailer->compose()->send();
 
             return true;
         }
