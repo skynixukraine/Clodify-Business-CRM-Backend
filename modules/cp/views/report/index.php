@@ -72,7 +72,7 @@ $this->params['menu'] = [
                 $users = User::find()
                     ->where(User::tableName() . '.id IN (' . $devUser . ')')
                     ->andWhere(['is_active' => 1])
-                    ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
+                    ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
                     ->andWhere(User::tableName() . '.is_delete=0')
                     ->all();
             }

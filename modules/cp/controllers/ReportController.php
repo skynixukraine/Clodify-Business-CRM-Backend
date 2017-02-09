@@ -154,6 +154,7 @@ class ReportController extends DefaultController
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
 
         $query              = Report::find()
+            ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
             ->where(Project::tableName() . '.status IN ("' . Project::STATUS_NEW . '", "' . Project::STATUS_INPROGRESS . '")')
@@ -233,6 +234,7 @@ class ReportController extends DefaultController
 
                     $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
                 }
+                $dataTable->setFilter(User::tableName() . '.role!="' . User::ROLE_FIN . '"');
 
             }
         }
