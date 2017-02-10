@@ -633,6 +633,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
     }
+
+    // returns list of customers identical that on user/index page for SALES role
+    public static function getCustomersDropdownForSalesUser()
+    {
+        $users = self::find()
+            ->where(['is_active' => 1])
+            ->andWhere(['is_delete' => 0])
+            ->andWhere(['role' => User::ROLE_CLIENT])
+            ->all();
+        return self::getCustomersDropDown($users, 'id');
+    }
 	/**
 	 * 
 	 * @return array
