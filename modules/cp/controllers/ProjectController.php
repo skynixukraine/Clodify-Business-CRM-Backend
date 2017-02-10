@@ -85,7 +85,6 @@ class ProjectController extends DefaultController
             $query         = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
-                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                 ->groupBy('id');
         }
 
