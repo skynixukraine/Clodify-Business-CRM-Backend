@@ -262,8 +262,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             </h1>
             <?php
                 $links = isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [];
+                $cp = User::hasPermission([User::ROLE_CLIENT]) ? ['report/index'] : '/cp';
                 array_unshift($links, array(
-                        "url"       => Url::to("/cp"),
+                        "url"       => Url::to($cp),
                         "label"     => Yii::t("app", "Cp")));
                 echo Breadcrumbs::widget([
                 'links' => $links,
