@@ -254,7 +254,6 @@ var ajaxReportPageModule = (function() {
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
 
-                    // dataArr.task = escapeHtml(reportTask);
                     dataArr.task = escapeHtml(reportTask);
                     console.log(dataArr.task);
                 } else {
