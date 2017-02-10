@@ -64,7 +64,7 @@ var ajaxReportPageModule = (function() {
                     var tableArr = [];
                     thisRowTd.each(function(i) {
                         var thisTd = $(this);
-                        var thisValue = escapeHtml(thisTd.text());
+                        var thisValue = thisTd.text();
                         switch (i) {
                             //////Changing project-id cell
                             case 1:
@@ -254,7 +254,7 @@ var ajaxReportPageModule = (function() {
 
                 if (reportTask.length >= 20 && reportTask.length <= 500) {
 
-                    dataArr.task = reportTask;
+                    dataArr.task = escapeHtml(reportTask);
                     console.log(dataArr.task);
                 } else {
                     dataArr.task = "";
