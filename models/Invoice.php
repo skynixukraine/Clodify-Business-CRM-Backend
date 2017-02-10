@@ -28,6 +28,7 @@ use app\components\DateUtil;
  * @property integer $contract_number
  * @property integer $act_of_work
  * @property integer $contract_id
+ * @property integer $project_id
 
  *
  * @property Report[] $reports
@@ -122,21 +123,24 @@ class Invoice extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes) {
 
+        if ($projects = $this->project_id) {
 
-        $projectsCustomer = ProjectCustomer::getReportsOfCustomer($this->user_id);
-        $projectId = [];
-        foreach($projectsCustomer as $project){
+        } else {
+            $projectsCustomer = ProjectCustomer::getReportsOfCustomer($this->user_id);
+            $projectId = [];
+            foreach ($projectsCustomer as $project) {
 
-            $projectId[] = $project->project_id;
+                $projectId[] = $project->project_id;
 
-        }
-        if($projectId && $projectId != null) {
+            }
+            if ($projectId && $projectId != null) {
 
-            $projects =  implode(', ', $projectId);
+                $projects = implode(', ', $projectId);
 
-        }else{
+            } else {
 
-            $projects = 'null';
+                $projects = 'null';
+            }
         }
 
         $connection = Yii::$app->db;
