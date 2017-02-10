@@ -185,7 +185,7 @@ class IndexController extends DefaultController
                 if (isset($data->id)) {
 
                     $model = Report::findOne($data->id);
-                    if ($model->is_delete = 0) {
+                    if ($model->is_delete == 0) {
                         $oldhours = $model->hours;
                     } else {
                         $oldhours = 0;
