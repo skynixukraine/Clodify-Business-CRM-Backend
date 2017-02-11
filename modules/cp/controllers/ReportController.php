@@ -57,7 +57,14 @@ class ReportController extends DefaultController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            $projects = Project::getProjectsDropdownForAdminAndFin(Yii::$app->user->id);
+        } else if (User::hasPermission([User::ROLE_SALES])) {
+            $projects = Project::getProjectsDropdownForSales(Yii::$app->user->id);
+        } else if (User::hasPermission([User::ROLE_CLIENT])) {
+            $projects = Project::getProjectsDropdownForClient(Yii::$app->user->id);
+        }
+        return $this->render('index', compact('projects'));
     }
 
     public function actionDownload() {
@@ -147,6 +154,7 @@ class ReportController extends DefaultController
         $keyword            = ( !empty($search['value']) ? $search['value'] : null);
 
         $query              = Report::find()
+            ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
             ->where(Project::tableName() . '.status IN ("' . Project::STATUS_NEW . '", "' . Project::STATUS_INPROGRESS . '")')
@@ -226,6 +234,7 @@ class ReportController extends DefaultController
 
                     $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
                 }
+                $dataTable->setFilter(User::tableName() . '.role!="' . User::ROLE_FIN . '"');
 
             }
         }
@@ -331,6 +340,10 @@ class ReportController extends DefaultController
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
             if ($output == 'table') {
+                $invoiceId = null;
+                if ($model->invoice_id && ($model->invoice->is_delete == 0)) {
+                    $invoiceId = $model->invoice_id;
+                }
                 $list[] = [
                     $model->id,
                     $task,
@@ -345,11 +358,11 @@ class ReportController extends DefaultController
                         User::findOne($model->user_id)->last_name),*/
                     $user,
                     $date_report,
-                    ($model->invoice_id == null ? "No" : "Yes"),
+                    ($invoiceId == null ? "No" : "Yes"),
                     $hours,
                     User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? '$' . number_format($model->cost, 2) : null,
                     $model->getProject()->one()->id,
-                    $model->invoice_id == null ? '' : $model->invoice_id
+                    $invoiceId
                 ];
 
             } else {

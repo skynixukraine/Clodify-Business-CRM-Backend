@@ -9,6 +9,6 @@ return [
     'port'              => "",
     'success'           => true,
     'invoice_cc_email'  => false,
-    'version'           => '1.11.0',
+    'version'           => '1.11.5',
     'contractorId'      => 1
 ];

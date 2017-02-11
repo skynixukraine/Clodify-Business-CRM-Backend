@@ -330,17 +330,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             } else {
                 unset($this->password);
             }
-            // sending letter to old email
-            Yii::$app->mailer->compose('changeEmail', [
-                'user' => $this->first_name,
-                'email' => $this->email,
-                'password' => $this->rawPassword,
-                'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
-            ])
-                ->setFrom(Yii::$app->params['adminEmail'])
-                ->setTo($oldData['email'])
-                ->setSubject('Skynix CRM: Your email is changed')
-                ->send();
+            if ($this->email && $this->email != $oldData['email']) {
+                // sending letter to old email
+                Yii::$app->mailer->compose('changeEmail', [
+                    'user' => $this->first_name,
+                    'email' => $this->email,
+                    'password' => $this->rawPassword,
+                    'adminName' => (isset(Yii::$app->user->identity->first_name)) ? Yii::$app->user->identity->first_name : 'Skynix Company'
+                ])
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($oldData['email'])
+                    ->setSubject('Skynix CRM: Your email address to access CRM is changed')
+                    ->send();
+            }
         }
         /*else
             $this->modified = new Expression('NOW()');*/
@@ -373,7 +375,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($this->email)
-                    ->setSubject('Skynix CRM: Your email is changed')
+                    ->setSubject('Skynix CRM: Your email address to access CRM is changed')
                     ->send();
             } 
 
@@ -448,8 +450,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->from(User::tableName())
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".user_id=id AND receive_invoices=1")
             ->leftJoin(Project::tableName(), Project::tableName() . ".id=" . ProjectCustomer::tableName() . ".project_id")
-            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " . Project::tableName() .
-                ".status IN ('" . Project::STATUS_INPROGRESS . "' ) AND " . Project::tableName() . ".is_delete=0")
+            ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND "
+                . Project::tableName() . ".is_delete=0")
             ->groupBy(ProjectCustomer::tableName() . ".user_id")
             ->all();
     }
