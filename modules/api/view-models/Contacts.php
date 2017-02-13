@@ -51,7 +51,7 @@ class Contacts extends ViewModelAbstract
                 $this->model->attachment = json_encode($filePath);
                 $this->model->save();
             } else {
-                $this->addError(Processor::CODE_TEHNICAL_ISSUE, Yii::t('yii', 'Sorry, you have not passed BOT check'));
+                $this->addError('verifyCode', Yii::t('yii', 'Sorry, you have not passed BOT check'));
             }
         }
 
