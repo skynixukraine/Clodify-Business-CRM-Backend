@@ -52,7 +52,8 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
 
 <?php
     if (User::hasPermission([User::ROLE_SALES])) {
-        $listCustomers = User::getCustomersDropdownForSalesUser();
+        $customers = User::getCustomersForSalesUser();
+        $listCustomers = User::getCustomersDropDown($customers, 'id');
         echo $form->field($model, 'customer_id')
             ->dropDownList($listCustomers, [
                 'prompt' => 'Choose...',

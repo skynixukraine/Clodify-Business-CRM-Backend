@@ -635,7 +635,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     // returns list of customers that works on common projects with current SALES user
-    public static function getCustomersDropdownForSalesUser()
+    public static function getCustomersForSalesUser()
     {
         $projectsID = [];
         $customersID = [];
@@ -656,7 +656,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         foreach ($customers as $customer) {
             $customersID[] = $customer->user;
         }
-        return self::getCustomersDropDown($customersID, 'id');
+        return $customersID;
     }
 	/**
 	 * 
