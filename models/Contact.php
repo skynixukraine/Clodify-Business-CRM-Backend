@@ -7,9 +7,15 @@ use yii\base\Model;
 use yii\db\ActiveRecord;
 
 /**
- * ContactForm is the model behind the contact form.
+ * Contact is the model behind the contact form.
+ * @property string name
+ * @property string email
+ * @property string subject
+ * @property string message
+ * @property string verifyCode
+ * @property array attachment
  */
-class ContactForm extends ActiveRecord
+class Contact extends ActiveRecord
 {
     public $name;
     public $email;
@@ -24,15 +30,15 @@ class ContactForm extends ActiveRecord
     public function rules()
     {
         return [
-            // name, email, subject and message are required
-            [['name', 'email', 'subject', 'message'], 'required'],
-            // email has to be a valid email address
-            ['email', 'email'],
-            // max length for email, message, name and subject
-            [['email', 'message'], 'string', 'max' => 150],
-            [['name', 'subject'], 'string', 'max' => 45],
-            // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+//            // name, email, subject and message are required
+//            [['name', 'email', 'subject', 'message'], 'required'],
+//            // email has to be a valid email address
+//            ['email', 'email'],
+//            // max length for email, message, name and subject
+//            [['email', 'message'], 'string', 'max' => 150],
+//            [['name', 'subject'], 'string', 'max' => 45],
+//            // verifyCode needs to be entered correctly
+//            ['verifyCode', 'captcha'],
             // 10485760 bytes - 10 megabytes
             [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760]
         ];

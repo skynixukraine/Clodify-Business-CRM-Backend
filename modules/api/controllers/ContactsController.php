@@ -16,7 +16,7 @@ class ContactsController extends DefaultController
     {
 
         $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\models\ContactForm')
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Contact')
             ->set('viewModel\ViewModelInterface', 'viewModel\Contacts')
             ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
                 'methods'       => [ Processor::METHOD_POST ],

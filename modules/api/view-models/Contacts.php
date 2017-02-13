@@ -7,20 +7,22 @@
 
 namespace viewModel;
 
-use app\models\ContactForm;
+use app\models\Contact;
+use app\models\Contract;
 use app\models\User;
 use Yii;
 use yii\web\UploadedFile;
-use yii\helpers\FileHelper;
+use app\modules\api\components\Api\Processor;
 
 class Contacts extends ViewModelAbstract
 {
-    /** @var  \app\models\ContactForm */
+    /** @var  \app\models\Contact */
     public $model;
 
     public function define()
     {
         $this->model->attachment = UploadedFile::getInstancesByName('attachment');
+
         if ($this->validate() && ($reciever = User::findOne(Yii::$app->params['contractorId']))) {
             $secret = Yii::$app->params['captchaSecret'];
             $ch = curl_init();
@@ -35,8 +37,21 @@ class Contacts extends ViewModelAbstract
 
             // The response is a JSON object:
             $server_output = json_decode($server_output);
-            if ($server_output['success']) {
-                $this->model->contact($reciever->email);
+            if ($server_output['success'] && $this->model->contact($reciever->email)) {
+                $dir = '/data/contact-attachments/';
+                $id = Contact::find()->max('id') + 1;
+                $filePath = [];
+                foreach ($this->model->attachment as $file) {
+                    if (!is_dir($dir)) {
+                        @mkdir($dir, 0777, true);
+                    }
+                    $file->saveAs(Yii::getAlias('@app') .  $dir . $id . $file->name);
+                    $filePath[] = $dir . $id . $file->name;
+                }
+                $this->model->attachment = json_encode($filePath);
+                $this->model->save();
+            } else {
+                $this->addError(Processor::CODE_TEHNICAL_ISSUE, Yii::t('yii', 'Sorry, you have not passed BOT check'));
             }
         }
 
