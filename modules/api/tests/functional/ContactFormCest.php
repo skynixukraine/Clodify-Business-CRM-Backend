@@ -26,7 +26,7 @@ class ContactFormCest
             'email' => email,
             'subject' => subject,
             'message' => message,
-            'captcha' => captcha
+            'verifyCode' => captcha
         ]);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
