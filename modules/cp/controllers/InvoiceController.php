@@ -149,8 +149,12 @@ class InvoiceController extends DefaultController
                 }
                 $projectIDs[] = $project->id;
             }
-            $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ') OR '
-                . Invoice::tableName() . '.project_id IS NULL');
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ') OR '
+                    . Invoice::tableName() . '.project_id IS NULL');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
+            }
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
