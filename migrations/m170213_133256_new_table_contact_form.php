@@ -13,17 +13,6 @@ class m170213_133256_new_table_contact_form extends Migration
             'message' => $this->string(150),
             'subject' => $this->string(45),
             'verifyCode' => $this->string(250),
-            'attachments' => $this->text()
-        ]);
-
-        $this->createTable('contact', [
-            'id' => $this->primaryKey()->notNull() . ' AUTO_INCREMENT',
-            'name' => 'varchar(45)',
-            'email' => 'varchar(150)',
-            'message' => 'varchar(150)',
-            'subject' => 'varchar(45)',
-            'verifyCode' => 'varchar(250)',
-            'attachment' => 'varchar(250)'
         ]);
     }
 
