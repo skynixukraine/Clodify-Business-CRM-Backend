@@ -12,7 +12,6 @@ class m170213_133256_new_table_contact_form extends Migration
             'email' => $this->string(150),
             'message' => $this->string(150),
             'subject' => $this->string(45),
-            'verifyCode' => $this->string(250),
         ]);
     }
 
