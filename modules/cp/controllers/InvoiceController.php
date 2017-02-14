@@ -149,12 +149,15 @@ class InvoiceController extends DefaultController
                 }
                 $projectIDs[] = $project->id;
             }
-            $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ') OR '
-                . Invoice::tableName() . '.project_id=NULL');
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ') OR '
+                    . Invoice::tableName() . '.project_id IS NULL');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
+            }
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
-
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
             $name = null;
@@ -230,7 +233,7 @@ class InvoiceController extends DefaultController
             if ($model->total_hours) {
                 $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
             }
-            
+
             $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
@@ -239,7 +242,7 @@ class InvoiceController extends DefaultController
             }
             return $this->redirect(['view?id=' . $model->id]);
         }
-        return $this->render('create', 
+        return $this->render('create',
                 [
                     'model'     => $model,
                     'contract'  => $contract

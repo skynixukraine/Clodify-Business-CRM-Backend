@@ -305,11 +305,17 @@ class Project extends \yii\db\ActiveRecord
         $listProjects = [];
         $projects = self::find()
             ->leftJoin(  ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id')
             ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
             ->where(ProjectCustomer::tableName() . ".user_id=" . $clientId)
-            ->andWhere(Project::tableName() . '.is_delete=0')
-            ->groupBy('id')
-            ->all();
+            ->andWhere(Project::tableName() . '.is_delete=0');
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $projects = $projects->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1]);
+        }
+            $projects = $projects->groupBy('id')
+                ->all();
+
         foreach ($projects as $project) {
             $listProjects[$project->id] = $project->name;
         }
