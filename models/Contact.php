@@ -21,8 +21,10 @@ class Contact extends ActiveRecord
     public $email;
     public $subject;
     public $message;
-    public $verifyCode;
     public $attachment;
+
+    const SCENARIO_ATTACH_FILES = 'attachment';
+    const SCENARIO_CONTACT_FORM = 'contact';
 
     /**
      * @return array the validation rules.
@@ -31,16 +33,14 @@ class Contact extends ActiveRecord
     {
         return [
             // name, email, subject and message are required
-            [['name', 'email', 'subject', 'message'], 'required'],
+            [['name', 'email', 'subject', 'message'], 'required', 'except' => self::SCENARIO_ATTACH_FILES],
             // email has to be a valid email address
             ['email', 'email'],
             // max length for email, message, name and subject
             [['email', 'message'], 'string', 'max' => 150],
             [['name', 'subject'], 'string', 'max' => 45],
-            // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
             // 10485760 bytes - 10 megabytes
-            [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760]
+            [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760, 'on' => self::SCENARIO_ATTACH_FILES]
         ];
     }
 
@@ -66,13 +66,8 @@ class Contact extends ActiveRecord
                 ->setTo($email)
                 ->setFrom([$this->email => $this->name])
                 ->setSubject($this->subject)
-                ->setTextBody($this->message);
-            if ($this->attachment) {
-                foreach ($this->attachment as $attach) {
-                    Yii::$app->mailer->compose()->attach($attach);
-                }
-            }
-            Yii::$app->mailer->compose()->send();
+                ->setTextBody($this->message)
+                ->send();
 
             return true;
         }

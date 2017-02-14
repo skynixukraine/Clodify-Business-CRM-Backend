@@ -23,7 +23,6 @@ class ContactFormCest
         define('email', 'test.email@gmail.com');
         define('subject', 'test subject');
         define('message', 'message of test mail');
-        define('captcha', 'captcha generated');
 
         $I->wantTo('Test sending Contact Form with attaching files');
         $I->sendPOST(Functional::CONTACT, [
@@ -31,7 +30,6 @@ class ContactFormCest
             'email' => email,
             'subject' => subject,
             'message' => message,
-            'verifyCode' => captcha
         ]);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());

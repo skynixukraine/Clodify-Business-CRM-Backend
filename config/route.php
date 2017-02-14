@@ -4,7 +4,7 @@ return [
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
-    
+    $API . '/contacts/attachment/delete'=> $API . '/contacts/attachment-delete',
     // Error rule for unknown methods
     [
         'pattern'   => $API . '/<route:(.*)>',
