@@ -12,7 +12,12 @@ class ContactFormCest
     {
     }
 
-    public function testContactFormWithAttachingFiles(FunctionalTester $I)
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-434
+     * @param  FunctionalTester      $I
+     * @return void
+     */
+    public function testSendingContactForm(FunctionalTester $I)
     {
         define('name', 'Tester');
         define('email', 'test.email@gmail.com');
