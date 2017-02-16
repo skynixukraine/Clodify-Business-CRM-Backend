@@ -33,7 +33,7 @@ class ContactsAttach extends ViewModelAbstract
                 Yii::$app->cache->set($key, $field);
                 $this->setData(['file_id' => $field]);
             } else {
-                $this->addError('attachment', $this->model->getErrors());
+                $this->addError('attachment', $this->model->getFirstError('attachment'));
             }
 
         }
