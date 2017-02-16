@@ -27,12 +27,15 @@ class ContactsAttach extends ViewModelAbstract
             }
             $key = 'attach';
             $field = Yii::$app->cache->exists($key) ? Yii::$app->cache->get($key) : 0;
+            $field++;
             $file = $path . '/' . $field . '.' . $this->model->attachment->getExtension();
             if($this->model->attachment->saveAs($file)) {
-                $field++;
+                Yii::$app->cache->set($key, $field);
+                $this->setData(['file_id' => $field]);
+            } else {
+                $this->addError('attachment', $this->model->getErrors());
             }
-            Yii::$app->cache->set($key, $field);
-            $this->setData(['file_id' => --$field]);
+
         }
 
     }
