@@ -21,8 +21,8 @@ class Contacts extends ViewModelAbstract
     public function define()
     {
 
-        if ($this->validate() && ($reciever = User::findOne(Yii::$app->params['contractorId']))) {
-            if ($this->model->contact($reciever->email)) {
+        if ($this->validate()) {
+            if ($this->model->contact(Yii::$app->params['adminEmail'])) {
                 $newDir = Yii::getAlias('@app') . '/data/contact-attachments';
                 if (!is_dir($newDir)) {
                     FileHelper::createDirectory($newDir);
