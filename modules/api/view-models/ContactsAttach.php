@@ -19,7 +19,7 @@ class ContactsAttach extends ViewModelAbstract
 
     public function define()
     {
-        $this->model->attachment = UploadedFile::getInstanceByName('fileName');
+        $this->model->attachment = UploadedFile::getInstanceByName('file');
         if ($this->validate()) {
             $path = Yii::getAlias('@runtime/uploads');
             if (!is_dir($path)) {

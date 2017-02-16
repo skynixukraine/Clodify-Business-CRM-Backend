@@ -20,7 +20,7 @@ class ContactFormAttachCest
     public function testAttachingFilesOnContactForm(FunctionalTester $I)
     {
         $I->wantTo('Test attaching the file sending contact form');
-        $I->sendPOST(Functional::CONTACT_ATTACH, [], ['fileName' => 'tests/_data/skynix-office.jpg']);
+        $I->sendPOST(Functional::CONTACT_ATTACH, [], ['file' => 'tests/_data/skynix-office.jpg']);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
