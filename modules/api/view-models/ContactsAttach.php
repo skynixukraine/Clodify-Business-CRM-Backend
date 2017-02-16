@@ -19,24 +19,20 @@ class ContactsAttach extends ViewModelAbstract
 
     public function define()
     {
-        $this->model->attachment = UploadedFile::getInstancesByName('fileName');
-        if (!empty($this->model->attachment) && $this->validate()) {
+        $this->model->attachment = UploadedFile::getInstanceByName('fileName');
+        if ($this->validate()) {
             $path = Yii::getAlias('@runtime/uploads');
             if (!is_dir($path)) {
                 FileHelper::createDirectory($path);
             }
             $key = 'attach';
-            $fileKeys = [];
             $field = Yii::$app->cache->exists($key) ? Yii::$app->cache->get($key) : 0;
-            foreach ($this->model->attachment as $idx => $attachment) {
-                $file = $path . '/' . $field . '.' . $attachment->getExtension();
-                if($attachment->saveAs($file)) {
-                    $fileKeys[] = $field;
-                    $field++;
-                }
+            $file = $path . '/' . $field . '.' . $this->model->attachment->getExtension();
+            if($this->model->attachment->saveAs($file)) {
+                $field++;
             }
             Yii::$app->cache->set($key, $field);
-            $this->setData(['file_id' => $fileKeys]);
+            $this->setData(['file_id' => --$field]);
         }
 
     }

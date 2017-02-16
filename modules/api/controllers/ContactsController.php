@@ -19,7 +19,7 @@ class ContactsController extends DefaultController
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\Contact')
             ->set('viewModel\ViewModelInterface', 'viewModel\Contacts')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
+            ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
                 'checkAccess'   => false
             ])
@@ -35,7 +35,7 @@ class ContactsController extends DefaultController
             ->set('app\models\Contact', ['scenario' => Contact::SCENARIO_ATTACH_FILES])
             ->set('yii\db\ActiveRecordInterface', 'app\models\Contact')
             ->set('viewModel\ViewModelInterface', 'viewModel\ContactsAttach')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
+            ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
                 'checkAccess'   => false
             ])

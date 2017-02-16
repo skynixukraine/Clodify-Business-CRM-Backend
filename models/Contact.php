@@ -38,7 +38,7 @@ class Contact extends ActiveRecord
             [['name', 'subject'], 'string', 'max' => 45],
             ['file_id', 'each', 'rule' => ['integer']],
             // 10485760 bytes - 10 megabytes
-            [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760, 'on' => self::SCENARIO_ATTACH_FILES]
+            [['attachment'], 'file', 'on' => self::SCENARIO_ATTACH_FILES]
         ];
     }
 

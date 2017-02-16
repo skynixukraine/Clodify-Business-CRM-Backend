@@ -102,7 +102,12 @@ class Processor
         $methods = [ self::METHOD_GET, self::METHOD_POST , self::METHOD_PUT , self::METHOD_DELETE ],
         $checkAccess = true )
     {
+        if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
 
+            $this->addError( self::CODE_METHOD_NOT_ALLOWED );
+
+
+        }
         //TODO if oAuth/tokens needed, this method should be filled in with code
         return ( count( $this->getViewModel()->getErrors() ) == 0  ? true : false );
     }
@@ -137,6 +142,12 @@ class Processor
     {
 
         $viewModel = $this->getViewModel();
+        if ( $this->hasAccess( $this->access->getMethods(), $this->access->shouldCheckAccess() ) &&
+            $this->getAccessModelToken() ) {
+
+            $viewModel->setAccessTokenModel( $this->getAccessModelToken() );
+
+        }
         $viewModel->setModel( $this->getModel() )
             ->render();
 
@@ -166,5 +177,5 @@ class Processor
     {
         return $this->accessTokenModel;
     }
-    
+
 }

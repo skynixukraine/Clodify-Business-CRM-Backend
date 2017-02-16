@@ -8,9 +8,8 @@
 namespace viewModel;
 
 use app\models\Contact;
-use app\models\User;
+use app\modules\api\components\Api\Processor;
 use Yii;
-use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
 class Contacts extends ViewModelAbstract
@@ -30,17 +29,25 @@ class Contacts extends ViewModelAbstract
                 $id = Contact::find()->max('id') + 1;
                 $idFolder = $path . '/' . $id;
                 FileHelper::createDirectory($idFolder);
-                $files = array_diff(scandir($uploads, 1), array('.', '..'));
-                foreach ($filesId as $fileId) {
-                    foreach ($files as $file) {
-                        $fileName = explode('.', $file)[0]; // return filename without extension
-                        if ($fileName == $fileId) {
-                            copy($uploads . '/' . $file, $idFolder . '/' . $file);
-                            @unlink($uploads . '/' . $file);
+                if (count($filesId) <= 5) {
+                    $size = 0;
+                    foreach ($filesId as $fileId) {
+                        $fullPath = glob($uploads . '/' . $fileId . '*')[0];
+                        $fileName = explode('/', $fullPath);
+                        $fileName = end($fileName);
+                        if (file_exists($fullPath)) {
+                            $size += filesize($fullPath);
+                            if ($size <= 10485760) {  // 10485760 bytes - 10 mb
+                                copy($fullPath, $idFolder . '/' . $fileName);
+                                @unlink($fullPath);
+                            } else {
+                                $this->addError(Processor::CODE_INSERT_ERROR, Yii::t('app','Common maximum size is 10 megabytes'));
+                            }
                         }
                     }
+                } else {
+                    $this->addError(Processor::CODE_INSERT_ERROR, Yii::t('app','You can upload a maximum of 5 files'));
                 }
-                @rmdir($uploads);
                 $this->model->contact(Yii::$app->params['adminEmail']);
             } else {
                 $this->model->contact(Yii::$app->params['adminEmail']);
