@@ -25,14 +25,15 @@ class ContactFormCest
         define('message', 'message of test mail');
 
         $I->wantTo('Test sending Contact Form with attaching files');
-        $I->sendPOST(Functional::CONTACT, [
+        $I->sendPOST(Functional::CONTACT, json_encode([
             'name' => name,
             'email' => email,
             'subject' => subject,
             'message' => message,
-        ]);
+        ]));
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(1, $response->success);
     }
 }
