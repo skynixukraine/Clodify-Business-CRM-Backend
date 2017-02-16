@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Model;
 use yii\db\ActiveRecord;
 
 /**
@@ -17,12 +16,6 @@ use yii\db\ActiveRecord;
  */
 class Contact extends ActiveRecord
 {
-    public $name;
-    public $email;
-    public $subject;
-    public $message;
-    public $attachment;
-
     const SCENARIO_ATTACH_FILES = 'attachment';
     const SCENARIO_CONTACT_FORM = 'contact';
 
