@@ -41,12 +41,12 @@ class Contacts extends ViewModelAbstract
                                 copy($fullPath, $idFolder . '/' . $fileName);
                                 @unlink($fullPath);
                             } else {
-                                $this->addError(Processor::CODE_INSERT_ERROR, Yii::t('app','Common maximum size is 10 megabytes'));
+                                $this->addError('file_id', Yii::t('app','Common maximum size is 10 megabytes'));
                             }
                         }
                     }
                 } else {
-                    $this->addError(Processor::CODE_INSERT_ERROR, Yii::t('app','You can upload a maximum of 5 files'));
+                    $this->addError('file_id', Yii::t('app','You can upload a maximum of 5 files'));
                 }
                 $this->model->contact(Yii::$app->params['adminEmail']);
             } else {

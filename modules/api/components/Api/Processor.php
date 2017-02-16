@@ -25,6 +25,7 @@ class Processor
     const CODE_DELETE_ERROR       = 'S208';
     const CODE_UPDATE_ERROR       = 'S209';
     const CODE_ACTION_RESTRICTED  = 'S210';
+    const ERROR_PARAM = 'error';
 
     const STATUS_CODE_SUCCESS       = 200;
 
@@ -87,9 +88,9 @@ class Processor
      * @param $code
      * @return $this
      */
-    public function addError( $code )
+    public function addError( $code, $message = null )
     {
-        $this->viewModel->addError( $code );
+        $this->viewModel->addError( $code, $message);
         return $this;
     }
 
@@ -104,7 +105,7 @@ class Processor
     {
         if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
 
-            $this->addError( self::CODE_METHOD_NOT_ALLOWED );
+            $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
 
 
         }
