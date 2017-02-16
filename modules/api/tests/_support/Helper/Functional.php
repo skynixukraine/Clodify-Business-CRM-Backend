@@ -7,4 +7,5 @@ namespace Helper;
 class Functional extends \Codeception\Module
 {
     const CONTACT = '/api/contacts';
+    const CONTACT_ATTACH = self::CONTACT . '/attachment';
 }
