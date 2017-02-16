@@ -13,9 +13,13 @@ use yii\db\ActiveRecord;
  * @property string message
  * @property string verifyCode
  * @property array attachment
+ * @property array file_id
  */
 class Contact extends ActiveRecord
 {
+    public $attachment;
+    public $file_id;
+
     const SCENARIO_ATTACH_FILES = 'attachment';
     const SCENARIO_CONTACT_FORM = 'contact';
 
@@ -32,6 +36,7 @@ class Contact extends ActiveRecord
             // max length for email, message, name and subject
             [['email', 'message'], 'string', 'max' => 150],
             [['name', 'subject'], 'string', 'max' => 45],
+            ['file_id', 'each', 'rule' => ['integer']],
             // 10485760 bytes - 10 megabytes
             [['attachment'], 'file', 'maxFiles' => 5, 'maxSize' => 10485760, 'on' => self::SCENARIO_ATTACH_FILES]
         ];

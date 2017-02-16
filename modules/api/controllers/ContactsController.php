@@ -44,19 +44,4 @@ class ContactsController extends DefaultController
 
     }
 
-    public function actionAttachmentDelete()
-    {
-
-        $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\models\Contact')
-            ->set('viewModel\ViewModelInterface', 'viewModel\ContactsAttachDelete')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
-                'methods'       => [ Processor::METHOD_DELETE ],
-                'checkAccess'   => false
-            ])
-            ->get('Processor')
-            ->respond();
-
-    }
-
 }

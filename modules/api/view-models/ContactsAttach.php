@@ -27,17 +27,16 @@ class ContactsAttach extends ViewModelAbstract
             }
             $key = 'attach';
             $fileKeys = [];
-            $data = Yii::$app->cache->exists($key) ? Yii::$app->cache->get($key) : [];
+            $field = Yii::$app->cache->exists($key) ? Yii::$app->cache->get($key) : 0;
             foreach ($this->model->attachment as $idx => $attachment) {
-                $file = $path . '/' . $attachment->name;
+                $file = $path . '/' . $field . '.' . $attachment->getExtension();
                 if($attachment->saveAs($file)) {
-                    $fileKey = md5($attachment->name);
-                    $data[$fileKey] = $file;
-                    $fileKeys[] = $fileKey;
+                    $fileKeys[] = $field;
+                    $field++;
                 }
             }
-            Yii::$app->cache->set($key, $data, 3600);
-            $this->setData(['id' => $fileKeys]);
+            Yii::$app->cache->set($key, $field);
+            $this->setData(['file_id' => $fileKeys]);
         }
 
     }
