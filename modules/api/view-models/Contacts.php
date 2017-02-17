@@ -24,7 +24,7 @@ class Contacts extends ViewModelAbstract
             if (!is_dir($path)) {
                 FileHelper::createDirectory($path);
             }
-            if ($filesId = $this->model->file_id) {
+            if ($filesId = $this->model->attachments) {
                 $uploads = Yii::getAlias('@runtime/uploads');
                 $id = Contact::find()->max('id') + 1;
                 $idFolder = $path . '/' . $id;
@@ -41,16 +41,16 @@ class Contacts extends ViewModelAbstract
                                 copy($fullPath, $idFolder . '/' . $fileName);
                                 @unlink($fullPath);
                             } else {
-                                $this->addError('file_id', Yii::t('app','Common maximum size is 10 megabytes'));
+                                $this->addError('attachments', Yii::t('app','Common maximum size is 10 megabytes'));
                             }
                         }
                     }
                 } else {
-                    $this->addError('file_id', Yii::t('app','You can upload a maximum of 5 files'));
+                    $this->addError('attachments', Yii::t('app','You can upload a maximum of 5 files'));
                 }
-                $this->model->contact(Yii::$app->params['adminEmail']);
+//                $this->model->contact(Yii::$app->params['adminEmail']);
             } else {
-                $this->model->contact(Yii::$app->params['adminEmail']);
+//                $this->model->contact(Yii::$app->params['adminEmail']);
             }
             $this->model->save();
         }
