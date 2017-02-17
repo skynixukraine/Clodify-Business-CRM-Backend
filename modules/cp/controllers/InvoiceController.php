@@ -129,6 +129,7 @@ class InvoiceController extends DefaultController
             }
         }
         if (User::hasPermission([User::ROLE_SALES])) {
+            $customers = [];
             $projects = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
@@ -139,16 +140,34 @@ class InvoiceController extends DefaultController
                 ->groupBy('id')
                 ->all();
             foreach ($projects as $project) {
+                $projectCustomer = ProjectCustomer::find()
+                    ->where([ProjectCustomer::tableName() . '.project_id' => $project])
+                    ->andWhere([ProjectCustomer::tableName() . '.receive_invoices' => 1])
+                    ->one();
+                if ($projectCustomer) {
+                    $customers[] = User::findOne($projectCustomer->user_id)->id;
+                }
                 $projectIDs[] = $project->id;
             }
-            $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ')' );
+            if ($projectIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IN (' . implode(",", $projectIDs) . ') OR '
+                    . Invoice::tableName() . '.project_id IS NULL');
+            } else {
+                $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
+            }
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
-
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
             $name = null;
+            // If invoice was created for 'All projects' and invoiced customer has no common projects
+            // with current SALES user - go to the next record
+            if (User::hasPermission([User::ROLE_SALES])) {
+                if (!$model->project_id && !in_array($model->user_id, $customers)) {
+                    continue;
+                }
+            }
             if ( $client = $model->getUser()->one() ) {
                 $name = $client->first_name . ' ' . $client->last_name;
             }
@@ -214,7 +233,7 @@ class InvoiceController extends DefaultController
             if ($model->total_hours) {
                 $model->total_hours = Yii::$app->Helper->timeLength($model->total_hours);
             }
-            
+
             $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
@@ -223,7 +242,7 @@ class InvoiceController extends DefaultController
             }
             return $this->redirect(['view?id=' . $model->id]);
         }
-        return $this->render('create', 
+        return $this->render('create',
                 [
                     'model'     => $model,
                     'contract'  => $contract

@@ -633,6 +633,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             ->where(SupportTicket::tableName() . '.id=:id', [':id' => $id])->one()->email;
     }
+
+    // returns list of customers that works on common projects with current SALES user
+    public static function getCustomersForSalesUser()
+    {
+        $projectsID = [];
+        $customersID = [];
+        // getting Sale's projects
+        $projects = Project::find()
+            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+            ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+            ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+            ->andWhere([Project::tableName() . '.is_delete' => 0])
+            ->all();
+        // array of Sale's projects IDs
+        foreach ($projects as $project) {
+            $projectsID[] = $project->id;
+        }
+        // customers on these projects
+        $customers = ProjectCustomer::getProjectCustomer($projectsID)->all();
+        foreach ($customers as $customer) {
+            $customersID[] = $customer->user;
+        }
+        return $customersID;
+    }
 	/**
 	 * 
 	 * @return array
