@@ -17,10 +17,10 @@ use yii\db\ActiveRecord;
  */
 class Contact extends ActiveRecord
 {
-    public $attachment;
-    public $file_id;
+    public $attachments;
+    public $file;
 
-    const SCENARIO_ATTACH_FILES = 'attachment';
+    const SCENARIO_ATTACH_FILES = 'attachments';
     const SCENARIO_CONTACT_FORM = 'contact';
 
     /**
@@ -36,10 +36,10 @@ class Contact extends ActiveRecord
             // max length for email, message, name and subject
             [['email', 'message'], 'string', 'max' => 150],
             [['name', 'subject'], 'string', 'max' => 45],
-            ['file_id', 'each', 'rule' => ['integer']],
+            ['attachments', 'each', 'rule' => ['integer']],
             // 10485760 bytes - 10 megabytes
-            ['attachment', 'required', 'on' => self::SCENARIO_ATTACH_FILES],
-            [['attachment'], 'file', 'on' => self::SCENARIO_ATTACH_FILES]
+            ['file', 'required', 'on' => self::SCENARIO_ATTACH_FILES],
+            [['file'], 'file', 'on' => self::SCENARIO_ATTACH_FILES]
         ];
     }
 
