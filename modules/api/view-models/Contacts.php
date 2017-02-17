@@ -48,10 +48,8 @@ class Contacts extends ViewModelAbstract
                 } else {
                     $this->addError('attachments', Yii::t('app','You can upload a maximum of 5 files'));
                 }
-                $this->model->contact(Yii::$app->params['adminEmail']);
-            } else {
-                $this->model->contact(Yii::$app->params['adminEmail']);
             }
+            $this->model->contact(Yii::$app->params['adminEmail']);
             $this->model->save();
         }
     }
