@@ -287,7 +287,7 @@ class IndexController extends DefaultController
                                 return json_encode([
                                     "success" => false,
                                     "id" => $model->id,
-                                    "errors" => ["field" => $model->id, "message" => implode(",", $model->getErrors())]
+                                    "errors" => ["field" => $model->id, "message" => implode(' ',$model->getFirstErrors())]
                                 ]);
                             }
                         } else {
