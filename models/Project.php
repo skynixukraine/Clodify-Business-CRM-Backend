@@ -296,7 +296,6 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
                 Project::tableName() . '.id')
             ->where(Project::tableName() . '.is_delete=0')
-            ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
             ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
                 . '", "' . Project::STATUS_ONHOLD . '")')
             ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
