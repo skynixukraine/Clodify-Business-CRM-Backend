@@ -33,7 +33,7 @@ $this->params['menu'] = [
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a></li>
         <li><a href="#tab_2" data-toggle="tab">Photo</a></li>
         <li><a href="#tab_3" data-toggle="tab">Sign</a></li>
-        <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES])):?>
+        <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN])):?>
             <li><a href="#tab_4" data-toggle="tab">Projects</a></li>
         <?php endif?>
         <?php if(User::hasPermission([User::ROLE_CLIENT])):?>
@@ -237,7 +237,7 @@ $this->params['menu'] = [
             ?>
         </div>
         <div id="tab_4" class="tab-pane">
-            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES])):?>
+            <?php if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN])):?>
                 <div class="box-header with-border">
                     <div class="box-body">
                         <table class="table box">
