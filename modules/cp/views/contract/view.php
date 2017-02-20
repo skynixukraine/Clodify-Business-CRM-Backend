@@ -7,6 +7,9 @@ use app\models\PaymentMethod;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
+use app\models\Contract;
+use app\models\Invoice;
+
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
@@ -38,10 +41,14 @@ $this->params['menu'] = [
         <li>Created By: <?=$createdBy->first_name . ' ' . $createdBy->last_name?></li>
     </ul>
     <?php if ($model->hasInvoices()):?>
+        <?php if (!User::hasPermission([User::ROLE_SALES]) || (User::hasPermission([User::ROLE_SALES]) && $model->created_by == Yii::$app->user->id)) :?>
         <div>
             <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->contract_id]) ?>
         </div>
+        <?php endif;?>
         <?php if ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) :?>
+            <?php if (!User::hasPermission([User::ROLE_SALES]) || (User::hasPermission([User::ROLE_SALES]) && $invoice->created_by == Yii::$app->user->id)) :?>
+
                 <div>
                     <?= Html::a('Download Act of Work', ['contract/downloadactofwork?id=' . $model->contract_id]) ?>
                 </div>
@@ -53,7 +60,7 @@ $this->params['menu'] = [
                 <div>
                     <?= Html::a('Download Reports', ['invoice/downloadreports?id=' . $invoice->id]) ?>
                 </div>
-
+            <?php endif;?>
         <?php endif;?>
     <?php endif;?>
 </div>
