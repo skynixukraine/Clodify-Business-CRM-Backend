@@ -176,7 +176,6 @@ var ajaxReportPageModule = (function() {
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
                                             ajaxSuccessFunc(errorMsg, data);
-                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },
                                     error: function(data) {
