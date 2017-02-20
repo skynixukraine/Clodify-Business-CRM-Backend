@@ -207,57 +207,67 @@ class IndexController extends DefaultController
                     $totalHoursOfThisDay = $model->sumHoursReportsOfThisDay(Yii::$app->user->id, $model->date_report);
                     $project = Project::findOne($model->project_id);
 
-                    $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
-                    $dte = Project::findOne(['id' => $model->project_id])->date_start;
-                    //var_dump(strtotime($dte));die();
-                    //var_dump($dte . ' ' . $model->date_report);die();
-                    if ( DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($dte) ) ) {
+                    if (in_array($project->status, [Project::STATUS_INPROGRESS, Project::STATUS_ONHOLD])) {
 
-                        return json_encode([
-                            "success" => false,
-                            "id" => $model->id,
-                            "errors" => ["field" => 'hours', "message" => "wrong date"]
-                        ]);
-                    }
-
-                    if (!$model->invoice_id && ($date_end == null || $model->date_report == null ||
-                            DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report))) )
-                    {
-                        if ($model->hours < 0.1) {
+                        $date_end = Invoice::getInvoiceWithDateEnd($model->project_id);
+                        $dte = Project::findOne(['id' => $model->project_id])->date_start;
+                        //var_dump(strtotime($dte));die();
+                        //var_dump($dte . ' ' . $model->date_report);die();
+                        if (DateUtil::compareDates(DateUtil::reConvertData($model->date_report), DateUtil::reConvertData($dte))) {
 
                             return json_encode([
                                 "success" => false,
                                 "id" => $model->id,
-                                "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                                "errors" => ["field" => 'hours', "message" => "wrong date"]
                             ]);
                         }
-                        if (strlen(trim($model->task)) <= 19) {
 
-                            return json_encode([
-                                "success" => false,
-                                "id" => $model->id,
-                                "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
-                            ]);
-                        }
-                        if ($model->validate()) {
-                            $user = User::findOne(Yii::$app->user->id);
-                            $model->cost = $model->hours * ($user->salary / Report::SALARY_HOURS );
-                            if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
-                                Yii::$app->user->getIdentity()->last_name;
-                                if ($model->save()) {
-                                    if($project->validate()){
-                                        $project->save(true, ["total_logged_hours", "total_paid_hours"]);
-                                    }
-                                    if ($model->hours >= 0.1) {
+                        if (!$model->invoice_id && ($date_end == null || $model->date_report == null ||
+                                DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report)))
+                        ) {
+                            if ($model->hours < 0.1) {
+
+                                return json_encode([
+                                    "success" => false,
+                                    "id" => $model->id,
+                                    "errors" => ["field" => 'hours', "message" => "hours must be at least 0.1"]
+                                ]);
+                            }
+                            if (strlen(trim($model->task)) <= 19) {
+
+                                return json_encode([
+                                    "success" => false,
+                                    "id" => $model->id,
+                                    "errors" => ["field" => 'task', "message" => "Task should contain at least 20 characters."]
+                                ]);
+                            }
+                            if ($model->validate()) {
+                                $user = User::findOne(Yii::$app->user->id);
+                                $model->cost = $model->hours * ($user->salary / Report::SALARY_HOURS);
+                                if (($result = $totalHoursOfThisDay - $oldhours + $model->hours) <= 12) {
+                                    Yii::$app->user->getIdentity()->last_name;
+                                    if ($model->save()) {
+                                        if ($project->validate()) {
+                                            $project->save(true, ["total_logged_hours", "total_paid_hours"]);
+                                        }
+                                        if ($model->hours >= 0.1) {
+                                            return json_encode([
+                                                "success" => true,
+                                                "id" => $model->id
+                                            ]);
+                                        }
+                                        if (trim(strlen($model->task)) > 20) {
+                                            return json_encode([
+                                                "success" => true,
+                                                "id" => $model->id
+                                            ]);
+                                        }
+
+                                    } else {
                                         return json_encode([
-                                            "success" => true,
-                                            "id" => $model->id
-                                        ]);
-                                    }
-                                    if (trim(strlen($model->task)) > 20) {
-                                        return json_encode([
-                                            "success" => true,
-                                            "id" => $model->id
+                                            "success" => false,
+                                            "id" => $model->id,
+                                            "errors" => ["field" => $model->id, "message" => "Report does not add"]
                                         ]);
                                     }
 
@@ -265,23 +275,23 @@ class IndexController extends DefaultController
                                     return json_encode([
                                         "success" => false,
                                         "id" => $model->id,
-                                        "errors" => ["field" => $model->id, "message" => "Report does not add"]
+                                        "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
                                     ]);
-                                }
 
+                                }
                             } else {
                                 return json_encode([
                                     "success" => false,
                                     "id" => $model->id,
-                                    "errors" => ["field" => $model->hours, "message" => "You can not add/edit this report. Maximum total hours is 12"]
+                                    "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
                                 ]);
-
                             }
                         } else {
+
                             return json_encode([
                                 "success" => false,
                                 "id" => $model->id,
-                                "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
+                                "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
                             ]);
                         }
                     } else {
@@ -289,10 +299,9 @@ class IndexController extends DefaultController
                         return json_encode([
                             "success" => false,
                             "id" => $model->id,
-                            "errors" => ["field" => $model->id, "message" => "The invoice has been created on this project"]
+                            "errors" => ["field" => 'project_id', "message" => "Project is not active yet"]
                         ]);
                     }
-
                 } else {
 
                     return json_encode([
