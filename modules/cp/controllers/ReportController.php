@@ -158,7 +158,6 @@ class ReportController extends DefaultController
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
             ->where(Project::tableName() . '.status IN ("' . Project::STATUS_ONHOLD . '", "' . Project::STATUS_INPROGRESS . '")')
-            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy(Report::tableName() . '.id');
 
