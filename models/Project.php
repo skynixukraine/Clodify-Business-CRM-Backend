@@ -288,7 +288,6 @@ class Project extends \yii\db\ActiveRecord
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
                 . '", "' . Project::STATUS_ONHOLD . '")')
-            ->andWhere(ProjectDeveloper::tableName() . '.status="' . ProjectDeveloper::STATUS_ACTIVE . '"')
             ->all();
     }
     public static function getProjectsDropdownForAdminAndFin($userId)
