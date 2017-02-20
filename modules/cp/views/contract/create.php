@@ -52,16 +52,7 @@ echo $form->field( $model, 'contract_id')->textInput(['value' => $contractId]);?
 
 <?php
     if (User::hasPermission([User::ROLE_SALES])) {
-        $projectsID = [];
-        $customers = [];
-        $projects = Project::getUsersProjects(Yii::$app->user->id);
-        foreach ($projects as $project) {
-            $projectsID[] = $project->id;
-        }
-        $projectCustomers = ProjectCustomer::getProjectCustomer($projectsID)->all();
-        foreach ($projectCustomers as $customer) {
-            $customers[] = $customer->user;
-        }
+        $customers = User::getCustomersForSalesUser();
         $listCustomers = User::getCustomersDropDown($customers, 'id');
         echo $form->field($model, 'customer_id')
             ->dropDownList($listCustomers, [
