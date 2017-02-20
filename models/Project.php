@@ -275,8 +275,8 @@ class Project extends \yii\db\ActiveRecord
             ->where([ProjectDeveloper::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForClient($userId)
@@ -285,8 +285,8 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
             ->where([ProjectCustomer::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForAdminAndFin($userId)
@@ -295,9 +295,8 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
                 Project::tableName() . '.id')
             ->where(Project::tableName() . '.is_delete=0')
-            ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getClientProjectsDropdown($clientId)
