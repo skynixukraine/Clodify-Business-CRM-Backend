@@ -19,6 +19,8 @@ use app\components\AccessRule;
 use DateTime;
 use Silex;
 use Atlassian;
+use yii\log\Logger;
+
 class IndexController extends DefaultController
 {
     public $enableCsrfValidation = false;
@@ -264,10 +266,11 @@ class IndexController extends DefaultController
                                         }
 
                                     } else {
+                                        Yii::getLogger()->log($model->getErrors(), Logger::LEVEL_ERROR);
                                         return json_encode([
                                             "success" => false,
                                             "id" => $model->id,
-                                            "errors" => ["field" => $model->id, "message" => "Report does not add"]
+                                            "errors" => ["field" => $model->id, "message" => "Report can not be saved"]
                                         ]);
                                     }
 
@@ -295,7 +298,7 @@ class IndexController extends DefaultController
                             ]);
                         }
                     } else {
-
+                        Yii::getLogger()->log('returns false if (in_array($project->status, [Project::STATUS_INPROGRESS, Project::STATUS_ONHOLD]))', Logger::LEVEL_ERROR);
                         return json_encode([
                             "success" => false,
                             "id" => $model->id,
