@@ -220,7 +220,7 @@ class IndexController extends DefaultController
                             return json_encode([
                                 "success" => false,
                                 "id" => $model->id,
-                                "errors" => ["field" => 'hours', "message" => "Date report can not be earlier then Project's date start"]
+                                "errors" => ["field" => 'hours', "message" => "Date report can not be earlier then project's date start"]
                             ]);
                         }
 
