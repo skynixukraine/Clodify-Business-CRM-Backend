@@ -18,7 +18,7 @@ class ApiLoginForm extends LoginForm
     public function login()
     {
         $user = $this->getUser();
-        $user->date_login = time();
+        $user->date_login = date('Y-m-d H:i:s');
 
         /*if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
