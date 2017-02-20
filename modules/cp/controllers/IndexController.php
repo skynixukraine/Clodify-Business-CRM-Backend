@@ -283,10 +283,11 @@ class IndexController extends DefaultController
 
                                 }
                             } else {
+                                Yii::getLogger()->log($model->getErrors(), Logger::LEVEL_ERROR);
                                 return json_encode([
                                     "success" => false,
                                     "id" => $model->id,
-                                    "errors" => ["field" => $model->id, "message" => "Data is not valid!"]
+                                    "errors" => ["field" => $model->id, "message" => implode(",", $model->getErrors())]
                                 ]);
                             }
                         } else {
