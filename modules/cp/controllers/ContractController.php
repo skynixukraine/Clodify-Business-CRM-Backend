@@ -178,7 +178,7 @@ class ContractController extends DefaultController
         $list = [];
         /* @var $model Contract*/
         foreach ($activeRecordsData as $model) {
-            $total_hours = null;
+            $total_hours = 0;
             $expenses = 0;
             $user = null;
             $createdByCurrentUser = null;
@@ -195,7 +195,7 @@ class ContractController extends DefaultController
             if ($model->hasInvoices() && ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]))
                 && $invoice->status != Invoice::STATUS_CANCELED ) {
                 $canInvoice = true;
-                $total_hours = $invoice->total_hours;
+                $total_hours = Yii::$app->Helper->timeLength( $invoice->total_hours * 3600);
             }
 
             $list[] = [
@@ -207,7 +207,7 @@ class ContractController extends DefaultController
                 date("d/m/Y", strtotime($model->end_date)),
                 date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
-                $total_hours ? Yii::$app->Helper->timeLength( $total_hours * 3600) : 0,
+                $total_hours,
                 '$' . $expenses,
                 $customer->id,
                 $createdByCurrentUser,
