@@ -8,7 +8,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
 use app\models\Contract;
-use app\models\Invoice;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
@@ -46,7 +45,7 @@ $this->params['menu'] = [
             <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->contract_id]) ?>
         </div>
         <?php endif;?>
-        <?php if ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) :?>
+        <?php if (($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) && $invoice->status != Invoice::STATUS_CANCELED) :?>
             <?php if (!User::hasPermission([User::ROLE_SALES]) || (User::hasPermission([User::ROLE_SALES]) && $invoice->created_by == Yii::$app->user->id)) :?>
 
                 <div>
