@@ -22,14 +22,22 @@ class DefaultController extends Controller
 
 	public function behaviors()
 	{
-        //API CORS http://www.yiiframework.com/doc-2.0/yii-filters-cors.html
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
-        Yii::$app->response->headers->add('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
-        Yii::$app->response->headers->add('Access-Control-Allow-Headers', 'x-requested-with, Content-Type, origin, accept, fe-access-token');
-        Yii::$app->response->headers->add('Access-Control-Max-Age', 1000);
-        
-		$behaviors = parent::behaviors();
-		return $behaviors;
+        return [
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::className(),
+                'cors' => [
+                    // restrict access to
+                    'Origin' => ['*'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                    // Allow only POST and PUT methods
+                    'Access-Control-Request-Headers' => ['x-requested-with', 'Content-Type',
+                        'origin', 'accept', 'fe-access-token'],
+                    // Allow OPTIONS caching
+                    'Access-Control-Max-Age' => 1000,
+                ],
+
+            ],
+        ];
 	}
 
     /**
