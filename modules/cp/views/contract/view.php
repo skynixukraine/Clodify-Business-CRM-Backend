@@ -8,7 +8,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
 use app\models\Contract;
-use app\models\Invoice;
 
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
