@@ -28,8 +28,9 @@ class DefaultController extends Controller
                 'cors' => [
                     // restrict access to
                     'Origin' => ['*'],
+                    // Allow POST, PUT, GET, DELETE and OPTIONS methods
                     'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-                    // Allow only POST and PUT methods
+                    // Allow only headers "x-requested-with, Content-Type, origin, accept, fe-access-token"
                     'Access-Control-Request-Headers' => ['x-requested-with', 'Content-Type',
                         'origin', 'accept', 'fe-access-token'],
                     // Allow OPTIONS caching
