@@ -14,8 +14,8 @@ return [
     'components' => [
         'db' => [
             'dsn' => 'mysql:host=localhost;dbname=in.skynix',
-            'username' => 'root',
-            'password' => 'root'
+            'username' => 'mysql_user',
+            'password' => 'mysql_pass'
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -42,9 +42,9 @@ return [
         ],
     ],
     'params' => array(
-        'ua_site'           => 'http://ua.skynix.local',
-        'en_site'           => 'http://skynix.local',
-        'in_site'           => 'http://in.skynix.local',
+        'ua_site'           => 'https://ua.skynix.local',
+        'en_site'           => 'https://skynix.local',
+        'in_site'           => 'https://in.skynix.local',
         'port'		        => ''
     )
 ];
