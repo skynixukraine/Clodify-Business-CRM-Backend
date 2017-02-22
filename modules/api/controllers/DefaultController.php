@@ -52,14 +52,13 @@ class DefaultController extends Controller
 
 	public function beforeAction($action)
     {
-
         $this->di = new yii\di\Container();
         $this->di
             ->setSingleton('Processor', 'app\modules\api\components\Api\Processor')
             ->set('app\modules\api\components\Api\AccessInterface',
                     'app\modules\api\components\Api\Access');
 
-        return true;
+        return parent::beforeAction($action);
 
     }
 
