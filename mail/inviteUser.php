@@ -70,7 +70,7 @@ use app\models\User;
 
     <td width = "96"  valign="top" style="padding:0; margin: 0; text-align: center; background-color: #a3d8f0;
         vertical-align: middle;">
-        <a href=<?= Yii::$app->params['en_site'] . Url::to(['/site/invite', 'hash' => $hash])?> title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
+        <a href=<?= Yii::$app->params['url_crm'] . Url::to(['/site/invite', 'hash' => $hash])?> title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
             <img src="http://cdn.skynix.co/skynix/btn-click.png" width="95" height = "34"  border="0"
                  alt = "CLICK HERE" style="display: block; padding: 0px; margin: 0px; border: none;"/>
         </a>
@@ -82,10 +82,3 @@ use app\models\User;
 <tr>
     <td colspan = "5"  height="13" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
 </tr>
-
-<!--<h1>Hello, <?/*= $user*/?>,</h1><br>
-<h2>Welcome to Skynix company!</h2><br>
-<h2><?/*= $adminName*/?> has invited you to the time tracking system.</h2><br>
-<h2>Your login is <?/*= $email*/?></h2><br>
-<h2>Your password is <?/*= $password*/?></h2><br>
-<h2>To start using time tracking system please click this <a href=<?/*= Url::to(['/site/invite', 'hash' => $hash], true)*/?>>link</a></h2><br>-->

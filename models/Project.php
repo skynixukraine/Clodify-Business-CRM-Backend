@@ -153,7 +153,7 @@ class Project extends \yii\db\ActiveRecord
             FROM projects
             LEFT JOIN project_developers ON projects.id=project_developers.project_id
             LEFT JOIN users ON project_developers.user_id=users.id AND (users.role=:role OR users.role=:roleA OR users.role=:roleP OR users.role=:roleS OR users.role=:roleF )
-            WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status IN ("' . Project::STATUS_INPROGRESS. '", "' . Project::STATUS_NEW . '")
+            WHERE users.id=:userId AND projects.is_delete = 0 AND projects.status=:status 
             AND project_developers.status IN ("' . ProjectDeveloper::STATUS_ACTIVE . '")
             GROUP by projects.id', [
             ':role'      => User::ROLE_DEV,
@@ -161,7 +161,8 @@ class Project extends \yii\db\ActiveRecord
             ':roleP'     => User::ROLE_PM,
             ':roleS'     => User::ROLE_SALES,
             ':roleF'     => User::ROLE_FIN,
-            ':userId'    => $userId
+            ':userId'    => $userId,
+            ':status'    => self::STATUS_INPROGRESS
         ])->all();
     }
 
@@ -275,8 +276,8 @@ class Project extends \yii\db\ActiveRecord
             ->where([ProjectDeveloper::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->andWhere(ProjectDeveloper::tableName() . '.is_sales=1')
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForClient($userId)
@@ -285,8 +286,8 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id=' . Project::tableName() . '.id')
             ->where([ProjectCustomer::tableName() . '.user_id' => $userId])
             ->andWhere(Project::tableName() . '.is_delete=0')
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getProjectsDropdownForAdminAndFin($userId)
@@ -295,9 +296,8 @@ class Project extends \yii\db\ActiveRecord
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' .
                 Project::tableName() . '.id')
             ->where(Project::tableName() . '.is_delete=0')
-            ->andWhere(ProjectDeveloper::tableName() . '.user_id=' . $userId)
-            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_NEW . '", "'
-                . Project::STATUS_INPROGRESS . '", "' . Project::STATUS_ONHOLD . '")')
+            ->andWhere(Project::tableName() . '.status IN ( "' . Project::STATUS_INPROGRESS
+                . '", "' . Project::STATUS_ONHOLD . '")')
             ->all();
     }
     public static function getClientProjectsDropdown($clientId)
