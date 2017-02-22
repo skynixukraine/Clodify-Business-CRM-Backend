@@ -3,9 +3,8 @@
 return [
     'adminEmail'        => 'admin@skynix.co',
     'applicationName'   => 'Skynix Ukraine',
-    'ua_site'           => 'https://skynix.co',
-    'en_site'           => 'https://skynix.co',
-    'in_site'           => 'https://skynix.co',
+    'url_crm'           => 'https://skynix.co',
+    'url_site'          => 'https://skynix.company',
     'port'              => "",
     'success'           => true,
     'invoice_cc_email'  => false,

@@ -70,7 +70,7 @@ use app\models\User;
 
     <td width = "96"  valign="top" style="padding:0; margin: 0; text-align: center; background-color: #a3d8f0;
         vertical-align: middle;">
-        <a href=<?= Yii::$app->params['en_site'] . Url::toRoute(['support/login', 'email' => $email, 'id' => $ticket])?> title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
+        <a href=<?= Yii::$app->params['url_crm'] . Url::toRoute(['support/login', 'email' => $email, 'id' => $ticket])?> title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
             <img src="http://cdn.skynix.co/skynix/btn-click.png" width="95" height = "34"  border="0"
                  alt = "CLICK HERE" style="display: block; padding: 0px; margin: 0px; border: none;"/>
         </a>

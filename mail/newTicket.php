@@ -41,7 +41,7 @@ use yii\helpers\Url;
         <td width = "29" style="padding: 0; margin: 0;"></td>
         <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-     font-weight: normal; text-align: center;">You can check the status or reply to this request online at: <a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $id])?>">
+     font-weight: normal; text-align: center;">You can check the status or reply to this request online at: <a href="<?=Yii::$app->params['url_crm'] . Url::to(['/support/ticket?id=' . $id])?>">
                 https://skynix.company/support/ticket?id=<?=$id?>.</a> Mail to: admin@skynix.co.</td>
         <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
@@ -94,7 +94,7 @@ use yii\helpers\Url;
         <td width = "29" style="padding: 0; margin: 0;"></td>
         <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-     font-weight: normal; text-align: center;">You can check the status or reply to this request online at: <a href="<?=Yii::$app->params['en_site'] . Url::to(['/support/ticket?id=' . $id])?>">
+     font-weight: normal; text-align: center;">You can check the status or reply to this request online at: <a href="<?=Yii::$app->params['url_crm'] . Url::to(['/support/ticket?id=' . $id])?>">
                 https://skynix.company/support/ticket?id=<?=$id?>.</a> Mail to: admin@skynix.co.</td>
         <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
@@ -114,6 +114,4 @@ use yii\helpers\Url;
         <td colspan = "5"  height="13" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
     </tr>
 
-
-   <!-- <h1>Your Skynix ticket #<a href="<?/*=Yii::$app->params['en_site'] . Url::toRoute(['support/login', 'email' => $email, 'id' => $id])*/?>"><?/*= $id */?></a></h1>-->
 <?php endif;?>

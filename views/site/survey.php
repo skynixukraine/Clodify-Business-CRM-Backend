@@ -62,12 +62,7 @@ $usersVote   = $model->getUsersVote();
                     <?php endforeach ?>
                 </fieldset>
                 <?php if ( $canVote )  : ?>
-                    <?php if (\app\components\Language::getLanguage() == 'en'):?>
                         <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Vote')?>" disabled>
-                    <?php endif;?>
-                    <?php if (\app\components\Language::getLanguage() == 'ua'):?>
-                        <input type="submit" id="submit" class="sub" value="<?= Yii::t('app', 'Проголосувати')?>" disabled>
-                    <?php endif;?>
                 <?php endif;?>
             </form>
 

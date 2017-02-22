@@ -2,15 +2,11 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\SupportTicket;
 use app\models\Survey;
-use app\models\SurveyVoter;
-use app\models\SurveysOption;
-use Faker\Provider\tr_TR\DateTime;
-use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use app\models\LoginForm;
@@ -19,7 +15,6 @@ use app\models\User;
 use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
-use DateTimeInterface;
 use app\modules\api\models\ApiAccessToken;
 
 class SiteController extends Controller
@@ -58,14 +53,14 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionError(){
-        //var_dump(Language::getLanguage());die();
-        return $this->render('error_' . Language::getLanguage());
+    public function actionError()
+    {
+        return $this->render('error');
     }
     public function beforeAction($action)
     {
 
-        $this->layout = "main_" . Language::getLanguage();
+        $this->layout = "main";
         //var_dump( $this->layout); exit;
         return parent::beforeAction($action);
     }
@@ -77,7 +72,7 @@ class SiteController extends Controller
             return $this->redirect(['cp/default/index']);
 
         }
-        return $this->redirect('https://skynix.company/');
+        return $this->redirect( Yii::$app->params['url_site'] );
     }
 
     /** New or invited user login  */
@@ -234,7 +229,7 @@ class SiteController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('login_' . Language::getLanguage() , ['model' => $model]);
+        return $this->render('login', ['model' => $model]);
     }
 
     public function actionLoginByAccessToken()
@@ -261,7 +256,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->redirect( Language::getUrl() );
+        return $this->redirect( "/" );
     }
 
     /**
@@ -270,15 +265,7 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact_' . Language::getLanguage() , [
-            'model' => $model,
-        ]);
+        return $this->redirect( Yii::$app->params['url_site'] . '/contacts');
     }
 
     /**
@@ -287,7 +274,7 @@ class SiteController extends Controller
      */
     public function actionCareer()
     {
-        return $this->render('career_' . Language::getLanguage());
+        return $this->redirect( Yii::$app->params['url_site'] . '/careers');
     }
 
     /**
@@ -296,7 +283,7 @@ class SiteController extends Controller
      */
     public function actionPrivacy()
     {
-        return $this->render('privacy_' . Language::getLanguage());
+        return $this->redirect( Yii::$app->params['url_site'] . '/privacy-policy');
     }
 
     /**

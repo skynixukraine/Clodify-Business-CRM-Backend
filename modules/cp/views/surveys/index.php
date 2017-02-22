@@ -51,7 +51,7 @@ if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User:
             findUrl     : '<?=Url::to(['surveys/find'])?>',
             deleteUrl   : '<?=Url::to(['surveys/delete'])?>',
             editUrl     : '<?=Url::to(['surveys/edit'])?>',
-            codeUrl     : '<?=Yii::$app->params['en_site'].Yii::$app->urlManager->createUrl(['/s'])?>',
+            codeUrl     : '<?=Yii::$app->params['url_crm'].Yii::$app->urlManager->createUrl(['/s'])?>',
             canDelete   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
             canAction   : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
             canEdit     : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES]) ? 'true' : 'false')?>,
