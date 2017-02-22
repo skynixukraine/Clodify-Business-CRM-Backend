@@ -31,7 +31,8 @@ class Auth extends ViewModelAbstract
             ($token =  $this->model->login() ) ) {
 
             $this->setData([
-                'access_token' => $token->access_token
+                'access_token' => $token->access_token,
+                'user_id' => $token->user_id
             ]);
 
         }

@@ -145,6 +145,9 @@ var ajaxReportPageModule = (function() {
                                 //     count++;
                                 // }
                             }
+                            if (dataArr.hours.indexOf(',')) {
+                                dataArr.hours = dataArr.hours.replace(',', '.');
+                            }
                             if (dataArr[i].length > 0) {
                                 count++;
                             }
@@ -176,7 +179,6 @@ var ajaxReportPageModule = (function() {
                                             var helpBlock = $('.form-add-report .help-block');
                                             helpBlock.text('');
                                             ajaxSuccessFunc(errorMsg, data);
-                                            lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>');
                                         }
                                     },
                                     error: function(data) {
@@ -259,11 +261,18 @@ var ajaxReportPageModule = (function() {
                 } else {
                     dataArr.task = "";
                 }
-                if (reportHours != "" && reportHours <= 10 && reportHours != 0) {
-                    dataArr.hours = reportHours;
+
+                if (reportHours != "") {
+                    if (reportHours.indexOf(',')) {
+                        reportHours = reportHours.replace(',', '.');
+                    }
+                    if (reportHours <= 10 && reportHours != 0) {
+                        dataArr.hours = reportHours;
+                    }
                 } else {
                     dataArr.hours = "";
                 }
+
                 return dataArr;
             }
 
@@ -494,6 +503,9 @@ var ajaxReportPageModule = (function() {
                         var splitDate = thisDateVal.split('/');
                         var hour = thisDate.closest('tr').find('.report-hour').val();
                         if (date == parseInt(splitDate[0], 10) && month == parseInt(splitDate[1], 10)) {
+                            if (hour.indexOf(',')) {
+                                hour = hour.replace(',', '.');
+                            }
                             totalHours += +hour;
                             totalHours = totalHours.toFixed(2);
                             //console.log(totalHours);

@@ -186,7 +186,6 @@ class ContractController extends DefaultController
             $projectIDs = [];
             $initiator = User::findOne($model->created_by);
             $customer = User::findOne($model->customer_id);
-            $projects = Project::ProjectsCurrentClient($customer->id);
             if (User::hasPermission([User::ROLE_ADMIN]) || $model->created_by == Yii::$app->user->id) {
                 $createdByCurrentUser = true;
             }
@@ -196,10 +195,7 @@ class ContractController extends DefaultController
             if ($model->hasInvoices() && ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]))
                 && $invoice->status != Invoice::STATUS_CANCELED ) {
                 $canInvoice = true;
-            }
-            foreach ($projects as $project) {
-                $total_hours += gmdate('H:i', floor($project->total_logged_hours * 3600));
-                $expenses += $project->cost;
+                $total_hours = Yii::$app->Helper->timeLength( $invoice->total_hours * 3600);
             }
 
             $list[] = [
@@ -211,7 +207,7 @@ class ContractController extends DefaultController
                 date("d/m/Y", strtotime($model->end_date)),
                 date("d/m/Y", strtotime($model->act_date)),
                 '$' . number_format($model->total, 2),
-                $total_hours . 'h',
+                $total_hours,
                 '$' . $expenses,
                 $customer->id,
                 $createdByCurrentUser,

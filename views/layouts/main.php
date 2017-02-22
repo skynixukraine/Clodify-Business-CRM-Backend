@@ -3,26 +3,26 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use app\components\SkynixNavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use yii\helpers\Url;
 use app\models\User;
 
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Skynix Ukraine, software development, software solutions, frontend development, backend development">
+    <meta name="description" content="Skynix Ukraine is a team of professional developers that provides innovative software solutions and high quality improvements in all IT areas. Only the latest technologies in front end and back end development.">
     <?= Html::csrfMetaTags() ?>
-    <meta name="description" content="Скайнікс Україна - це команда професійних розробників, що займається створенням інноваційних програмних рішень у всіх областях IT. Тільки найновіші технології.">
-    <meta name="keywords" content="Скайнікс Україна, розробка програмного забезпечення">
-    <title><?= ($this->title ? Html::encode($this->title) : '') ?></title>
+    <title>Skynix Ukraine - software development company</title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <?php $this->head() ?>
@@ -36,21 +36,21 @@ AppAsset::register($this);
         'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
         'brandUrl' => Yii::$app->homeUrl,
         'skynixLinks' => '
-             <ul class="nav navbar-nav navbar-right top-right-icon">
+                        <ul class="nav navbar-nav navbar-right top-right-icon">
                             <li>
                                 <a href="https://www.facebook.com/skynix.solutions/" target="_blank" class="ico-facebook"></a>
                             </li>
                             <li>
                                 <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                            <!--<li>
+                           <!-- <li>
                                 <a href="#" class="ico-in"></a>
                             </li>-->
                             <li>
-                                <a href="http://ua.skynix.solutions" class="ico-search"></a>
+                                <a href="http://skynix.solutions" class="ico-search"></a>
                             </li>
                         </ul>
-        ',
+                        ',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top box-header-menu',
         ],
@@ -59,10 +59,6 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right nav menu'],
         'items' => [
-            ['label' => 'контакти', 'url' => ['site/contact']],
-            ['label' => 'кар\'єра', 'url' => ['site/career']],
-            ['label' => 'магазин рішень', 'url' => 'https://ua.skynix.solutions'],
-            ['label' => 'блог', 'url' => '/blog'],
 
         ],
     ]);
@@ -102,27 +98,27 @@ AppAsset::register($this);
 
 <footer class="container">
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-9 footer-txt">
-            <?= date('Y') ?> Усі права захищені. Скайнікс Україна.
+        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-xs-10 footer-txt">
+            <?= date('Y') ?> All Rights Reserved. Skynix ltd.
         </div>
-        <div class="col-lg-2 col-xs-3 link">
+        <div class="col-lg-2 col-xs-2 link">
             <?php
-            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
-                <a href="<?=Yii::$app->params['in_site'] . '/cp/index'?>" rel="nofollow">cp</a>
-                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
-            <?php endif;?>
+                if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_PM])):?>
+                    <a href="<?=Yii::$app->params['url_crm'] . '/cp/index'?>" rel="nofollow">cp</a>
+                    <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
+                <?php endif;?>
             <?php
-            if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
-                <a href="<?=Yii::$app->params['in_site'] . '/cp/user/index'?>">cp</a>
-                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
+                if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_CLIENT, User::ROLE_FIN])):?>
+                <a href="<?=Yii::$app->params['url_crm'] . '/cp/user/index'?>">cp</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id != null && User::hasPermission([User::ROLE_GUEST])):?>
-                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">вийти</a>
+                <a href="<?=Url::to(['site/logout'])?>" rel="nofollow">log out</a>
             <?php endif;?>
             <?php
             if (Yii::$app->user->id ==null ):?>
-                <a href="<?=Url::to(['site/login'])?>" rel="nofollow">увійти</a>
+                    <a href="<?=Url::to(['site/login'])?>" rel="nofollow">log in</a>
 
             <?php endif;?>
 
@@ -144,7 +140,7 @@ AppAsset::register($this);
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-73439606-4', 'auto');
+    ga('create', 'UA-73439606-5', 'auto');
     ga('send', 'pageview');
 
 </script>

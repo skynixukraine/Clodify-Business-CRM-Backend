@@ -17,7 +17,7 @@ class AuthController extends DefaultController
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\Auth')
-            ->set('app\modules\api\components\ApiProcessor\ApiProcessorAccess', [
+            ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
                 'checkAccess'   => true
             ])

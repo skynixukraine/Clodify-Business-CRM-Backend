@@ -202,6 +202,7 @@ class InvoiceController extends DefaultController
     public function actionCreate($id = null)
     {
         $model      = new Invoice();
+        $model->created_by = Yii::$app->user->id;
         $contract   = null;
         if ( $id && ( $contract = Contract::findOne( $id )) ) {
             $model->contract_id     = $contract->id;
