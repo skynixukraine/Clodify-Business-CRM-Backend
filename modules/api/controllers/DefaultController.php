@@ -30,9 +30,9 @@ class DefaultController extends Controller
                     'Origin' => ['*'],
                     // Allow POST, PUT, GET, DELETE and OPTIONS methods
                     'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-                    // Allow only headers "x-requested-with, Content-Type, origin, accept, fe-access-token"
+                    // Allow only headers "x-requested-with, Content-Type, origin, accept, skynix-access-token"
                     'Access-Control-Request-Headers' => ['x-requested-with', 'Content-Type',
-                        'origin', 'accept', 'fe-access-token'],
+                        'origin', 'accept', 'skynix-access-token'],
                     // Allow OPTIONS caching
                     'Access-Control-Max-Age' => 1000,
                 ],
