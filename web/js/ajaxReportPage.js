@@ -102,7 +102,7 @@ var ajaxReportPageModule = (function() {
                                 //////Changing task cell
                             case 3:
                                 thisTd.empty();
-                                thisTd.append('<input class="form-control report-text" type = "text" value = "' + thisValue + '">')
+                                thisTd.append('<input class="form-control report-text" type = "text" value = "' + thisValue.replace(/"/g, '&quot;') + '">')
                                 break
                                 //////Changing hour cell
                             case 4:
