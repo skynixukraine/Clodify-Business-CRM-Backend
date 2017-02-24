@@ -123,7 +123,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
         <td colspan="6" width="570" height="12" valign="top" style="padding: 4px 0 4px 0; margin: 0;
         font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: center;">
             <strong>Total hours:
-            <span><?= $model->total_hours?></span></strong>
+            <span><?=Yii::$app->Helper->timeLength( $model->total_hours * 3600);?></span></strong>
         </td>
     </tr>
 

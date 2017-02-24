@@ -135,13 +135,11 @@ class InvoiceController extends DefaultController
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                 ->andWhere([Project::tableName() . '.is_delete' => 0])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
-                ->andWhere([ProjectDeveloper::tableName() . ".user_id" => Yii::$app->user->id])
                 ->groupBy('id')
                 ->all();
             foreach ($projects as $project) {
                 $projectCustomer = ProjectCustomer::find()
-                    ->where([ProjectCustomer::tableName() . '.project_id' => $project])
+                    ->where([ProjectCustomer::tableName() . '.project_id' => $project->id])
                     ->andWhere([ProjectCustomer::tableName() . '.receive_invoices' => 1])
                     ->one();
                 if ($projectCustomer) {
@@ -457,7 +455,7 @@ class InvoiceController extends DefaultController
     {
         /** @var $model Invoice */
         if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
-            $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
+            $r = Report::getReportsOnInvoice($id);
             $html2 = $this->renderPartial('invoiceReportPDF', [
                 'model' => $model,
                 'id' => $model->id,
