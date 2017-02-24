@@ -154,7 +154,8 @@ $this->params['menu'] = [
                                             <?=($model->isInDevelopers($developer->id))
                                                 ?'checked':''?> value = "<?=$developer->id?>">
                                     </td>
-                                    <td><input type="radio" title=""  name="Project[is_sales]"
+                                    <td><input type="radio" title=""  name="Project[is_sales]" onMouseDown="this.isChecked=this.checked;"
+                                               onClick="this.checked=!this.isChecked;"
                                             <?php if($mode == 'create') {
                                                 echo ( ($model->is_sales == $developer->id)
                                                     ?'checked':'');
@@ -164,7 +165,8 @@ $this->params['menu'] = [
                                         } ?> value = "<?=$developer->id?>">
 
                                     </td>
-                                    <td><input type="radio" title=""  name="Project[is_pm]"
+                                    <td><input type="radio" title=""  name="Project[is_pm]" onMouseDown="this.isChecked=this.checked;"
+                                               onClick="this.checked=!this.isChecked;"
                                             <?php if($mode == 'create') {
                                                 echo ( ($model->is_pm == $developer->id)
                                                     ?'checked':'');

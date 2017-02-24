@@ -57,7 +57,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'status'], 'required'],
-            [['customers', 'developers','invoice_received', 'is_pm', 'is_sales'], 'required', 'on' => 'admin'],
+            [['customers', 'developers','invoice_received'], 'required', 'on' => 'admin'],
             [['invoice_received', 'is_pm', 'is_delete', 'is_sales'], 'integer'],
             [['total_logged_hours', 'total_paid_hours'], 'number'],
             [['status'], 'string'],

@@ -24,7 +24,8 @@ class Helper
 
             return (float) $hours . '.' . $minutes;
         } elseif (is_float($time)) {
-            $m=floor(($time / 60) % 60);
+            $m=(int)round($time / 60);
+            $m %= 60;
             $h=floor($time / 3600);
 
             return $h.":".substr("0".$m,-2);
