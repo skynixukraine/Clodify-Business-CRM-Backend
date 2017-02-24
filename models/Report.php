@@ -332,6 +332,13 @@ class Report extends \yii\db\ActiveRecord
         return false;
     }
 
+    public static function getReportsOnInvoice($invoiceId)
+    {
+        return self::find()
+            ->where([Report::tableName() . '.invoice_id' => $invoiceId])
+            ->all();
+    }
+
     public static function getReportsCostOnInvoice($invoiceId)
     {
         return self::find()

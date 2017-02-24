@@ -455,7 +455,7 @@ class InvoiceController extends DefaultController
     {
         /** @var $model Invoice */
         if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Invoice::findOne($id) ) ) {
-            $r = Invoice::report($model->user_id, $model->date_start, $model->date_end);
+            $r = Report::getReportsOnInvoice($id);
             $html2 = $this->renderPartial('invoiceReportPDF', [
                 'model' => $model,
                 'id' => $model->id,
