@@ -110,7 +110,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
             [['bank_account_ua', 'bank_account_en'], 'string'],
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
-            ['captcha', 'string']
+            ['captcha', 'captcha']
 
         ];
     }
