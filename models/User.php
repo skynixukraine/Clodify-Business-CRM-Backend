@@ -62,6 +62,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ACTIVE_USERS  = 1;
     const DELETED_USERS = 1;
 
+    const SCENARIO_CHANGE_PASSWORD = 'change_password';
+
     public $rawPassword;
 
     /**
@@ -73,6 +75,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public $status = [];
     private $auth_key = "XnM";
     public $ticketId;
+    public $captcha;
 
     /**
      * @inheritdoc
@@ -89,11 +92,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            ['password', 'required', 'except' => 'edit-user'],
+            ['password', 'required', 'except' => ['edit-user', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'required', 'except'=>'settings'],
-            [['first_name', 'last_name', 'role'], 'required', 'except'=>['settings','api-login']],
+            [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            [['email'], 'unique', 'except'=>'api-login'],
+            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
@@ -105,7 +108,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['about'], 'string', 'max' => 1000],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^\S[^0-9_]*$/i'],
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
-            [['bank_account_ua', 'bank_account_en'], 'string']
+            [['bank_account_ua', 'bank_account_en'], 'string'],
+            ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+            ['captcha', 'string']
 
         ];
     }
