@@ -64,14 +64,23 @@ class DefaultController extends Controller
 
     public function actionError()
     {
-
+        $trace = [];
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'
             $message = Yii::t('yii', 'API Method not found.');
 
         } else {
 
-            $message = Yii::t('yii', 'An internal server error occurred.');
+            if ( YII_DEBUG ) {
+
+                $trace = $exception->getTraceAsString();
+                $message = $exception->getMessage();
+
+            } else {
+
+                $message = Yii::t('yii', 'An internal server error occurred.');
+
+            }
 
         }
         Yii::$app->response->format     = \yii\web\Response::FORMAT_JSON;
@@ -79,7 +88,8 @@ class DefaultController extends Controller
             'data'      => null,
             'errors'    => [
                 'param'     => Processor::CODE_TEHNICAL_ISSUE,
-                'message' => $message
+                'message'   => $message,
+                'trace'     => $trace
             ],
             'success'   => false
         ]);
