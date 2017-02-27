@@ -7,3 +7,6 @@ modules:
     enabled:
         - Asserts
         - \Helper\Unit
+        - REST:
+            url: 'http://skynix.local'
+            depends: PhpBrowser
