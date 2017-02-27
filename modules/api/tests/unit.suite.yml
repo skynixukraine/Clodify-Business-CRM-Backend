@@ -8,5 +8,5 @@ modules:
         - Asserts
         - \Helper\Unit
         - REST:
-            url: 'http://skynix.local'
+            url: 'https://develop.skynix.co'
             depends: PhpBrowser
