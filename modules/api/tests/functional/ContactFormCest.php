@@ -1,6 +1,6 @@
 <?php
 
-use Helper\Functional;
+use Helper\ApiEndpoints;
 
 class ContactFormCest
 {
@@ -25,7 +25,7 @@ class ContactFormCest
         define('message', 'message of test mail');
 
         $I->wantTo('Test sending Contact Form with attaching files');
-        $I->sendPOST(Functional::CONTACT, json_encode([
+        $I->sendPOST(ApiEndpoints::CONTACT, json_encode([
             'name' => name,
             'email' => email,
             'subject' => subject,
