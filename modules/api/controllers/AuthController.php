@@ -19,7 +19,7 @@ class AuthController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\Auth')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
-                'checkAccess'   => true
+                'checkAccess'   => false
             ])
             ->get('Processor')
             ->respond();

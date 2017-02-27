@@ -6,11 +6,13 @@
  */
 namespace app\modules\api\components\Api;
 
+use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
+use app\modules\api\models\ApiAccessToken;
 
 class Processor
 {
@@ -28,6 +30,7 @@ class Processor
     const ERROR_PARAM = 'error';
 
     const STATUS_CODE_SUCCESS       = 200;
+    const STATUS_CODE_UNAUTHORIZED  = 401;
 
 
     const METHOD_GET            = 'GET';
@@ -35,7 +38,7 @@ class Processor
     const METHOD_PUT            = 'PUT';
     const METHOD_DELETE         = 'DELETE';
 
-    const HEADER_ACCESS_TOKEN   = 'skynix-crm-atoken';
+    const HEADER_ACCESS_TOKEN   = 'skynix-access-token';
 
     private $response;
     private $errors = [];
@@ -107,6 +110,37 @@ class Processor
 
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
 
+
+        }
+        if ( ($accessToken = Yii::$app->request->headers->get(self::HEADER_ACCESS_TOKEN)) &&
+            count($this->getViewModel()->getErrors()) == 0 &&
+            ( $this->accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] ) ) ) {
+
+            if ( $checkAccess === true &&
+                ( $user = User::findOne($this->accessTokenModel->user_id) ) &&
+                $user->is_active == User::ACTIVE_USERS &&
+                $user->is_delete != User::DELETED_USERS ) {
+
+                Yii::$app->user->login($user);
+
+            }
+
+
+            if ( strtotime( $this->accessTokenModel->exp_date ) > strtotime("now -" . ApiAccessToken::EXPIRATION_PERIOD ) ) {
+
+                $this->accessTokenModel->exp_date = date("Y-m-d H:i:s");
+                $this->accessTokenModel->save(false, ['exp_date']);
+
+            } elseif ( $checkAccess == true ) {
+
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
+
+            }
+
+        } elseif ( $checkAccess == true ) {
+
+            $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED) );
+            Yii::$app->response->statusCode = self::STATUS_CODE_UNAUTHORIZED;
 
         }
         //TODO if oAuth/tokens needed, this method should be filled in with code
