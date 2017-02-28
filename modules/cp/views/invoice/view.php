@@ -43,7 +43,7 @@ $this->params['menu'] = [
         <?php endif;?>
         <li>Start Date:      <?php echo $model->date_start;?></li>
             <li>End Date:        <?php echo $model->date_end;?></li>
-            <li>Total hours:     <?php echo $model->total_hours;?></li>
+            <li>Total hours:     <?php echo Yii::$app->Helper->timeLength( $model->total_hours * 3600)?></li>
             <li>Sub total:       <?php echo '$' . $model->subtotal;?></li>
             <li>Discount:        <?php echo '$' . $model->discount;?></li>
             <li>Total:           <?php echo '$' . $model->total;?></li>
