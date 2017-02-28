@@ -223,8 +223,7 @@ class IndexController extends DefaultController
                                 "errors" => ["field" => 'hours', "message" => "Date report can not be earlier then project's date start"]
                             ]);
                         }
-
-                        if (!$model->invoice_id && ($date_end == null || $model->date_report == null ||
+                        if ((!$model->invoice_id || ($model->invoice_id && $model->getProject()->one()->is_delete == 0)) && ($date_end == null || $model->date_report == null ||
                                 DateUtil::compareDates(DateUtil::reConvertData($date_end), DateUtil::reConvertData($model->date_report)))
                         ) {
                             if ($model->hours < 0.1) {
@@ -335,7 +334,7 @@ class IndexController extends DefaultController
             /** @var  $model  Report*/
             $model = Report::findOne( $data->id );
 
-            if($model->invoice_id == null) {
+            if(($model->invoice_id == null) || ($model->invoice_id && $model->getInvoice()->one()->is_delete == 1)) {
 
                 $model->is_delete = 1;
                 if($model->save(true, ['is_delete']) && $model->hoursDelete()) {
