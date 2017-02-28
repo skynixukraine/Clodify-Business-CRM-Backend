@@ -227,10 +227,10 @@ class ReportsFetch extends ViewModelAbstract
         $totalCost = $activeRecordInstance->sum('cost') ? '$' . $activeRecordInstance->sum('cost') : 0;
 
         $data = [
-            "reports"           => $list,
-            "recordsTotal"      => DataTable::getInstance()->getTotal(),
-            "totalHours"        => $totalHours,
-            "totalCost"         => $totalCost,
+            "reports"            => $list,
+            "total_records"      => DataTable::getInstance()->getTotal(),
+            "total_hours"        => $totalHours,
+            "total_cost"         => $totalCost,
         ];
         $this->setData($data);
 
