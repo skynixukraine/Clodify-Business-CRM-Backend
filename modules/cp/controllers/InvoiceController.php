@@ -250,7 +250,7 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
             if (($id = Yii::$app->request->get("id"))) {
 
                 $model = Invoice::find()
