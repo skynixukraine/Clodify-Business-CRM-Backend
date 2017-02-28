@@ -9,43 +9,37 @@
 namespace viewModel;
 
 use app\components\DataTable;
-use app\components\DateUtil;
 use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\Report;
 use app\models\User;
+use app\modules\api\components\Api\Processor;
 use Yii;
-use app\modules\api\models\ApiAccessToken;
+use DateTime;
+use app\modules\api\components\SortHelper;
+
 
 class ReportsFetch extends ViewModelAbstract
 {
     public function define()
     {
         $usersId     = Yii::$app->request->getQueryParam('user_id');
-        $date_period = Yii::$app->request->getQueryParam('date_period') ? Yii::$app->request->getQueryParam('date_period') : null;
-        $projectId   = Yii::$app->request->getQueryParam('project_id') ? Yii::$app->request->getQueryParam('project_id') : null;
-        $dateStart   = Yii::$app->request->getQueryParam('from_date') ? Yii::$app->request->getQueryParam('from_date') : 1; // ?
-        $dateEnd     = Yii::$app->request->getQueryParam('to_date') ?  Yii::$app->request->getQueryParam('to_date') : null;
-        $search      = Yii::$app->request->getQueryParam('search_query') ? Yii::$app->request->getQueryParam('search_query') : null;
-        $is_invoiced = Yii::$app->request->getQueryParam('is_invoiced') ? Yii::$app->request->getQueryParam('is_invoiced') : null;
-        $start       = Yii::$app->request->getQueryParam('start') ? Yii::$app->request->getQueryParam('start') : 1;//?;
-        $limit       = Yii::$app->request->getQueryParam('limit') ? Yii::$app->request->getQueryParam('limit') : 1;//?;
-        $order       = Yii::$app->request->getQueryParam('order', []) ? Yii::$app->request->getQueryParam('order', []) : 1;//?;
+        $date_period = Yii::$app->request->getQueryParam('date_period');
+        $projectId   = Yii::$app->request->getQueryParam('project_id');
+        $dateStart   = Yii::$app->request->getQueryParam('from_date');
+        $dateEnd     = Yii::$app->request->getQueryParam('to_date');
+        $keyword     = Yii::$app->request->getQueryParam('search_query');
+        $is_invoiced = Yii::$app->request->getQueryParam('is_invoiced');
+        $start       = Yii::$app->request->getQueryParam('start') ? Yii::$app->request->getQueryParam('start') : 0;
+        $limit       = Yii::$app->request->getQueryParam('limit') ? Yii::$app->request->getQueryParam('limit') : SortHelper::DEFAULT_LIMIT;
+        $order       = Yii::$app->request->getQueryParam('order', []);
 
 
+        if ($date_period && ($dateStart || $dateEnd)) {
+            return $this->addError(Processor::ERROR_PARAM, 'date_period can not be used with from_date/to_date');
+        }
 
-
-
-
-
-
-
-
-
-
-
-        $keyword            = ( !empty($search['value']) ? $search['value'] : null);
 
         $query              = Report::find()
             ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
@@ -55,36 +49,26 @@ class ReportsFetch extends ViewModelAbstract
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy(Report::tableName() . '.id');
 
-        $columns        = [
-            'id',
-            'task',
-            'date_added',
-            'name',
-            'reporter_name',
-            'date_report',
-            'invoice_id',
-            'hours'
-        ];
 
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
-            ->setLimit( Yii::$app->request->getQueryParam("length") )
-            ->setStart( Yii::$app->request->getQueryParam("start") )
-            ->setSearchValue( $keyword ) //$search['value']
+            ->setLimit( $limit )
+            ->setStart( $start )
+            ->setSearchValue( $keyword )
             ->setSearchParams([ 'or',
                 ['like', 'reporter_name', $keyword],
                 ['like', 'task', $keyword],
             ]);
+        if( $order ){
 
-        if( isset( $columns[$order[0]['column']]) ){
-
-            $dataTable->setOrder(Report::tableName() . '.' . $columns[$order[0]['column']], $order[0]['dir']);
+            foreach ($order as $name => $value) {
+                $dataTable->setOrder(Report::tableName() . '.' . $name, $value);
+            }
 
         }else{
 
             $dataTable->setOrder( Report::tableName() . '.date_report', 'asc');
         }
-
 
         if($projectId && $projectId != null){
 
@@ -146,21 +130,54 @@ class ReportsFetch extends ViewModelAbstract
             $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
         }
 
-        if($dateStart && $dateStart != null){
-
-            $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart). '" ');
-
+        if (User::hasPermission([User::ROLE_DEV])) {
+            $dataTable->setFilter(Report::tableName() . '.user_id=' . Yii::$app->user->id);
         }
+
+
+        $date = new DateTime();
+        switch ($date_period) {
+            case 1:
+                $dateStart = date('Y-m-d');
+                break;
+            case 2:
+                $dateStart = $date->modify("last Monday")->format('Y-m-d');
+                $dateEnd = $date->modify("next Sunday")->format('Y-m-d');
+                break;
+            case 3:
+                $dateStart = $date->modify("first day of this month")->format('Y-m-d');
+                $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
+                break;
+            case 4:
+                $dateStart = $date->modify("first day of this month")->format('Y-m-d');
+                $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
+                break;
+        }
+
+        if (!$dateStart) {
+            $dateStart = date('Y-m-d');
+        }
+        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . $dateStart . '" ');
+
 
         if($dateEnd && $dateEnd != null){
 
-            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd). '"');
+            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . $dateEnd . '"');
 
         }
 
         $dataTable->setFilter(Report::tableName() . '.is_delete=0');
+
+        if ($is_invoiced === '1') {
+            $dataTable->setFilter(Report::tableName() . '.invoice_id IS NOT NULL');
+        } elseif ($is_invoiced === '0') {
+            $dataTable->setFilter(Report::tableName() . '.invoice_id IS NULL');
+        }
+
+
         $activeRecordInstance   = $dataTable->getQuery();
         $activeRecordsData      = $dataTable->getData();
+
         $list = [];
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $model ) {
@@ -172,15 +189,6 @@ class ReportsFetch extends ViewModelAbstract
 
                 $aliasUser = User::findOne( $pD->alias_user_id );
 
-            }
-            $task = $model->task;
-
-            $customer = ProjectCustomer::getProjectCustomer($model->getProject()->one()->id)->one();
-
-            if( $customer ) {
-                $customer_project =  $customer->user->first_name . ' ' . $customer->user->last_name . '<br>' . $model->getProject()->one()->name;
-            } else {
-                $customer_project = 'Customer NOT SET' . '<br>' . $model->getProject()->one()->name;
             }
 
             $user = (($aliasUser != null) ?
@@ -195,32 +203,31 @@ class ReportsFetch extends ViewModelAbstract
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
-                $invoiceId = null;
-                if ($model->invoice_id && ($model->invoice->is_delete == 0)) {
-                    $invoiceId = $model->invoice_id;
-                }
                 $list[] = [
                     'report_id'     => $model->id,
-                    'task'          => $task,
+                    'project'       => [
+                        'id'   => $model->getProject()->one()->id,
+                        'name' => $model->getProject()->one()->name
+                    ],
                     'created_date'  => date("d/m/Y", strtotime($model->date_added)),
-                    'project'       => $customer_project,
-                    $user,
-                    $date_report,
-                    ($invoiceId == null ? "No" : "Yes"),
-                    $hours,
-                    User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? '$' . number_format($model->cost, 2) : null,
-                    $model->getProject()->one()->id,
-                    $invoiceId
+                    'task'          => $model->task,
+                    'hour'          => $hours,
+                    'reporter'      => [
+                        'id'   => $model->user_id,
+                        'name' => $user
+                    ],
+                    'reported_date' => $date_report,
+                    'is_invoiced'   => $model->invoice_id ? 1 : 0
                 ];
 
 
         }
         $activeRecordInstance->limit(null)->offset(null);
         $totalHours = Yii::$app->Helper->timeLength( $activeRecordInstance->sum('hours') * 3600);
-        $totalCost = '$' . $activeRecordInstance->sum('cost');
+        $totalCost = $activeRecordInstance->sum('cost') ? '$' . $activeRecordInstance->sum('cost') : 0;
 
         $data = [
-            "reports"              => $list,
+            "reports"           => $list,
             "recordsTotal"      => DataTable::getInstance()->getTotal(),
             "totalHours"        => $totalHours,
             "totalCost"         => $totalCost,
