@@ -14,7 +14,7 @@ class PasswordCest
 
     /**
      * @see    http://jira.skynix.company:8070/browse/SI-436
-     * @param  UnitTester $I
+     * @param  FunctionalTester $I
      * @return void
      */
     public function testThatChangePasswordPageWorks(FunctionalTester $I)
