@@ -165,7 +165,7 @@ class Report extends \yii\db\ActiveRecord
 			$project = Project::findOne($this->project_id);
 			$user = User::findOne(Yii::$app->user->id);
 			//if the field was updated it was necessary to substract the old value of cost
-			if (!$insert) {
+			if (!$insert && isset($changedAttributes['hours'])) {
 				$project->cost -= round($changedAttributes['hours'] * ($user->salary / self::SALARY_HOURS), 2);
 				$project->total_logged_hours -= $changedAttributes['hours'];
 			}

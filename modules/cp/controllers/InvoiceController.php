@@ -381,8 +381,13 @@ class InvoiceController extends DefaultController
                 /** @var  $model User */
                 $model  = Invoice::findOne( $id );
                 $model->is_delete = 1;
-                $model->save(true, ['is_delete']);
-
+                if ($model->save(true, ['is_delete'])) {
+                    $reports = Report::find()->where(['invoice_id' => $id])->all();
+                    foreach ($reports as $report) {
+                        $report->invoice_id = null;
+                        $report->save(false);
+                    }
+                }
                 return json_encode([
                     "message"   => Yii::t("app", "Invoice # " . $id ." has been deleted "),
                 ]);
