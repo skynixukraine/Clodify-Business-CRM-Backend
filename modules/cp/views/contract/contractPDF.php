@@ -84,9 +84,8 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
     </tr>
 </table>
 
-<?php
-
-if ($user->sing) :?>
+<?php if ($user->sing) :?>
+    <pagebreak>
 <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; border-top:none">
         <td align="center" width="285" style =" vertical-align: top; border-top: none; border-left: 1px solid black; border-right: 1px solid black;  height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:'Times New Roman';font-size:10px;">
