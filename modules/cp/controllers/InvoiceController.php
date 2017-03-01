@@ -384,11 +384,10 @@ class InvoiceController extends DefaultController
                 if ($model->save(true, ['is_delete'])) {
                     $reports = Report::find()->where(['invoice_id' => $id])->all();
                     foreach ($reports as $report) {
-                        $report->is_delete = NULL;
-                        $report->save();
+                        $report->invoice_id = null;
+                        $report->save(false);
                     }
                 }
-
                 return json_encode([
                     "message"   => Yii::t("app", "Invoice # " . $id ." has been deleted "),
                 ]);
