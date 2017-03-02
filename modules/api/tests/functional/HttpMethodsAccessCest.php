@@ -1,6 +1,6 @@
 <?php
 
-use Helper\Functional;
+use Helper\ApiEndpoints;
 use app\modules\api\components\Api\Processor;
 
 class HttpMethodsAccessCest
@@ -24,19 +24,19 @@ class HttpMethodsAccessCest
         $I->wantTo('Test that api/contacts available only via POST method');
 
         // GET
-        $I->sendGET(Functional::CONTACT);
+        $I->sendGET(ApiEndpoints::CONTACT);
         $response = json_decode($I->grabResponse());
         $I->assertEquals($response->errors[0]->message, 'This HTTP method disallowed'); // (Processor::CODE_METHOD_NOT_ALLOWED, $response->errors[0]->param)
         $I->assertEquals(false, $response->success);
 
         // PUT
-        $I->sendPUT(Functional::CONTACT);
+        $I->sendPUT(ApiEndpoints::CONTACT);
         $response = json_decode($I->grabResponse());
         $I->assertEquals($response->errors[0]->message, 'This HTTP method disallowed'); // (Processor::CODE_METHOD_NOT_ALLOWED, $response->errors[0]->param)
         $I->assertEquals(false, $response->success);
 
         // Delete
-        $I->sendDELETE(Functional::CONTACT);
+        $I->sendDELETE(ApiEndpoints::CONTACT);
         $response = json_decode($I->grabResponse());
         $I->assertEquals($response->errors[0]->message, 'This HTTP method disallowed'); // (Processor::CODE_METHOD_NOT_ALLOWED, $response->errors[0]->param)
         $I->assertEquals(false, $response->success);
