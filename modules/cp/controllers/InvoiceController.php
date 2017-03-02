@@ -426,6 +426,9 @@ class InvoiceController extends DefaultController
 
             $pdf = new mPDF();
             $pdf->WriteHTML($html);
+            if ( !is_dir(Yii::getAlias('@app/data/invoices/')) ) {
+                mkdir(Yii::getAlias('@app/data/invoices/'), 0777);
+            }
             $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
