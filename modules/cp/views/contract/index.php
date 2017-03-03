@@ -89,6 +89,7 @@ if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
         contractCreateModule.init({
             editUrl     : '<?=Url::to(['contract/edit'])?>',
             deleteUrl   : '<?=Url::to(['contract/delete'])?>',
+            contractIdUrl : '<?=Url::to(['contract/contract-id'])?>',
             findUrl     : '<?=Url::to(['contract/find'])?>',
             viewUrl     : '<?=Url::to(['contract/view'])?>',
             invoiceUrl  : '<?=Url::to(['invoice/create'])?>',

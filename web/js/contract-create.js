@@ -6,6 +6,7 @@ var contractCreateModule = (function() {
             findUrl     : '',
             editUrl     : '',
             deleteUrl   : '',
+            contractIdUrl : '',
             viewUrl     : '',
             invoiceUrl  : '',
             canDelete   : '',
@@ -158,28 +159,37 @@ var contractCreateModule = (function() {
                 function deleteRequest(  )
                 {
                     var params = {
-                        url     : cfg.deleteUrl,
+                        url     : cfg.contractIdUrl,
                         data    : {id : id},
                         dataType: 'json',
-                        type    : 'DELETE',
+                        type    : 'GET',
                         success : function ( response ) {
+                            $.ajax({
+                                url     : cfg.deleteUrl,
+                                data    : {id : response.id, contract_id : id},
+                                dataType: 'json',
+                                type    : 'DELETE',
+                                success : function (response) {
+                                    if ( response.message ) {
 
-                            if ( response.message ) {
-
-                                var win = new ModalBootstrap({
-                                    title: 'Message',
-                                    body: response.message,
-                                    buttons: [
-                                        {class: 'btn-default confirm', text: 'Ok'}
-                                    ]
+                                        var win = new ModalBootstrap({
+                                            title: 'Message',
+                                            body: response.message,
+                                            buttons: [
+                                                {class: 'btn-default confirm', text: 'Ok'}
+                                            ]
 
 
-                                });
-                                win.show();
-                            }
+                                        });
+                                        win.show();
+                                    }
+                                }
+                            });
+
                             dataTable.api().ajax.reload();
                         }
                     };
+
 
                     $.ajax( params );
                     dataTable.api().ajax.reload();

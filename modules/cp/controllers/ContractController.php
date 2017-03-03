@@ -34,7 +34,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract', 'downloadactofwork'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract', 'downloadactofwork', 'contract-id'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
@@ -233,12 +233,20 @@ class ContractController extends DefaultController
 
     public function actionDelete()
     {
-        $id = Yii::$app->request->post("id");
-        if ( isset($id) ) {
-            $model  = Contract::findOne(['contract_id' => $id]);
+        if ( ($id = Yii::$app->request->post("id"))  && $model  = Contract::findOne($id)  ) {
             $model->delete();
             return json_encode([
-                "message"   => Yii::t("app", "You deleted contract " . $id),
+                "message"   => Yii::t("app", "You deleted contract " . Yii::$app->request->post('contract_id')),
+                "success"   => true
+            ]);
+        }
+    }
+
+    public function actionContractId()
+    {
+        if ($model = Contract::findOne(['contract_id' => Yii::$app->request->getQueryParam('id')])) {
+            return json_encode([
+                "id"        => $model->id,
                 "success"   => true
             ]);
         }
