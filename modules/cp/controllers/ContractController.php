@@ -233,7 +233,8 @@ class ContractController extends DefaultController
 
     public function actionDelete()
     {
-        if ( ( $id = Yii::$app->request->post("id") ) ) {
+        $id = Yii::$app->request->post("id");
+        if ( isset($id) ) {
             $model  = Contract::findOne(['contract_id' => $id]);
             $model->delete();
             return json_encode([
