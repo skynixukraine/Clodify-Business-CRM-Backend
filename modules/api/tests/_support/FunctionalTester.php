@@ -1,5 +1,5 @@
 <?php
-namespace api;
+
 
 /**
  * Inherited Methods
