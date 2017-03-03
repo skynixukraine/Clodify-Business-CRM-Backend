@@ -120,6 +120,27 @@ class Report extends \yii\db\ActiveRecord
 
         }
     }
+    public function getDatePeriods() {
+        $periods  = [
+            [
+                "id" => 1,
+                "date_period" =>  "Today's reports"
+            ],
+            [
+                "id" => 2,
+                "date_period" =>  "This week reports"
+            ],
+            [
+                "id" => 3,
+                "date_period" =>  "This month reports"
+            ],
+            [
+                "id" => 4,
+                "date_period" =>  "Last month reports"
+            ],
+        ];
+        return $periods;
+    }
 
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)

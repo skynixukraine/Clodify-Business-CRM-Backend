@@ -20,4 +20,16 @@ class ReportsController extends DefaultController
             ->respond();
 
     }
+    
+    public function actionDatePeriod(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\DatePeriod')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }   
