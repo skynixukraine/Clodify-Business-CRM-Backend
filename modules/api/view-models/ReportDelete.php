@@ -13,7 +13,11 @@ use app\models\Project;
 
 use Yii;
 
-
+/**
+ * Class ReportDelete
+ * Delete the report by id
+ * @package viewModel
+ */
 class ReportDelete extends ViewModelAbstract
 {
     public function define()
@@ -29,7 +33,6 @@ class ReportDelete extends ViewModelAbstract
                     $project->cost -= round($model->hours * ($user->salary / Report::SALARY_HOURS), 2);
                     $project->total_logged_hours -= $model->hours;
                     $project->save(true, ['total_logged_hours', 'cost']);
-                    $this->setData([]);
                 }
             } else {
                 $this->addError('invoice', Yii::t('app','Invoice was created for this report'));
@@ -37,6 +40,6 @@ class ReportDelete extends ViewModelAbstract
         } else {
             $this->addError('id', Yii::t('app','Such report is not existed'));
         }
-
+        $this->setData([]);
     }
 }
