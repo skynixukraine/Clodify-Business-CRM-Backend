@@ -1,9 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dmytro
- * Date: 24.02.17
- * Time: 12:20
+ * Created by Skynix Team
+ * Date: 03.03.17
+ * Time: 13:37
  */
 
 namespace viewModel;
