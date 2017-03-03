@@ -32,4 +32,16 @@ class ReportsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionDelete(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ReportDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }   
