@@ -30,7 +30,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
 
     <tr>
         <td colspan="6"  width="570" valign="top" style="padding: 0; margin: 0;">
-            <a href="http://skynix.solutions/" title="logo Skynix" target="_blank">
+            <a href="https://skynix.co" title="logo Skynix" target="_blank">
                 <img src="http://cdn.skynix.co/skynix/logo_skynix.jpg" alt="Skynix" border="0" width="105" height="30"
                      style="display: block; padding: 0px; margin: 0px; border: none;">
             </a>
@@ -102,7 +102,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
             </td>
             <td colspan="1" width="200" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
              font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
-                <?= Html::encode($a->task)?>
+                <?= Html::decode($a->task)?>
             </td>
             <td colspan="1" width="40" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
              font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
