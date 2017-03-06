@@ -7,7 +7,7 @@ use app\modules\api\components\Api\Processor;
 class ReportsController extends DefaultController
 {
 
-    public function actionFetch()
+    public function actionIndex()
     {
 
         $this->di
