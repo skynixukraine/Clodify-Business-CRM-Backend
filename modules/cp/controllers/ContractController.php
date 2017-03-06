@@ -34,7 +34,7 @@ class ContractController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract', 'downloadactofwork', 'contract-id'],
+                        'actions' => [ 'index', 'create', 'edit', 'find', 'delete', 'view', 'downloadcontract', 'downloadactofwork'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_FIN],
                     ],
