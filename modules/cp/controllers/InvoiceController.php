@@ -432,7 +432,7 @@ class InvoiceController extends DefaultController
             $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
-                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
 
@@ -475,7 +475,7 @@ class InvoiceController extends DefaultController
             $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
             if( ( $model->user_id == Yii::$app->user->id &&
                     User::hasPermission([User::ROLE_CLIENT]) ) ||
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . 'reports'. $id . '.pdf'))) {
                     /*$this->downloadFile($path);*/
