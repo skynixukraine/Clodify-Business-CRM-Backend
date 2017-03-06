@@ -12,13 +12,13 @@ class ReportDeleteCest
 {
     /**
      * @see    http://jira.skynix.company:8070/browse/SI-840
-     * @param  FunctionalTester      $I
+     * @param  FunctionalTester $I
      * @return void
      */
     public function deleteReports(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $reportId = 1;
-        $I->sendDELETE(ApiEndpoints::REPORT . '/'. $reportId);
+        $ownReportId = 1;
+        $I->sendDELETE(ApiEndpoints::REPORT . '/' . $ownReportId);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         //Not authorize to do this action
@@ -26,16 +26,46 @@ class ReportDeleteCest
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
-        $I->sendDELETE(ApiEndpoints::REPORT . '/'. $reportId);
-        $I->seeResponseCodeIs(200);
+        $userId = json_decode($I->grabResponse())->data->user_id;
 
+        //Try to delete not own report
+        $I->sendGET(ApiEndpoints::REPORT, [
+            'from_date' => date('Y-m-d', strtotime('-1 year')),
+            'to_date' => date('Y-m-d')
+        ]);
+
+        $response = json_decode($I->grabResponse());
+        $reports = $response->data->reports;
+
+        $notOwnReportId = 0;
+        foreach ($reports as $report) {
+            if (($report->reporter->id != $userId) && ($report->is_invoiced == 0)) {
+                $notOwnReportId  = $report->report_id;
+            }
+        }
+
+        $I->sendDELETE(ApiEndpoints::REPORT . '/'. $notOwnReportId);
+        $I->seeResponseCodeIs(200);
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->seeResponseContainsJson([
+            "data"   => [],
+            "errors" => [
+                "param"   => "error",
+                "message" => "You can delete only own reports"
+            ],
+            "success" => false
+        ]);
+
+        $I->sendDELETE(ApiEndpoints::REPORT . '/'. $ownReportId);
+        $I->seeResponseCodeIs(200);
+        $response = json_decode($I->grabResponse());
         $I->seeResponseContainsJson([
             "data"      => [],
             "errors"    => [],
             "success"   => true
         ]);
-        $response = json_decode($I->grabResponse());
-        codecept_debug($response->errors);
         $I->assertEmpty($response->errors);
         $I->assertEquals(1, $response->success);
     }
