@@ -6,7 +6,6 @@ var contractCreateModule = (function() {
             findUrl     : '',
             editUrl     : '',
             deleteUrl   : '',
-            contractIdUrl : '',
             viewUrl     : '',
             invoiceUrl  : '',
             canDelete   : '',
@@ -127,7 +126,7 @@ var contractCreateModule = (function() {
                             if (row[11] && !row[13]) {
 
                                 icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Delete the contract"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="'+row[12]+'" title="Delete the contract"></i>');
 
                             }
                             customerIDs[row[0]] = row[10];
@@ -159,32 +158,23 @@ var contractCreateModule = (function() {
                 function deleteRequest(  )
                 {
                     var params = {
-                        url     : cfg.contractIdUrl,
+                        url     : cfg.deleteUrl,
                         data    : {id : id},
                         dataType: 'json',
-                        type    : 'GET',
+                        type    : 'DELETE',
                         success : function ( response ) {
-                            $.ajax({
-                                url     : cfg.deleteUrl,
-                                data    : {id : response.id, contract_id : id},
-                                dataType: 'json',
-                                type    : 'DELETE',
-                                success : function (response) {
-                                    if ( response.message ) {
-
-                                        var win = new ModalBootstrap({
-                                            title: 'Message',
-                                            body: response.message,
-                                            buttons: [
-                                                {class: 'btn-default confirm', text: 'Ok'}
-                                            ]
+                            if ( response.message ) {
+                                var win = new ModalBootstrap({
+                                    title: 'Message',
+                                    body: response.message,
+                                    buttons: [
+                                        {class: 'btn-default confirm', text: 'Ok'}
+                                    ]
 
 
-                                        });
-                                        win.show();
-                                    }
-                                }
-                            });
+                                });
+                                win.show();
+                            }
 
                             dataTable.api().ajax.reload();
                         }
@@ -197,7 +187,7 @@ var contractCreateModule = (function() {
                 }
 
                 deleteModal = new ModalBootstrap({
-                    title       : 'Delete ' + name + "?",
+                    title       : 'Delete contract #' + name + "?",
                     body        : 'All data related to this contract will be deleted.',
                     winAttrs    : { class : 'modal delete'}
                 });
@@ -211,10 +201,10 @@ var contractCreateModule = (function() {
             dataTable.on( 'draw.dt', function (e, settings, data) {
 
                 dataTable.find("i[class*=delete]").click(function(){
+                    var name   = $(this).parents("tr").find("td").eq(0).text();
+                        actionDelete( $(this).data('id'), name, dataTable );
 
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionDelete( id, name, dataTable );
+
 
                 });
 

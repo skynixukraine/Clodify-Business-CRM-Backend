@@ -242,16 +242,6 @@ class ContractController extends DefaultController
         }
     }
 
-    public function actionContractId()
-    {
-        if ($model = Contract::findOne(['contract_id' => Yii::$app->request->getQueryParam('id')])) {
-            return json_encode([
-                "id"        => $model->id,
-                "success"   => true
-            ]);
-        }
-    }
-
     public function actionView()
     {
         $id = Yii::$app->request->get("id");
