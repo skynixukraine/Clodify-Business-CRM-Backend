@@ -13,4 +13,5 @@ class ApiEndpoints
     const CONTACT = '/api/contacts';
     const CONTACT_ATTACH = self::CONTACT . '/attachment';
     const PASSWORD = '/api/password';
+    const USERS = '/api/users';
 }
