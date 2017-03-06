@@ -7,7 +7,8 @@ use app\modules\api\components\Api\Processor;
 class ReportsController extends DefaultController
 {
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
@@ -20,4 +21,20 @@ class ReportsController extends DefaultController
             ->respond();
 
     }
+
+    public function actionCreate()
+    {
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ReportsCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
 }   
