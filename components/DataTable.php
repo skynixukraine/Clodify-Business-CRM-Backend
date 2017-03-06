@@ -65,7 +65,7 @@ class DataTable {
 
         } else {
 
-            $this->query->orderBy( array( $this->orderColumn => ($this->orderDir == "asc" ? SORT_ASC : SORT_DESC ) ) );
+            $this->query->orderBy( array( $this->orderColumn => ( (strcasecmp($this->orderDir, "asc") === 0) ? SORT_ASC : SORT_DESC ) ) );
 
         }
 
@@ -157,7 +157,7 @@ class DataTable {
     public function setOrder ( $column, $dir = null)
     {
         $this->orderColumn  = $column;
-        $this->orderDir     = mb_strtolower($dir);
+        $this->orderDir     = $dir;
         return $this;
     }
 
