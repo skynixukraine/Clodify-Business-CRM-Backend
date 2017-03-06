@@ -157,7 +157,7 @@ class DataTable {
     public function setOrder ( $column, $dir = null)
     {
         $this->orderColumn  = $column;
-        $this->orderDir     = $dir;
+        $this->orderDir     = mb_strtolower($dir);
         return $this;
     }
 

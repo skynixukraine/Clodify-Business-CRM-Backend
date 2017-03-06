@@ -107,7 +107,7 @@ class UsersFetch extends ViewModelAbstract
             }
 
         } else {
-            $dataTable->setOrder(User::tableName() . '.' . 'id', mb_strtolower(SortHelper::DESC));
+            $dataTable->setOrder(User::tableName() . '.' . 'id', SortHelper::DESC);
         }
 
         $dataTable->setFilter('is_delete=0');
