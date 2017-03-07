@@ -7,8 +7,7 @@ use app\modules\api\components\Api\Processor;
 class ReportsController extends DefaultController
 {
 
-    public function actionIndex()
-    {
+    public function actionIndex(){
 
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
@@ -20,6 +19,30 @@ class ReportsController extends DefaultController
             ->get('Processor')
             ->respond();
 
+    }
+    
+    public function actionDatePeriod(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\DatePeriod')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionDelete(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ReportDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
     }
 
     public function actionCreate()
