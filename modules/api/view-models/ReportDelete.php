@@ -36,7 +36,7 @@ class ReportDelete extends ViewModelAbstract
                         $project->total_logged_hours -= $model->hours;
                         $project->save(true, ['total_logged_hours', 'cost']);
                     } else {
-                        $this->addError(Processor::CODE_INSERT_ERROR, Yii::t('app','Report wasn\'t deleted'));
+                        $this->addError(Processor::ERROR_PARAM, Yii::t('app','Report wasn\'t deleted'));
                     }
                 }  else {
                     $this->addError(Processor::ERROR_PARAM, Yii::t('app','Invoice was created for this report'));
