@@ -60,13 +60,13 @@ $config = [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' =>array_merge([
+            'rules' =>array_merge($route, [
                 '<controller>/<action>'                     => '<controller>/<action>',
                 '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>/<id:\d+>',
                 '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>',
                 'profile/<name:\w+\-\w+>/<public_key:\w+>'  => 'profile/index',
 
-            ], $route),
+            ]),
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

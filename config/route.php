@@ -1,16 +1,14 @@
 <?php
 $API = 'api';
 return [
-    $API . '/reports/<id:\d+>' => $API . '/reports/delete',
+    'DELETE' . $API . '/reports/<id:\d+>' => $API . '/reports/delete',
+    'POST ' . $API . '/reports' => $API . '/reports/create',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
-
-            // Error rule for unknown methods
+    // Error rule for unknown methods
     [
         'pattern'   => $API . '/<route:(.*)>',
         'route'     => $API . '/default/error'
-
-    ],
-
+    ]
 ];

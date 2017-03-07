@@ -55,12 +55,12 @@ class Report extends \yii\db\ActiveRecord
         public function rules()
     {
         return [
-            [['project_id', 'user_id', 'task', 'hours'], 'required'],
+            [['project_id', 'user_id', 'task', 'hours', 'date_report'], 'required'],
             [['task'], 'trim'],
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
             [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
-            [['date_added', 'date_paid', 'date_report'], 'safe'],
+            [['date_added', 'date_paid'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
             [['task'], 'string', 'min' => 20, 'max' => 500 ]
