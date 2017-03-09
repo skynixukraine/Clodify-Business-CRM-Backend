@@ -35,7 +35,6 @@ class ReportsFetch extends ViewModelAbstract
         $limit       = Yii::$app->request->getQueryParam('limit') ? Yii::$app->request->getQueryParam('limit') : SortHelper::DEFAULT_LIMIT;
         $order       = Yii::$app->request->getQueryParam('order', []);
 
-
         if ($date_period && ($dateStart || $dateEnd)) {
             return $this->addError(Processor::ERROR_PARAM, 'date_period can not be used with from_date/to_date');
         }
@@ -60,7 +59,6 @@ class ReportsFetch extends ViewModelAbstract
                 ['like', 'task', $keyword],
             ]);
         if( $order ){
-
             foreach ($order as $name => $value) {
                 $dataTable->setOrder(Report::tableName() . '.' . $name, $value);
             }

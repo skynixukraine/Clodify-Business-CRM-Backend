@@ -40,16 +40,14 @@ class ReportsCest
             'success' => 'boolean'
         ]);
         $ownReportId = $response->data->report_id;
-
         /*2.1.3 Fetch Reports Data
-        * @see  http://jira.skynix.company:8070/browse/SI-824
-        */
+       * @see  http://jira.skynix.company:8070/browse/SI-824
+        * Check if  data was created
+       */
         $I->sendGET(ApiEndpoints::REPORT, [
-            'from_date' => date('Y-m-d', strtotime('-1 year')),
-            'to_date' => date('Y-m-d')
+            'limit'   => 1
         ]);
         $response = json_decode($I->grabResponse());
-        $reports = $response->data->reports;
         $I->assertEmpty($response->errors);
         $I->seeResponseMatchesJsonType([
             'data' => [
@@ -61,11 +59,72 @@ class ReportsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
-        /*2.1.4 Delete Reports Data
-         * @see   http://jira.skynix.company:8070/browse/SI-840
-         *
-         */
+        $I->seeResponseContainsJson([
+            'data' =>
+                [
+                    'reports' => [
+                        'report_id' =>$ownReportId,
+                        'task'      => task
+                    ],
 
+                ]
+        ]);
+
+        /*
+         * 2.1.2 Edit Report Data
+         * http://jira.skynix.company:8070/browse/SI-865
+         */
+        $newTask  = task . 'NEW';
+        $newHours = hours + 1;
+
+        $I->sendPUT(ApiEndpoints::REPORT . '/'.$ownReportId, json_encode([
+            'task' => $newTask,
+            'hours' => $newHours
+        ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+        /*2.1.3 Fetch Reports Data
+        * @see  http://jira.skynix.company:8070/browse/SI-824
+         * Check if  data was updated
+        */
+        $I->sendGET(ApiEndpoints::REPORT, [
+            'limit'   => 1
+        ]);
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'reports'       => 'array',
+                "total_records" => 'string',
+                "total_hours"   => 'string',
+                "total_cost"    => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $I->seeResponseContainsJson([
+            'data' =>
+                [
+                    'reports' => [
+                        'report_id' =>$ownReportId,
+                        'task'      => $newTask
+                    ],
+
+                ]
+        ]);
+
+        //Try to delete not own report
+        $I->sendGET(ApiEndpoints::REPORT, [
+            'from_date' => date('Y-m-d', strtotime('-1 year')),
+            'to_date' => date('Y-m-d')
+        ]);
+
+        $response = json_decode($I->grabResponse());
+        $reports = $response->data->reports;
         //Get not own report id from all reports
         $notOwnReportId = 0;
         foreach ($reports as $report) {
@@ -73,6 +132,10 @@ class ReportsCest
                 $notOwnReportId  = $report->report_id;
             }
         }
+        /*2.1.4 Delete Reports Data
+         * @see   http://jira.skynix.company:8070/browse/SI-840
+         *
+         */
         //Try to delete not own report
         $I->sendDELETE(ApiEndpoints::REPORT . '/'. $notOwnReportId);
         $I->seeResponseCodeIs(200);
@@ -97,6 +160,38 @@ class ReportsCest
         ]);
         $I->assertEmpty($response->errors);
         $I->assertEquals(1, $response->success);
+
+        //Check if data was deleted
+        /*2.1.3 Fetch Reports Data
+       * @see  http://jira.skynix.company:8070/browse/SI-824
+        * Check if  data was deleted
+       */
+        $I->sendGET(ApiEndpoints::REPORT, [
+            'limit'   => 1
+        ]);
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'reports'       => 'array',
+                "total_records" => 'string',
+                "total_hours"   => 'string',
+                "total_cost"    => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $I->cantseeResponseContainsJson([
+            'data' =>
+                [
+                    'reports' => [
+                        'report_id' =>$ownReportId,
+                        'task'      => $newTask
+                    ],
+
+                ]
+        ]);
+
 
         /*
          * 2.1.5 Report DatePeriod List
@@ -129,5 +224,7 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(1, $response->success);
+
     }
+
 }
