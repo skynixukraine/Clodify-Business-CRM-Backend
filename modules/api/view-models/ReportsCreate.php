@@ -21,8 +21,10 @@ class ReportsCreate extends ViewModelAbstract
 
     public function define()
     {
+
         $this->model->setAttributes($this->postData);
-        $this->model->user_id = Yii::$app->user->id;
+        $this->model->user_id = $this->getAccessTokenModel()->user_id;
+
         $this->model->date_added = date('Y-m-d');
         $this->model->date_report = DateUtil::convertData($this->model->date_report);
 
@@ -35,9 +37,9 @@ class ReportsCreate extends ViewModelAbstract
             str_replace(',', '.', $this->model->hours);
         }
 
-        if ($this->validate()) {
 
-                $totalHoursOfThisDay = $this->model->sumHoursReportsOfThisDay(Yii::$app->user->id, $this->model->date_report);
+        if ($this->validate()) {
+                $totalHoursOfThisDay = $this->model->sumHoursReportsOfThisDay( $this->getAccessTokenModel()->user_id, $this->model->date_report);
                 $project = Project::findOne($this->model->project_id);
                 if (in_array($project->status, [Project::STATUS_INPROGRESS, Project::STATUS_ONHOLD])) {
                     $date_end = Invoice::getInvoiceWithDateEnd($this->model->project_id);
@@ -56,10 +58,13 @@ class ReportsCreate extends ViewModelAbstract
                             return $this->addError(Processor::ERROR_PARAM, 'Task should contain at least 20 characters.');
                         }
                         if ($this->validate()) {
-                            $user = User::findOne(Yii::$app->user->id);
+                            $user_id = $this->getAccessTokenModel()->user_id;
+                            $user = User::findOne($user_id);
                             $this->model->cost = $this->model->hours * ($user->salary / Report::SALARY_HOURS);
+                            $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
+                            $this->model->user_id = $user_id;
+
                             if (($result = $totalHoursOfThisDay + $this->model->hours) <= 12) {
-                                Yii::$app->user->getIdentity()->last_name;
                                 if ($this->model->save()) {
                                     $this->setData(['report_id' => $this->model->id]);
                                     if ($project->validate()) {
