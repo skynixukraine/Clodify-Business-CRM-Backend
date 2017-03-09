@@ -18,9 +18,30 @@ class ReportsCest
         define('date_report', str_replace('-', '/', date('d-m-Y')));
         define('hours', 2);
         define('task', 'task description, task description, task description');
+
+        $I->wantTo('Create report without authorization');
+        //Try to create report without authorization
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => project_id,
+            'task' => task,
+            'hours' => hours,
+            'date_report' => date_report
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
         $userId = json_decode($I->grabResponse())->data->user_id;
+
+
+        /**
+         * 2.1.1 Create Report Data
+         *  @see    http://jira.skynix.company:8070/browse/SI-837
+         */
+        $I->wantTo('Create report with authorization');
 
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
             'project_id' => project_id,
@@ -41,9 +62,10 @@ class ReportsCest
         ]);
         $ownReportId = $response->data->report_id;
         /*2.1.3 Fetch Reports Data
-       * @see  http://jira.skynix.company:8070/browse/SI-824
+        * @see  http://jira.skynix.company:8070/browse/SI-824
         * Check if  data was created
        */
+        $I->wantTo('Check if report was created with using fetch method');
         $I->sendGET(ApiEndpoints::REPORT, [
             'limit'   => 1
         ]);
@@ -74,6 +96,7 @@ class ReportsCest
          * 2.1.2 Edit Report Data
          * http://jira.skynix.company:8070/browse/SI-865
          */
+        $I->wantTo('Edit previously created report');
         $newTask  = task . 'NEW';
         $newHours = hours + 1;
 
@@ -91,6 +114,7 @@ class ReportsCest
         * @see  http://jira.skynix.company:8070/browse/SI-824
          * Check if  data was updated
         */
+        $I->wantTo('Check if report was updated with using fetch method');
         $I->sendGET(ApiEndpoints::REPORT, [
             'limit'   => 1
         ]);
@@ -117,7 +141,8 @@ class ReportsCest
                 ]
         ]);
 
-        //Try to delete not own report
+        //Try to get id of not own report by using fetch method
+        $I->wantTo('Get not own id of report');
         $I->sendGET(ApiEndpoints::REPORT, [
             'from_date' => date('Y-m-d', strtotime('-1 year')),
             'to_date' => date('Y-m-d')
@@ -136,6 +161,7 @@ class ReportsCest
          * @see   http://jira.skynix.company:8070/browse/SI-840
          *
          */
+        $I->wantTo('Delete not own report');
         //Try to delete not own report
         $I->sendDELETE(ApiEndpoints::REPORT . '/'. $notOwnReportId);
         $I->seeResponseCodeIs(200);
@@ -150,6 +176,7 @@ class ReportsCest
             ],
             "success" => false
         ]);
+        $I->wantTo('Delete previously created report');
         $I->sendDELETE(ApiEndpoints::REPORT . '/'. $ownReportId);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
@@ -166,6 +193,7 @@ class ReportsCest
        * @see  http://jira.skynix.company:8070/browse/SI-824
         * Check if  data was deleted
        */
+        $I->wantTo('Check if previously created report was deleted');
         $I->sendGET(ApiEndpoints::REPORT, [
             'limit'   => 1
         ]);
@@ -198,6 +226,7 @@ class ReportsCest
          * @see  http://jira.skynix.company:8070/browse/SI-841
          *
          */
+        $I->wantTo('Get list with date periods for report');
         $I->sendGET(ApiEndpoints::REPORT . '/date-period');
         $I->seeResponseCodeIs(200);
 
@@ -224,7 +253,6 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(1, $response->success);
-
     }
 
 }
