@@ -57,14 +57,13 @@ class ReportsController extends DefaultController
             ->respond();
     }
 
-    public function actionCreate()
+    public function actionCreateEdit()
     {
-
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
-            ->set('viewModel\ViewModelInterface', 'viewModel\ReportsCreate')
+            ->set('viewModel\ViewModelInterface', 'viewModel\CreateEditReport')
             ->set('app\modules\api\components\Api\Access', [
-                'methods'       => [ Processor::METHOD_POST ],
+                'methods'       => [ Processor::METHOD_POST, Processor::METHOD_PUT],
                 'checkAccess'   => true
             ])
             ->get('Processor')

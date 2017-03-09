@@ -16,17 +16,29 @@ use Yii;
 use app\models\Project;
 use yii\log\Logger;
 
-class ReportsCreate extends ViewModelAbstract
+class CreateEditReport extends ViewModelAbstract
 {
 
     public function define()
     {
 
-        $this->model->setAttributes($this->postData);
-        $this->model->user_id = $this->getAccessTokenModel()->user_id;
+        $reportId       = Yii::$app->request->getQueryParam('id');
+        $userId = $this->getAccessTokenModel()->user_id;
 
-        $this->model->date_added = date('Y-m-d');
-        $this->model->date_report = DateUtil::convertData($this->model->date_report);
+        if( $reportId ) {
+            $this->model = Report::findOne($reportId);
+            $this->model->setAttributes($this->postData);
+            $oldHours = $this->model->hours;
+            $this->model->date_report = DateUtil::convertData($this->model->date_report);
+            if (strpos($this->model->hours, ',')) {
+                str_replace(',', '.', $this->model->hours);
+            }
+        } else {
+            $this->model->setAttributes($this->postData);
+            $this->model->date_added = date('Y-m-d');
+            $this->model->date_report = DateUtil::convertData($this->model->date_report);
+            $this->model->user_id = $userId;
+        }
 
         if ($this->model->date_report > date('Y-m-d')) {
             return $this->addError(Processor::ERROR_PARAM, 'You can not report in advance');
@@ -37,9 +49,9 @@ class ReportsCreate extends ViewModelAbstract
             str_replace(',', '.', $this->model->hours);
         }
 
-
-        if ($this->validate()) {
-                $totalHoursOfThisDay = $this->model->sumHoursReportsOfThisDay( $this->getAccessTokenModel()->user_id, $this->model->date_report);
+        if(($reportId && ($this->model->user_id == $userId )) || (!$reportId)) {
+            if ($this->validate()) {
+                $totalHoursOfThisDay = $this->model->sumHoursReportsOfThisDay($this->getAccessTokenModel()->user_id, $this->model->date_report);
                 $project = Project::findOne($this->model->project_id);
                 if (in_array($project->status, [Project::STATUS_INPROGRESS, Project::STATUS_ONHOLD])) {
                     $date_end = Invoice::getInvoiceWithDateEnd($this->model->project_id);
@@ -57,6 +69,7 @@ class ReportsCreate extends ViewModelAbstract
                         if (strlen(trim($this->model->task)) <= 19) {
                             return $this->addError(Processor::ERROR_PARAM, 'Task should contain at least 20 characters.');
                         }
+
                         if ($this->validate()) {
                             $user_id = $this->getAccessTokenModel()->user_id;
                             $user = User::findOne($user_id);
@@ -64,9 +77,19 @@ class ReportsCreate extends ViewModelAbstract
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
                             $this->model->user_id = $user_id;
 
-                            if (($result = $totalHoursOfThisDay + $this->model->hours) <= 12) {
+                            if ($reportId) {
+                                $result = $totalHoursOfThisDay - $oldHours;
+                            } else {
+                                $result = $totalHoursOfThisDay;
+                            }
+                            $result += $this->model->hours;
+                            if ($result <= 12) {
                                 if ($this->model->save()) {
-                                    $this->setData(['report_id' => $this->model->id]);
+                                    if(!$reportId) {
+                                        $this->setData(['report_id' => $this->model->id]);
+                                    } else {
+                                        $this->setData([]);
+                                    }
                                     if ($project->validate()) {
                                         $project->save(true, ["total_logged_hours", "total_paid_hours"]);
                                     }
@@ -81,16 +104,15 @@ class ReportsCreate extends ViewModelAbstract
                             }
                         } else {
                             Yii::getLogger()->log($this->model->getErrors(), Logger::LEVEL_ERROR);
-                            return $this->addError(Processor::ERROR_PARAM, implode(' ',$this->model->getFirstErrors()));
+                            return $this->addError(Processor::ERROR_PARAM, implode(' ', $this->model->getFirstErrors()));
                         }
                     } else {
                         return $this->addError(Processor::ERROR_PARAM, 'The invoice has been created on this project');
                     }
                 }
-
+            }
+        } else {
+            $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can edit only own reports'));
         }
-
-
-
     }
 }
