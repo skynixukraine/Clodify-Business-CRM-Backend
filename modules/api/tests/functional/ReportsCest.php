@@ -1,7 +1,6 @@
 <?php
 use Helper\ApiEndpoints;
 use Helper\OAuthSteps;
-use Yii;
 /**
  * Created by Skynix Team
  * Date: 09.03.17
@@ -14,7 +13,7 @@ class ReportsCest
         /* 2.1.1 Create Report Data
          * @see    http://jira.skynix.company:8070/browse/SI-837
          */
-        define('project_id', 1);
+        define('project_id', 321);
         define('date_report', str_replace('-', '/', date('d-m-Y')));
         define('hours', 2);
         define('task', 'task description, task description, task description');
@@ -169,7 +168,7 @@ class ReportsCest
         $I->assertNotEmpty($response->errors);
 
         $I->seeResponseContainsJson([
-            "data"   => [],
+            "data"   => null,
             "errors" => [
                 "param"   => "error",
                 "message" => "You can delete only own reports"
@@ -209,7 +208,7 @@ class ReportsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
-        $I->cantseeResponseContainsJson([
+        $I->cantSeeResponseContainsJson([
             'data' =>
                 [
                     'reports' => [
