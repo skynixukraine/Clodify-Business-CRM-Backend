@@ -2,7 +2,7 @@
 /**
  * Created by Skynix Team
  * Date: 10.03.17
- * Time: 16:46
+ * Time: 10:18
  */
 namespace viewModel;
 
@@ -10,7 +10,9 @@ use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
 
-class DeactivateUser extends ViewModelAbstract
+
+
+class UserActivate extends ViewModelAbstract
 {
     public function define()
     {
@@ -18,7 +20,7 @@ class DeactivateUser extends ViewModelAbstract
         $model    = User::findOne($userId);
         if(User::hasPermission([User::ROLE_ADMIN])) {
             if ($model) {
-                $model->is_active = 0;
+                $model->is_active = 1;
                 $model->save(true, ['is_active']);
             } else {
                 $this->addError('id', Yii::t('app','Such user is not existed'));

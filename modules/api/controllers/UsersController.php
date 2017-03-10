@@ -29,7 +29,7 @@ class UsersController extends DefaultController
 
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
-            ->set('viewModel\ViewModelInterface', 'viewModel\ActivateUser')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserActivate')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => true
@@ -41,7 +41,7 @@ class UsersController extends DefaultController
 
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
-            ->set('viewModel\ViewModelInterface', 'viewModel\DeactivateUser')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserDeactivate')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => true
