@@ -63,7 +63,8 @@ class Report extends \yii\db\ActiveRecord
             [['date_added', 'date_paid'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
-            [['task'], 'string', 'min' => 20, 'max' => 500 ]
+            [['task'], 'string', 'min' => 20, 'max' => 500 ],
+            ['date_report', 'date', 'format' => 'php:Y-m-d']
         ];
     }
 
@@ -114,7 +115,7 @@ class Report extends \yii\db\ActiveRecord
     public  function  validateProjectReport($attribute, $params)
     {
         $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]);
-        if( !$r ) {
+        if( !$r || $r->project->is_delete == 1) {
 
             $this->addError($attribute, 'Sorry, but you can not report this project.');
 

@@ -47,6 +47,5 @@ class ReportDelete extends ViewModelAbstract
         } else {
             $this->addError('id', Yii::t('app','Such report is not existed'));
         }
-        $this->setData([]);
     }
 }

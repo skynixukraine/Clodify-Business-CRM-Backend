@@ -1,7 +1,6 @@
 <?php
 use Helper\ApiEndpoints;
 use Helper\OAuthSteps;
-use Yii;
 /**
  * Created by Skynix Team
  * Date: 09.03.17
@@ -169,7 +168,7 @@ class ReportsCest
         $I->assertNotEmpty($response->errors);
 
         $I->seeResponseContainsJson([
-            "data"   => [],
+            "data"   => null,
             "errors" => [
                 "param"   => "error",
                 "message" => "You can delete only own reports"
@@ -209,7 +208,7 @@ class ReportsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
-        $I->cantseeResponseContainsJson([
+        $I->cantSeeResponseContainsJson([
             'data' =>
                 [
                     'reports' => [

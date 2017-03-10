@@ -109,10 +109,12 @@ class CreateEditReport extends ViewModelAbstract
                     } else {
                         return $this->addError(Processor::ERROR_PARAM, 'The invoice has been created on this project');
                     }
+                } else {
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The project is not accessible for posting reports'));
                 }
             }
         } else {
-            $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can edit only own reports'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can edit only own reports'));
         }
     }
 }
