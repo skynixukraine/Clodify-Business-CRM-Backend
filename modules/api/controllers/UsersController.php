@@ -25,5 +25,28 @@ class UsersController extends DefaultController
             ->respond();
 
     }
+    public function actionActivate(){
 
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserActivate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+    public function actionDeactivate(){
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserDeactivate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
