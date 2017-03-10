@@ -63,7 +63,8 @@ class Report extends \yii\db\ActiveRecord
             [['date_added', 'date_paid'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
-            [['task'], 'string', 'min' => 20, 'max' => 500 ]
+            [['task'], 'string', 'min' => 20, 'max' => 500 ],
+            ['date_report', 'date', 'format' => 'php:Y-m-d']
         ];
     }
 
