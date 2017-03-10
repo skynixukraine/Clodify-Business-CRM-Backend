@@ -53,7 +53,7 @@ class CreateEditReport extends ViewModelAbstract
             if ($this->validate()) {
                 $totalHoursOfThisDay = $this->model->sumHoursReportsOfThisDay($this->getAccessTokenModel()->user_id, $this->model->date_report);
                 $project = Project::findOne($this->model->project_id);
-                if (in_array($project->status, [Project::STATUS_INPROGRESS, Project::STATUS_ONHOLD])) {
+                if ($project->status == Project::STATUS_INPROGRESS) {
                     $date_end = Invoice::getInvoiceWithDateEnd($this->model->project_id);
                     $dte = Project::findOne(['id' => $this->model->project_id])->date_start;
                     if (DateUtil::compareDates(DateUtil::reConvertData($this->model->date_report), DateUtil::reConvertData($dte))) {
