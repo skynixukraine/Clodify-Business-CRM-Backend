@@ -12,6 +12,7 @@ use app\models\Invoice;
 use app\models\Report;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
+use Symfony\Component\Process\Process;
 use Yii;
 use app\models\Project;
 use yii\log\Logger;
@@ -109,10 +110,12 @@ class CreateEditReport extends ViewModelAbstract
                     } else {
                         return $this->addError(Processor::ERROR_PARAM, 'The invoice has been created on this project');
                     }
+                } else {
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The project is not accessible for posting reports'));
                 }
             }
         } else {
-            $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can edit only own reports'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can edit only own reports'));
         }
     }
 }

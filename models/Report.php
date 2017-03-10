@@ -114,7 +114,7 @@ class Report extends \yii\db\ActiveRecord
     public  function  validateProjectReport($attribute, $params)
     {
         $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]);
-        if( !$r ) {
+        if( !$r || $r->project->is_delete == 1) {
 
             $this->addError($attribute, 'Sorry, but you can not report this project.');
 
