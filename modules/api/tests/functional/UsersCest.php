@@ -109,4 +109,25 @@ class UsersCest
 
         }
     }
+
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-858
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('userId', 2);
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendDELETE(ApiEndpoints::USERS . '/' . userId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+    }
+
 }
