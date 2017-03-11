@@ -68,7 +68,7 @@ class UserView extends ViewModelAbstract
             $this->setData($data);
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, "You do not have permission to view this user profile");
+            return $this->addError(Processor::ERROR_PARAM, "You do not have permission to view this user data");
         }
 
     }

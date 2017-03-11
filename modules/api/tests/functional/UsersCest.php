@@ -115,7 +115,7 @@ class UsersCest
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testViewSingleUserPage(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testViewSingleUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         define('userId', 1);
         $oAuth = new OAuthSteps($scenario);
