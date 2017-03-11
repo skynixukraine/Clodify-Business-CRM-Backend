@@ -24,8 +24,6 @@ class UserDelete extends ViewModelAbstract
 
         if ( ($id = Yii::$app->request->getQueryParam('id')) && User::hasPermission([User::ROLE_ADMIN])) {
             $model  = User::findOne( $id );
-            $model->date_signup = null;
-            $model->date_login = null;
             $model->is_delete = 1;
             $model->save(true, ['is_delete', 'date_login', 'date_signup']);
 
