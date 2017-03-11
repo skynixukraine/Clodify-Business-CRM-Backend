@@ -32,7 +32,7 @@ class UserView extends ViewModelAbstract
                 'about'        => $model->about
                 ];
 
-            if (User::hasPermission([User::ROLE_ADMIN])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                 $data['month_logged_hours'] = $model->month_logged_hours;
                 $data['year_logged_hours']  = $model->year_logged_hours;
                 $data['total_logged_hours'] = $model->total_logged_hours;
@@ -44,8 +44,8 @@ class UserView extends ViewModelAbstract
             $data['photo'] = $model->photo ? urldecode(Url::to(['/cp/index/getphoto', 'entry' => Yii::getAlias('@app') .
                 '/data/' . $model->id . '/photo/' . $model->photo])) : "/img/avatar.png";
             $data['sign'] = $model->sing;
-            $data['bank_account_en'] = strip_tags($model->bank_account_en);
-            $data['bank_account_ua'] = strip_tags($model->bank_account_ua);
+            $data['bank_account_en'] = $model->bank_account_en;
+            $data['bank_account_ua'] = $model->bank_account_ua;
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
                 $data  ['role'] = $model->role;

@@ -55,59 +55,6 @@ class UsersCest
             'errors' => 'array',
             'success'=> 'boolean'
         ]);
-
-        /**
-         * 2.2.6 Activate Users Data
-         * @see http://jira.skynix.company:8070/browse/SI-859
-         * 2.2.7 Deactivate Users Data
-         * @see http://jira.skynix.company:8070/browse/SI-860
-         */
-
-        $userId = $response->data->users[0]->id;
-        $is_active = $response->data->users[0]->is_active;
-        codecept_debug($is_active);
-        
-        if($userId) {
-            if($is_active) {
-                //Deactivate user
-                $I->sendPUT(ApiEndpoints::USERS . '/' . $userId . '/deactivate');
-                $I->seeResponseCodeIs(200);
-                $I->seeResponseIsJson();
-                $response = json_decode($I->grabResponse());
-                $I->assertEmpty($response->errors);
-                $I->assertEquals(true, $response->success);
-
-                //Check if user was activated
-                $I->sendGET(ApiEndpoints::USERS, [
-                    'limit'   => 1
-                ]);
-                $I->seeResponseCodeIs(200);
-                $response = json_decode($I->grabResponse());
-                $I->assertEmpty($response->errors);
-                $I->assertEquals(0, $response->data->users[0]->is_active);
-
-
-            } else {
-                //Activate user
-                $I->sendPUT(ApiEndpoints::USERS . '/' . $userId . '/activate');
-                $I->seeResponseCodeIs(200);
-                $I->seeResponseIsJson();
-                $response = json_decode($I->grabResponse());
-                $I->assertEmpty($response->errors);
-                $I->assertEquals(true, $response->success);
-
-                //Check if user was deactivated
-                $I->sendGET(ApiEndpoints::USERS, [
-                    'limit'   => 1
-                ]);
-                $I->seeResponseCodeIs(200);
-                $response = json_decode($I->grabResponse());
-                $I->assertEmpty($response->errors);
-                $I->assertEquals(1, $response->data->users[0]->is_active);
-
-            }
-
-        }
     }
 
     /**
@@ -117,11 +64,11 @@ class UsersCest
      */
     public function testViewSingleUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('userId', 1);
+        define('userIdView', 1);
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->sendGET(ApiEndpoints::USERS . '/' . userId);
+        $I->sendGET(ApiEndpoints::USERS . '/' . userIdView);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -139,12 +86,95 @@ class UsersCest
                 'about'       => 'string',
                 'photo'       => 'string',
                 'sign'        => 'string',
-                'bank_account_en' => 'string',
-                'bank_account_ua' => 'string',
+                'bank_account_en' => 'string|null',
+                'bank_account_ua' => 'string|null',
                 'email'       => 'string',
                 'phone'       => 'string',
             ]
         ]);
+    }
+
+    /**
+     * 2.2.6 Activate Users Data
+     * @see http://jira.skynix.company:8070/browse/SI-859
+     * 2.2.7 Deactivate Users Data
+     * @see http://jira.skynix.company:8070/browse/SI-860
+     */
+    public function testActivateDeactivateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendGET(ApiEndpoints::USERS, [
+            'limit'   => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        $userId = $response->data->users[0]->id;
+        $is_active = $response->data->users[0]->is_active;
+
+        if($is_active) {
+            //Deactivate user
+            $I->sendPUT(ApiEndpoints::USERS . '/' . $userId . '/deactivate');
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertEmpty($response->errors);
+            $I->assertEquals(true, $response->success);
+
+            //Check if user was deactivated
+            $I->sendGET(ApiEndpoints::USERS, [
+                'limit'   => 1
+            ]);
+            $I->seeResponseCodeIs(200);
+            $response = json_decode($I->grabResponse());
+            $I->assertEmpty($response->errors);
+            $I->assertEquals(0, $response->data->users[0]->is_active);
+
+
+        } else {
+            //Activate user
+            $I->sendPUT(ApiEndpoints::USERS . '/' . $userId . '/activate');
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertEmpty($response->errors);
+            $I->assertEquals(true, $response->success);
+
+            //Check if user was deactivated
+            $I->sendGET(ApiEndpoints::USERS, [
+                'limit'   => 1
+            ]);
+            $I->seeResponseCodeIs(200);
+            $response = json_decode($I->grabResponse());
+            $I->assertEmpty($response->errors);
+            $I->assertEquals(1, $response->data->users[0]->is_active);
+
+        }
+
+    }
+
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-858
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('userIdDelete', 1);
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendDELETE(ApiEndpoints::USERS . '/' . userIdDelete);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
     }
 
 }

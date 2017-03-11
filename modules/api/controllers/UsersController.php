@@ -65,4 +65,17 @@ class UsersController extends DefaultController
             ->respond();
     }
 
+    public function actionDelete(){
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
