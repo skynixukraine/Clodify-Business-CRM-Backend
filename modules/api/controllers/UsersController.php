@@ -25,6 +25,7 @@ class UsersController extends DefaultController
             ->respond();
 
     }
+
     public function actionActivate(){
 
         $this->di
@@ -37,6 +38,7 @@ class UsersController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
     public function actionDeactivate(){
 
         $this->di
@@ -49,4 +51,18 @@ class UsersController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionView(){
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserView')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

@@ -109,4 +109,42 @@ class UsersCest
 
         }
     }
+
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-854
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewSingleUserPage(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('userId', 1);
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendGET(ApiEndpoints::USERS . '/' . userId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        // compare types of returned common fields for all roles
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'middle_name' => 'string',
+                'company'     => 'string',
+                'tags'        => 'string',
+                'about'       => 'string',
+                'photo'       => 'string',
+                'sign'        => 'string',
+                'bank_account_en' => 'string',
+                'bank_account_ua' => 'string',
+                'email'       => 'string',
+                'phone'       => 'string',
+            ]
+        ]);
+    }
+
 }
