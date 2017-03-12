@@ -103,18 +103,17 @@ class UserView extends ViewModelAbstract
         elseif( User::hasPermission([User::ROLE_CLIENT])) {
 
             $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
-            $arrayWorkers = [];
             foreach($workers as $worker){
-                $arrayWorkers[]= $worker->user_id;
-            }
-            if ( in_array($userId, $arrayWorkers) && User::find()
-                ->where([User::tableName() . '.id' => $userId, 'is_active' => 1, 'is_delete' => 0])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
-                ->count()) {
 
-                return true;
+                if ( $worker->user_id == $userId && User::find()
+                        ->where([User::tableName() . '.id' => $userId, 'is_active' => 1, 'is_delete' => 0])
+                        ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
+                        ->count()) {
+                    return true;
+                }
 
             }
+
 
 
         }
