@@ -78,23 +78,20 @@ class UserView extends ViewModelAbstract
     {
         //Admin can see all users (active & suspended)
         if( User::hasPermission([User::ROLE_ADMIN])) {
-
-            $data = User::find()
-                ->where(['is_delete' => 0])
-                ->all();
+            return true;
         }
         //FIN and SALES can see all active users (except of themselves)
         elseif(User::hasPermission([User::ROLE_FIN, User::ROLE_SALES])) {
-            $data = User::find()->where(['is_active' => 1, 'is_delete' => 0])
-                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()])
+            $data = User::find()
+                ->where(['is_active' => 1, 'is_delete' => 0])
                 ->all();
         }
 
         //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN, FIN except of themselves
         elseif( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
-            $data = User::find()->where(['is_active' => 1, 'is_delete' => 0])
+            $data = User::find()
+                ->where(['is_active' => 1, 'is_delete' => 0])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
-                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()])
                 ->all();
         }
         //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN
