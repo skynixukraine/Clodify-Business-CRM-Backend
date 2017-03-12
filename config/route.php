@@ -6,6 +6,7 @@ return [
     'POST '     . $API . '/reports'                   => $API . '/reports/create-edit',
     'PUT '      . $API . '/users/<id:\d+>/activate'   => $API . '/users/activate',
     'PUT '      . $API . '/users/<id:\d+>/deactivate' => $API . '/users/deactivate',
+    'GET '      . $API . '/users/<id:\d+>'            => $API . '/users/view',
     'DELETE '   . $API . '/users/<id:\d+>'            => $API . '/users/delete',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
