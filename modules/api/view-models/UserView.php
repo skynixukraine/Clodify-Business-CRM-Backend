@@ -8,6 +8,7 @@
 
 namespace viewModel;
 
+use app\models\ProjectCustomer;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
@@ -82,49 +83,43 @@ class UserView extends ViewModelAbstract
         }
         //FIN and SALES can see all active users (except of themselves)
         elseif(User::hasPermission([User::ROLE_FIN, User::ROLE_SALES])) {
-            $data = User::find()
-                ->where(['is_active' => 1, 'is_delete' => 0])
-                ->all();
-        }
 
+            if (User::find()->where(['is_active' => 1, 'is_delete' => 0, 'id' => $userId])->count()) {
+                return true;
+            }
+
+        }
         //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN, FIN except of themselves
         elseif( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
-            $data = User::find()
-                ->where(['is_active' => 1, 'is_delete' => 0])
+
+            if (User::find()->where(['is_active' => 1, 'is_delete' => 0, 'id' => $userId])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
-                ->all();
+                ->count()) {
+                return true;
+            }
+
         }
         //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN
         elseif( User::hasPermission([User::ROLE_CLIENT])) {
-            $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+
+            $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
             $arrayWorkers = [];
             foreach($workers as $worker){
                 $arrayWorkers[]= $worker->user_id;
             }
-            $devUser = '';
-            if(!empty($arrayWorkers)) {
-                $devUser = implode(', ' , $arrayWorkers);
-            }
-            else{
-                $devUser = 'null';
-            }
-
-            $data = User::find()
-                ->where(User::tableName() . '.id IN (' . $devUser . ')')
-                ->andWhere(['is_active' => 1, 'is_delete' => 0])
+            if ( in_array($userId, $arrayWorkers) && User::find()
+                ->where([User::tableName() . '.id' => $userId, 'is_active' => 1, 'is_delete' => 0])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]])
-                ->all();
-        }
+                ->count()) {
 
-        $availableUsers = [];
-        foreach ($data as $user) {
-            $availableUsers[] = $user->id;
-        }
+                return true;
+
+            }
 
 
-        if (in_array($userId, $availableUsers)) {
-            return true;
         }
+
+        return false;
 
     }
 
