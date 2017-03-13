@@ -106,13 +106,13 @@ var contractCreateModule = (function() {
                             if (cfg.canView) {
 
                                 icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="View"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[0] + '" title="View"></i>');
 
                             }
                             if (cfg.canEdit) {
 
                                 icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" title="Edit"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[0] + '" title="Edit"></i>');
 
                             }
 
@@ -204,23 +204,17 @@ var contractCreateModule = (function() {
                     var name   = $(this).parents("tr").find("td").eq(0).text();
                         actionDelete( $(this).data('id'), name, dataTable );
 
-
-
                 });
 
                 dataTable.find("i[class*=view]").click(function(){
 
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionView( id, name, dataTable );
+                    actionView( $(this).data('id') );
 
                 });
 
                 dataTable.find("i[class*=edit]").click(function(){
 
-                    var id     = $(this).parents("tr").find("td").eq(0).text(),
-                        name   = $(this).parents("tr").find("td").eq(1).text();
-                    actionEdit( id, name, dataTable );
+                    actionEdit( $(this).data('id') );
 
                 });
 
