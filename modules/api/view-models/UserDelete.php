@@ -14,6 +14,11 @@ use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
 
+/**
+ * Delete user data. Accepts one GET param - user id.
+ * Class UserDelete
+ * @package viewModel
+ */
 class UserDelete extends ViewModelAbstract
 {
     /** @var \app\models\User */
@@ -21,11 +26,10 @@ class UserDelete extends ViewModelAbstract
 
     public function define()
     {
-
-        if ( ($id = Yii::$app->request->getQueryParam('id')) && User::hasPermission([User::ROLE_ADMIN])) {
-            $model  = User::findOne( $id );
+        $id = Yii::$app->request->getQueryParam('id');
+        if ( ($model = User::findOne( $id )) && User::hasPermission([User::ROLE_ADMIN])) {
             $model->is_delete = 1;
-            $model->save(true, ['is_delete', 'date_login', 'date_signup']);
+            $model->save(true, ['is_delete']);
 
             $projectCustomer = ProjectCustomer::find()->where(['user_id' => $id])->all();
             //When we are deleting client, we should delete all relations between this customer and his projects
