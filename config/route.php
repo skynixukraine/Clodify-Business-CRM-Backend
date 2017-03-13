@@ -8,7 +8,7 @@ return [
     'PUT '      . $API . '/users/<id:\d+>/deactivate' => $API . '/users/deactivate',
     'GET '      . $API . '/users/<id:\d+>'            => $API . '/users/view',
     'DELETE '   . $API . '/users/<id:\d+>'            => $API . '/users/delete',
-    'PUT    '   . $API . '/users/<id:\d+>'            => $API . '/users/edit',
+    'PUT '      . $API . '/users/<id:\d+>'            => $API . '/users/edit',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
