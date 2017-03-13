@@ -95,6 +95,34 @@ class UsersCest
     }
 
     /**
+     * 2.2.4 Edit User Request
+     * @see http://jira.skynix.company:8070/browse/SI-858
+     */
+    public function testEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('userIdEdit', 1);
+        define('first_name', 'ChangedFirst');
+        define('last_name', 'ChangedLast');
+        define('email', 'test@mail.com');
+        define('role', 'DEV');
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendPUT(ApiEndpoints::USERS . '/' . userIdEdit, json_encode([
+            'first_name' => first_name,
+            'last_name'  => last_name,
+            'email'      => email,
+            'role'       => role
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+    }
+
+    /**
      * 2.2.6 Activate Users Data
      * @see http://jira.skynix.company:8070/browse/SI-859
      * 2.2.7 Deactivate Users Data

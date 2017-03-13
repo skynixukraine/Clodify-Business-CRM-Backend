@@ -12,8 +12,8 @@ use app\modules\api\components\Api\Processor;
 class UsersController extends DefaultController
 {
 
-    public function actionIndex(){
-
+    public function actionIndex()
+    {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UsersFetch')
@@ -26,8 +26,8 @@ class UsersController extends DefaultController
 
     }
 
-    public function actionActivate(){
-
+    public function actionActivate()
+    {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserActivate')
@@ -39,8 +39,8 @@ class UsersController extends DefaultController
             ->respond();
     }
 
-    public function actionDeactivate(){
-
+    public function actionDeactivate()
+    {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserDeactivate')
@@ -65,13 +65,26 @@ class UsersController extends DefaultController
             ->respond();
     }
 
-    public function actionDelete(){
-
+    public function actionDelete()
+    {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserDelete')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionEdit()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserEdit')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => true
             ])
             ->get('Processor')
