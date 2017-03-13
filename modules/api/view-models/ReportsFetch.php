@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DataTable;
+use app\components\DateUtil;
 use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
@@ -147,20 +148,20 @@ class ReportsFetch extends ViewModelAbstract
                 $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
                 break;
             case 4:
-                $dateStart = $date->modify("first day of this month")->format('Y-m-d');
-                $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
+                $dateStart = $date->modify("last day of previous month")->format('Y-m-d');
+                $dateEnd = $date->modify("first day of this month")->format('Y-m-d');
                 break;
         }
 
         if (!$dateStart) {
-            $dateStart = date('Y-m-d');
-        }
-        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . $dateStart . '" ');
+            $dateStart = date('d/m/Y');
+        } 
+        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
 
 
-        if($dateEnd && $dateEnd != null){
+        if($dateEnd){
 
-            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . $dateEnd . '"');
+            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd) . '"');
 
         }
 
