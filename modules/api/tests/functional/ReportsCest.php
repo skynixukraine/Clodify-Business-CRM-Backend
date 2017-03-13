@@ -14,7 +14,7 @@ class ReportsCest
          * @see    http://jira.skynix.company:8070/browse/SI-837
          */
         define('project_id', 1);
-        define('date_report', str_replace('-', '/', date('d-m-Y')));
+        define('date_report', date('d/m/Y'));
         define('hours', 2);
         define('task', 'task description, task description, task description');
 

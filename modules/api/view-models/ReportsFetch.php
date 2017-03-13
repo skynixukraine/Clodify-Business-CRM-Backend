@@ -20,7 +20,12 @@ use Yii;
 use DateTime;
 use app\modules\api\components\SortHelper;
 
-
+/**
+ * Fetch reports data. Available date, project, user, keyword and invoice filters.
+ * All GET params are optional.
+ * Class ReportsFetch
+ * @package viewModel
+ */
 class ReportsFetch extends ViewModelAbstract
 {
     public function define()
@@ -155,7 +160,7 @@ class ReportsFetch extends ViewModelAbstract
 
         if (!$dateStart) {
             $dateStart = date('d/m/Y');
-        } 
+        }
         $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
 
 
