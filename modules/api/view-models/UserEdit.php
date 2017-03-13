@@ -1,17 +1,20 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dmytro
+ * Created by Skynix Team
  * Date: 13.03.17
  * Time: 8:43
  */
-
 namespace viewModel;
 
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\User;
 
+/**
+ * Edit user data. Action available only for ADMIN. No required parameters
+ * Class UserEdit
+ * @package viewModel
+ */
 class UserEdit extends ViewModelAbstract
 {
     /* @var User*/
