@@ -20,6 +20,11 @@ class UserEdit extends ViewModelAbstract
     public function define()
     {
         $id = Yii::$app->request->getQueryParam('id');
+        
+        if ( !User::hasPermission([User::ROLE_ADMIN]) ) {
+            return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
+        }
+
         if ( $id && $this->model = $this->model->findOne($id) ) {
 
             if (isset($this->postData['password'])) {
