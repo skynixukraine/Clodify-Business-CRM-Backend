@@ -16,6 +16,9 @@ modules:
     config:
         Db:
             dsn: ''
-            user: ''
+            user: 'mysql_user'
             password: ''
             dump: tests/_data/dump.sql
+            populate: true
+            cleanup: true
+            reconnect: true
