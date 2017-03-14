@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dmytro
+ * Created by Skynix Team
  * Date: 11.03.17
  * Time: 19:11
  */
