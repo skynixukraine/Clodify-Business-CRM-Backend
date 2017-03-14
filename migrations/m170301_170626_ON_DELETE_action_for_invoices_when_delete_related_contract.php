@@ -6,10 +6,15 @@ class m170301_170626_ON_DELETE_action_for_invoices_when_delete_related_contract 
 {
     public function up()
     {
-        $this->dropForeignKey(
-            'fk-invoice_contract',
-            'invoices'
-        );
+
+        $foreignKeys = Yii::$app->db->schema->getTableSchema('invoices')->foreignKeys;
+
+        if (isset($foreignKeys['fk-invoice_contract'])) {
+            $this->dropForeignKey(
+                'fk-invoice_contract',
+                'invoices'
+            );
+        }
         $this->addForeignKey(
             'fk-invoice_contract',
             'invoices',
