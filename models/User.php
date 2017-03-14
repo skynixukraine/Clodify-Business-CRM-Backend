@@ -92,11 +92,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['photo','sing','role'], 'string'],
-            ['password', 'required', 'except' => ['edit-user', self::SCENARIO_CHANGE_PASSWORD]],
+            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'required', 'except'=>'settings'],
+            ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV, 'on' => ['api-create']]],
             [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
+            ['email', 'unique', 'when' => function ($model){
+                return $model->is_delete == 0;
+            }, 'on' => ['api-create']],
+            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD, 'api-create']],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
