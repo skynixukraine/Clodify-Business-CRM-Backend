@@ -15,6 +15,10 @@ use Yii;
 use app\components\DateUtil;
 use yii\helpers\Url;
 
+/**
+ * Class UserView
+ * @package viewModel
+ */
 class UserView extends ViewModelAbstract
 {
     /** @var  \app\models\User */
@@ -24,6 +28,11 @@ class UserView extends ViewModelAbstract
     {
         $userId = Yii::$app->request->getQueryParam('id');
         if (($model = $this->model->findOne($userId)) &&  self::hasPermission($userId)) {
+
+            if ($model->is_delete == 1) {
+                return $this->addError(Processor::ERROR_PARAM, 'The user has been deleted');
+            }
+
             $data = [
                 'first_name'   => $model->first_name,
                 'last_name'    => $model->last_name,
