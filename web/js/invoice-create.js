@@ -160,7 +160,6 @@ var invoiceCreateModule = (function() {
                         time = timeLength.split(':');
                         hours += Number(time[0]);
                         minutes += Number(time[1]);
-                        console.log(minutes);
                         if (minutes >= 60) {
                             hours += 1;
                             minutes -= 60;
