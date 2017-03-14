@@ -160,14 +160,17 @@ var invoiceCreateModule = (function() {
                         time = timeLength.split(':');
                         hours += Number(time[0]);
                         minutes += Number(time[1]);
+                        console.log(minutes);
                         if (minutes >= 60) {
                             hours += 1;
                             minutes -= 60;
                         }
-                        totalHours = hours + ':' + minutes;
                     }
-
                 }
+                if (minutes < 10) {
+                    minutes = '0' + minutes; // when minutes value is less then 10, convert total from h:1 to h:01, for example
+                }
+                totalHours = hours + ':' + minutes;
                 if( totalHours == null ) {
                     $(document).find('#invoice-total_hours').val('');
                 } else {
