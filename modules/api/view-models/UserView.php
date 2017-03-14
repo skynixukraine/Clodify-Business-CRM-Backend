@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dmytro
+ * Created by Skynix Team
  * Date: 11.03.17
  * Time: 16:28
  */
@@ -16,6 +15,7 @@ use app\components\DateUtil;
 use yii\helpers\Url;
 
 /**
+ * View single user data
  * Class UserView
  * @package viewModel
  */
