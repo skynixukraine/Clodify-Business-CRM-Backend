@@ -231,6 +231,10 @@ class ContractController extends DefaultController
 
     }
 
+    /**
+     * Delete contract for requested ID
+     * @return mixed
+     */
     public function actionDelete()
     {
         if ( ($id = Yii::$app->request->post("id"))  && $model  = Contract::findOne($id)  ) {
