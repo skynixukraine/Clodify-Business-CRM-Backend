@@ -36,7 +36,7 @@ class UserCreate extends ViewModelAbstract
                 ]);
 
             }
-    } else {
+        } else {
             $this->addError(Processor::ERROR_PARAM, Yii::t('app','You don\'t have permissions. Only admin can create users.'));
         }
     }
