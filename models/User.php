@@ -94,7 +94,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['photo','sing','role'], 'string'],
             ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'required', 'except'=>'settings'],
-            ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV]],
+            ['role', function () {
+                if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
+                    $this->addError('role', Yii::t('yii', 'Role is invalid'));
+                }
+            }],
             [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
