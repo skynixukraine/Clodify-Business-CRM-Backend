@@ -133,10 +133,10 @@ class UsersCest
         $I->canSeeResponseContainsJson([
             'data' => [
                 'users' => [
-                    'first_name' => first_name,
-                    'last_name'  => last_name,
-                    'email'      => email,
-                    'role'       => role
+                    'first_name' => FIRST_NAME,
+                    'last_name'  => LAST_NAME,
+                    'email'      => EMAIL,
+                    'role'       => ROLE
                 ]
             ]
         ]);
