@@ -106,13 +106,13 @@ var contractCreateModule = (function() {
                             if (cfg.canView) {
 
                                 icons.push('<i class="fa fa-list-alt view" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[0] + '" title="View"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[12] + '" title="View"></i>');
 
                             }
                             if (cfg.canEdit) {
 
                                 icons.push('<i class="fa fa-edit edit" style="cursor: pointer" ' +
-                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[0] + '" title="Edit"></i>');
+                                    'data-toggle="tooltip" data-placement="top" data-id="' + row[12] + '" title="Edit"></i>');
 
                             }
 

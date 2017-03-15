@@ -81,7 +81,7 @@ class ContractController extends DefaultController
     public function actionEdit()
     {
         if( $id = Yii::$app->request->get('id') ) {
-            $model  = Contract::findOne(['contract_id' => $id]);
+            $model  = Contract::findOne($id);
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
                     $model->save();
@@ -108,13 +108,13 @@ class ContractController extends DefaultController
                         if ($invoice->validate() && $invoice->save()) {
                             if(Yii::$app->request->post('updated')) {
                                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract "
-                                    . $id . " with related invoice " . $invoice->id));
+                                    . $model->contract_id . " with related invoice " . $invoice->id));
                             }
                             return $this->redirect(['index']);
                         }
                     }
                     if(Yii::$app->request->post('updated')) {
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract " . $id));
+                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract " . $model->contract_id));
                     }
                     return $this->redirect(['index']);
 
@@ -249,7 +249,7 @@ class ContractController extends DefaultController
     public function actionView()
     {
         $id = Yii::$app->request->get("id");
-        $model = Contract::findOne(['contract_id' => $id]);
+        $model = Contract::findOne($id);
         return $this->render('view', ['model' => $model,
             'title' => 'You watch contract #' . $model->contract_id]);
     }
