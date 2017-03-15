@@ -6,14 +6,23 @@
  */
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
+
+/**
+ * Class ProjectsCest
+ */
 class ProjectsCest
 {
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-876
+     * @param  FunctionalTester $I
+     * @return void
+     */
     public function testProjectCreation(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        //Create SALES
+        //Create SALES ( 2.2.3 Create User Request )
         $I->sendPOST(ApiEndpoints::USERS, json_encode(
             [
                 "role"               =>  "Sales",
@@ -70,6 +79,6 @@ class ProjectsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $projectId = $response->data->project_id;
-
+        codecept_debug($projectId);
     }
 }

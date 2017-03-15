@@ -11,7 +11,12 @@ use app\models\Project;
 use Yii;
 
 
-
+/**
+ * Create new project. Name, customers, invoice_received,
+ * developers, is_pm, is_sales params are required
+ * Class ProjectCreate
+ * @package viewModel
+ */
 class ProjectCreate extends ViewModelAbstract
 {
     public function define()
@@ -22,7 +27,7 @@ class ProjectCreate extends ViewModelAbstract
         }
         $this->model->status = Project::STATUS_NEW;
 
-        if(($this->validate()) &&  ($this->model->save())){
+        if($this->validate() &&  $this->model->save()){
             $this->setData([
                 'project_id'=> $this->model->id
             ]);
