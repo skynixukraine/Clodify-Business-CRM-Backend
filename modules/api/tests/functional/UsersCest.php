@@ -142,6 +142,44 @@ class UsersCest
         ]);
     }
     /**
+     * 2.2.4 Edit User Request
+     * @see http://jira.skynix.company:8070/browse/SI-857
+     */
+    public function testEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('userIdEdit', 1);
+        define('first_name', 'ChangedFirst');
+        define('last_name', 'ChangedLast');
+        define('salary', 150);
+        define('phone', '12345678985');
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendPUT(ApiEndpoints::USERS . '/' . userIdEdit, json_encode([
+            'first_name' => first_name,
+            'last_name'  => last_name,
+            'salary'     => salary,
+            'phone'      => phone
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        // Make sure that user's data was updated
+        $I->sendGET(ApiEndpoints::USERS . '/' . userIdEdit);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEquals(first_name, $response->data->first_name);
+        $I->assertEquals(last_name, $response->data->last_name);
+        $I->assertEquals('$' . salary, $response->data->salary);
+        $I->assertEquals(phone, $response->data->phone);
+    }
+
+    /**
      * 2.2.6 Activate Users Data
      * @see http://jira.skynix.company:8070/browse/SI-859
      * 2.2.7 Deactivate Users Data
