@@ -9,6 +9,7 @@ return [
     'GET '      . $API . '/users/<id:\d+>'            => $API . '/users/view',
     'DELETE '   . $API . '/users/<id:\d+>'            => $API . '/users/delete',
     'PUT '      . $API . '/users/<id:\d+>'            => $API . '/users/edit',
+    'POST '     . $API . '/users'                     => $API . '/users/create',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

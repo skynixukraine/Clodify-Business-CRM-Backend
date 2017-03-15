@@ -8,7 +8,7 @@ return [
     'port'              => "",
     'success'           => true,
     'invoice_cc_email'  => false,
-    'version'           => '1.11.5',
+    'version'           => '1.11.8',
     'contractorId'      => 1,
     'captchaSecret'     => '6LdjQxEUAAAAAOEcQW0lbZlEAItElKTD3yU05Ok-'
 ];
