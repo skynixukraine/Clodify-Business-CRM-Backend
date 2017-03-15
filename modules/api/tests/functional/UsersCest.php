@@ -99,19 +99,19 @@ class UsersCest
      */
     public function testCreateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('role', 'DEV');
-        define('first_name', 'Test');
-        define('last_name', 'Test');
-        define('email', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
+        define('ROLE', 'DEV');
+        define('FIRST_NAME', 'Test');
+        define('LAST_NAME', 'Test');
+        define('EMAIL', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
         $I->sendPOST(ApiEndpoints::USERS, json_encode([
-            'role'          => role,
-            'first_name'    => first_name,
-            'last_name'     => last_name,
-            'email'         => email
+            'role'          => ROLE,
+            'first_name'    => FIRST_NAME,
+            'last_name'     => LAST_NAME,
+            'email'         => EMAIL
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
