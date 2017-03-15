@@ -27,7 +27,7 @@ class ProjectsCest
             [
                 "role"               =>  "Sales",
                 "first_name"         =>  "Sales",
-                "last_name"         =>  "LastName Sales",
+                "last_name"          =>  "LastName Sales",
                 "email"              => 'sales' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
             ]
          ));
@@ -41,7 +41,7 @@ class ProjectsCest
             [
                 "role"               =>  "Dev",
                 "first_name"         =>  "Dev",
-                "last_name"         =>  "LastName Dev",
+                "last_name"          =>  "LastName Dev",
                 "email"              =>   'dev' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
             ]
         ));
@@ -55,7 +55,7 @@ class ProjectsCest
             [
                 "role"               =>  "Client",
                 "first_name"         =>  "Client",
-                "last_name"         =>  "LastName Client",
+                "last_name"          =>  "LastName Client",
                 "email"              =>   'client' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
             ]
         ));
