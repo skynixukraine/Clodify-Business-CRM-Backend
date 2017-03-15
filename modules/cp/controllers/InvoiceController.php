@@ -164,8 +164,11 @@ class InvoiceController extends DefaultController
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
             $name = null;
-            // If invoice was created for 'All projects' and invoiced customer has no common projects
-            // with current SALES user - go to the next record
+           /**
+            * If invoice was created for 'All projects' and invoiced customer has no common projects
+            * with current SALES user - go to the next record.
+            * Same logic when another SALES user creating invoice and has no common projects with us.
+           */
             if (User::hasPermission([User::ROLE_SALES])) {
                 if (!$model->project_id && ( !in_array($model->user_id, $customers) || !in_array($model->created_by, $sales))) {
                     continue;
