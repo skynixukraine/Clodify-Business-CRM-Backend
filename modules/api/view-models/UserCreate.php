@@ -31,6 +31,10 @@ class UserCreate extends ViewModelAbstract
             if ($this->validate()) {
                 /** Create new user*/
                 $this->model->save();
+                $this->setData([
+                    'user_id' => $this->model->id
+                ]);
+
             }
     } else {
             $this->addError(Processor::ERROR_PARAM, Yii::t('app','You don\'t have permissions. Only admin can create users.'));
