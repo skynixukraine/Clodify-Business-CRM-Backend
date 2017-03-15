@@ -16,11 +16,16 @@ class ProjectCreate extends ViewModelAbstract
 {
     public function define()
     {
-        $this->model->alias = $this->postData['alias_name'];
+        $alias   = Yii::$app->request->getQueryParam('alias_name');
+        if($alias) {
+            $this->model->alias = $alias;
+        }
         $this->model->status = Project::STATUS_NEW;
 
-        if($this->validate()){
-            $this->model->save();
+        if(($this->validate()) &&  ($this->model->save())){
+            $this->setData([
+                'project_id'=> $this->model->id
+            ]);
         }
     }
 }
