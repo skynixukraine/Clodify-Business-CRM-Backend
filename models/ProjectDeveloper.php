@@ -99,4 +99,16 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * Get user that is assigned as sales on the current project
+     * @var $projectId integer
+     * @return \yii\db\ActiveQuery|array
+     */
+    public static function getSalesOnProject($projectId)
+    {
+        return self::find()
+            ->where(['project_id' => $projectId, 'is_sales' => 1])
+            ->one();
+    }
+
 }
