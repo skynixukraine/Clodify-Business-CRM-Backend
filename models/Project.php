@@ -203,7 +203,7 @@ class Project extends \yii\db\ActiveRecord
                             'project_id' => $this->id,
                             'user_id' => $customer->id,
                             /*'receive_invoices' => 1,*///when add project to some user receive_invoices from project_customers = 1
-                            'receive_invoices' => 1,
+                            'receive_invoices' => ($this->invoice_received==$customer->id),
                         ])->execute();
                 }
 
