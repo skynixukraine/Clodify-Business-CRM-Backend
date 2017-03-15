@@ -97,10 +97,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV]],
             [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            ['email', 'unique', 'when' => function ($model){
-                return $model->is_delete == 0;
-            }, 'on' => ['api-create']],
-            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD, 'api-create']],
+            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
