@@ -30,7 +30,7 @@ class UserView extends ViewModelAbstract
         if (($model = $this->model->findOne($userId)) &&  self::hasPermission($userId)) {
 
             if ($model->is_delete == 1) {
-                return $this->addError(Processor::ERROR_PARAM, 'The user has been deleted');
+                return $this->addError(Processor::ERROR_PARAM, 'Hey, you are looking for the deleted user. The access completely impossible.');
             }
 
             $data = [
