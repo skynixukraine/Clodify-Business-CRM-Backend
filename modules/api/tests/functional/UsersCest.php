@@ -40,10 +40,10 @@ class UsersCest
                 'image'       => 'string',
                 'first_name'  => 'string',
                 'last_name'   => 'string',
-                'company'     => 'string',
+                'company'     => 'string|null',
                 'role'        => 'string',
                 'email'       => 'string',
-                'phone'       => 'string',
+                'phone'       => 'string|null',
                 'last_login'  => 'string',
                 'joined'      => 'string',
                 'is_active'   => 'integer',
@@ -93,7 +93,54 @@ class UsersCest
             ]
         ]);
     }
+    /**
+     * 2.2.3 Create User Request
+     * @see https://jira-v2.skynix.company/browse/SI-856
+     */
+    public function testCreateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('ROLE', 'DEV');
+        define('FIRST_NAME', 'Test');
+        define('LAST_NAME', 'Test');
+        define('EMAIL', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
 
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendPOST(ApiEndpoints::USERS, json_encode([
+            'role'          => ROLE,
+            'first_name'    => FIRST_NAME,
+            'last_name'     => LAST_NAME,
+            'email'         => EMAIL
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        /*Check if user was added */
+
+        $I->sendGET(ApiEndpoints::USERS, [
+            'limit'   => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        $I->canSeeResponseContainsJson([
+            'data' => [
+                'users' => [
+                    'first_name' => FIRST_NAME,
+                    'last_name'  => LAST_NAME,
+                    'email'      => EMAIL,
+                    'role'       => ROLE
+                ]
+            ]
+        ]);
+    }
     /**
      * 2.2.6 Activate Users Data
      * @see http://jira.skynix.company:8070/browse/SI-859

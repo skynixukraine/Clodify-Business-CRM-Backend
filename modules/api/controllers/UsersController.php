@@ -6,6 +6,7 @@
  */
 
 namespace app\modules\api\controllers;
+use app\models\User;
 
 use app\modules\api\components\Api\Processor;
 
@@ -24,6 +25,18 @@ class UsersController extends DefaultController
             ->get('Processor')
             ->respond();
 
+    }
+    public function actionCreate(){
+        $this->di
+            ->set('app\models\User', ['scenario' => 'api-create'])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
     }
 
     public function actionActivate(){
