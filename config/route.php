@@ -1,6 +1,7 @@
 <?php
 $API = 'api';
 return [
+    'POST '     . $API . '/projects'                  => $API . '/projects/create',
     'DELETE '   . $API . '/reports/<id:\d+>'          => $API . '/reports/delete',
     'PUT '      . $API . '/reports/<id:\d+>'          => $API . '/reports/create-edit',
     'POST '     . $API . '/reports'                   => $API . '/reports/create-edit',
