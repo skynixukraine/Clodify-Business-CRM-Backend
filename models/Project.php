@@ -56,8 +56,10 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'status'], 'required'],
-            [['customers', 'developers','invoice_received'], 'required', 'on' => 'admin'],
+            ['name', 'required'],
+            ['status', 'required', 'except'=>['api-create']],
+            [['customers', 'developers','invoice_received'], 'required', 'on' => ['admin', 'api-create']],
+            [['is_sales', 'is_pm'], 'required', 'on' => ['api-create']],
             [['invoice_received', 'is_pm', 'is_delete', 'is_sales'], 'integer'],
             [['total_logged_hours', 'total_paid_hours'], 'number'],
             [['status'], 'string'],
@@ -78,6 +80,7 @@ class Project extends \yii\db\ActiveRecord
                 }
 
                 if(empty($this->developers && $this->is_sales) || ($this->developers && !in_array($this->is_sales, $this->developers))) {
+
                     $this->addError('is_sales', Yii::t('yii', 'Sales was not assigned'));
                 }
             }]
@@ -194,13 +197,13 @@ class Project extends \yii\db\ActiveRecord
             /* Add to ProjectCustomers*/
 
             foreach (User::allCustomers() as $customer) {
-                if($this->invoice_received == $customer->id || in_array($customer->id, $this->customers)){
+                if(($this->invoice_received == $customer->id) || (in_array($customer->id, $this->customers))){
                     $connection->createCommand()
                         ->insert(ProjectCustomer::tableName(), [
                             'project_id' => $this->id,
                             'user_id' => $customer->id,
                             /*'receive_invoices' => 1,*///when add project to some user receive_invoices from project_customers = 1
-                            'receive_invoices' => ($this->invoice_received==$customer->id),
+                            'receive_invoices' => 1,
                         ])->execute();
                 }
 

@@ -15,4 +15,5 @@ class ApiEndpoints
     const PASSWORD = '/api/password';
     const REPORT = '/api/reports';
     const USERS = '/api/users';
+    const PROJECT = '/api/projects';
 }
