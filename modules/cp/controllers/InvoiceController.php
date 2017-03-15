@@ -130,6 +130,7 @@ class InvoiceController extends DefaultController
         }
         if (User::hasPermission([User::ROLE_SALES])) {
             $customers = [];
+            $sales = [];
             $projects = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
@@ -142,8 +143,12 @@ class InvoiceController extends DefaultController
                     ->where([ProjectCustomer::tableName() . '.project_id' => $project->id])
                     ->andWhere([ProjectCustomer::tableName() . '.receive_invoices' => 1])
                     ->one();
+                $projectSales = ProjectDeveloper::getSalesOnProject($project->id);
                 if ($projectCustomer) {
                     $customers[] = User::findOne($projectCustomer->user_id)->id;
+                }
+                if ($projectSales) {
+                    $sales[] = User::findOne($projectSales->user_id)->id;
                 }
                 $projectIDs[] = $project->id;
             }
@@ -162,7 +167,7 @@ class InvoiceController extends DefaultController
             // If invoice was created for 'All projects' and invoiced customer has no common projects
             // with current SALES user - go to the next record
             if (User::hasPermission([User::ROLE_SALES])) {
-                if (!$model->project_id && !in_array($model->user_id, $customers)) {
+                if (!$model->project_id && ( !in_array($model->user_id, $customers) || !in_array($model->created_by, $sales))) {
                     continue;
                 }
             }
