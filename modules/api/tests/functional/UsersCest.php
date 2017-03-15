@@ -43,7 +43,7 @@ class UsersCest
                 'company'     => 'string|null',
                 'role'        => 'string',
                 'email'       => 'string',
-                'phone'       => 'string',
+                'phone'       => 'string|null',
                 'last_login'  => 'string',
                 'joined'      => 'string',
                 'is_active'   => 'integer',
