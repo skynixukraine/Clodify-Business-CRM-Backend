@@ -20,25 +20,33 @@ class DefaultController extends Controller
     public $di;
     public $controllerNamespace = 'app\modules\api\controllers';
 
-	public function behaviors()
-	{
+    public function actions()
+    {
         return [
-            'corsFilter' => [
-                'class' => \yii\filters\Cors::className(),
-                'cors' => [
-                    // restrict access to
-                    'Origin' => ['*'],
-                    // Allow POST, PUT, GET, DELETE and OPTIONS methods
-                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-                    // Allow only headers "x-requested-with, Content-Type, origin, accept, skynix-access-token"
-                    'Access-Control-Request-Headers' => ['x-requested-with', 'Content-Type',
-                        'origin', 'accept', 'skynix-access-token'],
-                    // Allow OPTIONS caching
-                    'Access-Control-Max-Age' => 1000,
-                ],
-
+            'options' => [
+                'class' => 'yii\rest\OptionsAction',
             ],
         ];
+    }
+
+	public function behaviors()
+	{
+        $behaviors = parent::behaviors();
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                // restrict access to
+                'Origin' => ['*'],
+                // Allow POST, PUT, GET, DELETE and OPTIONS methods
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                // Allow only headers "x-requested-with, Content-Type, origin, accept, skynix-access-token"
+                'Access-Control-Request-Headers' => ['x-requested-with', 'Content-Type',
+                    'origin', 'accept', 'skynix-access-token'],
+                // Allow OPTIONS caching
+                'Access-Control-Max-Age' => 1000,
+            ],
+        ];
+        return $behaviors;
 	}
 
     /**
@@ -52,6 +60,7 @@ class DefaultController extends Controller
 
 	public function beforeAction($action)
     {
+
         $this->di = new yii\di\Container();
         $this->di
             ->setSingleton('Processor', 'app\modules\api\components\Api\Processor')
@@ -64,6 +73,14 @@ class DefaultController extends Controller
 
     public function actionError()
     {
+        if (Yii::$app->getRequest()->getMethod() == 'OPTIONS') {
+
+            Yii::$app->getResponse()->setStatusCode(200);
+            Yii::$app->getResponse()->getHeaders()->set('Allow', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
+            Yii::$app->end();
+
+        }
+
         $trace = [];
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'
@@ -87,7 +104,7 @@ class DefaultController extends Controller
         Yii::$app->response->content    = json_encode([
             'data'      => null,
             'errors'    => [
-                'param'     => Processor::CODE_TEHNICAL_ISSUE,
+                'param'     => Processor::ERROR_PARAM,
                 'message'   => $message,
                 'trace'     => $trace
             ],
@@ -95,5 +112,5 @@ class DefaultController extends Controller
         ]);
 
     }
-   
+
 }

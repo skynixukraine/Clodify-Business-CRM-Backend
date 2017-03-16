@@ -130,6 +130,7 @@ class InvoiceController extends DefaultController
         }
         if (User::hasPermission([User::ROLE_SALES])) {
             $customers = [];
+            $sales = [];
             $projects = Project::find()
                 ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
@@ -142,8 +143,12 @@ class InvoiceController extends DefaultController
                     ->where([ProjectCustomer::tableName() . '.project_id' => $project->id])
                     ->andWhere([ProjectCustomer::tableName() . '.receive_invoices' => 1])
                     ->one();
+                $projectSales = ProjectDeveloper::getSalesOnProject($project->id);
                 if ($projectCustomer) {
                     $customers[] = User::findOne($projectCustomer->user_id)->id;
+                }
+                if ($projectSales) {
+                    $sales[] = User::findOne($projectSales->user_id)->id;
                 }
                 $projectIDs[] = $project->id;
             }
@@ -159,10 +164,13 @@ class InvoiceController extends DefaultController
         /** @var  $model Invoice*/
         foreach ( $activeRecordsData as $model ) {
             $name = null;
-            // If invoice was created for 'All projects' and invoiced customer has no common projects
-            // with current SALES user - go to the next record
+           /**
+            * If invoice was created for 'All projects' and invoiced customer has no common projects
+            * with current SALES user - go to the next record.
+            * Same logic when another SALES user creating invoice and has no common projects with us.
+           */
             if (User::hasPermission([User::ROLE_SALES])) {
-                if (!$model->project_id && !in_array($model->user_id, $customers)) {
+                if (!$model->project_id && ( !in_array($model->user_id, $customers) || !in_array($model->created_by, $sales))) {
                     continue;
                 }
             }
@@ -250,7 +258,7 @@ class InvoiceController extends DefaultController
 
     public function actionView()
     {
-        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES, User::ROLE_CLIENT] ) ) {
+        if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
             if (($id = Yii::$app->request->get("id"))) {
 
                 $model = Invoice::find()
@@ -381,8 +389,13 @@ class InvoiceController extends DefaultController
                 /** @var  $model User */
                 $model  = Invoice::findOne( $id );
                 $model->is_delete = 1;
-                $model->save(true, ['is_delete']);
-
+                if ($model->save(true, ['is_delete'])) {
+                    $reports = Report::find()->where(['invoice_id' => $id])->all();
+                    foreach ($reports as $report) {
+                        $report->invoice_id = null;
+                        $report->save(false);
+                    }
+                }
                 return json_encode([
                     "message"   => Yii::t("app", "Invoice # " . $id ." has been deleted "),
                 ]);
@@ -421,10 +434,13 @@ class InvoiceController extends DefaultController
 
             $pdf = new mPDF();
             $pdf->WriteHTML($html);
+            if ( !is_dir(Yii::getAlias('@app/data/invoices/')) ) {
+                mkdir(Yii::getAlias('@app/data/invoices/'), 0777);
+            }
             $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
-                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
 
@@ -467,7 +483,7 @@ class InvoiceController extends DefaultController
             $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
             if( ( $model->user_id == Yii::$app->user->id &&
                     User::hasPermission([User::ROLE_CLIENT]) ) ||
-                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ){
+                User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
 
                 if (file_exists($path = Yii::getAlias('@app/data/invoices/' . 'reports'. $id . '.pdf'))) {
                     /*$this->downloadFile($path);*/
