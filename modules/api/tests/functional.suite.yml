@@ -10,6 +10,6 @@ modules:
         # add framework module here
         - \Helper\Functional
         - REST:
-            url: 'http://localhost'
+            url: 'https://skynixcrm-web'
             depends: PhpBrowser
         - Asserts

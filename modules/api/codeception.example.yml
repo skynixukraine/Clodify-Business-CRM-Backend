@@ -16,7 +16,7 @@ modules:
     config:
         Db:
             dsn: ''
-            user: 'mysql_user'
+            user: ''
             password: ''
             dump: tests/_data/dump.sql
             populate: true
