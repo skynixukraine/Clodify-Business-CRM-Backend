@@ -13,18 +13,18 @@ class ReportsCest
         /* 2.1.1 Create Report Data
          * @see    http://jira.skynix.company:8070/browse/SI-837
          */
-        define('project_id', 1);
-        define('date_report', str_replace('-', '/', date('d-m-Y')));
-        define('hours', 2);
-        define('task', 'task description, task description, task description');
+        define('PROJECT_ID', 1);
+        define('DATE_REPORT', date('d/m/Y'));
+        define('HOURS', 2);
+        define('TASK', 'task description, task description, task description');
 
         $I->wantTo('Create report without authorization');
         //Try to create report without authorization
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
-            'project_id' => project_id,
-            'task' => task,
-            'hours' => hours,
-            'date_report' => date_report
+            'project_id' => PROJECT_ID,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => DATE_REPORT
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -43,10 +43,10 @@ class ReportsCest
         $I->wantTo('Create report with authorization');
 
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
-            'project_id' => project_id,
-            'task' => task,
-            'hours' => hours,
-            'date_report' => date_report
+            'project_id' => PROJECT_ID,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => DATE_REPORT
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -85,7 +85,7 @@ class ReportsCest
                 [
                     'reports' => [
                         'report_id' =>$ownReportId,
-                        'task'      => task
+                        'task'      => TASK
                     ],
 
                 ]
@@ -96,8 +96,8 @@ class ReportsCest
          * http://jira.skynix.company:8070/browse/SI-865
          */
         $I->wantTo('Edit previously created report');
-        $newTask  = task . 'NEW';
-        $newHours = hours + 1;
+        $newTask  = TASK . 'NEW';
+        $newHours = HOURS + 1;
 
         $I->sendPUT(ApiEndpoints::REPORT . '/'.$ownReportId, json_encode([
             'task' => $newTask,
