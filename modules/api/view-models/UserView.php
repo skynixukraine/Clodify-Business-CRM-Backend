@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dmytro
+ * Created by Skynix Team
  * Date: 11.03.17
  * Time: 16:28
  */
@@ -15,6 +14,11 @@ use Yii;
 use app\components\DateUtil;
 use yii\helpers\Url;
 
+/**
+ * View single user data
+ * Class UserView
+ * @package viewModel
+ */
 class UserView extends ViewModelAbstract
 {
     /** @var  \app\models\User */
@@ -24,6 +28,11 @@ class UserView extends ViewModelAbstract
     {
         $userId = Yii::$app->request->getQueryParam('id');
         if (($model = $this->model->findOne($userId)) &&  self::hasPermission($userId)) {
+
+            if ($model->is_delete == 1) {
+                return $this->addError(Processor::ERROR_PARAM, 'Hey, you are looking for the deleted user. The access completely impossible.');
+            }
+
             $data = [
                 'first_name'   => $model->first_name,
                 'last_name'    => $model->last_name,
