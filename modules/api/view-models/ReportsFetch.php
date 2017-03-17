@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DataTable;
+use app\components\DateUtil;
 use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
@@ -19,7 +20,12 @@ use Yii;
 use DateTime;
 use app\modules\api\components\SortHelper;
 
-
+/**
+ * Fetch reports data. Available date, project, user, keyword and invoice filters.
+ * All GET params are optional.
+ * Class ReportsFetch
+ * @package viewModel
+ */
 class ReportsFetch extends ViewModelAbstract
 {
     public function define()
@@ -34,7 +40,6 @@ class ReportsFetch extends ViewModelAbstract
         $start       = Yii::$app->request->getQueryParam('start') ? Yii::$app->request->getQueryParam('start') : 0;
         $limit       = Yii::$app->request->getQueryParam('limit') ? Yii::$app->request->getQueryParam('limit') : SortHelper::DEFAULT_LIMIT;
         $order       = Yii::$app->request->getQueryParam('order', []);
-
 
         if ($date_period && ($dateStart || $dateEnd)) {
             return $this->addError(Processor::ERROR_PARAM, 'date_period can not be used with from_date/to_date');
@@ -60,7 +65,6 @@ class ReportsFetch extends ViewModelAbstract
                 ['like', 'task', $keyword],
             ]);
         if( $order ){
-
             foreach ($order as $name => $value) {
                 $dataTable->setOrder(Report::tableName() . '.' . $name, $value);
             }
@@ -149,20 +153,20 @@ class ReportsFetch extends ViewModelAbstract
                 $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
                 break;
             case 4:
-                $dateStart = $date->modify("first day of this month")->format('Y-m-d');
-                $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
+                $dateStart = $date->modify("last day of previous month")->format('Y-m-d');
+                $dateEnd = $date->modify("first day of this month")->format('Y-m-d');
                 break;
         }
 
         if (!$dateStart) {
-            $dateStart = date('Y-m-d');
+            $dateStart = date('d/m/Y');
         }
-        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . $dateStart . '" ');
+        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
 
 
-        if($dateEnd && $dateEnd != null){
+        if($dateEnd){
 
-            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . $dateEnd . '"');
+            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd) . '"');
 
         }
 

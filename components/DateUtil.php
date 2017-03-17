@@ -85,7 +85,7 @@ class DateUtil
     public static function convertDatetimeWithoutSecund( $date )
     {
         $timestamp = strtotime($date);
-        $newDate = date('d/m/Y<\b\r> H:i', $timestamp);
+        $newDate = date('d/m/Y H:i', $timestamp);
         return $newDate;
     }
 
