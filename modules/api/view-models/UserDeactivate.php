@@ -21,7 +21,7 @@ class UserDeactivate extends ViewModelAbstract
                 $model->is_active = 0;
                 $model->save(true, ['is_active']);
             } else {
-                $this->addError('id', Yii::t('app','The requested report does not exist'));
+                $this->addError('id', Yii::t('app','The requested user does not exist'));
             }
         } else {
             $this->addError(Processor::ERROR_PARAM, Yii::t('app','You don\'t have permissions. Only admin can activate or deactivate users.'));
