@@ -249,9 +249,9 @@ class ContractController extends DefaultController
     public function actionView()
     {
         $id = Yii::$app->request->get("id");
-        $model = Contract::findOne($id);
+        $model = Contract::findOne(['contract_id' => $id]);
         return $this->render('view', ['model' => $model,
-            'title' => 'You watch contract #' . $model->contract_id]);
+            'title' => 'You watch contract #' . $id]);
     }
 
     public function actionDownloadcontract()
