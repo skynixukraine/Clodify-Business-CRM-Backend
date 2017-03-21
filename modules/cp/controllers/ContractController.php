@@ -72,7 +72,7 @@ class ContractController extends DefaultController
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->contract_id));
-                return $this->redirect(['view?id=' . $model->contract_id]);
+                return $this->redirect(['view?id=' . $model->id]);
             }
         }
         return $this->render('create', ['model' => $model]);
@@ -249,9 +249,9 @@ class ContractController extends DefaultController
     public function actionView()
     {
         $id = Yii::$app->request->get("id");
-        $model = Contract::findOne(['contract_id' => $id]);
+        $model = Contract::findOne($id);
         return $this->render('view', ['model' => $model,
-            'title' => 'You watch contract #' . $id]);
+            'title' => 'You watch contract #' . $model->contract_id]);
     }
 
     public function actionDownloadcontract()
