@@ -27,7 +27,7 @@ class UserDelete extends ViewModelAbstract
     public function define()
     {
         $id = Yii::$app->request->getQueryParam('id');
-        // Run delete action only if user with requested ID exists and is not deleted.
+        // Run delete action only if user with requested ID exists and was not deleted.
         // Action available only for ADMIN role.
         if ( ($model = User::findOne( $id )) && User::hasPermission([User::ROLE_ADMIN]) && $model->is_delete == 0) {
             $model->is_delete = 1;
