@@ -160,8 +160,8 @@ class ContractController extends DefaultController
                 ['like', 'customer_id', $keyword],
                 ['like', 'act_number', $keyword]
             ]);
-        $date = strtotime(DateUtil::convertData($keyword)); // returns int or false
-        if ($date && $date = date('Y-m-d', $date)) {
+        // DateUtil::convertData() returns incoming param only if it does not match to 01/01/2017 format
+        if ( ($date = DateUtil::convertData($keyword)) !== $keyword ) {
             $dataTable->setSearchParams([ 'or',
                 ['like', 'start_date', $date],
                 ['like', 'end_date', $date],
