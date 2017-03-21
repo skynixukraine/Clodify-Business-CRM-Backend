@@ -26,13 +26,17 @@ class CreateEditReport extends ViewModelAbstract
         $userId = $this->getAccessTokenModel()->user_id;
 
         if( $reportId ) {
-            $this->model = Report::findOne($reportId);
-            $this->model->setAttributes($this->postData);
-            $oldHours = $this->model->hours;
-            $this->model->date_report = DateUtil::convertData($this->model->date_report);
-            if (strpos($this->model->hours, ',')) {
-                str_replace(',', '.', $this->model->hours);
+            // run edit report action only if report with requested ID exists and was not deleted
+            if ( (!$this->model = Report::findOne($reportId)) || $this->model->is_delete == 1 ) {
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app','Such report is not existed'));
             }
+            if (strpos($this->model->hours, ',')) {
+                $this->model->hours = str_replace(',', '.', $this->model->hours);
+            }
+            $oldHours = $this->model->hours;
+            $this->model->setAttributes($this->postData);
+            $this->model->date_report = DateUtil::convertData($this->model->date_report);
+
         } else {
             $this->model->setAttributes($this->postData);
             $this->model->date_added = date('Y-m-d');
@@ -46,7 +50,7 @@ class CreateEditReport extends ViewModelAbstract
 
         //  convert 8,1 to 8.1 before validation
         if (strpos($this->model->hours, ',')) {
-            str_replace(',', '.', $this->model->hours);
+            $this->model->hours = str_replace(',', '.', $this->model->hours);
         }
 
         if(($reportId && ($this->model->user_id == $userId )) || (!$reportId)) {
