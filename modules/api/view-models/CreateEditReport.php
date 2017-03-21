@@ -28,7 +28,7 @@ class CreateEditReport extends ViewModelAbstract
         if( $reportId ) {
             // run edit report action only if report with requested ID exists and was not deleted
             if ( (!$this->model = Report::findOne($reportId)) || $this->model->is_delete == 1 ) {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('app','Such report is not existed'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app','The requested report does not exist'));
             }
             if (strpos($this->model->hours, ',')) {
                 $this->model->hours = str_replace(',', '.', $this->model->hours);
