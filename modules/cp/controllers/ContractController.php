@@ -7,6 +7,7 @@
 
 namespace app\modules\cp\controllers;
 
+use app\components\DateUtil;
 use app\models\Report;
 use yii\filters\AccessControl;
 use app\models\User;
@@ -148,7 +149,6 @@ class ContractController extends DefaultController
             'total_hours',
             'expenses'
         ];
-
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
@@ -158,11 +158,16 @@ class ContractController extends DefaultController
                 ['like', 'contract_id', $keyword],
                 ['like', 'created_by', $keyword],
                 ['like', 'customer_id', $keyword],
-                ['like', 'act_number', $keyword],
-                ['like', 'start_date', $keyword],
-                ['like', 'end_date', $keyword],
-                ['like', 'act_date', $keyword],
+                ['like', 'act_number', $keyword]
             ]);
+        $date = strtotime(DateUtil::convertData($keyword)); // returns int or false
+        if ($date && $date = date('Y-m-d', $date)) {
+            $dataTable->setSearchParams([ 'or',
+                ['like', 'start_date', $date],
+                ['like', 'end_date', $date],
+                ['like', 'act_date', $date],
+            ]);
+        }
         if($customerId && $customerId != null){
 
             $dataTable->setFilter('customer_id=' . $customerId);
