@@ -153,8 +153,8 @@ class ReportsFetch extends ViewModelAbstract
                 $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
                 break;
             case 4:
-                $dateStart = $date->modify("last day of previous month")->format('Y-m-d');
-                $dateEnd = $date->modify("first day of this month")->format('Y-m-d');
+                $dateStart = $date->modify("first day of this month")->format('Y-m-d');
+                $dateEnd = $date->modify("last day of previous month")->format('Y-m-d');
                 break;
         }
 
