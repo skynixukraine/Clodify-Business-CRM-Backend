@@ -104,4 +104,18 @@ class UsersController extends DefaultController
             ->respond();
     }
 
+    public function actionSign()
+    {
+        $this->di
+            ->set('app\models\User', ['scenario' => User::ATTACH_USERS_SIGN])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UsersSign')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

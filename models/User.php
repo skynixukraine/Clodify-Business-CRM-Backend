@@ -63,6 +63,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const DELETED_USERS = 1;
 
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
+    const ATTACH_USERS_SIGN = 'api-attach-sign';
 
     public $rawPassword;
 
@@ -91,17 +92,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['photo','sing','role'], 'string'],
-            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD]],
-            ['email', 'required', 'except'=>'settings'],
+            [['role'], 'string'],
+            [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
+            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_USERS_SIGN]],
+            ['email', 'required', 'except' => ['settings', self::ATTACH_USERS_SIGN]],
             ['role', function () {
                 if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
                     $this->addError('role', Yii::t('yii', 'Role is invalid'));
                 }
             }],
-            [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
+            [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_USERS_SIGN]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
+            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_USERS_SIGN]],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],

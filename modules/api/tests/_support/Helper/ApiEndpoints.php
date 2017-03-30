@@ -16,4 +16,5 @@ class ApiEndpoints
     const REPORT         = '/api/reports';
     const USERS          = '/api/users';
     const PROJECT        = '/api/projects';
+    const ATTACH_SIGN    = '/api/users/sign';
 }
