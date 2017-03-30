@@ -32,7 +32,6 @@ class UsersSign extends ViewModelAbstract
                 mkdir($uploadPath, 0777, true);
                 chmod($uploadPath, 0777);
             }
-
             $uploadPath = $uploadPath . 'sign/';
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
@@ -48,8 +47,9 @@ class UsersSign extends ViewModelAbstract
                     User::setUserSing($file->name);
                 }
             } else {
-                $fileSize = round(($file->size / 1024)/1024, 2);
-                $this->addError('sign', 'File is too big: ' . $fileSize . 'MiB' . '. Max fileSize: 2 MiB.');
+                $fileSizeMib = round(($file->size / 1024)/1024, 2);
+                $this->addError('sign', 'File is too big: '
+                                . $fileSizeMib . 'MiB. Max fileSize: 2 MiB.');
             }
         }
     }

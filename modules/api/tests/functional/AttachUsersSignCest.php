@@ -11,6 +11,7 @@ class AttachUsersSignCest
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-905
      * @param  FunctionalTester      $I
+     * @param \Codeception\Scenario $scenario
      * @return void
      */
     public function testAttachingUsersSign(FunctionalTester $I, \Codeception\Scenario $scenario)
@@ -31,4 +32,5 @@ class AttachUsersSignCest
         ]);
         $I->assertEquals(1, $response->success);
     }
+
 }
