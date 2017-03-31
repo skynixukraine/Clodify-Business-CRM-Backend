@@ -61,11 +61,34 @@ class Contact extends ActiveRecord
     public function contact($email)
     {
         if ($this->validate()) {
+            $to             = $email;
+            $fromName       = "Skynix Administration";
+            $replyToEmail   = $this->email;
+            $replyToName    = $fromName;
+            $message        = $this->message;
+            if ( strstr($this->subject, 'Synpass') !== false ) {
+
+                $to             = Yii::$app->params['synpassAdminEmail'];
+                $fromName       = "Synpass Administration";
+                $replyToName    = "Synpass Guest";
+                $message        = "Welcome Synpass Guest, \n".
+                                    "We will inform you as soon as the service is launch.";
+
+                Yii::$app->mailer->compose()
+                    ->setTo($this->email)
+                    ->setReplyTo([$to => $fromName])
+                    ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
+                    ->setSubject($this->subject)
+                    ->setTextBody($message)
+                    ->send();
+
+            }
             Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([$this->email => $this->name])
+                ->setTo($to)
+                ->setReplyTo([$replyToEmail => $replyToName])
+                ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
                 ->setSubject($this->subject)
-                ->setTextBody($this->message)
+                ->setTextBody($message)
                 ->send();
 
             return true;

@@ -72,7 +72,7 @@ class ContractController extends DefaultController
 
             if ($model->validate() && $model->save()) {
                 Yii::$app->getSession()->setFlash('success', Yii::t("app", "You created new Contract " . $model->contract_id));
-                return $this->redirect(['view?id=' . $model->contract_id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
         return $this->render('create', ['model' => $model]);

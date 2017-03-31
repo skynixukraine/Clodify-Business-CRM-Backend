@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DataTable;
+use app\components\DateUtil;
 use app\models\Project;
 use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
@@ -19,7 +20,12 @@ use Yii;
 use DateTime;
 use app\modules\api\components\SortHelper;
 
-
+/**
+ * Fetch reports data. Available date, project, user, keyword and invoice filters.
+ * All GET params are optional.
+ * Class ReportsFetch
+ * @package viewModel
+ */
 class ReportsFetch extends ViewModelAbstract
 {
     public function define()
@@ -148,19 +154,19 @@ class ReportsFetch extends ViewModelAbstract
                 break;
             case 4:
                 $dateStart = $date->modify("first day of this month")->format('Y-m-d');
-                $dateEnd = $date->modify("last day of this month")->format('Y-m-d');
+                $dateEnd = $date->modify("last day of previous month")->format('Y-m-d');
                 break;
         }
 
         if (!$dateStart) {
-            $dateStart = date('Y-m-d');
+            $dateStart = date('d/m/Y');
         }
-        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . $dateStart . '" ');
+        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
 
 
-        if($dateEnd && $dateEnd != null){
+        if($dateEnd){
 
-            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . $dateEnd . '"');
+            $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd) . '"');
 
         }
 
