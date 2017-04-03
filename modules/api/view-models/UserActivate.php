@@ -20,9 +20,6 @@ class UserActivate extends ViewModelAbstract
         $model    = User::findOne($userId);
         if(User::hasPermission([User::ROLE_ADMIN])) {
             if ($model) {
-                if($model->is_delete == 1) {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app','You can\'t activate deleted user.'));
-                }
                 $model->is_active = 1;
                 $model->save(true, ['is_active']);
             } else {

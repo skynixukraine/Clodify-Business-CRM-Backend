@@ -1,30 +1,30 @@
 <?php
 /**
  * Created by Skynix Team
- * Date: 13.03.17
- * Time: 8:43
+ * Date: 30.03.17
+ * Time: 16:30
  */
+
 namespace viewModel;
 
 use Yii;
-use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 use app\models\User;
 
 /**
- * Class UserPhoto
+ * Class UsersSign
  * @package viewModel
  */
-class UserPhoto extends ViewModelAbstract
+class UsersSign extends ViewModelAbstract
 {
 
     public $model;
 
     public function define()
     {
-        $fileName = 'photo';
-        $file = \yii\web\UploadedFile::getInstanceByName($fileName);
-        $this->model->photo = $file;
+        $fileName = 'sign';
+        $file = UploadedFile::getInstanceByName($fileName);
+        $this->model->sing = $file;
 
         if ($this->validate()) {
             $uploadPath = Yii::getAlias('@app') . '/data/' . Yii::$app->user->id . '/';
@@ -32,25 +32,26 @@ class UserPhoto extends ViewModelAbstract
                 mkdir($uploadPath, 0777, true);
                 chmod($uploadPath, 0777);
             }
-            $uploadPath = $uploadPath . 'photo/';
+            $uploadPath = $uploadPath . 'sign/';
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
                 chmod($uploadPath, 0777);
             }
 
-            if ($file->size <= 5242880) { // 5242880 bytes - 5 mb
+            if ($file->size <= 2097152) { // 2097152 bytes - 2 mb
                 if ($file->saveAs($uploadPath . '/' . $file->name)) {
                     $pathFile = 'data/' . Yii::$app->user->id . '/' . $file->name;
-                    $this->setData(['photo' => $pathFile]);
+                    $this->setData(['sign' => $pathFile]);
 
                     //Now save file data to database
-                    User::setUserPhoto($file->name);
+                    User::setUserSing($file->name);
                 }
             } else {
-                $this->addError('photo', 'fileSize is too big. Max fileSize is 5 MiB.');
+                $fileSizeMib = round(($file->size / 1024)/1024, 2);
+                $this->addError('sign', 'File is too big: '
+                                . $fileSizeMib . 'MiB. Max fileSize: 2 MiB.');
             }
         }
-
     }
 
 }

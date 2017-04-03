@@ -6,29 +6,31 @@ use Helper\OAuthSteps;
 /**
  * Class AttachPhotoUsersCest
  */
-class AttachPhotoUsersCest
+class AttachUsersSignCest
 {
     /**
-     * @see    https://jira-v2.skynix.company/browse/SI-904
+     * @see    https://jira-v2.skynix.company/browse/SI-905
      * @param  FunctionalTester      $I
+     * @param \Codeception\Scenario $scenario
      * @return void
      */
-    public function testAttachingPhotoUsers(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testAttachingUsersSign(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Test attaching the photo');
-        $I->sendPOST(ApiEndpoints::ATTACH_PHOTO, [], ['photo' => 'tests/_data/skynix-office.jpg']);
+        $I->wantTo('Test attaching users sign');
+        $I->sendPOST(ApiEndpoints::ATTACH_SIGN, [], ['sign' => 'tests/_data/skynix-office.jpg']);
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertNotEmpty($response->data);
         $I->seeResponseMatchesJsonType([
             'data' => [
-                'photo'   => 'string'
+                'sign'   => 'string'
             ]
         ]);
         $I->assertEquals(1, $response->success);
     }
+
 }

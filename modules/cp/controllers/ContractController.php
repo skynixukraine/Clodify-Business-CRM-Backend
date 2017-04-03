@@ -261,7 +261,7 @@ class ContractController extends DefaultController
 
     public function actionDownloadcontract()
     {
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne(['contract_id' => $id]) )
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne($id) )
             && ($model->hasInvoices()) ) {
             // Generating PDF
             $html = $this->renderPartial('contractPDF', [
@@ -298,7 +298,7 @@ class ContractController extends DefaultController
 
 
     public function actionDownloadactofwork() {
-        if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne(['contract_id' => $id]) )
+        if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne($id) )
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
             $invoice    = Invoice::find()->where(['contract_id' => $contract->id, 'is_delete' => 0])->one();
