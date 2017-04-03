@@ -47,7 +47,7 @@ class UserEdit extends ViewModelAbstract
 
         } else {
 
-            return $this->addError(Processor::ERROR_PARAM, 'The user does not exist');
+            return $this->addError(Processor::ERROR_PARAM, 'The requested user does not exist');
 
         }
 
