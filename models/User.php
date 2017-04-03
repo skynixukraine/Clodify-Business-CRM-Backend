@@ -63,6 +63,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const DELETED_USERS = 1;
 
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
+    const ATTACH_PHOTO_USERS = 'api-attach-photo';
 
     public $rawPassword;
 
@@ -91,17 +92,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['photo','sing','role'], 'string'],
-            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD]],
-            ['email', 'required', 'except'=>'settings'],
+            [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => self::ATTACH_PHOTO_USERS],
+            [['sing','role'], 'string'],
+            ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS]],
+            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS]],
+
             ['role', function () {
                 if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
                     $this->addError('role', Yii::t('yii', 'Role is invalid'));
                 }
             }],
-            [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD]],
+            [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
-            [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
+            [['email'], 'unique', 'except' => ['api-login', self::SCENARIO_CHANGE_PASSWORD]],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
@@ -115,7 +118,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
             [['bank_account_ua', 'bank_account_en'], 'string'],
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
-            ['captcha', 'captcha', 'on' => self::SCENARIO_CHANGE_PASSWORD]
+            ['captcha', 'captcha', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+
 
         ];
     }
