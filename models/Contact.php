@@ -82,14 +82,27 @@ class Contact extends ActiveRecord
                     ->setTextBody($message)
                     ->send();
 
+
+                Yii::$app->mailer->compose('synpass_welcome')
+                    ->setTo($to)
+                    ->setReplyTo([$replyToEmail => $replyToName])
+                    ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
+                    ->setSubject($this->subject)
+                    ->setTextBody($message)
+                    ->send();
+
+            } else {
+
+                Yii::$app->mailer->compose()
+                    ->setTo($to)
+                    ->setReplyTo([$replyToEmail => $replyToName])
+                    ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
+                    ->setSubject($this->subject)
+                    ->setTextBody($message)
+                    ->send();
+                
             }
-            Yii::$app->mailer->compose()
-                ->setTo($to)
-                ->setReplyTo([$replyToEmail => $replyToName])
-                ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
-                ->setSubject($this->subject)
-                ->setTextBody($message)
-                ->send();
+            
 
             return true;
         }
