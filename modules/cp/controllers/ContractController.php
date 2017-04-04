@@ -80,12 +80,18 @@ class ContractController extends DefaultController
 
     public function actionEdit()
     {
-        if( $id = Yii::$app->request->get('id') ) {
-            $model  = Contract::findOne($id);
-            if ($model->load(Yii::$app->request->post())) {
+        if( ($id = Yii::$app->request->get('id')) &&
+            ( $model  = Contract::findOne($id) ) ) {
+
+            if ( Yii::$app->request->isPost &&
+                    $model->load( Yii::$app->request->post() ) ) {
+
                 if ($model->validate()) {
+
                     $model->save();
-                    if ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) {
+
+                    if ( ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]) ) ) {
+
                         $invoice->contract_id     = $model->id;
                         $invoice->contract_number = $model->contract_id;
                         $invoice->act_of_work     = $model->act_number;
@@ -107,19 +113,37 @@ class ContractController extends DefaultController
                         }
                         if ($invoice->validate() && $invoice->save()) {
                             if(Yii::$app->request->post('updated')) {
-                                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract "
-                                    . $model->contract_id . " with related invoice " . $invoice->id));
+                                Yii::$app->getSession()
+                                    ->setFlash('success', Yii::t("app", "You edited contract {contract_id} with related invoice {invoice_id}", [
+                                        'contract_id'   => $model->contract_id,
+                                        'invoice_id'    => $invoice->id
+                                    ]));
                             }
+                            return $this->redirect(['index']);
+                        } else {
+
+                            Yii::$app->getSession()->setFlash('error', implode("<br>", $invoice->getFirstErrors()));
                             return $this->redirect(['index']);
                         }
                     }
                     if(Yii::$app->request->post('updated')) {
-                        Yii::$app->getSession()->setFlash('success', Yii::t("app", "You edited contract " . $model->contract_id));
+                        Yii::$app->getSession()
+                            ->setFlash('success',
+                                    Yii::t("app", "You edited contract {contract_id}",
+                                            [
+                                                'contract_id' => $model->contract_id
+                                            ]));
                     }
                     return $this->redirect(['index']);
 
                 }
             }
+
+        } else {
+
+            Yii::$app->getSession()->setFlash('error', Yii::t("app", "The contract has not been found "));
+            return $this->redirect(['index']);
+
         }
         return $this->render('create', ['model' => $model]
         );

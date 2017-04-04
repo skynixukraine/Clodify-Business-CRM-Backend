@@ -20,7 +20,7 @@ class Helper
         if (is_string($time) && strstr($time, ":")) {
             $timeArr = explode(':', $time);
             $hours = $timeArr[0];
-            $minutes = round($timeArr[1]/60*100, 2);
+            $minutes = round($timeArr[1]/60*100);
 
             return (float) $hours . '.' . $minutes;
         } elseif (is_float($time)) {

@@ -211,6 +211,7 @@ class InvoiceController extends DefaultController
         $model->created_by = Yii::$app->user->id;
         $contract   = null;
         if ( $id && ( $contract = Contract::findOne( $id )) ) {
+
             $model->contract_id     = $contract->id;
             $model->contract_number = $contract->contract_id;
             $model->act_of_work     = $contract->act_number;
@@ -244,8 +245,15 @@ class InvoiceController extends DefaultController
             $model->date_created = date('Y-m-d');
 
             if ($model->validate() && $model->save()) {
+
                 Yii::$app->getSession()
                             ->setFlash('success', Yii::t("app", "You created new invoice {id}", ['id' => $model->id]));
+
+            } else {
+
+                Yii::$app->getSession()->setFlash('error', implode("<br>", $model->getFirstErrors()));
+                return $this->redirect(['index']);
+
             }
             return $this->redirect(['view?id=' . $model->id]);
         }
@@ -259,34 +267,36 @@ class InvoiceController extends DefaultController
     public function actionView()
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
-            if (($id = Yii::$app->request->get("id"))) {
+            if (($id = Yii::$app->request->get("id")) &&
+                ($model = Invoice::findOne($id))
+            ) {
 
-                $model = Invoice::find()
-                    ->where("id=:iD",
-                        [
-                            ':iD' => $id
-                        ])
-                    ->one();
-            }
+                $model->subtotal = $model->subtotal > 0 ? $model->subtotal : 0;
+                $model->total = $model->total > 0 ? $model->total : 0;
+                $model->discount = $model->discount > 0 ? $model->discount : 0;
 
-            $model->subtotal    = $model->subtotal > 0 ? $model->subtotal : 0;
-            $model->total       = $model->total > 0 ? $model->total : 0;
-            $model->discount    = $model->discount > 0 ? $model->discount : 0;
-
-            if( User::hasPermission( [User::ROLE_CLIENT])   ) {
-                //Check if the current client can see this invoice from the reports menu.
-                $reportsForCurrentClient = Report::find()->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id = reports.project_id' )
-                    ->where(['reports.invoice_id' => $id])->andWhere(['project_customers.user_id'=>Yii::$app->user->id])->all();
-                if( ! $reportsForCurrentClient ) {
-                    /*throw new \Exception('Sorry, you are prohibited to see this page');*/
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
-                    return $this->redirect(['index']);
+                if (User::hasPermission([User::ROLE_CLIENT])) {
+                    //Check if the current client can see this invoice from the reports menu.
+                    $reportsForCurrentClient = Report::find()->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . '.project_id = reports.project_id')
+                        ->where(['reports.invoice_id' => $id])->andWhere(['project_customers.user_id' => Yii::$app->user->id])->all();
+                    if (!$reportsForCurrentClient) {
+                        /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+                        Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
+                        return $this->redirect(['index']);
+                    }
                 }
+                /** @var $model Invoice */
+                return $this->render('view', ['model' => $model,
+                    'title' => 'You watch invoice #' . $model->id]);
+            } else {
+
+                /*throw new \Exception('Sorry, you are prohibited to see this page');*/
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, we could not find the invoice"));
+                return $this->redirect(['index']);
+
             }
-            /** @var $model Invoice */
-            return $this->render('view', ['model' => $model,
-                'title' => 'You watch invoice #' . $model->id]);
-        }else{
+
+        } else {
             /*throw new \Exception('Sorry, you are prohibited to see this page');*/
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, you are prohibited to see this page"));
             return $this->redirect(['index']);
