@@ -15,6 +15,6 @@ Best,
 Kristina Antypova<br>
 Co-founder at Synpass
 <br><br>
-If you no longer wish to receive our emails, click <a href="mailto:admin@synpass.pro?subject=Unsubscribe Me">unsubscribe.
+If you no longer wish to receive our emails, click <a href="mailto:kristina@synpass.pro?subject=Unsubscribe Me">unsubscribe.
 
 
