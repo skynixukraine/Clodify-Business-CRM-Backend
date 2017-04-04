@@ -15,7 +15,6 @@ use app\models\Survey;
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.dataTables.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/dataTables.bootstrap.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.slimscroll.min.js');
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/jquery.datetimepicker.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/survey_options.js');
 $this->title                    = Yii::t("app", $title );
 
