@@ -67,7 +67,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ATTACH_USERS_SIGN = 'api-attach-sign';
     const ATTACH_PHOTO_USERS = 'api-attach-photo';
 
-
     public $rawPassword;
 
     /**
@@ -80,6 +79,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     private $auth_key = "XnM";
     public $ticketId;
     public $captcha;
+    public $code;
 
     /**
      * @inheritdoc
@@ -95,7 +95,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role'], 'string'],
+            [['role', 'code'], 'string'],
             [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
             [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
             ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
@@ -121,7 +121,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
             [['bank_account_ua', 'bank_account_en'], 'string'],
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
-            ['captcha', 'captcha', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+            ['captcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['captchaSecret'],  'on' => self::SCENARIO_CHANGE_PASSWORD, ],
 
 
         ];
@@ -157,7 +157,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'year_paid_hours'       => 'Year Paid Hours',
             'total_paid_hours'      => 'Total Paid Hours',
             'invite_hash'           => 'Invite Hash',
-            'is_delete'             => 'Is Delete'
+            'is_delete'             => 'Is Delete',
+            'password_reset_token'  => 'Password Reset Token'
         ];
     }
 
@@ -686,5 +687,21 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 			self::ROLE_SALES => 'SALES'
 		];
 	}
+
+    /**
+     * generate and set password_reset_token
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . time();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPasswordResetToken()
+    {
+        return $this->password_reset_token;
+    }
 
 }
