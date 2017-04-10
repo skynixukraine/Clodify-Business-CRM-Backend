@@ -18,5 +18,6 @@ class ApiEndpoints
     const PROJECT        = '/api/projects';
     const ATTACH_SIGN    = '/api/users/sign';
     const ATTACH_PHOTO   = '/api/users/photo';
+    const CAREERS_VIEW   = '/api/careers';
 
 }
