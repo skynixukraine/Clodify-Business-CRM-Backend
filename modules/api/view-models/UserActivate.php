@@ -19,7 +19,7 @@ class UserActivate extends ViewModelAbstract
         $userId   = Yii::$app->request->getQueryParam('id');
         $model    = User::findOne($userId);
         if(User::hasPermission([User::ROLE_ADMIN])) {
-            if ($model) {
+            if ($model && !$model->is_delete) {
                 $model->is_active = 1;
                 $model->save(true, ['is_active']);
             } else {
