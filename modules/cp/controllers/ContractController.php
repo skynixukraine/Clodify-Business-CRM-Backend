@@ -7,6 +7,7 @@
 
 namespace app\modules\cp\controllers;
 
+use app\components\DateUtil;
 use app\models\Report;
 use yii\filters\AccessControl;
 use app\models\User;
@@ -172,24 +173,25 @@ class ContractController extends DefaultController
             'total_hours',
             'expenses'
         ];
-
-        $searchParams = [ 'or',
-            ['like', 'contract_id', $keyword],
-            ['like', 'created_by', $keyword],
-            ['like', 'customer_id', $keyword],
-            ['like', 'act_number', $keyword],
-        ];
-        if(preg_match('/^[0-9.\-:\/]+$/', $keyword)) {  // only numbers and (.-:/)
-            $searchParams[] = ['like', 'start_date', $keyword];
-            $searchParams[] = ['like', 'end_date', $keyword];
-            $searchParams[] = ['like', 'act_date', $keyword];
-        }
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
-            ->setSearchParams($searchParams);
+            ->setSearchParams([ 'or',
+                ['like', 'contract_id', $keyword],
+                ['like', 'created_by', $keyword],
+                ['like', 'customer_id', $keyword],
+                ['like', 'act_number', $keyword]
+            ]);
+        // DateUtil::convertData() returns incoming param only if it does not match to 01/01/2017 format
+        if (!empty($keyword) && ($date = DateUtil::convertData($keyword)) !== $keyword ) {
+            $dataTable->setSearchParams([ 'or',
+                ['like', 'start_date', $date],
+                ['like', 'end_date', $date],
+                ['like', 'act_date', $date],
+            ]);
+        }
         if($customerId && $customerId != null){
 
             $dataTable->setFilter('customer_id=' . $customerId);
