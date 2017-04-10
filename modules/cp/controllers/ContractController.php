@@ -173,20 +173,23 @@ class ContractController extends DefaultController
             'expenses'
         ];
 
+        $searchParams = [ 'or',
+            ['like', 'contract_id', $keyword],
+            ['like', 'created_by', $keyword],
+            ['like', 'customer_id', $keyword],
+            ['like', 'act_number', $keyword],
+        ];
+        if(preg_match('/^[0-9.\-:\/]+$/', $keyword)) {  // only numbers and (.-:/)
+            $searchParams[] = ['like', 'start_date', $keyword];
+            $searchParams[] = ['like', 'end_date', $keyword];
+            $searchParams[] = ['like', 'act_date', $keyword];
+        }
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( Yii::$app->request->getQueryParam("length") )
             ->setStart( Yii::$app->request->getQueryParam("start") )
             ->setSearchValue( $keyword ) //$search['value']
-            ->setSearchParams([ 'or',
-                ['like', 'contract_id', $keyword],
-                ['like', 'created_by', $keyword],
-                ['like', 'customer_id', $keyword],
-                ['like', 'act_number', $keyword],
-                ['like', 'start_date', $keyword],
-                ['like', 'end_date', $keyword],
-                ['like', 'act_date', $keyword],
-            ]);
+            ->setSearchParams($searchParams);
         if($customerId && $customerId != null){
 
             $dataTable->setFilter('customer_id=' . $customerId);
