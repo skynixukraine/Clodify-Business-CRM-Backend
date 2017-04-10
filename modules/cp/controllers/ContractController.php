@@ -185,7 +185,7 @@ class ContractController extends DefaultController
                 ['like', 'act_number', $keyword]
             ]);
         // DateUtil::convertData() returns incoming param only if it does not match to 01/01/2017 format
-        if ( ($date = DateUtil::convertData($keyword)) !== $keyword ) {
+        if (!empty($keyword) && ($date = DateUtil::convertData($keyword)) !== $keyword ) {
             $dataTable->setSearchParams([ 'or',
                 ['like', 'start_date', $date],
                 ['like', 'end_date', $date],
@@ -305,7 +305,7 @@ class ContractController extends DefaultController
             if (!is_dir('../data/contracts/')) {
                 mkdir('../data/contracts/', 0777);
             }
-            $pdf->Output('../data/contracts/' . $model->contract_id . '.pdf', 'F');
+            $pdf->Output('../data/contracts/' . $model->id . '.pdf', 'F');
 
             if ((file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf')))) {
                 header("Content-type:application/pdf"); //for pdf file
@@ -321,7 +321,8 @@ class ContractController extends DefaultController
     }
 
 
-    public function actionDownloadactofwork() {
+    public function actionDownloadactofwork()
+    {
         if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne($id) )
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
