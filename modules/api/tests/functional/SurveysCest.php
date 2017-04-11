@@ -1,8 +1,8 @@
 <?php
 /**
  * Created by Skynix Team
- * Date: 11.04.17
- * Time: 9:41
+ * Date: 10.04.17
+ * Time: 15:49
  */
 
 use Helper\OAuthSteps;
@@ -10,6 +10,45 @@ use Helper\ApiEndpoints;
 
 class SurveysCest
 {
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-901
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch surveys data');
+        $I->sendGET(ApiEndpoints::SURVEYS_FETCH, [
+            'limit' => 2
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['surveys' =>
+                [
+                    [
+                        'id' => 'integer',
+                        'shortcode' => 'string',
+                        'question' => 'string',
+                        'date_start' => 'string',
+                        'date_end' => 'string',
+                        'is_private' => 'string',
+                        'votes' => 'integer',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-902
      * @param  FunctionalTester $I

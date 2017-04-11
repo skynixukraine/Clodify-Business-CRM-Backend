@@ -21,6 +21,8 @@ use Yii;
 class Survey extends \yii\db\ActiveRecord
 {
     const SKYNIX_SURVEY_COOKIE = 'SKYNIX_SURVEY';
+    const IS_DELETE = 1;
+    const IS_PRIVATE = 1;
 
     public $result;
     public $model;
