@@ -27,6 +27,7 @@ class Survey extends \yii\db\ActiveRecord
     public $name;
     public $descriptions;
     public $survayOptions = [];
+    public $options;
     /**
      * @inheritdoc
      */
@@ -50,7 +51,9 @@ class Survey extends \yii\db\ActiveRecord
             [['date_start', 'date_end'], 'safe'],
             [['is_private', 'user_id', 'total_votes', 'is_delete'], 'integer'],
             [['shortcode'], 'string', 'max' => 25],
-            [['question'], 'string', 'max' => 250]
+            [['question'], 'string', 'max' => 250],
+            ['is_private', 'boolean'],
+            ['options', 'safe']
         ];
     }
     /**
