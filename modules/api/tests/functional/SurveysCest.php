@@ -1,8 +1,8 @@
 <?php
 /**
  * Created by Skynix Team
- * Date: 10.04.17
- * Time: 15:49
+ * Date: 11.04.17
+ * Time: 15:47
  */
 
 use Helper\OAuthSteps;
@@ -10,44 +10,7 @@ use Helper\ApiEndpoints;
 
 class SurveysCest
 {
-    /**
-     * @see    https://jira-v2.skynix.company/browse/SI-901
-     * @param  FunctionalTester $I
-     * @return void
-     */
-    public function testFetchSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
-    {
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
-
-        $I->wantTo('Testing fetch surveys data');
-        $I->sendGET(ApiEndpoints::SURVEYS_FETCH, [
-            'limit' => 2
-        ]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data' => ['surveys' =>
-                [
-                    [
-                        'id' => 'integer',
-                        'shortcode' => 'string',
-                        'question' => 'string',
-                        'date_start' => 'string',
-                        'date_end' => 'string',
-                        'is_private' => 'string',
-                        'votes' => 'integer',
-                    ]
-                ],
-                'total_records' => 'string'
-            ],
-            'errors' => 'array',
-            'success' => 'boolean'
-        ]);
-    }
+    private $surveyId;
 
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-902
@@ -77,14 +40,76 @@ class SurveysCest
                 ]
             ])
         );
+        $response = json_decode($I->grabResponse());
+        $this->surveyId = $response->data->surveys_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson([
+        $I->seeResponseMatchesJsonType([
             'data' => [
-                'surveys_id' => 'string',
+                'surveys_id' => 'integer',
             ],
             'errors' => 'array',
             'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-901
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch surveys data');
+        $I->sendGET(ApiEndpoints::SURVEYS_FETCH, [
+            'limit' => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['surveys' =>
+                [
+                    [
+                        'id' => 'integer',
+                        'shortcode' => 'string',
+                        'question' => 'string',
+                        'date_start' => 'string',
+                        'date_end' => 'string',
+                        'is_private' => 'string',
+                        'votes' => 'integer',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-907
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Test Delete Surveys');
+        $I->sendDELETE(ApiEndpoints::SURVEY_DELETE . '/' . $this->surveyId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
         ]);
     }
 

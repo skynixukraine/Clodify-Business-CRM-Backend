@@ -13,6 +13,7 @@ return [
     'DELETE '   . $API . '/users/<id:\d+>'            => $API . '/users/delete',
     'PUT '      . $API . '/users/<id:\d+>'            => $API . '/users/edit',
     'POST '     . $API . '/users'                     => $API . '/users/create',
+    'DELETE '   . $API . '/surveys/<id:\d+>'          => $API . '/surveys/delete',
     'GET '      . $API . '/surveys'                   => $API . '/surveys/fetch',
     'POST '     . $API . '/surveys'                   => $API . '/surveys/create',
     // General rules
