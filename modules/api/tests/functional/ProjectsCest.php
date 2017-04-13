@@ -81,4 +81,48 @@ class ProjectsCest
         $projectId = $response->data->project_id;
         codecept_debug($projectId);
     }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-958
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch projects data');
+        $I->sendGET(ApiEndpoints::PROJECT, [
+            'limit' => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['projects' =>
+                [
+                    [
+                        'id' => 'integer',
+                        'name' => 'string',
+                        'jira' => 'string',
+                        'total_logged' => 'string',
+                        'cost' => 'string',
+                        'total_paid' => 'string',
+                        'date_start' => 'string',
+                        'date_end' => 'string',
+                        'developers' => 'string',
+                        'clients' => 'string',
+                        'status' => 'string',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
 }
