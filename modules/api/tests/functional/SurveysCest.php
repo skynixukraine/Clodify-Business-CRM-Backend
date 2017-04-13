@@ -27,7 +27,7 @@ class SurveysCest
         $oAuth->login();
 
         $I->wantTo('Testing create surveys');
-        $I->sendPOST(ApiEndpoints::SURVEY_CREATE, json_encode([
+        $I->sendPOST(ApiEndpoints::SURVEY, json_encode([
                 'shortcode' => SHORTCODE,
                 'question' => 'What is testing?',
                 'date_start' => DATE_START,
@@ -64,8 +64,8 @@ class SurveysCest
         $oAuth->login();
 
         $I->wantTo('Testing fetch surveys data');
-        $I->sendGET(ApiEndpoints::SURVEYS_FETCH, [
-            'limit' => 1
+        $I->sendGET(ApiEndpoints::SURVEY, [
+            'limit' => 2
         ]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -93,6 +93,42 @@ class SurveysCest
     }
 
     /**
+     * @see    https://jira-v2.skynix.company/browse/SI-908
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing view survey');
+        $I->sendGET(ApiEndpoints::SURVEY . '/' . $this->surveyId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                [
+                    'shortcode' => 'string',
+                    'question' => 'string',
+                    'description' => 'string',
+                    'date_start' => 'string',
+                    'date_end' => 'string',
+                    'is_private' => 'integer',
+                    'options' => [
+                        [
+                            'name' => 'string',
+                            'description' => 'string',
+                        ]
+                    ]
+                ]
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-907
      * @param  FunctionalTester $I
      * @return void
@@ -103,7 +139,7 @@ class SurveysCest
         $oAuth->login();
 
         $I->wantTo('Test Delete Surveys');
-        $I->sendDELETE(ApiEndpoints::SURVEY_DELETE . '/' . $this->surveyId);
+        $I->sendDELETE(ApiEndpoints::SURVEY . '/' . $this->surveyId);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([

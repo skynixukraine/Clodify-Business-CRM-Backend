@@ -16,6 +16,7 @@ return [
     'DELETE '   . $API . '/surveys/<id:\d+>'          => $API . '/surveys/delete',
     'GET '      . $API . '/surveys'                   => $API . '/surveys/fetch',
     'POST '     . $API . '/surveys'                   => $API . '/surveys/create',
+    'GET '      . $API . '/surveys/<id:\d+>'          => $API . '/surveys/view',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
