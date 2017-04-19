@@ -16,10 +16,11 @@ class PasswordCest
     public function testResetPassword(FunctionalTester $I)
     {
         define('CAPTCHA', '03AHJ_VuukcmH81vXLFx0_BgBdOqSZG6');
+        define('EMAIL_PASS', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
 
         $I->wantTo('Test reset password');
         $I->sendPOST(ApiEndpoints::PASSWORD, json_encode([
-                'email' => EMAIL,
+                'email' => EMAIL_PASS,
                 'captcha' => CAPTCHA
             ])
         );
