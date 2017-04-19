@@ -135,6 +135,30 @@ class ProjectsCest
     }
 
     /**
+     * @see    https://jira-v2.skynix.company/browse/SI-962
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testSuspendProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing suspend project');
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId . '/suspend');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+    }
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-959
      * @param  FunctionalTester $I
      * @return void
@@ -145,7 +169,6 @@ class ProjectsCest
         $oAuth->login();
 
         $I->wantTo('Testing edit projects data');
-
         $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId, json_encode([
             "name"               =>  "Project",
             "jira_code"          =>  "SI-21",
@@ -169,8 +192,6 @@ class ProjectsCest
         ]);
 
     }
-
-
 
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-961
@@ -203,6 +224,9 @@ class ProjectsCest
      */
     public function testDeleteProject(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
         $I->wantTo('Testing delete project');
         $I->sendDELETE(ApiEndpoints::PROJECT . '/' . $this->projectId);
         $I->seeResponseCodeIs(200);

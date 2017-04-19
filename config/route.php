@@ -5,6 +5,7 @@ return [
     'PUT '      . $API . '/password'                  => $API . '/password/change',
     'POST '     . $API . '/projects'                  => $API . '/projects/create',
     'GET '      . $API . '/projects'                  => $API . '/projects/fetch',
+    'PUT '      . $API . '/projects/<id:\d+>/suspend' => $API . '/projects/suspend',
     'PUT '      . $API . '/projects/<id:\d+>'         => $API . '/projects/edit',
     'PUT '      . $API . '/projects/<id:\d+>/activate'=> $API . '/projects/activate',
     'DELETE '   . $API . '/projects/<id:\d+>'         => $API . '/projects/delete',

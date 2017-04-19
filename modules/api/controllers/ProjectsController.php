@@ -40,6 +40,19 @@ class ProjectsController extends DefaultController
 
     }
 
+    public function actionSuspend()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Project')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ProjectSuspend')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
     public function actionEdit()
     {
         $this->di
