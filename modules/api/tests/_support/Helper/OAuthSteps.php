@@ -30,7 +30,8 @@ class OAuthSteps extends \FunctionalTester
             $I->seeResponseMatchesJsonType([
                 'data' => [
                     'access_token'   => 'string',
-                    'user_id'		 => 'integer'
+                    'user_id'		 => 'integer',
+                    'role'           => 'string'
                 ]
             ]);
             $response  = json_decode($I->grabResponse());

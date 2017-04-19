@@ -30,9 +30,11 @@ class Auth extends ViewModelAbstract
         if( $this->validate() &&
             ($token =  $this->model->login() ) ) {
 
+            $user = User::findOne(['id' => $token->user_id]);
             $this->setData([
                 'access_token' => $token->access_token,
-                'user_id' => $token->user_id
+                'user_id' => $token->user_id,
+                'role' => $user->role
             ]);
 
         }
