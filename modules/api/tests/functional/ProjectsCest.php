@@ -12,6 +12,8 @@ use Helper\ApiEndpoints;
  */
 class ProjectsCest
 {
+    private $projectId;
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-876
      * @param  FunctionalTester $I
@@ -79,6 +81,7 @@ class ProjectsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $projectId = $response->data->project_id;
+        $this->projectId = $projectId;
         codecept_debug($projectId);
     }
 
@@ -123,6 +126,31 @@ class ProjectsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-960
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing delete project');
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . $this->projectId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+
     }
 
 }
