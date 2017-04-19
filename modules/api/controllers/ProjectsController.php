@@ -40,6 +40,20 @@ class ProjectsController extends DefaultController
 
     }
 
+    public function actionActivate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Project')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ProjectActivate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
     public function actionDelete()
     {
         $this->di

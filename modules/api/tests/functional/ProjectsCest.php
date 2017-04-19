@@ -129,6 +129,27 @@ class ProjectsCest
     }
 
     /**
+     * @see    https://jira-v2.skynix.company/browse/SI-961
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testActivateProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('Testing activate project');
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId . '/activate');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+    }
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-960
      * @param  FunctionalTester $I
      * @return void
@@ -150,7 +171,6 @@ class ProjectsCest
             'errors' => 'array',
             'success' => 'boolean',
         ]);
-
     }
 
 }
