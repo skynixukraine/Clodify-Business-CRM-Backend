@@ -117,6 +117,7 @@ class UsersController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
     public function actionPhoto()
     {
         $this->di
@@ -125,6 +126,19 @@ class UsersController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\UserPhoto')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionWorkHistory()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UsersWorkHistory')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
                 'checkAccess'   => true
             ])
             ->get('Processor')

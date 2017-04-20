@@ -22,6 +22,8 @@ return [
     'GET '      . $API . '/surveys'                   => $API . '/surveys/fetch',
     'POST '     . $API . '/surveys'                   => $API . '/surveys/create',
     'GET '      . $API . '/surveys/<id:\d+>'          => $API . '/surveys/view',
+    'GET '      . $API . '/profiles'                  => $API . '/profiles/fetch',
+    'GET '      . $API . '/users/<id:\d+>/work-history'=> $API . '/users/work-history',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

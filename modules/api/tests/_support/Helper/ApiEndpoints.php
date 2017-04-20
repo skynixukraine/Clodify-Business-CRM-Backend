@@ -20,5 +20,6 @@ class ApiEndpoints
     const ATTACH_PHOTO   = '/api/users/photo';
     const CAREERS_VIEW   = '/api/careers';
     const SURVEY         = '/api/surveys';
+    const PROFILES       = '/api/profiles';
 
 }

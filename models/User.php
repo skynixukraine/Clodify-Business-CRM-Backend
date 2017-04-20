@@ -40,6 +40,7 @@ use yii\web\UploadedFile;
  * @property string $sing
  * @property string $bank_account_en
  * @property string $bank_account_ua
+ * @property integer $is_published
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -208,6 +209,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getSalaryHistories()
     {
         return $this->hasMany(SalaryHistory::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkHistory()
+    {
+        return $this->hasMany(WorkHistory::className(), ['user_id' => 'id']);
     }
 
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
@@ -702,6 +711,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getPasswordResetToken()
     {
         return $this->password_reset_token;
+    }
+
+    public static function getTags($user) {
+        $skills = [];
+        if ($user && $user->tags) {
+            $tagsArray = array_map('trim', explode(",", $user->tags));
+            $skills['top'] = array_slice($tagsArray, 0, 2);
+            $skills['additional'] = array_slice($tagsArray, 2, count($tagsArray));
+            return $skills;
+        } else {
+            return $skills;
+        }
     }
 
 }
