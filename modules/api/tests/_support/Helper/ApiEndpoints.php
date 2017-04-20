@@ -21,5 +21,6 @@ class ApiEndpoints
     const CAREERS_VIEW   = '/api/careers';
     const SURVEY         = '/api/surveys';
     const PROFILES       = '/api/profiles';
+    const CONTRACTS      = '/api/contracts';
 
 }
