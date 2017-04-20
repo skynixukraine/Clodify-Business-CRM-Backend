@@ -25,6 +25,7 @@ return [
     'GET '      . $API . '/profiles'                   => $API . '/profiles/fetch',
     'GET '      . $API . '/users/<id:\d+>/work-history'=> $API . '/users/work-history',
     'GET '      . $API . '/contracts'                  => $API . '/contracts/fetch',
+    'GET '      . $API . '/contracts/<id:\d+>'         => $API . '/contracts/view',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
