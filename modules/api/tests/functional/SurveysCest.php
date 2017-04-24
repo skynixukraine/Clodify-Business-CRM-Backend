@@ -19,19 +19,19 @@ class SurveysCest
      */
     public function testCreateSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('SHORTCODE', substr(md5(rand(1, 1000)), 0, 5));
-        define('DATE_START', '20/03/2017 11:00');
-        define('DATE_END', '21/03/2017 23:00');
+        define('SHORTCODE_SURVEY', substr(md5(rand(1, 1000)), 0, 5));
+        define('DATE_START_SURVEY', '20/03/2017 11:00');
+        define('DATE_END_SURVEY', '21/03/2017 23:00');
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
         $I->wantTo('Testing create surveys');
         $I->sendPOST(ApiEndpoints::SURVEY, json_encode([
-                'shortcode' => SHORTCODE,
+                'shortcode' => SHORTCODE_SURVEY,
                 'question' => 'What is testing?',
-                'date_start' => DATE_START,
-                'date_end' => DATE_END,
+                'date_start' => DATE_START_SURVEY,
+                'date_end' => DATE_END_SURVEY,
                 'is_private' => 0,
                 'description' => 'tettttt',
                 'options' => [

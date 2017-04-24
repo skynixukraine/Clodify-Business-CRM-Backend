@@ -42,6 +42,19 @@ class ContractsController extends DefaultController
             ->respond();
     }
 
+    public function actionEdit()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Contract')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ContractEdit')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
     public function actionView()
     {
         $this->di

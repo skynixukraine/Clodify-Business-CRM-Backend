@@ -10,7 +10,7 @@ use Helper\ApiEndpoints;
 
 class ContractsCest
 {
-    private $contractId;
+    private $contractId = 5;
     private $customerId;
     private $projectId;
 
@@ -25,7 +25,7 @@ class ContractsCest
                 "role"               =>  "Sales",
                 "first_name"         =>  "Sales",
                 "last_name"          =>  "LastName Sales",
-                "email"              => 'sales' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
+                "email"              => 'sales' . substr(md5(time()), 0, 5) .  '@gmail.com'
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -40,7 +40,7 @@ class ContractsCest
                 "role"               =>  "Dev",
                 "first_name"         =>  "Dev",
                 "last_name"          =>  "LastName Dev",
-                "email"              =>   'dev' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
+                "email"              =>   'dev' . substr(md5(time()), 0, 5) .  '@gmail.com'
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -54,7 +54,7 @@ class ContractsCest
                 "role"               =>  "Client",
                 "first_name"         =>  "Client",
                 "last_name"          =>  "LastName Client",
-                "email"              =>   'client' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
+                "email"              =>   'client' . substr(md5(time()), 0, 5) .  '@gmail.com'
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -83,7 +83,7 @@ class ContractsCest
     }
 
     /**
-     * @see    https://jira-v2.skynix.company/browse/SI-967
+     * @see    https://jira-v2.skynix.company/browse/SI-968
      * @param  FunctionalTester $I
      * @return void
      */
@@ -92,8 +92,8 @@ class ContractsCest
         define('DATE_START_CONTRACT_CREATE', '20/03/2017');
         define('DATE_END_CONTRACT_CREATE', '21/03/2017');
         define('DATE_ACT_CONTRACT_CREATE', '21/03/2017');
-        define('CONTRACT_ID', rand(100, 10000));
-        define('CONTRACT_ID_ACT', rand(100, 10000));
+        define('CONTRACT_ID_CREATE', rand(100, 10000));
+        define('CONTRACT_ID_ACT_CREATE', rand(100, 10000));
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -101,12 +101,12 @@ class ContractsCest
         $I->wantTo('Testing create contract data');
         $I->sendPOST(ApiEndpoints::CONTRACTS, json_encode([
                 'customer_id' => $this->customerId,
-                'contract_id' => CONTRACT_ID,
+                'contract_id' => CONTRACT_ID_CREATE,
                 'project_id' => $this->projectId,
                 'contract_template_id' => 1,
                 'contract_payment_method_id' => 1,
                 'created_by' => $this->customerId,
-                'act_number' => CONTRACT_ID_ACT,
+                'act_number' => CONTRACT_ID_ACT_CREATE,
                 'start_date' => DATE_START_CONTRACT_CREATE,
                 'end_date' => DATE_END_CONTRACT_CREATE,
                 'act_date' => DATE_ACT_CONTRACT_CREATE,
@@ -129,6 +129,54 @@ class ContractsCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-970
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testEditContractCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('DATE_START_CONTRACT_EDIT', '2017/03/20');
+        define('DATE_END_CONTRACT_EDIT', '2017/03/21');
+        define('DATE_ACT_CONTRACT_EDIT', '2017/03/21');
+        define('CONTRACT_ID_EDIT', rand(100, 10000));
+        define('CONTRACT_ID_ACT_EDIT', rand(100, 10000));
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing edit contract data');
+        $I->sendPUT(ApiEndpoints::CONTRACTS . '/' . $this->contractId, json_encode([
+                'contract_id' => CONTRACT_ID_EDIT,
+                'customer_id' => $this->customerId,
+                'project_id' => $this->projectId,
+                'contract_template_id' => 1,
+                'contract_payment_method_id' => 1,
+                'act_number' => CONTRACT_ID_ACT_EDIT,
+                'start_date' => DATE_START_CONTRACT_EDIT,
+                'end_date' => DATE_END_CONTRACT_EDIT,
+                'act_date' => DATE_ACT_CONTRACT_EDIT,
+                'total' => 100,
+
+            ])
+        );
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-967
+     * @param  FunctionalTester $I
+     * @return void
+     */
     public function testFetchContractsCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
@@ -156,7 +204,7 @@ class ContractsCest
                         'end_date' => 'string',
                         'act_date' => 'string',
                         'total' => 'string',
-                        'total_hours' => 'integer',
+                        'total_hours' => 'string|integer',
                         'expenses' => 'string',
                     ]
                 ],

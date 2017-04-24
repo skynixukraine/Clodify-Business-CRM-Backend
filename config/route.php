@@ -26,6 +26,7 @@ return [
     'GET '      . $API . '/users/<id:\d+>/work-history'=> $API . '/users/work-history',
     'POST '     . $API . '/contracts'                  => $API . '/contracts/create',
     'GET '      . $API . '/contracts'                  => $API . '/contracts/fetch',
+    'PUT '      . $API . '/contracts/<contract_id:\d+>'=> $API . '/contracts/edit',
     'GET '      . $API . '/contracts/<id:\d+>'         => $API . '/contracts/view',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
