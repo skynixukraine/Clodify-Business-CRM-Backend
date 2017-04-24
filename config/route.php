@@ -28,6 +28,7 @@ return [
     'GET '      . $API . '/contracts'                  => $API . '/contracts/fetch',
     'PUT '      . $API . '/contracts/<contract_id:\d+>'=> $API . '/contracts/edit',
     'GET '      . $API . '/contracts/<id:\d+>'         => $API . '/contracts/view',
+    'DELETE '   . $API . '/contracts/<contract_id:\d+>'=> $API . '/contracts/delete',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

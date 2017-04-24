@@ -251,4 +251,28 @@ class ContractsCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-971
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteContractCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing delete contracts data');
+        $I->sendDELETE(ApiEndpoints::CONTRACTS . '/' . $this->contractId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
 }

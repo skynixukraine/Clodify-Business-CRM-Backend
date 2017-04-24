@@ -68,4 +68,17 @@ class ContractsController extends DefaultController
             ->respond();
     }
 
+    public function actionDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Contract')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ContractDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
