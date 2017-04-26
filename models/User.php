@@ -62,6 +62,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     const ACTIVE_USERS  = 1;
     const DELETED_USERS = 1;
+    const PUBLISHED_USERS = 1;
 
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
 

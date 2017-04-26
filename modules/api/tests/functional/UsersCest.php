@@ -185,6 +185,24 @@ class UsersCest
     }
 
     /**
+     * @see    https://jira-v2.skynix.company/browse/SI-983
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewPhotoUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendGET(ApiEndpoints::USER . '/' . $this->userId . '/photo');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+    }
+
+    /**
      * 2.2.6 Activate Users Data
      * @see http://jira.skynix.company:8070/browse/SI-859
      * 2.2.7 Deactivate Users Data

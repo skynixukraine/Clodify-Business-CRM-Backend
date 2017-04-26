@@ -22,5 +22,6 @@ class ApiEndpoints
     const SURVEY         = '/api/surveys';
     const PROFILES       = '/api/profiles';
     const CONTRACTS      = '/api/contracts';
+    const USER           = '/api/user';
 
 }

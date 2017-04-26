@@ -29,6 +29,7 @@ return [
     'PUT '      . $API . '/contracts/<contract_id:\d+>'=> $API . '/contracts/edit',
     'GET '      . $API . '/contracts/<id:\d+>'         => $API . '/contracts/view',
     'DELETE '   . $API . '/contracts/<contract_id:\d+>'=> $API . '/contracts/delete',
+    'GET '      . $API . '/user/<id:\d+>/photo'        => $API . '/users/view-photo',
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
