@@ -17,14 +17,14 @@ class UsersWorkHistory extends ViewModelAbstract
 
     public function define()
     {
-        $id = Yii::$app->request->getQueryParam('id');
+        $slug = Yii::$app->request->getQueryParam('slug');
 
-        if (!($user = User::findOne($id)) || $user->is_published != true) {
+        if (!($user = User::findOne(['slug' => $slug])) || $user->is_published != true) {
             return $this->addError('work-history', 'Sorry, no access to data');
         }
 
         $workHistory = WorkHistory::find()
-            ->andWhere([WorkHistory::tableName() . '.user_id' => $id])
+            ->andWhere([WorkHistory::tableName() . '.user_id' => $user->id])
             ->orderBy(['date_start' => SORT_DESC])
             ->all();
 

@@ -139,7 +139,7 @@ class UsersController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\UsersWorkHistory')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_GET ],
-                'checkAccess'   => true
+                'checkAccess'   => false
             ])
             ->get('Processor')
             ->respond();

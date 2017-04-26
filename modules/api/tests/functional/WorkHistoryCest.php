@@ -7,6 +7,7 @@
 
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
+use Helper\ValuesContainer;
 
 class WorkHistoryCest
 {
@@ -20,7 +21,7 @@ class WorkHistoryCest
         $oAuth->login();
 
         $I->wantTo('Testing view work history data');
-        $I->sendGET(ApiEndpoints::USERS . '/' . 1 . '/work-history');
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userSlug . '/work-history');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

@@ -32,6 +32,8 @@ class ProfilesCest
             'data' => ['profiles' =>
                 [
                     [
+                        'slug'     => 'string|null',
+                        'photo'    => 'string|null',
                         'position' => 'string|null',
                         'first_name' => 'string',
                         'last_name' => 'string',
