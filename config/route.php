@@ -1,6 +1,7 @@
 <?php
 $API = 'api';
 return [
+
     'POST '     . $API . '/password'                            => $API . '/password/reset',
     'PUT '      . $API . '/password'                            => $API . '/password/change',
     'POST '     . $API . '/projects'                            => $API . '/projects/create',
@@ -30,6 +31,8 @@ return [
     'GET '      . $API . '/contracts/<id:\d+>'                  => $API . '/contracts/view',
     'DELETE '   . $API . '/contracts/<contract_id:\d+>'         => $API . '/contracts/delete',
     'GET '      . $API . '/user/<id:\d+>/photo'                 => $API . '/users/view-photo',
+    'POST '     . $API . '/contracts/<id:\d+>/invoices'         => $API . '/invoices/create',
+
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

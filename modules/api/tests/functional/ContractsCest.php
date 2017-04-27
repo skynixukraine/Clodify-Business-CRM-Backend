@@ -10,6 +10,7 @@ use Helper\ApiEndpoints;
 
 class ContractsCest
 {
+
     private $contractId = 5;
     private $customerId;
     private $projectId;
@@ -226,7 +227,7 @@ class ContractsCest
         $oAuth->login();
 
         $I->wantTo('Testing fetch contracts data');
-        $I->sendGET(ApiEndpoints::CONTRACTS . '/' . $this->contractId);
+        $I->sendGET(ApiEndpoints::CONTRACTS . '/' . self::CONTRACT_ID);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
