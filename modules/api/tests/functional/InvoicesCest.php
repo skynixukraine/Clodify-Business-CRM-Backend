@@ -83,5 +83,25 @@ class InvoicesCest
         ]);
     }
 
-}
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-974
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testInvoiceDeleteCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
 
+        $I->wantTo('Testing delete invoice');
+        $I->sendDELETE(ApiEndpoints::CONTRACTS . '/' . ValuesContainer::$contractId . '/invoices/' . $this->invoiceId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+}
