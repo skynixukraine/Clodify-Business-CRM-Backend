@@ -14,6 +14,7 @@ use app\components\DateUtil;
 use app\models\Project;
 use app\models\User;
 use app\models\ProjectDeveloper;
+use app\models\ProjectCustomer;
 
 class ProjectFetch extends ViewModelAbstract
 {
@@ -21,13 +22,40 @@ class ProjectFetch extends ViewModelAbstract
     {
         $order       = Yii::$app->request->getQueryParam('order', []);
         $keyword     = Yii::$app->request->getQueryParam('search_query');
-        $start       = Yii::$app->request->getQueryParam('start') ? Yii::$app->request->getQueryParam('start') : 0;
-        $limit       = Yii::$app->request->getQueryParam('limit') ? Yii::$app->request->getQueryParam('limit') : SortHelper::DEFAULT_LIMIT;
+        $start       = Yii::$app->request->getQueryParam('start') ?: 0;
+        $limit       = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
 
-        $query = Project::find()
-            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
-            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
-            ->groupBy('id');
+        if (User::hasPermission([User::ROLE_ADMIN])) {
+            $query = Project::find()
+                ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
+                            . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->groupBy('id');
+        }
+        if (User::hasPermission([User::ROLE_PM] )) {
+            $query = Project::find()
+                ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
+                            . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->groupBy('id');
+        }
+        if (User::hasPermission([User::ROLE_SALES])) {
+            $query = Project::find()
+                ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
+                            . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+                ->groupBy('id');
+        }
+        if (User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])) {
+            $query = Project::find()
+                ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
+                            . Project::tableName() . ".id")
+                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
+                ->groupBy('id');
+        }
 
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
