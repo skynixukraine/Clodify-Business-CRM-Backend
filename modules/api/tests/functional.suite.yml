@@ -8,8 +8,9 @@ class_name: FunctionalTester
 modules:
     enabled:
         # add framework module here
+        - Db
         - \Helper\Functional
         - REST:
-            url: 'https://skynixcrm-web'
+            url: 'https://skynixcrm-web/index-test.php'
             depends: PhpBrowser
         - Asserts

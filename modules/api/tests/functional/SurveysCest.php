@@ -19,7 +19,7 @@ class SurveysCest
      */
     public function testCreateSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('SHORTCODE_SURVEY', substr(md5(rand(1, 1000)), 0, 5));
+        define('SHORTCODE_SURVEY', substr(md5(time()), 0, 5));
         define('DATE_START_SURVEY', '20/03/2017 11:00');
         define('DATE_END_SURVEY', '21/03/2017 23:00');
 
@@ -82,7 +82,7 @@ class SurveysCest
                         'date_start' => 'string',
                         'date_end' => 'string',
                         'is_private' => 'string',
-                        'votes' => 'integer',
+                        'votes' => 'integer|null',
                     ]
                 ],
                 'total_records' => 'string'

@@ -38,7 +38,7 @@ class ProfilesCest
                         'first_name' => 'string',
                         'last_name' => 'string',
                         'email' => 'string',
-                        'phone' => 'string',
+                        'phone' => 'string|null',
                         'about' => 'string|null',
                         'birthday' => 'string|null',
                         'experience_year' => 'integer',

@@ -26,7 +26,7 @@ class ProfileFetch extends ViewModelAbstract
             ->where(['role' => [User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES]])
             ->andWhere(['is_delete' => !User::DELETED_USERS])
             ->andWhere(['is_active' => User::ACTIVE_USERS])
-            ->andWhere(['is_published' => 0])
+            ->andWhere(['is_published' => 1])
             ->with(['developers' => function ($query) {
                 $query->where(['projects.is_published' => 1]);
             }]);

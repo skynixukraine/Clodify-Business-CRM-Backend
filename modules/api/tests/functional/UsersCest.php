@@ -2,6 +2,7 @@
 
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
+use Helper\ValuesContainer;
 
 class UsersCest
 {
@@ -194,12 +195,8 @@ class UsersCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->sendGET(ApiEndpoints::USER . '/' . $this->userId . '/photo');
+        $I->sendGET(ApiEndpoints::USER . '/' . ValuesContainer::$userId . '/photo');
         $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
     }
 
     /**

@@ -112,7 +112,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['first_name', 'last_name'], 'string', 'max' => 45],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
-            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
+            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published'], 'integer'],
             ['phone', 'string', 'max' => 25],
             ['company', 'string', 'max' => 55],
             [['email'], 'string', 'max' => 150],
@@ -718,8 +718,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $skills = [];
         if ($user && $user->tags) {
             $tagsArray = array_map('trim', explode(",", $user->tags));
-            $skills['top'] = array_slice($tagsArray, 0, 2);
-            $skills['additional'] = array_slice($tagsArray, 2, count($tagsArray));
+            $skills['top'] = array_slice($tagsArray, 0, 4);
+            $skills['additional'] = array_slice($tagsArray, 4, count($tagsArray));
             return $skills;
         } else {
             return $skills;

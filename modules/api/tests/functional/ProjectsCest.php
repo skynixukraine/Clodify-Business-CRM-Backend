@@ -6,6 +6,7 @@
  */
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
+use Helper\ValuesContainer;
 
 /**
  * Class ProjectsCest
@@ -13,9 +14,6 @@ use Helper\ApiEndpoints;
 class ProjectsCest
 {
     private $projectId;
-    private $salesUserId;
-    private $devUserId;
-    private $clientUserId;
 
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-876
@@ -27,67 +25,24 @@ class ProjectsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        //Create SALES ( 2.2.3 Create User Request )
-        $I->sendPOST(ApiEndpoints::USERS, json_encode(
-            [
-                "role"               =>  "Sales",
-                "first_name"         =>  "Sales",
-                "last_name"          =>  "LastName Sales",
-                "email"              => 'sales' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
-            ]
-         ));
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $salesUserId = $response->data->user_id;
-
-        //Create DEV
-        $I->sendPOST(ApiEndpoints::USERS, json_encode(
-            [
-                "role"               =>  "Dev",
-                "first_name"         =>  "Dev",
-                "last_name"          =>  "LastName Dev",
-                "email"              =>   'dev' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
-            ]
-        ));
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $devUserId = $response->data->user_id;
-
-        //Create CLIENT
-        $I->sendPOST(ApiEndpoints::USERS, json_encode(
-            [
-                "role"               =>  "Client",
-                "first_name"         =>  "Client",
-                "last_name"          =>  "LastName Client",
-                "email"              =>   'client' . substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com'
-            ]
-        ));
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $clientUserId = $response->data->user_id;
-
         $I->sendPOST(ApiEndpoints::PROJECT, json_encode([
             "name"               =>  "Project",
             "jira_code"          =>  "SI-21",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "developers"         => [$devUserId, $salesUserId],
-            "customers"          => [$clientUserId],
-            "invoice_received"   => $clientUserId,
-            "is_pm"              => $devUserId,
-            "is_sales"           => $salesUserId
+            "developers"         => [ValuesContainer::$userDevId, ValuesContainer::$userSalesId],
+            "customers"          => [ValuesContainer::$userClientId],
+            "invoice_received"   => ValuesContainer::$userClientId,
+            "is_pm"              => ValuesContainer::$userDevId,
+            "is_sales"           => ValuesContainer::$userSalesId,
+            "is_published"       => 1,
+            "status"             => "INPROGRESS"
         ]));
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $projectId = $response->data->project_id;
         $this->projectId = $projectId;
-        $this->clientUserId = $clientUserId;
-        $this->devUserId = $devUserId;
-        $this->salesUserId = $salesUserId;
         codecept_debug($projectId);
     }
 
@@ -169,18 +124,19 @@ class ProjectsCest
         $oAuth->login();
 
         $I->wantTo('Testing edit projects data');
-        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId, json_encode([
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectId, json_encode([
             "name"               =>  "Project",
             "jira_code"          =>  "SI-21",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "status"             => "OnHold",
-            "customers"          => [$this->clientUserId],
-            "invoice_received"   => $this->clientUserId,
-            "developers"         => [$this->devUserId, $this->salesUserId],
-            "is_pm"              => $this->devUserId,
-            "is_sales"           => $this->salesUserId,
-            "alias_name"         => [13, 45]
+            "status"             => "INPROGRESS",
+            "customers"          => [ValuesContainer::$userClientId],
+            "invoice_received"   => ValuesContainer::$userClientId,
+            "developers"         => [ValuesContainer::$userDevId, ValuesContainer::$userSalesId, ValuesContainer::$userId],
+            "is_pm"              => ValuesContainer::$userDevId,
+            "is_sales"           => ValuesContainer::$userSalesId,
+            "alias_name"         => [13, 45],
+            "is_published"       => 1,
         ]));
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
