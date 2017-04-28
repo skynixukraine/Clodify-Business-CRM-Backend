@@ -97,7 +97,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role', 'code'], 'string'],
+            [['role', 'code', 'slug', 'languages', 'residence', 'link_linkedin',
+                'link_video', 'birthday', 'position', 'degree'], 'string'],
             [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
             [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
             ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
@@ -112,7 +113,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['first_name', 'last_name'], 'string', 'max' => 45],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
-            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published'], 'integer'],
+            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours',
+                'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year'], 'integer'],
             ['phone', 'string', 'max' => 25],
             ['company', 'string', 'max' => 55],
             [['email'], 'string', 'max' => 150],
