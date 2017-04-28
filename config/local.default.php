@@ -23,8 +23,8 @@ return [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
-                'username' => '',//your google email
-                'password' => '', //your google password
+                'username' => 'mail_user',//your google email
+                'password' => 'mail_pass', //your google password
                 'port' => '587',
                 'encryption' => 'tls',
             ],
