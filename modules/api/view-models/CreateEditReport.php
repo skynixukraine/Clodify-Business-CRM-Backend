@@ -28,7 +28,6 @@ class CreateEditReport extends ViewModelAbstract
         if( $reportId ) {
             $this->model = Report::findOne($reportId);
             $this->model->setAttributes($this->postData);
-            $oldHours = $this->model->hours;
             $this->model->date_report = DateUtil::convertData($this->model->date_report);
             if (strpos($this->model->hours, ',')) {
                 str_replace(',', '.', $this->model->hours);
@@ -76,13 +75,7 @@ class CreateEditReport extends ViewModelAbstract
                             $this->model->cost = $this->model->hours * ($user->salary / Report::SALARY_HOURS);
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
                             $this->model->user_id = $user_id;
-
-                            if ($reportId) {
-                                $result = $totalHoursOfThisDay - $oldHours;
-                            } else {
-                                $result = $totalHoursOfThisDay;
-                            }
-                            $result += $this->model->hours;
+                            $result = $totalHoursOfThisDay + $this->model->hours;
                             if ($result <= 12) {
                                 if ($this->model->save()) {
                                     if(!$reportId) {
