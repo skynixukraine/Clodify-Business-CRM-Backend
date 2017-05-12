@@ -62,4 +62,17 @@ class SurveysController extends DefaultController
             ->respond();
     }
 
+    public function actionEdit()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Survey')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SurveysEdit')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

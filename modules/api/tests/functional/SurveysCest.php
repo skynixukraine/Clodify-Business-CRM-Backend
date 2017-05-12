@@ -19,7 +19,6 @@ class SurveysCest
      */
     public function testCreateSurveysCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('SHORTCODE_SURVEY', substr(md5(time()), 0, 5));
         define('DATE_START_SURVEY', '20/03/2017 11:00');
         define('DATE_END_SURVEY', '21/03/2017 23:00');
 
@@ -28,7 +27,7 @@ class SurveysCest
 
         $I->wantTo('Testing create surveys');
         $I->sendPOST(ApiEndpoints::SURVEY, json_encode([
-                'shortcode' => SHORTCODE_SURVEY,
+                'shortcode' => 'a1',
                 'question' => 'What is testing?',
                 'date_start' => DATE_START_SURVEY,
                 'date_end' => DATE_END_SURVEY,
@@ -126,6 +125,41 @@ class SurveysCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-910
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testEditSurvey(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing edit survey data');
+        $I->sendPUT(ApiEndpoints::SURVEY . '/' . $this->surveyId, json_encode([
+                'shortcode' => 'a2',
+                'question' => 'What is testing?',
+                'date_start' => DATE_START_SURVEY,
+                'date_end' => DATE_END_SURVEY,
+                'is_private' => 0,
+                'description' => '',
+                'options' => [
+                    [ 'name' => 'Process', 'description' => '' ],
+                    [ 'name' => 'Object', 'description' =>  '' ]
+                ]
+            ])
+        );
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+
     }
 
     /**

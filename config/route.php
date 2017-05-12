@@ -34,6 +34,7 @@ return [
     'GET '      . $API . '/contracts/<id:\d+>/invoices'                 => $API . '/invoices/fetch',
     'POST '     . $API . '/contracts/<id:\d+>/invoices'                 => $API . '/invoices/create',
     'DELETE '   . $API . '/contracts/<id:\d+>/invoices/<invoice_id:\d+>'=> $API . '/invoices/delete',
+    'PUT '      . $API . '/surveys/<survey_id:\d+>'                     => $API . '/surveys/edit',
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
