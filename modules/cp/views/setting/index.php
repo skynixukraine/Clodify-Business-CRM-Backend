@@ -178,7 +178,6 @@ $this->params['menu'] = [
                     $('#previews1').html(html);
                     <?php endif; ?>
                     setAsDefaultPhoto = function(photo, request) {
-                        console.log(photo);
                         $('.photouser').val(photo);
                     };
                     setAsDefaultSing = function(sing, request) {

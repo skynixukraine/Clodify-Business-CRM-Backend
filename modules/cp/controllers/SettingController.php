@@ -160,6 +160,7 @@ class SettingController extends DefaultController
             $request = Yii::$app->getRequest()->post();
             User::setUserPhoto($request['photo']);
             $result['success'] = true;
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your avatar"));
         } catch (\Exception $e) {
             $result['error'] = $e->getMessage();
         }

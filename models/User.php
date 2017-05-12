@@ -126,6 +126,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['bank_account_ua', 'bank_account_en'], 'string'],
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
             ['captcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['captchaSecret'],  'on' => self::SCENARIO_CHANGE_PASSWORD, ],
+            [['photo', 'sing'], 'string', 'on' => ['settings']],
 
 
         ];
