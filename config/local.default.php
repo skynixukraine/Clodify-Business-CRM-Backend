@@ -42,8 +42,8 @@ return [
         ],
     ],
     'params' => array(
-        'url_crm'           => 'https://skynix.local',
-        'url_site'          => 'https://skynix.local',
+        'url_crm'           => 'https://skynix.co',
+        'url_site'          => 'https://skynix.company',
         'port'		        => ''
     )
 ];
