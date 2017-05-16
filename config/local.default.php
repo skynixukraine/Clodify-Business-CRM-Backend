@@ -31,14 +31,20 @@ return [
         ],
         'user' => [
             'identityCookie' => [
-                'domain' => '.skynix.local',
+                'domain' => '.skynix.co',
             ]
         ],
         'session' => [
             'cookieParams' => [
                 'path' => '/',
-                'domain' => '.skynix.local'
+                'domain' => '.skynix.co'
             ],
+        ],
+        'reCaptcha' => [
+            'name' => 'reCaptcha',
+            'class' => 'himiklab\yii2\recaptcha\ReCaptcha',
+            'siteKey' => '6Lf4bhsUAAAAAGdS65wleDLXAbaUEJFNm_fw5OgP',
+            'secret' => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
         ],
     ],
     'params' => array(
