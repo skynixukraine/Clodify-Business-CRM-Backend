@@ -89,7 +89,7 @@ class ContractsFetch extends ViewModelAbstract
                         ? Report::getReportsCostOnInvoice($invoice->id) : 0);
             }
 
-            $list[] = [
+            $dataList = [
                 'id' => $model->id,
                 'contract_id' => $model->contract_id,
                 'created_by' => [
@@ -105,9 +105,14 @@ class ContractsFetch extends ViewModelAbstract
                 'end_date' => date("d/m/Y", strtotime($model->end_date)),
                 'act_date' => date("d/m/Y", strtotime($model->act_date)),
                 'total' => '$' . number_format($model->total, 2),
-                'total_hours' => $total_hours,
-                'expenses' => $expenses,
+                'total_hours' => $total_hours
             ];
+
+            if (!User::hasPermission([User::ROLE_CLIENT])) {
+                $dataList['expenses'] = $expenses;
+            }
+
+            $list[] = $dataList;
         }
 
         $data = [

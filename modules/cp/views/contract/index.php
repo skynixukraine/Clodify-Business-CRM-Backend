@@ -74,7 +74,9 @@ if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
         <th><?=Yii::t('app', 'Act Date')?></th>
         <th><?=Yii::t('app', 'Total')?></th>
         <th><?=Yii::t('app', 'Total Hours')?></th>
+        <?php if (!User::hasPermission([User::ROLE_CLIENT])) : ?>
         <th><?=Yii::t('app', 'Expenses')?></th>
+        <?php endif; ?>
         <?php if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN])) : ?>
         <th class="actions-col extend"><?=Yii::t('app', 'Actions')?></th>
         <?php endif;?>
