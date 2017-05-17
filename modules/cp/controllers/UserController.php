@@ -145,9 +145,7 @@ class UserController extends DefaultController {
             $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
             $arrayWorkers = [];
             foreach($workers as $worker){
-                if($worker->user_id) {
-                    $arrayWorkers[] = $worker->user_id;
-                }
+                $arrayWorkers[] = $worker->user_id;
             }
             $devUser = '';
             if(!empty($arrayWorkers)) {
