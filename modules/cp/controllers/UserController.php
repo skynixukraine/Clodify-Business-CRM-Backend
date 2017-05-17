@@ -145,7 +145,9 @@ class UserController extends DefaultController {
             $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
             $arrayWorkers = [];
             foreach($workers as $worker){
-                $arrayWorkers[]= $worker->user_id;
+                if($worker->user_id) {
+                    $arrayWorkers[] = $worker->user_id;
+                }
             }
             $devUser = '';
             if(!empty($arrayWorkers)) {
@@ -162,7 +164,7 @@ class UserController extends DefaultController {
         }
 
         //column ID is shown only to ADMIN
-        if(  User::hasPermission([User::ROLE_ADMIN])) {
+        if(User::hasPermission([User::ROLE_ADMIN])) {
             $columns [] = 'id';
         }
 
