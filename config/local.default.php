@@ -43,13 +43,24 @@ return [
         'reCaptcha' => [
             'name' => 'reCaptcha',
             'class' => 'himiklab\yii2\recaptcha\ReCaptcha',
-            'siteKey' => '6Lf4bhsUAAAAAGdS65wleDLXAbaUEJFNm_fw5OgP',
-            'secret' => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
+            'siteKey' => '<recaptcha_siteKey>',
+            'secret' => '<recaptcha_secret>',
+        ],
+        'awssdk' => [
+            'class' => 'fedemotta\awssdk\AwsSdk',
+            'credentials' => [
+                //you can use a different method to grant access
+                'key' => '<aws_key>',
+                'secret' => '<aws_secret>',
+            ],
+            'region' => 'us-east-1', //i.e.: 'us-east-1'
+            'version' => 'latest', //i.e.: 'latest'
         ],
     ],
     'params' => array(
         'url_crm'           => 'https://skynix.co',
         'url_site'          => 'https://skynix.company',
-        'port'		        => ''
+        'port'		        => '',
+        'adminEmail'        => 'admin@skynix.co',
     )
 ];
