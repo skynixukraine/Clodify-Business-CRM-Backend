@@ -27,7 +27,8 @@
         "guzzle/guzzle": "3.0.*",
         "silex/silex": "1.0.*",
         "twig/twig": "1.*",
-        "himiklab/yii2-recaptcha-widget" : "*"
+        "himiklab/yii2-recaptcha-widget" : "*",
+        "fedemotta/yii2-aws-sdk": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

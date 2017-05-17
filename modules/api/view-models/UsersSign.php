@@ -10,6 +10,7 @@ namespace viewModel;
 use Yii;
 use yii\web\UploadedFile;
 use app\models\User;
+use app\models\Storage;
 
 /**
  * Class UsersSign
@@ -27,21 +28,12 @@ class UsersSign extends ViewModelAbstract
         $this->model->sing = $file;
 
         if ($this->validate()) {
-            $uploadPath = Yii::getAlias('@app') . '/data/' . Yii::$app->user->id . '/';
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-                chmod($uploadPath, 0777);
-            }
-            $uploadPath = $uploadPath . 'sign/';
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-                chmod($uploadPath, 0777);
-            }
-
             if ($file->size <= 2097152) { // 2097152 bytes - 2 mb
-                if ($file->saveAs($uploadPath . '/' . $file->name)) {
-                    $pathFile = 'data/' . Yii::$app->user->id . '/' . $file->name;
-                    $this->setData(['sign' => $pathFile]);
+                $s = new Storage();
+                $pathFile = 'data/' . Yii::$app->user->id . '/sign/' . $file->name;
+                $result = $s->upload('skynixcrm-data', $pathFile, $file->tempName);
+                if ($result['ObjectURL']) {
+                    $this->setData(['sign' => $result['ObjectURL']]);
 
                     //Now save file data to database
                     User::setUserSing($file->name);

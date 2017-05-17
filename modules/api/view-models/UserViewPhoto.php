@@ -9,6 +9,7 @@ namespace viewModel;
 
 use Yii;
 use app\models\User;
+use app\models\Storage;
 
 class UserViewPhoto extends ViewModelAbstract
 {
@@ -26,23 +27,12 @@ class UserViewPhoto extends ViewModelAbstract
             ->one();
 
         if ($userPhoto) {
-            $src = Yii::getAlias('@app') . '/data/' . $id . '/photo/' . $userPhoto->photo;
-            $size = getimagesize($src);
-            if ($size['mime'] == image_type_to_mime_type(IMAGETYPE_JPEG)) {
-                header("Content-type: " . image_type_to_mime_type(IMAGETYPE_JPEG));
-                return imagejpeg(imagecreatefromstring(file_get_contents($src)));
-            }
-
-            if ($size['mime'] == image_type_to_mime_type(IMAGETYPE_PNG)) {
-                header("Content-type: " . image_type_to_mime_type(IMAGETYPE_PNG));
-                return imagepng(imagecreatefromstring(file_get_contents($src)));
-            }
-
-            if ($size['mime'] == image_type_to_mime_type(IMAGETYPE_GIF)) {
-                header("Content-type: " . image_type_to_mime_type(IMAGETYPE_GIF));
-                return imagegif(imagecreatefromstring(file_get_contents($src)));
-            }
-
+            $s = new Storage();
+            $result = $s->download('skynixcrm-data','data/' . $id . '/photo/' . $userPhoto->photo);
+            $path_info = pathinfo($userPhoto->photo);
+            header('Content-Type: ' . $result['ContentType'] . '/' . $path_info['extension']);
+            echo $result['Body'];
+            exit();
         } else {
             throw new \yii\web\NotFoundHttpException;
         }

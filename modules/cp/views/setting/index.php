@@ -153,12 +153,16 @@ $this->params['menu'] = [
                 $(document).ready(function (){
                     var html = '';
                     <?php $photos = []; ?>
-                    <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/photo")): ?>
-                    <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/photo/') as $photo): ?>
+                    <?php if ($userPhoto): ?>
+                    <?php foreach ($userPhoto as $photo): ?>
+                    <?php
+                        $arrayUserPhoto = explode('/',$photo['Key']);
+                        $photoName = end($arrayUserPhoto);
+                    ?>
                     html +=
-                        '<div onclick="setAsDefaultPhoto(\'<?=basename($photo)?>\', \'photo\')" class="dz-preview dz-image-preview">' +
+                        '<div onclick="setAsDefaultPhoto(\'<?=$photoName?>\', \'photo\')" class="dz-preview dz-image-preview">' +
                         '<div class="dz-image">' +
-                        '<img  data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$photo?>" style="<?=$defaultPhoto!=basename($photo) ?: 'border: 3px solid blue'?>" />' +
+                        '<img  data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/setting/download?photo=<?=$photo['Key']?>" style="<?=$defaultPhoto!=$photoName?: 'border: 3px solid blue'?>" />' +
                         '</div>' +
                         '</div>';
                     <?php endforeach ?>
@@ -166,12 +170,16 @@ $this->params['menu'] = [
                     <?php endif; ?>
                     <?php $sings = []; ?>
                     html = '';
-                    <?php if (is_dir(Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . "/sing")): ?>
-                    <?php foreach (\yii\helpers\FileHelper::findFiles( Yii::getAlias("@app") . "/data/" . Yii::$app->user->id . '/sing/') as $sing): ?>
+                    <?php if ($userSign): ?>
+                    <?php foreach ($userSign as $sign): ?>
+                    <?php
+                        $arrayUserSign = explode('/',$sign['Key']);
+                        $signName = end($arrayUserSign);
+                    ?>
                     html +=
-                        '<div onclick="setAsDefaultSing(\'<?=basename($sing)?>\', \'sing\')" class="dz-preview dz-image-preview">' +
+                        '<div onclick="setAsDefaultSing(\'<?=$signName?>\', \'sing\')" class="dz-preview dz-image-preview">' +
                         '<div class="dz-image">' +
-                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/index/getphoto?entry=<?=$sing?>" style="<?=$defaultSing!=basename($sing) ?: 'border: 3px solid blue'?>" />' +
+                        '<img data-dz-thumbnail="" width="120" height="120" alt="" src="/cp/setting/download?photo=<?=$sign['Key']?>" style="<?=$defaultSing!=$signName ?: 'border: 3px solid blue'?>" />' +
                         '</div>' +
                         '</div>';
                     <?php endforeach ?>

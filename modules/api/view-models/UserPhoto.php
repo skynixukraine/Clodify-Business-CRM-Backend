@@ -11,6 +11,7 @@ use Yii;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 use app\models\User;
+use app\models\Storage;
 
 /**
  * Class UserPhoto
@@ -27,21 +28,12 @@ class UserPhoto extends ViewModelAbstract
         $file = \yii\web\UploadedFile::getInstanceByName($fileName);
         $this->model->photo = $file;
         if ($this->validate()) {
-            $uploadPath = Yii::getAlias('@app') . '/data/' . Yii::$app->user->id . '/';
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-                chmod($uploadPath, 0777);
-            }
-            $uploadPath = $uploadPath . 'photo/';
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-                chmod($uploadPath, 0777);
-            }
-
             if ($file->size <= 5242880) { // 5242880 bytes - 5 mb
-                if ($file->saveAs($uploadPath . '/' . $file->name)) {
-                    $pathFile = 'data/' . Yii::$app->user->id . '/' . $file->name;
-                    $this->setData(['photo' => $pathFile]);
+                $s = new Storage();
+                $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
+                $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+                if ($result['ObjectURL']) {
+                    $this->setData(['photo' => $result['ObjectURL']]);
 
                     //Now save file data to database
                     User::setUserPhoto($file->name);
