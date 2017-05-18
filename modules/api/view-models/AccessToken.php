@@ -26,11 +26,8 @@ class AccessToken extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, 'Only admin can login as another users');
         }
 
-        if ( $userId && ($this->model = $this->model->findOne($userId)) ) {
-            $loginForm = new ApiLoginForm();
-            $loginForm->email       = $this->model->email;
-            $loginForm->password    = $this->model->password;
-            if($token = $loginForm->login() ) {
+        if ( $userId && ($user = $this->model->findOne($userId)) ) {
+            if($token = ApiAccessToken::generateNewToken($user)) {
                 $this->setData([
                     'access_token' => $token->access_token
                 ]);
