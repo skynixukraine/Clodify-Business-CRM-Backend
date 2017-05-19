@@ -298,22 +298,10 @@ class ContractController extends DefaultController
                 'customer_id' => $model->customer_id,
                 'contractor'=> User::findOne(Yii::$app->params['contractorId'])
             ]);
-
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
+            @$pdf->WriteHTML($html);
+            $pdf->Output($model->id . '.pdf', 'D');
 
-            if (!is_dir('../data/contracts/')) {
-                mkdir('../data/contracts/', 0777);
-            }
-            $pdf->Output('../data/contracts/' . $model->id . '.pdf', 'F');
-
-            if ((file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf')))) {
-                header("Content-type:application/pdf"); //for pdf file
-                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                header('Content-Length: ' . filesize($path));
-                readfile($path);
-                Yii::$app->end();
-            }
         } else {
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contract #" . $model->contract_id . " is not available for downloading."));
             return $this->redirect(['view', 'id' => $id]);
@@ -337,20 +325,8 @@ class ContractController extends DefaultController
             ]);
 
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
-
-            if (!is_dir('../data/acts/')) {
-                mkdir('../data/acts/', 0777);
-            }
-            $pdf->Output('../data/acts/' . $contract->act_number. '.pdf', 'F');
-
-            if ((file_exists($path = Yii::getAlias('@app/data/acts/' . $contract->act_number . '.pdf')))) {
-                header("Content-type:application/pdf"); //for pdf file
-                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                header('Content-Length: ' . filesize($path));
-                readfile($path);
-                Yii::$app->end();
-            }
+            @$pdf->WriteHTML($html);
+            $pdf->Output($contract->act_number . '.pdf', 'D');
         } else {
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contact  #" . $id. " is not existed."));
             return $this->redirect(['view', 'id' => $id]);

@@ -443,28 +443,11 @@ class InvoiceController extends DefaultController
             ]);
 
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
-            if ( !is_dir(Yii::getAlias('@app/data/invoices/')) ) {
-                mkdir(Yii::getAlias('@app/data/invoices/'), 0777);
-            }
-            $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
+            @$pdf->WriteHTML($html);
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
                  User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
-
-                if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
-
-                        header("Content-type:application/pdf"); //for pdf file
-                        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                        header('Content-Length: ' . filesize($path));
-                        readfile($path);
-                        Yii::$app->end();
-
-                } else {
-
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, this seems like this PDF invoice was deleted."));
-                    return $this->redirect(['view', 'id' => $id]);
-                }
+                 $pdf->Output( $dataPdf->id . '.pdf', 'D');
             } else {
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action."));
