@@ -12,13 +12,12 @@ use app\models\Contract;
 use app\models\Invoice;
 use app\components\DateUtil;
 use app\models\User;
-use app\modules\api\components\Api\Processor;
 
 class ContractEdit extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])){
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             if ($id = Yii::$app->request->get('contract_id')) {
                 if ($this->validate() && ($this->model = Contract::findOne($id))) {
                     //SALES can view, invoice & edit only own contracts
@@ -54,13 +53,9 @@ class ContractEdit extends ViewModelAbstract
                                 $invoice->save();
                             }
                         }
-                    }else {
-                        return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
                     }
                 }
             }
-        } else {
-            return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
         }
     }
 

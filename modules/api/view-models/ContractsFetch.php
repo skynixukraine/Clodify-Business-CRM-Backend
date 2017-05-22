@@ -22,23 +22,28 @@ class ContractsFetch extends ViewModelAbstract
     {
         $customerId     = Yii::$app->request->getQueryParam("customers");
         $order          = Yii::$app->request->getQueryParam("order");
-        $search         = Yii::$app->request->getQueryParam("search_query");
+        $keyword         = Yii::$app->request->getQueryParam("search_query") ?: null;
         $start          = Yii::$app->request->getQueryParam('start') ?: 0;
-        $keyword        = (!empty($search['value']) ? $search['value'] : null);
         $limit          = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
 
         $query = Contract::find()
+            ->joinWith('createdby users_created', false)
+            ->joinWith('customer users_customer', false)
             ->groupBy('id');
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
             ->setLimit( $limit )
             ->setStart( $start )
-            ->setSearchValue( $keyword ) //$search['value']
+            ->setSearchValue( $keyword )
             ->setSearchParams([ 'or',
                 ['like', 'contract_id', $keyword],
                 ['like', 'created_by', $keyword],
                 ['like', 'customer_id', $keyword],
-                ['like', 'act_number', $keyword]
+                ['like', 'act_number', $keyword],
+                ['like', 'users_created.first_name', $keyword],
+                ['like', 'users_customer.first_name', $keyword],
+                ['like', 'users_created.last_name', $keyword],
+                ['like', 'users_customer.last_name', $keyword]
             ]);
         // DateUtil::convertData() returns incoming param only if it does not match to 01/01/2017 format
         if (!empty($keyword) && ($date = DateUtil::convertData($keyword)) !== $keyword ) {
@@ -80,8 +85,6 @@ class ContractsFetch extends ViewModelAbstract
             $user = null;
             $createdByCurrentUser = null;
             $canInvoice = null;
-            $initiator = User::findOne($model->created_by);
-            $customer = User::findOne($model->customer_id);
             if ($model->hasInvoices() && ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]))
                 && $invoice->status != Invoice::STATUS_CANCELED ) {
                 $total_hours = Yii::$app->Helper->timeLength( $invoice->total_hours * 3600);
@@ -93,12 +96,12 @@ class ContractsFetch extends ViewModelAbstract
                 'id' => $model->id,
                 'contract_id' => $model->contract_id,
                 'created_by' => [
-                    'id' => $initiator->id,
-                    'name' => $initiator->first_name . ' ' . $initiator->last_name
+                    'id' => $model->createdby->id,
+                    'name' => $model->createdby->first_name . ' ' . $model->createdby->last_name
                 ],
                 'customer' => [
-                    'id' => $customer->id,
-                    'name' => $customer->first_name . ' ' . $customer->last_name
+                    'id' => $model->customer->id,
+                    'name' => $model->customer->first_name . ' ' . $model->customer->last_name
                 ],
                 'act_number' => $model->act_number,
                 'start_date' => date("d/m/Y", strtotime($model->start_date)),

@@ -67,5 +67,21 @@ class Contract extends ActiveRecord
         }
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(User::className(), ['id' => 'customer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedby()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
 
 }
