@@ -15,6 +15,7 @@ use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\components\DataTable;
 use app\modules\api\components\SortHelper;
+use app\models\Contract;
 
 class InvoicesFetch extends ViewModelAbstract
 {
@@ -97,6 +98,17 @@ class InvoicesFetch extends ViewModelAbstract
                                       . Invoice::tableName() . '.project_id IS NULL');
             } else {
                 $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
+            }
+            //SALES can view, invoice & edit only own contracts
+            $contracts = Contract::find()->where(['created_by'=>Yii::$app->user->id])->all();
+            $contractsIDs = [];
+            foreach ($contracts as $contract) {
+                $contractsIDs[] = $contract->id;
+            }
+            if($contractsIDs) {
+                $dataTable->setFilter(Invoice::tableName() . '.contract_id IN ('
+                    . implode(",", $contractsIDs) . ')'
+                ) ;
             }
         }
         $activeRecordsData = $dataTable->getData();
