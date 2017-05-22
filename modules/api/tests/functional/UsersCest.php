@@ -281,5 +281,25 @@ class UsersCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
     }
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-981
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function getAccessToken(FunctionalTester $I, \Codeception\Scenario $scenario) {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+        $I->sendGET(ApiEndpoints::USERS . '/access-token/' . ValuesContainer::$userId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'access_token' => 'string'
+            ]
+        ]);
+    }
 
 }
