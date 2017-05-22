@@ -28,7 +28,7 @@ class InvoicesFetch extends ViewModelAbstract
         $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
         $query = Invoice::find()
             ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' )
-            ->where(['contract_number' => $contractId]);
+            ->where(['contract_id' => $contractId]);
 
         $projectIDs = [];
         $dataTable = DataTable::getInstance()
