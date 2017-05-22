@@ -20,20 +20,21 @@ class InvoicesFetch extends ViewModelAbstract
 {
     public function define()
     {
+        $contractId = Yii::$app->request->getQueryParam("id");
         $order = Yii::$app->request->getQueryParam("order");
-        $search = Yii::$app->request->getQueryParam("search");
-        $keyword = ( !empty($search['value']) ? $search['value'] : null);
+        $keyword = Yii::$app->request->getQueryParam("search_query") ?: null;
         $start = Yii::$app->request->getQueryParam('start') ?: 0;
         $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
         $query = Invoice::find()
-                ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' );
+            ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' )
+            ->where(['contract_number' => $contractId]);
 
         $projectIDs = [];
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
             ->setLimit($limit)
             ->setStart($start)
-            ->setSearchValue($keyword) //$search['value']
+            ->setSearchValue($keyword)
             ->setSearchParams([ 'or',
                 ['like', 'status', $keyword],
             ]);

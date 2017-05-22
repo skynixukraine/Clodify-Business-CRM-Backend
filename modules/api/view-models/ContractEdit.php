@@ -16,16 +16,13 @@ class ContractEdit extends ViewModelAbstract
 {
     public function define()
     {
-        if ($id = Yii::$app->request->get('contract_id')) {
-            if ($this->validate() && ($this->model = Contract::findOne($id))) {
-                $this->model->start_date = DateUtil::convertData($this->model->start_date);
-                $this->model->end_date = DateUtil::convertData($this->model->end_date);
-                $this->model->act_date = DateUtil::convertData($this->model->act_date);
-                $this->model->setAttributes($this->postData);
-                $this->model->save();
-
+        if (($id = Yii::$app->request->get('contract_id')) && ($this->model = Contract::findOne($id))) {
+            $this->model->start_date = DateUtil::convertData($this->model->start_date);
+            $this->model->end_date = DateUtil::convertData($this->model->end_date);
+            $this->model->act_date = DateUtil::convertData($this->model->act_date);
+            $this->model->setAttributes($this->postData);
+            if ($this->model->validate() && $this->model->save()) {
                 if (($invoice = Invoice::findOne(['contract_id' => $this->model->id, 'is_delete' => 0]))) {
-
                     $invoice->contract_id     = $this->model->id;
                     $invoice->contract_number = $this->model->contract_id;
                     $invoice->act_of_work     = $this->model->act_number;
