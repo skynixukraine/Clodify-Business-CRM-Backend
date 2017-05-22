@@ -20,12 +20,10 @@ class ContractView extends ViewModelAbstract
     {
         $id = Yii::$app->request->get("id");
         $listContract = [];
-
         if ($contract = Contract::findOne($id)) {
             $initiator = User::findOne($contract->created_by);
             $customer = User::findOne($contract->customer_id);
-            //SALES can view, invoice & edit only own contracts
-            if (User::hasPermission([User::ROLE_SALES]) && ($contract->created_by == Yii::$app->user->id) ) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) || (User::hasPermission([User::ROLE_SALES]) && ($this->model->created_by == Yii::$app->user->id))) {
                 $listContract = [
                     'contract_id' => $contract->contract_id,
                     'customer' => [
