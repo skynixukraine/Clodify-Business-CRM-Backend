@@ -67,7 +67,7 @@ class ContractsFetch extends ViewModelAbstract
         } else {
             $dataTable->setOrder( Contract::tableName() . '.id', 'asc');
         }
-
+        //SALES can view, invoice & edit only own contracts
         if (User::hasPermission([User::ROLE_SALES])) {
             $dataTable->setFilter(Contract::tableName() . '.created_by=' . Yii::$app->user->id);
         }

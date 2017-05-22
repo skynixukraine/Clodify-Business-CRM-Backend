@@ -11,6 +11,7 @@ use Yii;
 use app\models\Contract;
 use app\models\Invoice;
 use app\models\User;
+use app\modules\api\components\Api\Processor;
 
 class ContractDelete extends ViewModelAbstract
 {
@@ -18,10 +19,10 @@ class ContractDelete extends ViewModelAbstract
     {
         $contractId = Yii::$app->request->getQueryParam("contract_id");
         $contract = Contract::findOne($contractId);
-
+       // FIN can view, edit, invoice all contracts, but can delete only own contracts
         if (User::hasPermission([User::ROLE_ADMIN])
             || (User::hasPermission([User::ROLE_FIN])
-                && $contract->customer_id == Yii::$app->user->id)) {
+                && $contract->created_by == Yii::$app->user->id)) {
 
             if ($contract) {
                 $invoices = Invoice::find()

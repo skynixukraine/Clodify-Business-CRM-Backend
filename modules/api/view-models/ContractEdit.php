@@ -11,39 +11,46 @@ use Yii;
 use app\models\Contract;
 use app\models\Invoice;
 use app\components\DateUtil;
+use app\models\User;
 
 class ContractEdit extends ViewModelAbstract
 {
     public function define()
     {
-        if (($id = Yii::$app->request->get('contract_id')) && ($this->model = Contract::findOne($id))) {
-            $this->model->start_date = DateUtil::convertData($this->model->start_date);
-            $this->model->end_date = DateUtil::convertData($this->model->end_date);
-            $this->model->act_date = DateUtil::convertData($this->model->act_date);
-            $this->model->setAttributes($this->postData);
-            if ($this->model->validate() && $this->model->save()) {
-                if (($invoice = Invoice::findOne(['contract_id' => $this->model->id, 'is_delete' => 0]))) {
-                    $invoice->contract_id     = $this->model->id;
-                    $invoice->contract_number = $this->model->contract_id;
-                    $invoice->act_of_work     = $this->model->act_number;
-                    $invoice->date_start      = $this->model->start_date;
-                    $invoice->date_end        = $this->model->end_date;
-                    $invoice->total           = $this->model->total;
-                    $invoice->user_id         = $this->model->customer_id;
-                    /** Invoice - total logic */
-                    if($invoice->total != null && $invoice->discount == null){
+        if ($id = Yii::$app->request->get('contract_id')) {
+            if ($this->validate() && ($this->model = Contract::findOne($id))) {
+                //SALES can view, invoice & edit only own contracts
+                if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) || (User::hasPermission([User::ROLE_SALES]) && ($this->model->created_by == Yii::$app->user->id))) {
+                    $this->model->start_date = DateUtil::convertData($this->model->start_date);
+                    $this->model->end_date = DateUtil::convertData($this->model->end_date);
+                    $this->model->act_date = DateUtil::convertData($this->model->act_date);
+                    $this->model->setAttributes($this->postData);
+                    $this->model->save();
 
-                        $invoice->discount = 0;
-                        $invoice->subtotal = $invoice->total;
+                    if (($invoice = Invoice::findOne(['contract_id' => $this->model->id, 'is_delete' => 0]))) {
 
-                    }
-                    if($invoice->total !=null && $invoice->discount != null){
-                        $invoice->subtotal = $invoice->total;
-                        $invoice->total = ( $invoice->subtotal - $invoice->discount );
+                        $invoice->contract_id = $this->model->id;
+                        $invoice->contract_number = $this->model->contract_id;
+                        $invoice->act_of_work = $this->model->act_number;
+                        $invoice->date_start = $this->model->start_date;
+                        $invoice->date_end = $this->model->end_date;
+                        $invoice->total = $this->model->total;
+                        $invoice->user_id = $this->model->customer_id;
+                        /** Invoice - total logic */
+                        if ($invoice->total != null && $invoice->discount == null) {
 
-                    }
-                    if ($invoice->validate()) {
-                        $invoice->save();
+                            $invoice->discount = 0;
+                            $invoice->subtotal = $invoice->total;
+
+                        }
+                        if ($invoice->total != null && $invoice->discount != null) {
+                            $invoice->subtotal = $invoice->total;
+                            $invoice->total = ($invoice->subtotal - $invoice->discount);
+
+                        }
+                        if ($invoice->validate()) {
+                            $invoice->save();
+                        }
                     }
                 }
             }
