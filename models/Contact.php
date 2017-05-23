@@ -87,7 +87,7 @@ class Contact extends ActiveRecord
                     ->setTo($to)
                     ->setReplyTo([$replyToEmail => $replyToName])
                     ->setFrom([$to => $fromName])
-                    ->setSubject($this->subject)
+                    ->setSubject($adminSubject)
                     ->setTextBody('New subscriber: ' . $this->email)
                     ->send();
 
