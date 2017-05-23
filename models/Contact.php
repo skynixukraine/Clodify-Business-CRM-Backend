@@ -67,7 +67,7 @@ class Contact extends ActiveRecord
             $replyToName = $fromName;
             $message = $this->message;
             if (strstr($this->subject, 'Synpass') !== false) {
-                $to = 'zlatagordenko@gmail.com';
+                $to = 'kristina@synpass.pro';
                // $to = Yii::$app->params['synpassAdminEmail'];
                 $fromName = "Kristina at Synpass";
                 $replyToName = "Synpass Guest";
