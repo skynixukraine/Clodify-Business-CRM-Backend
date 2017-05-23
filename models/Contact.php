@@ -78,7 +78,7 @@ class Contact extends ActiveRecord
                 Yii::$app->mailer->compose('synpass_welcome')
                     ->setTo($this->email)
                     ->setReplyTo([$to => $fromName])
-                    ->setFrom([Yii::$app->params['synpassAdminEmail'] => $fromName])
+                    ->setFrom([$to => $fromName])
                     ->setSubject($clientSubject)
                     ->send();
 
