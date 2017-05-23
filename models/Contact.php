@@ -55,44 +55,43 @@ class Contact extends ActiveRecord
 
     /**
      * Sends an email to the specified email address using the information collected by this model.
-     * @param  string  $email the target email address
+     * @param  string $email the target email address
      * @return boolean whether the model passes validation
      */
     public function contact($email)
     {
         if ($this->validate()) {
-            $to             = $email;
-            $fromName       = "Skynix Administration";
-            $replyToEmail   = $this->email;
-            $replyToName    = $fromName;
-            $message        = $this->message;
-            if ( strstr($this->subject, 'Synpass') !== false ) {
+            $to = $email;
+            $fromName = "Skynix Administration";
+            $replyToEmail = $this->email;
+            $replyToName = $fromName;
+            $message = $this->message;
+            if (strstr($this->subject, 'Synpass') !== false) {
+                $to = 'kristina@synpass.pro';
+               // $to = Yii::$app->params['synpassAdminEmail'];
+                $fromName = "Kristina at Synpass";
+                $replyToName = "Synpass Guest";
+                $clientSubject = "Thank you for your subscription!";
+                $adminSubject = "New Synpass subscriber!";
 
-                $to             = Yii::$app->params['synpassAdminEmail'];
-                $fromName       = "Synpass Administration";
-                $replyToName    = "Synpass Guest";
-                $message        = "Welcome Synpass Guest, \n".
-                                    "We will inform you as soon as the service is launch.";
-
-                Yii::$app->mailer->compose()
+                //Welcome email to client. Send an email to the subscriber.
+                Yii::$app->mailer->compose('synpass_welcome')
                     ->setTo($this->email)
                     ->setReplyTo([$to => $fromName])
-                    ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
-                    ->setSubject($this->subject)
-                    ->setTextBody($message)
+                    ->setFrom([$to => $fromName])
+                    ->setSubject($clientSubject)
                     ->send();
 
-
-                Yii::$app->mailer->compose('synpass_welcome')
+                //Send an email to Admin
+                Yii::$app->mailer->compose()
                     ->setTo($to)
                     ->setReplyTo([$replyToEmail => $replyToName])
-                    ->setFrom([Yii::$app->params['adminEmail'] => $fromName])
-                    ->setSubject($this->subject)
-                    ->setTextBody($message)
+                    ->setFrom([$to => $fromName])
+                    ->setSubject($adminSubject)
+                    ->setTextBody('New subscriber: ' . $this->email)
                     ->send();
 
             } else {
-
                 Yii::$app->mailer->compose()
                     ->setTo($to)
                     ->setReplyTo([$replyToEmail => $replyToName])
@@ -100,10 +99,7 @@ class Contact extends ActiveRecord
                     ->setSubject($this->subject)
                     ->setTextBody($message)
                     ->send();
-                
             }
-            
-
             return true;
         }
         return false;
