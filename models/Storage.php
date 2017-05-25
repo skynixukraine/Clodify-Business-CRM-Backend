@@ -57,6 +57,15 @@ class Storage
         ]);
         return $file;
     }
+    public function downloadToFile($bucket='',$key ='', $pathToFile = '') {
+
+        $result = $this->s3->getObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+            'SaveAs' => $pathToFile
+        ]);
+        return $result;
+    }
 
     /**
      * get the all object from prefix s3

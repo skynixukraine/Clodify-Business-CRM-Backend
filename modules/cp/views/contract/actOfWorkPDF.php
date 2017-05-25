@@ -112,11 +112,11 @@
     </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td width="285" style ="width: 285px; vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
-            <img src="<?=$contractor->getUserSingPath()?>" style="max-width: 120px;">
+            <img src="<?=$signatureContractor?>" style="max-width: 120px;">
 
         </td>
         <td width="285" style ="width: 285px; vertical-align: top; border-collapse: collapse; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
-            <img src="<?=$customer->getUserSingPath()?>" style="max-width: 120px;">
+            <img src="<?=$signatureCustomer?>" style="max-width: 120px;">
         </td>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td width="285" style ="width: 285px; vertical-align: top; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
