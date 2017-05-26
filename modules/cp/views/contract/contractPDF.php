@@ -10,8 +10,6 @@ $user = User::findOne($customer_id);
 
 $total = number_format($total, 2);
 $companyName = $user->company;
-$signatureProzhoga = Yii::getAlias('@app') . '/data/' . $contractor->id . '/sing/' . $contractor->sing;
-$signatureProzhoga = (string) $signatureProzhoga;
 
 $start_date = date("d/m/Y", strtotime($start_date));
 $search = ['var_contract_id', 'var_start_date', 'var_total', 'var_company_name'];
@@ -66,10 +64,10 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
 <table width="570" style="max-width: 570px; margin-left: auto; margin-right: auto; border-collapse: collapse;">
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td width="285" style ="width: 285px; vertical-align: top;  border-bottom: 0px solid black; border-left: 1px solid black; border-right: 0px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
-            <img src="<?=$signatureProzhoga?>" style="max-width: 120px;">
+            <img src="<?=$signatureContractor?>" style="max-width: 120px;">
         </td>
         <td width="284" style ="width: 284px; vertical-align: top; border-collapse: collapse; border-bottom: 0px solid black; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; padding: 5px; font-family:\'Times New Roman\';font-size:10px;">
-            <img src="<?=$signatureProzhoga?>" style="max-width: 120px;">
+            <img src="<?=$signatureContractor?>" style="max-width: 120px;">
         </td>
     </tr>
 </table>
@@ -109,10 +107,10 @@ echo str_replace($search, $replace, $contract_template->content) . $payment_temp
 <table width="570" style=" margin-left: auto; margin-right: auto; border-collapse: collapse;">
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td width="285" style =" vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px;">
-            <img src="<?=$user->getUserSingPath()?>" style="max-width: 120px;">
+            <img src="<?=$signatureCustomer?>" style="max-width: 120px;">
         </td>
         <td width="284" style =" vertical-align: top; border-left: 1px solid black; border-right: 1px solid black; border-right: 1px solid black; height: 100%; box-sizing: border-box; border-collapse: collapse; padding: 5px;">
-            <img src="<?=$user->getUserSingPath()?>" style="max-width: 120px;">
+            <img src="<?=$signatureCustomer?>" style="max-width: 120px;">
         </td>
     </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
