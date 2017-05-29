@@ -6,6 +6,9 @@ use Helper\OAuthSteps;
  * Date: 09.03.17
  * Time: 12:15
  */
+
+use Helper\ValuesContainer;
+
 class ReportsCest
 {
     public function testReports(FunctionalTester $I, \Codeception\Scenario $scenario)
@@ -13,7 +16,6 @@ class ReportsCest
         /* 2.1.1 Create Report Data
          * @see    http://jira.skynix.company:8070/browse/SI-837
          */
-        define('PROJECT_ID', 1);
         define('DATE_REPORT', date('d/m/Y'));
         define('HOURS', 2);
         define('TASK', 'task description, task description, task description');
@@ -21,7 +23,7 @@ class ReportsCest
         $I->wantTo('Create report without authorization');
         //Try to create report without authorization
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
-            'project_id' => PROJECT_ID,
+            'project_id' => ValuesContainer::$projectId,
             'task' => TASK,
             'hours' => HOURS,
             'date_report' => DATE_REPORT
@@ -33,7 +35,7 @@ class ReportsCest
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
-        $userId = json_decode($I->grabResponse())->data->user_id;
+        $userId = ValuesContainer::$userId;
 
 
         /**
@@ -43,7 +45,7 @@ class ReportsCest
         $I->wantTo('Create report with authorization');
 
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
-            'project_id' => PROJECT_ID,
+            'project_id' => ValuesContainer::$projectId,
             'task' => TASK,
             'hours' => HOURS,
             'date_report' => DATE_REPORT
@@ -150,7 +152,7 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $reports = $response->data->reports;
         //Get not own report id from all reports
-        $notOwnReportId = 0;
+        $notOwnReportId = ValuesContainer::$deleteReportId;
         foreach ($reports as $report) {
             if (($report->reporter->id != $userId) && ($report->is_invoiced == 0)) {
                 $notOwnReportId  = $report->report_id;
@@ -180,7 +182,7 @@ class ReportsCest
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         $I->seeResponseContainsJson([
-            "data"      => [],
+            "data"      => null,
             "errors"    => [],
             "success"   => true
         ]);
@@ -203,7 +205,7 @@ class ReportsCest
                 'reports'       => 'array',
                 "total_records" => 'string',
                 "total_hours"   => 'string',
-                "total_cost"    => 'string'
+                "total_cost"    => 'string|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'

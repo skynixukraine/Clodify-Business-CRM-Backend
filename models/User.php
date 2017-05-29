@@ -40,6 +40,7 @@ use yii\web\UploadedFile;
  * @property string $sing
  * @property string $bank_account_en
  * @property string $bank_account_ua
+ * @property integer $is_published
 
  *
  * @property ProjectCustomers[] $projectCustomers
@@ -61,12 +62,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     const ACTIVE_USERS  = 1;
     const DELETED_USERS = 1;
+    const PUBLISHED_USERS = 1;
 
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
 
     const ATTACH_USERS_SIGN = 'api-attach-sign';
     const ATTACH_PHOTO_USERS = 'api-attach-photo';
-
 
     public $rawPassword;
 
@@ -80,6 +81,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     private $auth_key = "XnM";
     public $ticketId;
     public $captcha;
+    public $code;
 
     /**
      * @inheritdoc
@@ -95,11 +97,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role'], 'string'],
+            [['role', 'code', 'slug', 'languages', 'residence', 'link_linkedin',
+                'link_video', 'birthday', 'position', 'degree'], 'string'],
             [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
             [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
             ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
-            ['password', 'required', 'except' => ['edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
+            ['password', 'required', 'except' => ['settings','edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             ['role', function () {
                 if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
                     $this->addError('role', Yii::t('yii', 'Role is invalid'));
@@ -110,7 +113,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['first_name', 'last_name'], 'string', 'max' => 45],
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
-            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours', 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId'], 'integer'],
+            [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours',
+                'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year'], 'integer'],
             ['phone', 'string', 'max' => 25],
             ['company', 'string', 'max' => 55],
             [['email'], 'string', 'max' => 150],
@@ -121,7 +125,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password', 'xHsluIp'], 'match', 'pattern' => '/^\S*$/i'],
             [['bank_account_ua', 'bank_account_en'], 'string'],
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
-            ['captcha', 'captcha', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+            ['captcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['captchaSecret'],  'on' => self::SCENARIO_CHANGE_PASSWORD, ],
+            [['photo', 'sing'], 'string', 'on' => ['settings']],
 
 
         ];
@@ -157,7 +162,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'year_paid_hours'       => 'Year Paid Hours',
             'total_paid_hours'      => 'Total Paid Hours',
             'invite_hash'           => 'Invite Hash',
-            'is_delete'             => 'Is Delete'
+            'is_delete'             => 'Is Delete',
+            'password_reset_token'  => 'Password Reset Token'
         ];
     }
 
@@ -207,6 +213,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getSalaryHistories()
     {
         return $this->hasMany(SalaryHistory::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkHistory()
+    {
+        return $this->hasMany(WorkHistory::className(), ['user_id' => 'id']);
     }
 
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
@@ -686,5 +700,33 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 			self::ROLE_SALES => 'SALES'
 		];
 	}
+
+    /**
+     * generate and set password_reset_token
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . time();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPasswordResetToken()
+    {
+        return $this->password_reset_token;
+    }
+
+    public static function getTags($user) {
+        $skills = [];
+        if ($user && $user->tags) {
+            $tagsArray = array_map('trim', explode(",", $user->tags));
+            $skills['top'] = array_slice($tagsArray, 0, 4);
+            $skills['additional'] = array_slice($tagsArray, 4, count($tagsArray));
+            return $skills;
+        } else {
+            return $skills;
+        }
+    }
 
 }

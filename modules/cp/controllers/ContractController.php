@@ -19,6 +19,7 @@ use yii\filters\VerbFilter;
 use app\models\Project;
 use mPDF;
 use app\models\Invoice;
+use app\models\Storage;
 
 class ContractController extends DefaultController
 {
@@ -287,33 +288,54 @@ class ContractController extends DefaultController
     {
         if ( ( $id = Yii::$app->request->get("id") ) && ( $model = Contract::findOne($id) )
             && ($model->hasInvoices()) ) {
+            //-------------- Download contractor signature from Amazon Simple Storage Service--------//
+            $contractor = User::findOne(Yii::$app->params['contractorId']);
+            $contractorSign = 'data/' . $contractor->id . '/sign/' . $contractor->sing;
+
+            $s = new Storage();
+            $folder = Yii::getAlias('@app') . '/data/sign/';
+
+            if(!is_dir($folder)){
+                mkdir($folder );
+            }
+
+            $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+            try {
+                $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+            }catch (\Aws\S3\Exception\S3Exception $e) {}
+
+            //----------------Download customer signature from Amazon Simple Storage Service---------//
+
+            $customer =  User::findOne($model->customer_id);
+            $customerSign = 'data/' . $customer->id . '/sign/' . $customer->sing;
+            $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+            try{
+                $s->downloadToFile('skynixcrm-data',  $customerSign, $customerImgPath);
+            } catch (\Aws\S3\Exception\S3Exception $e) {}
+
+            $imgData = base64_encode(file_get_contents($conractorImgPath));
+            $signatureContractor = 'data: '.mime_content_type($conractorImgPath).';base64,'.$imgData;
+
+            $imgData = base64_encode(file_get_contents($customerImgPath));
+            $signatureCustomer = 'data: '.mime_content_type($customerImgPath).';base64,'.$imgData;
             // Generating PDF
             $html = $this->renderPartial('contractPDF', [
 
-                'contract_id' => $model->contract_id,
-                'start_date' => $model->start_date,
-                'total' => $model->total,
-                'contract_template_id' => $model->contract_template_id,
-                'contract_payment_method_id' => $model->contract_payment_method_id,
-                'customer_id' => $model->customer_id,
-                'contractor'=> User::findOne(Yii::$app->params['contractorId'])
+                'contract_id'                   => $model->contract_id,
+                'start_date'                    => $model->start_date,
+                'total'                         => $model->total,
+                'contract_template_id'          => $model->contract_template_id,
+                'contract_payment_method_id'    => $model->contract_payment_method_id,
+                'customer_id'                   => $model->customer_id,
+                'contractor'                    => $contractor,
+                'signatureCustomer'             => $signatureCustomer,
+                'signatureContractor'           => $signatureContractor
             ]);
 
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
+            @$pdf->WriteHTML($html);
+            $pdf->Output($model->id . '.pdf', 'D');
 
-            if (!is_dir('../data/contracts/')) {
-                mkdir('../data/contracts/', 0777);
-            }
-            $pdf->Output('../data/contracts/' . $model->id . '.pdf', 'F');
-
-            if ((file_exists($path = Yii::getAlias('@app/data/contracts/' . $id . '.pdf')))) {
-                header("Content-type:application/pdf"); //for pdf file
-                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                header('Content-Length: ' . filesize($path));
-                readfile($path);
-                Yii::$app->end();
-            }
         } else {
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contract #" . $model->contract_id . " is not available for downloading."));
             return $this->redirect(['view', 'id' => $id]);
@@ -329,28 +351,48 @@ class ContractController extends DefaultController
             $invoice    = Invoice::find()->where(['contract_id' => $contract->id, 'is_delete' => 0])->one();
             $contractor = User::findOne(Yii::$app->params['contractorId']);
 
+            //-------------- Download contractor signature from Amazon Simple Storage Service--------//
+            $contractor = User::findOne(Yii::$app->params['contractorId']);
+            $contractorSign = 'data/' . $contractor->id . '/sign/' . $contractor->sing;
+
+            $s = new Storage();
+            $folder = Yii::getAlias('@app') . '/data/sign/';
+
+             if(!is_dir($folder)){
+                mkdir($folder );
+             }
+            $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+               try {
+                   $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+               } catch (\Aws\S3\Exception\S3Exception $e) {
+               }
+
+            //----------------Download customer signature from Amazon Simple Storage Service---------//
+
+            $customerSign = 'data/' . $customer->id . '/sign/' . $customer->sing;
+            $customerImg = 'customer.'. pathinfo( $customer->sing, PATHINFO_EXTENSION);
+            $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+            try {
+                $s->downloadToFile('skynixcrm-data', $customerSign, $customerImgPath);
+            }  catch (\Aws\S3\Exception\S3Exception $e) {}
+            $imgData = base64_encode(file_get_contents($conractorImgPath));
+            $signatureContractor = 'data: '.mime_content_type($conractorImgPath).';base64,'.$imgData;
+
+            $imgData = base64_encode(file_get_contents($customerImgPath));
+            $signatureCustomer = 'data: '.mime_content_type($customerImgPath).';base64,'.$imgData;
+
             $html = $this->renderPartial('actOfWorkPDF', [
-                'contractor'=> $contractor,
-                'customer'  => $customer,
-                'invoice'   => $invoice,
-                'contract'  => $contract
+                'contractor'          => $contractor,
+                'customer'            => $customer,
+                'invoice'             => $invoice,
+                'contract'            => $contract,
+                'signatureCustomer'   => $signatureCustomer,
+                'signatureContractor' => $signatureContractor
             ]);
 
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
-
-            if (!is_dir('../data/acts/')) {
-                mkdir('../data/acts/', 0777);
-            }
-            $pdf->Output('../data/acts/' . $contract->act_number. '.pdf', 'F');
-
-            if ((file_exists($path = Yii::getAlias('@app/data/acts/' . $contract->act_number . '.pdf')))) {
-                header("Content-type:application/pdf"); //for pdf file
-                header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                header('Content-Length: ' . filesize($path));
-                readfile($path);
-                Yii::$app->end();
-            }
+            @$pdf->WriteHTML($html);
+            $pdf->Output($contract->act_number . '.pdf', 'D');
         } else {
             Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, the contact  #" . $id. " is not existed."));
             return $this->redirect(['view', 'id' => $id]);

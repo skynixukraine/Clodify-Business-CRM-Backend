@@ -23,6 +23,7 @@ use app\models\ProjectCustomer;
 use app\models\PaymentMethod;
 use mPDF;
 use app\models\ProjectDeveloper;
+use app\models\Storage;
 
 class InvoiceController extends DefaultController
 {
@@ -422,49 +423,63 @@ class InvoiceController extends DefaultController
         /** @var $model Invoice */
         if ( ( $id = Yii::$app->request->get("id") ) && ( $dataPdf = Invoice::findOne($id) ) ) {
             $contract = Contract::findOne($dataPdf->contract_id);
-            $html = $this->renderPartial('invoicePDF', [
 
-                'id' => $dataPdf->id,
-                'nameCustomer' => $dataPdf->getUser()->one()->first_name . ' ' .
+            //-------------- Download contractor signature from Amazon Simple Storage Service--------//
+            $contractor = User::findOne(Yii::$app->params['contractorId']);
+            $contractorSign = 'data/' . $contractor->id . '/sign/' . $contractor->sing;
+
+            $s = new Storage();
+            $folder = Yii::getAlias('@app') . '/data/sign/';
+
+            if(!is_dir($folder)){
+                mkdir($folder );
+            }
+            $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+            try {
+                $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+            }catch (\Aws\S3\Exception\S3Exception $e) {}
+
+            //----------------Download customer signature from Amazon Simple Storage Service---------//
+
+            $customerSign = 'data/' . $dataPdf->getUser()->one()->id . '/sign/' . $dataPdf->getUser()->one()->sing;
+            $customerImg = 'customer.'. pathinfo( $dataPdf->getUser()->one()->sing, PATHINFO_EXTENSION);
+            $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
+            try {
+                $s->downloadToFile('skynixcrm-data', $customerSign, $customerImgPath);
+            } catch (\Aws\S3\Exception\S3Exception $e) {}
+            $imgData = base64_encode(file_get_contents($conractorImgPath));
+            $signatureContractor = 'data: '.mime_content_type($conractorImgPath).';base64,'.$imgData;
+
+            $imgData = base64_encode(file_get_contents($customerImgPath));
+            $signatureCustomer = 'data: '.mime_content_type($customerImgPath).';base64,'.$imgData;
+
+            $html = $this->renderPartial('invoicePDF', [
+                'id'                    => $dataPdf->id,
+                'nameCustomer'          => $dataPdf->getUser()->one()->first_name . ' ' .
                     $dataPdf->getUser()->one()->last_name,
-                'total' => $dataPdf->total > 0 ?$dataPdf->total:0,
-                'numberContract' => $dataPdf->contract_number,
-                'actWork' => $dataPdf->act_of_work,
-                'dataFrom' => date('j F', strtotime($dataPdf->date_start)),
-                'dataTo' => date('j F', strtotime($dataPdf->date_end)),
-                'dataFromUkr' => date('d.m.Y', strtotime($dataPdf->date_start)),
-                'dataToUkr' => date('d.m.Y', strtotime($dataPdf->date_end)),
-                'paymentMethod' => PaymentMethod::findOne($contract->contract_payment_method_id),
-                'idCustomer' => $dataPdf->getUser()->one()->id,
-                'notes'      => $dataPdf->note,
-                'sing'       => $dataPdf->getUser()->one()->sing,
-                'contractor' => User::findOne(Yii::$app->params['contractorId'])
+                'total'                 => $dataPdf->total > 0 ?$dataPdf->total:0,
+                'numberContract'        => $dataPdf->contract_number,
+                'actWork'               => $dataPdf->act_of_work,
+                'dataFrom'              => date('j F', strtotime($dataPdf->date_start)),
+                'dataTo'                => date('j F', strtotime($dataPdf->date_end)),
+                'dataFromUkr'           => date('d.m.Y', strtotime($dataPdf->date_start)),
+                'dataToUkr'             => date('d.m.Y', strtotime($dataPdf->date_end)),
+                'paymentMethod'         => PaymentMethod::findOne($contract->contract_payment_method_id),
+                'idCustomer'            => $dataPdf->getUser()->one()->id,
+                'notes'                 => $dataPdf->note,
+                'sing'                  => $dataPdf->getUser()->one()->sing,
+                'contractor'            => $contractor,
+                'signatureCustomer'     => $signatureCustomer,
+                'signatureContractor'   => $signatureContractor
 
             ]);
 
             $pdf = new mPDF();
-            $pdf->WriteHTML($html);
-            if ( !is_dir(Yii::getAlias('@app/data/invoices/')) ) {
-                mkdir(Yii::getAlias('@app/data/invoices/'), 0777);
-            }
-            $pdf->Output('../data/invoices/' . $dataPdf->id . '.pdf', 'F');
+            @$pdf->WriteHTML($html);
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
                  User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
-
-                if (file_exists($path = Yii::getAlias('@app/data/invoices/' . $id . '.pdf'))) {
-
-                        header("Content-type:application/pdf"); //for pdf file
-                        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
-                        header('Content-Length: ' . filesize($path));
-                        readfile($path);
-                        Yii::$app->end();
-
-                } else {
-
-                    Yii::$app->getSession()->setFlash('error', Yii::t("app", "Sorry, this seems like this PDF invoice was deleted."));
-                    return $this->redirect(['view', 'id' => $id]);
-                }
+                 $pdf->Output( $dataPdf->id . '.pdf', 'D');
             } else {
 
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", "Ooops, you do not have priviledes for this action."));

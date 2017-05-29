@@ -22,21 +22,21 @@ class Auth extends ViewModelAbstract
     {
         $this->model->scenario = 'api-login';
 
-        $loginForm = new ApiLoginForm();
-        $loginForm->email       = $this->model->email;
-        $loginForm->password    = $this->model->password;
-        $this->model            = $loginForm;
+        if($this->validate()) {
+            $loginForm = new ApiLoginForm();
+            $loginForm->email       = $this->model->email;
+            $loginForm->password    = $this->model->password;
+            $this->model            = $loginForm;
 
-        if( $this->validate() &&
-            ($token =  $this->model->login() ) ) {
-
-            $this->setData([
-                'access_token' => $token->access_token,
-                'user_id' => $token->user_id
-            ]);
-
+           if ($this->validate() && ($token = $this->model->login())) {
+               $user = User::findOne(['id' => $token->user_id]);
+               $this->setData([
+                   'access_token' => $token->access_token,
+                   'user_id' => $token->user_id,
+                   'role' => $user->role
+               ]);
+           }
         }
-
-
     }
+
 }

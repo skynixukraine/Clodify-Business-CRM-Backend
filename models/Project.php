@@ -60,7 +60,7 @@ class Project extends \yii\db\ActiveRecord
             ['status', 'required', 'except'=>['api-create']],
             [['customers', 'developers','invoice_received'], 'required', 'on' => ['admin', 'api-create']],
             [['is_sales', 'is_pm'], 'required', 'on' => ['api-create']],
-            [['invoice_received', 'is_pm', 'is_delete', 'is_sales'], 'integer'],
+            [['invoice_received', 'is_pm', 'is_delete', 'is_sales', 'is_published'], 'integer'],
             [['total_logged_hours', 'total_paid_hours'], 'number'],
             [['status'], 'string'],
             [['date_start', 'date_end'], 'safe'],

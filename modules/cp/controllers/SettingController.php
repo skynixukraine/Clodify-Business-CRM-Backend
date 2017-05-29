@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\models\User;
 use app\models\Project;
+use app\models\Storage;
 use yii\web\UploadedFile;
 
 
@@ -33,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing', 'download'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
@@ -77,6 +78,9 @@ class SettingController extends DefaultController
                 return $this->redirect(['index']);
             }
         }
+        $s = new Storage();
+        $userPhoto = $s->getListFileUser('skynixcrm-data','data/' . Yii::$app->user->id . '/photo/');
+        $userSign = $s->getListFileUser('skynixcrm-data','data/' . Yii::$app->user->id . '/sign/');
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
         return $this->render("index", ['model' => $model,
@@ -84,29 +88,35 @@ class SettingController extends DefaultController
                             'defaultSing' => $defaultSing,
                             'bank_account_en' => $model->bank_account_en,
                             'bank_account_ua' => $model->bank_account_ua,
+                            'userPhoto' => $userPhoto['Contents'],
+                            'userSign' => $userSign['Contents'],
         ]);
+    }
+
+    public function actionDownload()
+    {
+        $userPhoto = Yii::$app->request->getQueryParam('photo');
+        $s = new Storage();
+        $result = $s->download('skynixcrm-data',$userPhoto);
+        $arrayuserPhoto = explode('/',$userPhoto);
+        $path_info = pathinfo(end($arrayuserPhoto));
+        header('Content-Type: ' . $result['ContentType'] . '/' . $path_info['extension']);
+        echo $result['Body'];
+        exit();
     }
 
     public function actionUpload()
     {
         $fileName = 'file';
-        $uploadPath = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
-        if (!file_exists($uploadPath))
-        {
-            mkdir($uploadPath, 0777, true);
-            chmod($uploadPath, 0777);
-        }
-        $uploadPath = $uploadPath . 'photo/';
-        if (!file_exists($uploadPath))
-        {
-            mkdir($uploadPath, 0777, true);
-            chmod($uploadPath, 0777);
-        }
 
         if (isset($_FILES[$fileName])) {
             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
-            if ($file->saveAs($uploadPath . '/' . $file->name)) {
+            $s = new Storage();
+            $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
+            $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+
+            if ($result['ObjectURL']) {
                 //Now save file data to database
 
                 echo \yii\helpers\Json::encode($file);
@@ -125,22 +135,15 @@ class SettingController extends DefaultController
     public function actionUploaded()
     {
         $fileName = 'file';
-        $path = __DIR__ . '/../../../data/' . Yii::$app->user->id . '/';
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-            chmod($path, 0777);
-        }
-        $path = $path . 'sing/';
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-            chmod($path, 0777);
-
-        }
 
         if (isset($_FILES[$fileName])) {
             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
 
-            if ($file->saveAs($path  . '/' . $file->name)) {
+            $s = new Storage();
+            $pathFile = 'data/' . Yii::$app->user->id . '/sign/';
+            $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+
+            if ($result['ObjectURL']) {
                 //Now save file data to database
 
                 echo \yii\helpers\Json::encode($file);
@@ -148,6 +151,9 @@ class SettingController extends DefaultController
                 return $this->render('index');
             }
         }
+
+        return false;
+
     }
 
     /**
@@ -160,6 +166,7 @@ class SettingController extends DefaultController
             $request = Yii::$app->getRequest()->post();
             User::setUserPhoto($request['photo']);
             $result['success'] = true;
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "Thank You. You have successfully saved your avatar"));
         } catch (\Exception $e) {
             $result['error'] = $e->getMessage();
         }

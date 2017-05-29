@@ -21,12 +21,15 @@ use Yii;
 class Survey extends \yii\db\ActiveRecord
 {
     const SKYNIX_SURVEY_COOKIE = 'SKYNIX_SURVEY';
+    const IS_DELETE = 1;
+    const IS_PRIVATE = 1;
 
     public $result;
     public $model;
     public $name;
     public $descriptions;
     public $survayOptions = [];
+    public $options;
     /**
      * @inheritdoc
      */
@@ -50,7 +53,9 @@ class Survey extends \yii\db\ActiveRecord
             [['date_start', 'date_end'], 'safe'],
             [['is_private', 'user_id', 'total_votes', 'is_delete'], 'integer'],
             [['shortcode'], 'string', 'max' => 25],
-            [['question'], 'string', 'max' => 250]
+            [['question'], 'string', 'max' => 250],
+            ['is_private', 'boolean'],
+            ['options', 'safe']
         ];
     }
     /**

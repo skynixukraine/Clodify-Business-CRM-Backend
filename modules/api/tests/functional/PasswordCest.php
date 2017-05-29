@@ -1,44 +1,61 @@
 <?php
+/**
+ * Created by Skynix Team
+ * Date: 03.04.17
+ * Time: 12:37
+ */
 
 use Helper\ApiEndpoints;
 
 class PasswordCest
 {
-    public function _before(FunctionalTester $I)
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-946
+     * @param  FunctionalTester $I
+     */
+    public function testResetPassword(FunctionalTester $I)
     {
-    }
+        define('CAPTCHA', '03AHJ_VuukcmH81vXLFx0_BgBdOqSZG6');
+        define('EMAIL_PASS', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
 
-    public function _after(FunctionalTester $I)
-    {
+        $I->wantTo('Test reset password');
+        $I->sendPOST(ApiEndpoints::PASSWORD, json_encode([
+                'email' => EMAIL_PASS,
+                'captcha' => CAPTCHA
+            ])
+        );
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
     }
 
     /**
-     * @see    http://jira.skynix.company:8070/browse/SI-436
-     * @param  FunctionalTester $I
-     * @return void
+     * @see    https://jira-v2.skynix.company/browse/SI-946
+     * @param FunctionalTester $I
      */
-    public function testThatChangePasswordPageWorks(FunctionalTester $I)
+    public function testChangePassword(FunctionalTester $I)
     {
+        define('CODE', 'eXMvlNehB-sVxjaqarPYcwek6H9XW-Nq1491313868');
 
-        $I->wantTo('Test that change password page available');
-
-        $I->sendPOST(ApiEndpoints::PASSWORD);
+        $I->wantTo('Test change password');
+        $I->sendPUT(ApiEndpoints::PASSWORD, json_encode([
+                'code' => CODE
+            ])
+        );
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
             'success' => false,
             'errors' => [
                 [
-                    'param' => 'email',
-                    'message' => 'Email cannot be blank.'
-                ],
-                [
-                    'param' => 'captcha',
-                    'message' => 'Captcha cannot be blank.'
+                    'param' => 'code',
+                    'message' => 'Code is not valid or expired.'
                 ],
 
             ],
         ]);
-
     }
+
 }

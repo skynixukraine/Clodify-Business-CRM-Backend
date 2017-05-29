@@ -19,5 +19,9 @@ class ApiEndpoints
     const ATTACH_SIGN    = '/api/users/sign';
     const ATTACH_PHOTO   = '/api/users/photo';
     const CAREERS_VIEW   = '/api/careers';
+    const SURVEY         = '/api/surveys';
+    const PROFILES       = '/api/profiles';
+    const CONTRACTS      = '/api/contracts';
+    const USER           = '/api/user';
 
 }

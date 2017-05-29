@@ -2,15 +2,68 @@
 
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
+use Helper\ValuesContainer;
 
 class UsersCest
 {
+    private $userId;
+
     public function _before(FunctionalTester $I)
     {
     }
 
     public function _after(FunctionalTester $I)
     {
+    }
+
+    /**
+     * 2.2.3 Create User Request
+     * @see https://jira-v2.skynix.company/browse/SI-856
+     */
+    public function testCreateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        define('ROLE', 'DEV');
+        define('FIRST_NAME', 'Test');
+        define('LAST_NAME', 'Test');
+        define('EMAIL', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendPOST(ApiEndpoints::USERS, json_encode([
+            'role'          => ROLE,
+            'first_name'    => FIRST_NAME,
+            'last_name'     => LAST_NAME,
+            'email'         => EMAIL
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $this->userId = $response->data->user_id;
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        /*Check if user was added */
+
+        $I->sendGET(ApiEndpoints::USERS, [
+            'limit'   => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        $I->canSeeResponseContainsJson([
+            'data' => [
+                'users' => [
+                    'first_name' => FIRST_NAME,
+                    'last_name'  => LAST_NAME,
+                    'email'      => EMAIL,
+                    'role'       => ROLE
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -93,54 +146,7 @@ class UsersCest
             ]
         ]);
     }
-    /**
-     * 2.2.3 Create User Request
-     * @see https://jira-v2.skynix.company/browse/SI-856
-     */
-    public function testCreateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
-    {
-        define('ROLE', 'DEV');
-        define('FIRST_NAME', 'Test');
-        define('LAST_NAME', 'Test');
-        define('EMAIL', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
 
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
-
-        $I->sendPOST(ApiEndpoints::USERS, json_encode([
-            'role'          => ROLE,
-            'first_name'    => FIRST_NAME,
-            'last_name'     => LAST_NAME,
-            'email'         => EMAIL
-        ]));
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-
-        /*Check if user was added */
-
-        $I->sendGET(ApiEndpoints::USERS, [
-            'limit'   => 1
-        ]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-
-        $I->canSeeResponseContainsJson([
-            'data' => [
-                'users' => [
-                    'first_name' => FIRST_NAME,
-                    'last_name'  => LAST_NAME,
-                    'email'      => EMAIL,
-                    'role'       => ROLE
-                ]
-            ]
-        ]);
-    }
     /**
      * 2.2.4 Edit User Request
      * @see http://jira.skynix.company:8070/browse/SI-857
@@ -177,6 +183,20 @@ class UsersCest
         $I->assertEquals(last_name, $response->data->last_name);
         $I->assertEquals('$' . salary, $response->data->salary);
         $I->assertEquals(phone, $response->data->phone);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-983
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewPhotoUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendGET(ApiEndpoints::USER . '/' . ValuesContainer::$userId . '/photo');
+        $I->seeResponseCodeIs(200);
     }
 
     /**
@@ -250,7 +270,7 @@ class UsersCest
      */
     public function testDeleteUser(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('userIdDelete', 1);
+        define('userIdDelete', $this->userId);
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
@@ -260,6 +280,26 @@ class UsersCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
+    }
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-981
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function getAccessToken(FunctionalTester $I, \Codeception\Scenario $scenario) {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+        $I->sendGET(ApiEndpoints::USERS . '/access-token/' . ValuesContainer::$userId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'access_token' => 'string'
+            ]
+        ]);
     }
 
 }

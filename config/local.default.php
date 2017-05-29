@@ -23,27 +23,44 @@ return [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
-                'username' => '',//your google email
-                'password' => '', //your google password
+                'username' => '<mail_username>',//your google email
+                'password' => '<mail_password', //your google password
                 'port' => '587',
                 'encryption' => 'tls',
             ],
         ],
         'user' => [
             'identityCookie' => [
-                'domain' => '.skynix.local',
+                'domain' => '.skynix.co',
             ]
         ],
         'session' => [
             'cookieParams' => [
                 'path' => '/',
-                'domain' => '.skynix.local'
+                'domain' => '.skynix.co'
             ],
+        ],
+        'reCaptcha' => [
+            'name' => 'reCaptcha',
+            'class' => 'himiklab\yii2\recaptcha\ReCaptcha',
+            'siteKey' => '<recaptcha_siteKey>',
+            'secret' => '<recaptcha_secret>',
+        ],
+        'awssdk' => [
+            'class' => 'fedemotta\awssdk\AwsSdk',
+            'credentials' => [
+                //you can use a different method to grant access
+                'key' => '<aws_key>',
+                'secret' => '<aws_secret>',
+            ],
+            'region' => 'us-east-1', //i.e.: 'us-east-1'
+            'version' => 'latest', //i.e.: 'latest'
         ],
     ],
     'params' => array(
-        'url_crm'           => 'https://skynix.local',
-        'url_site'          => 'https://skynix.local',
-        'port'		        => ''
+        'url_crm'           => 'https://skynix.co',
+        'url_site'          => 'https://skynix.company',
+        'port'		        => '',
+        'adminEmail'        => 'admin@skynix.co',
     )
 ];

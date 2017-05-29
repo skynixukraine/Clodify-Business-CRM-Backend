@@ -12,15 +12,28 @@ use app\modules\api\components\Api\Processor;
 
 class PasswordController extends DefaultController
 {
-    public function actionIndex()
+    public function actionReset()
     {
-
         $this->di
             ->set('app\models\User', ['scenario' => User::SCENARIO_CHANGE_PASSWORD])
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
-            ->set('viewModel\ViewModelInterface', 'viewModel\Password')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ResetPassword')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => false
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
+    public function actionChange()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ChangePassword')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => false
             ])
             ->get('Processor')
