@@ -436,7 +436,7 @@ class InvoiceController extends DefaultController
             }
             $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
             try {
-                $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+                $s->downloadToFile($contractorSign, $conractorImgPath);
             }catch (\Aws\S3\Exception\S3Exception $e) {}
 
             //----------------Download customer signature from Amazon Simple Storage Service---------//
@@ -445,7 +445,7 @@ class InvoiceController extends DefaultController
             $customerImg = 'customer.'. pathinfo( $dataPdf->getUser()->one()->sing, PATHINFO_EXTENSION);
             $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
             try {
-                $s->downloadToFile('skynixcrm-data', $customerSign, $customerImgPath);
+                $s->downloadToFile($customerSign, $customerImgPath);
             } catch (\Aws\S3\Exception\S3Exception $e) {}
             $imgData = base64_encode(file_get_contents($conractorImgPath));
             $signatureContractor = 'data: '.mime_content_type($conractorImgPath).';base64,'.$imgData;

@@ -31,7 +31,7 @@ class UserPhoto extends ViewModelAbstract
             if ($file->size <= 5242880) { // 5242880 bytes - 5 mb
                 $s = new Storage();
                 $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
-                $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+                $result = $s->upload($pathFile . $file->name, $file->tempName);
                 if ($result['ObjectURL']) {
                     $this->setData(['photo' => $result['ObjectURL']]);
 
