@@ -301,7 +301,7 @@ class ContractController extends DefaultController
 
             $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
             try {
-                $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+                $s->downloadToFile($contractorSign, $conractorImgPath);
             }catch (\Aws\S3\Exception\S3Exception $e) {}
 
             //----------------Download customer signature from Amazon Simple Storage Service---------//
@@ -310,7 +310,7 @@ class ContractController extends DefaultController
             $customerSign = 'data/' . $customer->id . '/sign/' . $customer->sing;
             $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
             try{
-                $s->downloadToFile('skynixcrm-data',  $customerSign, $customerImgPath);
+                $s->downloadToFile($customerSign, $customerImgPath);
             } catch (\Aws\S3\Exception\S3Exception $e) {}
 
             $imgData = base64_encode(file_get_contents($conractorImgPath));
@@ -363,7 +363,7 @@ class ContractController extends DefaultController
              }
             $conractorImgPath  = $folder .'/'. 'contractor.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
                try {
-                   $s->downloadToFile('skynixcrm-data', $contractorSign, $conractorImgPath);
+                   $s->downloadToFile($contractorSign, $conractorImgPath);
                } catch (\Aws\S3\Exception\S3Exception $e) {
                }
 
@@ -373,7 +373,7 @@ class ContractController extends DefaultController
             $customerImg = 'customer.'. pathinfo( $customer->sing, PATHINFO_EXTENSION);
             $customerImgPath  = $folder .'/'. 'customer.'. pathinfo( $contractor->sing, PATHINFO_EXTENSION);
             try {
-                $s->downloadToFile('skynixcrm-data', $customerSign, $customerImgPath);
+                $s->downloadToFile($customerSign, $customerImgPath);
             }  catch (\Aws\S3\Exception\S3Exception $e) {}
             $imgData = base64_encode(file_get_contents($conractorImgPath));
             $signatureContractor = 'data: '.mime_content_type($conractorImgPath).';base64,'.$imgData;

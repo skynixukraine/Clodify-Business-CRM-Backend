@@ -97,7 +97,7 @@ class SettingController extends DefaultController
     {
         $userPhoto = Yii::$app->request->getQueryParam('photo');
         $s = new Storage();
-        $result = $s->download('skynixcrm-data',$userPhoto);
+        $result = $s->download($userPhoto);
         $arrayuserPhoto = explode('/',$userPhoto);
         $path_info = pathinfo(end($arrayuserPhoto));
         header('Content-Type: ' . $result['ContentType'] . '/' . $path_info['extension']);
@@ -114,7 +114,7 @@ class SettingController extends DefaultController
 
             $s = new Storage();
             $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
-            $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+            $result = $s->upload($pathFile . $file->name, $file->tempName);
 
             if ($result['ObjectURL']) {
                 //Now save file data to database
