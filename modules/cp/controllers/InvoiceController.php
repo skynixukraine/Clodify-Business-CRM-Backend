@@ -504,8 +504,8 @@ class InvoiceController extends DefaultController
 
             ]);
             $pdf = new mPDF();
-            $pdf->WriteHTML($html2);
-            $pdf->Output('../data/invoices/' . 'reports' . $model->id . '.pdf', 'F');
+            @$pdf->WriteHTML($html2);
+            $pdf->Output($model->id . '.pdf', 'D');
             if( ( $model->user_id == Yii::$app->user->id &&
                     User::hasPermission([User::ROLE_CLIENT]) ) ||
                 User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ){
