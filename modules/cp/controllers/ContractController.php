@@ -230,6 +230,10 @@ class ContractController extends DefaultController
                     ? Report::getReportsCostOnInvoice($invoice->id) : 0);
             }
 
+            if (User::hasPermission([User::ROLE_CLIENT])) {
+                $expenses = null;
+            }
+
             $list[] = [
                 $model->contract_id,
                 $initiator->first_name . ' ' . $initiator->last_name,
