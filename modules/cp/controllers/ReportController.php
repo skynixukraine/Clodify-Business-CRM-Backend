@@ -113,8 +113,8 @@ class ReportController extends DefaultController
         ]);
 
         $pdf = new mPDF();
-        $pdf->WriteHTML($html);
-        $pdf->Output('../data/reports/'.$fileName, 'F');
+        @$pdf->WriteHTML($html);
+        $pdf->Output($fileName,  'D');
 
         header("Content-type:application/pdf"); //for pdf file
         header('Content-Disposition: attachment; filename="' . basename('../data/reports/'. $fileName ) . '"');

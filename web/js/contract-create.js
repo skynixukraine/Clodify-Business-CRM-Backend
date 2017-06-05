@@ -3,15 +3,16 @@
  */
 var contractCreateModule = (function() {
     var cfg = {
-            findUrl     : '',
-            editUrl     : '',
-            deleteUrl   : '',
-            viewUrl     : '',
-            invoiceUrl  : '',
-            canDelete   : '',
-            canEdit     : '',
-            canInvoice  : '',
-            canView     : ''
+            findUrl              : '',
+            editUrl              : '',
+            deleteUrl            : '',
+            viewUrl              : '',
+            invoiceUrl           : '',
+            canDelete            : '',
+            canEdit              : '',
+            canInvoice           : '',
+            canView              : '',
+            canVisibleColumn     : true
         },
         dataFilter = {
 
@@ -95,7 +96,8 @@ var contractCreateModule = (function() {
                     },
                     {
                         "targets"   : 9,
-                        "orderable" : false
+                        "orderable" : false,
+                        "visible": cfg.canVisibleColumn
                     },
                     {
                         "targets"   : 10,

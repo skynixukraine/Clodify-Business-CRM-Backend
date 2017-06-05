@@ -31,7 +31,7 @@ class UsersSign extends ViewModelAbstract
             if ($file->size <= 2097152) { // 2097152 bytes - 2 mb
                 $s = new Storage();
                 $pathFile = 'data/' . Yii::$app->user->id . '/sign/' . $file->name;
-                $result = $s->upload('skynixcrm-data', $pathFile, $file->tempName);
+                $result = $s->upload($pathFile, $file->tempName);
                 if ($result['ObjectURL']) {
                     $this->setData(['sign' => $result['ObjectURL']]);
 

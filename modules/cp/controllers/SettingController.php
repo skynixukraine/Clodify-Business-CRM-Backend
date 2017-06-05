@@ -79,8 +79,8 @@ class SettingController extends DefaultController
             }
         }
         $s = new Storage();
-        $userPhoto = $s->getListFileUser('skynixcrm-data','data/' . Yii::$app->user->id . '/photo/');
-        $userSign = $s->getListFileUser('skynixcrm-data','data/' . Yii::$app->user->id . '/sign/');
+        $userPhoto = $s->getListFileUser('data/' . Yii::$app->user->id . '/photo/');
+        $userSign = $s->getListFileUser('data/' . Yii::$app->user->id . '/sign/');
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
         return $this->render("index", ['model' => $model,
@@ -97,7 +97,7 @@ class SettingController extends DefaultController
     {
         $userPhoto = Yii::$app->request->getQueryParam('photo');
         $s = new Storage();
-        $result = $s->download('skynixcrm-data',$userPhoto);
+        $result = $s->download($userPhoto);
         $arrayuserPhoto = explode('/',$userPhoto);
         $path_info = pathinfo(end($arrayuserPhoto));
         header('Content-Type: ' . $result['ContentType'] . '/' . $path_info['extension']);
@@ -114,7 +114,7 @@ class SettingController extends DefaultController
 
             $s = new Storage();
             $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
-            $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+            $result = $s->upload($pathFile . $file->name, $file->tempName);
 
             if ($result['ObjectURL']) {
                 //Now save file data to database
@@ -141,7 +141,7 @@ class SettingController extends DefaultController
 
             $s = new Storage();
             $pathFile = 'data/' . Yii::$app->user->id . '/sign/';
-            $result = $s->upload('skynixcrm-data', $pathFile . $file->name, $file->tempName);
+            $result = $s->upload($pathFile . $file->name, $file->tempName);
 
             if ($result['ObjectURL']) {
                 //Now save file data to database

@@ -62,5 +62,6 @@ return [
         'url_site'          => 'https://skynix.company',
         'port'		        => '',
         'adminEmail'        => 'admin@skynix.co',
+        'basketAwssdk'      => '<aws_basket>'
     )
 ];

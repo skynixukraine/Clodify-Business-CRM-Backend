@@ -28,7 +28,7 @@ class UserViewPhoto extends ViewModelAbstract
 
         if ($userPhoto) {
             $s = new Storage();
-            $result = $s->download('skynixcrm-data','data/' . $id . '/photo/' . $userPhoto->photo);
+            $result = $s->download('data/' . $id . '/photo/' . $userPhoto->photo);
             $path_info = pathinfo($userPhoto->photo);
             header('Content-Type: ' . $result['ContentType'] . '/' . $path_info['extension']);
             echo $result['Body'];

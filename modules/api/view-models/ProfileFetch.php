@@ -23,12 +23,11 @@ class ProfileFetch extends ViewModelAbstract
         $order = Yii::$app->request->getQueryParam('order', []);
 
         $query = User::find()
-            ->where(['role' => [User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES]])
             ->andWhere(['is_delete' => !User::DELETED_USERS])
             ->andWhere(['is_active' => User::ACTIVE_USERS])
-            ->andWhere(['is_published' => 1])
+            ->andWhere(['is_published' => User::PUBLISHED_USERS])
             ->with(['developers' => function ($query) {
-                $query->where(['projects.is_published' => 1]);
+                $query->where(['projects.is_published' => Project::PROJECT_PUBLISHED]);
             }]);
 
         $dataTable = DataTable::getInstance()
@@ -52,7 +51,7 @@ class ProfileFetch extends ViewModelAbstract
         if ($profiles) {
             $profiles = ArrayHelper::toArray($profiles, [
                 User::className() => [
-                    'id', 'slug', 'photo' => function($profile) {
+                    'slug', 'photo' => function($profile) {
                         return '/api/user/' . $profile->id . '/photo';
                     },
                     'first_name', 'last_name', 'email', 'phone', 'about',

@@ -12,11 +12,13 @@ class Storage
 {
     private $aws;
     private $s3;
+    private $basket;
 
     function __construct()
     {
         $this->aws = Yii::$app->awssdk->getAwsSdk();
         $this->s3 = $this->aws->createS3();
+        $this->basket = Yii::$app->params['basketAwssdk'];
     }
 
     /**
@@ -25,10 +27,10 @@ class Storage
      * @param $filepath
      * @return mixed
      */
-    public function upload($bucket,$keyname,$filepath)
+    public function upload($keyname,$filepath)
     {
         $result = $this->s3->putObject(array(
-            'Bucket' => $bucket,
+            'Bucket' => $this->basket,
             'Key' => $keyname,
             'SourceFile' => $filepath,
             'ContentType' => 'image',
@@ -49,18 +51,18 @@ class Storage
      * @param string $key
      * @return mixed
      */
-    public function download($bucket='',$key ='')
+    public function download($key ='')
     {
         $file = $this->s3->getObject([
-            'Bucket' => $bucket,
+            'Bucket' => $this->basket,
             'Key' => $key,
         ]);
         return $file;
     }
-    public function downloadToFile($bucket='',$key ='', $pathToFile = '') {
+    public function downloadToFile($key ='', $pathToFile = '') {
 
         $result = $this->s3->getObject([
-            'Bucket' => $bucket,
+            'Bucket' => $this->basket,
             'Key' => $key,
             'SaveAs' => $pathToFile
         ]);
@@ -73,10 +75,10 @@ class Storage
      * @param string $key
      * @return mixed
      */
-    public function getListFileUser($bucket='',$prefix ='')
+    public function getListFileUser($prefix ='')
     {
         $file = $this->s3->listObjects([
-            'Bucket' => $bucket,
+            'Bucket' => $this->basket,
             'Prefix' => $prefix,
         ]);
         return $file;

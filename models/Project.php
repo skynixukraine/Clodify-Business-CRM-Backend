@@ -34,6 +34,8 @@ class Project extends \yii\db\ActiveRecord
     const STATUS_DONE       = "DONE";
     const STATUS_CANCELED   = "CANCELED";
 
+    const PROJECT_PUBLISHED = 1;
+
 
     public $customers;
     public $developers;
