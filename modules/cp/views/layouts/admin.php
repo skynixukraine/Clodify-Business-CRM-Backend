@@ -94,8 +94,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                             <!-- User image -->
                             <li class="user-header">
                                 <?php if (Yii::$app->user->identity->photo != null):?>
-                                    <img src="<?=urldecode( Url::to (['/cp/index/getphoto', 'entry'=>Yii::getAlias('@app').
-                                    '/data/'.Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+                                    <img src="<?=urldecode( Url::to (['/cp/setting/download?photo=data/' .
+                                        Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>"
+                                         class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
                                 <?php else:?>
                                     <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
                                 <?php endif;?>

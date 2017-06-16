@@ -222,8 +222,11 @@ class UserController extends DefaultController {
                 }
 
                 if ($model->photo) {
-                    $photo = urldecode(Url::to(['/cp/index/getphoto', 'entry' => Yii::getAlias('@app') .
-                        '/data/' . $model->id . '/photo/' . $model->photo]));
+                    $photo = urldecode(Url::to(
+                        [
+                            '/cp/setting/download?photo=data/' . $model->id . '/photo/' . $model->photo
+                        ]
+                    ));
                 } else {
                     $photo = "/img/avatar.png";
                 }
