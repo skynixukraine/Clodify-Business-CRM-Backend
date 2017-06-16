@@ -22,8 +22,8 @@ var contractCreateModule = (function() {
         },
         filterCustomersSelect = "select[name=customers]",
         filterDateStartSelect = "#contract-start_date",
-        filterDateEndSelect = "#contract-end_date";
-    filterDateActSelect = "#contract-act_date";
+        filterDateEndSelect = "#contract-end_date",
+        filterDateActSelect = "#contract-act_date";
     function actionEdit( id )
     {
         document.location.href = cfg.editUrl + "?id=" + id;
@@ -239,49 +239,50 @@ var contractCreateModule = (function() {
             filterDateStartSelect.datepicker({
                 format : 'yyyy-mm-dd',
                 autoclose: true,
-                defaultViewDate: firstDayOfCurrMonth
+                defaultViewDate: filterDateStartSelect.val(),
+                endDate : currentDay
             }).on("hide", function( event ){
                 var startDate = filterDateStartSelect.val();
                 dataFilter['start_date'] = startDate;
-                console.log(filterDateStartSelect.val());
-                if(startDate != '' && filterDateEndSelect.val() != ''){
+                if(startDate != '' && filterDateStartSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
 
-            }).datepicker("setDate", firstDayOfCurrMonth);
+            }).datepicker("setDate", filterDateStartSelect.val());
 
             filterDateEndSelect = $( filterDateEndSelect );
             filterDateEndSelect.datepicker({
                 format : 'yyyy-mm-dd',
                 autoclose: true,
-                defaultViewDate: currentDay,
+                defaultViewDate: filterDateEndSelect.val(),
                 endDate : currentDay
             }).on("hide", function( event ){
                 var endDate = filterDateEndSelect.val();
                 dataFilter['end_date'] = endDate;
-                if(endDate != '' && filterDateStartSelect.val() != ''){
+                if(endDate != '' && filterDateEndSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
-            }).datepicker("setDate", currentDay);
+            }).datepicker("setDate", filterDateEndSelect.val());
 
             filterDateActSelect = $( filterDateActSelect );
             filterDateActSelect.datepicker({
                 format : 'yyyy-mm-dd',
                 autoclose: true,
-                defaultViewDate: currentDay,
+                defaultViewDate: filterDateActSelect.val(),
                 endDate : currentDay
             }).on("hide", function( event ){
-                var endDate = filterDateActSelect.val();
-                dataFilter['end_date'] = endDate;
-                if(endDate != '' && filterDateActSelect.val() != ''){
+                var actDate = filterDateActSelect.val();
+                dataFilter['act_date'] = actDate;
+                if(actDate != '' && filterDateActSelect.val() != ''){
                     dataTable.api().ajax.reload();
                 }
-            }).datepicker("setDate", currentDay);
+            }).datepicker("setDate", filterDateActSelect.val());
 
 
 
             dataFilter['start_date'] = filterDateStartSelect.val();
             dataFilter['end_date'] = filterDateEndSelect.val();
+            dataFilter['act_date'] = filterDateActSelect.val();
 
         }
     }
