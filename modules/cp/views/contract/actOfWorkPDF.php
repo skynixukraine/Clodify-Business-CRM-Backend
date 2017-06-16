@@ -75,7 +75,7 @@
     </tr>
     <tr style = "height: 100%; box-sizing: border-box; border-collapse: collapse; ">
         <td align="justify" style="margin: 0;font-family:\'Times New Roman\';font-size:10px;">
-            Загальна вартість робіт <strong><?= $invoice->subtotal - $invoice->discount?></strong> USD (Total cost of the work <strong><?= $invoice->subtotal - $invoice->discount?></strong> USD)
+            Загальна вартість робіт <strong><?= $invoice->total - $invoice->discount?></strong> USD (Total cost of the work <strong><?= $invoice->total - $invoice->discount?></strong> USD)
             <br><span style="color: #ffffff;">.</span>
         </td>
     </tr>

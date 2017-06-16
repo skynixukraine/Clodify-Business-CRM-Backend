@@ -70,6 +70,14 @@ class Contract extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getInvoices()
+    {
+        return $this->hasMany(Invoice::className(), ['contract_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCustomer()
     {
         return $this->hasOne(User::className(), ['id' => 'customer_id']);

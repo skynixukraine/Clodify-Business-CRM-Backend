@@ -40,6 +40,8 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_CANCELED   = "CANCELED";
     const STATUS_PAID       = "PAID";
 
+    const INVOICE_DELETED   = 1;
+
     public $method;
 
     /**
@@ -106,6 +108,11 @@ class Invoice extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getContract()
+    {
+        return $this->hasOne(Contract::className(), ['id' => 'contract_id']);
     }
 
     public function beforeSave($insert)
