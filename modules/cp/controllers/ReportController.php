@@ -328,9 +328,7 @@ class ReportController extends DefaultController
 
             $user = (($aliasUser != null) ?
                 $aliasUser->first_name . ' ' .
-                $aliasUser->last_name .
-                '(' . User::findOne($model->user_id)->first_name . ' ' .
-                User::findOne($model->user_id)->last_name . ')' :
+                $aliasUser->last_name :
                 (User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
                     $aliasUser->first_name . ' ' . $aliasUser->last_name :
                     User::findOne($model->user_id)->first_name . ' ' .
