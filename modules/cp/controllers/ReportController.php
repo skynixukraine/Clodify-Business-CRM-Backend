@@ -326,13 +326,23 @@ class ReportController extends DefaultController
                 $customer_project = 'Customer NOT SET' . '<br>' . $model->getProject()->one()->name;
             }
 
+            $userDeveloper = User::findOne($model->user_id);
+
             $user = (($aliasUser != null) ?
                 $aliasUser->first_name . ' ' .
                 $aliasUser->last_name :
                 (User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
                     $aliasUser->first_name . ' ' . $aliasUser->last_name :
-                    User::findOne($model->user_id)->first_name . ' ' .
-                    User::findOne($model->user_id)->last_name));
+                    $userDeveloper->first_name . ' ' . $userDeveloper->last_name));
+
+            /**
+             * Output an alias developer and developer on dashboard report
+             * if download reports output only an alias developer
+             */
+            if (!User::hasPermission([User::ROLE_CLIENT]) && $aliasUser && $output != 'pdf') {
+                $user .= '(' . $userDeveloper->first_name . ' ' . $userDeveloper->last_name . ')';
+            }
+
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
