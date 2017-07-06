@@ -40,7 +40,8 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_CANCELED   = "CANCELED";
     const STATUS_PAID       = "PAID";
 
-    const INVOICE_DELETED   = 1;
+    const INVOICE_DELETED       = 1;
+    const INVOICE_NOT_DELETED   = 0;
 
     public $method;
 
