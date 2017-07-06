@@ -297,10 +297,15 @@ class ContractController extends DefaultController
 
         $model = Contract::find()
             ->andWhere([Contract::tableName() . '.id' => $id])
-            ->andWhere([Invoice::tableName() . '.is_delete' => !Invoice::INVOICE_DELETED])
-            ->joinWith('invoices')
             ->one();
-        if ($model && $model->invoices) {
+
+        $invoice = Invoice::find()
+            ->andWhere(['contract_id' => $model->id])
+            ->andWhere([Invoice::tableName() . '.is_delete' => Invoice::INVOICE_NOT_DELETED])
+            ->andWhere(['in', Invoice::tableName() . '.status', array(Invoice::STATUS_NEW, Invoice::STATUS_PAID)])
+            ->one();
+
+        if ($model && $invoice) {
             //-------------- Download contractor signature from Amazon Simple Storage Service--------//
             $contractor = User::findOne(Yii::$app->params['contractorId']);
             $contractorSign = 'data/' . $contractor->id . '/sign/' . $contractor->sing;
@@ -332,12 +337,11 @@ class ContractController extends DefaultController
             $imgData = base64_encode(file_get_contents($customerImgPath));
             $signatureCustomer = 'data: ' . mime_content_type($customerImgPath) . ';base64,' . $imgData;
             // Generating PDF
-            $total = array_shift($model->invoices)->total;
             $html = $this->renderPartial('contractPDF', [
 
                 'contract_id'                => $model->contract_id,
                 'start_date'                 => $model->start_date,
-                'total'                      => $total,
+                'total'                      => $invoice->total,
                 'contract_template_id'       => $model->contract_template_id,
                 'contract_payment_method_id' => $model->contract_payment_method_id,
                 'customer_id'                => $model->customer_id,
