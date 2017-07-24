@@ -28,6 +28,7 @@ class FinancialReportView extends ViewModelAbstract
             $financialReport = FinancialReport::find()
                 ->where([FinancialReport::tableName() . '.id' => $id])
                 ->one();
+
             $data = ArrayHelper::toArray($financialReport, [
                 'app\models\FinancialReport' => [
                     'id',
@@ -46,10 +47,10 @@ class FinancialReportView extends ViewModelAbstract
                          return json_decode($financialReport->expense_constant);
                     },
                 ],
-
             ]);
 
             $this->setData($data);
+
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }

@@ -21,12 +21,12 @@ class FinancialReportsCest
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testCreateFunctionalReportCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testCreateFinancialReportCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Testing create functional reports');
+        $I->wantTo('Testing create financial reports');
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
             [
                 'report_date' => '2019-02-03'
