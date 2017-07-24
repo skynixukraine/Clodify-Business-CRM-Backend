@@ -25,6 +25,11 @@ class DateUtil
         }
         return $date;
     }
+
+    /**
+     * @param $date
+     * @return string
+     */
     public static function convertDatetime( $date )
     {
         if( $date ) {

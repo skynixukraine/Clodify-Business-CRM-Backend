@@ -1,16 +1,19 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: igor
+ * Created by Skynix Team
  * Date: 21.07.17
- * Time: 17:40
+ * Time: 12:25
  */
+
 namespace app\modules\api\controllers;
 
+
+use app\models\FinancialReport;
 use app\modules\api\components\Api\Processor;
 
 class FinancialReportsController extends DefaultController
 {
+
     public function actionView()
     {
         $this->di
@@ -23,4 +26,19 @@ class FinancialReportsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionCreate()
+    {
+        $this->di
+            ->set('app\models\FinancialReport', ['scenario' => FinancialReport::SCENARIO_FINANCIAL_REPORT_CREATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

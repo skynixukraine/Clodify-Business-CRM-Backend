@@ -23,16 +23,16 @@ class FinancialReportView extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
-        $id = Yii::$app->request->getQueryParam('id');
+            $id = Yii::$app->request->getQueryParam('id');
 
-        $financialReport = FinancialReport::find()
-            ->where([FinancialReport::tableName() . '.id' => $id])
-            ->one();
+            $financialReport = FinancialReport::find()
+                ->where([FinancialReport::tableName() . '.id' => $id])
+                ->one();
             $data = ArrayHelper::toArray($financialReport, [
                 'app\models\FinancialReport' => [
                     'id',
-                    'report_data' => function ($financialReport) {
-                         return DateUtil::convertDateFromUnix($financialReport->report_data);
+                    'report_date' => function ($financialReport) {
+                         return DateUtil::convertDateFromUnix($financialReport->report_date);
                     },
                     'currency',
                     'expense_salary',

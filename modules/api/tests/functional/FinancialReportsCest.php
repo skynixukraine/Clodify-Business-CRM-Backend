@@ -15,6 +15,37 @@ use Helper\ApiEndpoints;
  */
 class FinancialReportsCest
 {
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-972
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testCreateFunctionalReportCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing create functional reports');
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
+            [
+                'report_date' => '2019-02-03'
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data'    => [
+                    'report_id' => 'integer',
+                ],
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        );
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-1025
      * @param  FunctionalTester $I
@@ -52,7 +83,7 @@ class FinancialReportsCest
         $I->haveInDatabase('financial_reports',
             array(
                 'id' => 1,
-                'report_data' => strtotime('2017-08-01'),
+                'report_date' => strtotime('2017-08-01'),
                 'currency' => 26.6,
                 'income' => json_encode($income),
                 'expense_constant' => json_encode($expenses),
@@ -71,11 +102,11 @@ class FinancialReportsCest
         $I->seeResponseMatchesJsonType([
             'data' => [
                 'id' => 'integer',
-                'report_data' => 'string',
+                'report_date' => 'string',
                 'income' => 'array',
                 'currency' => 'float',
                 'expense_constant' => 'array',
-                'expense_salary' => 'float',
+                'expense_salary' => 'integer',
                 'investments' => 'array',
             ],
             'errors' => 'array',

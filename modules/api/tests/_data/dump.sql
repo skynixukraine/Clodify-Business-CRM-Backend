@@ -198,7 +198,7 @@ DROP TABLE IF EXISTS `financial_reports`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `financial_reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `report_data` int null,
+  `report_date` int null,
   `income` text null,
   `currency` double null,
   `expense_constant` text null,
