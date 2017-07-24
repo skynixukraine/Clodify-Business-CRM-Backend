@@ -190,6 +190,25 @@ CREATE TABLE `extensions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `financial_reports`
+--
+
+DROP TABLE IF EXISTS `financial_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `financial_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_date` int null,
+  `income` text null,
+  `currency` double null,
+  `expense_constant` text null,
+  `expense_salary` double null,
+  `investments` text null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `invoices`
 --
 

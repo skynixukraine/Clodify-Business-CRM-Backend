@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "financial_reports".
  *
  * @property integer $id
- * @property integer $report_data
+ * @property integer $report_date
  * @property string $income
  * @property double $currency
  * @property string $expense_constant
@@ -17,6 +17,11 @@ use Yii;
  */
 class FinancialReport extends \yii\db\ActiveRecord
 {
+
+    const EXPIRATION_PERIOD_CREATE = '30 days';
+
+    const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
+
     /**
      * @inheritdoc
      */
@@ -31,7 +36,8 @@ class FinancialReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_data'], 'integer'],
+            [['report_date'], 'integer', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
+            [['report_date'], 'required', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
             [['income', 'expense_constant', 'investments'], 'string'],
             [['currency', 'expense_salary'], 'number'],
         ];
@@ -44,7 +50,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'report_data' => 'Report Data',
+            'report_date' => 'Report Date',
             'income' => 'Income',
             'currency' => 'Currency',
             'expense_constant' => 'Expense Constant',
