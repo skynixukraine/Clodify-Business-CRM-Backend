@@ -28,4 +28,17 @@ class FinancialReportsController extends DefaultController
             ->respond();
     }
 
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
