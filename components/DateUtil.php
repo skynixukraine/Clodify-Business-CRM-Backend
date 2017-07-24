@@ -95,4 +95,22 @@ class DateUtil
         return $newDate;
     }
 
+    /**
+     * @param $date
+     * @return false|string
+     */
+    public static function convertDateFromUnix($date, $formatDate = 'd-m-Y')
+    {
+        return date($formatDate, $date);
+    }
+
+    /**
+     * @param $date
+     * @return false|string
+     */
+    public static function convertDateToUnix($date)
+    {
+        return strtotime($date);
+    }
+
 }
