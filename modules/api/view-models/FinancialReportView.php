@@ -14,6 +14,10 @@ use app\models\User;
 use app\models\FinancialReport;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class FinancialReportView
+ * @package viewModel
+ */
 class FinancialReportView extends ViewModelAbstract
 {
     public function define()
