@@ -44,7 +44,7 @@ class FinancialReportView extends ViewModelAbstract
                          return json_decode($financialReport->expense_constant);
                     },
                     'investments' => function ($financialReport) {
-                         return json_decode($financialReport->expense_constant);
+                         return json_decode($financialReport->investments);
                     },
                 ],
             ]);

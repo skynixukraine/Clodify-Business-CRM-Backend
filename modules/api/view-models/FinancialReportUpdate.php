@@ -8,22 +8,43 @@
 namespace viewModel;
 
 use app\models\FinancialReport;
-use app\models\SurveysOption;
-use app\components\DateUtil;
-use app\models\Survey;
+use app\models\User;
+use app\modules\api\components\Api\Processor;
 use yii;
-use yii\helpers\ArrayHelper;
 
+/**
+ * Class FinancialReportUpdate
+ * @package viewModel
+ */
 class FinancialReportUpdate extends ViewModelAbstract
 {
 
     public function define()
     {
-        if ($id = Yii::$app->request->get('id')) {
-            if ($this->validate() && ($this->model = FinancialReport::findOne($id)) ) {
-                $this->model->setAttributes($this->postData);
-                $this->model->save();
+
+        $id = Yii::$app->request->getQueryParam('id');
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+            $financialReport = FinancialReport::findOne($id);
+            if(isset($this->postData['income'])){
+                $this->postData['income'] = json_encode($this->postData['income']);
             }
+            if(isset($this->postData['expense_constant'])){
+                $this->postData['expense_constant'] = json_encode($this->postData['expense_constant']);
+            }
+            if(isset($this->postData['investments'])){
+                $this->postData['investments'] = json_encode($this->postData['investments']);
+            }
+            $financialReport->setAttributes($this->postData, false);
+               if ($financialReport->validate()) {
+                    $financialReport->save();
+               } else {
+                    return $this->addError(
+                        Processor::ERROR_PARAM,
+                        Yii::t('yii', 'This report can not be updated!'));
+               }
+
+        } else {
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
     }
 }

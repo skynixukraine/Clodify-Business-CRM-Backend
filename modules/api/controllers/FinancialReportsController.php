@@ -44,6 +44,7 @@ class FinancialReportsController extends DefaultController
     public function actionUpdate()
     {
         $this->di
+            ->set('app\models\FinancialReport', ['scenario' => FinancialReport::SCENARIO_FINANCIAL_REPORT_UPDATE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
             ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportUpdate')
             ->set('app\modules\api\components\Api\Access', [
