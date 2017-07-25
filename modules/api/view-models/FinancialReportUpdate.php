@@ -25,23 +25,25 @@ class FinancialReportUpdate extends ViewModelAbstract
         $id = Yii::$app->request->getQueryParam('id');
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
             $financialReport = FinancialReport::findOne($id);
-            if(isset($this->postData['income'])){
+            if (isset($this->postData['income'])) {
                 $this->postData['income'] = json_encode($this->postData['income']);
             }
-            if(isset($this->postData['expense_constant'])){
+            if (isset($this->postData['expense_constant'])) {
                 $this->postData['expense_constant'] = json_encode($this->postData['expense_constant']);
             }
-            if(isset($this->postData['investments'])){
+            if (isset($this->postData['investments'])) {
                 $this->postData['investments'] = json_encode($this->postData['investments']);
             }
-            $financialReport->setAttributes($this->postData, false);
-               if ($financialReport->validate()) {
-                    $financialReport->save();
-               } else {
-                    return $this->addError(
-                        Processor::ERROR_PARAM,
-                        Yii::t('yii', 'This report can not be updated!'));
-               }
+            $financialReport->setAttributes(
+                array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
+            );
+            if ($financialReport->validate()) {
+                $financialReport->save();
+            } else {
+                return $this->addError(
+                    Processor::ERROR_PARAM,
+                    Yii::t('yii', 'This report can not be updated!'));
+            }
 
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));

@@ -21,7 +21,6 @@ class FinancialReport extends \yii\db\ActiveRecord
     const EXPIRATION_PERIOD_CREATE = '30 days';
 
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
-
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
 
