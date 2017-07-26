@@ -21,6 +21,8 @@ class FinancialReport extends \yii\db\ActiveRecord
     const EXPIRATION_PERIOD_CREATE = '30 days';
 
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
+    const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
+
 
     /**
      * @inheritdoc
@@ -36,10 +38,10 @@ class FinancialReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date'], 'integer', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
-            [['report_date'], 'required', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
-            [['income', 'expense_constant', 'investments'], 'string'],
-            [['currency', 'expense_salary'], 'number'],
+            [['report_date'], 'integer', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['report_date'], 'required', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['income', 'expense_constant', 'investments'], 'string', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            [['currency', 'expense_salary'], 'number', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
         ];
     }
 
