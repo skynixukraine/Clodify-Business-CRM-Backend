@@ -62,7 +62,7 @@ class FinancialReportFetch extends ViewModelAbstract
                             if($finRep->currency){
                                 return $finRep->currency;
                             } else {
-                                return 0.00;
+                                return 0;
                             }
                         },
                         'income' => function ($finRep) {

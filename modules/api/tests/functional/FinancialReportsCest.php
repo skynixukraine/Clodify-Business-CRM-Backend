@@ -178,6 +178,11 @@ class FinancialReportsCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1024
+     * @param  FunctionalTester $I
+     * @return void
+     */
     public function testFetchFinancilReportCest(FunctionalTester $I)
     {
 
