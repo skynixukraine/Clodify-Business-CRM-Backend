@@ -39,6 +39,8 @@ return [
     'GET '      . $API . '/financial-reports/<id:\d+>'                  => $API . '/financial-reports/view',
     'POST '     . $API . '/financial-reports'                           => $API . '/financial-reports/create',
     'GET '      . $API . '/financial-reports'                           => $API . '/financial-reports/fetch',
+    'PUT '      . $API . '/financial-reports/<id:\d+>'                  => $API . '/financial-reports/update',
+
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',

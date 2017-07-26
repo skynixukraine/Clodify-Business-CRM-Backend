@@ -21,6 +21,8 @@ class FinancialReport extends \yii\db\ActiveRecord
     const EXPIRATION_PERIOD_CREATE = '30 days';
 
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
+    const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
+
 
     /**
      * @inheritdoc
@@ -36,10 +38,10 @@ class FinancialReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date'], 'integer', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
-            [['report_date'], 'required', 'on' => self::SCENARIO_FINANCIAL_REPORT_CREATE],
-            [['income', 'expense_constant', 'investments'], 'string'],
-            [['currency', 'expense_salary'], 'number'],
+            [['report_date'], 'integer', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['report_date'], 'required', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['income', 'expense_constant', 'investments'], 'string', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            [['currency', 'expense_salary'], 'number', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
         ];
     }
 
@@ -59,64 +61,102 @@ class FinancialReport extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * income = sum of all income amounts
+     * @param $id
+     * @return int
+     */
     public static function sumIncome($id)
     {
-        $income = 0;
         $financialReport = FinancialReport::findOne($id);
-            foreach (json_decode($financialReport['income']) as $val) {
-                foreach ($val as $k => $v) {
-                    if ($k === 'amount') {
-                        $income += $v;
-                    }
-                }
-            }
-            return $income;
-    }
+        $financialReport = json_decode($financialReport->income);
+        $incomeSum = 0;
 
-    public static function sumExpenseConstant($id)
-    {
-        $expcon = 0;
-        $financialReport = FinancialReport::findOne($id);
-        foreach (json_decode($financialReport['expense_constant']) as $val) {
-            foreach ($val as $k => $v) {
-                if ($k === 'amount') {
-                    $expcon += $v;
-                }
+        if ($financialReport) {
+            foreach ($financialReport as $income) {
+                $incomeSum += $income->amount;
             }
         }
-        return $expcon;
+
+        return $incomeSum;
     }
 
+    /**
+     * sum of all expense constant amounts
+     * @param $id
+     * @return int
+     */
+    public static function sumExpenseConstant($id)
+    {
+        $financialReport = FinancialReport::findOne($id);
+        $financialReport = json_decode($financialReport->expense_constant);
+        $expenseConstantSum = 0;
+
+        if ($financialReport) {
+            foreach ($financialReport as $exp_con) {
+                $expenseConstantSum += $exp_con->amount;
+            }
+        }
+
+        return $expenseConstantSum;
+    }
+
+    /**
+     * sum of all expense salary amounts
+     * @param $id
+     * @return float
+     */
     public static function sumExpenseSalary($id)
     {
         $financialReport = FinancialReport::findOne($id);
         return $financialReport->expense_salary;
     }
 
+    /**
+     * sum of all investments amount
+     * @param $id
+     * @return int
+     */
     public static function sumInvestments($id)
     {
-        $inv = 0;
         $financialReport = FinancialReport::findOne($id);
-        foreach (json_decode($financialReport['investments']) as $val) {
-            foreach ($val as $k => $v) {
-                if ($k === 'amount') {
-                    $inv += $v;
-                }
+        $financialReport = json_decode($financialReport->investments);
+        $investmentsSum = 0;
+
+        if ($financialReport) {
+            foreach ($financialReport as $investment) {
+                $investmentsSum += $investment->amount;
             }
         }
-        return $inv;
+
+        return $investmentsSum;
     }
 
+    /**
+     *expenses = sum of all expense_constant amounts + expense_salary
+     * @param $id
+     * @return float
+     */
     public static function sumExpenses($id)
     {
         return self::sumExpenseSalary($id) + self::sumExpenseConstant($id);
     }
 
+    /**
+     * profit = income - expenses
+     * @param $id
+     * @return int
+     */
     public static function makeProfit($id)
     {
         return self::sumIncome($id) - self::sumExpenses($id);
     }
 
+    /**
+     * balance = profit - sum of all investments amounts
+     * @param $id
+     * @return int
+     */
     public static function makeBalance($id)
     {
         return self::makeProfit($id) - self::sumInvestments($id);
