@@ -58,4 +58,68 @@ class FinancialReport extends \yii\db\ActiveRecord
             'investments' => 'Investments',
         ];
     }
+
+    public static function sumIncome($id)
+    {
+        $income = 0;
+        $financialReport = FinancialReport::findOne($id);
+            foreach (json_decode($financialReport['income']) as $val) {
+                foreach ($val as $k => $v) {
+                    if ($k === 'amount') {
+                        $income += $v;
+                    }
+                }
+            }
+            return $income;
+    }
+
+    public static function sumExpenseConstant($id)
+    {
+        $expcon = 0;
+        $financialReport = FinancialReport::findOne($id);
+        foreach (json_decode($financialReport['expense_constant']) as $val) {
+            foreach ($val as $k => $v) {
+                if ($k === 'amount') {
+                    $expcon += $v;
+                }
+            }
+        }
+        return $expcon;
+    }
+
+    public static function sumExpenseSalary($id)
+    {
+        $financialReport = FinancialReport::findOne($id);
+        return $financialReport->expense_salary;
+    }
+
+    public static function sumInvestments($id)
+    {
+        $inv = 0;
+        $financialReport = FinancialReport::findOne($id);
+        foreach (json_decode($financialReport['investments']) as $val) {
+            foreach ($val as $k => $v) {
+                if ($k === 'amount') {
+                    $inv += $v;
+                }
+            }
+        }
+        return $inv;
+    }
+
+    public static function sumExpenses($id)
+    {
+        return self::sumExpenseSalary($id) + self::sumExpenseConstant($id);
+    }
+
+    public static function makeProfit($id)
+    {
+        return self::sumIncome($id) - self::sumExpenses($id);
+    }
+
+    public static function makeBalance($id)
+    {
+        return self::makeProfit($id) - self::sumInvestments($id);
+    }
+
 }

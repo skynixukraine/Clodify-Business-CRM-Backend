@@ -20,7 +20,7 @@ class FinancialReportsController extends DefaultController
             ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
             ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportView')
             ->set('app\modules\api\components\Api\Access', [
-                'methods' => [Processor::METHOD_GET],
+                'methods' => [Processor::METHOD_GET ],
                 'checkAccess' => true
             ])
             ->get('Processor')
@@ -39,6 +39,20 @@ class FinancialReportsController extends DefaultController
             ])
             ->get('Processor')
             ->respond();
+    }
+
+    public function actionFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+
     }
 
 }

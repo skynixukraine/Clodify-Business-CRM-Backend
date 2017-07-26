@@ -113,4 +113,37 @@ class FinancialReportsCest
             'success' => 'boolean'
         ]);
     }
+
+    public function testFetchFinancilReport(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch financial report data');
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['reports' =>
+                [
+                    [
+                        'id'            => 'integer',
+                        'report_date'   => 'string',
+                        'balance'       => 'integer',
+                        'currency'      => 'float',
+                        'income'        => 'integer',
+                        'expenses'      => 'integer',
+                        'profit'        => 'integer',
+                        'investments'   => 'integer'
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
 }
