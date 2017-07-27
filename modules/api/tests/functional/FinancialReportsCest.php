@@ -15,6 +15,7 @@ use Helper\ValuesContainer;
  */
 class FinancialReportsCest
 {
+    private $reportId;
     /**
      * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario
@@ -126,7 +127,7 @@ class FinancialReportsCest
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testUpdateFinancialEwportsCest(FunctionalTester $I)
+    public function testUpdateFinancialReportsCest(FunctionalTester $I)
     {
         $income = array(
             array(
@@ -172,6 +173,42 @@ class FinancialReportsCest
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1024
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchFinancilReportCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing fetch financial report data');
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['reports' =>
+                [
+                    [
+                        'id'            => 'integer',
+                        'report_date'   => 'string',
+                        'balance'       => 'integer',
+                        'currency'      => 'integer',
+                        'income'        => 'integer',
+                        'expenses'      => 'integer',
+                        'profit'        => 'integer',
+                        'investments'   => 'integer'
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
             'errors' => 'array',
             'success' => 'boolean'
         ]);
