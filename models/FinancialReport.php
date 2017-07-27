@@ -166,4 +166,24 @@ class FinancialReport extends \yii\db\ActiveRecord
         return self::getProfit($id) - self::sumInvestments($id);
     }
 
+    /**
+     * Validate:
+     *     only one report per month can be created.
+     *
+     * @param $reportDate
+     * @return bool
+     */
+    public static function validateReportDate($date)
+    {
+        $financialReports = FinancialReport::find()->all();
+
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
