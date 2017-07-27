@@ -222,8 +222,8 @@ class ContractController extends DefaultController
             if(User::hasPermission([User::ROLE_SALES])) {
                 $createdByCurrentUser = false;
             }
-            if ($model->hasInvoices() && ($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0]))
-                && $invoice->status != Invoice::STATUS_CANCELED ) {
+
+            if ($model->hasInvoices() && ($invoice = $model->getValidInvoice())) {
                 $canInvoice = true;
                 $total_hours = Yii::$app->Helper->timeLength( $invoice->total_hours * 3600);
                 $expenses = '$' . (Report::getReportsCostOnInvoice($invoice->id)
@@ -365,7 +365,7 @@ class ContractController extends DefaultController
         if ( ( $id = Yii::$app->request->get("id") ) && ( $contract = Contract::findOne($id) )
             && ($contract->hasInvoices()) ) {
             $customer   = User::findOne($contract->customer_id);
-            $invoice    = Invoice::find()->where(['contract_id' => $contract->id, 'is_delete' => 0])->one();
+            $invoice = $contract->getValidInvoice();
             $contractor = User::findOne(Yii::$app->params['contractorId']);
 
             //-------------- Download contractor signature from Amazon Simple Storage Service--------//

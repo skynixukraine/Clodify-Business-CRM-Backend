@@ -25,6 +25,11 @@ class DateUtil
         }
         return $date;
     }
+
+    /**
+     * @param $date
+     * @return string
+     */
     public static function convertDatetime( $date )
     {
         if( $date ) {
@@ -93,6 +98,24 @@ class DateUtil
         $timestamp = strtotime($date);
         $newDate = date('d/m/Y', $timestamp);
         return $newDate;
+    }
+
+    /**
+     * @param $date
+     * @return false|string
+     */
+    public static function convertDateFromUnix($date, $formatDate = 'd-m-Y')
+    {
+        return date($formatDate, $date);
+    }
+
+    /**
+     * @param $date
+     * @return false|string
+     */
+    public static function convertDateToUnix($date)
+    {
+        return strtotime($date);
     }
 
 }

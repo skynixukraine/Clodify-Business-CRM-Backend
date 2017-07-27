@@ -19,5 +19,6 @@ class ValuesContainer
     public static $projectId;
     public static $contractId;
     public static $deleteReportId = 1;
+    public static $FinancialReportId = 1;
 
 }

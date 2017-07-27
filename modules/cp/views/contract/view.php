@@ -45,7 +45,7 @@ $this->params['menu'] = [
             <?= Html::a('Download Contract', ['contract/downloadcontract?id=' . $model->id]) ?>
         </div>
         <?php endif;?>
-        <?php if (($invoice = Invoice::findOne(['contract_id' => $model->id, 'is_delete' => 0])) && $invoice->status != Invoice::STATUS_CANCELED) :?>
+        <?php if ($invoice = $model->getValidInvoice()) :?>
             <?php if (!User::hasPermission([User::ROLE_SALES]) || (User::hasPermission([User::ROLE_SALES]) && $invoice->created_by == Yii::$app->user->id)) :?>
 
                 <div>

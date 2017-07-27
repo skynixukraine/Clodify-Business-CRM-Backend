@@ -68,6 +68,20 @@ class Contract extends ActiveRecord
     }
 
     /**
+     * Get NEW and PAID invoice for current contract
+     *
+     * @return array|null|ActiveRecord
+     */
+    public function getValidInvoice()
+    {
+        return Invoice::find()
+            ->andWhere(['contract_id' => $this->id])
+            ->andWhere(['is_delete' => Invoice::INVOICE_NOT_DELETED])
+            ->andWhere(['in', 'status', array(Invoice::STATUS_NEW, Invoice::STATUS_PAID)])
+            ->one();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getInvoices()
