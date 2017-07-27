@@ -38,10 +38,14 @@ class FinancialReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date'], 'integer', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['report_date'], 'required', 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['income', 'expense_constant', 'investments'], 'string', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
-            [['currency', 'expense_salary'], 'number', 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            [['report_date'], 'integer',
+                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['report_date'], 'required',
+                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+            [['income', 'expense_constant', 'investments'], 'string',
+                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            [['currency', 'expense_salary'], 'number',
+                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
         ];
     }
 
@@ -106,7 +110,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return float
      */
-    public static function sumExpenseSalary($id)
+    public static function getExpenseSalary($id)
     {
         $financialReport = FinancialReport::findOne($id);
         return $financialReport->expense_salary;
@@ -133,13 +137,13 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
-     *expenses = sum of all expense_constant amounts + expense_salary
+     *expenses = sum of all exp.ense_constant amounts + expense_salary
      * @param $id
      * @return float
      */
     public static function sumExpenses($id)
     {
-        return self::sumExpenseSalary($id) + self::sumExpenseConstant($id);
+        return self::getExpenseSalary($id) + self::sumExpenseConstant($id);
     }
 
     /**
@@ -147,7 +151,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return int
      */
-    public static function makeProfit($id)
+    public static function getProfit($id)
     {
         return self::sumIncome($id) - self::sumExpenses($id);
     }
@@ -157,9 +161,9 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return int
      */
-    public static function makeBalance($id)
+    public static function getBalance($id)
     {
-        return self::makeProfit($id) - self::sumInvestments($id);
+        return self::getProfit($id) - self::sumInvestments($id);
     }
 
 }

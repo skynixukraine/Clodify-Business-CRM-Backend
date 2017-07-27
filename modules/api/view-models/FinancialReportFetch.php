@@ -56,7 +56,7 @@ class FinancialReportFetch extends ViewModelAbstract
                             return DateUtil::convertDateFromUnix($finRep->report_date);
                         },
                         'balance' => function ($finRep) {
-                            return FinancialReport::makeBalance($finRep->id);
+                            return FinancialReport::getBalance($finRep->id);
                         },
                         'currency'=> function ($finRep) {
                             if($finRep->currency){
@@ -72,7 +72,7 @@ class FinancialReportFetch extends ViewModelAbstract
                             return FinancialReport::sumExpenses($finRep->id);
                         },
                         'profit' => function ($finRep) {
-                            return FinancialReport::makeProfit($finRep->id);
+                            return FinancialReport::getProfit($finRep->id);
                         },
                         'investments' => function ($finRep) {
                             return FinancialReport::sumInvestments($finRep->id);
