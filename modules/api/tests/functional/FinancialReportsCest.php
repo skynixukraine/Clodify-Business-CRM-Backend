@@ -50,6 +50,15 @@ class FinancialReportsCest
             ),
         );
 
+        $spent_corp_events = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Spent Corp Events1",
+                "date" => 123243543545
+            ),
+        );
+
         $I->haveInDatabase('financial_reports',
             array(
                 'id' => ValuesContainer::$FinancialReportId,
@@ -58,6 +67,7 @@ class FinancialReportsCest
                 'income' => json_encode($income),
                 'expense_constant' => json_encode($expenses),
                 'investments' => json_encode($investments),
+                'spent_corp_events' => json_encode($spent_corp_events),
                 'expense_salary' => 3000,
             )
         );
@@ -116,6 +126,7 @@ class FinancialReportsCest
                 'expense_constant' => 'array',
                 'expense_salary' => 'integer',
                 'investments' => 'array',
+                'spent_corp_events' => 'array',
             ],
             'errors' => 'array',
             'success' => 'boolean'

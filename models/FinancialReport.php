@@ -42,7 +42,7 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['income', 'expense_constant', 'investments'], 'string',
+            [['income', 'expense_constant', 'investments', 'spend_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
@@ -62,6 +62,7 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
+            'spend_corp_events' => 'Spend Corp Events'
         ];
     }
 

@@ -38,13 +38,16 @@ class FinancialReportView extends ViewModelAbstract
                     'currency',
                     'expense_salary',
                     'income' => function ($financialReport) {
-                         return json_decode($financialReport->income);
+                         return $this->convertElement($financialReport->income);
                     },
                     'expense_constant'=> function ($financialReport) {
                          return json_decode($financialReport->expense_constant);
                     },
                     'investments' => function ($financialReport) {
                          return json_decode($financialReport->investments);
+                    },
+                    'spent_corp_events' => function ($financialReport) {
+                         return $this->convertElement($financialReport->spent_corp_events);
                     },
                 ],
             ]);
@@ -55,4 +58,18 @@ class FinancialReportView extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
     }
+
+    /*
+     * convert date element to Jul 23 format
+     */
+    private function convertElement($string)
+    {
+        $array = json_decode($string);
+        foreach ($array as $arr){
+            if(!empty ($arr)) {
+                $arr->date = date('F j', $arr->date);
+            }
+       }
+       return $array;
+   }
 }
