@@ -59,8 +59,10 @@ class FinancialReportView extends ViewModelAbstract
         }
     }
 
-    /*
-     * convert date element to Jul 23 format
+    /**
+     * @param $string
+     * @return mixed
+     *  convert date element to Jul 23 format
      */
     private function convertElement($string)
     {
