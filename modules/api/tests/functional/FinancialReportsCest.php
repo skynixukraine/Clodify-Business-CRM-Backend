@@ -15,53 +15,15 @@ use Helper\ValuesContainer;
  */
 class FinancialReportsCest
 {
-    private $reportId;
+    private $finacialReportId;
+
     /**
-     * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario
      */
-    public function _before (FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function _before (\Codeception\Scenario $scenario)
     {
-
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
-
-        $income = array(
-            array(
-
-                "amount" => 2000,
-                "description" => "Some Income1",
-                "date" => 123243543545
-            ),
-        );
-
-        $expenses = array(
-            array(
-                "amount" => 200,
-                "description" => "Some Expenses4",
-            ),
-        );
-
-        $investments = array(
-            array(
-
-                "amount" => 200,
-                "description" => "Investments1"
-            ),
-        );
-
-        $I->haveInDatabase('financial_reports',
-            array(
-                'id' => ValuesContainer::$FinancialReportId,
-                'report_date' => strtotime('2017-08-01'),
-                'currency' => 26.6,
-                'income' => json_encode($income),
-                'expense_constant' => json_encode($expenses),
-                'investments' => json_encode($investments),
-                'expense_salary' => 3000,
-            )
-        );
-
     }
 
     /**
@@ -75,10 +37,13 @@ class FinancialReportsCest
         $I->wantTo('Testing create financial reports');
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
             [
-                'report_date' => '2019-02-03'
+                'report_date' => '7'
             ]
         ));
         $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $this->finacialReportId = $response->data->report_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
@@ -90,36 +55,6 @@ class FinancialReportsCest
                 'success' => 'boolean'
             ]
         );
-    }
-
-    /**
-     * @see    https://jira-v2.skynix.company/browse/SI-1025
-     * @param  FunctionalTester $I
-     * @return void
-     */
-    public function testViewFinancialReportsCest(FunctionalTester $I)
-    {
-
-        $I->wantTo('Testing financial report data');
-        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data' => [
-                'id' => 'integer',
-                'report_date' => 'string',
-                'income' => 'array',
-                'currency' => 'float',
-                'expense_constant' => 'array',
-                'expense_salary' => 'integer',
-                'investments' => 'array',
-            ],
-            'errors' => 'array',
-            'success' => 'boolean'
-        ]);
     }
 
     /**
@@ -154,9 +89,9 @@ class FinancialReportsCest
         );
 
         $I->wantTo('Testing update financial report data');
-        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId,
+        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId,
             json_encode([
-                'report_date' => 'string',
+                'report_date' => '8',
                 'currency' => 26.6,
                 'expense_salary' => 3000,
                 'income' => $income,
@@ -173,6 +108,36 @@ class FinancialReportsCest
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1025
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewFinancialReportsCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing financial report data');
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'id' => 'integer',
+                'report_date' => 'string',
+                'income' => 'array',
+                'currency' => 'float',
+                'expense_constant' => 'array',
+                'expense_salary' => 'integer',
+                'investments' => 'array',
+            ],
             'errors' => 'array',
             'success' => 'boolean'
         ]);
@@ -200,7 +165,7 @@ class FinancialReportsCest
                         'id'            => 'integer',
                         'report_date'   => 'string',
                         'balance'       => 'integer',
-                        'currency'      => 'integer',
+                        'currency'      => 'integer|float',
                         'income'        => 'integer',
                         'expenses'      => 'integer',
                         'profit'        => 'integer',

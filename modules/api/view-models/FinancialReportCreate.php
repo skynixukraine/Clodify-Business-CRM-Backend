@@ -29,11 +29,11 @@ class FinancialReportCreate extends ViewModelAbstract
         // TODO: Implement define() method.
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-
-            $reportDate = DateUtil::convertDateToUnix($this->model->report_date);
+            $date = date("Y-") . $this->model->report_date . date("-d");
+            $reportDate = DateUtil::convertDateToUnix($date);
 
             if (!FinancialReport::validateReportDate($reportDate)) {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created or time for report invalid'));
             }
 
             $this->model->report_date = $reportDate;
