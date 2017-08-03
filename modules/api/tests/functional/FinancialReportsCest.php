@@ -197,14 +197,16 @@ class FinancialReportsCest
             'data' => ['reports' =>
                 [
                     [
-                        'id'            => 'integer',
-                        'report_date'   => 'string',
-                        'balance'       => 'integer',
-                        'currency'      => 'integer',
-                        'income'        => 'integer',
-                        'expenses'      => 'integer',
-                        'profit'        => 'integer',
-                        'investments'   => 'integer'
+                        'id'                => 'integer',
+                        'report_date'       => 'string',
+                        'balance'           => 'string | integer',
+                        'currency'          => 'integer',
+                        'income'            => 'string | integer',
+                        'expenses'          => 'string | integer',
+                        'profit'            => 'string | integer',
+                        'investments'       => 'string | integer',
+                        'spent_corp_events' => 'string | integer',
+                        'is_locked'         => 'integer',
                     ]
                 ],
                 'total_records' => 'string'

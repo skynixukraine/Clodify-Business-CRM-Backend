@@ -204,6 +204,8 @@ CREATE TABLE `financial_reports` (
   `expense_constant` text null,
   `expense_salary` double null,
   `investments` text null,
+  `spent_corp_events` text null,
+  `is_locked` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

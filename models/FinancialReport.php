@@ -19,9 +19,9 @@ class FinancialReport extends \yii\db\ActiveRecord
 {
 
     const EXPIRATION_PERIOD_CREATE = '30 days';
-
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
+    const USD = '$';
 
 
     /**
@@ -163,7 +163,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function getBalance($id)
     {
-        return self::getProfit($id) - self::sumInvestments($id);
+        return FinancialReport::USD . (self::getProfit($id) - self::sumInvestments($id));
     }
 
     /**
@@ -184,6 +184,37 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return true;
+    }
+
+    public static function sumSpentCorpEvents($id)
+    {
+        $financialReport = FinancialReport::findOne($id);
+        $financialReport = json_decode($financialReport->spent_corp_events);
+        $spent_corp_eventsSum = 0;
+
+        if ($financialReport) {
+            foreach ($financialReport as $sp_corp_eve) {
+                $spent_corp_eventsSum += $sp_corp_eve->amount;
+            }
+        }
+
+        return FinancialReport::USD . $spent_corp_eventsSum;
+    }
+
+    /**
+     * @param $date
+     * @return string
+     *  return something like that 01/01/2016 ~ 31/01/2016
+     */
+    public static function dateRangeForFetch($date)
+    {
+        $range = '';
+        $month_from_date = date('m', $date);
+        $year_from_date = date('Y',$date);
+        $count_of_days = date("t",mktime(0,0,0,$month_from_date ,1,$year_from_date));
+        $range .= '01/'. $month_from_date . '/' . $year_from_date ;
+        $range .= ' ~ ' . $count_of_days . '/' .$month_from_date . '/' . $year_from_date;
+        return $range;
     }
 
 }

@@ -49,41 +49,29 @@ class FinancialReportFetch extends ViewModelAbstract
             $financialReport = $dataTable->getData();
 
             if ($financialReport) {
-                $financialReport = ArrayHelper::toArray($financialReport, [
-                    'app\models\FinancialReport' => [
-                        'id',
-                        'report_date' => function ($finRep) {
-                            return DateUtil::convertDateFromUnix($finRep->report_date);
-                        },
-                        'balance' => function ($finRep) {
-                            return FinancialReport::getBalance($finRep->id);
-                        },
-                        'currency'=> function ($finRep) {
-                            if($finRep->currency){
-                                return $finRep->currency;
-                            } else {
-                                return 0;
-                            }
-                        },
-                        'income' => function ($finRep) {
-                            return FinancialReport::sumIncome($finRep->id);
-                        },
-                        'expenses' => function ($finRep) {
-                            return FinancialReport::sumExpenses($finRep->id);
-                        },
-                        'profit' => function ($finRep) {
-                            return FinancialReport::getProfit($finRep->id);
-                        },
-                        'investments' => function ($finRep) {
-                            return FinancialReport::sumInvestments($finRep->id);
-                        },
 
-                    ],
-                ]);
+                foreach ($financialReport as $key => $finRep){
+                    $financialReport[$key] = [
+                        'id' => $finRep->id,
+                        'report_date' => FinancialReport::dateRangeForFetch($finRep->report_date),
+                        'balance' => FinancialReport::getBalance($finRep->id),
+                        'currency' => $finRep->currency ? $finRep->currency : 0,
+                        'income' => FinancialReport::USD . (FinancialReport::sumIncome($finRep->id)),
+                        'expenses' => FinancialReport::USD . (FinancialReport::sumExpenses($finRep->id)),
+                        'profit' => FinancialReport::USD . (FinancialReport::getProfit($finRep->id)),
+                        'investments' => FinancialReport::USD . (FinancialReport::sumInvestments($finRep->id)),
+                        'spent_corp_events' => FinancialReport::sumSpentCorpEvents($finRep->id),
+                        'is_locked'=>$finRep->is_locked
+                    ];
+                    if (!User::hasPermission([User::ROLE_ADMIN])) {
+                        unset ($financialReport[$key]['income']);
+                        unset ($financialReport[$key]['profit']);
+                    }
+                }
+
             } else {
                 $financialReport = [];
             }
-
             $data = [
                 'reports' => $financialReport,
                 'total_records' => DataTable::getInstance()->getTotal()
