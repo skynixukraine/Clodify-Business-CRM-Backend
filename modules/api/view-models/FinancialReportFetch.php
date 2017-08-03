@@ -56,10 +56,10 @@ class FinancialReportFetch extends ViewModelAbstract
                         'report_date' => FinancialReport::dateRangeForFetch($finRep->report_date),
                         'balance' => FinancialReport::getBalance($finRep->id),
                         'currency' => $finRep->currency ? $finRep->currency : 0,
-                        'income' => FinancialReport::USD . (FinancialReport::sumIncome($finRep->id)),
-                        'expenses' => FinancialReport::USD . (FinancialReport::sumExpenses($finRep->id)),
-                        'profit' => FinancialReport::USD . (FinancialReport::getProfit($finRep->id)),
-                        'investments' => FinancialReport::USD . (FinancialReport::sumInvestments($finRep->id)),
+                        'income' => FinancialReport::sumIncome($finRep->id),
+                        'expenses' => FinancialReport::sumExpenses($finRep->id),
+                        'profit' => FinancialReport::getProfit($finRep->id),
+                        'investments' => FinancialReport::sumInvestments($finRep->id),
                         'spent_corp_events' => FinancialReport::sumSpentCorpEvents($finRep->id),
                         'is_locked'=>$finRep->is_locked
                     ];

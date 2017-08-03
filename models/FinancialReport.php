@@ -21,7 +21,6 @@ class FinancialReport extends \yii\db\ActiveRecord
     const EXPIRATION_PERIOD_CREATE = '30 days';
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
-    const USD = '$';
 
 
     /**
@@ -163,7 +162,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function getBalance($id)
     {
-        return FinancialReport::USD . (self::getProfit($id) - self::sumInvestments($id));
+        return self::getProfit($id) - self::sumInvestments($id);
     }
 
     /**
@@ -198,7 +197,7 @@ class FinancialReport extends \yii\db\ActiveRecord
             }
         }
 
-        return FinancialReport::USD . $spent_corp_eventsSum;
+        return $spent_corp_eventsSum;
     }
 
     /**
