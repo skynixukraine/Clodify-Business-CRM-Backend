@@ -200,20 +200,4 @@ class FinancialReport extends \yii\db\ActiveRecord
         return $spent_corp_eventsSum;
     }
 
-    /**
-     * @param $date
-     * @return string
-     *  return something like that 01/01/2016 ~ 31/01/2016
-     */
-    public static function dateRangeForFetch($date)
-    {
-        $range = '';
-        $month_from_date = date('m', $date);
-        $year_from_date = date('Y',$date);
-        $count_of_days = date("t",mktime(0,0,0,$month_from_date ,1,$year_from_date));
-        $range .= '01/'. $month_from_date . '/' . $year_from_date ;
-        $range .= ' ~ ' . $count_of_days . '/' .$month_from_date . '/' . $year_from_date;
-        return $range;
-    }
-
 }

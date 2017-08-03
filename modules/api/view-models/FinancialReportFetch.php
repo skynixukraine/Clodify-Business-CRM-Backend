@@ -50,22 +50,20 @@ class FinancialReportFetch extends ViewModelAbstract
 
             if ($financialReport) {
 
-                foreach ($financialReport as $key => $finRep){
+                foreach ($financialReport as $key => $finRep) {
                     $financialReport[$key] = [
                         'id' => $finRep->id,
-                        'report_date' => FinancialReport::dateRangeForFetch($finRep->report_date),
+                        'report_date' => $this->dateRangeForFetch($finRep->report_date),
                         'balance' => FinancialReport::getBalance($finRep->id),
                         'currency' => $finRep->currency ? $finRep->currency : 0,
-                        'income' => FinancialReport::sumIncome($finRep->id),
                         'expenses' => FinancialReport::sumExpenses($finRep->id),
-                        'profit' => FinancialReport::getProfit($finRep->id),
                         'investments' => FinancialReport::sumInvestments($finRep->id),
                         'spent_corp_events' => FinancialReport::sumSpentCorpEvents($finRep->id),
-                        'is_locked'=>$finRep->is_locked
+                        'is_locked' => $finRep->is_locked
                     ];
-                    if (!User::hasPermission([User::ROLE_ADMIN])) {
-                        unset ($financialReport[$key]['income']);
-                        unset ($financialReport[$key]['profit']);
+                    if (User::hasPermission([User::ROLE_ADMIN])) {
+                        $financialReport[$key]['income'] = FinancialReport::sumIncome($finRep->id);
+                        $financialReport[$key]['profit'] = FinancialReport::getProfit($finRep->id);
                     }
                 }
 
@@ -83,6 +81,22 @@ class FinancialReportFetch extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
 
+    }
+
+    /**
+     * @param $date
+     * @return string
+     *  return something like that 01/01/2016 ~ 31/01/2016
+     */
+    private function dateRangeForFetch($date)
+    {
+        $range = '';
+        $month_from_date = date('m', $date);
+        $year_from_date = date('Y',$date);
+        $count_of_days = date("t",mktime(0,0,0,$month_from_date ,1,$year_from_date));
+        $range .= '01/'. $month_from_date . '/' . $year_from_date ;
+        $range .= ' ~ ' . $count_of_days . '/' .$month_from_date . '/' . $year_from_date;
+        return $range;
     }
 }
 
