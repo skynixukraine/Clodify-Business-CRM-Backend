@@ -40,8 +40,9 @@ return [
     'POST '     . $API . '/financial-reports'                           => $API . '/financial-reports/create',
     'GET '      . $API . '/financial-reports'                           => $API . '/financial-reports/fetch',
     'PUT '      . $API . '/financial-reports/<id:\d+>'                  => $API . '/financial-reports/update',
+    'PUT '      . $API . '/financial-reports/<id:\d+>/lock'             => $API . '/financial-reports/lock',
 
-
+    
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',
