@@ -46,7 +46,7 @@ class FinancialReportLock extends ViewModelAbstract
                         $finyearrep->balance += FinancialReport::getBalance($id);
                         $finyearrep->spent_corp_events += FinancialReport::sumSpentCorpEvents($id);
                         if ($finyearrep->validate() && $finyearrep->save()) {
-                            $financialReport->is_locked = 1;
+                            $financialReport->is_locked = FinancialReport::LOCKED;
                             $financialReport->save();
                         }
 
@@ -64,7 +64,7 @@ class FinancialReportLock extends ViewModelAbstract
                         $yearlyReport->balance = FinancialReport::getBalance($id);
                         $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
                         $yearlyReport->save();
-                        $financialReport->is_locked = 1;
+                        $financialReport->is_locked = FinancialReport::LOCKED;
                         $financialReport->save();
                     }
 

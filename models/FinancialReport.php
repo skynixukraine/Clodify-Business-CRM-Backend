@@ -17,9 +17,8 @@ use Yii;
  */
 class FinancialReport extends \yii\db\ActiveRecord
 {
-
-    const EXPIRATION_PERIOD_CREATE = '30 days';
-
+    const NOT_LOCKED = 0;
+    const LOCKED = 1;
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
@@ -187,6 +186,8 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
+     * Get sum spent_corp_events
+     *
      * @param $id
      * @return int
      */

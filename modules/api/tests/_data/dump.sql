@@ -205,7 +205,7 @@ CREATE TABLE `financial_reports` (
   `expense_salary` double null,
   `investments` text null,
   `spent_corp_events` text null,
-  `is_locked` int null,
+  `is_locked` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -230,6 +230,7 @@ CREATE TABLE `financial_yearly_reports` (
   `profit` int null,
   `balance` int null,
   `spent_corp_events` int null,
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
