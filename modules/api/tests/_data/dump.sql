@@ -211,6 +211,31 @@ CREATE TABLE `financial_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `financial_reports`
+--
+
+DROP TABLE IF EXISTS `financial_yearly_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `financial_yearly_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` int null,
+  `income` int null,
+  `expense_constant` int null,
+  `investments` int null,
+  `expense_salary` int null,
+  `difference` int null,
+  `bonuses` int null,
+  `corp_events` int null,
+  `profit` int null,
+  `balance` int null,
+  `spent_corp_events` int null,
+>>>>>>> origin/develop
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `invoices`
 --
 
