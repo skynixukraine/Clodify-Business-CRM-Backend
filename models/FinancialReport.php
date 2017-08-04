@@ -42,9 +42,9 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['income', 'expense_constant', 'investments'], 'string',
+            [['income', 'expense_constant', 'investments', 'spend_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
-            [['currency', 'expense_salary'], 'number',
+            [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
         ];
     }
@@ -184,6 +184,25 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public static function sumSpentCorpEvents($id)
+    {
+        $financialReport = FinancialReport::findOne($id);
+        $financialReport = json_decode($financialReport->spent_corp_events);
+        $spent_corp_eventsSum = 0;
+
+        if ($financialReport) {
+            foreach ($financialReport as $sp_corp_eve) {
+                $spent_corp_eventsSum += $sp_corp_eve->amount;
+            }
+        }
+
+        return $spent_corp_eventsSum;
     }
 
 }

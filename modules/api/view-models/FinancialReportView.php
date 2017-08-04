@@ -29,30 +29,55 @@ class FinancialReportView extends ViewModelAbstract
                 ->where([FinancialReport::tableName() . '.id' => $id])
                 ->one();
 
-            $data = ArrayHelper::toArray($financialReport, [
-                'app\models\FinancialReport' => [
-                    'id',
-                    'report_date' => function ($financialReport) {
-                         return DateUtil::convertDateFromUnix($financialReport->report_date);
-                    },
-                    'currency',
-                    'expense_salary',
-                    'income' => function ($financialReport) {
-                         return json_decode($financialReport->income);
-                    },
-                    'expense_constant'=> function ($financialReport) {
-                         return json_decode($financialReport->expense_constant);
-                    },
-                    'investments' => function ($financialReport) {
-                         return json_decode($financialReport->investments);
-                    },
-                ],
-            ]);
+            if ($financialReport) {
+                $financialReport = ArrayHelper::toArray($financialReport, [
+                    'app\models\FinancialReport' => [
+                        'id',
+                        'report_date' => function ($financialReport) {
+                            return DateUtil::convertDateFromUnix($financialReport->report_date);
+                        },
+                        'currency',
+                        'expense_salary',
+                        'income' => function ($financialReport) {
+                            return $this->convertElement($financialReport->income);
+                        },
+                        'expense_constant' => function ($financialReport) {
+                            return json_decode($financialReport->expense_constant);
+                        },
+                        'investments' => function ($financialReport) {
+                            return json_decode($financialReport->investments);
+                        },
+                        'spent_corp_events' => function ($financialReport) {
+                            return $this->convertElement($financialReport->spent_corp_events);
+                        },
+                    ],
+                ]);
 
-            $this->setData($data);
+                $this->setData($financialReport);
+            }
 
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
+    }
+
+    /**
+     * convert date element to Jul 23 format
+     *
+     * @param $string
+     * @return mixed
+     */
+    private function convertElement($string)
+    {
+        if ($string) {
+            $array = json_decode($string);
+            foreach ($array as $arr) {
+                if (!empty ($arr)) {
+                    $arr->date = date('F j', $arr->date);
+                }
+            }
+            return $array;
+        }
+        return null;
     }
 }

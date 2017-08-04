@@ -50,6 +50,15 @@ class FinancialReportsCest
             ),
         );
 
+        $spent_corp_events = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Spent Corp Events1",
+                "date" => 123243543545
+            ),
+        );
+
         $I->haveInDatabase('financial_reports',
             array(
                 'id' => ValuesContainer::$FinancialReportId,
@@ -58,6 +67,7 @@ class FinancialReportsCest
                 'income' => json_encode($income),
                 'expense_constant' => json_encode($expenses),
                 'investments' => json_encode($investments),
+                'spent_corp_events' => json_encode($spent_corp_events),
                 'expense_salary' => 3000,
             )
         );
@@ -116,6 +126,7 @@ class FinancialReportsCest
                 'expense_constant' => 'array',
                 'expense_salary' => 'integer',
                 'investments' => 'array',
+                'spent_corp_events' => 'array',
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -213,4 +224,69 @@ class FinancialReportsCest
             'success' => 'boolean'
         ]);
     }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1023
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testLockFinancialReportsCest(FunctionalTester $I)
+    {
+        $income = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Some Income1",
+                "date" => 123243543545
+            ),
+        );
+
+        $expenses = array(
+            array(
+                "amount" => 200,
+                "description" => "Some Expenses4",
+            ),
+        );
+
+        $investments = array(
+            array(
+
+                "amount" => 200,
+                "description" => "Investments1"
+            ),
+        );
+
+        $spent_corp_events = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Spent Corp Events1",
+                "date" => 123243543545
+            ),
+        );
+
+        $I->wantTo('Testing lock financial report data');
+        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/lock',
+            json_encode([
+                'year' => 2111,
+                'expense_salary' => 3000,
+                'income' => $income,
+                'expense_constant' => $expenses,
+                'investments' => $investments,
+                'spent_corp_events' => $spent_corp_events,
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
 }

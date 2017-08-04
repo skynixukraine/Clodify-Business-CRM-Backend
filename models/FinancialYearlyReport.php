@@ -61,45 +61,53 @@ class FinancialYearlyReport extends \yii\db\ActiveRecord
         ];
     }
 
-//income - int (a sum of all month's income amounts)
-//expense_constant - int (a sum of all month's expense_constant amounts)
-//investments - int (a sum of all month's investments amounts)
-//expense_salary - int
-//currency - int
-//difference - int ( income - expense_constant)
-//bonuses - int ( 10% of difference )
-//corp_events - int ( 10% of difference )
-//profit - int (  difference - bonuses - corp_events )
-//balance - int ( profit - investments )
-//spent_corp_events - int
-
+    /**
+     * difference = income - expense_constant
+     * @param $id
+     * @return int
+     */
     public static function getDifference($id)
     {
         return FinancialReport::sumIncome($id) - FinancialReport::sumExpenseConstant($id);
     }
 
+    /**
+     *  bonuses = 10% of difference
+     * @param $id
+     * @return int
+     */
     public static function getBonuses($id)
     {
         return self::getDifference($id) * 0.1;
     }
 
+    /**
+     * corp_events = 10% of difference
+     * @param $id
+     * @return int
+     */
     public static function getCorpEvents($id)
     {
         return self::getDifference($id) * 0.1;
     }
 
+    /**
+     * profit = difference - bonuses - corp_events
+     * @param $id
+     * @return int
+     */
     public static function getYearlyProfit($id)
     {
         return self::getDifference($id) - self::getBonuses($id) - self::getCorpEvents($id);
-       // return self::getDifference($id) - self::getBonuses($id);
     }
 
-    public static function isYearlyReportExist()
+    /**
+     * @param $year
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function findYearlyReport($year)
     {
-        return self::find()
-            ->where(FinancialYearlyReport::tableName() . '.year =:x',
-                [':x' =>  date("Y"),])
-            ->all();
+        return FinancialYearlyReport::find()->where('year = :xy', [':xy' => $year])->one();
     }
 
 }
