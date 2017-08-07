@@ -11,6 +11,7 @@ use app\components\DateUtil;
 use app\models\FinancialReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
+use phpDocumentor\Reflection\Types\Array_;
 use yii;
 
 /**
@@ -28,40 +29,131 @@ class FinancialReportUpdate extends ViewModelAbstract
 
             $financialReport = FinancialReport::findOne($id);
 
-            if (isset($this->postData['income'])) {
-                $this->postData['income'] = json_encode($this->postData['income']);
-            }
+            if (!$financialReport->is_locked) {
 
-            if (isset($this->postData['expense_constant'])) {
-                $this->postData['expense_constant'] = json_encode($this->postData['expense_constant']);
-            }
+                if (isset($this->postData['report_date'])) {
 
-            if (isset($this->postData['investments'])) {
-                $this->postData['investments'] = json_encode($this->postData['investments']);
-            }
+                    $reportDate = $this->getDay($financialReport->report_date) .
+                        $this->postData['report_date'] .
+                        $this->getYear($financialReport->report_date);
 
-            if (isset($this->postData['report_date'])) {
-                $reportDate = DateUtil::convertDateToUnix($this->postData['report_date']);
+                    $reportDate = DateUtil::convertDateToUnix($reportDate);
 
-                if (!FinancialReport::validateReportDate($reportDate)) {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+//                    if (!FinancialReport::validateReportDate($reportDate)) {
+//                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+//                    }
+
+                    $this->postData['report_date'] = $reportDate;
                 }
 
-                $this->postData['report_date'] = $reportDate;
-            }
+                if (User::hasPermission([User::ROLE_ADMIN])) {
 
-            $financialReport->setAttributes(
-                array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
-            );
+                    $this->postData['income'] = $this->getElement('income', $financialReport);
 
-            if ($financialReport->validate()) {
-                $financialReport->save();
+                } else {
+                    unset($this->postData['income']);
+                }
+
+                if (isset($this->postData['expense_constant'])) {
+
+                    $this->postData['expense_constant'] = $this->getElement('expense_constant', $financialReport);
+                }
+
+                if (isset($this->postData['investments'])) {
+
+                    $this->postData['investments'] = $this->getElement('investments', $financialReport);
+                }
+
+                if (isset($this->postData['spent_corp_events'])) {
+
+                    $this->postData['spent_corp_events'] = $this->getElement('spent_corp_events', $financialReport);
+
+                }
+
+                $financialReport->setAttributes(
+                    array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
+                );
+
+                if ($financialReport->validate()) {
+                    $financialReport->save();
+                }
+
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'This report can not be updated!'));
+                return $this->addError(Processor::ERROR_PARAM,
+                    Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM,
+                Yii::t('yii', 'You have no permission for this action'));
         }
+    }
+
+    /**
+     *
+     *
+     * @param $attributes
+     * @param FinancialReport $financialReport
+     * @return array|null
+     */
+    private function getElement($attributes, FinancialReport $financialReport)
+    {
+        return $this->convertDateForElement(
+            $this->postData[$attributes],
+            $this->postData['report_date'],
+            $financialReport);
+    }
+
+    /**
+     *
+     *
+     * @param $array
+     * @param $month
+     * @param $financialReport
+     * @return null|array
+     */
+    private function convertDateForElement($array, $reportDateFromPost, $financialReport)
+    {
+        if (is_array($array)) {
+            foreach ($array as &$arr) {
+                if (!empty ($arr)) {
+                   $arr['date'] = DateUtil::convertDateToUnix(
+                       $arr['date'] . '.' .
+                       $this->getMonth($reportDateFromPost) .
+                       $this->getYear($financialReport->report_date));
+                }
+            }
+
+            return json_encode($array);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $data
+     * @return false|string
+     */
+    private  function getDay($data)
+    {
+        return date("d.",$data);
+    }
+
+    /**
+     * @param $data
+     * @return false|string
+     */
+    private  function getYear($data)
+    {
+        return date(".Y",$data);
+    }
+
+    /**
+     * @param $data
+     * @return false|string
+     */
+    private function getMonth($data)
+    {
+        return date( "m",$data);
     }
 }
