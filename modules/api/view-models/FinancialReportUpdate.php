@@ -39,9 +39,9 @@ class FinancialReportUpdate extends ViewModelAbstract
 
                     $reportDate = DateUtil::convertDateToUnix($reportDate);
 
-//                    if (!FinancialReport::validateReportDate($reportDate)) {
-//                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
-//                    }
+                    if (!FinancialReport::validateReportDate($reportDate)) {
+                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+                    }
 
                     $this->postData['report_date'] = $reportDate;
                 }
@@ -91,7 +91,7 @@ class FinancialReportUpdate extends ViewModelAbstract
 
     /**
      *
-     *
+     * set values for converting date element
      * @param $attributes
      * @param FinancialReport $financialReport
      * @return array|null
@@ -106,7 +106,7 @@ class FinancialReportUpdate extends ViewModelAbstract
 
     /**
      *
-     *
+     * convert date from day format to timestamp for db
      * @param $array
      * @param $month
      * @param $financialReport
