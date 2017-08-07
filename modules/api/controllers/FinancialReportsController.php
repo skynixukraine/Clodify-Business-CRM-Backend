@@ -69,4 +69,18 @@ class FinancialReportsController extends DefaultController
             ->respond();
     }
 
+    public function actionLock()
+    {
+        $this->di
+            ->set('app\models\FinancialReport', ['scenario' => FinancialReport::SCENARIO_FINANCIAL_REPORT_UPDATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportLock')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
