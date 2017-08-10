@@ -7,17 +7,21 @@
 
 namespace viewModel;
 
+use app\models\Invoice;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
 use app\components\DateUtil;
 use app\models\Project;
 use app\models\User;
+use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
+use yii\db\Query;
 
 class ProjectFetch extends ViewModelAbstract
 {
+
     public function define()
     {
         $order       = Yii::$app->request->getQueryParam('order', []);
@@ -123,9 +127,9 @@ class ProjectFetch extends ViewModelAbstract
                     'id' => $model->id,
                     'name' => $model->name,
                     'jira' => $model->jira_code,
-                    'total_logged' => gmdate('H:i', floor($model->total_logged_hours * 3600)),
+                    'total_logged' => $this->sumLoggedHours($model->id),
                     'cost' => $cost,
-                    'total_paid' => $totalpaid,
+                    'total_paid' => $this->sumPaidHours($model->id),
                     'date_start' => $newDateStart,
                     'date_end' => $newDateEnd,
                     'developers' => $developersNames ? implode(", ", $developersNames): "Developer Not Set",
@@ -140,4 +144,33 @@ class ProjectFetch extends ViewModelAbstract
         ];
         $this->setData($data);
     }
+
+    /**
+     * @param $prodId
+     * @return int|mixed
+     */
+    private function sumLoggedHours($prodId)
+    {
+        $hoursInReport = Report::find()
+            ->where('project_id=:prodId', [
+                ':prodId' => $prodId])->sum('hours');
+
+        return $hoursInReport ? $hoursInReport : 0;
+    }
+
+    /**
+     * @param $prodId
+     * @return int
+     */
+    private function sumPaidHours($prodId)
+    {
+        $sumHoursReports = Report::find()
+            ->select('hours')
+            ->joinWith(['invoice'])
+            ->andWhere([Invoice::tableName() . '.status' => Invoice::STATUS_PAID])
+            ->andWhere([Report::tableName() . '.project_id' => $prodId])
+            ->sum('hours');
+        return $sumHoursReports ?: 0;
+    }
+
 }
