@@ -7,7 +7,6 @@
 
 namespace viewModel;
 
-use app\models\Invoice;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -17,7 +16,7 @@ use app\models\User;
 use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
-use yii\db\Query;
+use app\models\Invoice;
 
 class ProjectFetch extends ViewModelAbstract
 {
