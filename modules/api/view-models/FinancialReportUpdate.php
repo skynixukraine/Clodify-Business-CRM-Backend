@@ -41,7 +41,8 @@ class FinancialReportUpdate extends ViewModelAbstract
             }
 
             if (isset($this->postData['report_date'])) {
-                $reportDate = DateUtil::convertDateToUnix($this->postData['report_date']);
+                $newdateform = date("Y-") . $this->postData['report_date'] . date("-d");
+                $reportDate = DateUtil::convertDateToUnix($newdateform);
 
                 if (!FinancialReport::validateReportDate($reportDate)) {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));

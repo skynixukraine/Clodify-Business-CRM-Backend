@@ -78,6 +78,6 @@ class FinancialReportView extends ViewModelAbstract
             }
             return $array;
         }
-        return null;
+        return [];
     }
 }
