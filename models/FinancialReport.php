@@ -61,6 +61,7 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
+            'spend_corp_events' => 'Spend Corp Events'
         ];
     }
 

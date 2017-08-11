@@ -42,16 +42,19 @@ class FinancialReportView extends ViewModelAbstract
                             return $this->convertElement($financialReport->income);
                         },
                         'expense_constant' => function ($financialReport) {
-                            return json_decode($financialReport->expense_constant);
+                            return $this->convertElement($financialReport->expense_constant);
                         },
                         'investments' => function ($financialReport) {
-                            return json_decode($financialReport->investments);
+                            return $this->convertElement($financialReport->investments);
                         },
                         'spent_corp_events' => function ($financialReport) {
                             return $this->convertElement($financialReport->spent_corp_events);
                         },
                     ],
                 ]);
+                if (!User::hasPermission([User::ROLE_ADMIN])) {
+                    unset ($financialReport['income']);
+                }
 
                 $this->setData($financialReport);
             }

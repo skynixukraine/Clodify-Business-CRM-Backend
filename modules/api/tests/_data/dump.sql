@@ -230,7 +230,6 @@ CREATE TABLE `financial_yearly_reports` (
   `profit` int null,
   `balance` int null,
   `spent_corp_events` int null,
-
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
