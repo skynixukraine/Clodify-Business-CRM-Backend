@@ -95,10 +95,10 @@ class FinancialReportUpdate extends ViewModelAbstract
      * @param FinancialReport $financialReport
      * @return array|null
      */
-    private function getElement($attributes, FinancialReport $financialReport)
+    private function getElement($attributName, FinancialReport $financialReport)
     {
         return $this->convertDateForElement(
-            $this->postData[$attributes],
+            $this->postData[$attributName],
             $this->postData['report_date'],
             $financialReport);
     }
