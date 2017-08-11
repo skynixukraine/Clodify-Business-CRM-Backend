@@ -11,7 +11,6 @@ use app\components\DateUtil;
 use app\models\FinancialReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
-use phpDocumentor\Reflection\Types\Array_;
 use yii;
 
 /**
