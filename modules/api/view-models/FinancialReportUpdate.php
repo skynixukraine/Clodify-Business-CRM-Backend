@@ -90,7 +90,7 @@ class FinancialReportUpdate extends ViewModelAbstract
 
     /**
      *
-     * set values for converting date element
+     * get values for converting date element
      * @param $attributes
      * @param FinancialReport $financialReport
      * @return array|null
