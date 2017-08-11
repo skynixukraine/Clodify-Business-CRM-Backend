@@ -28,16 +28,18 @@ class FinancialReportUpdate extends ViewModelAbstract
 
             $financialReport = FinancialReport::findOne($id);
 
-            if (!$financialReport->is_locked) {
+            if ($financialReport) {
 
-                if (isset($this->postData['report_date'])) {
+                if (!$financialReport->is_locked) {
 
-                    $reportDate = $this->getDay($financialReport->report_date) .
-                        $this->postData['report_date'] .
-                        $this->getYear($financialReport->report_date);
+                    if (isset($this->postData['report_date'])) {
+
+                        $reportDate = date("d.", $financialReport->report_date) .
+                            $this->postData['report_date'] .
+                            date(".Y", $financialReport->report_date);
 
 
-                    $reportDate = DateUtil::convertDateToUnix($reportDate);
+                        $reportDate = DateUtil::convertDateToUnix($reportDate);
 
                         if (!FinancialReport::validateReportDate($reportDate)) {
                             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
@@ -85,9 +87,14 @@ class FinancialReportUpdate extends ViewModelAbstract
 
             } else {
                 return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'You have no permission for this action'));
+                    Yii::t('yii', 'This financial report not exist. It is not editable'));
             }
+
+        } else {
+            return $this->addError(Processor::ERROR_PARAM,
+                Yii::t('yii', 'You have no permission for this action'));
         }
+    }
 
     /**
      *
@@ -119,8 +126,8 @@ class FinancialReportUpdate extends ViewModelAbstract
                 if (!empty ($arr)) {
                    $arr['date'] = DateUtil::convertDateToUnix(
                        $arr['date'] . '.' .
-                       $this->getMonth($reportDateFromPost) .
-                       $this->getYear($financialReport->report_date));
+                       date("m",$reportDateFromPost) .
+                       date(".Y",$financialReport->report_date));
                 }
             }
 
@@ -130,30 +137,4 @@ class FinancialReportUpdate extends ViewModelAbstract
         return null;
     }
 
-    /**
-     * @param $data
-     * @return false|string
-     */
-    private  function getDay($data)
-    {
-        return date("d.",$data);
-    }
-
-    /**
-     * @param $data
-     * @return false|string
-     */
-    private  function getYear($data)
-    {
-        return date(".Y",$data);
-    }
-
-    /**
-     * @param $data
-     * @return false|string
-     */
-    private function getMonth($data)
-    {
-        return date( "m",$data);
-    }
 }

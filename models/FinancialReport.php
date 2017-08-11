@@ -174,8 +174,6 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function validateReportDate($date)
     {
-        $datefrom = strtotime(date('Y-m-2', strtotime('-1 Month', time())));
-        $dateto = strtotime(date('Y-m-01', strtotime('+1 Month', time())));
 
         $financialReports = FinancialReport::find()->all();
 
@@ -183,9 +181,6 @@ class FinancialReport extends \yii\db\ActiveRecord
             if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
                 return false;
             }
-        }
-        if ($date < $datefrom || $dateto < $date) {
-            return false;
         }
 
         return true;
