@@ -120,13 +120,12 @@ class ProjectFetch extends ViewModelAbstract
             $newDateStart =$model->date_start ? date("d/m/Y", strtotime($model->date_start)): "Date Start Not Set";
             $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
             $cost = '$' . number_format($model->cost, 2, ',	', '.');
-            $totalpaid = gmdate('H:i', floor($model->total_paid_hours * 3600));
             $list[] =
                 [
                     'id' => $model->id,
                     'name' => $model->name,
                     'jira' => $model->jira_code,
-                    'total_logged' => $this->sumLoggedHours($model->id),
+                    'total_logged' => $model->total_logged_hours,
                     'cost' => $cost,
                     'total_paid' => $this->sumPaidHours($model->id),
                     'date_start' => $newDateStart,
@@ -142,19 +141,6 @@ class ProjectFetch extends ViewModelAbstract
             "total_records" => DataTable::getInstance()->getTotal()
         ];
         $this->setData($data);
-    }
-
-    /**
-     * @param $prodId
-     * @return int|mixed
-     */
-    private function sumLoggedHours($prodId)
-    {
-        $hoursInReport = Report::find()
-            ->where('project_id=:prodId', [
-                ':prodId' => $prodId])->sum('hours');
-
-        return $hoursInReport ? $hoursInReport : 0;
     }
 
     /**
