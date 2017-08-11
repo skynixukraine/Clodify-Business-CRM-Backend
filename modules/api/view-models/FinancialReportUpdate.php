@@ -36,57 +36,58 @@ class FinancialReportUpdate extends ViewModelAbstract
                         $this->postData['report_date'] .
                         $this->getYear($financialReport->report_date);
 
+
                     $reportDate = DateUtil::convertDateToUnix($reportDate);
 
-                    if (!FinancialReport::validateReportDate($reportDate)) {
-                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+                        if (!FinancialReport::validateReportDate($reportDate)) {
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
+                        }
+
+                        $this->postData['report_date'] = $reportDate;
                     }
 
-                    $this->postData['report_date'] = $reportDate;
-                }
+                    if (User::hasPermission([User::ROLE_ADMIN])) {
 
-                if (User::hasPermission([User::ROLE_ADMIN])) {
+                        $this->postData['income'] = $this->getElement('income', $financialReport);
 
-                    $this->postData['income'] = $this->getElement('income', $financialReport);
+                    } else {
+                        unset($this->postData['income']);
+                    }
+
+                    if (isset($this->postData['expense_constant'])) {
+
+                        $this->postData['expense_constant'] = $this->getElement('expense_constant', $financialReport);
+                    }
+
+                    if (isset($this->postData['investments'])) {
+
+                        $this->postData['investments'] = $this->getElement('investments', $financialReport);
+                    }
+
+                    if (isset($this->postData['spent_corp_events'])) {
+
+                        $this->postData['spent_corp_events'] = $this->getElement('spent_corp_events', $financialReport);
+
+                    }
+
+                    $financialReport->setAttributes(
+                        array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
+                    );
+
+                    if ($financialReport->validate()) {
+                        $financialReport->save();
+                    }
 
                 } else {
-                    unset($this->postData['income']);
-                }
-
-                if (isset($this->postData['expense_constant'])) {
-
-                    $this->postData['expense_constant'] = $this->getElement('expense_constant', $financialReport);
-                }
-
-                if (isset($this->postData['investments'])) {
-
-                    $this->postData['investments'] = $this->getElement('investments', $financialReport);
-                }
-
-                if (isset($this->postData['spent_corp_events'])) {
-
-                    $this->postData['spent_corp_events'] = $this->getElement('spent_corp_events', $financialReport);
-
-                }
-
-                $financialReport->setAttributes(
-                    array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
-                );
-
-                if ($financialReport->validate()) {
-                    $financialReport->save();
+                    return $this->addError(Processor::ERROR_PARAM,
+                        Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
                 }
 
             } else {
                 return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
+                    Yii::t('yii', 'You have no permission for this action'));
             }
-
-        } else {
-            return $this->addError(Processor::ERROR_PARAM,
-                Yii::t('yii', 'You have no permission for this action'));
         }
-    }
 
     /**
      *
