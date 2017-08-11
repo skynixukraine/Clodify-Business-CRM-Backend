@@ -52,6 +52,9 @@ class FinancialReportView extends ViewModelAbstract
                         },
                     ],
                 ]);
+                if (!User::hasPermission([User::ROLE_ADMIN])) {
+                    unset ($financialReport['income']);
+                }
 
                 $this->setData($financialReport);
             }
