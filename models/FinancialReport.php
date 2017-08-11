@@ -41,7 +41,7 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['income', 'expense_constant', 'investments', 'spend_corp_events'], 'string',
+            [['income', 'expense_constant', 'investments', 'spent_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
@@ -175,8 +175,6 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function validateReportDate($date)
     {
-        $datefrom = strtotime(date('Y-m-2', strtotime('-1 Month', time())));
-        $dateto = strtotime(date('Y-m-01', strtotime('+1 Month', time())));
 
         $financialReports = FinancialReport::find()->all();
 
@@ -184,9 +182,6 @@ class FinancialReport extends \yii\db\ActiveRecord
             if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
                 return false;
             }
-        }
-        if ($date < $datefrom || $dateto < $date) {
-            return false;
         }
 
         return true;
