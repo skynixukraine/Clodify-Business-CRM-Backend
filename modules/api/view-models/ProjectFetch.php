@@ -125,9 +125,9 @@ class ProjectFetch extends ViewModelAbstract
                     'id' => $model->id,
                     'name' => $model->name,
                     'jira' => $model->jira_code,
-                    'total_logged' => $model->total_logged_hours,
+                    'total_logged' => $model->total_logged_hours ? $model->total_logged_hours :0,
                     'cost' => $cost,
-                    'total_paid' => $this->sumPaidHours($model->id),
+                    'total_paid' => $model->total_paid_hours ? $model->total_paid_hours : 0,
                     'date_start' => $newDateStart,
                     'date_end' => $newDateEnd,
                     'developers' => $developersNames ? implode(", ", $developersNames): "Developer Not Set",
@@ -141,21 +141,6 @@ class ProjectFetch extends ViewModelAbstract
             "total_records" => DataTable::getInstance()->getTotal()
         ];
         $this->setData($data);
-    }
-
-    /**
-     * @param $prodId
-     * @return int
-     */
-    private function sumPaidHours($prodId)
-    {
-        $sumHoursReports = Report::find()
-            ->select('hours')
-            ->joinWith(['invoice'])
-            ->andWhere([Invoice::tableName() . '.status' => Invoice::STATUS_PAID])
-            ->andWhere([Report::tableName() . '.project_id' => $prodId])
-            ->sum('hours');
-        return $sumHoursReports ?: 0;
     }
 
 }

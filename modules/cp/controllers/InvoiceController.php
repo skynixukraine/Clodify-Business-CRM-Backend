@@ -373,14 +373,8 @@ class InvoiceController extends DefaultController
             $model = Invoice::findOne($id);
             $model->status = Invoice::STATUS_PAID;
             $model->date_paid = date('Y-m-d');
-            if($model->save(true, ['status', 'date_paid'])) {
-                $hours = $model->total_hours;
-                $id = $model->project_id;
-                $project = Project::findOne($id);
-                $project->total_paid_hours += $hours;
-                $project->save();
-                Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have marked the invoice " . $id . " as paid"));
-            }
+            $model->save(true, ['status', 'date_paid']);
+            Yii::$app->getSession()->setFlash('success', Yii::t("app", "You have marked the invoice " . $id . " as paid"));
             return $this->redirect(['invoice/index']);
         }
     }
