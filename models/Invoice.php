@@ -168,7 +168,6 @@ class Invoice extends \yii\db\ActiveRecord
             ->execute();
 
             if( ! $insert && $this->status == self::STATUS_PAID) {
-    //           if ($this->project_id) {
                     $project = Project::findOne($this->project_id);
                     $invoices = Invoice::find()->where(['project_id' => $this->project_id])
                         ->andWhere(['status' => self::STATUS_PAID])->all();
@@ -182,27 +181,6 @@ class Invoice extends \yii\db\ActiveRecord
                             $project->save();
                         }
                     }
-//                } else {  // if $this->project_id == null, there must be not NULL value of $this->user_id
-//                    $projects = Project::ProjectsCurrentClient($this->user_id);
-//                    $IDs = [];
-//                    foreach ($projects as $project) {
-//                        $IDs[] = $project->id;
-//                    }
-//                    $invoices = Invoice::find()->where(['project_id' => $IDs])
-//                        ->andWhere(['status' => self::STATUS_PAID])->all();
-//                    $totalPaid = 0;
-//                    if ($invoices) {
-//                        foreach ($invoices as $invoice) {
-//                            $totalPaid += $invoice->total_hours;
-//                        }
-//                        if ($totalPaid) {
-//                            foreach ($projects as $project) {
-//                                $project->total_paid_hours = $totalPaid;
-//                                $project->save();
-//                            }
-//                        }
-//                    }
-//                }
 
             }
 
