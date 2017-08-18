@@ -166,8 +166,7 @@ class Invoice extends \yii\db\ActiveRecord
                 ':end'      => DateUtil::convertData($this->date_end),
                 ])
             ->execute();
-
-
+        
             if( ! $insert ) {
                 if ($this->project_id) {
                     $project = Project::findOne($this->project_id);
@@ -187,13 +186,13 @@ class Invoice extends \yii\db\ActiveRecord
                     $projects = Project::ProjectsCurrentClient($this->user_id);
                     foreach ($projects as $project) {
                         $totalHoursReport = Report::find()
-                            ->joinWith(['invoice'])
-                            ->where(Report::tableName() . ' .date_report >' . Invoice::tableName()
-                                . '.date_start AND ' . Report::tableName() . ' .date_report < ' . Invoice::tableName() . '.date_end')
+                            ->andWhere([Report::tableName() . '.invoice_id' => $this->id])
                             ->andWhere([Report::tableName() .'.project_id' => $project->id])
                             ->andWhere([Report::tableName() .'.is_delete' => 0])->sum('hours');
-                        $project->total_paid_hours = $totalHoursReport;
-                        $project->save();
+                        if($totalHoursReport) {
+                            $project->total_paid_hours = $totalHoursReport;
+                            $project->save();
+                        }
                     }
                 }
             }
