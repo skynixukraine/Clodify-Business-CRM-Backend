@@ -257,4 +257,42 @@ class FinancialReportsCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1032
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testYearlyFinancialReportsCest(FunctionalTester $I)
+    {
+        $I->wantTo('Testing yearly financial report data');
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/yearly');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                [
+                    'id' => 'integer',
+                    'year' => 'integer',
+                    'income' => 'integer',
+                    'expense_constant' => 'integer',
+                    'investments' => 'integer',
+                    'expense_salary' => 'integer',
+                    'difference' => 'integer',
+                    'bonuses' => 'integer',
+                    'corp_events' => 'integer',
+                    'profit' => 'integer',
+                    'balance' => 'integer',
+                    'spent_corp_events' => 'integer',
+
+                ],
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+
+        ]);
+    }
+
 }
