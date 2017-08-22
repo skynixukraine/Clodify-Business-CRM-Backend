@@ -41,6 +41,7 @@ return [
     'GET '      . $API . '/financial-reports'                           => $API . '/financial-reports/fetch',
     'PUT '      . $API . '/financial-reports/<id:\d+>'                  => $API . '/financial-reports/update',
     'PUT '      . $API . '/financial-reports/<id:\d+>/lock'             => $API . '/financial-reports/lock',
+    'GET '      . $API . '/financial-reports/yearly'                    => $API . '/financial-reports/yearly',
 
     
     // General rules
