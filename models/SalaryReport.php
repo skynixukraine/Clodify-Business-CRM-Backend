@@ -16,7 +16,7 @@ use Yii;
  * @property integer $id
  * @property integer $report_date
  * @property double $total_salary
- * @property double $oficial_salary
+ * @property double $official_salary
  * @property double $bonuses
  * @property double $hospital
  * @property double $day_off
