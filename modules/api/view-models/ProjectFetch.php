@@ -13,11 +13,14 @@ use app\components\DataTable;
 use app\components\DateUtil;
 use app\models\Project;
 use app\models\User;
+use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
+use app\models\Invoice;
 
 class ProjectFetch extends ViewModelAbstract
 {
+
     public function define()
     {
         $order       = Yii::$app->request->getQueryParam('order', []);
@@ -117,15 +120,14 @@ class ProjectFetch extends ViewModelAbstract
             $newDateStart =$model->date_start ? date("d/m/Y", strtotime($model->date_start)): "Date Start Not Set";
             $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
             $cost = '$' . number_format($model->cost, 2, ',	', '.');
-            $totalpaid = gmdate('H:i', floor($model->total_paid_hours * 3600));
             $list[] =
                 [
                     'id' => $model->id,
                     'name' => $model->name,
                     'jira' => $model->jira_code,
-                    'total_logged' => gmdate('H:i', floor($model->total_logged_hours * 3600)),
+                    'total_logged' => $model->total_logged_hours ? $model->total_logged_hours :0,
                     'cost' => $cost,
-                    'total_paid' => $totalpaid,
+                    'total_paid' => $model->total_paid_hours ? $model->total_paid_hours : 0,
                     'date_start' => $newDateStart,
                     'date_end' => $newDateEnd,
                     'developers' => $developersNames ? implode(", ", $developersNames): "Developer Not Set",
@@ -140,4 +142,5 @@ class ProjectFetch extends ViewModelAbstract
         ];
         $this->setData($data);
     }
+
 }

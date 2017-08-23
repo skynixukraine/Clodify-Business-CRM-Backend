@@ -49,41 +49,27 @@ class FinancialReportFetch extends ViewModelAbstract
             $financialReport = $dataTable->getData();
 
             if ($financialReport) {
-                $financialReport = ArrayHelper::toArray($financialReport, [
-                    'app\models\FinancialReport' => [
-                        'id',
-                        'report_date' => function ($finRep) {
-                            return DateUtil::convertDateFromUnix($finRep->report_date);
-                        },
-                        'balance' => function ($finRep) {
-                            return FinancialReport::getBalance($finRep->id);
-                        },
-                        'currency'=> function ($finRep) {
-                            if($finRep->currency){
-                                return $finRep->currency;
-                            } else {
-                                return 0;
-                            }
-                        },
-                        'income' => function ($finRep) {
-                            return FinancialReport::sumIncome($finRep->id);
-                        },
-                        'expenses' => function ($finRep) {
-                            return FinancialReport::sumExpenses($finRep->id);
-                        },
-                        'profit' => function ($finRep) {
-                            return FinancialReport::getProfit($finRep->id);
-                        },
-                        'investments' => function ($finRep) {
-                            return FinancialReport::sumInvestments($finRep->id);
-                        },
 
-                    ],
-                ]);
+                foreach ($financialReport as $key => $finRep) {
+                    $financialReport[$key] = [
+                        'id' => $finRep->id,
+                        'report_date' => $this->dateRangeForFetch($finRep->report_date),
+                        'balance' => FinancialReport::getBalance($finRep->id),
+                        'currency' => $finRep->currency ? $finRep->currency : 0,
+                        'expenses' => FinancialReport::sumExpenses($finRep->id),
+                        'investments' => FinancialReport::sumInvestments($finRep->id),
+                        'spent_corp_events' => FinancialReport::sumSpentCorpEvents($finRep->id),
+                        'is_locked' => $finRep->is_locked
+                    ];
+                    if (User::hasPermission([User::ROLE_ADMIN])) {
+                        $financialReport[$key]['income'] = FinancialReport::sumIncome($finRep->id);
+                        $financialReport[$key]['profit'] = FinancialReport::getProfit($finRep->id);
+                    }
+                }
+
             } else {
                 $financialReport = [];
             }
-
             $data = [
                 'reports' => $financialReport,
                 'total_records' => DataTable::getInstance()->getTotal()
@@ -95,6 +81,22 @@ class FinancialReportFetch extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
 
+    }
+
+    /**
+     * @param $date
+     * @return string
+     *  return something like that 01/01/2016 ~ 31/01/2016
+     */
+    private function dateRangeForFetch($date)
+    {
+        $range = '';
+        $month_from_date = date('m', $date);
+        $year_from_date = date('Y',$date);
+        $count_of_days = date("t",mktime(0,0,0,$month_from_date ,1,$year_from_date));
+        $range .= '01/'. $month_from_date . '/' . $year_from_date ;
+        $range .= ' ~ ' . $count_of_days . '/' .$month_from_date . '/' . $year_from_date;
+        return $range;
     }
 }
 

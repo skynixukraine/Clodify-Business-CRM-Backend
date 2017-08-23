@@ -21,12 +21,13 @@ class CreateEditReport extends ViewModelAbstract
 
     public function define()
     {
-
+        $oldHours = 0;
         $reportId       = Yii::$app->request->getQueryParam('id');
         $userId = $this->getAccessTokenModel()->user_id;
 
         if( $reportId ) {
             $this->model = Report::findOne($reportId);
+            $oldHours = $this->model->hours;
             $this->model->setAttributes($this->postData);
             $this->model->date_report = DateUtil::convertData($this->model->date_report);
             if (strpos($this->model->hours, ',')) {
@@ -75,7 +76,7 @@ class CreateEditReport extends ViewModelAbstract
                             $this->model->cost = $this->model->hours * ($user->salary / Report::SALARY_HOURS);
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
                             $this->model->user_id = $user_id;
-                            $result = $totalHoursOfThisDay + $this->model->hours;
+                            $result = $totalHoursOfThisDay - $oldHours + $this->model->hours;
                             if ($result <= 12) {
                                 if ($this->model->save()) {
                                     if(!$reportId) {

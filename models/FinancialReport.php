@@ -17,9 +17,8 @@ use Yii;
  */
 class FinancialReport extends \yii\db\ActiveRecord
 {
-
-    const EXPIRATION_PERIOD_CREATE = '30 days';
-
+    const NOT_LOCKED = 0;
+    const LOCKED = 1;
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
@@ -42,9 +41,9 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
-            [['income', 'expense_constant', 'investments'], 'string',
+            [['income', 'expense_constant', 'investments', 'spent_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
-            [['currency', 'expense_salary'], 'number',
+            [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
         ];
     }
@@ -62,6 +61,7 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
+            'spend_corp_events' => 'Spend Corp Events'
         ];
     }
 
@@ -175,6 +175,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function validateReportDate($date)
     {
+
         $financialReports = FinancialReport::find()->all();
 
         foreach ($financialReports as $financialReport) {
@@ -184,6 +185,27 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * Get sum spent_corp_events
+     *
+     * @param $id
+     * @return int
+     */
+    public static function sumSpentCorpEvents($id)
+    {
+        $financialReport = FinancialReport::findOne($id);
+        $financialReport = json_decode($financialReport->spent_corp_events);
+        $spent_corp_eventsSum = 0;
+
+        if ($financialReport) {
+            foreach ($financialReport as $sp_corp_eve) {
+                $spent_corp_eventsSum += $sp_corp_eve->amount;
+            }
+        }
+
+        return $spent_corp_eventsSum;
     }
 
 }
