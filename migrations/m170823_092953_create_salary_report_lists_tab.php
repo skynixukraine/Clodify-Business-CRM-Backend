@@ -2,14 +2,8 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `salary_report_lists`.
- */
-class m170822_144951_create_salary_report_lists_table extends Migration
+class m170823_092953_create_salary_report_lists_tab extends Migration
 {
-    /**
-     * @inheritdoc
-     */
     public function up()
     {
         $tableOptions = null;
@@ -25,7 +19,7 @@ class m170822_144951_create_salary_report_lists_table extends Migration
             'salary' => $this->integer(),
             'worked_days' => $this->integer(),
             'actually_worked_out_salary' => $this->integer(),
-            'oficial_salary' => $this->double(),
+            'official_salary' => $this->double(),
             'hospital_days' => $this->integer(),
             'hospital_value' => $this->double(),
             'bonuses' => $this->double(),
@@ -40,11 +34,19 @@ class m170822_144951_create_salary_report_lists_table extends Migration
         ],$tableOptions);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function down()
     {
         $this->dropTable('salary_report_lists');
     }
+
+    /*
+    // Use safeUp/safeDown to run migration code within a transaction
+    public function safeUp()
+    {
+    }
+
+    public function safeDown()
+    {
+    }
+    */
 }
