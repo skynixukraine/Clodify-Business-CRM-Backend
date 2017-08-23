@@ -79,4 +79,35 @@ class SalaryReportsCest
             'success' => 'boolean'
         ]);
     }
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-6
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testCreateSalaryReportCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing create salary reports');
+        $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
+            [
+                'report_date' => '7'
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $this->finacialReportId = $response->data->report_id;
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data'    => [
+                    'report_id' => 'integer',
+                ],
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        );
+    }
 }
