@@ -29,6 +29,8 @@ use Yii;
  */
 class SalaryReport extends \yii\db\ActiveRecord
 {
+    const SCENARIO_SALARY_REPORT_CREATE = 'api-salary_report-create';
+
     /**
      * @inheritdoc
      */
@@ -43,7 +45,11 @@ class SalaryReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date', 'number_of_working_days'], 'integer'],
+            [['report_date'], 'integer',
+                'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
+            [['report_date'], 'required',
+                'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
+            [['number_of_working_days'], 'integer'],
             [['total_salary', 'official_salary', 'bonuses', 'hospital', 'day_off', 'overtime', 'other_surcharges', 'subtotal', 'currency_rate', 'total_to_pay'], 'number'],
         ];
     }
@@ -68,5 +74,26 @@ class SalaryReport extends \yii\db\ActiveRecord
             'total_to_pay' => 'Total To Pay',
             'number_of_working_days' => 'Number Of Working Days',
         ];
+    }
+
+    /**
+     * Validate:
+     *     only one report per month can be created.
+     *
+     * @param $reportDate
+     * @return bool
+     */
+    public static function validateSalaryReportDate($date)
+    {
+
+        $financialReports = SalaryReport::find()->all();
+
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

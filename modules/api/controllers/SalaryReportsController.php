@@ -27,4 +27,18 @@ class SalaryReportsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionCreate()
+    {
+        $this->di
+            ->set('app\models\SalaryReport', ['scenario' => SalaryReport::SCENARIO_SALARY_REPORT_CREATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryReportCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
