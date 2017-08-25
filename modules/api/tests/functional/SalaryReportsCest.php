@@ -12,7 +12,7 @@ use Helper\ValuesContainer;
 
 class SalaryReportsCest
 {
- //   private $finacialReportId;
+    private $salaryReportId;
 
     /**
      * @param \Codeception\Scenario $scenario
@@ -97,7 +97,7 @@ class SalaryReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->finacialReportId = $response->data->report_id;
+        $this->salaryReportId = $response->data->report_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
@@ -109,5 +109,75 @@ class SalaryReportsCest
                 'success' => 'boolean'
             ]
         );
+    }
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-7
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchSalaryReportListCest(FunctionalTester $I)
+    {
+
+        $salaryReportListId = 1;
+
+        $I->haveInDatabase('salary_report_lists', array(
+
+            'id' => $salaryReportListId,
+            'salary_report_id' => $this->salaryReportId,
+            'user_id' => 30,
+            'salary' => 4000,
+            'worked_days' => 21,
+            'actually_worked_out_salary' => 4000,
+            'official_salary' => 3200,
+            'hospital_days' => 1,
+            'hospital_value' => 12,
+            'bonuses' => 40,
+            'day_off' => 0,
+            'overtime_days' => 0,
+            'overtime_value' => 0,
+            'other_surcharges' => 0,
+            'subtotal' => 4000,
+            'currency_rate' => 26.1,
+            'subtotal_uah' => 30000,
+            'total_to_pay' => 26000
+        ));
+
+        $I->wantTo('Testing fetch salary report list data');
+        $I->sendGET(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['lists' =>
+                [
+                    [
+                        'id' => 'integer',
+                        'salary_report_id' => 'integer',
+                        'user_id' => 'integer',
+                        'salary' => 'integer',
+                        'worked_days' => 'integer',
+                        'actually_worked_out_salary' => 'integer',
+                        'official_salary' => 'integer | float',
+                        'hospital_days' => 'integer',
+                        'hospital_value' => 'integer | float',
+                        'bonuses' => 'integer | float',
+                        'day_off' => 'integer',
+                        'overtime_days' => 'integer',
+                        'overtime_value' => 'integer | float',
+                        'other_surcharges' => 'integer | float',
+                        'subtotal' => 'integer | float',
+                        'currency_rate' => 'integer | float',
+                        'subtotal_uah' => 'integer | float',
+                        'total_to_pay' => 'integer | float',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
     }
 }

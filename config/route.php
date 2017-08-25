@@ -44,6 +44,7 @@ return [
     'GET '      . $API . '/financial-reports/yearly'                    => $API . '/financial-reports/yearly',
     'GET '      . $API . '/salary-reports'                              => $API . '/salary-reports/fetch',
     'POST '     . $API . '/salary-reports'                              => $API . '/salary-reports/create',
+    'GET '      . $API . '/salary-reports/<id:\d+>/lists'               => $API . '/salary-reports/lists',
 
     
     // General rules
