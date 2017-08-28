@@ -12,7 +12,8 @@ use Helper\ValuesContainer;
 
 class SalaryReportsCest
 {
- //   private $finacialReportId;
+    private $salaryReportId;
+    private $salaryRepId;
 
     /**
      * @param \Codeception\Scenario $scenario
@@ -85,6 +86,7 @@ class SalaryReportsCest
      * @param  FunctionalTester $I
      * @return void
      */
+
     public function testCreateSalaryReportCest(FunctionalTester $I)
     {
 
@@ -97,13 +99,58 @@ class SalaryReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->finacialReportId = $response->data->report_id;
+        $this->salaryReportId = $response->data->report_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
             [
                 'data'    => [
                     'report_id' => 'integer',
+                ],
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        );
+    }
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-6
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testCreateSalaryReportListsCest(FunctionalTester $I)
+    {
+
+        $I->haveInDatabase('financial_reports', array(
+            'report_date' => '1500681600',
+            'currency' => 26.6,
+            'expense_salary' => 3000,
+            'num_of_working_days' => 30,
+        ));
+
+        $I->wantTo('Testing create salary report lists');
+        $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
+            [
+                'salary_report_id' => $this->salaryReportId,
+                'user_id' => ValuesContainer::$userSalesId,
+                'worked_days' => '21',
+                'hospital_days' => '1',
+                'bonuses' => '40',
+                'day_off' => '0',
+                'overtime_days' => '0',
+                'other_surcharges' => '0',
+                'finacialReportId' => '2',
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data'    => [
+                    'list_id' => 'integer',
                 ],
                 'errors'  => 'array',
                 'success' => 'boolean'

@@ -127,6 +127,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
             ['captcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['captchaSecret'],  'on' => self::SCENARIO_CHANGE_PASSWORD, ],
             [['photo', 'sing'], 'string', 'on' => ['settings']],
+            [['official_salary'], 'integer'],
 
 
         ];
@@ -729,6 +730,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * Check that a passed user has a role DEV, SALES, FIN
+     * @param $id
+     * @return bool
+     */
     public static function validateRoleForSalaryList($id)
     {
         $user= User::findOne($id);
@@ -739,6 +745,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * Check that a passed user is active
+     * @param $id
+     * @return bool
+     */
     public static function isActiveUser($id)
     {
         $user= User::findOne($id);
@@ -749,10 +760,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * Check that user→salary > 0 & user→official_salary > 0
+     * @param $id
+     * @return bool
+     */
     public static function validateSalaryForSalaryList($id)
     {
         $user= User::findOne($id);
-        if($user->salary > 0 ){    // && $user->official_salary
+        if($user->salary > 0 && $user->official_salary > 0){
             return true;
         } else {
             return false;

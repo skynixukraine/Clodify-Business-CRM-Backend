@@ -8,9 +8,7 @@
 namespace viewModel;
 
 use Yii;
-use app\components\DateUtil;
 use app\models\FinancialReport;
-use app\models\SalaryReportList;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 /**
@@ -34,29 +32,30 @@ class SalaryListCreate extends ViewModelAbstract
                 if (User::validateRoleForSalaryList($this->model->user_id)) {
                     if (User::isActiveUser($this->model->user_id)) {
                         if (User::validateSalaryForSalaryList($this->model->user_id)) {
-                            if (!FinancialReport::checkIsLockForSalaryList($this->model->salary_report_id)){
+                            if (!FinancialReport::checkIsLockForSalaryList($this->model->salary_report_id)) {
 
                                 $this->working_days = FinancialReport::getNumOfWorkingDaysForSalaryList($this->model->salary_report_id);
 
-                            $user = User::findOne($this->model->user_id);
+                                $user = User::findOne($this->model->user_id);
 
-                            $this->model->salary = $user->salary;
-                            $this->model->currency_rate = FinancialReport::getCurrencyForSalaryList($this->model->salary_report_id);
-                            $this->model->actually_worked_out_salary = ($this->model->salary / $this->working_days) * $this->model->worked_days;
-                            $this->model->official_salary = $user->official_salary;
-                            $this->model->hospital_value = ($this->model->salary / $this->working_days) * $this->model->hospital_days / 2;
-                            $this->model->overtime_value = ($this->model->salary / $this->working_days) * $this->model->overtime_days * 1.5;
-                            $this->model->subtotal = $this->model->actually_worked_out_salary + $this->model->hospital_value +
-                                $this->model->bonuses + $this->model->overtime_value + $this->model->other_surcharges;
-                            $this->model->subtotal_uah = $this->model->subtotal * $this->model->currency_rate;
-                            $this->model->total_to_pay = $this->model->subtotal_uah - $this->model->official_salary;
+                                $this->model->salary = $user->salary;
+                                $this->model->currency_rate = FinancialReport::getCurrencyForSalaryList($this->model->salary_report_id);
+                                $this->model->actually_worked_out_salary = ($this->model->salary / $this->working_days) * $this->model->worked_days;
+                                $this->model->official_salary = $user->official_salary;
+                                $this->model->hospital_value = ($this->model->salary / $this->working_days) * $this->model->hospital_days / 2;
+                                $this->model->overtime_value = ($this->model->salary / $this->working_days) * $this->model->overtime_days * 1.5;
+                                $this->model->subtotal = $this->model->actually_worked_out_salary + $this->model->hospital_value +
+                                    $this->model->bonuses + $this->model->overtime_value + $this->model->other_surcharges;
+                                $this->model->subtotal_uah = $this->model->subtotal * $this->model->currency_rate;
+                                $this->model->total_to_pay = $this->model->subtotal_uah - $this->model->official_salary;
 
+                                if ($this->validate() && $this->model->save()) {
 
-                            if ($this->validate()) {
-
-                                $this->model->save();
+                                    $this->setData([
+                                        'list_id' => $this->model->id
+                                    ]);
+                                }
                             }
-                        }
                         } else {
                             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', ' Please specify a salary & official salary for a passed user before creating a salary list.'));
                         }

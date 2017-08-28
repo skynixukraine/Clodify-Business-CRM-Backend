@@ -701,6 +701,7 @@ CREATE TABLE `users` (
   `is_published` tinyint(1) DEFAULT '0',
   `languages` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
+  `official_salary` double null,
   PRIMARY KEY (`id`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;
