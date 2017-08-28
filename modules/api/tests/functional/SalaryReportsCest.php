@@ -13,7 +13,6 @@ use Helper\ValuesContainer;
 class SalaryReportsCest
 {
     private $salaryReportId;
-    private $salaryRepId;
 
     /**
      * @param \Codeception\Scenario $scenario
