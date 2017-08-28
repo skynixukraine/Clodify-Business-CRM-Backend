@@ -28,6 +28,7 @@ class SalaryReportsController extends DefaultController
             ->respond();
     }
 
+
     public function actionCreate()
     {
         $this->di
@@ -37,6 +38,19 @@ class SalaryReportsController extends DefaultController
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_POST ],
                 'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionListsCreate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_POST],
+                'checkAccess' => true
             ])
             ->get('Processor')
             ->respond();

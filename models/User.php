@@ -729,4 +729,35 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    public static function validateRoleForSalaryList($id)
+    {
+        $user= User::findOne($id);
+        if($user->role == self::ROLE_DEV || $user->role == self::ROLE_FIN || $user->role == self::ROLE_SALES){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isActiveUser($id)
+    {
+        $user= User::findOne($id);
+        if($user->is_active == self::ACTIVE_USERS){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function validateSalaryForSalaryList($id)
+    {
+        $user= User::findOne($id);
+        if($user->salary > 0 ){    // && $user->official_salary
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }

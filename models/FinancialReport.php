@@ -68,7 +68,8 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
-            'spend_corp_events' => 'Spend Corp Events'
+            'spend_corp_events' => 'Spend Corp Events',
+            'num_of_working_days' => 'Num',
         ];
     }
 
@@ -215,4 +216,58 @@ class FinancialReport extends \yii\db\ActiveRecord
         return $spent_corp_eventsSum;
     }
 
+    public static function validateReportForSalaryList($id)
+    {
+        $salaryReport = SalaryReport::findOne($id);
+        $salaryReportDate = $salaryReport->report_date;
+
+        $financialReports = FinancialReport::find()->all();
+
+        foreach ($financialReports as $financialReport) {
+            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate))&&
+                $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getCurrencyForSalaryList($id)
+    {
+        $salaryReport = SalaryReport::findOne($id);
+        $salaryReportDate = $salaryReport->report_date;
+
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+                return $financialReport->currency;
+            }
+        }
+    }
+
+    public static function getNumOfWorkingDaysForSalaryList($id)
+    {
+        $salaryReport = SalaryReport::findOne($id);
+        $salaryReportDate = $salaryReport->report_date;
+
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+                return $financialReport->num_of_working_days;
+            }
+        }
+    }
+
+    public static function checkIsLockForSalaryList($id)
+    {
+        $salaryReport = SalaryReport::findOne($id);
+        $salaryReportDate = $salaryReport->report_date;
+
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+                return $financialReport->is_locked;
+            }
+        }
+    }
 }
