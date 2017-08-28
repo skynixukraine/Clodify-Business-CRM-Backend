@@ -206,6 +206,7 @@ CREATE TABLE `financial_reports` (
   `investments` text null,
   `spent_corp_events` text null,
   `is_locked` tinyint(1) DEFAULT '0',
+  `num_of_working_days` int null,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

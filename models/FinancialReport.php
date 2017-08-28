@@ -19,6 +19,10 @@ class FinancialReport extends \yii\db\ActiveRecord
 {
     const NOT_LOCKED = 0;
     const LOCKED = 1;
+
+    const NUM_OF_WORKING_DAY_MIN = 15;
+    const NUM_OF_WORKING_DAY_MAX = 31;
+
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
@@ -45,6 +49,9 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            ['num_of_working_days', 'integer',
+                'min' => self::NUM_OF_WORKING_DAY_MIN, 'max' => self::NUM_OF_WORKING_DAY_MAX,
+                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE]
         ];
     }
 

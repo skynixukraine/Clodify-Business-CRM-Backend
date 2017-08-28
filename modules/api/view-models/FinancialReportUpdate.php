@@ -76,8 +76,13 @@ class FinancialReportUpdate extends ViewModelAbstract
                         array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
                     );
 
+                    $financialReport->setScenario(FinancialReport::SCENARIO_FINANCIAL_REPORT_UPDATE);
+
                     if ($financialReport->validate()) {
-                        $financialReport->save();
+                        $financialReport->save(true);
+                    } else {
+                        return $this->addError(Processor::ERROR_PARAM,
+                            Yii::t('yii', 'Sorry, but the entered data is not correct'));
                     }
 
                 } else {

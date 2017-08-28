@@ -103,6 +103,7 @@ class FinancialReportsCest
                 'report_date' => '8',
                 'currency' => 26.6,
                 'expense_salary' => 3000,
+                'num_of_working_days' => 30,
                 'income' => $income,
                 'expense_constant' => $expenses,
                 'investments' => $investments,
