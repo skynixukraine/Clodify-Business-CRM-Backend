@@ -31,44 +31,36 @@ class SalaryListUpdate extends ViewModelAbstract
             if ($salaryListReport) {
                 if (!FinancialReport::checkIsLockForSalaryList($salaryReportId)) {
 
-                    if (isset($this->postData['worked_days']) && isset($this->postData['hospital_days']) &&
-                        isset($this->postData['bonuses']) && isset($this->postData['day_off']) &&
-                        isset($this->postData['overtime_days']) && isset($this->postData['other_surcharges'])
-                    ) {
+                    if ($this->validate()) {
 
                         $working_days = FinancialReport::getNumOfWorkingDaysForSalaryList($salaryReportId);
-                            $user = User::findOne($salaryListReport->user_id);
+                        $user = User::findOne($salaryListReport->user_id);
 
-                            $salaryListReport->salary = $user->salary;
-                            $salaryListReport->day_off = $this->postData['day_off'];
-                            $salaryListReport->other_surcharges = $this->postData['other_surcharges'];
-                            $salaryListReport->overtime_days = $this->postData['overtime_days'];
-                            $salaryListReport->hospital_days = $this->postData['hospital_days'];
-                            $salaryListReport->bonuses = $this->postData['bonuses'];
-                            $salaryListReport->worked_days = $this->postData['worked_days'];
-                            $salaryListReport->currency_rate = FinancialReport::getCurrencyForSalaryList($salaryReportId);
-                            $salaryListReport->actually_worked_out_salary = ($salaryListReport->salary / $working_days) * $salaryListReport->worked_days;
-                            $salaryListReport->official_salary = $user->official_salary;
-                            $salaryListReport->hospital_value = ($salaryListReport->salary / $working_days) * $salaryListReport->hospital_days / 2;
-                            $salaryListReport->overtime_value = ($salaryListReport->salary / $working_days) * $salaryListReport->overtime_days * 1.5;
-                            $salaryListReport->subtotal = $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
-                                $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
-                            $salaryListReport->subtotal_uah = $salaryListReport->subtotal * $salaryListReport->currency_rate;
-                            $salaryListReport->total_to_pay = $salaryListReport->subtotal_uah - $salaryListReport->official_salary;
+                        $salaryListReport->setAttributes(
+                            array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
+                        );
 
-                            $salaryListReport->setScenario(SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE);
+                        $salaryListReport->salary = $user->salary;
+                        $salaryListReport->currency_rate = FinancialReport::getCurrencyForSalaryList($salaryReportId);
+                        $salaryListReport->actually_worked_out_salary = ($salaryListReport->salary / $working_days) * $salaryListReport->worked_days;
+                        $salaryListReport->official_salary = $user->official_salary;
+                        $salaryListReport->hospital_value = ($salaryListReport->salary / $working_days) * $salaryListReport->hospital_days / 2;
+                        $salaryListReport->overtime_value = ($salaryListReport->salary / $working_days) * $salaryListReport->overtime_days * 1.5;
+                        $salaryListReport->subtotal = $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
+                            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
+                        $salaryListReport->subtotal_uah = $salaryListReport->subtotal * $salaryListReport->currency_rate;
+                        $salaryListReport->total_to_pay = $salaryListReport->subtotal_uah - $salaryListReport->official_salary;
 
-                            if ($salaryListReport->validate()) {
-                                $salaryListReport->save(true);
-                            } else {
-                                return $this->addError(Processor::ERROR_PARAM,
-                                    Yii::t('yii', 'Sorry, but the entered data is not correct'));
-                            }
+                        $salaryListReport->setScenario(SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE);
 
-                    } else {
-                        return $this->addError(Processor::ERROR_PARAM,
-                            Yii::t('yii', 'Missing some required params'));
+                        if ($salaryListReport->validate()) {
+                            $salaryListReport->save();
+                        } else {
+                            return $this->addError(Processor::ERROR_PARAM,
+                                Yii::t('yii', 'Sorry, but the entered data is not correct'));
+                        }
                     }
+
                 } else {
                     return $this->addError(Processor::ERROR_PARAM,
                         Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
