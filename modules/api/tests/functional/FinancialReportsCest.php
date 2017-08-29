@@ -143,6 +143,7 @@ class FinancialReportsCest
             'data' => [
                 'id' => 'integer',
                 'report_date' => 'string',
+                'num_of_working_days' => 'integer|null',
                 'income' => 'array',
                 'currency' => 'float',
                 'expense_constant' => 'array',
