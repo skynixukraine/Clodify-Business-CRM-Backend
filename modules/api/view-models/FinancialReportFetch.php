@@ -59,6 +59,7 @@ class FinancialReportFetch extends ViewModelAbstract
                         'expenses' => FinancialReport::sumExpenses($finRep->id),
                         'investments' => FinancialReport::sumInvestments($finRep->id),
                         'spent_corp_events' => FinancialReport::sumSpentCorpEvents($finRep->id),
+                        'num_of_working_days' => $finRep->num_of_working_days,
                         'is_locked' => $finRep->is_locked
                     ];
                     if (User::hasPermission([User::ROLE_ADMIN])) {
@@ -70,6 +71,7 @@ class FinancialReportFetch extends ViewModelAbstract
             } else {
                 $financialReport = [];
             }
+
             $data = [
                 'reports' => $financialReport,
                 'total_records' => DataTable::getInstance()->getTotal()
