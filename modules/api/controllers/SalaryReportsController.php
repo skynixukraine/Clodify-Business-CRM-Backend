@@ -41,4 +41,17 @@ class SalaryReportsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionListsDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_DELETE],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
