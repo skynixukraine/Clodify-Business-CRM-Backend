@@ -89,19 +89,20 @@ class UsersCest
             'data'  => ['users' =>
                 [
                     [
-                'id'          => 'integer',
-                'image'       => 'string',
-                'first_name'  => 'string',
-                'last_name'   => 'string',
-                'company'     => 'string|null',
-                'role'        => 'string',
-                'email'       => 'string',
-                'phone'       => 'string|null',
-                'last_login'  => 'string',
-                'joined'      => 'string',
-                'is_active'   => 'integer',
-                'salary'      => 'string',
-                'salary_up'   => 'string'
+                'id'               => 'integer',
+                'image'            => 'string',
+                'first_name'       => 'string',
+                'last_name'        => 'string',
+                'company'          => 'string|null',
+                'role'             => 'string',
+                'email'            => 'string',
+                'phone'            => 'string|null',
+                'last_login'       => 'string',
+                'joined'           => 'string',
+                'is_active'        => 'integer',
+                'salary'           => 'string',
+                'official_salary'  => 'integer|null',
+                'salary_up'        => 'string'
                     ]
                 ]
             ],

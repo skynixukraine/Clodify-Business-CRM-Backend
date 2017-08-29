@@ -43,11 +43,11 @@ use yii\web\UploadedFile;
  * @property integer $is_published
 
  *
- * @property ProjectCustomers[] $projectCustomers
- * @property Projects[] $projects
- * @property ProjectDevelopers[] $projectDevelopers
- * @property Projects[] $projects0
- * @property Reports[] $reports
+ * @property ProjectCustomer[] $projectCustomers
+ * @property Project[] $projects
+ * @property ProjectDeveloper[] $projectDevelopers
+ * @property Project[] $projects0
+ * @property Report[] $reports
  * @property SalaryHistory[] $salaryHistories
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface

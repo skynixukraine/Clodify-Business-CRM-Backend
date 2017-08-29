@@ -701,6 +701,7 @@ CREATE TABLE `users` (
   `is_published` tinyint(1) DEFAULT '0',
   `languages` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
+  `official_salary` double null,
   PRIMARY KEY (`id`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;
@@ -712,8 +713,8 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `role`, `phone`, `email`, `password`, `first_name`, `last_name`, `middle_name`, `company`, `tags`, `about`, `date_signup`, `date_login`, `date_salary_up`, `is_active`, `salary`, `month_logged_hours`, `year_logged_hours`, `total_logged_hours`, `month_paid_hours`, `year_paid_hours`, `total_paid_hours`, `invite_hash`, `is_delete`, `photo`, `sing`, `public_profile_key`, `bank_account_en`, `bank_account_ua`, `is_published`, `slug`)
-VALUES (1,'ADMIN','0662050652','maryt@skynix.co','21232f297a57a5a743894a0e4a801fc3','Oleksii','Prozhoga','','FOP Prozhoha O.Y.','apache, nginx, php, java, Objective C, c++, mysql, zf2, yii2, magento 2, javascript, html5, css3, sencha, angularjs, phonegap, server administration','I have been working about 15 years with different versions of PHP. \r\n Last 8 years I have been a technical leader for different well known companies such as Citrix.\r\n Currently, I provide services for projecting & modeling complex systems, configuring web servers and solving complex programming tasks.','2016-03-17 09:00:10','2017-02-25 13:27:10','2017-02-25',1,1500,0,0,0,0,0,0,'',0,'Oleksii-round.png','Sign-clean-128.png',NULL,NULL,NULL, 1,'oleksii-prozhoga');
+INSERT INTO `users` (`id`, `role`, `phone`, `email`, `password`, `first_name`, `last_name`, `middle_name`, `company`, `tags`, `about`, `date_signup`, `date_login`, `date_salary_up`, `is_active`, `salary`, `month_logged_hours`, `year_logged_hours`, `total_logged_hours`, `month_paid_hours`, `year_paid_hours`, `total_paid_hours`, `invite_hash`, `is_delete`, `photo`, `sing`, `public_profile_key`, `bank_account_en`, `bank_account_ua`, `is_published`, `slug`, official_salary)
+VALUES (1,'ADMIN','0662050652','maryt@skynix.co','21232f297a57a5a743894a0e4a801fc3','Oleksii','Prozhoga','','FOP Prozhoha O.Y.','apache, nginx, php, java, Objective C, c++, mysql, zf2, yii2, magento 2, javascript, html5, css3, sencha, angularjs, phonegap, server administration','I have been working about 15 years with different versions of PHP. \r\n Last 8 years I have been a technical leader for different well known companies such as Citrix.\r\n Currently, I provide services for projecting & modeling complex systems, configuring web servers and solving complex programming tasks.','2016-03-17 09:00:10','2017-02-25 13:27:10','2017-02-25',1,1500,0,0,0,0,0,0,'',0,'Oleksii-round.png','Sign-clean-128.png',NULL,NULL,NULL, 1,'oleksii-prozhoga', 3200);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
