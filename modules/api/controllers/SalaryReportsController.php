@@ -10,6 +10,7 @@ namespace app\modules\api\controllers;
 
 
 use app\models\SalaryReport;
+use app\models\SalaryReportList;
 use app\modules\api\components\Api\Processor;
 
 class SalaryReportsController extends DefaultController
@@ -46,6 +47,7 @@ class SalaryReportsController extends DefaultController
     public function actionListsCreate()
     {
         $this->di
+            ->set('app\models\SalariReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_CREATE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
             ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListCreate')
             ->set('app\modules\api\components\Api\Access', [
