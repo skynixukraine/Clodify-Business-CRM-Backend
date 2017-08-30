@@ -166,10 +166,11 @@ class UsersCest
         $oAuth->login();
 
         $I->sendPUT(ApiEndpoints::USERS . '/' . userIdEdit, json_encode([
-            'first_name' => first_name,
-            'last_name'  => last_name,
-            'salary'     => salary,
-            'phone'      => phone
+            'first_name'      => first_name,
+            'last_name'       => last_name,
+            'salary'          => salary,
+            'phone'           => phone,
+            'official_salary' => 8000
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
