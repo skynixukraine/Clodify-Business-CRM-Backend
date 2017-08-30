@@ -31,10 +31,11 @@ class UsersCest
         $oAuth->login();
 
         $I->sendPOST(ApiEndpoints::USERS, json_encode([
-            'role'          => ROLE,
-            'first_name'    => FIRST_NAME,
-            'last_name'     => LAST_NAME,
-            'email'         => EMAIL
+            'role'            => ROLE,
+            'first_name'      => FIRST_NAME,
+            'last_name'       => LAST_NAME,
+            'email'           => EMAIL,
+            'official_salary' => 3200
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();

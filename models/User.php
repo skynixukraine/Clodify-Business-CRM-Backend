@@ -65,6 +65,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const PUBLISHED_USERS = 1;
 
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
+    const SCENARIO_CREATE_USER = 'api-create-user';
 
     const ATTACH_USERS_SIGN = 'api-attach-sign';
     const ATTACH_PHOTO_USERS = 'api-attach-photo';
@@ -102,7 +103,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
             [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
             ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
-            ['password', 'required', 'except' => ['settings','edit-user', 'api-create', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
+            ['password', 'required', 'except' => ['settings','edit-user', self::SCENARIO_CREATE_USER, self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             ['role', function () {
                 if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
                     $this->addError('role', Yii::t('yii', 'Role is invalid'));
@@ -127,6 +128,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['captcha', 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
             ['captcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['captchaSecret'],  'on' => self::SCENARIO_CHANGE_PASSWORD, ],
             [['photo', 'sing'], 'string', 'on' => ['settings']],
+            ['official_salary', 'number', 'on' => self::SCENARIO_CREATE_USER]
 
 
         ];
@@ -163,7 +165,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'total_paid_hours'      => 'Total Paid Hours',
             'invite_hash'           => 'Invite Hash',
             'is_delete'             => 'Is Delete',
-            'password_reset_token'  => 'Password Reset Token'
+            'password_reset_token'  => 'Password Reset Token',
+            'official_salary'       => 'Official Salary'
         ];
     }
 
