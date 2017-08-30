@@ -143,6 +143,7 @@ class UsersCest
                 'sign'        => 'string',
                 'bank_account_en' => 'string|null',
                 'bank_account_ua' => 'string|null',
+                'official_salary' => 'integer|null',
                 'email'       => 'string',
                 'phone'       => 'string',
             ]
