@@ -28,7 +28,7 @@ class UsersController extends DefaultController
     }
     public function actionCreate(){
         $this->di
-            ->set('app\models\User', ['scenario' => 'api-create'])
+            ->set('app\models\User', ['scenario' => User::SCENARIO_CREATE_USER])
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserCreate')
             ->set('app\modules\api\components\Api\Access', [

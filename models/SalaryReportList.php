@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Skynix Team.
  * User: igor
@@ -31,6 +32,7 @@ use Yii;
  * @property double $currency_rate
  * @property double $subtotal_uah
  * @property double $total_to_pay
+
  *
  * @property SalaryReports $salaryReport
  * @property Users $user
@@ -56,6 +58,10 @@ class SalaryReportList extends \yii\db\ActiveRecord
         return [
             [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'bonuses', 'day_off', 'overtime_days', 'other_surcharges'], 'required',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'day_off', 'overtime_days'],'integer',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['bonuses', 'other_surcharges', 'actually_worked_out_salary', 'overtime_value', 'currency_rate', 'subtotal_uah', 'total_to_pay', 'official_salary', 'hospital_value', 'subtotal'],'double',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
             [['worked_days', 'hospital_days', 'bonuses', 'day_off', 'overtime_days', 'other_surcharges'], 'required',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
@@ -65,6 +71,9 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['official_salary', 'hospital_value', 'bonuses', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'number'],
             [['salary_report_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalaryReport::className(), 'targetAttribute' => ['salary_report_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['salary_report_id', 'user_id', 'salary', 'worked_days', 'actually_worked_out_salary', 'hospital_days', 'day_off', 'overtime_days'], 'integer'],
+            [['official_salary', 'hospital_value', 'bonuses', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'number'],
+
         ];
     }
 
@@ -110,4 +119,5 @@ class SalaryReportList extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
 }

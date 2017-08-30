@@ -31,10 +31,11 @@ class UsersCest
         $oAuth->login();
 
         $I->sendPOST(ApiEndpoints::USERS, json_encode([
-            'role'          => ROLE,
-            'first_name'    => FIRST_NAME,
-            'last_name'     => LAST_NAME,
-            'email'         => EMAIL
+            'role'            => ROLE,
+            'first_name'      => FIRST_NAME,
+            'last_name'       => LAST_NAME,
+            'email'           => EMAIL,
+            'official_salary' => 3200
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -89,19 +90,20 @@ class UsersCest
             'data'  => ['users' =>
                 [
                     [
-                'id'          => 'integer',
-                'image'       => 'string',
-                'first_name'  => 'string',
-                'last_name'   => 'string',
-                'company'     => 'string|null',
-                'role'        => 'string',
-                'email'       => 'string',
-                'phone'       => 'string|null',
-                'last_login'  => 'string',
-                'joined'      => 'string',
-                'is_active'   => 'integer',
-                'salary'      => 'string',
-                'salary_up'   => 'string'
+                'id'               => 'integer',
+                'image'            => 'string',
+                'first_name'       => 'string',
+                'last_name'        => 'string',
+                'company'          => 'string|null',
+                'role'             => 'string',
+                'email'            => 'string',
+                'phone'            => 'string|null',
+                'last_login'       => 'string',
+                'joined'           => 'string',
+                'is_active'        => 'integer',
+                'salary'           => 'string',
+                'official_salary'  => 'integer|null',
+                'salary_up'        => 'string'
                     ]
                 ]
             ],
@@ -141,6 +143,7 @@ class UsersCest
                 'sign'        => 'string',
                 'bank_account_en' => 'string|null',
                 'bank_account_ua' => 'string|null',
+                'official_salary' => 'integer|null',
                 'email'       => 'string',
                 'phone'       => 'string',
             ]
@@ -163,10 +166,11 @@ class UsersCest
         $oAuth->login();
 
         $I->sendPUT(ApiEndpoints::USERS . '/' . userIdEdit, json_encode([
-            'first_name' => first_name,
-            'last_name'  => last_name,
-            'salary'     => salary,
-            'phone'      => phone
+            'first_name'      => first_name,
+            'last_name'       => last_name,
+            'salary'          => salary,
+            'phone'           => phone,
+            'official_salary' => 8000
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();

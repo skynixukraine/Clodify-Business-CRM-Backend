@@ -34,8 +34,10 @@ class UserEdit extends ViewModelAbstract
                 $this->postData['xHsluIp'] = $this->postData['password'];
                 unset($this->postData['password']);
             }
-            $this->model->setAttributes($this->postData);
-            $this->model->setScenario('edit-user');
+
+            $this->model->setScenario(User::SCENARIO_UPDATE_USER);
+            $this->model->setAttributes($this->postData, false);
+
             if ( $this->validate() ) {
                 if ( $this->model->xHsluIp ) {
 

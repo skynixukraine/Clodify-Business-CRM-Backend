@@ -143,6 +143,7 @@ class FinancialReportsCest
             'data' => [
                 'id' => 'integer',
                 'report_date' => 'string',
+                'num_of_working_days' => 'integer|null',
                 'income' => 'array',
                 'currency' => 'float',
                 'expense_constant' => 'array',
@@ -174,16 +175,17 @@ class FinancialReportsCest
             'data' => ['reports' =>
                 [
                     [
-                        'id'                => 'integer',
-                        'report_date'       => 'string',
-                        'balance'           => 'integer',
-                        'currency'          => 'float',
-                        'income'            => 'integer',
-                        'expenses'          => 'integer',
-                        'profit'            => 'integer',
-                        'investments'       => 'integer',
-                        'spent_corp_events' => 'integer',
-                        'is_locked'         => 'integer',
+                        'id'                  => 'integer',
+                        'report_date'         => 'string',
+                        'balance'             => 'integer',
+                        'currency'            => 'float',
+                        'income'              => 'integer',
+                        'expenses'            => 'integer',
+                        'profit'              => 'integer',
+                        'investments'         => 'integer',
+                        'spent_corp_events'   => 'integer',
+                        'num_of_working_days' => 'integer|null',
+                        'is_locked'           => 'integer',
 
                     ]
                 ],

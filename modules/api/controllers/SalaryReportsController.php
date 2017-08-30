@@ -50,6 +50,20 @@ class SalaryReportsController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListUpdate')
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [Processor::METHOD_PUT],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionLists()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryReportFetchList')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_GET],
+
                 'checkAccess' => true
             ])
             ->get('Processor')
