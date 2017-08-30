@@ -163,6 +163,7 @@ class UsersFetch extends ViewModelAbstract
             }
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                 $row ['salary'] = '$' . number_format($model->salary);
+                $row ['official_salary'] = $model->official_salary;
                 $row ['salary_up'] = $salary_up;
             }
 

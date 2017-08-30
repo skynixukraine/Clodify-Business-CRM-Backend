@@ -261,6 +261,36 @@ CREATE TABLE `salary_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `salary_report_lists`
+--
+
+DROP TABLE IF EXISTS `salary_report_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `salary_report_lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `salary_report_id` int null,
+  `user_id` int null,
+  `salary` int null,
+  `worked_days` int null,
+  `actually_worked_out_salary` int null,
+  `official_salary` double null,
+  `hospital_days` int null,
+  `hospital_value` double null,
+  `bonuses` double null,
+  `day_off` int null,
+  `overtime_days` int null,
+  `overtime_value` double null,
+  `other_surcharges` double null,
+  `subtotal` double null,
+  `currency_rate` double null,
+  `subtotal_uah` double null,
+  `total_to_pay` double null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `invoices`
 --
 
@@ -713,8 +743,8 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `role`, `phone`, `email`, `password`, `first_name`, `last_name`, `middle_name`, `company`, `tags`, `about`, `date_signup`, `date_login`, `date_salary_up`, `is_active`, `salary`, `month_logged_hours`, `year_logged_hours`, `total_logged_hours`, `month_paid_hours`, `year_paid_hours`, `total_paid_hours`, `invite_hash`, `is_delete`, `photo`, `sing`, `public_profile_key`, `bank_account_en`, `bank_account_ua`, `is_published`, `slug`)
-VALUES (1,'ADMIN','0662050652','maryt@skynix.co','21232f297a57a5a743894a0e4a801fc3','Oleksii','Prozhoga','','FOP Prozhoha O.Y.','apache, nginx, php, java, Objective C, c++, mysql, zf2, yii2, magento 2, javascript, html5, css3, sencha, angularjs, phonegap, server administration','I have been working about 15 years with different versions of PHP. \r\n Last 8 years I have been a technical leader for different well known companies such as Citrix.\r\n Currently, I provide services for projecting & modeling complex systems, configuring web servers and solving complex programming tasks.','2016-03-17 09:00:10','2017-02-25 13:27:10','2017-02-25',1,1500,0,0,0,0,0,0,'',0,'Oleksii-round.png','Sign-clean-128.png',NULL,NULL,NULL, 1,'oleksii-prozhoga');
+INSERT INTO `users` (`id`, `role`, `phone`, `email`, `password`, `first_name`, `last_name`, `middle_name`, `company`, `tags`, `about`, `date_signup`, `date_login`, `date_salary_up`, `is_active`, `salary`, `month_logged_hours`, `year_logged_hours`, `total_logged_hours`, `month_paid_hours`, `year_paid_hours`, `total_paid_hours`, `invite_hash`, `is_delete`, `photo`, `sing`, `public_profile_key`, `bank_account_en`, `bank_account_ua`, `is_published`, `slug`, official_salary)
+VALUES (1,'ADMIN','0662050652','maryt@skynix.co','21232f297a57a5a743894a0e4a801fc3','Oleksii','Prozhoga','','FOP Prozhoha O.Y.','apache, nginx, php, java, Objective C, c++, mysql, zf2, yii2, magento 2, javascript, html5, css3, sencha, angularjs, phonegap, server administration','I have been working about 15 years with different versions of PHP. \r\n Last 8 years I have been a technical leader for different well known companies such as Citrix.\r\n Currently, I provide services for projecting & modeling complex systems, configuring web servers and solving complex programming tasks.','2016-03-17 09:00:10','2017-02-25 13:27:10','2017-02-25',1,1500,0,0,0,0,0,0,'',0,'Oleksii-round.png','Sign-clean-128.png',NULL,NULL,NULL, 1,'oleksii-prozhoga', 3200);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
