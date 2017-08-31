@@ -241,14 +241,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function getCurrencyForSalaryList($id)
+    public static function getCurrency($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->currency;
             }
         }
@@ -259,14 +256,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function getNumOfWorkingDaysForSalaryList($id)
+    public static function getNumOfWorkingDays($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->num_of_working_days;
             }
         }
@@ -277,14 +271,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function checkIsLockForSalaryList($id)
+    public static function isLock($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->is_locked;
             }
         }

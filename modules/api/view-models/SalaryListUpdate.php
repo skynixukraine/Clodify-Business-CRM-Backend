@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\models\FinancialReport;
+use app\models\SalaryReport;
 use app\models\SalaryReportList;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
@@ -29,28 +30,28 @@ class SalaryListUpdate extends ViewModelAbstract
                 $salaryReportListId = Yii::$app->request->getQueryParam('id');
 
                 $salaryListReport = SalaryReportList::findOne($salaryReportListId);
+                $salaryReport = SalaryReport::findOne($salaryReportId);
                 if ($salaryListReport) {
-                    if (!FinancialReport::checkIsLockForSalaryList($salaryReportId)) {
+                    if (!FinancialReport::isLock($salaryReport->report_date)) {
 
-                        $working_days = FinancialReport::getNumOfWorkingDaysForSalaryList($salaryReportId);
+                        $working_days = FinancialReport::getNumOfWorkingDays($salaryReport->report_date);
                         $user = User::findOne($salaryListReport->user_id);
+
+                        $this->model->setScenario(SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE);
+                        $salaryListReport->setScenario(SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE);
 
                         $salaryListReport->setAttributes(
                             array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
                         );
-
                         $salaryListReport->salary = $user->salary;
-                        $salaryListReport->currency_rate = FinancialReport::getCurrencyForSalaryList($salaryReportId);
-                        $salaryListReport->actually_worked_out_salary = ($salaryListReport->salary / $working_days) * $salaryListReport->worked_days;
+                        $salaryListReport->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
+                        $salaryListReport->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($salaryListReport, $working_days);
                         $salaryListReport->official_salary = $user->official_salary;
-                        $salaryListReport->hospital_value = ($salaryListReport->salary / $working_days) * $salaryListReport->hospital_days / 2;
-                        $salaryListReport->overtime_value = ($salaryListReport->salary / $working_days) * $salaryListReport->overtime_days * 1.5;
-                        $salaryListReport->subtotal = $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
-                            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
-                        $salaryListReport->subtotal_uah = $salaryListReport->subtotal * $salaryListReport->currency_rate;
-                        $salaryListReport->total_to_pay = $salaryListReport->subtotal_uah - $salaryListReport->official_salary;
-
-                        $salaryListReport->setScenario(SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE);
+                        $salaryListReport->hospital_value = SalaryReportList::getHospitalValue($salaryListReport, $working_days);
+                        $salaryListReport->overtime_value = SalaryReportList::getOvertimeValue($salaryListReport, $working_days);
+                        $salaryListReport->subtotal = SalaryReportList::getSubtotal($salaryListReport);
+                        $salaryListReport->subtotal_uah = SalaryReportList::getSubtotalUah($salaryListReport);
+                        $salaryListReport->total_to_pay = SalaryReportList::getTotalToPay($salaryListReport);
 
                         if ($salaryListReport->validate()) {
                             $salaryListReport->save();
@@ -68,7 +69,6 @@ class SalaryListUpdate extends ViewModelAbstract
                         Yii::t('yii', 'This salary list not exist. It is not editable'));
                 }
             }
-
         } else {
             return $this->addError(Processor::ERROR_PARAM,
                 Yii::t('yii', 'You have no permission for this action'));
