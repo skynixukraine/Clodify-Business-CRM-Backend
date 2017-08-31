@@ -24,14 +24,13 @@ class SalaryListUpdate extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
-            $salaryReportId = Yii::$app->request->getQueryParam('sal_report_id');
-            $salaryReportListId = Yii::$app->request->getQueryParam('id');
+            if ($this->validate()) {
+                $salaryReportId = Yii::$app->request->getQueryParam('sal_report_id');
+                $salaryReportListId = Yii::$app->request->getQueryParam('id');
 
-            $salaryListReport = SalaryReportList::findOne($salaryReportListId);
-            if ($salaryListReport) {
-                if (!FinancialReport::checkIsLockForSalaryList($salaryReportId)) {
-
-                    if ($this->validate()) {
+                $salaryListReport = SalaryReportList::findOne($salaryReportListId);
+                if ($salaryListReport) {
+                    if (!FinancialReport::checkIsLockForSalaryList($salaryReportId)) {
 
                         $working_days = FinancialReport::getNumOfWorkingDaysForSalaryList($salaryReportId);
                         $user = User::findOne($salaryListReport->user_id);
@@ -59,15 +58,15 @@ class SalaryListUpdate extends ViewModelAbstract
                             return $this->addError(Processor::ERROR_PARAM,
                                 Yii::t('yii', 'Sorry, but the entered data is not correct'));
                         }
-                    }
 
+                    } else {
+                        return $this->addError(Processor::ERROR_PARAM,
+                            Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
+                    }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM,
-                        Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
+                        Yii::t('yii', 'This salary list not exist. It is not editable'));
                 }
-            } else {
-                return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'This salary list not exist. It is not editable'));
             }
 
         } else {
