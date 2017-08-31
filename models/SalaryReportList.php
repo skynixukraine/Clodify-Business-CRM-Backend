@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Created by Skynix Team.
+ * User: igor
+ * Date: 29.08.17
+ * Time: 10:18
+ */
+
 namespace app\models;
 
 use Yii;
@@ -25,9 +32,16 @@ use Yii;
  * @property double $currency_rate
  * @property double $subtotal_uah
  * @property double $total_to_pay
+
+ *
+ * @property SalaryReport $salaryReport
+ * @property User $user
  */
 class SalaryReportList extends \yii\db\ActiveRecord
 {
+    const SCENARIO_SALARY_REPORT_LISTS_CREATE = 'api-salary_report-lists_create';
+    const SCENARIO_SALARY_REPORT_LISTS_UPDATE = 'api-salary_report-lists_update';
+
     /**
      * @inheritdoc
      */
@@ -42,8 +56,17 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['salary_report_id', 'user_id', 'salary', 'worked_days', 'actually_worked_out_salary', 'hospital_days', 'day_off', 'overtime_days'], 'integer'],
-            [['official_salary', 'hospital_value', 'bonuses', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'number'],
+            [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'bonuses', 'day_off', 'overtime_days', 'other_surcharges'], 'required',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'day_off', 'overtime_days'],'integer',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['bonuses', 'other_surcharges', 'actually_worked_out_salary', 'overtime_value', 'currency_rate', 'subtotal_uah', 'total_to_pay', 'official_salary', 'hospital_value', 'subtotal'],'double',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['salary_report_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalaryReport::className(), 'targetAttribute' => ['salary_report_id' => 'id'],'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id'], 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
+            [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
+                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
         ];
     }
 
@@ -72,5 +95,91 @@ class SalaryReportList extends \yii\db\ActiveRecord
             'subtotal_uah' => 'Subtotal Uah',
             'total_to_pay' => 'Total To Pay',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSalaryReport()
+    {
+        return $this->hasOne(SalaryReport::className(), ['id' => 'salary_report_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @param SalaryReportList $salaryListReport
+     * @param $workingDays
+     * @return float|null
+     */
+    public static function getHospitalValue(SalaryReportList $salaryListReport, $workingDays)
+    {
+        $result = null;
+        if ($workingDays) {
+            $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->hospital_days / 2;
+    }
+        return $result;
+    }
+
+    /**
+     * @param SalaryReportList $salaryListReport
+     * @param $workingDays
+     * @return float|int|null
+     */
+    public static function getOvertimeValue(SalaryReportList $salaryListReport, $workingDays)
+    {
+        $result = null;
+        if ($workingDays) {
+            $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->overtime_days * 1.5;
+        }
+        return $result;
+    }
+
+    /**
+     * @param SalaryReportList $salaryListReport
+     * @param $workingDays
+     * @return float|int|null
+     */
+    public static function getActuallyWorkedOutSalary(SalaryReportList $salaryListReport, $workingDays)
+    {
+        $result = null;
+        if ($workingDays) {
+            $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->worked_days;
+        }
+        return $result;
+    }
+
+    /**
+     * @param $salaryListReport
+     * @return mixed
+     */
+    public static function getSubtotal($salaryListReport)
+    {
+        return $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
+            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
+    }
+
+    /**
+     * @param $salaryListReport
+     * @return mixed
+     */
+    public static function getSubtotalUah($salaryListReport)
+    {
+        return $salaryListReport->subtotal * $salaryListReport->currency_rate;
+    }
+
+    /**
+     * @param $salaryListReport
+     * @return mixed
+     */
+    public static function getTotalToPay($salaryListReport)
+    {
+        return $salaryListReport->subtotal_uah - $salaryListReport->official_salary;
     }
 }

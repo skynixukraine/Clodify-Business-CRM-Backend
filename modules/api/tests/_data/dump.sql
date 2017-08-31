@@ -259,7 +259,35 @@ CREATE TABLE `salary_reports` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table `salary_report_lists`
+--
 
+DROP TABLE IF EXISTS `salary_report_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `salary_report_lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `salary_report_id` int null,
+  `user_id` int null,
+  `salary` int null,
+  `worked_days` int null,
+  `actually_worked_out_salary` int null,
+  `official_salary` double null,
+  `hospital_days` int null,
+  `hospital_value` double null,
+  `bonuses` double null,
+  `day_off` int null,
+  `overtime_days` int null,
+  `overtime_value` double null,
+  `other_surcharges` double null,
+  `subtotal` double null,
+  `currency_rate` double null,
+  `subtotal_uah` double null,
+  `total_to_pay` double null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 --
 -- Table structure for table `salary_report_lists`
 --

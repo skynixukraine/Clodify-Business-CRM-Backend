@@ -13,6 +13,8 @@ use Helper\ValuesContainer;
 class SalaryReportsCest
 {
     private $salaryReportId;
+    private $salaryReportListId = 1;
+
 
     /**
      * @param \Codeception\Scenario $scenario
@@ -112,6 +114,52 @@ class SalaryReportsCest
     }
 
     /**
+     * @see    https://jira.skynix.company/browse/SCA-16?src=confmacro
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testUpdateSalaryReportListsCest(FunctionalTester $I)
+    {
+
+        $I->haveInDatabase('financial_reports', array(
+            'report_date' => '1500681600',
+            'currency' => 26.6,
+            'expense_salary' => 3000,
+            'num_of_working_days' => 30,
+        ));
+
+        $I->haveInDatabase('salary_report_lists', array(
+            'id' => $this->salaryReportListId,
+            'salary_report_id' => $this->salaryReportId,
+        ));
+
+        $I->wantTo('Testing update salary report lists');
+        $I->sendPUT(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId, json_encode(
+            [
+                'worked_days' => '21',
+                'hospital_days' => '1',
+                'bonuses' => '40',
+                'day_off' => '0',
+                'overtime_days' => '0',
+                'other_surcharges' => '0',
+                'finacialReportId' => '2'
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data' => 'array|null',
+                'errors' => 'array',
+                'success' => 'boolean'
+            ]
+        );
+    }
+
+    /**
      * @see    https://jira.skynix.company/browse/SCA-7
      * @param  FunctionalTester $I
      * @return void
@@ -180,4 +228,5 @@ class SalaryReportsCest
             'success' => 'boolean'
         ]);
     }
+
 }
