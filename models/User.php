@@ -721,6 +721,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->password_reset_token;
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public static function getTags($user) {
         $skills = [];
         if ($user && $user->tags) {
@@ -777,6 +781,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
     }
-
-
 }

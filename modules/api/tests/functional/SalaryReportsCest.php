@@ -247,4 +247,27 @@ class SalaryReportsCest
         ]);
     }
 
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-15
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteSalaryReportListsCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing delete salary report list data');
+        $I->sendDELETE(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
 }
