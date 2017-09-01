@@ -158,6 +158,7 @@ class SalaryReportsCest
         );
     }
 
+
     /**
      * @see    https://jira.skynix.company/browse/SCA-16?src=confmacro
      * @param  FunctionalTester $I
@@ -200,7 +201,7 @@ class SalaryReportsCest
         );
     }
 
-    /**
+     /**
      * @see    https://jira.skynix.company/browse/SCA-7
      * @param  FunctionalTester $I
      * @return void

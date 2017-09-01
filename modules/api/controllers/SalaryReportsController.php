@@ -28,6 +28,7 @@ class SalaryReportsController extends DefaultController
             ->respond();
     }
 
+
     public function actionCreate()
     {
         $this->di

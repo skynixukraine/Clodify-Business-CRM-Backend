@@ -67,6 +67,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
+
         ];
     }
 

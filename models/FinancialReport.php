@@ -68,7 +68,8 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
-            'spend_corp_events' => 'Spend Corp Events'
+            'spend_corp_events' => 'Spend Corp Events',
+            'num_of_working_days' => 'Num',
         ];
     }
 
@@ -268,6 +269,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
+
     public static function isLock($date)
     {
         $financialReports = FinancialReport::find()->all();

@@ -263,7 +263,6 @@ CREATE TABLE `salary_reports` (
 --
 -- Table structure for table `salary_report_lists`
 --
-
 DROP TABLE IF EXISTS `salary_report_lists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
