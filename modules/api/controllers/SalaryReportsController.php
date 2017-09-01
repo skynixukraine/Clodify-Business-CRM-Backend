@@ -8,9 +8,8 @@
 
 namespace app\modules\api\controllers;
 
-
-use app\models\SalaryReport;
 use app\models\SalaryReportList;
+use app\models\SalaryReport;
 use app\modules\api\components\Api\Processor;
 
 class SalaryReportsController extends DefaultController
@@ -44,16 +43,29 @@ class SalaryReportsController extends DefaultController
             ->respond();
     }
 
-
     public function actionListsCreate()
     {
         $this->di
-            ->set('app\models\SalariReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_CREATE])
+            ->set('app\models\SalaryReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_CREATE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
             ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListCreate')
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [Processor::METHOD_POST],
                 'checkAccess' => true
+           ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionListsUpdate()
+    {
+        $this->di
+            ->set('app\models\SalaryReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess'   => true
             ])
             ->get('Processor')
             ->respond();
@@ -66,6 +78,7 @@ class SalaryReportsController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\SalaryReportFetchList')
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [Processor::METHOD_GET],
+
                 'checkAccess' => true
             ])
             ->get('Processor')

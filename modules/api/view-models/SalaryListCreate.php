@@ -9,6 +9,8 @@ namespace viewModel;
 
 use Yii;
 use app\models\FinancialReport;
+use app\models\SalaryReportList;
+use app\models\SalaryReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 /**
@@ -28,25 +30,26 @@ class SalaryListCreate extends ViewModelAbstract
         $user = User::findOne($this->model->user_id);
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+
+            $salaryReportId = Yii::$app->request->getQueryParam('id');
+            $salaryReport = SalaryReport::findOne($salaryReportId);
             if (User::isActiveUser($user->id)) {
-                if (FinancialReport::validateReportForSalaryList($this->model->salary_report_id)) {
+                if (FinancialReport::validateReportForSalaryList($salaryReport->report_date)) {
                     if (User::validateRoleForSalaryList($user->id)) {
                         if (User::validateSalaryForSalaryList($user->id)) {
-                            if (!FinancialReport::checkIsLockForSalaryList($this->model->salary_report_id)) {
+                            if (!FinancialReport::isLock($salaryReport->report_date)) {
 
-                                $this->working_days = FinancialReport::getNumOfWorkingDaysForSalaryList($this->model->salary_report_id);
+                                $this->working_days = FinancialReport::getNumOfWorkingDays($salaryReport->report_date);
 
                                 $this->model->salary = $user->salary;
-                                $this->model->currency_rate = FinancialReport::getCurrencyForSalaryList($this->model->salary_report_id);
-                                $this->model->actually_worked_out_salary = ($this->model->salary / $this->working_days) * $this->model->worked_days;
+                                $this->model->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
+                                $this->model->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($this->model, $this->working_days);
                                 $this->model->official_salary = $user->official_salary;
-                                $this->model->hospital_value = ($this->model->salary / $this->working_days) * $this->model->hospital_days / 2;
-                                $this->model->overtime_value = ($this->model->salary / $this->working_days) * $this->model->overtime_days * 1.5;
-                                $this->model->subtotal = $this->model->actually_worked_out_salary + $this->model->hospital_value +
-                                    $this->model->bonuses + $this->model->overtime_value + $this->model->other_surcharges;
-                                $this->model->subtotal_uah = $this->model->subtotal * $this->model->currency_rate;
-                                $this->model->total_to_pay = $this->model->subtotal_uah - $this->model->official_salary;
-
+                                $this->model->hospital_value = SalaryReportList::getHospitalValue($this->model, $this->working_days);
+                                $this->model->overtime_value = SalaryReportList::getOvertimeValue($this->model, $this->working_days);
+                                $this->model->subtotal = SalaryReportList::getSubtotal($this->model);
+                                $this->model->subtotal_uah = SalaryReportList::getSubtotalUah($this->model);
+                                $this->model->total_to_pay = SalaryReportList::getTotalToPay($this->model);
                                 if ($this->validate() && $this->model->save()) {
 
                                     $this->setData([

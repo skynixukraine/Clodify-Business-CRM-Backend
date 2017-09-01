@@ -221,15 +221,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return bool
      */
-    public static function validateReportForSalaryList($id)
+    public static function validateReportForSalaryList($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
-
         foreach ($financialReports as $financialReport) {
-            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)) &&
+            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $date)) &&
                 $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
                 return true;
             }
@@ -242,14 +238,12 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function getCurrencyForSalaryList($id)
-    {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
 
+    public static function getCurrency($date)
+    {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->currency;
             }
         }
@@ -260,14 +254,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function getNumOfWorkingDaysForSalaryList($id)
+    public static function getNumOfWorkingDays($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->num_of_working_days;
             }
         }
@@ -278,14 +269,12 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
-    public static function checkIsLockForSalaryList($id)
-    {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
 
+    public static function isLock($date)
+    {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)){
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
                 return $financialReport->is_locked;
             }
         }

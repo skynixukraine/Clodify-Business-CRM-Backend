@@ -259,7 +259,6 @@ CREATE TABLE `salary_reports` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `salary_report_lists`
 --
