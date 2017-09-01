@@ -25,7 +25,9 @@ class ServiceCest {
                 "last_name"          =>  "LastName Sales",
                 "email"              =>  "SalesService@gmail.com",
                 "is_published"       => 1,
-                "is_active"          => 1
+                "is_active"          => 1,
+                "salary"             => 3000,
+                "official_salary"    => 2500
             ]
         ));
         $response = json_decode($I->grabResponse());

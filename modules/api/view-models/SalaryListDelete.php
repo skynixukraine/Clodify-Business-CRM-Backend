@@ -11,6 +11,7 @@ namespace viewModel;
 use Yii;
 use app\models\FinancialReport;
 use app\models\SalaryReportList;
+use app\models\SalaryReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 
@@ -21,7 +22,8 @@ class SalaryListDelete extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
             $salaryReportId = Yii::$app->request->getQueryParam('sal_report_id');
             $salaryReportListId = Yii::$app->request->getQueryParam('id');
-            if (!FinancialReport::checkIsLockForSalaryList($salaryReportId)) {
+            $salaryReport = SalaryReport::findOne($salaryReportId);
+            if (!FinancialReport::isLock($salaryReport->report_date)) {
                 $salaryListReport = SalaryReportList::findOne($salaryReportListId);
                 $salaryListReport->delete();
             } else {

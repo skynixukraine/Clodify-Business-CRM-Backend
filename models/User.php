@@ -721,6 +721,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->password_reset_token;
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public static function getTags($user) {
         $skills = [];
         if ($user && $user->tags) {
@@ -730,6 +734,51 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return $skills;
         } else {
             return $skills;
+        }
+    }
+
+    /**
+     * Check that a passed user has a role DEV, SALES, FIN
+     * @param $id
+     * @return bool
+     */
+    public static function validateRoleForSalaryList($id)
+    {
+        $user= User::findOne($id);
+        if($user->role == self::ROLE_DEV || $user->role == self::ROLE_FIN || $user->role == self::ROLE_SALES){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check that a passed user is active
+     * @param $id
+     * @return bool
+     */
+    public static function isActiveUser($id)
+    {
+        $user= User::findOne($id);
+        if($user->is_active == self::ACTIVE_USERS){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check that user→salary > 0 & user→official_salary > 0
+     * @param $id
+     * @return bool
+     */
+    public static function validateSalaryForSalaryList($id)
+    {
+        $user= User::findOne($id);
+        if($user->salary > 0 && $user->official_salary > 0){
+            return true;
+        } else {
+            return false;
         }
     }
 
