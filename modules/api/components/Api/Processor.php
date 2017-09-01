@@ -28,6 +28,7 @@ class Processor
     const CODE_UPDATE_ERROR       = 'S209';
     const CODE_ACTION_RESTRICTED  = 'S210';
     const ERROR_PARAM = 'error';
+    const ID_PARAM = 'id';
 
     const STATUS_CODE_SUCCESS       = 200;
     const STATUS_CODE_UNAUTHORIZED  = 401;

@@ -42,10 +42,37 @@ class SalaryReportsController extends DefaultController
             ->respond();
     }
 
+    public function actionListsCreate()
+    {
+        $this->di
+            ->set('app\models\SalaryReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_CREATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_POST],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionListsDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_DELETE],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
     public function actionListsUpdate()
     {
         $this->di
-            ->set('app\models\SalariReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE])
+            ->set('app\models\SalaryReportList', ['scenario' => SalaryReportList::SCENARIO_SALARY_REPORT_LISTS_UPDATE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\SalaryReportList')
             ->set('viewModel\ViewModelInterface', 'viewModel\SalaryListUpdate')
             ->set('app\modules\api\components\Api\Access', [

@@ -44,10 +44,11 @@ return [
     'GET '      . $API . '/financial-reports/yearly'                          => $API . '/financial-reports/yearly',
     'GET '      . $API . '/salary-reports'                                    => $API . '/salary-reports/fetch',
     'POST '     . $API . '/salary-reports'                                    => $API . '/salary-reports/create',
+    'POST '     . $API . '/salary-reports/<id:\d+>/lists'                     => $API . '/salary-reports/lists-create',
     'GET '      . $API . '/salary-reports/<id:\d+>/lists'                     => $API . '/salary-reports/lists',
     'PUT '      . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-update',
+    'DELETE '   . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-delete',
 
-    
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

@@ -220,15 +220,11 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return bool
      */
-    public static function validateReportForSalaryList($id)
+    public static function validateReportForSalaryList($date)
     {
-        $salaryReport = SalaryReport::findOne($id);
-        $salaryReportDate = $salaryReport->report_date;
-
         $financialReports = FinancialReport::find()->all();
-
         foreach ($financialReports as $financialReport) {
-            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $salaryReportDate)) &&
+            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $date)) &&
                 $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
                 return true;
             }
@@ -241,6 +237,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      * @param $id
      * @return mixed
      */
+
     public static function getCurrency($date)
     {
         $financialReports = FinancialReport::find()->all();

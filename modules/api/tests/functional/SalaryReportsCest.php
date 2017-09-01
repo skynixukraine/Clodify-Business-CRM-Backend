@@ -13,8 +13,7 @@ use Helper\ValuesContainer;
 class SalaryReportsCest
 {
     private $salaryReportId;
-    private $salaryReportListId = 1;
-
+    private $salaryReportListId;
 
     /**
      * @param \Codeception\Scenario $scenario
@@ -26,6 +25,39 @@ class SalaryReportsCest
     }
 
     /**
+     * @see    https://jira.skynix.company/browse/SCA-6
+     * @param  FunctionalTester $I
+     * @return void
+     */
+
+    public function testCreateSalaryReportCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing create salary reports');
+        $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
+            [
+                'report_date' => '7'
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $this->salaryReportId = $response->data->report_id;
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data'    => [
+                    'report_id' => 'integer',
+                ],
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        );
+    }
+
+
+    /**
      * @see    https://jira.skynix.company/browse/SCA-3
      * @param  FunctionalTester $I
      * @return void
@@ -33,7 +65,7 @@ class SalaryReportsCest
     public function testFetchSalaryReportCest(FunctionalTester $I)
     {
         $I->haveInDatabase('salary_reports', array(
-            'id' => 17,
+            'id' => $this->salaryReportId + 1,
             'report_date' => 1437609600,
             'total_salary' => 9000,
             'official_salary' => 1500,
@@ -81,33 +113,46 @@ class SalaryReportsCest
             'success' => 'boolean'
         ]);
     }
-
     /**
      * @see    https://jira.skynix.company/browse/SCA-6
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testCreateSalaryReportCest(FunctionalTester $I)
+    public function testCreateSalaryReportListsCest(FunctionalTester $I)
     {
+        $I->haveInDatabase('financial_reports', array(
+            'report_date' => '1500681600',
+            'currency' => 26.6,
+            'expense_salary' => 3000,
+            'num_of_working_days' => 30,
+        ));
 
-        $I->wantTo('Testing create salary reports');
-        $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
+        $I->wantTo('Testing create salary report lists');
+        $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
             [
-                'report_date' => '7'
+                'salary_report_id' => $this->salaryReportId,
+                'user_id' => ValuesContainer::$userSalesId,
+                'worked_days' => '21',
+                'hospital_days' => '1',
+                'bonuses' => '40',
+                'day_off' => '0',
+                'overtime_days' => '0',
+                'other_surcharges' => '0',
+                'finacialReportId' => '2',
             ]
         ));
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->salaryReportId = $response->data->report_id;
+        $this->salaryReportListId = $response->data->list_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
             [
-                'data'    => [
-                    'report_id' => 'integer',
+                'data' => [
+                    'list_id' => 'integer',
                 ],
-                'errors'  => 'array',
+                'errors' => 'array',
                 'success' => 'boolean'
             ]
         );
@@ -128,13 +173,9 @@ class SalaryReportsCest
             'num_of_working_days' => 30,
         ));
 
-        $I->haveInDatabase('salary_report_lists', array(
-            'id' => $this->salaryReportListId,
-            'salary_report_id' => $this->salaryReportId,
-        ));
 
         $I->wantTo('Testing update salary report lists');
-        $I->sendPUT(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId, json_encode(
+        $I->sendPUT(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId , json_encode(
             [
                 'worked_days' => '21',
                 'hospital_days' => '1',
@@ -166,30 +207,6 @@ class SalaryReportsCest
      */
     public function testFetchSalaryReportListCest(FunctionalTester $I)
     {
-
-        $salaryReportListId = 1;
-
-        $I->haveInDatabase('salary_report_lists', array(
-
-            'id' => $salaryReportListId,
-            'salary_report_id' => $this->salaryReportId,
-            'user_id' => 30,
-            'salary' => 4000,
-            'worked_days' => 21,
-            'actually_worked_out_salary' => 4000,
-            'official_salary' => 3200,
-            'hospital_days' => 1,
-            'hospital_value' => 12,
-            'bonuses' => 40,
-            'day_off' => 0,
-            'overtime_days' => 0,
-            'overtime_value' => 0,
-            'other_surcharges' => 0,
-            'subtotal' => 4000,
-            'currency_rate' => 26.1,
-            'subtotal_uah' => 30000,
-            'total_to_pay' => 26000
-        ));
 
         $I->wantTo('Testing fetch salary report list data');
         $I->sendGET(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists');
@@ -224,6 +241,29 @@ class SalaryReportsCest
                 ],
                 'total_records' => 'string'
             ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-15
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteSalaryReportListsCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing delete salary report list data');
+        $I->sendDELETE(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
             'errors' => 'array',
             'success' => 'boolean'
         ]);
