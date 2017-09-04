@@ -186,119 +186,30 @@ class SalaryReportList extends \yii\db\ActiveRecord
 
     /**
      * @param $salaryReportLists
+     * @param $attr
      * @return int
      */
-    public static function getSumSubtotalUah($salaryReportLists)
+    public static function getSumOf($salaryReportLists, $attr)
     {
-        $totalSalary = 0;
+        $total = 0;
         foreach ($salaryReportLists as $salaryReportList){
-            $totalSalary += $salaryReportList->subtotal_uah;
+            $total += $salaryReportList->$attr;
         }
-        return $totalSalary;
+        return $total;
     }
 
     /**
      * @param $salaryReportLists
+     * @param $attr
      * @return int
      */
-    public static function getSumOfBonuses($salaryReportLists)
+    public static function getSumByCurrency($salaryReportLists, $attr)
     {
-        $totalBonuses = 0;
+        $total = 0;
         foreach ($salaryReportLists as $salaryReportList){
-            $totalBonuses += $salaryReportList->bonuses * $salaryReportList->currency_rate;
+            $total += $salaryReportList->$attr * $salaryReportList->currency_rate;
         }
-        return $totalBonuses;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfHospital($salaryReportLists)
-    {
-        $totalHospitals = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalHospitals += $salaryReportList->hospital_value * $salaryReportList->currency_rate;
-        }
-        return $totalHospitals;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfDayOff($salaryReportLists)
-    {
-        $totalDayOff = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalDayOff += $salaryReportList->day_off;
-        }
-        return $totalDayOff;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfOvertime($salaryReportLists)
-    {
-        $totalOvertimeValue = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalOvertimeValue += $salaryReportList->overtime_value * $salaryReportList->currency_rate;
-        }
-        return $totalOvertimeValue;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfOtherSurcharges($salaryReportLists)
-    {
-        $totalOfOtherSurchrges = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalOfOtherSurchrges += $salaryReportList->other_surcharges * $salaryReportList->currency_rate;
-        }
-        return $totalOfOtherSurchrges;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfSubtotal($salaryReportLists)
-    {
-        $totalOfSubtotal = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalOfSubtotal += $salaryReportList->subtotal;
-        }
-        return $totalOfSubtotal;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfTotalToPay($salaryReportLists)
-    {
-        $totalToPay = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalToPay += $salaryReportList->total_to_pay;
-        }
-        return $totalToPay;
-    }
-
-    /**
-     * @param $salaryReportLists
-     * @return int
-     */
-    public static function getSumOfficialSalary($salaryReportLists)
-    {
-        $totalOfficialSalary = 0;
-        foreach ($salaryReportLists as $salaryReportList){
-            $totalOfficialSalary += $salaryReportList->official_salary;
-        }
-        return $totalOfficialSalary;
+        return $total;
     }
 
 }

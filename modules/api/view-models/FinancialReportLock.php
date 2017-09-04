@@ -42,15 +42,15 @@ class FinancialReportLock extends ViewModelAbstract
                         $salaryReportLists = SalaryReportList::findAll([
                             'salary_report_id' => $salaryReport->id,
                         ]);
-                        $salaryReport->total_salary = SalaryReportList::getSumSubtotalUah($salaryReportLists);
-                        $salaryReport->official_salary = SalaryReportList::getSumOfficialSalary($salaryReportLists);
-                        $salaryReport->bonuses = SalaryReportList::getSumOfBonuses($salaryReportLists);
-                        $salaryReport->hospital = SalaryReportList::getSumOfHospital($salaryReportLists);
-                        $salaryReport->day_off = SalaryReportList::getSumOfDayOff($salaryReportLists);
-                        $salaryReport->overtime = SalaryReportList::getSumOfOvertime($salaryReportLists);
-                        $salaryReport->other_surcharges = SalaryReportList::getSumOfOtherSurcharges($salaryReportLists);
-                        $salaryReport->subtotal = SalaryReportList::getSumOfSubtotal($salaryReportLists);
-                        $salaryReport->total_to_pay = SalaryReportList::getSumOfTotalToPay($salaryReportLists);
+                        $salaryReport->total_salary = SalaryReportList::getSumOf($salaryReportLists, 'subtotal_uah');
+                        $salaryReport->official_salary = SalaryReportList::getSumOf($salaryReportLists,'official_salary');
+                        $salaryReport->bonuses = SalaryReportList::getSumByCurrency($salaryReportLists, 'bonuses');
+                        $salaryReport->hospital = SalaryReportList::getSumByCurrency($salaryReportLists, 'hospital_value');
+                        $salaryReport->day_off = SalaryReportList::getSumOf($salaryReportLists, 'day_off');
+                        $salaryReport->overtime = SalaryReportList::getSumByCurrency($salaryReportLists, 'overtime_value');
+                        $salaryReport->other_surcharges = SalaryReportList::getSumByCurrency($salaryReportLists, 'other_surcharges');
+                        $salaryReport->subtotal = SalaryReportList::getSumOf($salaryReportLists, 'subtotal');
+                        $salaryReport->total_to_pay = SalaryReportList::getSumOf($salaryReportLists, 'total_to_pay');
                         $salaryReport->save();
                     }
 
