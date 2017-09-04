@@ -192,7 +192,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function getSumOf($salaryReportLists, $attr)
     {
         $total = 0;
-        foreach ($salaryReportLists as $salaryReportList){
+        foreach ($salaryReportLists as $salaryReportList) {
             $total += $salaryReportList->$attr;
         }
         return $total;
@@ -206,7 +206,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function getSumByCurrency($salaryReportLists, $attr)
     {
         $total = 0;
-        foreach ($salaryReportLists as $salaryReportList){
+        foreach ($salaryReportLists as $salaryReportList) {
             $total += $salaryReportList->$attr * $salaryReportList->currency_rate;
         }
         return $total;

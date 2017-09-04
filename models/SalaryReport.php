@@ -101,12 +101,12 @@ class SalaryReport extends \yii\db\ActiveRecord
      * @param $financialReport
      * @return mixed
      */
-    public static function findSalaryReportId($financialReport)
+    public static function findSalaryReport($financialReport)
     {
         $salaryReports = SalaryReport::find()->all();
         foreach ($salaryReports as $salaryReport) {
             if (date('Y-m', $salaryReport->report_date) == date('Y-m', $financialReport->report_date)) {
-                return $salaryReport->id;
+                return $salaryReport;
             }
         }
     }

@@ -37,7 +37,7 @@ class FinancialReportLock extends ViewModelAbstract
             if ($financialReport) {
                 if (!$financialReport->is_locked) {
 
-                    $salaryReport = SalaryReport::findOne(SalaryReport::findSalaryReportId($financialReport));
+                    $salaryReport = SalaryReport::findSalaryReport($financialReport);
                     if($salaryReport) {
                         $salaryReportLists = SalaryReportList::findAll([
                             'salary_report_id' => $salaryReport->id,
