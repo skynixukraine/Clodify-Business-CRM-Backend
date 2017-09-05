@@ -8,6 +8,5 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-              url: 'https://skynixcrm-web/index-test.php'
-                     depends: PhpBrowser
-                 - Asserts
+            url: 'https://skynixcrm-web:4443/index-test.php'
+        - \Helper\Acceptance
