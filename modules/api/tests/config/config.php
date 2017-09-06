@@ -18,8 +18,4 @@ return [
             'showScriptName'    => true,
         ],
     ],
-    'params' => array(
-        'url_crm'           => 'https://develop.skynix.co',
-        'url_site'          => 'https://skynix.company',
-    )
 ];
