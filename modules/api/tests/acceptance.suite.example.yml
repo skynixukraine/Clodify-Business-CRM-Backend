@@ -8,5 +8,5 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: 'https://develop.skynix.co/'
+            url: 'url_site' # url for testing
         - \Helper\Acceptance
