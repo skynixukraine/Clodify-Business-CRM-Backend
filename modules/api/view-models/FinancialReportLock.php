@@ -10,6 +10,8 @@ namespace viewModel;
 
 use app\models\FinancialReport;
 use app\models\FinancialYearlyReport;
+use app\models\SalaryReport;
+use app\models\SalaryReportList;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
@@ -31,8 +33,26 @@ class FinancialReportLock extends ViewModelAbstract
             $id = Yii::$app->request->getQueryParam('id');
             $financialReport = FinancialReport::findOne($id);
             $year = date("Y",$financialReport->report_date);
+
             if ($financialReport) {
                 if (!$financialReport->is_locked) {
+
+                    $salaryReport = SalaryReport::findSalaryReport($financialReport);
+                    if($salaryReport) {
+                        $salaryReportLists = SalaryReportList::findAll([
+                            'salary_report_id' => $salaryReport->id,
+                        ]);
+                        $salaryReport->total_salary = SalaryReportList::getSumOf($salaryReportLists, 'subtotal_uah');
+                        $salaryReport->official_salary = SalaryReportList::getSumOf($salaryReportLists,'official_salary');
+                        $salaryReport->bonuses = SalaryReportList::getSumByCurrency($salaryReportLists, 'bonuses');
+                        $salaryReport->hospital = SalaryReportList::getSumByCurrency($salaryReportLists, 'hospital_value');
+                        $salaryReport->day_off = SalaryReportList::getSumOf($salaryReportLists, 'day_off');
+                        $salaryReport->overtime = SalaryReportList::getSumByCurrency($salaryReportLists, 'overtime_value');
+                        $salaryReport->other_surcharges = SalaryReportList::getSumByCurrency($salaryReportLists, 'other_surcharges');
+                        $salaryReport->subtotal = SalaryReportList::getSumOf($salaryReportLists, 'subtotal');
+                        $salaryReport->total_to_pay = SalaryReportList::getSumOf($salaryReportLists, 'total_to_pay');
+                        $salaryReport->save();
+                    }
 
                     if ($finyearrep = FinancialYearlyReport::findYearlyReport($year)) {          //add to current year
                         $finyearrep->income += FinancialReport::sumIncome($id);

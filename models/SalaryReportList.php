@@ -183,4 +183,33 @@ class SalaryReportList extends \yii\db\ActiveRecord
     {
         return $salaryListReport->subtotal_uah - $salaryListReport->official_salary;
     }
+
+    /**
+     * @param $salaryReportLists
+     * @param $attr
+     * @return int
+     */
+    public static function getSumOf($salaryReportLists, $attr)
+    {
+        $total = 0;
+        foreach ($salaryReportLists as $salaryReportList) {
+            $total += $salaryReportList->$attr;
+        }
+        return $total;
+    }
+
+    /**
+     * @param $salaryReportLists
+     * @param $attr
+     * @return int
+     */
+    public static function getSumByCurrency($salaryReportLists, $attr)
+    {
+        $total = 0;
+        foreach ($salaryReportLists as $salaryReportList) {
+            $total += $salaryReportList->$attr * $salaryReportList->currency_rate;
+        }
+        return $total;
+    }
+
 }
