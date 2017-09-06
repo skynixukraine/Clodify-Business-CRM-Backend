@@ -247,6 +247,18 @@ class SalaryReportsCest
         ]);
     }
 
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-15
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDownloadSalaryReportCest(FunctionalTester $I)
+    {
+
+        $I->wantTo('Testing download salary report to pdf');
+        $I->sendGET(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId);
+        $I->seeResponseCodeIs(200);
+    }
 
     /**
      * @see    https://jira.skynix.company/browse/SCA-15

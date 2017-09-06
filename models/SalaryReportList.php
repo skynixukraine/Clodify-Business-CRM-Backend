@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Created by Skynix Team.
  * User: igor
@@ -32,15 +31,15 @@ use Yii;
  * @property double $currency_rate
  * @property double $subtotal_uah
  * @property double $total_to_pay
-
  *
- * @property SalaryReports $salaryReport
- * @property Users $user
+ * @property SalaryReport $salaryReport
+ * @property User $user
  */
 class SalaryReportList extends \yii\db\ActiveRecord
 {
     const SCENARIO_SALARY_REPORT_LISTS_CREATE = 'api-salary_report-lists_create';
     const SCENARIO_SALARY_REPORT_LISTS_UPDATE = 'api-salary_report-lists_update';
+
 
     /**
      * @inheritdoc
@@ -67,7 +66,6 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
-
         ];
     }
 

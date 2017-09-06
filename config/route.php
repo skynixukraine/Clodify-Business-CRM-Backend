@@ -49,6 +49,8 @@ return [
     'POST '     . $API . '/salary-reports/<id:\d+>/lists'                     => $API . '/salary-reports/lists-create',
     'PUT '      . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-update',
     'DELETE '   . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-delete',
+    'GET '      . $API . '/salary-reports/<id:\d+>'                           => $API . '/salary-reports/download',
+
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
