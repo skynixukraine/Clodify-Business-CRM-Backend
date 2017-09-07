@@ -25,9 +25,7 @@ class FinancialReportView extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
             $id = Yii::$app->request->getQueryParam('id');
 
-            $financialReport = FinancialReport::find()
-                ->where([FinancialReport::tableName() . '.id' => $id])
-                ->one();
+            $financialReport = FinancialReport::findOne(['id' => $id]);
 
             if ($financialReport) {
                 $financialReport = ArrayHelper::toArray($financialReport, [
@@ -38,6 +36,7 @@ class FinancialReportView extends ViewModelAbstract
                         },
                         'currency',
                         'expense_salary',
+                        'num_of_working_days',
                         'income' => function ($financialReport) {
                             return $this->convertElement($financialReport->income);
                         },
@@ -52,6 +51,7 @@ class FinancialReportView extends ViewModelAbstract
                         },
                     ],
                 ]);
+
                 if (!User::hasPermission([User::ROLE_ADMIN])) {
                     unset ($financialReport['income']);
                 }

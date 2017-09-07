@@ -304,7 +304,6 @@ class SurveysController extends DefaultController
     public function actionCode()
     {
         if( User::hasPermission( [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_FIN, User::ROLE_CLIENT] ) ) {
-
             if ( ( $shortcode = Yii::$app->request->post("shortcode") ) ) {
 
                 /** @var  $model Survey */

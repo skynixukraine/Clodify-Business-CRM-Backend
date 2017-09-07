@@ -8,6 +8,7 @@
 
 namespace app\modules\cp\controllers;
 use app\components\DateUtil;
+use app\models\Career;
 use app\models\Invoice;
 use app\models\Project;
 use app\models\Report;
@@ -443,6 +444,5 @@ class IndexController extends DefaultController
         set_time_limit(0);
         @readfile("$filename") or die("File not found.");
     }
-
 
 }

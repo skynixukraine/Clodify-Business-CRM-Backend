@@ -19,6 +19,10 @@ class FinancialReport extends \yii\db\ActiveRecord
 {
     const NOT_LOCKED = 0;
     const LOCKED = 1;
+
+    const NUM_OF_WORKING_DAY_MIN = 15;
+    const NUM_OF_WORKING_DAY_MAX = 31;
+
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
@@ -45,6 +49,9 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            ['num_of_working_days', 'integer',
+                'min' => self::NUM_OF_WORKING_DAY_MIN, 'max' => self::NUM_OF_WORKING_DAY_MAX,
+                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE]
         ];
     }
 
@@ -61,7 +68,8 @@ class FinancialReport extends \yii\db\ActiveRecord
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
             'investments' => 'Investments',
-            'spend_corp_events' => 'Spend Corp Events'
+            'spend_corp_events' => 'Spend Corp Events',
+            'num_of_working_days' => 'Num',
         ];
     }
 
@@ -208,4 +216,67 @@ class FinancialReport extends \yii\db\ActiveRecord
         return $spent_corp_eventsSum;
     }
 
+    /**
+     *  Check that a financial report for this month exists and columns financial_reports→num_of_working_days  > 0
+     * @param $id
+     * @return bool
+     */
+    public static function validateReportForSalaryList($date)
+    {
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $date)) &&
+                $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  Check that financial_reports→currency for this month > 0
+     * @param $id
+     * @return mixed
+     */
+
+    public static function getCurrency($date)
+    {
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+                return $financialReport->currency;
+            }
+        }
+    }
+
+    /**
+     *  get financial_reports→num_of_working_days
+     * @param $id
+     * @return mixed
+     */
+    public static function getNumOfWorkingDays($date)
+    {
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+                return $financialReport->num_of_working_days;
+            }
+        }
+    }
+
+    /**
+     *  Check that if only a financial report is not locked
+     * @param $id
+     * @return mixed
+     */
+
+    public static function isLock($date)
+    {
+        $financialReports = FinancialReport::find()->all();
+        foreach ($financialReports as $financialReport) {
+            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+                return $financialReport->is_locked;
+            }
+        }
+    }
 }

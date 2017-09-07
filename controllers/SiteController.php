@@ -16,6 +16,7 @@ use app\components\Language;
 use app\models\Upload;
 use yii\web\UploadedFile;
 use app\modules\api\models\ApiAccessToken;
+use app\models\Career;
 
 class SiteController extends Controller
 {
@@ -479,6 +480,12 @@ class SiteController extends Controller
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         Yii::$app->response->content = json_encode($data);
         Yii::$app->end();
+    }
+
+    public function actionStatus()
+    {
+        $f = Career::find()->all();
+        return $this->render('for_status', ['f' => $f]);
     }
 
 }
