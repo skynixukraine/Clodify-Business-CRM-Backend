@@ -210,4 +210,21 @@ class SalaryReportList extends \yii\db\ActiveRecord
         return $total;
     }
 
+    /**
+     * @param $salaryReportId
+     * @param $userId
+     * @return bool
+     */
+    public static function checkOneUserPerMonth($salaryReportId, $userId)
+    {
+        $salaryReportLists = SalaryReportList::find()->all();
+        foreach ($salaryReportLists as $salaryReportList) {
+            if ($salaryReportList->salary_report_id == $salaryReportId &&
+                $salaryReportList->user_id == $userId) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
