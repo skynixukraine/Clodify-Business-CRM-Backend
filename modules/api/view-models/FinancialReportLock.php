@@ -42,6 +42,7 @@ class FinancialReportLock extends ViewModelAbstract
                         $salaryReportLists = SalaryReportList::findAll([
                             'salary_report_id' => $salaryReport->id,
                         ]);
+                        $salaryReport->currency_rate = $financialReport->currency;
                         $salaryReport->total_salary = SalaryReportList::getSumOf($salaryReportLists, 'subtotal_uah');
                         $salaryReport->official_salary = SalaryReportList::getSumOf($salaryReportLists,'official_salary');
                         $salaryReport->bonuses = SalaryReportList::getSumByCurrency($salaryReportLists, 'bonuses');
