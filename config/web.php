@@ -61,6 +61,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' =>array_merge($route, [
+                'check-status'                              => 'site/status',
                 's/<shortcode:\w+>'                         => 'site/survey',
                 '<controller>/<action>'                     => '<controller>/<action>',
                 '<module>/<controller>/<action>/<id:\d+>'   => '<module>/<controller>/<action>/<id:\d+>',
