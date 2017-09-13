@@ -17,7 +17,6 @@ use app\models\User;
 use app\models\Project;
 use app\models\Storage;
 use yii\web\UploadedFile;
-use yii\base\ErrorException;
 
 
 class SettingController extends DefaultController

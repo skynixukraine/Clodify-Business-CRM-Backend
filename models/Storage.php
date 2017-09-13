@@ -6,9 +6,7 @@
  */
 
 namespace app\models;
-use Aws\Ec2\Exception\Ec2Exception;
 use Yii;
-use yii\base\Exception;
 
 class Storage
 {
