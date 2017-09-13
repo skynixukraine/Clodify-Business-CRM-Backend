@@ -17,6 +17,7 @@ use app\models\User;
 use app\models\Project;
 use app\models\Storage;
 use yii\web\UploadedFile;
+use yii\base\ErrorException;
 
 
 class SettingController extends DefaultController
@@ -78,11 +79,14 @@ class SettingController extends DefaultController
                 return $this->redirect(['index']);
             }
         }
+
         $s = new Storage();
+       // die('111');
         $userPhoto = $s->getListFileUser('data/' . Yii::$app->user->id . '/photo/');
         $userSign = $s->getListFileUser('data/' . Yii::$app->user->id . '/sign/');
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
+
         return $this->render("index", ['model' => $model,
                             'defaultPhoto' => $defaultPhoto,
                             'defaultSing' => $defaultSing,
