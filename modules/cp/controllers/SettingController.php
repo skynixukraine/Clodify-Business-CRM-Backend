@@ -80,7 +80,6 @@ class SettingController extends DefaultController
         }
 
         $s = new Storage();
-       // die('111');
         $userPhoto = $s->getListFileUser('data/' . Yii::$app->user->id . '/photo/');
         $userSign = $s->getListFileUser('data/' . Yii::$app->user->id . '/sign/');
         $defaultPhoto = User::getUserPhoto();
