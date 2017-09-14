@@ -76,36 +76,38 @@ class FinancialReportLock extends ViewModelAbstract
                         }
 
                     } else {
-                    $yearlyReport = new FinancialYearlyReport();                  // create new yearly report
-                    $yearlyReport->year = $year;
-                    $yearlyReport->income = FinancialReport::sumIncome($id);
-                    $yearlyReport->expense_constant = FinancialReport::sumExpenseConstant($id);
-                    $yearlyReport->investments = FinancialReport::sumInvestments($id);
-                    $yearlyReport->expense_salary = FinancialReport::getExpenseSalary($id);
-                    $yearlyReport->difference = FinancialYearlyReport::getDifference($id);
-                    $yearlyReport->bonuses = FinancialYearlyReport::getBonuses($id);
-                    $yearlyReport->corp_events = FinancialYearlyReport::getCorpEvents($id);
-                    $yearlyReport->profit = FinancialYearlyReport::getYearlyProfit($id);
-                    $yearlyReport->balance = FinancialReport::getBalance($id);
-                    $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
-                    $yearlyReport->save();
-                    $financialReport->is_locked = FinancialReport::LOCKED;
-                    if (!$financialReport->save()) {
-                        return $financialReport->getErrors();
+                        $yearlyReport = new FinancialYearlyReport();                  // create new yearly report
+                        $yearlyReport->year = $year;
+                        $yearlyReport->income = FinancialReport::sumIncome($id);
+                        $yearlyReport->expense_constant = FinancialReport::sumExpenseConstant($id);
+                        $yearlyReport->investments = FinancialReport::sumInvestments($id);
+                        $yearlyReport->expense_salary = FinancialReport::getExpenseSalary($id);
+                        $yearlyReport->difference = FinancialYearlyReport::getDifference($id);
+                        $yearlyReport->bonuses = FinancialYearlyReport::getBonuses($id);
+                        $yearlyReport->corp_events = FinancialYearlyReport::getCorpEvents($id);
+                        $yearlyReport->profit = FinancialYearlyReport::getYearlyProfit($id);
+                        $yearlyReport->balance = FinancialReport::getBalance($id);
+                        $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
+                        if ($yearlyReport->save()) {
+                            $financialReport->is_locked = FinancialReport::LOCKED;
+                            $financialReport->save();
+                        } else {
+                            foreach ($yearlyReport->getErrors() as $error) {
+                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', $error));
+                            }
+                        }
                     }
-                }
 
+                } else {
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add twise the same report'));
+                }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add twise the same report'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add not existent report'));
             }
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add not existent report'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
-    } else
-{
-return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
-}
 
-}
+    }
 
 }
