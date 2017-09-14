@@ -175,13 +175,13 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
-     *Make a float only show two decimal places exept case 99.99999
+     *Make a float only show two decimal places exept case 99.999999999
      * @param $decimal
      * @return float
      */
     public static function cutDecimal($decimal)
     {
-        return (float)(preg_replace('/(\..{2}).*/', '$1', $decimal));
+        return (float) preg_replace('/(\..{2}).*/', '$1', $decimal);
     }
 
     /**
