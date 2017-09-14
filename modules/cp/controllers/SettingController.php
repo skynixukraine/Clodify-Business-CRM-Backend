@@ -78,11 +78,13 @@ class SettingController extends DefaultController
                 return $this->redirect(['index']);
             }
         }
+
         $s = new Storage();
         $userPhoto = $s->getListFileUser('data/' . Yii::$app->user->id . '/photo/');
         $userSign = $s->getListFileUser('data/' . Yii::$app->user->id . '/sign/');
         $defaultPhoto = User::getUserPhoto();
         $defaultSing = User::getUserSing();
+
         return $this->render("index", ['model' => $model,
                             'defaultPhoto' => $defaultPhoto,
                             'defaultSing' => $defaultSing,
