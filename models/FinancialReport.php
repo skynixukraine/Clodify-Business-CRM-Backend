@@ -175,9 +175,9 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
-     * cut exept 99.9999
+     *Make a float only show two decimal places exept case 99.99999
      * @param $decimal
-     * @return mixed
+     * @return float
      */
     public static function cutDecimal($decimal)
     {
