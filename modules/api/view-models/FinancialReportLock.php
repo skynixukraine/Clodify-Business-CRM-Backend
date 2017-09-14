@@ -70,8 +70,9 @@ class FinancialReportLock extends ViewModelAbstract
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             $financialReport->save();
                         } else {
-                            foreach ($finyearrep->getErrors() as $error) {
-                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', $error));
+                            foreach ($finyearrep->getErrors() as $param=> $errors) {
+                                foreach ( $errors as $error )
+                                    $this->addError( $param , Yii::t('yii', $error));
                             }
                         }
 
@@ -92,8 +93,9 @@ class FinancialReportLock extends ViewModelAbstract
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             $financialReport->save();
                         } else {
-                            foreach ($yearlyReport->getErrors() as $error) {
-                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', $error));
+                            foreach ($finyearrep->getErrors() as $param=> $errors) {
+                                foreach ( $errors as $error )
+                                    $this->addError( $param , Yii::t('yii', $error));
                             }
                         }
                     }
