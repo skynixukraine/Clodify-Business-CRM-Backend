@@ -221,16 +221,16 @@ DROP TABLE IF EXISTS `financial_yearly_reports`;
 CREATE TABLE `financial_yearly_reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` int null,
-  `income` int null,
-  `expense_constant` int null,
-  `investments` int null,
-  `expense_salary` int null,
-  `difference` int null,
-  `bonuses` int null,
-  `corp_events` int null,
-  `profit` int null,
-  `balance` int null,
-  `spent_corp_events` int null,
+  `income` double null,
+  `expense_constant` double null,
+  `investments` double null,
+  `expense_salary` double null,
+  `difference` double null,
+  `bonuses` double null,
+  `corp_events` double null,
+  `profit` double null,
+  `balance` double null,
+  `spent_corp_events` double null,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

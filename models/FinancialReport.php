@@ -151,7 +151,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function sumExpenses($id)
     {
-        return self::getExpenseSalary($id) + self::sumExpenseConstant($id);
+        return self::cutDecimal(self::getExpenseSalary($id) + self::sumExpenseConstant($id));
     }
 
     /**
@@ -161,7 +161,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function getProfit($id)
     {
-        return self::sumIncome($id) - self::sumExpenses($id);
+        return self::cutDecimal(self::sumIncome($id) - self::sumExpenses($id));
     }
 
     /**
@@ -171,7 +171,17 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function getBalance($id)
     {
-        return self::getProfit($id) - self::sumInvestments($id);
+        return self::cutDecimal(self::getProfit($id) - self::sumInvestments($id));
+    }
+
+    /**
+     * cut exept 99.9999
+     * @param $decimal
+     * @return mixed
+     */
+    public static function cutDecimal($decimal)
+    {
+        return (float)(preg_replace('/(\..{2}).*/', '$1', $decimal));
     }
 
     /**
