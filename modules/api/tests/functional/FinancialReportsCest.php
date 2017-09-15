@@ -260,6 +260,65 @@ class FinancialReportsCest
         ]);
     }
 
+    public function testUnlockFinancialReportsCest(FunctionalTester $I)
+    {
+        $income = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Some Income1",
+                "date" => 123243543545
+            ),
+        );
+
+        $expenses = array(
+            array(
+                "amount" => 200,
+                "description" => "Some Expenses4",
+            ),
+        );
+
+        $investments = array(
+            array(
+
+                "amount" => 200,
+                "description" => "Investments1"
+            ),
+        );
+
+        $spent_corp_events = array(
+            array(
+
+                "amount" => 2000,
+                "description" => "Spent Corp Events1",
+                "date" => 123243543545
+            ),
+        );
+
+        $I->wantTo('Testing lock financial report data');
+        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . '/unlock',
+            json_encode([
+                'year' => 2111,
+                'expense_salary' => 3000,
+                'income' => $income,
+                'expense_constant' => $expenses,
+                'investments' => $investments,
+                'spent_corp_events' => $spent_corp_events,
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-1032
      * @param  FunctionalTester $I

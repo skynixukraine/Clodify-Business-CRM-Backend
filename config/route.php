@@ -50,6 +50,7 @@ return [
     'PUT '      . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-update',
     'DELETE '   . $API . '/salary-reports/<sal_report_id:\d+>/lists/<id:\d+>' => $API . '/salary-reports/lists-delete',
     'GET '      . $API . '/salary-reports/<id:\d+>'                           => $API . '/salary-reports/download',
+    'PUT '      . $API . '/financial-reports/<id:\d+>/unlock'                   => $API . '/financial-reports/unlock',
 
 
     // General rules
