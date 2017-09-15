@@ -181,7 +181,7 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function cutDecimal($decimal)
     {
-        return (float) preg_replace('/(\..{2}).*/', '$1', $decimal);
+        return round($decimal, 2);
     }
 
     /**
