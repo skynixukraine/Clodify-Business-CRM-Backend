@@ -260,6 +260,22 @@ class FinancialReportsCest
         ]);
     }
 
+    public function testUnlockFinancialReportsCest(FunctionalTester $I)
+    {
+        $I->wantTo('Testing lock financial report data');
+        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . '/unlock');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-1032
      * @param  FunctionalTester $I
