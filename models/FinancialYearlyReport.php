@@ -36,7 +36,8 @@ class FinancialYearlyReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['year', 'income', 'expense_constant', 'investments', 'expense_salary', 'difference', 'bonuses', 'corp_events', 'profit', 'balance', 'spent_corp_events'], 'integer'],
+            [['year'], 'integer'],
+            [['income', 'expense_constant', 'investments', 'expense_salary', 'difference', 'bonuses', 'corp_events', 'profit', 'balance', 'spent_corp_events'], 'double'],
         ];
     }
 

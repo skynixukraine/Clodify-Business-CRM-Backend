@@ -53,10 +53,15 @@ class Storage
      */
     public function download($key ='')
     {
+        try {
         $file = $this->s3->getObject([
             'Bucket' => $this->basket,
             'Key' => $key,
         ]);
+        } catch (\Exception $e) {
+            return null;
+        }
+
         return $file;
     }
     public function downloadToFile($key ='', $pathToFile = '') {
@@ -77,10 +82,15 @@ class Storage
      */
     public function getListFileUser($prefix ='')
     {
-        $file = $this->s3->listObjects([
-            'Bucket' => $this->basket,
-            'Prefix' => $prefix,
-        ]);
+        try {
+            $file = $this->s3->listObjects([
+                'Bucket' => $this->basket,
+                'Prefix' => $prefix,
+            ]);
+        } catch (\Exception $e) {
+            return null;
+        }
+
         return $file;
     }
 }

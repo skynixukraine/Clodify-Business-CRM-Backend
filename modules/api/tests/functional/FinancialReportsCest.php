@@ -177,13 +177,13 @@ class FinancialReportsCest
                     [
                         'id'                  => 'integer',
                         'report_date'         => 'string',
-                        'balance'             => 'integer',
+                        'balance'             => 'integer | float',
                         'currency'            => 'float',
-                        'income'              => 'integer',
-                        'expenses'            => 'integer',
-                        'profit'              => 'integer',
-                        'investments'         => 'integer',
-                        'spent_corp_events'   => 'integer',
+                        'income'              => 'integer | float',
+                        'expenses'            => 'integer | float',
+                        'profit'              => 'integer | float',
+                        'investments'         => 'integer | float',
+                        'spent_corp_events'   => 'integer | float',
                         'num_of_working_days' => 'integer|null',
                         'is_locked'           => 'integer',
 
@@ -248,6 +248,22 @@ class FinancialReportsCest
             ])
         );
 
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    public function testUnlockFinancialReportsCest(FunctionalTester $I)
+    {
+        $I->wantTo('Testing lock financial report data');
+        $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . '/unlock');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

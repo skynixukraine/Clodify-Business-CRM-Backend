@@ -32,19 +32,19 @@ class FinancialReportLock extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $id = Yii::$app->request->getQueryParam('id');
             $financialReport = FinancialReport::findOne($id);
-            $year = date("Y",$financialReport->report_date);
+            $year = date("Y", $financialReport->report_date);
 
             if ($financialReport) {
                 if (!$financialReport->is_locked) {
 
                     $salaryReport = SalaryReport::findSalaryReport($financialReport);
-                    if($salaryReport) {
+                    if ($salaryReport) {
                         $salaryReportLists = SalaryReportList::findAll([
                             'salary_report_id' => $salaryReport->id,
                         ]);
                         $salaryReport->currency_rate = $financialReport->currency;
                         $salaryReport->total_salary = SalaryReportList::getSumOf($salaryReportLists, 'subtotal_uah');
-                        $salaryReport->official_salary = SalaryReportList::getSumOf($salaryReportLists,'official_salary');
+                        $salaryReport->official_salary = SalaryReportList::getSumOf($salaryReportLists, 'official_salary');
                         $salaryReport->bonuses = SalaryReportList::getSumByCurrency($salaryReportLists, 'bonuses');
                         $salaryReport->hospital = SalaryReportList::getSumByCurrency($salaryReportLists, 'hospital_value');
                         $salaryReport->day_off = SalaryReportList::getSumOf($salaryReportLists, 'day_off');
@@ -69,6 +69,11 @@ class FinancialReportLock extends ViewModelAbstract
                         if ($finyearrep->validate() && $finyearrep->save()) {
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             $financialReport->save();
+                        } else {
+                            foreach ($finyearrep->getErrors() as $param=> $errors) {
+                                foreach ( $errors as $error )
+                                    $this->addError( $param , Yii::t('yii', $error));
+                            }
                         }
 
                     } else {
@@ -84,9 +89,15 @@ class FinancialReportLock extends ViewModelAbstract
                         $yearlyReport->profit = FinancialYearlyReport::getYearlyProfit($id);
                         $yearlyReport->balance = FinancialReport::getBalance($id);
                         $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
-                        $yearlyReport->save();
-                        $financialReport->is_locked = FinancialReport::LOCKED;
-                        $financialReport->save();
+                        if ($yearlyReport->save()) {
+                            $financialReport->is_locked = FinancialReport::LOCKED;
+                            $financialReport->save();
+                        } else {
+                            foreach ($finyearrep->getErrors() as $param=> $errors) {
+                                foreach ( $errors as $error )
+                                    $this->addError( $param , Yii::t('yii', $error));
+                            }
+                        }
                     }
 
                 } else {
