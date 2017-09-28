@@ -229,11 +229,12 @@ class Survey extends \yii\db\ActiveRecord
         /** @var $option SurveysOption */
         if ( ($option = SurveysOption::findOne($optionId)) && $option->survey_id == $this->id) {
 
-            $this->total_votes++;
-            $this->save(false, ['total_votes']);
-
             $option->votes++;
-            $option->save(false, ['votes']);
+            if ($option->save(false, ['votes'])) {
+                $this->total_votes++;
+                $this->save(false, ['total_votes']);
+            }
+
 
         }
 
