@@ -167,23 +167,27 @@ class ReportController extends DefaultController
             'date_added',
             'name',
             'reporter_name',
-            'date_report',
             'invoice_id',
-            'hours'
+            'hours',
+            'date_report',
         ];
 
         $dataTable = DataTable::getInstance()
             ->setQuery( $query )
-            ->setLimit( Yii::$app->request->getQueryParam("length") )
             ->setStart( Yii::$app->request->getQueryParam("start") )
-            ->setSearchValue( $keyword ) //$search['value']
+            ->setSearchValue( $keyword ); //$search['value']
+
+        if ($output == 'table') {
+            $dataTable = $dataTable->setLimit( Yii::$app->request->getQueryParam("length") );
+        }
+
+        $dataTable = $dataTable
             ->setSearchParams([ 'or',
                 ['like', 'reporter_name', $keyword],
                 ['like', 'task', $keyword],
             ]);
 
         if( isset( $columns[$order[0]['column']]) ){
-
             $dataTable->setOrder(Report::tableName() . '.' . $columns[$order[0]['column']], $order[0]['dir']);
 
         }else{
