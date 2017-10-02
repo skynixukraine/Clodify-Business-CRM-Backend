@@ -94,6 +94,7 @@ class UsersController extends DefaultController
     public function actionEdit()
     {
         $this->di
+            ->set('app\models\User', ['scenario' => User::SCENARIO_UPDATE_USER_SINGLE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserEdit')
             ->set('app\modules\api\components\Api\Access', [
@@ -164,6 +165,19 @@ class UsersController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\AccessToken')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionEditAdmin()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserAdminEdit')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => true
             ])
             ->get('Processor')

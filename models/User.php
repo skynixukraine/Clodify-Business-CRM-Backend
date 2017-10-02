@@ -67,6 +67,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const SCENARIO_CHANGE_PASSWORD = 'change_password';
     const SCENARIO_UPDATE_USER = 'api-update-user';
     const SCENARIO_CREATE_USER = 'api-create-user';
+    const SCENARIO_UPDATE_USER_SINGLE = 'api-update-user-single';
 
 
     const ATTACH_USERS_SIGN = 'api-attach-sign';

@@ -12,10 +12,10 @@ use app\models\User;
 
 /**
  * Edit user data. Action available only for ADMIN. No required parameters
- * Class UserEdit
+ * Class UserAdminEdit
  * @package viewModel
  */
-class UserEdit extends ViewModelAbstract
+class UserAdminEdit extends ViewModelAbstract
 {
     /* @var User*/
     public $model;
@@ -36,7 +36,7 @@ class UserEdit extends ViewModelAbstract
             }
 
             $this->model->setScenario(User::SCENARIO_UPDATE_USER);
-            $this->model->setAttributes($this->postData, false);
+            $this->model->setAttributes($this->postData);
 
             if ( $this->validate() ) {
                 if ( $this->model->xHsluIp ) {
