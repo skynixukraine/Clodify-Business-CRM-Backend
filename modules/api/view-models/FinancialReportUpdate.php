@@ -48,7 +48,7 @@ class FinancialReportUpdate extends ViewModelAbstract
                         $this->postData['report_date'] = $reportDate;
                     }
 
-                    if (User::hasPermission([User::ROLE_ADMIN])) {
+                    if (isset($this->postData['income']) && User::hasPermission([User::ROLE_ADMIN])) {
 
                         $this->postData['income'] = $this->getElement('income', $financialReport);
 

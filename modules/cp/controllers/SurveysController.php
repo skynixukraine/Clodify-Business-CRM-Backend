@@ -245,7 +245,6 @@ class SurveysController extends DefaultController
                             }
                             foreach ($survayOptions as $survayOption) {
                                 $survayOption->survey_id = $model->id;
-                                $survayOption->votes     = 0;
                                 if (! ($flag = $survayOption->save(false))) {
                                     $transaction->rollBack();
                                     break;
