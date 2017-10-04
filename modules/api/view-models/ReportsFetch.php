@@ -97,11 +97,9 @@ class ReportsFetch extends ViewModelAbstract
                     $projectId[] = $project->project_id;
 
                 }
-                if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
-                }
-                $dataTable->setFilter(User::tableName() . '.role!="' . User::ROLE_FIN . '"');
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
             }
         }
@@ -118,10 +116,8 @@ class ReportsFetch extends ViewModelAbstract
                     $projectId[] = $project->project_id;
 
                 }
-                if($projectId && $projectId != null) {
-
-                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
-                }
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
             }
         }
@@ -131,7 +127,8 @@ class ReportsFetch extends ViewModelAbstract
             foreach ($projects as $project) {
                 $projectId[] = $project->id;
             }
-            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
+            $projects = $projectId ? implode(', ', $projectId) : 0;
+            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
         }
 
         if (User::hasPermission([User::ROLE_DEV])) {
