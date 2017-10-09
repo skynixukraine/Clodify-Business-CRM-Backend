@@ -63,13 +63,13 @@ class FinancialYearlyReport extends \yii\db\ActiveRecord
     }
 
     /**
-     * difference = income - expense_constant
+     * difference = income - expense_constant - expense salary
      * @param $id
      * @return int
      */
     public static function getDifference($id)
     {
-        return FinancialReport::sumIncome($id) - FinancialReport::sumExpenseConstant($id);
+        return FinancialReport::sumIncome($id) - FinancialReport::sumExpenseConstant($id) - FinancialReport::getExpenseSalary($id);
     }
 
     /**
