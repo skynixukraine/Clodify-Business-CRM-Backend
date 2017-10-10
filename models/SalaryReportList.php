@@ -8,7 +8,6 @@
 
 namespace app\models;
 
-use app\components\DateUtil;
 use Yii;
 
 /**
@@ -231,7 +230,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
     /**
      * @param $date
      * @return int
-     * number of working days (Monday - Friday) with more than 6 reported hours
+     * take month and year from exp: '1389916800'
+     * and return number of working days (Monday - Friday) with more than 6 reported hours
      */
     public static function numWorkingDaysInMonth($date)
     {
@@ -253,6 +253,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
     /**
      * @param $dateReport
      * @return mixed
+     * require 'Y-m-d' format of date
      */
     public static function sumHoursReportsForMonth($dateReport)
     {

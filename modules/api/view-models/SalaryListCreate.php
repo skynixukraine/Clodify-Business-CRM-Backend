@@ -7,7 +7,6 @@
  */
 namespace viewModel;
 
-use app\models\Report;
 use Yii;
 use app\models\FinancialReport;
 use app\models\SalaryReportList;
