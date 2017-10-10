@@ -233,7 +233,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
      * take month and year from exp: '1389916800'
      * and return number of working days (Monday - Friday) with more than 6 reported hours
      */
-    public static function numWorkingDaysInMonth($date)
+    public static function numWorkedDaysInMonth($date)
     {
         $m = date('m', $date);
         $y = date('Y', $date);
@@ -242,7 +242,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
         for($d=1;$d<=$lastday;$d++) {
             $wd = date("w",mktime(0,0,0,$m,$d,$y));
             if($wd > 0 && $wd < 6) {
-                if (self::sumHoursReportsForMonth(date('Y-m-d',mktime(0,0,0,$m,$d,$y))) > 6) {
+                if (self::sumHoursReportsForMonth(date('Y-m-d',mktime(0,0,0,$m,$d,$y))) >= 6) {
                     $workdays++;
                 }
             }
@@ -270,7 +270,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
      */
     public static function getNumOfWorkedDays($date, $numWorkDays)
     {
-        $workDays = self::numWorkingDaysInMonth($date);
+        $workDays = self::numWorkedDaysInMonth($date);
         if ($workDays <= $numWorkDays){
             return $workDays;
         }
