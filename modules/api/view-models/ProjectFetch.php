@@ -44,52 +44,12 @@ class ProjectFetch extends ViewModelAbstract
                 ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-            $q = Project::find()
+                $query= Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
                 ->groupBy('id');
-
-            $dataTable = DataTable::getInstance()
-                ->setQuery($q)
-                ->setLimit($limit)
-                ->setStart($start)
-                ->setSearchValue($keyword)
-                ->setSearchParams([ 'or',
-                    ['like', 'name', $keyword],
-                    ['like', 'jira_code', $keyword]
-                ]);
-            if (!empty($keyword) && ($date = DateUtil::convertData($keyword)) !== $keyword) {
-                $dataTable->setSearchParams([ 'or',
-                    ['like', 'date_start', $date],
-                    ['like', 'date_end', $date],
-                ]);
-            }
-            if ($order) {
-                foreach ($order as $name => $value) {
-                    $dataTable->setOrder(Project::tableName() . '.' . $name, $value);
-                }
-
-            } else {
-                $dataTable->setOrder( Project::tableName() . '.id', 'asc');
-            }
-
-            $dataTable->setFilter(Project::tableName() . '.is_delete=0');
-            $dt = $dataTable->getData();
-
-            if (!empty($dt)) {
-                $this->flagForSales = true;
-                $query = $q;
-            } else {
-                $query = Project::find()
-                    ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
-                        . Project::tableName() . ".id")
-                    ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
-                    ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                    ->groupBy('id');
-            }
         }
 
         if (User::hasPermission([User::ROLE_FIN])) {
@@ -177,7 +137,7 @@ class ProjectFetch extends ViewModelAbstract
             $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
             $cost = '$' . number_format($model->cost, 2, ',	', '.');
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES])) {
                 $list[$key]['id'] = $model->id;
                 $list[$key]['name'] = $model->name;
                 $list[$key]['jira'] = $model->jira_code;
@@ -194,14 +154,7 @@ class ProjectFetch extends ViewModelAbstract
                 $list[$key] ['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
             }
 
-            if (User::hasPermission([User::ROLE_SALES])) {
-                $list[$key]['id'] = $model->id;
-                $list[$key]['name'] = $model->name;
-                $list[$key]['jira'] = $model->jira_code;
-                $list[$key]['status'] = $model->status;
-            }
-
-            if (User::hasPermission([User::ROLE_SALES]) && $this->flagForSales) {
+            if (User::hasPermission([User::ROLE_SALES]) && $model->isSales(Yii::$app->user->id)) {
                 $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
                 $list[$key]['cost'] = $cost;
                 $list[$key] ['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
@@ -221,4 +174,3 @@ class ProjectFetch extends ViewModelAbstract
     }
 
 }
- 
