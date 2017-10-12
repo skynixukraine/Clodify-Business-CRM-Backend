@@ -135,31 +135,43 @@ class ProjectFetch extends ViewModelAbstract
             $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
             $cost = '$' . number_format($model->cost, 2, ',	', '.');
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
                 $list[$key]['id'] = $model->id;
                 $list[$key]['name'] = $model->name;
                 $list[$key]['jira'] = $model->jira_code;
                 $list[$key]['status'] = $model->status;
+            } else {
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
             }
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
                 $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
                 $list[$key]['cost'] = $cost;
-                $list[$key] ['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
                 $list[$key]['date_start'] = $newDateStart;
                 $list[$key]['date_end'] = $newDateEnd;
                 $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-                $list[$key] ['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
             }
 
-            if (User::hasPermission([User::ROLE_SALES]) && $model->isSales(Yii::$app->user->id)) {
+            if (User::hasPermission([User::ROLE_SALES]) && ($model->isSales(Yii::$app->user->id))) {
                 $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
                 $list[$key]['cost'] = $cost;
-                $list[$key] ['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
                 $list[$key]['date_start'] = $newDateStart;
                 $list[$key]['date_end'] = $newDateEnd;
                 $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-                $list[$key] ['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+            }
+
+            if (User::hasPermission([User::ROLE_PM]) && $model->isPm(Yii::$app->user->id)) {
+                $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
+                $list[$key]['cost'] = $cost;
+                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+                $list[$key]['date_start'] = $newDateStart;
+                $list[$key]['date_end'] = $newDateEnd;
+                $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
+                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
             }
 
         }
