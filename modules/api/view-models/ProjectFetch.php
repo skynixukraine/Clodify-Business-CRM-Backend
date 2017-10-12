@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -121,8 +122,8 @@ class ProjectFetch extends ViewModelAbstract
                 } else {
                     $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
                 }
-
             }
+
             $customers = $model->getCustomers()->all();
             $customersNames = [];
 
@@ -131,13 +132,14 @@ class ProjectFetch extends ViewModelAbstract
                 $customersNames[] = $customer->first_name . " " . $customer->last_name;
             }
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
-                $list[$key]['id'] = $model->id;
-                $list[$key]['name'] = $model->name;
-                $list[$key]['jira'] = $model->jira_code;
-                $list[$key]['status'] = $model->status;
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV,
+                User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
+
+                    $list[$key] = $this->defaultVal($model);
+
             } else {
-                  return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+                  return $this->addError(Processor::ERROR_PARAM,
+                      Yii::t('yii', 'You have no permission for this action'));
             }
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
@@ -160,12 +162,15 @@ class ProjectFetch extends ViewModelAbstract
         $this->setData($data);
     }
 
-    function specialVal($model, $developersNames, $customersNames)
+    /**
+     * @param $model
+     * @param $developersNames
+     * @param $customersNames
+     * @return Array
+     */
+    function specialVal($model, $developersNames, $customersNames) : Array
     {
-        $list['id'] = $model->id;
-        $list['name'] = $model->name;
-        $list['jira'] = $model->jira_code;
-        $list['status'] = $model->status;
+        $list = $this->defaultVal($model);
         $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
         $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
@@ -173,6 +178,21 @@ class ProjectFetch extends ViewModelAbstract
         $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
         $list['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
         $list['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+
+        return $list;
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    function defaultVal($model) : Array
+    {
+        $list['id'] = $model->id;
+        $list['name'] = $model->name;
+        $list['jira'] = $model->jira_code;
+        $list['status'] = $model->status;
+
         return $list;
     }
 
