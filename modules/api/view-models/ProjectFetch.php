@@ -16,11 +16,10 @@ use app\models\User;
 use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
-use app\models\Invoice;
+use app\modules\api\components\Api\Processor;
 
 class ProjectFetch extends ViewModelAbstract
 {
-    private $flagForSales = false;
     public function define()
     {
         $order       = Yii::$app->request->getQueryParam('order', []);
@@ -73,7 +72,6 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
-
 
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
