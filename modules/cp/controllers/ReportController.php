@@ -178,14 +178,13 @@ class ReportController extends DefaultController
             ->setSearchValue( $keyword ); //$search['value']
 
         if ($output == 'table') {
-            $dataTable = $dataTable->setLimit( Yii::$app->request->getQueryParam("length") );
+            $dataTable->setLimit( Yii::$app->request->getQueryParam("length") );
         }
 
-        $dataTable = $dataTable
-            ->setSearchParams([ 'or',
-                ['like', 'reporter_name', $keyword],
-                ['like', 'task', $keyword],
-            ]);
+        $dataTable->setSearchParams([ 'or',
+            ['like', 'reporter_name', $keyword],
+            ['like', 'task', $keyword],
+        ]);
 
         if( isset( $columns[$order[0]['column']]) ){
             $dataTable->setOrder(Report::tableName() . '.' . $columns[$order[0]['column']], $order[0]['dir']);
@@ -205,22 +204,25 @@ class ReportController extends DefaultController
             $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId);
         }
 
-        if($customerId && $customerId != null){
+        if (User::hasPermission([User::ROLE_ADMIN])) {
 
-            $projectsCustomer = ProjectCustomer::getReportsOfCustomer($customerId);
-            $projectId = [];
-            foreach($projectsCustomer as $project){
+            if ($customerId && $customerId != null) {
 
-                $projectId[] = $project->project_id;
+                $projectsCustomer = ProjectCustomer::getReportsOfCustomer($customerId);
+                $projectId = [];
+                foreach ($projectsCustomer as $project) {
+
+                    $projectId[] = $project->project_id;
+
+                }
+
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
             }
-            if($projectId && $projectId != null) {
-
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
-            }
-
         }
-        if(User::hasPermission([User::ROLE_CLIENT])) {
+
+        if (User::hasPermission([User::ROLE_CLIENT])) {
 
             $customer = Yii::$app->user->id;
 
@@ -233,14 +235,14 @@ class ReportController extends DefaultController
                     $projectId[] = $project->project_id;
 
                 }
-                if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
-                }
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
                 $dataTable->setFilter(User::tableName() . '.role!="' . User::ROLE_FIN . '"');
 
             }
         }
+
         if(User::hasPermission([User::ROLE_SALES])) {
 
             $salesid = Yii::$app->user->id;
@@ -254,20 +256,22 @@ class ReportController extends DefaultController
                     $projectId[] = $project->project_id;
 
                 }
-                if($projectId && $projectId != null) {
 
-                    $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
-                }
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
             }
         }
+
         if(User::hasPermission([User::ROLE_PM])) {
             $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
             $projectId = [];
             foreach ($projects as $project) {
                 $projectId[] = $project->id;
             }
-            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . implode(', ', $projectId) . ") ");
+
+            $projects = $projectId ? implode(', ', $projectId) : 0;
+            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
 //                $teammates = [];
 //                if ( ( $pmTeammates = Report::reportsPM() ) ) {
