@@ -131,49 +131,26 @@ class ProjectFetch extends ViewModelAbstract
                 $customersNames[] = $customer->first_name . " " . $customer->last_name;
             }
 
-            $newDateStart = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
-            $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
-            $cost = '$' . number_format($model->cost, 2, ',	', '.');
-
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
                 $list[$key]['id'] = $model->id;
                 $list[$key]['name'] = $model->name;
                 $list[$key]['jira'] = $model->jira_code;
                 $list[$key]['status'] = $model->status;
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+                  return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
             }
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
-                $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
-                $list[$key]['cost'] = $cost;
-                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
-                $list[$key]['date_start'] = $newDateStart;
-                $list[$key]['date_end'] = $newDateEnd;
-                $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
             }
 
             if (User::hasPermission([User::ROLE_SALES]) && ($model->isSales(Yii::$app->user->id))) {
-                $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
-                $list[$key]['cost'] = $cost;
-                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
-                $list[$key]['date_start'] = $newDateStart;
-                $list[$key]['date_end'] = $newDateEnd;
-                $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
             }
 
             if (User::hasPermission([User::ROLE_PM]) && $model->isPm(Yii::$app->user->id)) {
-                $list[$key]['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
-                $list[$key]['cost'] = $cost;
-                $list[$key]['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
-                $list[$key]['date_start'] = $newDateStart;
-                $list[$key]['date_end'] = $newDateEnd;
-                $list[$key]['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-                $list[$key]['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
             }
-
         }
 
         $data = [
@@ -181,6 +158,22 @@ class ProjectFetch extends ViewModelAbstract
             "total_records" => DataTable::getInstance()->getTotal()
         ];
         $this->setData($data);
+    }
+
+    function specialVal($model, $developersNames, $customersNames)
+    {
+        $list['id'] = $model->id;
+        $list['name'] = $model->name;
+        $list['jira'] = $model->jira_code;
+        $list['status'] = $model->status;
+        $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
+        $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
+        $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+        $list['date_start'] = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
+        $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
+        $list['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
+        $list['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+        return $list;
     }
 
 }
