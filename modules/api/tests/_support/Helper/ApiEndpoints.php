@@ -25,5 +25,6 @@ class ApiEndpoints
     const USER              = '/api/user';
     const FINANCIAL_REPORTS = '/api/financial-reports';
     const SALARY_REPORTS    = '/api/salary-reports';
+    const SETTINGS          = '/api/settings';
 
 }
