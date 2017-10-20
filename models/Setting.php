@@ -52,4 +52,20 @@ class Setting extends \yii\db\ActiveRecord
             'type' => 'Type',
         ];
     }
+
+    public static function getCorpEventsFactor()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => 'corp_events_percentage'])
+            ->one();
+        return $settingRow->value/100;
+    }
+
+    public static function getBonusesFactor()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => 'bonuses_percentage'])
+            ->one();
+        return $settingRow->value/100;
+    }
 }
