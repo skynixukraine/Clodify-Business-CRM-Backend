@@ -53,6 +53,7 @@ return [
     'GET '      . $API . '/salary-reports/<id:\d+>'                           => $API . '/salary-reports/download',
     'PUT '      . $API . '/financial-reports/<id:\d+>/unlock'                 => $API . '/financial-reports/unlock',
     'PUT '      . $API . '/settings/<key:\w+>'                                => $API . '/settings/update',
+    'GET '      . $API . '/settings'                                          => $API . '/settings/fetch',
 
 
     // General rules
