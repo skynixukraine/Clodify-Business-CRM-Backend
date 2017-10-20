@@ -53,6 +53,9 @@ class Setting extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return float|int
+     */
     public static function getCorpEventsFactor()
     {
         $settingRow = Setting::find()
@@ -61,6 +64,9 @@ class Setting extends \yii\db\ActiveRecord
         return $settingRow->value/100;
     }
 
+    /**
+     * @return float|int
+     */
     public static function getBonusesFactor()
     {
         $settingRow = Setting::find()
