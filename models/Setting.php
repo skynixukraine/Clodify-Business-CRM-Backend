@@ -20,6 +20,9 @@ use Yii;
  */
 class Setting extends \yii\db\ActiveRecord
 {
+    const CORP_EVENTS_FACTOR = 'corp_events_percentage';
+    const BONUSES_FACTOR = 'bonuses_percentage';
+
     /**
      * @inheritdoc
      */
@@ -51,5 +54,27 @@ class Setting extends \yii\db\ActiveRecord
             'value' => 'Value',
             'type' => 'Type',
         ];
+    }
+
+    /**
+     * @return float|int
+     */
+    public static function getCorpEventsFactor()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::CORP_EVENTS_FACTOR])
+            ->one();
+        return $settingRow->value/100;
+    }
+
+    /**
+     * @return float|int
+     */
+    public static function getBonusesFactor()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::BONUSES_FACTOR])
+            ->one();
+        return $settingRow->value/100;
     }
 }
