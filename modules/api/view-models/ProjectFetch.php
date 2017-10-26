@@ -82,7 +82,7 @@ class ProjectFetch extends ViewModelAbstract
             }
 
         } else {
-            $dataTable->setOrder( Project::tableName() . '.id', 'asc');
+            $dataTable->setOrder( Project::tableName() . '.id', 'desc');
         }
 
         $dataTable->setFilter(Project::tableName() . '.is_delete=0');
