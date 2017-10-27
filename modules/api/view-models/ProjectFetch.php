@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -16,11 +17,10 @@ use app\models\User;
 use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
-use app\models\Invoice;
+use app\modules\api\components\Api\Processor;
 
 class ProjectFetch extends ViewModelAbstract
 {
-
     public function define()
     {
         $order       = Yii::$app->request->getQueryParam('order', []);
@@ -31,33 +31,47 @@ class ProjectFetch extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
-                            . Project::tableName() . ".id")
+                    . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_PM] )) {
             $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
-                            . Project::tableName() . ".id")
+                    . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
                 ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-            $query = Project::find()
+                $query= Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
-                            . Project::tableName() . ".id")
+                    . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
                 ->groupBy('id');
         }
-        if (User::hasPermission([User::ROLE_FIN, User::ROLE_CLIENT])) {
+
+        if (User::hasPermission([User::ROLE_FIN])) {
             $query = Project::find()
                 ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
-                            . Project::tableName() . ".id")
+                    . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
                 ->groupBy('id');
+        }
+
+        if (User::hasPermission([User::ROLE_CLIENT])) {
+            $query = Project::find()
+                ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
+                    . Project::tableName() . ".id")
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id]);
+        }
+
+        if (User::hasPermission([User::ROLE_DEV])) {
+            $query = Project::find()
+                ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
+                    . Project::tableName() . ".id")
+                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
 
         $dataTable = DataTable::getInstance()
@@ -90,50 +104,55 @@ class ProjectFetch extends ViewModelAbstract
         $activeRecordsData = $dataTable->getData();
         $list = [];
 
-        foreach ($activeRecordsData as $model) {
+        foreach ($activeRecordsData as $key => $model) {
             $developers = $model->getDevelopers()->all();
             $developersNames = [];
             foreach ($developers as $developer) {
-                if($alias_user = ProjectDeveloper::findOne(['user_id' => $developer->id,
-                    'project_id' => $model->id])->alias_user_id) {
-                        $aliases = User::find()
+                if ($alias_user = ProjectDeveloper::findOne(['user_id' => $developer->id,
+                    'project_id' => $model->id])->alias_user_id
+                ) {
+                    $aliases = User::find()
                             ->where('id=:alias', [
                                 ':alias' => $alias_user])->one()->first_name . ' ' .
                         User::find()
                             ->where('id=:alias', [
                                 ':alias' => $alias_user])->one()->last_name;
-                        $developer->id == $alias_user ? $developersNames[] = $aliases:
-                            $developersNames[] = $aliases . '(' . $developer->first_name ." ". $developer->last_name . ')';
+                    $developer->id == $alias_user ? $developersNames[] = $aliases :
+                        $developersNames[] = $aliases . '(' . $developer->first_name . " " . $developer->last_name . ')';
                 } else {
                     $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
                 }
-
             }
+
             $customers = $model->getCustomers()->all();
             $customersNames = [];
 
-            foreach ($customers as $customer){
+            foreach ($customers as $customer) {
 
-                $customersNames[] = $customer->first_name . " " .  $customer->last_name;
+                $customersNames[] = $customer->first_name . " " . $customer->last_name;
             }
 
-            $newDateStart =$model->date_start ? date("d/m/Y", strtotime($model->date_start)): "Date Start Not Set";
-            $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
-            $cost = '$' . number_format($model->cost, 2, ',	', '.');
-            $list[] =
-                [
-                    'id' => $model->id,
-                    'name' => $model->name,
-                    'jira' => $model->jira_code,
-                    'total_logged' => $model->total_logged_hours ? $model->total_logged_hours :0,
-                    'cost' => $cost,
-                    'total_paid' => $model->total_paid_hours ? $model->total_paid_hours : 0,
-                    'date_start' => $newDateStart,
-                    'date_end' => $newDateEnd,
-                    'developers' => $developersNames ? implode(", ", $developersNames): "Developer Not Set",
-                    'clients' => $customersNames ? implode(", ", $customersNames): "Customer Not Set",
-                    'status' => $model->status
-                ];
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV,
+                User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
+
+                    $list[$key] = $this->defaultVal($model);
+
+            } else {
+                  return $this->addError(Processor::ERROR_PARAM,
+                      Yii::t('yii', 'You have no permission for this action'));
+            }
+
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
+            }
+
+            if (User::hasPermission([User::ROLE_SALES]) && ($model->isSales(Yii::$app->user->id))) {
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
+            }
+
+            if (User::hasPermission([User::ROLE_PM]) && $model->isPm(Yii::$app->user->id)) {
+                $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
+            }
         }
 
         $data = [
@@ -141,6 +160,40 @@ class ProjectFetch extends ViewModelAbstract
             "total_records" => DataTable::getInstance()->getTotal()
         ];
         $this->setData($data);
+    }
+
+    /**
+     * @param $model
+     * @param $developersNames
+     * @param $customersNames
+     * @return Array
+     */
+    function specialVal($model, $developersNames, $customersNames) : Array
+    {
+        $list = $this->defaultVal($model);
+        $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
+        $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
+        $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+        $list['date_start'] = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
+        $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
+        $list['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
+        $list['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+
+        return $list;
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    function defaultVal($model) : Array
+    {
+        $list['id'] = $model->id;
+        $list['name'] = $model->name;
+        $list['jira'] = $model->jira_code;
+        $list['status'] = $model->status;
+
+        return $list;
     }
 
 }
