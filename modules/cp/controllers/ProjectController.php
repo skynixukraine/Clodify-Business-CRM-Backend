@@ -204,7 +204,8 @@ class ProjectController extends DefaultController
                 $model->id,
                 $model->name,
                 $model->jira_code,
-                gmdate('H:i', floor($model->total_logged_hours * 3600)),
+                //gmdate('H:i', floor($model->total_logged_hours * 3600)),
+                $model->total_logged_hours,
             ];
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
                 $row[] = '$' . number_format( $model->cost, 2, ',	', '.');
