@@ -64,7 +64,8 @@ class ProjectFetch extends ViewModelAbstract
             $query = Project::find()
                 ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
                     . Project::tableName() . ".id")
-                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id]);
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectCustomer::tableName() . '.subscribedOnly' => 1]);
         }
 
         if (User::hasPermission([User::ROLE_DEV])) {
