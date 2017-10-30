@@ -40,15 +40,17 @@ class ProjectFetch extends ViewModelAbstract
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
-                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
-                $query= Project::find()
+            $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
-                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
 
@@ -64,15 +66,15 @@ class ProjectFetch extends ViewModelAbstract
             $query = Project::find()
                 ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
                     . Project::tableName() . ".id")
-                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectCustomer::tableName() . '.subscribedOnly' => 1]);
+                ->where([ProjectCustomer::tableName() . '.user_id' => Yii::$app->user->id]);
         }
 
         if (User::hasPermission([User::ROLE_DEV])) {
             $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
-                ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
+                ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE]);
         }
 
         $dataTable = DataTable::getInstance()
