@@ -13,6 +13,9 @@ use app\components\DataTable;
 use app\components\DateUtil;
 use yii\helpers\Url;
 use app\modules\api\components\SortHelper;
+use app\models\ProjectCustomer;
+use app\models\ProjectDeveloper;
+use app\models\Project;
 
 class UsersFetch extends ViewModelAbstract
 {
@@ -31,24 +34,47 @@ class UsersFetch extends ViewModelAbstract
 
             $query = User::find();
         }
-        //FIN and SALES can see all active users (except of themselves)
-        if(User::hasPermission([User::ROLE_FIN, User::ROLE_SALES])) {
-            $query = User::find()->where(['is_active' => 1])->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
-        }
 
-        //PM & DEV can see only active users with roles DEV, SALES, PM, ADMIN, FIN except of themselves
-        if( User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
+        //FIN has an access to all active users of roles DEV, SALES, FIN, ADMIN to all columns
+        if(User::hasPermission([User::ROLE_FIN])) {
             $query = User::find()->where(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN, User::ROLE_FIN]])
-                ->andWhere(['<>', 'id', Yii::$app->user->identity->getId()]);
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN]]);
         }
 
-        //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN
-        if( User::hasPermission([User::ROLE_CLIENT])) {
-            $workers = \app\models\ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+        //SALES has an access to all active users who are DEV, ADMIN
+        // and has an access to CLIENT users of their projects and has
+        // an access to all columns except of salary, official_salary, salary_up
+        if( User::hasPermission([User::ROLE_SALES])) {
+            $workers = User::getCustomersForSales();
             $arrayWorkers = [];
             foreach($workers as $worker){
-                $arrayWorkers[]= $worker->user_id;
+                $arrayWorkers[] = $worker->id;
+            }
+            if(!empty($arrayWorkers)) {
+                $devUser = implode(', ' , $arrayWorkers);
+            } else {
+                $devUser = 'null';
+            }
+
+            $query1 = User::find()
+                ->where(User::tableName() . '.id IN (' . $devUser . ')')
+                ->andWhere(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_CLIENT]]);
+
+            $query2 = User::find()
+                ->andWhere(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_ADMIN]]);
+
+            $query = $query1->union($query2);
+        }
+
+        //CLIENT has an access to all active users who are DEV, ADMIN or SALES of their projects
+        // and has an access to all columns except of salary, official_salary, salary_up, role, joined
+        if(User::hasPermission([User::ROLE_CLIENT])) {
+            $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
+            $arrayWorkers = [];
+            foreach($workers as $worker){
+                $arrayWorkers[] = $worker->user_id;
             }
             $devUser = '';
             if(!empty($arrayWorkers)) {
@@ -61,7 +87,15 @@ class UsersFetch extends ViewModelAbstract
             $query = User::find()
                 ->where(User::tableName() . '.id IN (' . $devUser . ')')
                 ->andWhere(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]]);
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN]]);
+
+        }
+
+       // DEV has an access to all active users who are DEV, ADMIN or SALES
+        // to the following columns: id, first_name, last_name, company, email, phone
+        if(User::hasPermission([User::ROLE_DEV])) {
+            $query = User::find()->where(['is_active' => 1])
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN]]);
         }
 
         //column ID is shown only to ADMIN
@@ -121,8 +155,8 @@ class UsersFetch extends ViewModelAbstract
         } elseif ($active === '0') {
             $dataTable->setFilter('is_active=0');
         }
-
         $activeRecordsData = $dataTable->getData();
+//        die(var_dump($activeRecordsData));
         $list = array();
 
 
@@ -142,29 +176,37 @@ class UsersFetch extends ViewModelAbstract
                 $photo = "/img/avatar.png";
             }
 
-            if (User::hasPermission([User::ROLE_ADMIN])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV])) {
                 $row['id'] = $model->id;
             }
             $row ['image'] = $photo;
             $row ['first_name'] = $model->first_name;
-            $row ['last_name'] =  $model->last_name;
+            $row ['last_name'] = $model->last_name;
             $row ['company'] = $model->company;
+            $row ['email'] = $model->email;
+            $row ['phone'] = $model->phone;
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
-                $row  ['role'] = $model->role;
-            }
-
-            $row ['email']  = $model->email;
-            $row ['phone']  = $model->phone;
-            $row ['last_login']  = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
-            $row ['joined']  = DateUtil::convertDateTimeWithoutHours($model->date_signup);
-            if (User::hasPermission([User::ROLE_ADMIN])) {
+            if (User::hasPermission([User::ROLE_FIN, User::ROLE_ADMIN])) {
+                $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
+                $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 $row ['is_active'] = $model->is_active;
-            }
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                 $row ['salary'] = '$' . number_format($model->salary);
                 $row ['official_salary'] = $model->official_salary;
                 $row ['salary_up'] = $salary_up;
+                $row ['role'] = $model->role;
+            }
+
+            if (User::hasPermission([User::ROLE_SALES])) {
+                $row ['role'] = $model->role;
+                $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
+                $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
+                $row ['is_active'] = $model->is_active;
+                $row['id'] = $model->id;
+            }
+
+            if (User::hasPermission([User::ROLE_CLIENT])) {
+                $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
+                $row ['is_active'] = $model->is_active;
             }
 
             $list[] = $row;

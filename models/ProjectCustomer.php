@@ -94,13 +94,22 @@ class ProjectCustomer extends \yii\db\ActiveRecord
             ->all();
     }
 
-    public static function getProjectCustomer($projectId)
+    public static function getProjectCustomer($projectId, $withInvoice=true)
     {
-        return self::find()
-            ->leftJoin(User::tableName(), User::tableName() . '.id=' . ProjectCustomer::tableName() . '.user_id')
-            ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
-            ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1')
-            ->andWhere(User::tableName() . '.is_delete=0')
-            ->andWhere(User::tableName() . '.is_active=1');
+        if($withInvoice) {
+            return self::find()
+                ->leftJoin(User::tableName(), User::tableName() . '.id=' . ProjectCustomer::tableName() . '.user_id')
+                ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
+                ->andWhere(User::tableName() . '.is_delete=0')
+                ->andWhere(User::tableName() . '.is_active=1')
+                ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1');
+        } else {
+            return self::find()
+                ->leftJoin(User::tableName(), User::tableName() . '.id=' . ProjectCustomer::tableName() . '.user_id')
+                ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
+                ->andWhere(User::tableName() . '.is_delete=0')
+                ->andWhere(User::tableName() . '.is_active=1');
+        }
     }
+
 }
