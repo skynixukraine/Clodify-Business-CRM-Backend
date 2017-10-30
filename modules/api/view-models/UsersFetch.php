@@ -156,7 +156,6 @@ class UsersFetch extends ViewModelAbstract
             $dataTable->setFilter('is_active=0');
         }
         $activeRecordsData = $dataTable->getData();
-//        die(var_dump($activeRecordsData));
         $list = array();
 
 
