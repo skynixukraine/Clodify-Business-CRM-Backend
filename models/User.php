@@ -709,7 +709,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $projectsID[] = $project->id;
         }
         // customers on these projects
-        $customers = ProjectCustomer::getProjectCustomer($projectsID, $withoutInvoice = false)->all();
+        $customers = ProjectCustomer::getProjectCustomer($projectsID, $withInvoice = false)->all();
         foreach ($customers as $customer) {
             $customersID[] = $customer->user;
         }

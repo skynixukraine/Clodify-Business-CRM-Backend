@@ -200,7 +200,6 @@ class UsersFetch extends ViewModelAbstract
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 $row ['is_active'] = $model->is_active;
-                $row['id'] = $model->id;
             }
 
             if (User::hasPermission([User::ROLE_CLIENT])) {
