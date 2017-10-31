@@ -67,6 +67,21 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
 
     }
 
+    /**
+     * @param $salesId
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getProjectForSales($salesId)
+    {
+        return self::find()
+            ->where(ProjectDeveloper::tableName() . ".user_id=:sId AND status=:s" , [
+
+                ':sId' => $salesId,
+                ':s' => self::STATUS_ACTIVE
+            ])
+            ->all();
+
+    }
 
     /**
      * @inheritdoc

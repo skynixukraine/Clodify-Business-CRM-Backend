@@ -23,10 +23,11 @@ class ProjectFetch extends ViewModelAbstract
 {
     public function define()
     {
-        $order       = Yii::$app->request->getQueryParam('order', []);
-        $keyword     = Yii::$app->request->getQueryParam('search_query');
-        $start       = Yii::$app->request->getQueryParam('start') ?: 0;
-        $limit       = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+        $order          = Yii::$app->request->getQueryParam('order', []);
+        $keyword        = Yii::$app->request->getQueryParam('search_query');
+        $start          = Yii::$app->request->getQueryParam('start') ?: 0;
+        $limit          = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+        $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $query = Project::find()
@@ -41,7 +42,6 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
         if (User::hasPermission([User::ROLE_SALES])) {
@@ -50,7 +50,6 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE])
                 ->groupBy('id');
         }
 
@@ -73,8 +72,7 @@ class ProjectFetch extends ViewModelAbstract
             $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
-                ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->andWhere([ProjectDeveloper::tableName() . '.status' => ProjectDeveloper::STATUS_ACTIVE]);
+                ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
 
         $dataTable = DataTable::getInstance()
@@ -103,6 +101,22 @@ class ProjectFetch extends ViewModelAbstract
         }
 
         $dataTable->setFilter(Project::tableName() . '.is_delete=0');
+
+        //Implement filter subscribedOnly, if it is set to true output the projects where user ticked box as ACTIVE(subscribe)
+        if (!empty($subscribedOnly) && $subscribedOnly === 'true') {
+            $salesid = Yii::$app->user->id;
+
+            if($salesid && $salesid != null){
+
+                $projectsDeveloper = ProjectDeveloper::getProjectForSales($salesid );
+                $projectId = [];
+                foreach($projectsDeveloper as $project){
+                    $projectId[] = $project->project_id;
+                }
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Project::tableName() . '.id IN (' . $projects . ') ');
+           }
+        }
 
         $activeRecordsData = $dataTable->getData();
         $list = [];
