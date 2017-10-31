@@ -22,6 +22,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
     const STATUS_ACTIVE     = "ACTIVE";
     const STATUS_INACTIVE   = "INACTIVE";
     const STATUS_HIDDEN     = "HIDDEN";
+    const IS_SUBSCRIBED     = "true";
     /**
      * @inheritdoc
      */
