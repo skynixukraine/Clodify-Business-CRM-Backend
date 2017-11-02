@@ -45,12 +45,11 @@ class ReportsFetch extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, 'date_period can not be used with from_date/to_date');
         }
 
-
-        $query              = Report::find()
+        $query = Report::find()
             ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
-            ->where(Project::tableName() . '.status IN ("' . Project::STATUS_ONHOLD . '", "' . Project::STATUS_INPROGRESS . '")')
+//            ->where(Project::tableName() . '.status IN ("' . Project::STATUS_ONHOLD . '", "' . Project::STATUS_INPROGRESS . '")')
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy(Report::tableName() . '.id');
 
@@ -83,7 +82,6 @@ class ReportsFetch extends ViewModelAbstract
             $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId);
         }
 
-
         if(User::hasPermission([User::ROLE_CLIENT])) {
 
             $customer = Yii::$app->user->id;
@@ -99,10 +97,13 @@ class ReportsFetch extends ViewModelAbstract
                 }
 
                 $projects = $projectId ? implode(', ', $projectId) : 0;
+
                 $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $dataTable->setFilter(Report::tableName() . '.is_approved=1 ');
 
             }
         }
+
         if(User::hasPermission([User::ROLE_SALES])) {
 
             $salesid = Yii::$app->user->id;
@@ -116,11 +117,14 @@ class ReportsFetch extends ViewModelAbstract
                     $projectId[] = $project->project_id;
 
                 }
+
                 $projects = $projectId ? implode(', ', $projectId) : 0;
+
                 $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
 
             }
         }
+
         if(User::hasPermission([User::ROLE_PM])) {
             $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
             $projectId = [];
@@ -155,16 +159,12 @@ class ReportsFetch extends ViewModelAbstract
                 break;
         }
 
-        if (!$dateStart) {
-            $dateStart = date('d/m/Y');
+        if($dateStart) {
+            $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
         }
-        $dataTable->setFilter(Report::tableName() . '.date_report >= "' . DateUtil::convertData($dateStart) . '" ');
-
 
         if($dateEnd){
-
             $dataTable->setFilter(Report::tableName() . '.date_report <= "' . DateUtil::convertData($dateEnd) . '"');
-
         }
 
         $dataTable->setFilter(Report::tableName() . '.is_delete=0');
@@ -181,7 +181,7 @@ class ReportsFetch extends ViewModelAbstract
 
         $list = [];
         /* @var $model \app\models\Report */
-        foreach ( $activeRecordsData as $model ) {
+        foreach ( $activeRecordsData as $key=>$model ) {
             $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
                 'project_id' => $model->getProject()->one()->id ]);
 
@@ -204,7 +204,7 @@ class ReportsFetch extends ViewModelAbstract
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
-                $list[] = [
+                $list[$key] = [
                     'report_id'     => $model->id,
                     'project'       => [
                         'id'   => $model->getProject()->one()->id,
@@ -213,6 +213,8 @@ class ReportsFetch extends ViewModelAbstract
                     'created_date'  => date("d/m/Y", strtotime($model->date_added)),
                     'task'          => $model->task,
                     'hour'          => $hours,
+                    'cost'          => $model->cost,
+                    'is_approved'   => $model->is_approved ? true : false,
                     'reporter'      => [
                         'id'   => $model->user_id,
                         'name' => $user
@@ -221,8 +223,11 @@ class ReportsFetch extends ViewModelAbstract
                     'is_invoiced'   => $model->invoice_id ? 1 : 0
                 ];
 
-
+            if(User::hasPermission([User::ROLE_CLIENT])) {
+                unset($list[$key]['cost']);
+            }
         }
+
         $activeRecordInstance->limit(null)->offset(null);
         $totalHours = Yii::$app->Helper->timeLength( $activeRecordInstance->sum('hours') * 3600);
         $totalCost = $activeRecordInstance->sum('cost') ? '$' . $activeRecordInstance->sum('cost') : 0;
@@ -233,6 +238,11 @@ class ReportsFetch extends ViewModelAbstract
             "total_hours"        => $totalHours,
             "total_cost"         => $totalCost,
         ];
+
+        if(User::hasPermission([User::ROLE_CLIENT])) {
+            unset($data['total_cost']);
+        }
+
         $this->setData($data);
 
     }
