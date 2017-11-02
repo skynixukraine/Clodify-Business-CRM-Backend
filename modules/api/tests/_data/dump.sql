@@ -496,6 +496,7 @@ CREATE TABLE `reports` (
   `is_working_day` tinyint(1) DEFAULT NULL,
   `is_delete` tinyint(1) DEFAULT '0',
   `cost` decimal(10,2) DEFAULT '0.00',
+  `is_approved` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_reports_projects1_idx` (`project_id`),
   KEY `fk_reports_users1_idx` (`user_id`),
