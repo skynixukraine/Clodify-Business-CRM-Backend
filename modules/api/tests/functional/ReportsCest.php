@@ -16,6 +16,8 @@ class ReportsCest
     private $userId;
     private $notOwnReportId;
 
+
+
     /* 2.1.1 Create Report Data
      * @see    http://jira.skynix.company:8070/browse/SI-837
      */
@@ -117,6 +119,7 @@ class ReportsCest
      */
     public function testFetchReports(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
@@ -140,7 +143,7 @@ class ReportsCest
                         'task' => 'string',
                         'hour' => 'string',
                         'cost' => 'string',
-//                        'is_approved' => 'boolean',
+                       'is_approved' => 'boolean',
                         'reporter' => [
                             'id' => 'integer',
                             'name' => 'string'
@@ -158,11 +161,12 @@ class ReportsCest
         ]);
     }
 
-   /*
-   * 2.1.2 Edit Report Data
-   * http://jira.skynix.company:8070/browse/SI-865
-   */
-    public function testEditCreatedReports(FunctionalTester $I, \Codeception\Scenario $scenario)
+
+    /*
+    * 2.1.2 Edit Report Data
+    * http://jira.skynix.company:8070/browse/SI-865
+    */
+    public function testEditReports(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
         $oAuth = new OAuthSteps($scenario);
@@ -360,6 +364,213 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(1, $response->success);
+    }
+
+    /**
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFetchReportsForClient(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'clientUsers',
+            'last_name' => 'clientSNUsers',
+            'email' => 'clientUser@email.com',
+            'role' => 'CLIENT',
+            'password' => md5('client')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $I->haveInDatabase('reports', array(
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+        $I->haveInDatabase('project_customers', array(
+            'user_id' => $userId,
+            'project_id' => $projectId
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("clientUser@email.com", "client");
+
+        $I->wantTo('Testing fetch reports data');
+        $I->sendGET(ApiEndpoints::REPORT);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['reports' =>
+                [
+                    [
+                        'report_id' => 'integer',
+                        'project' => [
+                            'id' => 'integer',
+                            'name' => 'string'
+                        ],
+                        'created_date' => 'string',
+                        'task' => 'string',
+                        'hour' => 'string',
+ // no coct for client  'cost' => 'string',
+                        'is_approved' => 'boolean',
+                        'reporter' => [
+                            'id' => 'integer',
+                            'name' => 'string'
+                        ],
+                        'reported_date' => 'string',
+                        'is_invoiced' => 'integer'
+                    ]
+                ],
+                'total_records' => 'string',
+                'total_hours' => 'string',
+// no                'total_cost' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * Testing fetch only own reports data for dev otherwise return empty array
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFetchReportsForDev(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            //'id' => 3,
+            'first_name' => 'clientUsers',
+            'last_name' => 'clientSNUsers',
+            'email' => 'clientUser@email.com',
+            'role' => 'DEV',
+            'password' => md5('dev')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $I->haveInDatabase('reports', array(
+            //      'id' => 1,
+            'user_id' => ValuesContainer::$userDevId,
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null
+        ));
+
+        $I->haveInDatabase('project_developers', array(
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'is_sales'  => 0
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("clientUser@email.com", "dev");
+
+        $I->wantTo('Testing fetch only own reports data for dev');
+        $I->sendGET(ApiEndpoints::REPORT);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['reports' =>
+                [],
+                'total_records' => 'string',
+                'total_hours' => 'string',
+                 'total_cost' => 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * Testing fetch reports data for sales only if he is marked as is_sales for project otherwise return empty array
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFetchReportsForSales(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'clientUsers',
+            'last_name' => 'clientSNUsers',
+            'email' => 'clientUser@email.com',
+            'role' => 'SALES',
+            'password' => md5('sales')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $I->haveInDatabase('reports', array(
+            //      'id' => 1,
+            'user_id' => $userId,   // 5
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null
+        ));
+
+        $I->haveInDatabase('project_developers', array(
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'is_sales'  => 0
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("clientUser@email.com", "sales");
+
+        $I->wantTo('Testing fetch reports data for sales projects');
+        $I->sendGET(ApiEndpoints::REPORT);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['reports' =>
+                [],
+                'total_records' => 'string',
+                'total_hours' => 'string',
+                'total_cost' => 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
     }
 
 }

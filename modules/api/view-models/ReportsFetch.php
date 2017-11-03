@@ -49,7 +49,6 @@ class ReportsFetch extends ViewModelAbstract
             ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
             ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
-//            ->where(Project::tableName() . '.status IN ("' . Project::STATUS_ONHOLD . '", "' . Project::STATUS_INPROGRESS . '")')
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy(Report::tableName() . '.id');
 
@@ -100,7 +99,6 @@ class ReportsFetch extends ViewModelAbstract
 
                 $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
                 $dataTable->setFilter(Report::tableName() . '.is_approved=1 ');
-
             }
         }
 
