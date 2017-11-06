@@ -160,6 +160,7 @@ class UserController extends DefaultController {
                 ->andWhere(['is_active' => 1])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]]);
         }
+
         //column ID is shown only to ADMIN
         if(User::hasPermission([User::ROLE_ADMIN])) {
             $columns [] = 'id';
