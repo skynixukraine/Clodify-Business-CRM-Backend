@@ -454,7 +454,6 @@ class ReportsCest
     public function testFetchReportsForDev(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $userId = $I->haveInDatabase('users', array(
-            //'id' => 3,
             'first_name' => 'clientUsers',
             'last_name' => 'clientSNUsers',
             'email' => 'clientUser@email.com',
@@ -467,7 +466,6 @@ class ReportsCest
         ));
 
         $I->haveInDatabase('reports', array(
-            //      'id' => 1,
             'user_id' => ValuesContainer::$userDevId,
             'project_id' => $projectId,
             'date_added' => '2017-03-09',
@@ -530,7 +528,6 @@ class ReportsCest
         ));
 
         $I->haveInDatabase('reports', array(
-            //      'id' => 1,
             'user_id' => $userId,   // 5
             'project_id' => $projectId,
             'date_added' => '2017-03-09',
@@ -593,7 +590,6 @@ class ReportsCest
         ));
 
         $repId = $I->haveInDatabase('reports', array(
-            //      'id' => 1,
             'user_id' => $userId,   // 5
             'project_id' => $projectId,
             'date_added' => '2017-03-09',
@@ -627,7 +623,7 @@ class ReportsCest
             "data"   => null,
             "errors" => [
                 "param"   => "error",
-                "message" => "You can not approve own report"
+                "message" => "You (role sales) can not approve own report"
             ],
             "success" => false
         ]);
@@ -653,7 +649,6 @@ class ReportsCest
         ));
 
         $repId = $I->haveInDatabase('reports', array(
-            //      'id' => 1,
             'user_id' => $userId,   // 5
             'project_id' => $projectId,
             'date_added' => '2017-03-09',
@@ -684,13 +679,12 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
         $I->seeResponseContainsJson([
-            "data"   => 'array|null',
+            "data"   => null,
             "errors" => [
                 "param"   => "error",
-                "message" => "You can not approve own report"
+                "message" => "You (role fin) can not approve own report"
             ],
             "success" => false
         ]);
     }
-
 }

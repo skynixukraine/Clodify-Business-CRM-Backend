@@ -33,7 +33,7 @@ class ReportApprove extends ViewModelAbstract
             $id = Yii::$app->request->getQueryParam('id');
             $curReport = Report::findOne($id);
             if ($curReport) {
-                if (!$curReport->is_approve) {
+                if (!$curReport->is_approved) {
 
                     if (User::hasPermission([User::ROLE_ADMIN])) {
                         $this->noteToActionTable($curReport);
@@ -55,7 +55,9 @@ class ReportApprove extends ViewModelAbstract
                                 } else {
                                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You (role sales) can not approve own report'));
                                 }
-                            }
+                           } else {
+                               return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for approving this report '));
+                           }
                         }
                     }
 
@@ -88,13 +90,16 @@ class ReportApprove extends ViewModelAbstract
         $reporterRole = User::getUserRoleById($curReport->user_id);
 
         $str = $approverRole . ' ' . $approverName . ' has approved ' .
-            $reportsHours . ' of ' . $reporterRole . ' ' . $reporterName;
+            $reportsHours . ' hours of ' . $reporterRole . ' ' . $reporterName;
         $action = new ReportAction();
         $action->report_id = Yii::$app->request->getQueryParam('id');
         $action->user_id = Yii::$app->user->identity->getId();
         $action->action = $str;
         $action->datetime = time();
         $action->save();
+
+        $curReport->is_approved = 1;
+        $curReport->save(false);
     }
 
 }
