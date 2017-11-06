@@ -807,4 +807,25 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
     }
+
+    public static function getUserFirstName()
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        return $user->first_name;
+
+    }
+
+    public static function getUserFirstNameById($id)
+    {
+        $user = self::findOne($id);
+        return $user->first_name;
+
+    }
+
+    public static function getUserRoleById($id)
+    {
+        $user = self::findOne($id);
+        return $user->role;
+
+    }
 }

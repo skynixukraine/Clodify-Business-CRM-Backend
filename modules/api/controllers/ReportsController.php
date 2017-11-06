@@ -71,4 +71,32 @@ class ReportsController extends DefaultController
 
     }
 
+    public function actionApprove(){
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ReportApprove')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
+    public function actionDisapprove(){
+
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Report')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ReportDisApprove')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_PUT ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
 }   
