@@ -41,7 +41,6 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
         $this->userId = ValuesContainer::$userId;
-
     }
 
     /**
@@ -427,7 +426,7 @@ class ReportsCest
                         'created_date' => 'string',
                         'task' => 'string',
                         'hour' => 'string',
-                        // no coct for client  'cost' => 'string',
+ // no coct for client  'cost' => 'string',
                         'is_approved' => 'boolean',
                         'reporter' => [
                             'id' => 'integer',
@@ -439,7 +438,7 @@ class ReportsCest
                 ],
                 'total_records' => 'string',
                 'total_hours' => 'string',
-// no                'total_cost' => 'string'
+// no           'total_cost' => 'string'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -500,8 +499,7 @@ class ReportsCest
             'data' => ['reports' =>
                 [],
                 'total_records' => 'string',
-                'total_hours' => 'string',
-                'total_cost' => 'integer'
+                 'total_cost' => 'integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'

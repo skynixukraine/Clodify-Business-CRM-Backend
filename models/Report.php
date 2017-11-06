@@ -377,5 +377,5 @@ class Report extends \yii\db\ActiveRecord
             ->where([Report::tableName() . '.invoice_id' => $invoiceId])
             ->sum('cost');
     }
-    
+
 }

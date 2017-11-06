@@ -202,6 +202,7 @@ class ReportsFetch extends ViewModelAbstract
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
+
             $list[$key] = [
                 'report_id'     => $model->id,
                 'project'       => [
