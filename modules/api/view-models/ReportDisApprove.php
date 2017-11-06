@@ -72,7 +72,7 @@ class ReportDisApprove extends ViewModelAbstract
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to disapprove already disapproved report'));
                 }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to approve not existent report'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to disapprove not existent report'));
             }
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
