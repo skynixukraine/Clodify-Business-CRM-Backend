@@ -685,4 +685,175 @@ class ReportsCest
             "success" => false
         ]);
     }
+
+    /**
+     * ADMIN can disapprove any report
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testDisApproveReport(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'adminUsers',
+            'last_name' => 'adminUsersLast',
+            'email' => 'adminUser@email.com',
+            'role' => 'ADMIN',
+            'password' => md5('admin')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id' => $userId,   // 5
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("adminUser@email.com", "admin");
+
+        $I->wantTo('Test disapproving report');
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [],
+            "success" => true
+        ]);
+    }
+
+    /**
+     * SALES can disapprove only reports of participants of their projects and  CAN NOT DISapprove own reports
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testSalesCanDisApproveReport(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'saleUsers',
+            'last_name' => 'saleUsersLast',
+            'email' => 'saleUser@email.com',
+            'role' => 'SALES',
+            'password' => md5('sales')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id' => $userId,   // 5
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+        $I->haveInDatabase('project_developers', array(
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'is_sales'  => 1
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("saleUser@email.com", "sales");
+
+        $I->wantTo('Test approving report for client exept own');
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data"   => null,
+            "errors" => [
+                "param"   => "error",
+                "message" => "You (role sales) can not disapprove own report"
+            ],
+            "success" => false
+        ]);
+    }
+
+    /**
+     * FIN can disapprove any reports except of own
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFinCanDisApproveReportExeptOwn(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'finUsers',
+            'last_name' => 'finUserLast',
+            'email' => 'finUser@email.com',
+            'role' => 'FIN',
+            'password' => md5('fin')
+        ));
+
+        $projectId = $I->haveInDatabase('projects', array(
+            'name' => 'Hello World!'
+        ));
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id' => $userId,   // 5
+            'project_id' => $projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+        $I->haveInDatabase('project_developers', array(
+            'user_id' => $userId,
+            'project_id' => $projectId,
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("finUser@email.com", "fin");
+
+        $I->wantTo('Test disapproving report for fin exept own');
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data"   => null,
+            "errors" => [
+                "param"   => "error",
+                "message" => "You (role fin) can not disapprove own report"
+            ],
+            "success" => false
+        ]);
+    }
+
 }
