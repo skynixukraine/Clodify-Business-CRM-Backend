@@ -828,4 +828,5 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $user->role;
 
     }
+
 }

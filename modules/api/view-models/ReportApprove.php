@@ -42,19 +42,20 @@ class ReportApprove extends ViewModelAbstract
                     if (User::hasPermission([User::ROLE_SALES])) {
                         $salesId = Yii::$app->user->id;
 
-                        if($salesId && $salesId != null){
+                        if ($salesId && $salesId != null) {
 
-                            $projectsDeveloper = ProjectDeveloper::getReportsOfSales($salesId );
+                            $projectsDeveloper = ProjectDeveloper::getReportsOfSales($salesId);
                             $projectId = [];
-                            foreach($projectsDeveloper as $project){
+                            foreach ($projectsDeveloper as $project) {
                                 $projectId[] = $project->project_id;
                             }
-                            if(in_array($curReport->project_id, $projectId)){
-                                if($curReport->user_id != $salesId) {
+                            if (in_array($curReport->project_id, $projectId)) {
+                                if ($curReport->user_id != $salesId) {
                                     $this->noteToActionTable($curReport);
                                 } else {
                                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You (role sales) can not approve own report'));
                                 }
+
                             } else {
                                 return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for approving this report '));
                             }
@@ -63,7 +64,7 @@ class ReportApprove extends ViewModelAbstract
 
                     if (User::hasPermission([User::ROLE_FIN])) {
                         $finId = Yii::$app->user->id;
-                        if($curReport->user_id != $finId){
+                        if ($curReport->user_id != $finId) {
                             $this->noteToActionTable($curReport);
                         } else {
                             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You (role fin) can not approve own report'));
