@@ -22,6 +22,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
     const STATUS_ACTIVE     = "ACTIVE";
     const STATUS_INACTIVE   = "INACTIVE";
     const STATUS_HIDDEN     = "HIDDEN";
+    const IS_SUBSCRIBED     = "true";
     /**
      * @inheritdoc
      */
@@ -67,6 +68,21 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
 
     }
 
+    /**
+     * @param $salesId
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getProjectForEmployee($emplId)
+    {
+        return self::find()
+            ->where(ProjectDeveloper::tableName() . ".user_id=:sId AND status=:s" , [
+
+                ':sId' => $emplId,
+                ':s' => self::STATUS_ACTIVE
+            ])
+            ->all();
+
+    }
 
     /**
      * @inheritdoc
