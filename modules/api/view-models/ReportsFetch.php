@@ -202,24 +202,25 @@ class ReportsFetch extends ViewModelAbstract
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
-                $list[$key] = [
-                    'report_id'     => $model->id,
-                    'project'       => [
-                        'id'   => $model->getProject()->one()->id,
-                        'name' => $model->getProject()->one()->name
-                    ],
-                    'created_date'  => date("d/m/Y", strtotime($model->date_added)),
-                    'task'          => $model->task,
-                    'hour'          => $hours,
-                    'cost'          => $model->cost,
-                    'is_approved'   => $model->is_approved ? true : false,
-                    'reporter'      => [
-                        'id'   => $model->user_id,
-                        'name' => $user
-                    ],
-                    'reported_date' => $date_report,
-                    'is_invoiced'   => $model->invoice_id ? 1 : 0
-                ];
+
+            $list[$key] = [
+                'report_id'     => $model->id,
+                'project'       => [
+                    'id'   => $model->getProject()->one()->id,
+                    'name' => $model->getProject()->one()->name
+                ],
+                'created_date'  => date("d/m/Y", strtotime($model->date_added)),
+                'task'          => $model->task,
+                'hour'          => $hours,
+                'cost'          => $model->cost,
+                'is_approved'   => $model->is_approved ? true : false,
+                'reporter'      => [
+                    'id'   => $model->user_id,
+                    'name' => $user
+                ],
+                'reported_date' => $date_report,
+                'is_invoiced'   => $model->invoice_id ? 1 : 0
+            ];
 
             if(User::hasPermission([User::ROLE_CLIENT])) {
                 unset($list[$key]['cost']);

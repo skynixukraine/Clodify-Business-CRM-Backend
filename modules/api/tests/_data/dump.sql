@@ -514,6 +514,24 @@ VALUES (1,0,0,null);
 /*!40000 ALTER TABLE `reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `report_actions`
+--
+
+DROP TABLE IF EXISTS `report_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(250) DEFAULT NULL,
+  `datetime` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reports_users2_idx` (`user_id`),
+  CONSTRAINT `fk_reports_users2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `salary_history`

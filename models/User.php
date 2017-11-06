@@ -691,6 +691,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return $customersID;
     }
+
+    public static function getCustomersForSales()
+    {
+        $projectsID = [];
+        $customersID = [];
+        // getting Sale's projects
+        $projects = Project::find()
+            ->leftJoin(  ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id=" . Project::tableName() . ".id")
+            ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
+            ->where([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
+            ->andWhere([ProjectDeveloper::tableName() . '.is_sales' => 1])
+            ->andWhere([Project::tableName() . '.is_delete' => 0])
+            ->all();
+        // array of Sale's projects IDs
+        foreach ($projects as $project) {
+            $projectsID[] = $project->id;
+        }
+        // customers on these projects
+        $customers = ProjectCustomer::getProjectCustomer($projectsID, $withInvoice = false)->all();
+        foreach ($customers as $customer) {
+            $customersID[] = $customer->user;
+        }
+        return $customersID;
+    }
+
 	/**
 	 * 
 	 * @return array
@@ -782,5 +807,26 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
     }
-    
+
+    public static function getUserFirstName()
+    {
+        $user = self::findOne(Yii::$app->user->id);
+        return $user->first_name;
+
+    }
+
+    public static function getUserFirstNameById($id)
+    {
+        $user = self::findOne($id);
+        return $user->first_name;
+
+    }
+
+    public static function getUserRoleById($id)
+    {
+        $user = self::findOne($id);
+        return $user->role;
+
+    }
+
 }

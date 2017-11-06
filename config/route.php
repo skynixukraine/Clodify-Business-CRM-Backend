@@ -54,6 +54,7 @@ return [
     'PUT '      . $API . '/financial-reports/<id:\d+>/unlock'                 => $API . '/financial-reports/unlock',
     'PUT '      . $API . '/settings/<key:\w+>'                                => $API . '/settings/update',
     'GET '      . $API . '/settings'                                          => $API . '/settings/fetch',
+    'PUT '      . $API . '/reports/<id:\d+>/approve'                          => $API . '/reports/approve',
 
 
     // General rules
