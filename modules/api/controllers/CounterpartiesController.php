@@ -7,8 +7,6 @@
  */
 namespace app\modules\api\controllers;
 
-
-use app\models\FinancialReport;
 use app\modules\api\components\Api\Processor;
 
 class CounterpartiesController extends DefaultController
