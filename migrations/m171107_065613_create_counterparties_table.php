@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `counterparties`.
  */
-class m171106_153436_create_counterparties_table extends Migration
+class m171107_065613_create_counterparties_table extends Migration
 {
     /**
      * @inheritdoc
@@ -19,7 +19,7 @@ class m171106_153436_create_counterparties_table extends Migration
         }
         $this->createTable('counterparties', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(45)
+            'name' => $this->string(255)
         ],$tableOptions);
     }
 
