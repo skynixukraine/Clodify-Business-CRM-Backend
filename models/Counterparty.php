@@ -31,7 +31,7 @@ class Counterparty extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 45],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
