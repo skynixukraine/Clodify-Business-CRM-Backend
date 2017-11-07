@@ -49,4 +49,19 @@ class CounterpartiesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Counterparty')
+            ->set('viewModel\ViewModelInterface', 'viewModel\CounterpartyFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_GET],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+
 }

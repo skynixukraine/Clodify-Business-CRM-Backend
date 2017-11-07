@@ -187,5 +187,5 @@ class CounterpartiesCest
             'success' => 'boolean'
         ]);
     }
-
+    
 }

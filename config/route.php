@@ -59,6 +59,7 @@ return [
     'POST '     . $API . '/counterparties'                                    => $API . '/counterparties/create',
     'PUT '      . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/update',
     'DELETE '   . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/delete',
+    'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
 
 
     // General rules
