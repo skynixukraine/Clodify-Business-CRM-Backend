@@ -36,4 +36,17 @@ class CounterpartiesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Counterparty')
+            ->set('viewModel\ViewModelInterface', 'viewModel\CounterpartyDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
