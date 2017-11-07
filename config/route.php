@@ -56,6 +56,7 @@ return [
     'GET '      . $API . '/settings'                                          => $API . '/settings/fetch',
     'PUT '      . $API . '/reports/<id:\d+>/approve'                          => $API . '/reports/approve',
     'PUT '      . $API . '/reports/<id:\d+>/disapprove'                       => $API . '/reports/disapprove',
+    'POST '     . $API . '/counterparties'                                    => $API . '/counterparties/create',
 
 
     // General rules
