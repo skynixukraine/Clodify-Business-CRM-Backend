@@ -10,7 +10,7 @@ class m171107_152204_create_busineses_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $tableOptions = null;
 
@@ -21,13 +21,15 @@ class m171107_152204_create_busineses_table extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(255)
         ],$tableOptions);
+
+        $this->insert('busineses', [
+            'name' => 'TOV Skynix'
+        ]);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function down()
+    public function safeDown()
     {
+        $this->delete('busineses', ['id' => 1]);
         $this->dropTable('busineses');
     }
 }
