@@ -67,18 +67,8 @@ class CounterpartiesCest
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testCounterpartyCreateAndUpdateForbiddenForSaleDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testCounterpartyCreateAndUpdateForbiddenForDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-
-        $I->haveInDatabase('users', array(
-            'id' => 4,
-            'first_name' => 'saleUsers',
-            'last_name' => 'saleUsersLast',
-            'email' => 'saleUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
-
         $I->haveInDatabase('users', array(
             'id' => 5,
             'first_name' => 'devUsers',
@@ -106,7 +96,7 @@ class CounterpartiesCest
             'password' => md5('client')
         ));
 
-        for ($i = 4; $i < 8; $i++) {
+        for ($i = 5; $i < 8; $i++) {
             $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
             $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
 
@@ -115,7 +105,7 @@ class CounterpartiesCest
             $oAuth = new OAuthSteps($scenario);
             $oAuth->login($email, strtolower($pas));
 
-        $I->wantTo('Test that counterparty creation forbidden for  DEV, SALES, PM, CLIENT role');
+        $I->wantTo('Test that counterparty creation forbidden for  DEV, PM, CLIENT role');
         $I->sendPOST(ApiEndpoints::COUNTERPARTY );
 
         \Helper\OAuthToken::$key = null;
@@ -132,7 +122,7 @@ class CounterpartiesCest
         ]);
     }
 
-        for ($i = 4; $i < 8; $i++) {
+        for ($i = 5; $i < 8; $i++) {
             $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
             $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
 
@@ -141,7 +131,7 @@ class CounterpartiesCest
             $oAuth = new OAuthSteps($scenario);
             $oAuth->login($email, strtolower($pas));
 
-            $I->wantTo('Test that counterparty update forbidden for  DEV, SALES, PM, CLIENT role');
+            $I->wantTo('Test that counterparty update forbidden for  DEV, PM, CLIENT role');
             $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
                 "name" => "Projectxxx"
             ]));
