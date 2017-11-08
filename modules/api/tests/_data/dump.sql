@@ -547,6 +547,25 @@ CREATE TABLE `counterparties` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `busineses`
+--
+
+DROP TABLE IF EXISTS `busineses`;
+
+CREATE TABLE `busineses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `busineses` WRITE;
+/*!40000 ALTER TABLE `busineses` DISABLE KEYS */;
+INSERT INTO `busineses` (`id`, `name`)
+VALUES (1,'coolBusi');
+/*!40000 ALTER TABLE `busineses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `salary_history`
 --
 
