@@ -187,5 +187,37 @@ class CounterpartiesCest
             'success' => 'boolean'
         ]);
     }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1024
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchCounterpartiesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch counterparties data');
+        $I->sendGET(ApiEndpoints::COUNTERPARTY);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['counterparties' =>
+                [
+                    [
+                        'id'   => 'integer',
+                        'name' => 'string',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
     
 }

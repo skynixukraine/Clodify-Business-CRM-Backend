@@ -63,5 +63,4 @@ class CounterpartiesController extends DefaultController
             ->respond();
     }
 
-
 }
