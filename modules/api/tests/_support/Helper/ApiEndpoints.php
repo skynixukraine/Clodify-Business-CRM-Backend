@@ -28,5 +28,6 @@ class ApiEndpoints
     const SETTINGS          = '/api/settings';
     const COUNTERPARTY      = '/api/counterparties';
     const BUSINESS          = '/api/businesses';
+    const OPERATION_TYPES   = '/api/operation-types';
 
 }
