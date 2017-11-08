@@ -389,7 +389,7 @@ class UserController extends DefaultController {
 
         }
         
-        $user->setScenario('edit-user');
+        // $user->setScenario('edit-user');
 
         if ( Yii::$app->request->isPost &&
                 $user->load(Yii::$app->request->post()) &&
