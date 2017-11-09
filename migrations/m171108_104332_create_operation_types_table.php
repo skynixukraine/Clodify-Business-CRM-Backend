@@ -47,13 +47,13 @@ class m171108_104332_create_operation_types_table extends Migration
 
     public function safeDown()
     {
-        $this->delete('news', ['id' => 1]);
-        $this->delete('news', ['id' => 2]);
-        $this->delete('news', ['id' => 3]);
-        $this->delete('news', ['id' => 4]);
-        $this->delete('news', ['id' => 5]);
-        $this->delete('news', ['id' => 6]);
-        $this->delete('news', ['id' => 7]);
+        $this->delete('operation_types', ['name' => 'Банківські операції']);
+        $this->delete('operation_types', ['name' => 'Валютні операції']);
+        $this->delete('operation_types', ['name' => 'Податки']);
+        $this->delete('operation_types', ['name' => 'Податки на зарплату']);
+        $this->delete('operation_types', ['name' => 'Статутний фонд']);
+        $this->delete('operation_types', ['name' => 'Придбання ОЗ']);
+        $this->delete('operation_types', ['name' => 'Нарахування Зарплати']);
         $this->dropTable('operation_types');
     }
 }
