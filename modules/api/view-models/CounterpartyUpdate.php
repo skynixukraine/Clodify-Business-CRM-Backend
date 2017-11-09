@@ -20,7 +20,7 @@ class CounterpartyUpdate extends ViewModelAbstract
     {
         $id = Yii::$app->request->getQueryParam('id');
 
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
 
             $counterparty = Counterparty::findOne($id);
 

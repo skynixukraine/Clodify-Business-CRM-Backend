@@ -59,6 +59,8 @@ return [
     'POST '     . $API . '/counterparties'                                    => $API . '/counterparties/create',
     'GET '      . $API . '/reference-book-items'                              => $API . '/reference-book-items/fetch',
     'PUT '      . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/update',
+    'DELETE '   . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/delete',
+    'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
