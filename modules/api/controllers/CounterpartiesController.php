@@ -23,4 +23,17 @@ class CounterpartiesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Counterparty')
+            ->set('viewModel\ViewModelInterface', 'viewModel\CounterpartyUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
