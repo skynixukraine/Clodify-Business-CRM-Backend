@@ -582,6 +582,25 @@ LOCK TABLES `operation_types` WRITE;
 INSERT INTO `operation_types` (`id`, `name`)
 VALUES (1,'coolOperation');
 /*!40000 ALTER TABLE `operation_types` ENABLE KEYS */;
+
+-- Table structure for table `reference_book`
+--
+
+DROP TABLE IF EXISTS `reference_book`;
+
+CREATE TABLE `reference_book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `code` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `reference_book` WRITE;
+/*!40000 ALTER TABLE `reference_book` DISABLE KEYS */;
+INSERT INTO `reference_book` (`id`, `name`, `code`)
+VALUES (1,'myReference',555);
+/*!40000 ALTER TABLE `reference_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

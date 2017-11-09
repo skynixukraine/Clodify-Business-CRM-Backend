@@ -29,5 +29,6 @@ class ApiEndpoints
     const COUNTERPARTY      = '/api/counterparties';
     const BUSINESS          = '/api/businesses';
     const OPERATION_TYPES   = '/api/operation-types';
+    const REFERENCE_BOOK    = '/api/reference-book-items';
 
 }

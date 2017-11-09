@@ -57,12 +57,12 @@ return [
     'PUT '      . $API . '/reports/<id:\d+>/approve'                          => $API . '/reports/approve',
     'PUT '      . $API . '/reports/<id:\d+>/disapprove'                       => $API . '/reports/disapprove',
     'POST '     . $API . '/counterparties'                                    => $API . '/counterparties/create',
+    'GET '      . $API . '/reference-book-items'                              => $API . '/reference-book-items/fetch',
     'PUT '      . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/update',
     'DELETE '   . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/delete',
     'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
     'GET '      . $API . '/businesses'                                        => $API . '/businesses/fetch',
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
-
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
