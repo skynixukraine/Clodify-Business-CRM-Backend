@@ -61,6 +61,8 @@ return [
     'PUT '      . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/update',
     'DELETE '   . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/delete',
     'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
+    'GET '      . $API . '/businesses'                                        => $API . '/businesses/fetch',
+    'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
