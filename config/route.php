@@ -57,8 +57,8 @@ return [
     'PUT '      . $API . '/reports/<id:\d+>/approve'                          => $API . '/reports/approve',
     'PUT '      . $API . '/reports/<id:\d+>/disapprove'                       => $API . '/reports/disapprove',
     'POST '     . $API . '/counterparties'                                    => $API . '/counterparties/create',
+    'GET '      . $API . '/reference-book-items'                              => $API . '/reference-book-items/fetch',
     'PUT '      . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/update',
-
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
