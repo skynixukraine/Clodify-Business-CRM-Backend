@@ -56,5 +56,5 @@ class ReferenceBook extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Transaction::className(), ['reference_book_id' => 'id']);
     }
-    
+
 }
