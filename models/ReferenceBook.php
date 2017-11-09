@@ -10,8 +10,11 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property integer $code
+<<<<<<< HEAD
  *
  * @property Transaction[] $transactions
+=======
+>>>>>>> origin/develop
  */
 class ReferenceBook extends \yii\db\ActiveRecord
 {
@@ -53,4 +56,5 @@ class ReferenceBook extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Transaction::className(), ['reference_book_id' => 'id']);
     }
+    
 }

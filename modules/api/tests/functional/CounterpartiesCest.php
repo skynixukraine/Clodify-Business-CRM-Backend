@@ -62,22 +62,13 @@ class CounterpartiesCest
     }
 
     /**
-     * @see    https://jira.skynix.company/browse/SCA-43
+     * @see    https://jira.skynix.company/browse/SCA-43  &&
+     *         https://jira.skynix.company/browse/SCA-44
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testCounterpartyCreationForbiddenForSaleDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testCounterpartyCreateAndUpdateForbiddenForDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-
-        $I->haveInDatabase('users', array(
-            'id' => 4,
-            'first_name' => 'saleUsers',
-            'last_name' => 'saleUsersLast',
-            'email' => 'saleUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
-
         $I->haveInDatabase('users', array(
             'id' => 5,
             'first_name' => 'devUsers',
@@ -105,8 +96,7 @@ class CounterpartiesCest
             'password' => md5('client')
         ));
 
-
-        for ($i = 4; $i < 8; $i++) {
+        for ($i = 5; $i < 8; $i++) {
             $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
             $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
 
@@ -115,7 +105,7 @@ class CounterpartiesCest
             $oAuth = new OAuthSteps($scenario);
             $oAuth->login($email, strtolower($pas));
 
-        $I->wantTo('Test that counterparty creation forbidden for  DEV, SALES, PM, CLIENT role');
+        $I->wantTo('Test that counterparty creation forbidden for  DEV, PM, CLIENT role');
         $I->sendPOST(ApiEndpoints::COUNTERPARTY );
 
         \Helper\OAuthToken::$key = null;
@@ -132,5 +122,92 @@ class CounterpartiesCest
         ]);
     }
 
+        for ($i = 5; $i < 8; $i++) {
+            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
+            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, strtolower($pas));
+
+            $I->wantTo('Test that counterparty update forbidden for  DEV, PM, CLIENT role');
+            $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
+                "name" => "Projectxxx"
+            ]));
+
+            \Helper\OAuthToken::$key = null;
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+        }
     }
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-44
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testUpdateCounterpartyCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing update financial report data');
+        $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
+            "name" => "Projectzzz"
+        ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SI-1024
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchCounterpartiesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch counterparties data');
+        $I->sendGET(ApiEndpoints::COUNTERPARTY);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['counterparties' =>
+                [
+                    [
+                        'id'   => 'integer',
+                        'name' => 'string',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+    
 }

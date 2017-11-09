@@ -28,5 +28,6 @@ class ApiEndpoints
     const SETTINGS          = '/api/settings';
     const COUNTERPARTY      = '/api/counterparties';
     const OPERATION         = '/api/operations';
+    const REFERENCE_BOOK    = '/api/reference-book-items';
 
 }
