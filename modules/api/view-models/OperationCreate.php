@@ -28,19 +28,8 @@ class OperationCreate extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-            
-//bussiness_id                       `id` INT NOT NULL AUTO_INCREMENT,            `id` INT NOT NULL,
-//name                               `business_id` INT NOT NULL,                  `type` ENUM('DEBIT', 'CREDIT') NULL,
-//operation_type_id                  `name` VARCHAR(255) NULL,                    `name` VARCHAR(255) NULL,
-//transaction_name                   `status` ENUM('DONE', 'CANCELED') NULL,      `date` INT NULL,
-//amount                             `date_created` INT NULL,                     `amount` DECIMAL(15,2) NULL,
-//currency                           `date_updated` INT NULL,                     `currency` ENUM('USD', 'UAH') NULL,
-//debit_reference_id                 `operation_type_id` INT NOT NULL,            `reference_book_id` INT NOT NULL,
-//credit_reference_id                                                             `counterparty_id` INT NOT NULL,
-//debit_counterparty_id                                                           `operation_id` INT NOT NULL,
-//credit_counterparty_id                                                          `operation_business_id` INT NOT NULL,
 
-
+            // get POST data
             $bussiness_id = $this->postData['bussiness_id'];
             $name = $this->postData['name'];
             $operation_type_id = $this->postData['operation_type_id'];
@@ -52,10 +41,7 @@ class OperationCreate extends ViewModelAbstract
             $debit_counterparty_id  = $this->postData['debit_counterparty_id'];
             $credit_counterparty_id = $this->postData['credit_counterparty_id'];
 
-//            var_dump($amount);
-//            var_dump($bussiness_id);
-//            exit();
-
+           // create operation
             $operation = new Operation();
             $operation->business_id = $bussiness_id;
             $operation->name = $name;
@@ -64,6 +50,7 @@ class OperationCreate extends ViewModelAbstract
             $operation->save(false);
             $this->operationId = $operation->id;
 
+            // create two transaction for DEBIT and CREDIT
             $transaction1 = new Transaction();
             $transaction1->type = Transaction::DEBIT;
             $transaction1->name =  $transaction_name;
