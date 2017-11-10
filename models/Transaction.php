@@ -41,7 +41,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'required'],
+            [['reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'required'],
             [['id', 'date', 'reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'integer'],
             [['type', 'currency'], 'string'],
             [['amount'], 'number'],

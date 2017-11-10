@@ -20,6 +20,7 @@ use Yii;
  */
 class Operation extends \yii\db\ActiveRecord
 {
+    const DONE = "DONE";
     /**
      * @inheritdoc
      */
@@ -34,7 +35,7 @@ class Operation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'business_id', 'operation_type_id'], 'required'],
+            [['business_id', 'operation_type_id'], 'required'],
             [['id', 'business_id', 'date_created', 'date_updated', 'operation_type_id'], 'integer'],
             [['status'], 'string'],
             [['name'], 'string', 'max' => 255],
