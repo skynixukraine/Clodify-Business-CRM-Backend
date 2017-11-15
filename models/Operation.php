@@ -21,6 +21,8 @@ use Yii;
 class Operation extends \yii\db\ActiveRecord
 {
     const DONE = "DONE";
+    const SCENARIO_OPERATION_CREATE = 'api-operation-create';
+    const SCENARIO_OPERATION_UPDATE = 'api-operation-update';
     /**
      * @inheritdoc
      */
@@ -35,10 +37,10 @@ class Operation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['business_id', 'operation_type_id'], 'required'],
-            [['id', 'business_id', 'date_created', 'date_updated', 'operation_type_id'], 'integer'],
-            [['status'], 'string'],
-            [['name'], 'string', 'max' => 255],
+            [['business_id', 'operation_type_id'], 'required', 'on' => [self::SCENARIO_OPERATION_CREATE]],
+            [['id', 'business_id', 'date_created', 'date_updated', 'operation_type_id'], 'integer', 'on' => [self::SCENARIO_OPERATION_CREATE, self::SCENARIO_OPERATION_UPDATE]],
+            [['status'], 'string' , 'on' => [self::SCENARIO_OPERATION_CREATE, self::SCENARIO_OPERATION_UPDATE]],
+            [['name'], 'string', 'max' => 255, 'on' => [self::SCENARIO_OPERATION_CREATE, self::SCENARIO_OPERATION_UPDATE]],
             [['business_id'], 'exist', 'skipOnError' => true, 'targetClass' => Business::className(), 'targetAttribute' => ['business_id' => 'id']],
             [['operation_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OperationType::className(), 'targetAttribute' => ['operation_type_id' => 'id']],
         ];
