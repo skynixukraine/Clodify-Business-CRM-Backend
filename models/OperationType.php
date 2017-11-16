@@ -9,6 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ *
+ * @property Operation[] $operations
  */
 class OperationType extends \yii\db\ActiveRecord
 {
@@ -41,4 +43,13 @@ class OperationType extends \yii\db\ActiveRecord
             'name' => 'Name',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOperations()
+    {
+        return $this->hasMany(Operation::className(), ['operation_type_id' => 'id']);
+    }
+
 }

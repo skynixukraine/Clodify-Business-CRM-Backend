@@ -2,23 +2,21 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `operations`.
- */
-class m171108_151109_create_operations_table extends Migration
+class m171109_093535_alter_column_id_in_operations extends Migration
 {
-    /**
-     * @inheritdoc
-     */
     public function safeUp()
     {
+        $tableSchema = Yii::$app->db->schema->getTableSchema('operations');
         $tableOptions = null;
 
+        if ($tableSchema != null) {
+            $this->dropTable('operations');
+        }
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
         $this->createTable('operations', [
-            'id' =>  $this->integer(),
+            'id' => $this->integer(11) . ' NOT NULL AUTO_INCREMENT',
             'business_id' => $this->integer(),
             'name' => $this->string(255),
             'status' => "enum('DONE', 'CANCELED')",
@@ -26,7 +24,7 @@ class m171108_151109_create_operations_table extends Migration
             'date_updated' => $this->integer(),
             'operation_type_id' => $this->integer()->notNull(),
             'PRIMARY KEY(id, business_id)',
-        ],$tableOptions);
+        ], $tableOptions);
 
         // creates index for column `business_id`
         $this->createIndex(
@@ -63,6 +61,7 @@ class m171108_151109_create_operations_table extends Migration
             'NO ACTION',
             'NO ACTION'
         );
+
     }
 
     public function safeDown()
