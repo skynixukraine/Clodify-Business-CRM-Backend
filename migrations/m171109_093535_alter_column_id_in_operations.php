@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171109_125436_alter_column_id_in_operations extends Migration
+class m171109_093535_alter_column_id_in_operations extends Migration
 {
     public function safeUp()
     {
