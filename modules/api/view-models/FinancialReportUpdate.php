@@ -110,17 +110,11 @@ class FinancialReportUpdate extends ViewModelAbstract
      */
     private function getElement($attributName, FinancialReport $financialReport)
     {
-        if (isset($this->postData['report_date'])) {
-            return $this->convertDateForElement(
-                $this->postData[$attributName],
-                $this->postData['report_date'],
-                $financialReport);
-        } else {
-            return $this->convertDateForElement(
-                $this->postData[$attributName],
-                $financialReport->report_date,
-                $financialReport);
-        }
+        return $this->convertDateForElement(
+            $this->postData[$attributName],
+            $this->postData['report_date'] ?: $financialReport->report_date,
+            $financialReport);
+
     }
 
     /**
