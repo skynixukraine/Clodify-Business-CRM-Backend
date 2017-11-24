@@ -75,7 +75,7 @@ class FinancialReportView extends ViewModelAbstract
         if ($string) {
             $array = json_decode($string);
             foreach ($array as $arr) {
-                if (!empty ($arr)) {
+                if (!empty ($arr->date)) {
                     $arr->date = date('F j', $arr->date);
                 }
             }
