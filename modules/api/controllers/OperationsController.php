@@ -24,4 +24,17 @@ class OperationsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Transaction')
+            ->set('viewModel\ViewModelInterface', 'viewModel\OperationUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }

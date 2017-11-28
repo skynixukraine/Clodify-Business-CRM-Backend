@@ -96,4 +96,22 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ReferenceBook::className(), ['id' => 'reference_book_id']);
     }
+
+    public static function getDebitTransactionById($id)
+    {
+        $transaction = self::find()
+            ->andWhere(['type' => self::DEBIT])
+            ->andWhere(['operation_id' => $id])
+            ->one();
+        return $transaction;
+    }
+
+    public static function getCreditTransactionById($id)
+    {
+        $transaction = self::find()
+            ->andWhere(['type' => self::CREDIT])
+            ->andWhere(['operation_id' => $id])
+            ->one();
+        return $transaction;
+    }
 }

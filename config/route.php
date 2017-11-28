@@ -64,6 +64,7 @@ return [
     'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
     'GET '      . $API . '/businesses'                                        => $API . '/businesses/fetch',
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
+    'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
 
 
     // General rules

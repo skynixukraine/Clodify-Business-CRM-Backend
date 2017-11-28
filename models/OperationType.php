@@ -52,4 +52,13 @@ class OperationType extends \yii\db\ActiveRecord
         return $this->hasMany(Operation::className(), ['operation_type_id' => 'id']);
     }
 
+    public static function validCount($int)
+    {
+        if ($int <= self::find()->count()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
