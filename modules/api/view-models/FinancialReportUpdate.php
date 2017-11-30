@@ -112,8 +112,9 @@ class FinancialReportUpdate extends ViewModelAbstract
     {
         return $this->convertDateForElement(
             $this->postData[$attributName],
-            $this->postData['report_date'],
+            $this->postData['report_date'] ?: $financialReport->report_date,
             $financialReport);
+
     }
 
     /**

@@ -23,6 +23,8 @@ use yii\db\ActiveQuery;
  * @property integer $is_working_day
  * @property string $status
  * @property integer $is_delete
+ * @property integer $is_approved
+ *
  *
  * @property Invoices $invoice
  * @property Projects $project
@@ -375,5 +377,5 @@ class Report extends \yii\db\ActiveRecord
             ->where([Report::tableName() . '.invoice_id' => $invoiceId])
             ->sum('cost');
     }
-    
+
 }

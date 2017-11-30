@@ -94,13 +94,17 @@ class ProjectCustomer extends \yii\db\ActiveRecord
             ->all();
     }
 
-    public static function getProjectCustomer($projectId)
+    public static function getProjectCustomer($projectId, $withInvoice = true)
     {
-        return self::find()
+        $query = self::find()
             ->leftJoin(User::tableName(), User::tableName() . '.id=' . ProjectCustomer::tableName() . '.user_id')
             ->where([ProjectCustomer::tableName() . '.project_id' => $projectId])
-            ->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1')
             ->andWhere(User::tableName() . '.is_delete=0')
             ->andWhere(User::tableName() . '.is_active=1');
+        if ($withInvoice) {
+            $query = $query->andWhere(ProjectCustomer::tableName() . '.receive_invoices=1');
+        }
+        return $query;
     }
+
 }

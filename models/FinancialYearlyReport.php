@@ -79,7 +79,7 @@ class FinancialYearlyReport extends \yii\db\ActiveRecord
      */
     public static function getBonuses($id)
     {
-        return self::getDifference($id) * 0.1;
+        return self::getDifference($id) * Setting::getBonusesFactor();
     }
 
     /**
@@ -89,7 +89,7 @@ class FinancialYearlyReport extends \yii\db\ActiveRecord
      */
     public static function getCorpEvents($id)
     {
-        return self::getDifference($id) * 0.1;
+        return self::getDifference($id) * Setting::getCorpEventsFactor();
     }
 
     /**

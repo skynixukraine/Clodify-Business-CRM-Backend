@@ -290,6 +290,21 @@ CREATE TABLE `salary_report_lists` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `settings`
+--
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` text null,
+  `value` int null,
+  `type` enum('INT','STRING') DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `invoices`
 --
 
@@ -481,6 +496,7 @@ CREATE TABLE `reports` (
   `is_working_day` tinyint(1) DEFAULT NULL,
   `is_delete` tinyint(1) DEFAULT '0',
   `cost` decimal(10,2) DEFAULT '0.00',
+  `is_approved` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_reports_projects1_idx` (`project_id`),
   KEY `fk_reports_users1_idx` (`user_id`),
@@ -498,6 +514,171 @@ VALUES (1,0,0,null);
 /*!40000 ALTER TABLE `reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `report_actions`
+--
+
+DROP TABLE IF EXISTS `report_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(250) DEFAULT NULL,
+  `datetime` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reports_users2_idx` (`user_id`),
+  CONSTRAINT `fk_reports_users2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `counterparties`
+--
+
+DROP TABLE IF EXISTS `counterparties`;
+
+CREATE TABLE `counterparties` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `counterparties` WRITE;
+/*!40000 ALTER TABLE `counterparties` DISABLE KEYS */;
+INSERT INTO `counterparties` (`id`, `name`)
+VALUES (1,'goodCounterparty');
+/*!40000 ALTER TABLE `counterparties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `busineses`
+--
+
+DROP TABLE IF EXISTS `busineses`;
+
+CREATE TABLE `busineses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `busineses` WRITE;
+/*!40000 ALTER TABLE `busineses` DISABLE KEYS */;
+INSERT INTO `busineses` (`id`, `name`)
+VALUES (1,'coolBusi');
+/*!40000 ALTER TABLE `busineses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `operation_types`
+--
+
+DROP TABLE IF EXISTS `operation_types`;
+
+CREATE TABLE `operation_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `operation_types` WRITE;
+/*!40000 ALTER TABLE `operation_types` DISABLE KEYS */;
+INSERT INTO `operation_types` (`id`, `name`)
+VALUES (1,'coolOperation');
+/*!40000 ALTER TABLE `operation_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reference_book`
+--
+
+DROP TABLE IF EXISTS `reference_book`;
+
+CREATE TABLE `reference_book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `code` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `reference_book` WRITE;
+/*!40000 ALTER TABLE `reference_book` DISABLE KEYS */;
+INSERT INTO `reference_book` (`id`, `name`, `code`)
+VALUES (1,'myReference',555);
+/*!40000 ALTER TABLE `reference_book` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `operations`
+--
+
+DROP TABLE IF EXISTS `operations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operations` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`business_id` INT NOT NULL,
+`name` VARCHAR(255) NULL,
+`status` ENUM('DONE', 'CANCELED') NULL,
+`date_created` INT NULL,
+`date_updated` INT NULL,
+`operation_type_id` INT NOT NULL,
+INDEX `fk_operations_busineses1_idx` (`business_id` ASC),
+INDEX `fk_operations_operation_types1_idx` (`operation_type_id` ASC),
+PRIMARY KEY (`id`, `business_id`),
+CONSTRAINT `fk_operations_busineses1`
+FOREIGN KEY (`business_id`)
+REFERENCES `busineses` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_operations_operation_types1`
+FOREIGN KEY (`operation_type_id`)
+REFERENCES `operation_types` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transactions` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`type` ENUM('DEBIT', 'CREDIT') NULL,
+`name` VARCHAR(255) NULL,
+`date` INT NULL,
+`amount` DECIMAL(15,2) NULL,
+`currency` ENUM('USD', 'UAH') NULL,
+`reference_book_id` INT NOT NULL,
+`counterparty_id` INT NOT NULL,
+`operation_id` INT NOT NULL,
+`operation_business_id` INT NOT NULL,
+PRIMARY KEY (`id`, `operation_id`, `operation_business_id`),
+INDEX `fk_transactions_reference_book_idx` (`reference_book_id` ASC),
+INDEX `fk_transactions_counterparties1_idx` (`counterparty_id` ASC),
+INDEX `fk_transactions_operations1_idx` (`operation_id` ASC, `operation_business_id` ASC),
+CONSTRAINT `fk_transactions_reference_book`
+FOREIGN KEY (`reference_book_id`)
+REFERENCES `reference_book` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_transactions_counterparties1`
+FOREIGN KEY (`counterparty_id`)
+REFERENCES `counterparties` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_transactions_operations1`
+FOREIGN KEY (`operation_id` , `operation_business_id`)
+REFERENCES `operations` (`id` , `business_id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 --
 -- Table structure for table `salary_history`
