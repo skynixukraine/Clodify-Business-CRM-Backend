@@ -54,24 +54,24 @@ class SalaryReportFetchList extends ViewModelAbstract
 
                 foreach ($salaryReportList as $key => $salRepList) {
                     $salaryReportList[$key] = [
-                        "id" => $salRepList->id,
-                        "salary_report_id" => $salRepList->salary_report_id,
-                        "user" => $salRepList->user->getPublicInfo(),
-                        "salary" => $salRepList->salary,
-                        "worked_days" => $salRepList->worked_days,
+                        "id"                         => $salRepList->id,
+                        "salary_report_id"           => $salRepList->salary_report_id,
+                        "user"                       => $salRepList->user->getPublicInfo(),
+                        "salary"                     => $salRepList->salary,
+                        "worked_days"                => $salRepList->worked_days,
                         "actually_worked_out_salary" => $salRepList->actually_worked_out_salary,
-                        "official_salary" => $salRepList->official_salary,
-                        "hospital_days" => $salRepList->hospital_days,
-                        "hospital_value" => $salRepList->hospital_value,
-                        "bonuses" => $salRepList->bonuses,
-                        "day_off" => $salRepList->day_off,
-                        "overtime_days" => $salRepList->overtime_days,
-                        "overtime_value" => $salRepList->overtime_value,
-                        "other_surcharges" => $salRepList->other_surcharges,
-                        "subtotal" => $salRepList->subtotal,
-                        "currency_rate" => $salRepList->currency_rate,
-                        "subtotal_uah" => $salRepList->subtotal_uah,
-                        "total_to_pay" => $salRepList->total_to_pay
+                        "official_salary"            => $salRepList->official_salary,
+                        "hospital_days"              => $salRepList->hospital_days,
+                        "hospital_value"             => $salRepList->hospital_value,
+                        "bonuses"                    => $salRepList->bonuses,
+                        "day_off"                    => $salRepList->day_off,
+                        "overtime_days"              => $salRepList->overtime_days,
+                        "overtime_value"             => $salRepList->overtime_value,
+                        "other_surcharges"           => $salRepList->other_surcharges,
+                        "subtotal"                   => $salRepList->subtotal,
+                        "currency_rate"              => $salRepList->currency_rate,
+                        "subtotal_uah"               => $salRepList->subtotal_uah,
+                        "total_to_pay"               => $salRepList->total_to_pay
                     ];
                 }
 
