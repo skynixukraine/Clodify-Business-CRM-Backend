@@ -70,30 +70,30 @@ class CounterpartiesCest
     public function testCounterpartyCreateAndUpdateForbiddenForDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $I->haveInDatabase('users', array(
-            'id' => 5,
+            'id'         => 5,
             'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
+            'last_name'  => 'devUsersLast',
+            'email'      => 'devUser@email.com',
+            'role'       => 'DEV',
+            'password'   => md5('dev')
         ));
 
         $I->haveInDatabase('users', array(
-            'id' => 6,
+            'id'         => 6,
             'first_name' => 'pmUsers',
-            'last_name' => 'pmUsersLast',
-            'email' => 'pmUser@email.com',
-            'role' => 'PM',
-            'password' => md5('pm')
+            'last_name'  => 'pmUsersLast',
+            'email'      => 'pmUser@email.com',
+            'role'       => 'PM',
+            'password'   => md5('pm')
         ));
 
         $I->haveInDatabase('users', array(
-            'id' => 7,
+            'id'         => 7,
             'first_name' => 'clientUsers',
-            'last_name' => 'clientUsersLast',
-            'email' => 'clientUser@email.com',
-            'role' => 'CLIENT',
-            'password' => md5('client')
+            'last_name'  => 'clientUsersLast',
+            'email'      => 'clientUser@email.com',
+            'role'       => 'CLIENT',
+            'password'   => md5('client')
         ));
 
         for ($i = 5; $i < 8; $i++) {
@@ -210,6 +210,11 @@ class CounterpartiesCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SCA-59
+     * @param  FunctionalTester $I
+     * @return void
+     */
     public function testDeleteCounterpartyUsedInTransaction(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
@@ -237,10 +242,10 @@ class CounterpartiesCest
         ));
 
         $I->haveInDatabase('transactions', array(
-            'id' => 13,
-            'counterparty_id' => $id,
-            'reference_book_id' => 3,
-            'operation_id' => 2,
+            'id'                    => 13,
+            'counterparty_id'       => $id,
+            'reference_book_id'     => 3,
+            'operation_id'          => 2,
             'operation_business_id' => 4
         ));
 
@@ -258,6 +263,11 @@ class CounterpartiesCest
         ]);
     }
 
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SCA-59
+     * @param  FunctionalTester $I
+     * @return void
+     */
     public function testDeleteCounterparty(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
@@ -287,16 +297,16 @@ class CounterpartiesCest
         ));
 
         $I->haveInDatabase('operations', array(
-            'id' => 2,
-            'business_id' => 4,
+            'id'                => 2,
+            'business_id'       => 4,
             'operation_type_id' => 3
         ));
 
         $I->haveInDatabase('transactions', array(
-            'id' => 13,
-            'counterparty_id' => 3,
-            'reference_book_id' => 3,
-            'operation_id' => 2,
+            'id'                    => 13,
+            'counterparty_id'       => 3,
+            'reference_book_id'     => 3,
+            'operation_id'          => 2,
             'operation_business_id' => 4
         ));
 
