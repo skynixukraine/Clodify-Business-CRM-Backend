@@ -222,7 +222,7 @@ class SalaryReportsCest
                     [
                         'id' => 'integer',
                         'salary_report_id' => 'integer',
-                        'user_id' => 'integer',
+                        'user' => 'array',
                         'salary' => 'integer',
                         'worked_days' => 'integer',
                         'actually_worked_out_salary' => 'integer',

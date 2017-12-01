@@ -829,4 +829,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    public static function getUserObjectById($id)
+    {
+        $arr = [];
+        $user= User::findOne($id);
+        $arr['id'] = $id;
+        $arr['first_name'] = $user->first_name;
+        $arr['last_name'] = $user->last_name;
+        return $arr;
+    }
+
 }
