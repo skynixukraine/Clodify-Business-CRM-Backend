@@ -65,18 +65,18 @@ class SalaryReportsCest
     public function testFetchSalaryReportCest(FunctionalTester $I)
     {
         $I->haveInDatabase('salary_reports', array(
-            'id' => $this->salaryReportId + 1,
-            'report_date' => 1437609600,
-            'total_salary' => 9000,
-            'official_salary' => 1500,
-            'bonuses' => 600,
-            'hospital' => 400,
-            'day_off' => 0,
-            'overtime' => 0,
-            'other_surcharges' => 0,
-            'subtotal' => 3232,
-            'currency_rate' => 26.5,
-            'total_to_pay' => 3200,
+            'id'                     => $this->salaryReportId + 1,
+            'report_date'            => 1437609600,
+            'total_salary'           => 9000,
+            'official_salary'        => 1500,
+            'bonuses'                => 600,
+            'hospital'               => 400,
+            'day_off'                => 0,
+            'overtime'               => 0,
+            'other_surcharges'       => 0,
+            'subtotal'               => 3232,
+            'currency_rate'          => 26.5,
+            'total_to_pay'           => 3200,
             'number_of_working_days' => 20
         ));
 
@@ -91,18 +91,18 @@ class SalaryReportsCest
             'data' => ['reports' =>
                 [
                     [
-                        'id' => 'integer',
-                        'report_date' => 'string',
-                        'total_salary' => 'float | integer',
-                        'official_salary' => 'float | integer',
-                        'bonuses' => 'float | integer',
-                        'hospital' => 'float | integer',
-                        'day_off' => 'float | integer',
-                        'overtime' => 'float | integer',
-                        'other_surcharges' => 'float | integer',
-                        'subtotal' => 'float | integer',
-                        'currency_rate' => 'float | integer',
-                        'total_to_pay' => 'float | integer',
+                        'id'                     => 'integer',
+                        'report_date'            => 'string',
+                        'total_salary'           => 'float | integer',
+                        'official_salary'        => 'float | integer',
+                        'bonuses'                => 'float | integer',
+                        'hospital'               => 'float | integer',
+                        'day_off'                => 'float | integer',
+                        'overtime'               => 'float | integer',
+                        'other_surcharges'       => 'float | integer',
+                        'subtotal'               => 'float | integer',
+                        'currency_rate'          => 'float | integer',
+                        'total_to_pay'           => 'float | integer',
                         'number_of_working_days' => 'integer',
 
                     ]
@@ -131,12 +131,12 @@ class SalaryReportsCest
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
             [
                 'salary_report_id' => $this->salaryReportId,
-                'user_id' => ValuesContainer::$userSalesId,
-                'worked_days' => '21',
-                'hospital_days' => '1',
-                'bonuses' => '40',
-                'day_off' => '0',
-                'overtime_days' => '0',
+                'user_id'          => ValuesContainer::$userSalesId,
+                'worked_days'      => '21',
+                'hospital_days'    => '1',
+                'bonuses'          => '40',
+                'day_off'          => '0',
+                'overtime_days'    => '0',
                 'other_surcharges' => '0',
                 'finacialReportId' => '2',
             ]
@@ -168,9 +168,9 @@ class SalaryReportsCest
     {
 
         $I->haveInDatabase('financial_reports', array(
-            'report_date' => '1500681600',
-            'currency' => 26.6,
-            'expense_salary' => 3000,
+            'report_date'         => '1500681600',
+            'currency'            => 26.6,
+            'expense_salary'      => 3000,
             'num_of_working_days' => 30,
         ));
 
@@ -178,11 +178,11 @@ class SalaryReportsCest
         $I->wantTo('Testing update salary report lists');
         $I->sendPUT(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists/' . $this->salaryReportListId , json_encode(
             [
-                'worked_days' => '21',
-                'hospital_days' => '1',
-                'bonuses' => '40',
-                'day_off' => '0',
-                'overtime_days' => '0',
+                'worked_days'      => '21',
+                'hospital_days'    => '1',
+                'bonuses'          => '40',
+                'day_off'          => '0',
+                'overtime_days'    => '0',
                 'other_surcharges' => '0',
                 'finacialReportId' => '2'
             ]
@@ -220,24 +220,24 @@ class SalaryReportsCest
             'data' => ['lists' =>
                 [
                     [
-                        'id' => 'integer',
-                        'salary_report_id' => 'integer',
-                        'user_id' => 'integer',
-                        'salary' => 'integer',
-                        'worked_days' => 'integer',
+                        'id'                         => 'integer',
+                        'salary_report_id'           => 'integer',
+                        'user'                       => 'array',
+                        'salary'                     => 'integer',
+                        'worked_days'                => 'integer',
                         'actually_worked_out_salary' => 'integer',
-                        'official_salary' => 'integer | float',
-                        'hospital_days' => 'integer',
-                        'hospital_value' => 'integer | float',
-                        'bonuses' => 'integer | float',
-                        'day_off' => 'integer',
-                        'overtime_days' => 'integer',
-                        'overtime_value' => 'integer | float',
-                        'other_surcharges' => 'integer | float',
-                        'subtotal' => 'integer | float',
-                        'currency_rate' => 'integer | float',
-                        'subtotal_uah' => 'integer | float',
-                        'total_to_pay' => 'integer | float',
+                        'official_salary'            => 'integer | float',
+                        'hospital_days'              => 'integer',
+                        'hospital_value'             => 'integer | float',
+                        'bonuses'                    => 'integer | float',
+                        'day_off'                    => 'integer',
+                        'overtime_days'              => 'integer',
+                        'overtime_value'             => 'integer | float',
+                        'other_surcharges'           => 'integer | float',
+                        'subtotal'                   => 'integer | float',
+                        'currency_rate'              => 'integer | float',
+                        'subtotal_uah'               => 'integer | float',
+                        'total_to_pay'               => 'integer | float',
                     ]
                 ],
                 'total_records' => 'string'
