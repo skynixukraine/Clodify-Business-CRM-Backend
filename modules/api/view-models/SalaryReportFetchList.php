@@ -56,7 +56,7 @@ class SalaryReportFetchList extends ViewModelAbstract
                     $salaryReportList[$key] = [
                         "id" => $salRepList->id,
                         "salary_report_id" => $salRepList->salary_report_id,
-                        "user" => User::getUserObjectById($salRepList->user_id),
+                        "user" => $salRepList->user->getPublicInfo(),
                         "salary" => $salRepList->salary,
                         "worked_days" => $salRepList->worked_days,
                         "actually_worked_out_salary" => $salRepList->actually_worked_out_salary,
