@@ -40,7 +40,6 @@ class CounterpartyDelete extends ViewModelAbstract
             } else {
                 return $this->addError(Processor::ERROR_PARAM, 'You are trying to delete non existent counterparty');
             }
-
         } else {
             return $this->addError(Processor::ERROR_PARAM, 'You have no access for this action');
         }
