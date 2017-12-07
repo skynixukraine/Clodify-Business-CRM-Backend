@@ -829,4 +829,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    public function getPublicInfo()
+    {
+        $arr = [];
+        $arr['id']         = $this->id;
+        $arr['first_name'] = $this->first_name;
+        $arr['last_name']  = $this->last_name;
+        return $arr;
+    }
+
 }

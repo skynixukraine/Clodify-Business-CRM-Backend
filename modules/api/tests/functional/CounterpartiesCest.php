@@ -70,30 +70,30 @@ class CounterpartiesCest
     public function testCounterpartyCreateAndUpdateForbiddenForDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $I->haveInDatabase('users', array(
-            'id' => 5,
+            'id'         => 5,
             'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
+            'last_name'  => 'devUsersLast',
+            'email'      => 'devUser@email.com',
+            'role'       => 'DEV',
+            'password'   => md5('dev')
         ));
 
         $I->haveInDatabase('users', array(
-            'id' => 6,
+            'id'         => 6,
             'first_name' => 'pmUsers',
-            'last_name' => 'pmUsersLast',
-            'email' => 'pmUser@email.com',
-            'role' => 'PM',
-            'password' => md5('pm')
+            'last_name'  => 'pmUsersLast',
+            'email'      => 'pmUser@email.com',
+            'role'       => 'PM',
+            'password'   => md5('pm')
         ));
 
         $I->haveInDatabase('users', array(
-            'id' => 7,
+            'id'         => 7,
             'first_name' => 'clientUsers',
-            'last_name' => 'clientUsersLast',
-            'email' => 'clientUser@email.com',
-            'role' => 'CLIENT',
-            'password' => md5('client')
+            'last_name'  => 'clientUsersLast',
+            'email'      => 'clientUser@email.com',
+            'role'       => 'CLIENT',
+            'password'   => md5('client')
         ));
 
         for ($i = 5; $i < 8; $i++) {
@@ -209,5 +209,116 @@ class CounterpartiesCest
             'success' => 'boolean'
         ]);
     }
-    
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SCA-59
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteCounterpartyUsedInTransaction(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $id = 1;
+
+        $I->haveInDatabase('reference_book', array(
+            'id' => 3,
+            'code' => 454
+        ));
+
+        $I->haveInDatabase('busineses', array(
+            'id' => 4
+        ));
+
+        $I->haveInDatabase('operation_types', array(
+            'id' => 3
+        ));
+
+        $I->haveInDatabase('operations', array(
+            'id' => 2,
+            'business_id' => 4,
+            'operation_type_id' => 3
+        ));
+
+        $I->haveInDatabase('transactions', array(
+            'id'                    => 13,
+            'counterparty_id'       => $id,
+            'reference_book_id'     => 3,
+            'operation_id'          => 2,
+            'operation_business_id' => 4
+        ));
+
+        $I->wantTo('Counterparty can`t be deleted if it used in transactions');
+        $I->sendDELETE(ApiEndpoints::COUNTERPARTY. '/' .$id );
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "Sorry, this counteragent can not be deleted"
+            ],
+            "success" => false
+        ]);
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SCA-59
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testDeleteCounterparty(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $id = 2;
+
+        $I->haveInDatabase('counterparties', array(
+            'id' => $id
+        ));
+
+        $I->haveInDatabase('counterparties', array(
+            'id' => 3
+        ));
+
+        $I->haveInDatabase('reference_book', array(
+            'id' => 3,
+            'code' => 454
+        ));
+
+        $I->haveInDatabase('busineses', array(
+            'id' => 4
+        ));
+
+        $I->haveInDatabase('operation_types', array(
+            'id' => 3
+        ));
+
+        $I->haveInDatabase('operations', array(
+            'id'                => 2,
+            'business_id'       => 4,
+            'operation_type_id' => 3
+        ));
+
+        $I->haveInDatabase('transactions', array(
+            'id'                    => 13,
+            'counterparty_id'       => 3,
+            'reference_book_id'     => 3,
+            'operation_id'          => 2,
+            'operation_business_id' => 4
+        ));
+
+        $I->wantTo('Delete counterparty if not used in transactions');
+        $I->sendDELETE(ApiEndpoints::COUNTERPARTY. '/' .$id );
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
 }
