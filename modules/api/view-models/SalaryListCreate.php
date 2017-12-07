@@ -32,6 +32,7 @@ class SalaryListCreate extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
             $salaryReportId = Yii::$app->request->getQueryParam('id');
+
             $salaryReport = SalaryReport::findOne($salaryReportId);
             if (User::isActiveUser($user->id)) {
                 if (FinancialReport::validateReportForSalaryList($salaryReport->report_date)) {
@@ -43,6 +44,7 @@ class SalaryListCreate extends ViewModelAbstract
                                     $this->working_days = FinancialReport::getNumOfWorkingDays($salaryReport->report_date);
 
                                     $this->model->salary = $user->salary;
+                                    $this->model->salary_report_id = $salaryReportId;
                                     $this->model->worked_days = SalaryReportList::getNumOfWorkedDays($salaryReport->report_date, $this->working_days);
                                     $this->model->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
                                     $this->model->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($this->model, $this->working_days);
