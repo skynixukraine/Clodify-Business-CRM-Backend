@@ -130,7 +130,6 @@ class SalaryReportsCest
         $I->wantTo('Testing create salary report lists');
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
             [
-                'salary_report_id' => $this->salaryReportId,
                 'user_id'          => ValuesContainer::$userSalesId,
                 'worked_days'      => '21',
                 'hospital_days'    => '1',
