@@ -137,7 +137,6 @@ class SalaryReportsCest
              //   'day_off'          => '0',
                 'overtime_days'    => '0',
                 'other_surcharges' => '0',
-                'finacialReportId' => '2',
             ]
         ));
         $response = json_decode($I->grabResponse());
