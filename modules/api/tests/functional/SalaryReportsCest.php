@@ -131,10 +131,8 @@ class SalaryReportsCest
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
             [
                 'user_id'          => ValuesContainer::$userSalesId,
-              //  'worked_days'      => '21',
                 'hospital_days'    => '1',
                 'bonuses'          => '40',
-             //   'day_off'          => '0',
                 'overtime_days'    => '0',
                 'other_surcharges' => '0',
             ]
@@ -182,7 +180,6 @@ class SalaryReportsCest
                 'day_off'          => '0',
                 'overtime_days'    => '0',
                 'other_surcharges' => '0',
-                'finacialReportId' => '2'
             ]
         ));
         $response = json_decode($I->grabResponse());
