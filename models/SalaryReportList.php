@@ -271,9 +271,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function getNumOfWorkedDays($date, $numWorkDays)
     {
         $workDays = self::numWorkedDaysInMonth($date);
-        if ($workDays <= $numWorkDays){
-            return $workDays;
-        }
+       return $workDays <= $numWorkDays ? $workDays : $numWorkDays;
     }
 
 }
