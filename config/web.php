@@ -103,6 +103,9 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'crowd_component' => [
+            'class' => 'app\components\CrowdComponent',
+        ],
     ],
     'params' => $params,
 ];
