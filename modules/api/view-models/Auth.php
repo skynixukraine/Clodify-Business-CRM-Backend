@@ -30,7 +30,7 @@ class Auth extends ViewModelAbstract
             $this->model            = $loginForm;
 
             // crowd session code go here
-            $var = Yii::$app->crowd_component->checkByEmailPassword($loginForm->email, $loginForm->password);
+            $var = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
             if(isset($var['error'])){
                 $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
             }

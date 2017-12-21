@@ -19,7 +19,7 @@ use app\models\User;
 class CrowdComponent extends Component
 {
 
-    public function checkByAccessToken($accessToken, $checkAccess = true)
+    public function checkByAccessToken($accessToken, $checkAccess)
     {
         $errorArr = [];
         $accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] );
@@ -48,7 +48,7 @@ class CrowdComponent extends Component
 
         if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
-            $objToArray = json_decode(json_encode($obj), true);
+            $objToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
 
             if ($obj->active) {
                 $user = User::findOne(['email' => $email]);

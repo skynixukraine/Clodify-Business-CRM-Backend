@@ -142,7 +142,7 @@ class Processor
             }
 
             // crowd session code go here
-            $var = Yii::$app->crowd_component->checkByAccessToken($accessToken, $checkAccess = true);
+            $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken, $checkAccess);
             if(isset($var['error'])){
                 $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
             }

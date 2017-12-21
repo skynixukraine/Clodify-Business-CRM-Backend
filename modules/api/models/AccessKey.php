@@ -20,7 +20,6 @@ use yii\helpers\Json;
  */
 class AccessKey extends \yii\db\ActiveRecord
 {
-    const CROWD_CODE  =  "Basic c2t5bml4Y3JtOml5Yk05UXFuVUNoNlpfNWE4UEpOQkF2NGt1Y0tYZA==";  //base64_encode('skynixcrm:iybM9QqnUCh6Z_5a8PJNBAv4kucKXd');
     const CREATE_CROWD_SESSION_URL = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/session";
     const CHECK_CROWD_SESSION_URL = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/session/";
     const CROWD_REQUEST = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/authentication?username=";
@@ -81,7 +80,7 @@ class AccessKey extends \yii\db\ActiveRecord
             CURLOPT_CUSTOMREQUEST  => "GET",
             CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
-                "authorization:" . AccessKey::CROWD_CODE,
+                "authorization:" . Yii::$app->params['crowd_code'],
                 "content-type: application/json",
             ),
         ));
@@ -116,7 +115,7 @@ class AccessKey extends \yii\db\ActiveRecord
             CURLOPT_POSTFIELDS     => Json::encode($params),
             CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
-                "authorization:" . AccessKey::CROWD_CODE,
+                "authorization:" . Yii::$app->params['crowd_code'],
                 "content-type: application/json",
             ),
         ));
@@ -138,7 +137,7 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function getExpireForSession($obj)
     {
-        $sessionObjToArray = json_decode(json_encode($obj), true);
+        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
         return substr($sessionObjToArray['expiry-date'], 0, 10);
     }
 
@@ -148,8 +147,8 @@ class AccessKey extends \yii\db\ActiveRecord
     public static function createAccessKey($email, $password, $userId, $obj)
     {
         $sessionObj = self::createCrowdSession($email, $password);
+        $objToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
 
-        $objToArray = json_decode(json_encode($obj), true);
         $exp = self::getExpireForSession($sessionObj);
 
         $accessKey = new AccessKey();
@@ -182,7 +181,7 @@ class AccessKey extends \yii\db\ActiveRecord
             CURLOPT_POSTFIELDS     => Json::encode($params),
             CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
-                "authorization:" . self::CROWD_CODE,
+                "authorization:" . Yii::$app->params['crowd_code'],
                 "content-type: application/json",
             ),
         ));

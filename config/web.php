@@ -103,7 +103,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        'crowd_component' => [
+        'crowdComponent' => [
             'class' => 'app\components\CrowdComponent',
         ],
     ],
