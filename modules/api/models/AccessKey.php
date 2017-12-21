@@ -52,13 +52,14 @@ class AccessKey extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'expand' => 'Expand',
-            'token' => 'Token',
+            'id'          => 'ID',
+            'expand'      => 'Expand',
+            'token'       => 'Token',
             'expiry_date' => 'Expiry Date',
-            'email' => 'Email',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
+            'email'       => 'Email',
+            'first_name'  => 'First Name',
+            'last_name'   => 'Last Name',
+            'user_id'     => 'User Id',
         ];
     }
 
@@ -75,10 +76,10 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => self::CHECK_CROWD_SESSION_URL . $token,
+            CURLOPT_URL            => self::CHECK_CROWD_SESSION_URL . $token,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_CUSTOMREQUEST  => "GET",
+            CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
                 "authorization:" . AccessKey::CROWD_CODE,
                 "content-type: application/json",
@@ -109,11 +110,11 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => self::CREATE_CROWD_SESSION_URL,
+            CURLOPT_URL            => self::CREATE_CROWD_SESSION_URL,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => Json::encode($params),
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => Json::encode($params),
+            CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
                 "authorization:" . AccessKey::CROWD_CODE,
                 "content-type: application/json",
@@ -152,13 +153,13 @@ class AccessKey extends \yii\db\ActiveRecord
         $exp = self::getExpireForSession($sessionObj);
 
         $accessKey = new AccessKey();
-        $accessKey->expand     = $sessionObj->expand;
-        $accessKey->token      = $sessionObj->token;
+        $accessKey->expand      = $sessionObj->expand;
+        $accessKey->token       = $sessionObj->token;
         $accessKey->expiry_date = $exp;
-        $accessKey->email      = $obj->email;
-        $accessKey->first_name = $objToArray['first-name'];
-        $accessKey->last_name  = $objToArray['last-name'];
-        $accessKey->user_id = $userId;
+        $accessKey->email       = $obj->email;
+        $accessKey->first_name  = $objToArray['first-name'];
+        $accessKey->last_name   = $objToArray['last-name'];
+        $accessKey->user_id     = $userId;
         $accessKey->save();
     }
 
@@ -175,11 +176,11 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => self::CROWD_REQUEST . $email,
+            CURLOPT_URL            => self::CROWD_REQUEST . $email,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => Json::encode($params),
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => Json::encode($params),
+            CURLOPT_HTTPHEADER     => array(
                 "accept: application/json",
                 "authorization:" . self::CROWD_CODE,
                 "content-type: application/json",

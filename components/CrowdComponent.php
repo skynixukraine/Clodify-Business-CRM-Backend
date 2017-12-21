@@ -57,11 +57,11 @@ class CrowdComponent extends Component
                 if (!$user) {
                     //create user and write to access_keys with new user
                     $newUser = new User();
-                    $newUser->role = User::ROLE_DEV;
+                    $newUser->role       = User::ROLE_DEV;
                     $newUser->first_name = $objToArray['first-name'];
-                    $newUser->last_name = $objToArray['last-name'];
-                    $newUser->email = $obj->email;
-                    $newUser->password = $password;
+                    $newUser->last_name  = $objToArray['last-name'];
+                    $newUser->email      = $obj->email;
+                    $newUser->password   = $password;
                     $newUser->save();
                     AccessKey::createAccessKey($email, $password, $newUser->id, $obj);
                 } elseif(!$accesKey && $user) {
