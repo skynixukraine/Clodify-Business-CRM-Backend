@@ -175,7 +175,15 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-                                return $this->redirect(['cp/index/index']);
+
+                                // check for crowd session before access
+                                $var = Yii::$app->crowd_component->checkByEmailPasswordCRM($model->email, $model->password);
+                                if(isset($var['error'])){
+                                    Yii::$app->getSession()->setFlash('error', Yii::t("app", $var['error']));
+                                    return $this->refresh();
+                                } else {
+                                    return $this->redirect(['cp/index/index']);
+                                }
                             }
                         }
 

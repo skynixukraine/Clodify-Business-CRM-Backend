@@ -29,7 +29,7 @@ class CrowdComponent extends Component
         if($crowdInfo){
             $crowdSession = AccessKey::checkCrowdSession($crowdInfo->token);
             if(isset($crowdSession->reason)){
-                $errorArr['error'] = $crowdSession->reason;
+                $errorArr['error'] = $crowdSession->reason . ' You have to authenticate with email and password!';
             }
             if(isset($crowdSession->active) && !$crowdSession->active){
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
@@ -82,6 +82,41 @@ class CrowdComponent extends Component
             $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
+    }
+
+    public function checkByEmailPasswordCRM($email, $password)
+    {
+        $errorArr = [];
+        $obj = AccessKey::toCrowd($email, $password);
+        if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
+
+            if ($obj->active) {
+
+                if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
+
+                    $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
+                    if(isset($session->reason)){
+                        $this->createCrowdSessionAndCookie($email, $password);
+                    }
+                } else {
+                    $this->createCrowdSessionAndCookie($email, $password);
+                }
+
+            } else {
+                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+            }
+        } else {
+            $errorArr['error'] = $obj->reason;
+        }
+        return $errorArr;
+    }
+
+    private function createCrowdSessionAndCookie($email, $password)
+    {
+        $path = "/";
+        $domain = ".skynix.co";
+        $newSession = AccessKey::createCrowdSession($email, $password);
+        setcookie(User::CREATE_COOKIE_NAME, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
     }
 
 }
