@@ -72,7 +72,8 @@ class CrowdComponent extends Component
                     $session = AccessKey::checkCrowdSession($accesKey->token);
                     if(isset($session->reason)){
                         $newSession = AccessKey::createCrowdSession($email, $password);
-                        AccessKey::updateAll(['token' => $newSession->token], ['user_id' => $accesKey->user_id, 'email' => $email]);
+                        AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
+                            ['user_id' => $accesKey->user_id, 'email' => $email]);
                     }
                 }
             } else {
