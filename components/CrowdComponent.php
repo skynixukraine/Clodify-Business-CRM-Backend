@@ -19,7 +19,7 @@ use app\models\User;
 class CrowdComponent extends Component
 {
 
-    public function checkByAccessToken($accessToken, $checkAccess)
+    public function checkByAccessToken($accessToken)
     {
         $errorArr = [];
         $accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] );
@@ -34,7 +34,7 @@ class CrowdComponent extends Component
             if(isset($crowdSession->active) && !$crowdSession->active){
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
-        } elseif ($checkAccess == true ) {
+        } else {
             $errorArr['error'] = 'You have to authenticate with email and password';
         }
 

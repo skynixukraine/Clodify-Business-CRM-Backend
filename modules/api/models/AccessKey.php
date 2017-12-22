@@ -20,9 +20,9 @@ use yii\helpers\Json;
  */
 class AccessKey extends \yii\db\ActiveRecord
 {
-    const CREATE_CROWD_SESSION_URL = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/session";
-    const CHECK_CROWD_SESSION_URL = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/session/";
-    const CROWD_REQUEST = "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/authentication?username=";
+    const CREATE_CROWD_SESSION_URL = "/rest/usermanagement/1/session";
+    const CHECK_CROWD_SESSION_URL = "/rest/usermanagement/1/session/";
+    const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
 
     /**
      * @inheritdoc
@@ -75,7 +75,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => self::CHECK_CROWD_SESSION_URL . $token,
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CHECK_CROWD_SESSION_URL . $token,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => "GET",
             CURLOPT_HTTPHEADER     => array(
@@ -109,7 +109,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => self::CREATE_CROWD_SESSION_URL,
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CREATE_CROWD_SESSION_URL,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => "POST",
             CURLOPT_POSTFIELDS     => Json::encode($params),
@@ -175,7 +175,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => self::CROWD_REQUEST . $email,
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => "POST",
             CURLOPT_POSTFIELDS     => Json::encode($params),

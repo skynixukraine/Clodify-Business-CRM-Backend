@@ -1,7 +1,5 @@
 <?php
 
-$string = 'Basic ' . base64_encode('skynixcrm:iybM9QqnUCh6Z_5a8PJNBAv4kucKXd');
-
 return [
     'adminEmail'        => 'admin@skynix.co',
     'applicationName'   => 'Skynix Ukraine',
@@ -14,6 +12,5 @@ return [
     'contractorId'      => 1,
     'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
     //Temporary Synpass API
-    'synpassAdminEmail' => 'admin@synpass.pro',
-    'crowd_code' => $string
+    'synpassAdminEmail' => 'admin@synpass.pro'
 ];

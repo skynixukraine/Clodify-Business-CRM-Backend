@@ -109,7 +109,6 @@ class Processor
         $methods = [ self::METHOD_GET, self::METHOD_POST , self::METHOD_PUT , self::METHOD_DELETE ],
         $checkAccess = true )
     {
-
         if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
 
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
@@ -142,7 +141,7 @@ class Processor
             }
 
             // crowd session code go here
-            $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken, $checkAccess);
+            $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);
             if(isset($var['error'])){
                 $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
             }
