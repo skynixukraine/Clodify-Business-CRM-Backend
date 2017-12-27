@@ -681,6 +681,25 @@ ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 --
+-- Table structure for table `access_keys`
+--
+
+DROP TABLE IF EXISTS `access_keys`;
+
+CREATE TABLE `access_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `expand` varchar(100) ,
+  `token` varchar(255),
+  `expiry_date` int(11),
+  `email` varchar(100),
+  `first_name` varchar(255),
+  `last_name` varchar(255),
+  `user_id` int(11),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=695 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `salary_history`
 --
 

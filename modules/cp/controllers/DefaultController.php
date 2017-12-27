@@ -8,17 +8,34 @@ use yii\filters\AccessControl;
 use app\models\User;
 use app\components\AccessRule;
 use app\components\Language;
+use app\modules\api\models\AccessKey;
+
 
 class DefaultController extends Controller
 {
 
     public function beforeAction( $action )
     {
+        if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
 
-        Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
-        Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
-        Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
-        return parent::beforeAction( $action );
+            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
+
+            if(isset($session->reason)){
+                Yii::$app->getSession()->setFlash('success',
+                    Yii::t("app", $session->reason . " You have to authenticate with email and password"));
+                return $this->redirect(["/site/login"]);
+            } else {
+                Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
+                Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
+                Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
+                return parent::beforeAction( $action );
+            }
+        } else {
+            Yii::$app->getSession()->setFlash('error',
+                Yii::t("app",  "You have to authenticate with email and password"));
+            return $this->redirect(["/site/login"]);
+        }
+
     }
 
     public function behaviors()

@@ -13,6 +13,7 @@ use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
 use app\modules\api\models\ApiAccessToken;
+use app\modules\api\models\AccessKey;
 
 class Processor
 {
@@ -27,8 +28,9 @@ class Processor
     const CODE_DELETE_ERROR       = 'S208';
     const CODE_UPDATE_ERROR       = 'S209';
     const CODE_ACTION_RESTRICTED  = 'S210';
-    const ERROR_PARAM = 'error';
-    const ID_PARAM = 'id';
+    const ERROR_PARAM             = 'error';
+    const CROWD_ERROR_PARAM       = 'crowd_error';
+    const ID_PARAM                = 'id';
 
     const STATUS_CODE_SUCCESS       = 200;
     const STATUS_CODE_UNAUTHORIZED  = 401;
@@ -136,6 +138,12 @@ class Processor
 
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
 
+            }
+
+            // crowd session code go here
+            $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);
+            if(isset($var['error'])){
+                $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
             }
 
         } elseif ( $checkAccess == true ) {

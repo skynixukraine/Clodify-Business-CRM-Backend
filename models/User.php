@@ -73,6 +73,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ATTACH_USERS_SIGN = 'api-attach-sign';
     const ATTACH_PHOTO_USERS = 'api-attach-photo';
 
+    const CREATE_COOKIE_NAME = "crowd.token_key";
+    const READ_COOKIE_NAME = "crowd_token_key";
+
     public $rawPassword;
 
     /**

@@ -62,6 +62,9 @@ return [
         'url_site'          => 'https://skynix.company',
         'port'		        => '',
         'adminEmail'        => 'admin@skynix.co',
-        'basketAwssdk'      => '<aws_basket>'
+        'basketAwssdk'      => '<aws_basket>',
+        'crowd_code'        => 'Basic <encoded_crowd_auth>',
+        'crowd_domain'      => 'https://crowd-01.skynix.co/crowd'
+
     )
 ];
