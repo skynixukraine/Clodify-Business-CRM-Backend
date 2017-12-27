@@ -259,8 +259,10 @@ class SiteController extends Controller
     /** Log out user*/
     public function actionLogout()
     {
+        $path = "/";
+        $domain = ".skynix.co";
         Yii::$app->user->logout();
-
+        setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
         return $this->redirect( "/" );
     }
 
