@@ -212,5 +212,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $newUser->password = $password;
         $newUser->is_active = User::ACTIVE_USERS;
         $newUser->save();
+
+        return $newUser;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 use yii\db\Migration;
 
 class m171109_093535_alter_column_id_in_operations extends Migration

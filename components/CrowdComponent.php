@@ -48,22 +48,14 @@ class CrowdComponent extends Component
 
         if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
-            $objToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
-
             if ($obj->active) {
                 $user = User::findOne(['email' => $email]);
                 $accesKey = AccessKey::findOne(['email' => $obj->email]);
 
                 if (!$user) {
                     //create user and write to access_keys with new user
-                    $newUser = new User();
-                    $newUser->role       = User::ROLE_DEV;
-                    $newUser->first_name = $objToArray['first-name'];
-                    $newUser->last_name  = $objToArray['last-name'];
-                    $newUser->email      = $obj->email;
-                    $newUser->password   = $password;
-                    $newUser->is_active = User::ACTIVE_USERS;
-                    $newUser->save();
+                    $newUser = AccessKey::createUser($obj, $password);
+
                     AccessKey::createAccessKey($email, $password, $newUser->id, $obj);
                 } elseif(!$accesKey && $user) {
                     // write to access_keys with existed user
@@ -73,7 +65,7 @@ class CrowdComponent extends Component
                     $session = AccessKey::checkCrowdSession($accesKey->token);
                     if(isset($session->reason)){
                         $newSession = AccessKey::createCrowdSession($email, $password);
-                        AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession), 'user_id' => $user->id],
+                        AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
                             ['email' => $email]);
                     }
                 }

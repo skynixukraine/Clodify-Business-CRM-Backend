@@ -23,6 +23,17 @@ class m171219_141221_create_access_keys_table extends Migration
             'user_id' => $this->integer(),
 
         ]);
+
+        // add foreign key for table `access_keys`
+        $this->addForeignKey(
+            'fk_access_keys_users',
+            'access_keys',
+            'user_id',
+            'users',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**
