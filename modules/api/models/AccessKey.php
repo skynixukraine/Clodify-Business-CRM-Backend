@@ -197,4 +197,20 @@ class AccessKey extends \yii\db\ActiveRecord
             return json_decode($response);
         }
     }
+
+    /*
+     *
+     */
+    public static function createUser($obj, $password)
+    {
+        $objToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
+        $newUser = new User();
+        $newUser->role = User::ROLE_DEV;
+        $newUser->first_name = $objToArray['first-name'];
+        $newUser->last_name = $objToArray['last-name'];
+        $newUser->email = $obj->email;
+        $newUser->password = $password;
+        $newUser->is_active = User::ACTIVE_USERS;
+        $newUser->save();
+    }
 }

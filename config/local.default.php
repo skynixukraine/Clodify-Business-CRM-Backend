@@ -63,7 +63,7 @@ return [
         'port'		        => '',
         'adminEmail'        => 'admin@skynix.co',
         'basketAwssdk'      => '<aws_basket>',
-        'crowd_code'        => 'Basic <encoded_crowd_auth>',     //. base64_encode('skynixcrm:iybM9QqnUCh6Z_5a8PJNBAv4kucKXd'),
+        'crowd_code'        => 'Basic <encoded_crowd_auth>',
         'crowd_domain'      => 'https://crowd-01.skynix.co/crowd'
 
     )

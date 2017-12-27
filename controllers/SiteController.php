@@ -102,6 +102,13 @@ class SiteController extends Controller
         }
         if ( $model->load(Yii::$app->request->post()) ) {
 
+            // check for crowd session before access
+            $var = Yii::$app->crowdComponent->checkByEmailPasswordCRM($model->email, $model->password);
+            if(isset($var['error'])){
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", $var['error']));
+
+            }
+
             /** @var $user User */
             if( ($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password ) {
                 $modelUserLogins = User::find()
@@ -172,15 +179,7 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-
-                                // check for crowd session before access
-                                $var = Yii::$app->crowdComponent->checkByEmailPasswordCRM($model->email, $model->password);
-                                if(isset($var['error'])){
-                                    Yii::$app->getSession()->setFlash('error', Yii::t("app", $var['error']));
-                                    return $this->refresh();
-                                } else {
                                     return $this->redirect(['cp/index/index']);
-                                }
                             }
                         }
 

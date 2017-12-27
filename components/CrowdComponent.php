@@ -62,6 +62,7 @@ class CrowdComponent extends Component
                     $newUser->last_name  = $objToArray['last-name'];
                     $newUser->email      = $obj->email;
                     $newUser->password   = $password;
+                    $newUser->is_active = User::ACTIVE_USERS;
                     $newUser->save();
                     AccessKey::createAccessKey($email, $password, $newUser->id, $obj);
                 } elseif(!$accesKey && $user) {
@@ -72,8 +73,8 @@ class CrowdComponent extends Component
                     $session = AccessKey::checkCrowdSession($accesKey->token);
                     if(isset($session->reason)){
                         $newSession = AccessKey::createCrowdSession($email, $password);
-                        AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
-                            ['user_id' => $accesKey->user_id, 'email' => $email]);
+                        AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession), 'user_id' => $user->id],
+                            ['email' => $email]);
                     }
                 }
             } else {
@@ -88,10 +89,17 @@ class CrowdComponent extends Component
     public function checkByEmailPasswordCRM($email, $password)
     {
         $errorArr = [];
+
+        $user = User::findOne(['email' => $email]);
         $obj = AccessKey::toCrowd($email, $password);
+
         if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
             if ($obj->active) {
+
+                if (!$user) {
+                    AccessKey::createUser($obj, $password);
+                }
 
                 if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
 
