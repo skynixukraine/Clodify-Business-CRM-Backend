@@ -219,7 +219,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
     public static function refToGroupInCrowd($email)
     {
-        $roleArr = ['DEV', 'CLIENT', 'PM', 'FIN', 'ADMIN'];
+        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN];
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
