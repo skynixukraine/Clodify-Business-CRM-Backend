@@ -219,6 +219,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
     public static function refToGroupInCrowd($email)
     {
+        $roleArr = ['DEV', 'CLIENT', 'PM', 'FIN', 'ADMIN'];
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -242,13 +243,15 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
             $array = json_decode($response,TRUE);
             $elem = array_shift($array['groups']);
-            return $elem['name'];
+            if(in_array($elem['name'], $roleArr)) {
+                return $elem['name'];
+            }
         }
     }
 
     public static function changeUserRole($user, $roleInCrowd)
     {
         $user->role = $roleInCrowd;
-        $user->save;
+        $user->save();
     }
 }
