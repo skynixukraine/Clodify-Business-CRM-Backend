@@ -57,13 +57,23 @@ class CrowdComponent extends Component
                     $newUser = AccessKey::createUser($obj, $password);
 
                     AccessKey::createAccessKey($email, $password, $newUser->id, $obj);
-                } elseif(!$accesKey && $user) {
+                } else {     // if user exist pickup role from crowd and synchronize
+                    $roleInCrowd = AccessKey::refToGroupInCrowd($email);
+                    if ($user->role !== $roleInCrowd)
+                    {
+                        AccessKey::changeUserRole($user, $roleInCrowd);
+                    }
+                }
+
+                if (!$accesKey && $user) {
                     // write to access_keys with existed user
                     AccessKey::createAccessKey($email, $password, $user->id, $obj);
-                } elseif($accesKey) {
+                }
+
+                if ($accesKey) {
                     // create crowd session
                     $session = AccessKey::checkCrowdSession($accesKey->token);
-                    if(isset($session->reason)){
+                    if (isset($session->reason)) {
                         $newSession = AccessKey::createCrowdSession($email, $password);
                         AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
                             ['email' => $email]);
@@ -91,6 +101,12 @@ class CrowdComponent extends Component
 
                 if (!$user) {
                     AccessKey::createUser($obj, $password);
+                } else {  // if user exist pickup role from crowd and synchronize
+                    $roleInCrowd = AccessKey::refToGroupInCrowd($email);
+                     if ($user->role !== $roleInCrowd)
+                     {
+                         AccessKey::changeUserRole($user, $roleInCrowd);
+                     }
                 }
 
                 if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
