@@ -234,19 +234,17 @@ class AccessKey extends \yii\db\ActiveRecord
         ));
 
         $response = curl_exec($curl);
-        $err = curl_error($curl);
 
         curl_close($curl);
 
-        if ($err) {
-            return "cURL Error #:" . $err;
-        } else {
             $array = json_decode($response,TRUE);
             $elem = array_shift($array['groups']);
             if(in_array($elem['name'], $roleArr)) {
                 return $elem['name'];
+            } else {
+                return false;
             }
-        }
+
     }
 
     public static function changeUserRole($user, $roleInCrowd)
