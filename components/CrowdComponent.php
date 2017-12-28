@@ -103,8 +103,7 @@ class CrowdComponent extends Component
                     AccessKey::createUser($obj, $password);
                 } else {  // if user exist pickup role from crowd and synchronize
                     $roleInCrowd = AccessKey::refToGroupInCrowd($email);
-                     if ($user->role !== $roleInCrowd)
-                     {
+                    if ($roleInCrowd && $user->role !== $roleInCrowd)                     {
                          AccessKey::changeUserRole($user, $roleInCrowd);
                      }
                 }
