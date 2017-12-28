@@ -61,6 +61,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_SALES    = "SALES";
     
     const ACTIVE_USERS  = 1;
+    const DEACTIVATED   = 0;
     const DELETED_USERS = 1;
     const PUBLISHED_USERS = 1;
 
@@ -839,6 +840,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $arr['first_name'] = $this->first_name;
         $arr['last_name']  = $this->last_name;
         return $arr;
+    }
+
+    public static function deactivateUser($user)
+    {
+        if($user->is_active == self::ACTIVE_USERS){
+            $user->is_active = self::DEACTIVATED;
+            $user->save();
+        }
     }
 
 }
