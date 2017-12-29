@@ -215,4 +215,46 @@ class AccessKey extends \yii\db\ActiveRecord
 
         return $newUser;
     }
+
+    public static function findAddress($string, $substring) {
+        $pos = strpos($string, $substring);
+        if ($pos === false)
+            return $string;
+        else
+            return strval(substr($string, $pos+strlen($substring)));
+    }
+
+    public static function getAvatarFromCrowd($email)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://crowd-01.skynix.co/crowd/rest/usermanagement/1/user/avatar?username=" . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization: Basic c2t5bml4Y3JtOml5Yk05UXFuVUNoNlpfNWE4UEpOQkF2NGt1Y0tYZA==",
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            $j = json_decode($response);
+            if(isset($j->reason)){
+                return "/img/avatar.png";
+            } else {
+                return self::findAddress($response,'found at ');
+            }
+        }
+    }
+
+
 }
