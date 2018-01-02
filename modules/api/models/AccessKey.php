@@ -23,6 +23,7 @@ class AccessKey extends \yii\db\ActiveRecord
     const CREATE_CROWD_SESSION_URL = "/rest/usermanagement/1/session";
     const CHECK_CROWD_SESSION_URL = "/rest/usermanagement/1/session/";
     const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
+    const GROUP_FROM_CROWD = "/rest/usermanagement/1/user/group/direct?username=";
 
     /**
      * @inheritdoc
@@ -214,5 +215,41 @@ class AccessKey extends \yii\db\ActiveRecord
         $newUser->save();
 
         return $newUser;
+    }
+
+    public static function refToGroupInCrowd($email)
+    {
+        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN];
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::GROUP_FROM_CROWD . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+            $array = json_decode($response,TRUE);
+            $elem = array_shift($array['groups']);
+            if(in_array($elem['name'], $roleArr)) {
+                return $elem['name'];
+            } else {
+                return false;
+            }
+
+    }
+
+    public static function changeUserRole($user, $roleInCrowd)
+    {
+        $user->role = $roleInCrowd;
+        $user->save();
     }
 }
