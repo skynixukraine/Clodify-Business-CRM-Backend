@@ -25,6 +25,7 @@ class CrowdComponent extends Component
         $accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] );
 
         $crowdInfo = AccessKey::findOne(['user_id' => $accessTokenModel->user_id]);
+        $user= User::findOne($accessTokenModel->user_id);
 
         if($crowdInfo){
             $crowdSession = AccessKey::checkCrowdSession($crowdInfo->token);
@@ -32,6 +33,9 @@ class CrowdComponent extends Component
                 $errorArr['error'] = $crowdSession->reason . ' You have to authenticate with email and password!';
             }
             if(isset($crowdSession->active) && !$crowdSession->active){
+                if ($user){
+                    User::deactivateUser($user);
+                }
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
@@ -45,11 +49,11 @@ class CrowdComponent extends Component
     {
         $errorArr = [];
         $obj = AccessKey::toCrowd($email, $password);
+        $user = User::findOne(['email' => $email]);
 
         if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
             if ($obj->active) {
-                $user = User::findOne(['email' => $email]);
                 $accesKey = AccessKey::findOne(['email' => $obj->email]);
 
                 if (!$user) {
@@ -70,9 +74,15 @@ class CrowdComponent extends Component
                     }
                 }
             } else {
+                if ($user){
+                    User::deactivateUser($user);
+                }
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
+            if ($user){
+                User::deactivateUser($user);
+            }
             $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
@@ -104,9 +114,15 @@ class CrowdComponent extends Component
                 }
 
             } else {
+                if ($user){
+                 User::deactivateUser($user);
+                }
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
+            if ($user){
+                User::deactivateUser($user);
+            }
             $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
