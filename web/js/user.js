@@ -76,41 +76,41 @@ var userModule = (function() {
 
     }
 
-    function actionSuspend(id, action, dataTable) {
-        function suspendRequest() {
-            var params = {
-                url: cfg.activateUrl,
-                data: {id: id, action: action},
-                dataType: 'json',
-                type: 'POST',
-                success: function (response) {
-                    dataTable.api().ajax.reload();
-                }
-            };
-            $.ajax(params);
-        }
-
-        if (action == 'active') {
-            var title = 'Account Suspending.',
-                body = 'Are you sure you wish suspend the account?';
-        } else {
-            var title = 'Account activation.',
-                body = 'Are you sure you wish activate an account?';
-        }
-
-        suspendModal = new ModalBootstrap({
-            title: title,
-            body: body,
-            winAttrs: {class: 'modal delete'}
-        });
-
-        suspendModal.show();
-        suspendModal.getWin().find("button[class*=confirm]").click(function (e) {
-            e.preventDefault();
-            suspendRequest();
-        });
-
-    }
+    // function actionSuspend(id, action, dataTable) {
+    //     function suspendRequest() {
+    //         var params = {
+    //             url: cfg.activateUrl,
+    //             data: {id: id, action: action},
+    //             dataType: 'json',
+    //             type: 'POST',
+    //             success: function (response) {
+    //                 dataTable.api().ajax.reload();
+    //             }
+    //         };
+    //         $.ajax(params);
+    //     }
+    //
+    //     if (action == 'active') {
+    //         var title = 'Account Suspending.',
+    //             body = 'Are you sure you wish suspend the account?';
+    //     } else {
+    //         var title = 'Account activation.',
+    //             body = 'Are you sure you wish activate an account?';
+    //     }
+    //
+    //     suspendModal = new ModalBootstrap({
+    //         title: title,
+    //         body: body,
+    //         winAttrs: {class: 'modal delete'}
+    //     });
+    //
+    //     suspendModal.show();
+    //     suspendModal.getWin().find("button[class*=confirm]").click(function (e) {
+    //         e.preventDefault();
+    //         suspendRequest();
+    //     });
+    //
+    // }
     return {
 
         init: function( config ){
@@ -376,7 +376,7 @@ var userModule = (function() {
                     e.preventDefault();
                     var id     = $(this).parents("tr").find("td").eq(0).text(),
                         action = $(this).attr('class');
-                    actionSuspend(id, action, dataTable);
+                    //actionSuspend(id, action, dataTable);
                 }));
             });
         }
