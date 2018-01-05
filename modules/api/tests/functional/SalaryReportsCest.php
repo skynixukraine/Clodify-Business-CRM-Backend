@@ -36,7 +36,7 @@ class SalaryReportsCest
         $I->wantTo('Testing create salary reports');
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
             [
-                'report_date' => '3'
+                'report_date' => '3'  // same as financial_reports 'report_date' after updating
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -121,7 +121,7 @@ class SalaryReportsCest
     public function testCreateSalaryReportListsCest(FunctionalTester $I)
     {
         $I->haveInDatabase('financial_reports', array(
-            'report_date' => '1514888742',
+            'report_date' => '1514888742',  //  02 Jan 2018
             'currency' => 26.6,
             'expense_salary' => 3000,
             'num_of_working_days' => 30,
@@ -164,7 +164,7 @@ class SalaryReportsCest
     {
 
         $I->haveInDatabase('financial_reports', array(
-            'report_date'         => '1517522400',   //  1500681600
+            'report_date'         => '1517522400',   //  01 Feb 2018
             'currency'            => 26.6,
             'expense_salary'      => 3000,
             'num_of_working_days' => 30,
