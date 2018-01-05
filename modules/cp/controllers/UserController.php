@@ -12,7 +12,6 @@ use app\models\ProjectCustomer;
 use app\models\ProjectDeveloper;
 use app\models\SiteUser;
 use app\models\Visit;
-use app\modules\api\models\AccessKey;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -233,7 +232,11 @@ class UserController extends DefaultController {
 //                    $photo = "/img/avatar.png";
 //                }
 
-            $photo = AccessKey::getAvatarFromCrowd($model->email);
+              $photo = urldecode(Url::to(
+                        [
+                            '/cp/setting/download-avatar?id=' . $model->id
+                        ]
+                    ));
 
                 if (User::hasPermission([User::ROLE_ADMIN])) {
                     $row[] = $model->id;

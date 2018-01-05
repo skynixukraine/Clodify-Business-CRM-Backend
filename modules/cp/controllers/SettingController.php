@@ -34,7 +34,7 @@ class SettingController extends DefaultController
                 ],
                 'rules' => [
                     [
-                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing', 'download'],
+                        'actions'   => ['index', 'suspend', 'activate', 'upload', 'uploaded', 'photo', 'sing', 'download', 'download-avatar'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES],
                     ],
@@ -107,13 +107,35 @@ class SettingController extends DefaultController
         exit();
     }
 
+    /*
+     * return photo downloaded from amazon or default image
+     */
+    public function actionDownloadAvatar()
+    {
+        $id = Yii::$app->request->getQueryParam('id');
+        $s = new Storage();
+        $pathFile = 'data/' . $id . '/photo/';
+        header('Content-type: image/jpeg');
+
+        try {
+            $photo = $s->download($pathFile . 'avatar');
+            if(isset($photo['Body'])) {
+                return $photo['Body'];
+            } else {
+                return file_get_contents(Yii::getAlias('@webroot').'/img/avatar.png');
+            }
+
+        } catch (\Exception $e) {
+            return file_get_contents(Yii::getAlias('@webroot').'/img/avatar.png');
+        }
+    }
+
     public function actionUpload()
     {
         $fileName = 'file';
 
         if (isset($_FILES[$fileName])) {
             $file = \yii\web\UploadedFile::getInstanceByName($fileName);
-
             $s = new Storage();
             $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
             $result = $s->upload($pathFile . $file->name, $file->tempName);

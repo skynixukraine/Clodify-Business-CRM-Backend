@@ -82,23 +82,23 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
-                            <img src="<?=\app\modules\api\models\AccessKey::getAvatarFromCrowd(Yii::$app->user->identity->email)?>" class="user-image" alt="User Image"/>
+                            <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>" class="user-image" alt="User Image"/>
 
-<!--                                                        --><?php //if (Yii::$app->user->identity->photo != null):?>
+                            <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
 <!--                                <img src="/cp/setting/download?photo=data/--><?//=Yii::$app->user->identity->id?><!--/photo/--><?//=Yii::$app->user->identity->photo?><!--" class="user-image" alt="User Image"/>-->
 <!--                            --><?php //else:?>
 <!--                                <img src="/img/avatar.png" class="user-image" alt="User Image"/>-->
 <!--                            --><?php //endif;?>
-<!--                            <span class="hidden-xs">--><?//=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?><!--</span>-->
+                            <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
 
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
 
-                                <img src="<?=\app\modules\api\models\AccessKey::getAvatarFromCrowd(Yii::$app->user->identity->email)?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image"/>
+                                <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
 
-<!--                                                                --><?php //if (Yii::$app->user->identity->photo != null):?>
+                                <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
 <!--                                    <img src="--><?//=urldecode( Url::to (['/cp/setting/download?photo=data/' .
 //                                        Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?><!--"-->
 <!--                                         class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />-->
@@ -135,9 +135,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <div class="user-panel">
                 <div class="pull-left image">
 
-                    <img src="<?=\app\modules\api\models\AccessKey::getAvatarFromCrowd(Yii::$app->user->identity->email)?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+                    <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
 
-<!--                                        --><?php //if (Yii::$app->user->identity->photo != null):?>
+                    <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
 <!--                    <img src="/cp/setting/download?photo=data/--><?//=Yii::$app->user->identity->id?><!--/photo/--><?//=Yii::$app->user->identity->photo?><!--" class="img-circle" style="max-width: 100px; height: 100px;" alt="--><?//=Yii::t('app', 'User Image')?><!--" />-->
 <!--                    --><?php //else:?>
 <!--                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="--><?//=Yii::t('app', 'User Image')?><!--" />-->

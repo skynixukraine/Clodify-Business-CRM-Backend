@@ -11,6 +11,8 @@ use Yii;
 use app\models\User;
 use app\models\Storage;
 use app\modules\api\models\AccessKey;
+use yii\helpers\Url;
+
 
 
 class UserViewPhoto extends ViewModelAbstract
@@ -18,8 +20,7 @@ class UserViewPhoto extends ViewModelAbstract
 
     public function define()
     {
-        $id = Yii::$app->request->getQueryParam('id');
-
+        //$id = Yii::$app->request->getQueryParam('id');
 
 //        $userPhoto = User::find()
 //            ->select('photo')
@@ -40,10 +41,23 @@ class UserViewPhoto extends ViewModelAbstract
 //            throw new \yii\web\NotFoundHttpException;
 //        }
 
-        $data = [
-            AccessKey::getAvatarFromCrowd(User::findOne($id)->email)
-        ];
+        $id = Yii::$app->request->getQueryParam('id');
+        $s = new Storage();
+        $pathFile = 'data/' . $id . '/photo/';
+        header('Content-type: image/jpeg');
 
+        try {
+            $photo = $s->download($pathFile . 'avatar');
+            if(isset($photo['Body'])) {
+                $str = $photo['Body'];
+            } else {
+                $str = file_get_contents(Yii::getAlias('@webroot').'/img/avatar.png');
+            }
+        } catch (\Exception $e) {
+            $str = file_get_contents(Yii::getAlias('@webroot').'/img/avatar.png');
+        }
+        $base = base64_encode($str);
+        $data = [$base];
         $this->setData($data);
     }
 
