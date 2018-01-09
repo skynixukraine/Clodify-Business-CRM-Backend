@@ -9,6 +9,7 @@ use app\models\User;
 use app\components\AccessRule;
 use app\components\Language;
 use app\modules\api\models\AccessKey;
+use yii\web\Cookie;
 
 
 class DefaultController extends Controller
@@ -16,7 +17,7 @@ class DefaultController extends Controller
 
     public function beforeAction( $action )
     {
-        if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
+        if(isset($_COOKIE[User::READ_COOKIE_NAME]) || isset($_COOKIE[User::COOKIE_DATABASE])) {
 
             $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
 

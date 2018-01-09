@@ -77,6 +77,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const CREATE_COOKIE_NAME = "crowd.token_key";
     const READ_COOKIE_NAME = "crowd_token_key";
 
+    const COOKIE_DATABASE = "database_cookie";
+
     public $rawPassword;
 
     /**
