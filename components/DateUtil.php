@@ -140,11 +140,11 @@ class DateUtil
      */
     public static function getLastDayOfMonth($str)
     {
-        $a = explode("/", $str);
-        $month = $a[1];
-        $year = $a[2];
-        $days_in_month = date('t', mktime(0, 0, 0, $month +1, 0, $year));
-        $lastDay = mktime(23, 0, 0, $month, $days_in_month, $year);
+        $arrayDate = explode("/", $str);
+        $month = $arrayDate[1];
+        $year = $arrayDate[2];
+        $daysInMonth = date('t', mktime(0, 0, 0, $month +1, 0, $year));
+        $lastDay = mktime(23, 0, 0, $month, $daysInMonth, $year);
         return $lastDay;
     }
 
@@ -153,11 +153,11 @@ class DateUtil
      */
     public static function toUnixFromSlashFormat($str)
     {
-        $a = explode("/", $str);
-        $month = $a[1];
-        $day = $a[0];
-        $year = $a[2];
-        $timestamp = mktime(23, 0, 0, $month, $day, $year);
+        $arrayDate = explode("/", $str);
+        $month = $arrayDate[1];
+        $day = $arrayDate[0];
+        $year = $arrayDate[2];
+        $timestamp = mktime(2, 0, 0, $month, $day, $year);
         return $timestamp;
     }
 
