@@ -26,11 +26,19 @@ class FinancialReportFetch extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
-            $order = Yii::$app->request->getQueryParam('order');
-            $start = Yii::$app->request->getQueryParam('start') ?: 0;
-            $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+            $order    = Yii::$app->request->getQueryParam('order');
+            $start    = Yii::$app->request->getQueryParam('start') ?: 0;
+            $limit    = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+            $date_raw = Yii::$app->request->getQueryParam('search_query');
 
-            $query = FinancialReport::find();
+            if (!empty($date_raw)){
+                $query = FinancialReport::find()
+                    ->where(['between', 'report_date',
+                        DateUtil::toUnixFromSlashFormat($date_raw), DateUtil::getLastDayOfMonth($date_raw)
+                    ]);
+            } else {
+                $query = FinancialReport::find();
+            }
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
