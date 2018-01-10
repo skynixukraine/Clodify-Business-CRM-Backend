@@ -26,6 +26,10 @@ class DefaultController extends Controller
                     Yii::t("app", $session->reason . " You have to authenticate with email and password"));
                 return $this->redirect(["/site/login"]);
             } else {
+                if(isset($_COOKIE[User::COOKIE_DATABASE])){
+                    // prolong to 10min
+                    Yii::$app->crowdComponent->createCookie();
+                }
                 Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
                 Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
                 Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;

@@ -168,40 +168,33 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function toCrowd($email, $password)
     {
-        if (isset($_COOKIE[User::COOKIE_DATABASE])) {
+        $params = array(
+            "value" => "$password",
+        );
 
-            return false;
+        $curl = curl_init();
 
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => Json::encode($params),
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            return "cURL Error #:" . $err;
         } else {
-
-            $params = array(
-                "value" => "$password",
-            );
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => Json::encode($params),
-                CURLOPT_HTTPHEADER => array(
-                    "accept: application/json",
-                    "authorization:" . Yii::$app->params['crowd_code'],
-                    "content-type: application/json",
-                ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-                return "cURL Error #:" . $err;
-            } else {
-                return json_decode($response);
-            }
+            return json_decode($response);
         }
     }
 

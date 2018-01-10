@@ -160,11 +160,10 @@ class CrowdComponent extends Component
     }
 
 
-    private function createCookie()
+    public function createCookie()
     {
         $path = "/";
         $domain = ".skynix.co";
-        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*60*60*24), $path, $domain);
+        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*10), $path, $domain);
     }
-
 }
