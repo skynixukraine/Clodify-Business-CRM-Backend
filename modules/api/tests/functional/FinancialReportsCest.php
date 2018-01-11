@@ -100,14 +100,14 @@ class FinancialReportsCest
         $I->wantTo('Testing update financial report data');
         $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId,
             json_encode([
-                'report_date' => '3',  // same as salary_reports 'report_date'
-                'currency' => 26.6,
-                'expense_salary' => 3000,
+                'report_date'         => '3', // same as salary_reports 'report_date'
+                'currency'            => 26.6,
+                'expense_salary'      => 3000,
                 'num_of_working_days' => 30,
-                'income' => $income,
-                'expense_constant' => $expenses,
-                'investments' => $investments,
-                'spent_corp_events' => $spent_corp_events,
+                'income'              => $income,
+                'expense_constant'    => $expenses,
+                'investments'         => $investments,
+                'spent_corp_events'   => $spent_corp_events,
 
             ])
         );
@@ -118,8 +118,8 @@ class FinancialReportsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => 'array|null',
-            'errors' => 'array',
+            'data'    => 'array|null',
+            'errors'  => 'array',
             'success' => 'boolean'
         ]);
     }
@@ -141,17 +141,17 @@ class FinancialReportsCest
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => [
-                'id' => 'integer',
-                'report_date' => 'string',
+                'id'                  => 'integer',
+                'report_date'         => 'string',
                 'num_of_working_days' => 'integer|null',
-                'income' => 'array',
-                'currency' => 'float',
-                'expense_constant' => 'array',
-                'expense_salary' => 'integer',
-                'investments' => 'array',
-                'spent_corp_events' => 'array',
+                'income'              => 'array',
+                'currency'            => 'float',
+                'expense_constant'    => 'array',
+                'expense_salary'      => 'integer',
+                'investments'         => 'array',
+                'spent_corp_events'   => 'array',
             ],
-            'errors' => 'array',
+            'errors'  => 'array',
             'success' => 'boolean'
         ]);
     }
@@ -169,30 +169,32 @@ class FinancialReportsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertEmpty($response->meta->errors);
+        $I->assertEquals(true, $response->meta->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['reports' =>
+            'data' => ['financialReport' =>
                 [
                     [
                         'id'                  => 'integer',
                         'report_date'         => 'string',
-                        'balance'             => 'integer | float',
+                        'balance'             => 'string',
                         'currency'            => 'float',
-                        'income'              => 'integer | float',
-                        'expenses'            => 'integer | float',
-                        'profit'              => 'integer | float',
-                        'investments'         => 'integer | float',
-                        'spent_corp_events'   => 'integer | float',
+                        'income'              => 'string',
+                        'expenses'            => 'string',
+                        'profit'              => 'string',
+                        'investments'         => 'string',
+                        'spent_corp_events'   => 'string',
                         'num_of_working_days' => 'integer|null',
                         'is_locked'           => 'integer',
-
                     ]
                 ],
-                'total_records' => 'string'
+
             ],
-            'errors' => 'array',
+            'meta'    => [
+            'total'   => 'string',
+            'errors'  => 'array',
             'success' => 'boolean'
+            ]
         ]);
     }
 
@@ -239,11 +241,11 @@ class FinancialReportsCest
         $I->wantTo('Testing lock financial report data');
         $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . '/lock',
             json_encode([
-                'year' => 2111,
-                'expense_salary' => 3000,
-                'income' => $income,
-                'expense_constant' => $expenses,
-                'investments' => $investments,
+                'year'              => 2111,
+                'expense_salary'    => 3000,
+                'income'            => $income,
+                'expense_constant'  => $expenses,
+                'investments'       => $investments,
                 'spent_corp_events' => $spent_corp_events,
             ])
         );
@@ -254,8 +256,8 @@ class FinancialReportsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => 'array|null',
-            'errors' => 'array',
+            'data'    => 'array|null',
+            'errors'  => 'array',
             'success' => 'boolean'
         ]);
     }
@@ -270,8 +272,8 @@ class FinancialReportsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => 'array|null',
-            'errors' => 'array',
+            'data'    => 'array|null',
+            'errors'  => 'array',
             'success' => 'boolean'
         ]);
     }
@@ -293,17 +295,17 @@ class FinancialReportsCest
         $I->seeResponseMatchesJsonType([
             'data' => [
                 [
-                    'id' => 'integer',
-                    'year' => 'integer',
-                    'income' => 'integer',
-                    'expense_constant' => 'integer',
-                    'investments' => 'integer',
-                    'expense_salary' => 'integer',
-                    'difference' => 'integer',
-                    'bonuses' => 'integer',
-                    'corp_events' => 'integer',
-                    'profit' => 'integer',
-                    'balance' => 'integer',
+                    'id'                => 'integer',
+                    'year'              => 'integer',
+                    'income'            => 'integer',
+                    'expense_constant'  => 'integer',
+                    'investments'       => 'integer',
+                    'expense_salary'    => 'integer',
+                    'difference'        => 'integer',
+                    'bonuses'           => 'integer',
+                    'corp_events'       => 'integer',
+                    'profit'            => 'integer',
+                    'balance'           => 'integer',
                     'spent_corp_events' => 'integer',
 
                 ],
