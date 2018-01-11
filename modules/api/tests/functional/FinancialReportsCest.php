@@ -165,7 +165,7 @@ class FinancialReportsCest
     {
 
         $I->wantTo('Testing fetch financial report data');
-        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS);
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
