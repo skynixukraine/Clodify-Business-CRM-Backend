@@ -130,6 +130,7 @@ class CrowdComponent extends Component
                         $this->createCrowdSessionAndCookie($email, $password);
                     }
                 } else {
+
                     $this->createCrowdSessionAndCookie($email, $password);
                 }
             } else {
@@ -146,7 +147,6 @@ class CrowdComponent extends Component
                 // set cookies about auth with database
                 $this->createCookie();
             }
-          //  $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
     }
@@ -157,6 +157,9 @@ class CrowdComponent extends Component
         $domain = ".skynix.co";
         $newSession = AccessKey::createCrowdSession($email, $password);
         setcookie(User::CREATE_COOKIE_NAME, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
+        // delete db authorization cookie
+        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()-3600*60, $path, $domain);
+
     }
 
 
@@ -165,5 +168,8 @@ class CrowdComponent extends Component
         $path = "/";
         $domain = ".skynix.co";
         setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*10), $path, $domain);
+        //delete crowd cookie
+        setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+
     }
 }
