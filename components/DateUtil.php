@@ -134,4 +134,31 @@ class DateUtil
         return $range;
     }
 
+    /*
+     *  receive query string '01/05/2017' return 1496260800 (last day of month 31/5/2017)
+     *
+     */
+    public static function getLastDayOfMonth($str)
+    {
+        $arrayDate = explode("/", $str);
+        $month = $arrayDate[1];
+        $year = $arrayDate[2];
+        $daysInMonth = date('t', mktime(0, 0, 0, $month +1, 0, $year));
+        $lastDay = mktime(23, 0, 0, $month, $daysInMonth, $year);
+        return $lastDay;
+    }
+
+    /*
+     * receive query string d/m/Y  e.g '01/05/2017' return timestamp 1493668800
+     */
+    public static function toUnixFromSlashFormat($str)
+    {
+        $arrayDate = explode("/", $str);
+        $month = $arrayDate[1];
+        $day = $arrayDate[0];
+        $year = $arrayDate[2];
+        $timestamp = mktime(2, 0, 0, $month, $day, $year);
+        return $timestamp;
+    }
+
 }
