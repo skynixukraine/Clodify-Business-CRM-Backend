@@ -172,7 +172,7 @@ class FinancialReportsCest
         $I->assertEmpty($response->meta->errors);
         $I->assertEquals(true, $response->meta->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['financialReport' =>
+                'financialReport' =>
                 [
                     [
                         'id'                  => 'integer',
@@ -188,8 +188,7 @@ class FinancialReportsCest
                         'is_locked'           => 'integer',
                     ]
                 ],
-
-            ],
+            
             'meta'    => [
             'total'   => 'string',
             'errors'  => 'array',
