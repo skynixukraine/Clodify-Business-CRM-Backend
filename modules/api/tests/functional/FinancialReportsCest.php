@@ -165,14 +165,14 @@ class FinancialReportsCest
     {
 
         $I->wantTo('Testing fetch financial report data');
-        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS);
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->meta->errors);
         $I->assertEquals(true, $response->meta->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['financialReport' =>
+                'financialReport' =>
                 [
                     [
                         'id'                  => 'integer',
@@ -188,8 +188,7 @@ class FinancialReportsCest
                         'is_locked'           => 'integer',
                     ]
                 ],
-
-            ],
+            
             'meta'    => [
             'total'   => 'string',
             'errors'  => 'array',

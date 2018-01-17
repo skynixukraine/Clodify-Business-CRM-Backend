@@ -39,7 +39,11 @@ class CrowdComponent extends Component
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
-            $errorArr['error'] = 'You have to authenticate with email and password';
+            if($user->is_active && !$user->is_delete){
+                return true;
+            } else {
+                $errorArr['error'] = 'No user is registered with this credentials';
+            }
         }
 
         return $errorArr;
@@ -51,7 +55,7 @@ class CrowdComponent extends Component
         $obj = AccessKey::toCrowd($email, $password);
         $user = User::findOne(['email' => $email]);
 
-        if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
+        if($obj &&!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
             if ($obj->active) {
                 $accesKey = AccessKey::findOne(['email' => $obj->email]);
@@ -93,10 +97,11 @@ class CrowdComponent extends Component
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
-            if ($user){
-                User::deactivateUser($user);
+            if($user->is_active && !$user->is_delete){
+                return true;
+            } else {
+                $errorArr['error'] = 'No user is registered with this credentials';
             }
-            $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
     }
@@ -108,15 +113,15 @@ class CrowdComponent extends Component
         $user = User::findOne(['email' => $email]);
         $obj = AccessKey::toCrowd($email, $password);
 
-        if(!isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
+        if($obj && !isset($obj->reason)) {     // if element 'reason' exist, some autentication error there in crowd
 
-            if ($obj->active) {
+            if (isset($obj->active) && $obj->active) {
 
                 if (!$user) {
                     AccessKey::createUser($obj, $password);
                 } else {  // if user exist pickup role from crowd and synchronize
                     $roleInCrowd = AccessKey::refToGroupInCrowd($email);
-                    if ($roleInCrowd && $user->role !== $roleInCrowd)                     {
+                    if ($roleInCrowd && $user->role !== $roleInCrowd) {
                          AccessKey::changeUserRole($user, $roleInCrowd);
                      }
                 }
@@ -128,6 +133,7 @@ class CrowdComponent extends Component
                         $this->createCrowdSessionAndCookie($email, $password);
                     }
                 } else {
+
                     $this->createCrowdSessionAndCookie($email, $password);
                 }
 
@@ -135,15 +141,18 @@ class CrowdComponent extends Component
 
             } else {
                 if ($user){
-                 User::deactivateUser($user);
+             //    User::deactivateUser($user);
+                    $this->createCookie();
+                } else {
+                    $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
                 }
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
         } else {
-            if ($user){
-                User::deactivateUser($user);
+            if ($user->is_active){
+                // easy login with database
+                // set cookies about auth with database
+                $this->createCookie();
             }
-            $errorArr['error'] = $obj->reason;
         }
         return $errorArr;
     }
@@ -154,6 +163,19 @@ class CrowdComponent extends Component
         $domain = ".skynix.co";
         $newSession = AccessKey::createCrowdSession($email, $password);
         setcookie(User::CREATE_COOKIE_NAME, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
+        // delete db authorization cookie
+        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()-3600*60, $path, $domain);
+
     }
 
+
+    public function createCookie()
+    {
+        $path = "/";
+        $domain = ".skynix.co";
+        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*10), $path, $domain);
+        //delete crowd cookie
+        setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+
+    }
 }

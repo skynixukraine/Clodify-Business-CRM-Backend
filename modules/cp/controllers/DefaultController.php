@@ -9,6 +9,7 @@ use app\models\User;
 use app\components\AccessRule;
 use app\components\Language;
 use app\modules\api\models\AccessKey;
+use yii\web\Cookie;
 
 
 class DefaultController extends Controller
@@ -16,7 +17,7 @@ class DefaultController extends Controller
 
     public function beforeAction( $action )
     {
-        if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
+        if(isset($_COOKIE[User::READ_COOKIE_NAME]) || isset($_COOKIE[User::COOKIE_DATABASE])) {
 
             $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
 
@@ -25,6 +26,10 @@ class DefaultController extends Controller
                     Yii::t("app", $session->reason . " You have to authenticate with email and password"));
                 return $this->redirect(["/site/login"]);
             } else {
+                if(isset($_COOKIE[User::COOKIE_DATABASE])){
+                    // prolong to 10min
+                    Yii::$app->crowdComponent->createCookie();
+                }
                 Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
                 Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
                 Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
