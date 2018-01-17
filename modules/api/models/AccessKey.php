@@ -168,7 +168,6 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function toCrowd($email, $password)
     {
-
         $params = array(
             "value" => "$password",
         );
@@ -176,11 +175,11 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_POSTFIELDS     => Json::encode($params),
-            CURLOPT_HTTPHEADER     => array(
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => Json::encode($params),
+            CURLOPT_HTTPHEADER => array(
                 "accept: application/json",
                 "authorization:" . Yii::$app->params['crowd_code'],
                 "content-type: application/json",

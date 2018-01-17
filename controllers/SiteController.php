@@ -263,6 +263,7 @@ class SiteController extends Controller
         $domain = ".skynix.co";
         Yii::$app->user->logout();
         setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+        setcookie(User::COOKIE_DATABASE,"",time()-3600*60, $path, $domain);
         return $this->redirect( "/" );
     }
 

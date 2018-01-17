@@ -100,6 +100,7 @@ class FinancialReportsCest
         $I->wantTo('Testing update financial report data');
         $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId,
             json_encode([
+
                 'report_date'         => '3',
                 'currency'            => 26.6,
                 'expense_salary'      => 3000,
