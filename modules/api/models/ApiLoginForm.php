@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use app\modules\api\models\ApiAccessToken;
 use app\models\LoginForm;
+use yii\helpers\Json;
 /**
  * ApiLoginForm is the model behind the login form used by API.
  */
@@ -40,4 +41,5 @@ class ApiLoginForm extends LoginForm
         return $accessToken;
 
     }
+
 }

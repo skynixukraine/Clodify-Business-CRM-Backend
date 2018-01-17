@@ -102,8 +102,12 @@ class SiteController extends Controller
         }
         if ( $model->load(Yii::$app->request->post()) ) {
 
-            //var_dump($email);
-            //exit();
+            // check for crowd session before access
+            $var = Yii::$app->crowdComponent->checkByEmailPasswordCRM($model->email, $model->password);
+            if(isset($var['error'])){
+                Yii::$app->getSession()->setFlash('error', Yii::t("app", $var['error']));
+
+            }
 
             /** @var $user User */
             if( ($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password ) {
@@ -175,7 +179,7 @@ class SiteController extends Controller
                                 return $this->redirect(["support/ticket", 'id' => $idticket]);
 
                             }else {
-                                return $this->redirect(['cp/index/index']);
+                                    return $this->redirect(['cp/index/index']);
                             }
                         }
 
@@ -255,8 +259,11 @@ class SiteController extends Controller
     /** Log out user*/
     public function actionLogout()
     {
+        $path = "/";
+        $domain = ".skynix.co";
         Yii::$app->user->logout();
-
+        setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+        setcookie(User::COOKIE_DATABASE,"",time()-3600*60, $path, $domain);
         return $this->redirect( "/" );
     }
 

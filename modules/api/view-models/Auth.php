@@ -8,9 +8,10 @@
 namespace viewModel;
 
 use Yii;
-use app\modules\api\models\ApiAccessToken;
 use app\models\User;
 use app\modules\api\models\ApiLoginForm;
+use app\modules\api\components\Api\Processor;
+
 
 class Auth extends ViewModelAbstract
 {
@@ -27,6 +28,12 @@ class Auth extends ViewModelAbstract
             $loginForm->email       = $this->model->email;
             $loginForm->password    = $this->model->password;
             $this->model            = $loginForm;
+
+            // crowd session code go here
+            $var = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
+            if(isset($var['error'])){
+                $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
+            }
 
            if ($this->validate() && ($token = $this->model->login())) {
                $user = User::findOne(['id' => $token->user_id]);

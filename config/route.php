@@ -39,7 +39,7 @@ return [
     'GET '      . $API . '/users/access-token/<user_id:\d+>'                  => $API . '/users/access-token',
     'GET '      . $API . '/financial-reports/<id:\d+>'                        => $API . '/financial-reports/view',
     'POST '     . $API . '/financial-reports'                                 => $API . '/financial-reports/create',
-    'GET '      . $API . '/financial-reports'                                 => $API . '/financial-reports/fetch',
+    'GET '      . $API . '/financialReports'                                  => $API . '/financial-reports/fetch',
     'PUT '      . $API . '/financial-reports/<id:\d+>'                        => $API . '/financial-reports/update',
     'PUT '      . $API . '/financial-reports/<id:\d+>/lock'                   => $API . '/financial-reports/lock',
     'GET '      . $API . '/financial-reports/yearly'                          => $API . '/financial-reports/yearly',

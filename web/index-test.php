@@ -9,4 +9,7 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 $config = require(__DIR__ . '/../modules/api/tests/config/functional.php');
 
+Yii::$classMap['app\components\CrowdComponent'] = '@app/modules/api/tests/_support/Helper/CrowdComponent.php';
+
+
 (new yii\web\Application($config))->run();
