@@ -29,20 +29,33 @@ class Auth extends ViewModelAbstract
             $loginForm->password    = $this->model->password;
             $this->model            = $loginForm;
 
-            // crowd session code go here
-            $var = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
-            if(isset($var['error'])){
-                $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
+            // authorization with crowd code go here
+            $checkUser = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
+            if(isset($checkUser['error'])){
+                $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $checkUser['error']));
             }
 
-           if ($this->validate() && ($token = $this->model->login())) {
-               $user = User::findOne(['id' => $token->user_id]);
+            $user = $this->model->getUser();
+            if($user->auth_type == User::CROWD_AUTH){
+                if(!is_array($checkUser)) {
+                    $token = $this->model->login();
+                } else {
+                    return false;
+                }
+            }
+
+            if($user->auth_type == User::DATABASE_AUTH){
+                if($this->validate()){
+                    $token = $this->model->login();
+                } else {
+                    return false;
+                }
+            }
                $this->setData([
                    'access_token' => $token->access_token,
                    'user_id' => $token->user_id,
                    'role' => $user->role
                ]);
-           }
         }
     }
 

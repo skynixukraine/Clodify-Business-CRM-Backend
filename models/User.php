@@ -41,6 +41,7 @@ use yii\web\UploadedFile;
  * @property string $bank_account_en
  * @property string $bank_account_ua
  * @property integer $is_published
+ * @property integer $auth_type
 
  *
  * @property ProjectCustomer[] $projectCustomers
@@ -78,6 +79,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const READ_COOKIE_NAME = "crowd_token_key";
 
     const COOKIE_DATABASE = "database_cookie";
+
+    const CROWD_AUTH = 1;
+    const DATABASE_AUTH = 2;
 
     public $rawPassword;
 
