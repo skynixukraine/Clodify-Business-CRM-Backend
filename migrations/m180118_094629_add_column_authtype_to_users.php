@@ -6,7 +6,7 @@ class m180118_094629_add_column_authtype_to_users extends Migration
 {
     public function up()
     {
-        $this->addColumn( 'users', 'auth_type', $this->string()->defaultValue(1));
+        $this->addColumn( 'users', 'auth_type', $this->integer()->defaultValue(1));
 
         // add foreign key for table `users`
         $this->addForeignKey(
