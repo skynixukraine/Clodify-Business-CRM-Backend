@@ -42,7 +42,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>FPP</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.png')?></span>
+            <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.svg')?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <!--<nav class="navbar navbar-static-top" role="navigation">-->
