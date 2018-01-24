@@ -173,6 +173,7 @@ class CrowdComponent extends Component
         $domain = ".skynix.co";
         $newSession = AccessKey::createCrowdSession($email, $password);
         setcookie(User::CREATE_COOKIE_NAME, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
+
         // delete db authorization cookie
         setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()-3600*60, $path, $domain);
 
@@ -188,6 +189,26 @@ class CrowdComponent extends Component
         setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*20), $path, $domain);
         //delete crowd cookie
         setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+
+    }
+
+    /**
+     * @param $session
+     */
+    public function prolongCrowdCookie($session)
+    {
+        $path = "/";
+        $domain = ".skynix.co";
+
+        // get difference beetwen create and expiry date of the crowd session instead of hardcode 30 min
+        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($session, [], false);
+        $created = substr($sessionObjToArray['created-date'], 0, 10);
+        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($session, [], false);
+        $expiry = substr($sessionObjToArray['expiry-date'], 0, 10);
+        $dateDiff = $expiry - $created;
+
+        // set crowd.token_key cookie with value of current crowd token and expiry extended by expiry crowd date difference(30 min)
+        setcookie(User::CREATE_COOKIE_NAME, $_COOKIE[User::READ_COOKIE_NAME],time() + $dateDiff, $path, $domain);
 
     }
 }

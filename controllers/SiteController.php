@@ -109,7 +109,7 @@ class SiteController extends Controller
             }
 
             /** @var $user User */
-            if( (($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password) || ($checkUser && !is_array($checkUser))) {
+            if( (($user = User::findOne(['email' => $model->email]) ) && md5($model->password) == $user->password) || ($checkUser === true)) {
                 $modelUserLogins = User::find()
                     ->where('email=:Email',
                         [
