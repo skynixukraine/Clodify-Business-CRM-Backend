@@ -186,7 +186,7 @@ class CrowdComponent extends Component
     {
         $path = "/";
         $domain = ".skynix.co";
-        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*20), $path, $domain);
+        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*30), $path, $domain);
         //delete crowd cookie
         setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
 

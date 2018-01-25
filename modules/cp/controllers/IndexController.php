@@ -184,7 +184,10 @@ class IndexController extends DefaultController
         if( ( Yii::$app->request->isAjax &&
             Yii::$app->request->isPost ) ) {
             if ($data = json_decode($_POST['jsonData'])) {
-
+                // prohibit any action if session ended
+                if(!isset($_COOKIE[User::READ_COOKIE_NAME]) && !isset($_COOKIE[User::COOKIE_DATABASE])) {
+                    exit();
+                }
                 if (isset($data->id)) {
 
                     $model = Report::findOne($data->id);
