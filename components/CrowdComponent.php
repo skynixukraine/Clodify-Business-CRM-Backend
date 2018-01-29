@@ -82,6 +82,7 @@ class CrowdComponent extends Component
                             // write to access_keys with existed user
                             AccessKey::createAccessKey($email, $password, $user->id, $obj);
                         }
+                    AccessKey::putAvatarInAm($email);
                 } else {
                     $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
                 }
@@ -92,6 +93,7 @@ class CrowdComponent extends Component
             $obj = AccessKey::toCrowd($email, $password);
             if($obj && $this->validCrowdUser($obj)) {     // if element 'reason' exist, some autentication error there in crowd
                     AccessKey::createUser($obj, $password);
+                    AccessKey::putAvatarInAm($email);
             } else {
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
@@ -130,19 +132,21 @@ class CrowdComponent extends Component
 
                             $this->createCrowdSessionAndCookie($email, $password);
                         }
-
+                    AccessKey::putAvatarInAm($email);
                 } else {
                     $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
                 }
 
             } elseif($user->auth_type == User::DATABASE_AUTH){
                 $this->createCookie();
+                AccessKey::putAvatarInAm($email);
             }       // another auth types
 
         } else {
             $obj = AccessKey::toCrowd($email, $password);
             if($obj && $this->validCrowdUser($obj)) {     // if element 'reason' exist, some autentication error there in crowd
                         AccessKey::createUser($obj, $password);
+                        AccessKey::putAvatarInAm($email);
             } else {
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
