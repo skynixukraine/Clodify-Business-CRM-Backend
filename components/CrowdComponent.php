@@ -66,7 +66,7 @@ class CrowdComponent extends Component
             if ($user->auth_type == User::CROWD_AUTH) {
                 $obj = AccessKey::toCrowd($email, $password);
 
-                if($obj && $this->validCrowdUser($obj)) {   // if element 'reason' exist, some autentication error there in crowd
+                if($obj && $this->validCrowdUser($obj)) {   // if element 'reason' exist, some authentication error there in crowd
 
                         $accesKey = AccessKey::findOne(['email' => $obj->email]);
                         if ($accesKey) {

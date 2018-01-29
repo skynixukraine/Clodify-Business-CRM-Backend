@@ -103,9 +103,11 @@ class SiteController extends Controller
         if ( $model->load(Yii::$app->request->post()) ) {
 
             // check for crowd session before access
+
             $checkUser = Yii::$app->crowdComponent->checkByEmailPasswordCRM($model->email, $model->password);
             if(isset($checkUser['error'])){
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", $checkUser['error']));
+
             }
 
             /** @var $user User */

@@ -222,15 +222,21 @@ class UserController extends DefaultController {
                     $salary_up = 'No Changes';
                 }
 
-                if ($model->photo) {
-                    $photo = urldecode(Url::to(
+//                if ($model->photo) {
+//                    $photo = urldecode(Url::to(
+//                        [
+//                            '/cp/setting/download?photo=data/' . $model->id . '/photo/' . $model->photo
+//                        ]
+//                    ));
+//                } else {
+//                    $photo = "/img/avatar.png";
+//                }
+
+              $photo = urldecode(Url::to(
                         [
-                            '/cp/setting/download?photo=data/' . $model->id . '/photo/' . $model->photo
+                            '/cp/setting/download-avatar?id=' . $model->id
                         ]
                     ));
-                } else {
-                    $photo = "/img/avatar.png";
-                }
 
                 if (User::hasPermission([User::ROLE_ADMIN])) {
                     $row[] = $model->id;

@@ -33,7 +33,7 @@
     <tr>
         <td colspan = "8" width = "570"  valign="top" style="padding: 0; margin: 0;">
             <a href="https://skynix.co" title="logo Skynix" target="_blank">
-                <img src="http://cdn.skynix.co/skynix/logo_skynix.jpg" alt="Skynix" border="0" width="105" height="30" style="display: block; padding: 0px; margin: 0px; border: none;">
+                <img src="<?=Yii::getAlias('@app') . '/web/img/logo_skynix_color_horizontal.png'?>" alt="Skynix" border="0" width="105" height="28" style="display: block; padding: 0px; margin: 0px; border: none; background-color: white;">
             </a>
         </td>
     </tr>

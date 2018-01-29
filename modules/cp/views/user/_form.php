@@ -1,4 +1,4 @@
-z<?php
+<?php
 use yii\bootstrap\ActiveForm;
 use app\models\Story;
 use yii\helpers\Url;

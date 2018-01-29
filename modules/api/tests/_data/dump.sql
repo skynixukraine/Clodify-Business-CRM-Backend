@@ -212,7 +212,7 @@ CREATE TABLE `financial_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `financial_reports`
+-- Table structure for table `financial_yearly_reports`
 --
 
 DROP TABLE IF EXISTS `financial_yearly_reports`;
