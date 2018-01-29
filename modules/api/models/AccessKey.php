@@ -5,6 +5,8 @@ namespace app\modules\api\models;
 use Yii;
 use app\models\User;
 use yii\helpers\Json;
+use app\models\Storage;
+
 
 /**
  * This is the model class for table "access_keys".
@@ -23,7 +25,9 @@ class AccessKey extends \yii\db\ActiveRecord
     const CREATE_CROWD_SESSION_URL = "/rest/usermanagement/1/session";
     const CHECK_CROWD_SESSION_URL = "/rest/usermanagement/1/session/";
     const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
+    const AVATAR_REQUEST = "/rest/usermanagement/1/user/avatar?username=";
     const GROUP_FROM_CROWD = "/rest/usermanagement/1/user/group/direct?username=";
+
 
     /**
      * @inheritdoc
@@ -216,6 +220,56 @@ class AccessKey extends \yii\db\ActiveRecord
         return $newUser;
     }
 
+    /*
+     * return string(url of the avatar image) after specified substring
+     */
+    public static function findAddress($string, $substring) {
+        $pos = strpos($string, $substring);
+        if ($pos === false)
+            return $string;
+        else
+            return strval(substr($string, $pos+strlen($substring)));
+    }
+
+    /*
+     *
+     */
+    public static function getAvatarFromCrowd($email)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::AVATAR_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            $j = json_decode($response);
+            if(isset($j->reason)){
+                return "/img/avatar.png";
+            } else {
+                return self::findAddress($response,'found at ');
+            }
+        }
+    }
+
+    /*
+     *
+     */
     public static function refToGroupInCrowd($email)
     {
         $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN];
@@ -233,22 +287,64 @@ class AccessKey extends \yii\db\ActiveRecord
         ));
 
         $response = curl_exec($curl);
-
         curl_close($curl);
 
-            $array = json_decode($response,TRUE);
-            $elem = array_shift($array['groups']);
-            if(in_array($elem['name'], $roleArr)) {
-                return $elem['name'];
-            } else {
-                return false;
-            }
+        $array = json_decode($response,TRUE);
+        $elem = array_shift($array['groups']);
+        if(in_array($elem['name'], $roleArr)) {
+            return $elem['name'];
+        } else {
+            return false;
+        }
 
     }
-
+    /*
+     *
+     */
     public static function changeUserRole($user, $roleInCrowd)
     {
         $user->role = $roleInCrowd;
         $user->save();
     }
+
+    /*
+     *
+     */
+    public static function putAvatarInAm($email)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::AVATAR_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+
+            try {
+                $content = file_get_contents(AccessKey::findAddress($response,'found at '));
+                $s = new Storage();
+                $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
+                $s->uploadData($pathFile . 'avatar', $content);
+            }
+            catch (\Exception $e) {
+            }
+
+        }
+    }
+
 }

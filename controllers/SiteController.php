@@ -106,7 +106,6 @@ class SiteController extends Controller
             $var = Yii::$app->crowdComponent->checkByEmailPasswordCRM($model->email, $model->password);
             if(isset($var['error'])){
                 Yii::$app->getSession()->setFlash('error', Yii::t("app", $var['error']));
-
             }
 
             /** @var $user User */

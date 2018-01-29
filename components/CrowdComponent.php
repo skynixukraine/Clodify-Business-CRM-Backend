@@ -87,6 +87,9 @@ class CrowdComponent extends Component
                             ['email' => $email]);
                     }
                 }
+
+                AccessKey::putAvatarInAm($email);
+
             } else {
                 if ($user){
                     User::deactivateUser($user);
@@ -133,6 +136,9 @@ class CrowdComponent extends Component
 
                     $this->createCrowdSessionAndCookie($email, $password);
                 }
+
+                AccessKey::putAvatarInAm($email);
+
             } else {
                 if ($user){
              //    User::deactivateUser($user);
