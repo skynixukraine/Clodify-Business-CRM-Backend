@@ -215,6 +215,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $newUser->email = $obj->email;
         $newUser->password = $password;
         $newUser->is_active = User::ACTIVE_USERS;
+        $newUser->auth_type = User::CROWD_AUTH;
         $newUser->save();
 
         return $newUser;

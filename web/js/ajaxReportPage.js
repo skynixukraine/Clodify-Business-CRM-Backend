@@ -641,8 +641,14 @@ var ajaxReportPageModule = (function() {
             function ajaxSuccessFunc(er, data) {
                 if (er == "error") {
                     var ajaxError = $('.ajax-error');
-                    ajaxError.remove();
-                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                    if(typeof data !== 'undefined'){
+                        ajaxError.remove();
+                        lastForm.append('<p class = "ajax-error"> Your session is ended!!! </p>')
+                    } else {
+                        //  var ajaxError = $('.ajax-error');
+                        ajaxError.remove();
+                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
+                    }
                 } else {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();

@@ -21,14 +21,18 @@ class DefaultController extends Controller
 
             $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
 
-            if(isset($session->reason)){
+            if (isset($session->reason)) {
                 Yii::$app->getSession()->setFlash('success',
                     Yii::t("app", $session->reason . " You have to authenticate with email and password"));
                 return $this->redirect(["/site/login"]);
             } else {
-                if(isset($_COOKIE[User::COOKIE_DATABASE])){
-                    // prolong to 10min
+                if (isset($_COOKIE[User::COOKIE_DATABASE])) {
+                    // prolong db cookie to 20min
                     Yii::$app->crowdComponent->createCookie();
+                }
+                if (isset($_COOKIE[User::READ_COOKIE_NAME])) {
+                    // prolong crowd cookie to 30min
+                    Yii::$app->crowdComponent->prolongCrowdCookie($session);
                 }
                 Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
                 Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
