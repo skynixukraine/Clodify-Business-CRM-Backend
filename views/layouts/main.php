@@ -23,7 +23,7 @@ AppAsset::register($this);
     <meta name="description" content="Skynix Ukraine is a team of professional developers that provides innovative software solutions and high quality improvements in all IT areas. Only the latest technologies in front end and back end development.">
     <?= Html::csrfMetaTags() ?>
     <title>Skynix Ukraine - software development company</title>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/img/favicon.png" />
 
     <?php $this->head() ?>
 </head>
@@ -33,7 +33,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     SkynixNavBar::begin([
-        'brandLabel' => Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ]),
+        'brandLabel' => Html::img('/img/skycrmlogin.png', ['alt'=> Yii::$app->params['applicationName'], 'width' => '185']),
         'brandUrl' => Yii::$app->homeUrl,
         'skynixLinks' => '
                         <ul class="nav navbar-nav navbar-right top-right-icon">
@@ -43,9 +43,9 @@ AppAsset::register($this);
                             <li>
                                 <a href="https://twitter.com/SkynixSolutions" target="_blank" class="ico-twitter"></a>
                             </li>
-                           <!-- <li>
-                                <a href="#" class="ico-in"></a>
-                            </li>-->
+                            <li>
+                                <a href="#"  target="_blank" class="ico-in"></a>
+                            </li>
                             <li>
                                 <a href="http://skynix.solutions" class="ico-search"></a>
                             </li>
