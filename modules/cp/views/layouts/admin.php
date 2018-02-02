@@ -29,10 +29,10 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) . ' - ' . Yii::$app->params['applicationName']?></title>
     <?php $this->head() ?>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/img/favicon.png" />
 </head>
 <body>
-<body class="skin-blue sidebar-mini">
+<body class="skin-black-dark sidebar-mini">
 <?php $this->beginBody() ?>
 <div class="wrapper">
 
@@ -42,7 +42,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>FPP</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.svg')?></span>
+            <span class="logo-lg"><?= Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ])?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <!--<nav class="navbar navbar-static-top" role="navigation">-->
