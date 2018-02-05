@@ -27,6 +27,7 @@ class AccessKey extends \yii\db\ActiveRecord
     const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
     const AVATAR_REQUEST = "/rest/usermanagement/1/user/avatar?username=";
     const GROUP_FROM_CROWD = "/rest/usermanagement/1/user/group/direct?username=";
+    const CHECK_USER_BY_EMAIL = "/rest/usermanagement/1/user?username=";
 
 
     /**
@@ -345,6 +346,37 @@ class AccessKey extends \yii\db\ActiveRecord
             catch (\Exception $e) {
             }
 
+        }
+    }
+
+    /**
+     * @param $email
+     * @return bool
+     */
+    public static function checkUserByName($email) : bool
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::CHECK_USER_BY_EMAIL . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            return "cURL Error #:" . $err;
+        } else {
+            $decode = json_decode($response);
+           return isset($decode->reason) ? false : true;
         }
     }
 

@@ -84,7 +84,7 @@ class CrowdComponent extends Component
                         }
                     AccessKey::putAvatarInAm($email);
                 } else {
-                    $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
                 }
             }  //elseif(check for another auth type){}
 
@@ -95,7 +95,7 @@ class CrowdComponent extends Component
                     AccessKey::createUser($obj, $password);
                     AccessKey::putAvatarInAm($email);
             } else {
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                $errorArr['error'] = $this->getMessageFromCrowd($obj);
             }
         }
 
@@ -134,7 +134,7 @@ class CrowdComponent extends Component
                         }
                     AccessKey::putAvatarInAm($email);
                 } else {
-                    $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
                 }
 
             } elseif($user->auth_type == User::DATABASE_AUTH){
@@ -148,7 +148,7 @@ class CrowdComponent extends Component
                         AccessKey::createUser($obj, $password);
                         AccessKey::putAvatarInAm($email);
             } else {
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                $errorArr['error'] = $this->getMessageFromCrowd($obj);
             }
         }
         return !empty($errorArr) ? $errorArr : true;
@@ -165,6 +165,12 @@ class CrowdComponent extends Component
         } else {
             return false;
         }
+    }
+
+    public function getMessageFromCrowd($obj)
+    {
+        // {"reason":"USER_NOT_FOUND","message":"User <email@skynix.co> does not exist"}
+        return $obj->message . " in Crowd";
     }
 
     /**

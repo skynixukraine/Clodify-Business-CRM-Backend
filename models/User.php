@@ -8,6 +8,7 @@ use yii\web\IdentityInterface;
 use yii\db\Expression;
 use yii\db\ActiveQuery;
 use yii\web\UploadedFile;
+use app\modules\api\models\AccessKey;
 
 /**
  * This is the model class for table "users".
@@ -854,6 +855,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $user->is_active = self::DEACTIVATED;
             $user->save();
         }
+    }
+
+    /**
+     * @param $model
+     * @return string
+     */
+    public static function checkUserStatus($model)
+    {
+       if($model->auth_type = self::CROWD_AUTH){
+           return AccessKey::checkUserByName($model->email) ? "Active" : "Suspended";
+       } elseif($model->auth_type = self::DATABASE_AUTH){
+           return $model->is_active == 1 ? "Active" : "Suspended";
+       }
     }
 
 }

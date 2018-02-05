@@ -253,7 +253,7 @@ class UserController extends DefaultController {
                 $row []  = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row []  = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 if (User::hasPermission([User::ROLE_ADMIN])) {
-                    $row [] = $model->is_active == 1 ? "Active" : "Suspended";
+                    $row [] = User::checkUserStatus($model);  //$model->is_active == 1 ? "Active" : "Suspended";
                 }
                 if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                     $row [] = '$' . number_format($model->salary);
