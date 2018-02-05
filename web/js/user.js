@@ -11,7 +11,8 @@ var userModule = (function() {
             loginAsUserUrl: '',
             canDelete: null,
             canLoginAs: null,
-            canEdit: null
+            canEdit: null,
+            changeAuthUrl: ''
         },
         dataTable,
         filterUsersSelect = "select[name=roles]",
@@ -75,6 +76,52 @@ var userModule = (function() {
         });
 
     }
+
+    function actionChangeAuth(id, name, dataTable) {
+
+        function changeRequest() {
+            var params = {
+                url: cfg.changeAuthUrl,
+                data: {id: id},
+                dataType: 'json',
+                type: 'Post',
+                success: function (response) {
+
+                    if (response.message) {
+
+                        var win = new ModalBootstrap({
+                            title: 'Message',
+                            body: response.message,
+                            buttons: [
+                                {class: 'btn-default confirm', text: 'Ok'}
+                            ]
+
+
+                        });
+                        win.show();
+                    }
+                    dataTable.api().ajax.reload();
+
+                }
+            };
+
+            $.ajax(params);
+
+        }
+
+        deleteModal = new ModalBootstrap({
+            title: 'Change authorization type ' + name + "?",
+            body: 'The user will be unavailable anymore, but all his data reports and project will be left in the system.',
+            winAttrs: {class: 'modal delete'}
+        });
+
+        deleteModal.show();
+        deleteModal.getWin().find("button[class*=confirm]").click(function () {
+            changeRequest();
+        });
+
+    }
+
 
     // function actionSuspend(id, action, dataTable) {
     //     function suspendRequest() {
@@ -230,7 +277,7 @@ var userModule = (function() {
                     });
             }
             target++;
-            if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete) {
+            if (cfg.canEdit || cfg.canLoginAs || cfg.canDelete || cfg.canChangeAuthType) {
                 columnDefs.push({
                     "targets": target,
                     "orderable": false,
@@ -251,6 +298,11 @@ var userModule = (function() {
 
                             icons.push('<i class="fa fa-times delete" style="cursor: pointer" ' +
                                 'data-toggle="tooltip" data-placement="top" title="Delete"></i>');
+                        }
+                        if (cfg.canChangeAuthType) {
+
+                            icons.push('<i class="fa fa-arrow-up authchange" style="cursor: pointer" ' +
+                                'data-toggle="tooltip" data-placement="top" title="Change authorization type"></i>');
                         }
 
                         return '<div class="actions">' + icons.join(" ") + '</div>';
@@ -368,6 +420,14 @@ var userModule = (function() {
 
                     var id     = $(this).parents("tr").find("td").eq(0).text();
                     actionEdit( id );
+
+                });
+
+                dataTable.find("i[class*=authchange]").click(function(){
+
+                    var id     = $(this).parents("tr").find("td").eq(0).text(),
+                        name   = $(this).parents("tr").find("td").eq(1).text();
+                    actionChangeAuth( id, name, dataTable );
 
                 });
                 dataTable.find('td:contains("Suspend")').parent('tr').addClass('suspend');
