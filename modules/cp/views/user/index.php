@@ -81,9 +81,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             showSales       : <?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ? 'true' : 'false')?>,
             showUserStatus  : <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>,
             canFilterByRole   : '<?=( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ? 'true' : 'false')?>',
-            canFilterByStatus : '<?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>',
-            changeAuthUrl     : '<?=Url::to(['user/change-auth-type'])?>',
-            canChangeAuthType :  <?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>
+            canFilterByStatus : '<?=( User::hasPermission([User::ROLE_ADMIN]) ? 'true' : 'false')?>'
 
         })
     });

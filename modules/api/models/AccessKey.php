@@ -6,6 +6,7 @@ use Yii;
 use app\models\User;
 use yii\helpers\Json;
 use app\models\Storage;
+use yii\helpers\Url;
 
 
 /**
@@ -378,6 +379,37 @@ class AccessKey extends \yii\db\ActiveRecord
             $decode = json_decode($response);
            return isset($decode->reason) ? false : true;
         }
+    }
+
+    /**
+     * @return mixed
+     *  e.g "http://develop.skynix.co/"
+     */
+    public static function getStringFromURL()
+    {
+        $url = Url::home(true);
+        $name = '';
+        $str = '';
+        if (strpos($url, 'http://') !== false) {
+            $str = str_replace("http://" , "", $url);
+        }
+
+        elseif (strpos($url, 'https://') !== false) {
+            $str = str_replace("https://" , "", $url);
+        }
+
+        if (strpos($url, '/') !== false) {
+            $name = str_replace("/" , "", $str);
+        }
+        return  '.' . $name;
+    }
+
+    /*
+     *
+     */
+    public static function nameFromURL()
+    {
+       return str_replace( ".", "_", self::getStringFromURL());
     }
 
 }

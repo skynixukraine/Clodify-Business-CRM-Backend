@@ -98,38 +98,6 @@ class UserController extends DefaultController {
         }
     }
 
-
-
-    /**
-     * @return string
-     * change-auth-type from Manage Users
-     */
-    public function actionChangeAuthType()
-    {
-        if (( $id = Yii::$app->request->post("id") ) ) {
-
-            /** @var  $model User */
-            $user = User::findOne($id);
-
-            if ($user->auth_type = User::DATABASE_AUTH) {
-                $user->auth_type = User::CROWD_AUTH;
-            }
-            if ($user->auth_type = User::CROWD_AUTH) {
-                $user->auth_type = User::DATABASE_AUTH;
-            }
-
-            if($user->save()) {
-                return json_encode([
-                    "message" => Yii::t("app", "Authorization type for user # " . $id . " has been changed"),
-                ]);
-            } else {
-                return json_encode([
-                    "message" => Yii::t("app", "Something wrong"),
-                ]);
-            }
-        }
-    }
-
     /** Activate/Suspend user from Manage Users */
     public function actionActivate()
     {
