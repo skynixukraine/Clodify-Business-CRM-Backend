@@ -8,6 +8,7 @@ use yii\web\IdentityInterface;
 use yii\db\Expression;
 use yii\db\ActiveQuery;
 use yii\web\UploadedFile;
+use app\modules\api\models\AccessKey;
 
 /**
  * This is the model class for table "users".
@@ -128,7 +129,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours',
-                'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year'], 'integer'],
+                'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year', 'auth_type'], 'integer'],
             ['phone', 'string', 'max' => 25],
             ['company', 'string', 'max' => 55],
             [['email'], 'string', 'max' => 150],
@@ -178,7 +179,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'invite_hash'           => 'Invite Hash',
             'is_delete'             => 'Is Delete',
             'password_reset_token'  => 'Password Reset Token',
-            'official_salary'       => 'Official Salary'
+            'official_salary'       => 'Official Salary',
+            'auth_type'             => 'Auth Type'
         ];
     }
 
@@ -854,6 +856,24 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $user->is_active = self::DEACTIVATED;
             $user->save();
         }
+    }
+
+    /**
+     * @param $model
+     * @return string
+     */
+    public static function checkUserStatus($model)
+    {
+       if($model->auth_type = self::CROWD_AUTH){
+           return AccessKey::checkUserByName($model->email) ? "Active" : "Suspended";
+       } elseif($model->auth_type = self::DATABASE_AUTH){
+           return $model->is_active == 1 ? "Active" : "Suspended";
+       }
+    }
+
+    public static function getAuthType($model)
+    {
+        return $model->auth_type;
     }
 
 }

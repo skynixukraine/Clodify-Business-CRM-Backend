@@ -84,7 +84,7 @@ class CrowdComponent extends Component
                         }
                     AccessKey::putAvatarInAm($email);
                 } else {
-                    $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
                 }
             }  //elseif(check for another auth type){}
 
@@ -95,7 +95,7 @@ class CrowdComponent extends Component
                     AccessKey::createUser($obj, $password);
                     AccessKey::putAvatarInAm($email);
             } else {
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                $errorArr['error'] = $this->getMessageFromCrowd($obj);
             }
         }
 
@@ -109,6 +109,7 @@ class CrowdComponent extends Component
      */
     public function checkByEmailPasswordCRM($email, $password)
     {
+        $toName = AccessKey::nameFromURL();
         $errorArr = [];
 
         $user = User::findOne(['email' => $email]);
@@ -122,9 +123,9 @@ class CrowdComponent extends Component
 //                        if ($roleInCrowd && $user->role !== $roleInCrowd) {
 //                            AccessKey::changeUserRole($user, $roleInCrowd);
 //                        }
-                        if(isset($_COOKIE[User::READ_COOKIE_NAME])) {
+                        if(isset($_COOKIE[User::READ_COOKIE_NAME . $toName])) {
 
-                            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
+                            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
                             if(isset($session->reason)){
                                 $this->createCrowdSessionAndCookie($email, $password);
                             }
@@ -134,7 +135,7 @@ class CrowdComponent extends Component
                         }
                     AccessKey::putAvatarInAm($email);
                 } else {
-                    $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
                 }
 
             } elseif($user->auth_type == User::DATABASE_AUTH){
@@ -148,7 +149,7 @@ class CrowdComponent extends Component
                         AccessKey::createUser($obj, $password);
                         AccessKey::putAvatarInAm($email);
             } else {
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
+                $errorArr['error'] = $this->getMessageFromCrowd($obj);
             }
         }
         return !empty($errorArr) ? $errorArr : true;
@@ -167,6 +168,12 @@ class CrowdComponent extends Component
         }
     }
 
+    public function getMessageFromCrowd($obj)
+    {
+        // {"reason":"USER_NOT_FOUND","message":"User <email@skynix.co> does not exist"}
+        return $obj->message . " in Crowd";
+    }
+
     /**
      * @param $email
      * @param $password
@@ -174,12 +181,13 @@ class CrowdComponent extends Component
     private function createCrowdSessionAndCookie($email, $password)
     {
         $path = "/";
-        $domain = ".skynix.co";
+        $domain = AccessKey::getStringFromURL();
+        $toName = AccessKey::nameFromURL();
         $newSession = AccessKey::createCrowdSession($email, $password);
-        setcookie(User::CREATE_COOKIE_NAME, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
+        setcookie(User::CREATE_COOKIE_NAME . $toName, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
 
         // delete db authorization cookie
-        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()-3600*60, $path, $domain);
+        setcookie(User::COOKIE_DATABASE . $toName, 'authorized_through_database',time()-3600*60, $path, $domain);
 
     }
 
@@ -189,10 +197,12 @@ class CrowdComponent extends Component
     public function createCookie()
     {
         $path = "/";
-        $domain = ".skynix.co";
-        setcookie(User::COOKIE_DATABASE, 'authorized_through_database',time()+(60*30), $path, $domain);
+        $domain = AccessKey::getStringFromURL();
+        $toName = AccessKey::nameFromURL();
+
+        setcookie(User::COOKIE_DATABASE . $toName, 'authorized_through_database',time()+(60*30), $path, $domain);
         //delete crowd cookie
-        setcookie(User::CREATE_COOKIE_NAME,"",time()-3600*60, $path, $domain);
+        setcookie(User::CREATE_COOKIE_NAME . $toName,"",time()-3600*60, $path, $domain);
 
     }
 
@@ -202,7 +212,8 @@ class CrowdComponent extends Component
     public function prolongCrowdCookie($session)
     {
         $path = "/";
-        $domain = ".skynix.co";
+        $domain = AccessKey::getStringFromURL();
+        $toName = AccessKey::nameFromURL();
 
         // get difference beetwen create and expiry date of the crowd session instead of hardcode 30 min
         $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($session, [], false);
@@ -212,7 +223,7 @@ class CrowdComponent extends Component
         $dateDiff = $expiry - $created;
 
         // set crowd.token_key cookie with value of current crowd token and expiry extended by expiry crowd date difference(30 min)
-        setcookie(User::CREATE_COOKIE_NAME, $_COOKIE[User::READ_COOKIE_NAME],time() + $dateDiff, $path, $domain);
+        setcookie(User::CREATE_COOKIE_NAME . $toName, $_COOKIE[User::READ_COOKIE_NAME . $toName],time() + $dateDiff, $path, $domain);
 
     }
 }

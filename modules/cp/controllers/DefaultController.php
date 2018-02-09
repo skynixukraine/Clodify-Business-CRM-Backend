@@ -17,20 +17,22 @@ class DefaultController extends Controller
 
     public function beforeAction( $action )
     {
-        if(isset($_COOKIE[User::READ_COOKIE_NAME]) || isset($_COOKIE[User::COOKIE_DATABASE])) {
+        $toName = AccessKey::nameFromURL();
 
-            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME]);
+        if(isset($_COOKIE[User::READ_COOKIE_NAME . $toName]) || isset($_COOKIE[User::COOKIE_DATABASE . $toName])) {
+
+            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
 
             if (isset($session->reason)) {
                 Yii::$app->getSession()->setFlash('success',
                     Yii::t("app", $session->reason . " You have to authenticate with email and password"));
                 return $this->redirect(["/site/login"]);
             } else {
-                if (isset($_COOKIE[User::COOKIE_DATABASE])) {
+                if (isset($_COOKIE[User::COOKIE_DATABASE . $toName])) {
                     // prolong db cookie to 20min
                     Yii::$app->crowdComponent->createCookie();
                 }
-                if (isset($_COOKIE[User::READ_COOKIE_NAME])) {
+                if (isset($_COOKIE[User::READ_COOKIE_NAME . $toName])) {
                     // prolong crowd cookie to 30min
                     Yii::$app->crowdComponent->prolongCrowdCookie($session);
                 }
