@@ -411,7 +411,8 @@ class UserController extends DefaultController {
 
         }
         return $this->render('edit', [
-            'model' => $user
+            'model'      => $user,
+            'auth_types' => \app\models\AuthType::find()->all()
         ]);
     }
 }

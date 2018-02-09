@@ -383,25 +383,11 @@ class AccessKey extends \yii\db\ActiveRecord
 
     /**
      * @return mixed
-     *  e.g "http://develop.skynix.co/"
+     *  e.g "develop.skynix.co"
      */
     public static function getStringFromURL()
     {
-        $url = Url::home(true);
-        $name = '';
-        $str = '';
-        if (strpos($url, 'http://') !== false) {
-            $str = str_replace("http://" , "", $url);
-        }
-
-        elseif (strpos($url, 'https://') !== false) {
-            $str = str_replace("https://" , "", $url);
-        }
-
-        if (strpos($url, '/') !== false) {
-            $name = str_replace("/" , "", $str);
-        }
-        return  '.' . $name;
+       return Yii::$app->getRequest()->hostName;
     }
 
     /*

@@ -54,7 +54,7 @@ if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
 
         <?php
             $model->auth_type = User::getAuthType($model);
-            echo $form->field($model, 'auth_type')->radioList(\yii\helpers\ArrayHelper::map(\app\models\AuthType::find()->all(), 'id', 'type_name')) ?>
+            echo $form->field($model, 'auth_type')->radioList(\yii\helpers\ArrayHelper::map($auth_types, 'id', 'type_name')) ?>
 
         <div>
             <?= Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
