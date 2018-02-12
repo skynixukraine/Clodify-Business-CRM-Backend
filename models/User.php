@@ -864,11 +864,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function checkUserStatus($model)
     {
-       if($model->auth_type = self::CROWD_AUTH){
-           return AccessKey::checkUserByName($model->email) ? "Active" : "Suspended";
-       } elseif($model->auth_type = self::DATABASE_AUTH){
-           return $model->is_active == 1 ? "Active" : "Suspended";
-       }
+        if($model->auth_type == self::CROWD_AUTH){
+            return AccessKey::checkUserByName($model->email) ? "Active in Crowd" : "Suspended in Crowd";
+        }
+        if($model->auth_type == self::DATABASE_AUTH){
+            return $model->is_active == 1 ? "Active in DB" : "Suspended in DB";
+        }
     }
 
     public static function getAuthType($model)
