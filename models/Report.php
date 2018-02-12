@@ -378,6 +378,9 @@ class Report extends \yii\db\ActiveRecord
             ->sum('cost');
     }
 
+    /**
+     * 
+     */
     public static function approveTodayReports()
     {
         self::updateAll(['is_approved' => 1], 'date_added=CURDATE() AND is_delete=0 AND is_approved=0');
