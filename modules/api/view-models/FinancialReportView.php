@@ -65,7 +65,7 @@ class FinancialReportView extends ViewModelAbstract
     }
 
     /**
-     *  convert date element to
+     *  convert unix timestamp date element to day format
      *
      * @param $string
      * @return mixed
