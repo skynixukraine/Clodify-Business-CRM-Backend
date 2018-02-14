@@ -36,7 +36,7 @@ class SalaryReportsCest
         $I->wantTo('Testing create salary reports');
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
             [
-                'report_date' => '12'  // same as financial_reports 'report_date' after updating
+                'report_date' => ValuesContainer::$FinancialReportDate
             ]
         ));
         $response = json_decode($I->grabResponse());

@@ -20,5 +20,5 @@ class ValuesContainer
     public static $contractId;
     public static $deleteReportId = 1;
     public static $FinancialReportId = 1;
-
+    public static $FinancialReportDate = 2;
 }

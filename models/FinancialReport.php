@@ -42,9 +42,9 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         return [
             [['report_date'], 'integer',
-                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
             [['report_date'], 'required',
-                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE, self::SCENARIO_FINANCIAL_REPORT_UPDATE]],
+                'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
             [['income', 'expense_constant', 'investments', 'spent_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
