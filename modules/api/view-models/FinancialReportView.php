@@ -65,7 +65,7 @@ class FinancialReportView extends ViewModelAbstract
     }
 
     /**
-     * convert date element to Jul 23 format
+     *  convert date element to
      *
      * @param $string
      * @return mixed
@@ -76,7 +76,7 @@ class FinancialReportView extends ViewModelAbstract
             $array = json_decode($string);
             foreach ($array as $arr) {
                 if (!empty ($arr->date)) {
-                    $arr->date = date('F j', $arr->date);
+                    $arr->date = date('d', $arr->date);
                 }
             }
             return $array;
