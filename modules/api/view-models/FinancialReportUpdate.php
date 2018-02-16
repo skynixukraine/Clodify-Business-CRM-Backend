@@ -32,22 +32,6 @@ class FinancialReportUpdate extends ViewModelAbstract
 
                 if (!$financialReport->is_locked) {
 
-                    if (isset($this->postData['report_date'])) {
-
-                        $reportDate = date("d.", $financialReport->report_date) .
-                            $this->postData['report_date'] .
-                            date(".Y", $financialReport->report_date);
-
-
-                        $reportDate = DateUtil::convertDateToUnix($reportDate);
-
-                        if (!FinancialReport::validateReportDate($reportDate)) {
-                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created'));
-                        }
-
-                        $this->postData['report_date'] = $reportDate;
-                    }
-
                     if (isset($this->postData['income']) && User::hasPermission([User::ROLE_ADMIN])) {
 
                         $this->postData['income'] = $this->getElement('income', $financialReport);
