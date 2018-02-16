@@ -50,7 +50,7 @@ class FinancialReportUpdate extends ViewModelAbstract
 
                     if (isset($this->postData['income']) && User::hasPermission([User::ROLE_ADMIN])) {
 
-                        $this->postData['income'] = $this->getElement('income', $financialReport);
+                        $this->postData['income'] = $this->getElement('income');
 
                     } else {
                         unset($this->postData['income']);
@@ -58,17 +58,17 @@ class FinancialReportUpdate extends ViewModelAbstract
 
                     if (isset($this->postData['expense_constant'])) {
 
-                        $this->postData['expense_constant'] = $this->getElement('expense_constant', $financialReport);
+                        $this->postData['expense_constant'] = $this->getElement('expense_constant');
                     }
 
                     if (isset($this->postData['investments'])) {
 
-                        $this->postData['investments'] = $this->getElement('investments', $financialReport);
+                        $this->postData['investments'] = $this->getElement('investments');
                     }
 
                     if (isset($this->postData['spent_corp_events'])) {
 
-                        $this->postData['spent_corp_events'] = $this->getElement('spent_corp_events', $financialReport);
+                        $this->postData['spent_corp_events'] = $this->getElement('spent_corp_events');
 
                     }
 
@@ -101,46 +101,14 @@ class FinancialReportUpdate extends ViewModelAbstract
         }
     }
 
-    /**
-     *
-     * get values for converting date element
-     * @param $attributes
-     * @param FinancialReport $financialReport
-     * @return array|null
-     */
-    private function getElement($attributName, FinancialReport $financialReport)
-    {
-        return $this->convertDateForElement(
-            $this->postData[$attributName],
-            $this->postData['report_date'] ?: $financialReport->report_date,
-            $financialReport);
-
-    }
 
     /**
-     *
-     * convert date from day format to timestamp for db
-     * @param $array
-     * @param $month
-     * @param $financialReport
-     * @return null|array
+     * @param $attributName
+     * @return string
      */
-    private function convertDateForElement($array, $reportDateFromPost, $financialReport)
+    private function getElement($attributName)
     {
-        if (is_array($array)) {
-            foreach ($array as &$arr) {
-                if (!empty ($arr)) {
-                   $arr['date'] = DateUtil::convertDateToUnix(
-                       $arr['date'] . '.' .
-                       date("m",$reportDateFromPost) .
-                       date(".Y",$financialReport->report_date));
-                }
-            }
-
-            return json_encode($array);
-        }
-
-        return null;
+        return json_encode($this->postData[$attributName]);
     }
 
 }
