@@ -29,10 +29,10 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) . ' - ' . Yii::$app->params['applicationName']?></title>
     <?php $this->head() ?>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/img/favicon.png" />
 </head>
 <body>
-<body class="skin-blue sidebar-mini">
+<body class="skin-black-dark sidebar-mini">
 <?php $this->beginBody() ?>
 <div class="wrapper">
 
@@ -42,7 +42,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>FPP</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><?= Html::img('/img/skynix-logo-white.png')?></span>
+            <span class="logo-lg"><?= Html::img('/img/logo.png', ['alt'=> Yii::$app->params['applicationName'] ])?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <!--<nav class="navbar navbar-static-top" role="navigation">-->
@@ -82,24 +82,29 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
-                            <?php if (Yii::$app->user->identity->photo != null):?>
-                                <img src="/cp/setting/download?photo=data/<?=Yii::$app->user->identity->id?>/photo/<?=Yii::$app->user->identity->photo?>" class="user-image" alt="User Image"/>
-                            <?php else:?>
-                                 <img src="/img/avatar.png" class="user-image" alt="User Image"/>
-                            <?php endif;?>
+                            <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>" class="user-image" alt="User Image"/>
+
+                            <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
+<!--                                <img src="/cp/setting/download?photo=data/--><?//=Yii::$app->user->identity->id?><!--/photo/--><?//=Yii::$app->user->identity->photo?><!--" class="user-image" alt="User Image"/>-->
+<!--                            --><?php //else:?>
+<!--                                <img src="/img/avatar.png" class="user-image" alt="User Image"/>-->
+<!--                            --><?php //endif;?>
                             <span class="hidden-xs"><?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?></span>
 
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <?php if (Yii::$app->user->identity->photo != null):?>
-                                    <img src="<?=urldecode( Url::to (['/cp/setting/download?photo=data/' .
-                                        Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?>"
-                                         class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
-                                <?php else:?>
-                                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
-                                <?php endif;?>
+
+                                <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />
+
+                                <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
+<!--                                    <img src="--><?//=urldecode( Url::to (['/cp/setting/download?photo=data/' .
+//                                        Yii::$app->user->id.'/photo/'.Yii::$app->user->identity->photo ]))?><!--"-->
+<!--                                         class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />-->
+<!--                                --><?php //else:?>
+<!--                                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="User Image" />-->
+<!--                                --><?php //endif;?>
                                 <p>
                                     <?=Yii::$app->user->identity->first_name . " " . Yii::$app->user->identity->last_name?>
                                     <?php if (Yii::$app->user->identity->photo != null):?>
@@ -129,11 +134,14 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/app.js');
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <?php if (Yii::$app->user->identity->photo != null):?>
-                    <img src="/cp/setting/download?photo=data/<?=Yii::$app->user->identity->id?>/photo/<?=Yii::$app->user->identity->photo?>" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
-                    <?php else:?>
-                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
-                    <?php endif?>
+
+                    <img src="/cp/setting/download-avatar?id=<?=Yii::$app->user->identity->id?>"  class="img-circle" style="max-width: 100px; height: 100px;" alt="<?=Yii::t('app', 'User Image')?>" />
+
+                    <!--   <?php //if (Yii::$app->user->identity->photo != null):?>
+<!--                    <img src="/cp/setting/download?photo=data/--><?//=Yii::$app->user->identity->id?><!--/photo/--><?//=Yii::$app->user->identity->photo?><!--" class="img-circle" style="max-width: 100px; height: 100px;" alt="--><?//=Yii::t('app', 'User Image')?><!--" />-->
+<!--                    --><?php //else:?>
+<!--                    <img src="/img/avatar.png" class="img-circle" style="max-width: 100px; height: 100px;" alt="--><?//=Yii::t('app', 'User Image')?><!--" />-->
+<!--                    --><?php //endif?>
                 </div>
                 <div class="pull-left info" style="word-break: break-all; position: relative; float: left !important; width: 78%; left: 0;">
                     <p style="white-space: normal !important"><?=Yii::$app->user->identity->first_name?></p>

@@ -29,18 +29,38 @@ class Storage
      */
     public function upload($keyname,$filepath)
     {
+        try {
+            $result = $this->s3->putObject(array(
+                'Bucket' => $this->basket,
+                'Key' => $keyname,
+                'SourceFile' => $filepath,
+                'ContentType' => 'image',
+                'ACL' => 'bucket-owner-full-control',
+                'StorageClass' => 'REDUCED_REDUNDANCY',
+                "Cache-Control" => "max-age=315360000",
+                'Metadata' => array(
+                    'param1' => 'value 1',
+                    'param2' => 'value 2'
+                )
+            ));
+        } catch (\Exception $e) {
+            throw new $e;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $keyname
+     * @param $file
+     * @return mixed
+     */
+    public function uploadData($keyname, $file)
+    {
         $result = $this->s3->putObject(array(
             'Bucket' => $this->basket,
-            'Key' => $keyname,
-            'SourceFile' => $filepath,
-            'ContentType' => 'image',
-            'ACL' => 'bucket-owner-full-control',
-            'StorageClass' => 'REDUCED_REDUNDANCY',
-            "Cache-Control" => "max-age=315360000",
-            'Metadata' => array(
-                'param1' => 'value 1',
-                'param2' => 'value 2'
-            )
+            'Key'    => $keyname,
+            'Body'   => $file
         ));
         return $result;
     }
@@ -64,6 +84,7 @@ class Storage
 
         return $file;
     }
+
     public function downloadToFile($key ='', $pathToFile = '') {
 
         $result = $this->s3->getObject([

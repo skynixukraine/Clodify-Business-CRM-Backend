@@ -37,7 +37,7 @@ class FinancialReportsCest
         $I->wantTo('Testing create financial reports');
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
             [
-                'report_date' => '7'
+                'report_date' => ValuesContainer::$FinancialReportDate
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -69,7 +69,7 @@ class FinancialReportsCest
 
                 "amount" => 2000,
                 "description" => "Some Income1",
-                "date" => 123243543545
+                "date" => 1521676800
             ),
         );
 
@@ -93,7 +93,7 @@ class FinancialReportsCest
 
                 "amount" => 2000,
                 "description" => "Spent Corp Events1",
-                "date" => 123243543545
+                "date" => 1533157200
             ),
         );
 
@@ -101,7 +101,6 @@ class FinancialReportsCest
         $I->sendPUT(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId,
             json_encode([
 
-                'report_date'         => '3',
                 'currency'            => 26.6,
                 'expense_salary'      => 3000,
                 'num_of_working_days' => 30,

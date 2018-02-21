@@ -41,7 +41,7 @@ class UserController extends DefaultController {
                 ],
                 'rules' => [
                     [
-                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update', 'activate'],
+                        'actions'   => [ 'find', 'index', 'invite', 'delete', 'loginas', 'loginback', 'update', 'activate', 'change-auth-type'],
                         'allow'     => true,
                         'roles'     => [User::ROLE_ADMIN],
                     ],
@@ -222,15 +222,21 @@ class UserController extends DefaultController {
                     $salary_up = 'No Changes';
                 }
 
-                if ($model->photo) {
-                    $photo = urldecode(Url::to(
+//                if ($model->photo) {
+//                    $photo = urldecode(Url::to(
+//                        [
+//                            '/cp/setting/download?photo=data/' . $model->id . '/photo/' . $model->photo
+//                        ]
+//                    ));
+//                } else {
+//                    $photo = "/img/avatar.png";
+//                }
+
+              $photo = urldecode(Url::to(
                         [
-                            '/cp/setting/download?photo=data/' . $model->id . '/photo/' . $model->photo
+                            '/cp/setting/download-avatar?id=' . $model->id
                         ]
                     ));
-                } else {
-                    $photo = "/img/avatar.png";
-                }
 
                 if (User::hasPermission([User::ROLE_ADMIN])) {
                     $row[] = $model->id;
@@ -247,7 +253,7 @@ class UserController extends DefaultController {
                 $row []  = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row []  = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 if (User::hasPermission([User::ROLE_ADMIN])) {
-                    $row [] = $model->is_active == 1 ? "Active" : "Suspended";
+                    $row [] = User::checkUserStatus($model);  //$model->is_active == 1 ? "Active" : "Suspended";
                 }
                 if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
                     $row [] = '$' . number_format($model->salary);
@@ -405,7 +411,8 @@ class UserController extends DefaultController {
 
         }
         return $this->render('edit', [
-            'model' => $user
+            'model'      => $user,
+            'auth_types' => \app\models\AuthType::find()->all()
         ]);
     }
 }

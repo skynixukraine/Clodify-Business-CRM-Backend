@@ -370,6 +370,7 @@ var userModule = (function() {
                     actionEdit( id );
 
                 });
+
                 dataTable.find('td:contains("Suspend")').parent('tr').addClass('suspend');
                 dataTable.find('td:contains("Active")').parent('tr').removeClass('suspend');
                 dataTable.find('a.active, a.suspended').on('click', (function(e){

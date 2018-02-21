@@ -57,12 +57,20 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate() && $this->getUser()->is_delete == 0 && $this->getUser()->is_active == 1 ) {
+        if($this->getUser()->auth_type == User::CROWD_AUTH){
+          return  $this->enter();
+        } elseif ($this->getUser()->auth_type == User::DATABASE_AUTH){
+            if ($this->validate() && $this->getUser()->is_delete == 0 && $this->getUser()->is_active == 1 ) {
+            return  $this->enter();
+            }
+        } //elseif (other auth type){
 
-                return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
-
-        }
+        //  }
         return false;
+    }
+
+    public function enter(){
+      return  Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
     }
 
     public function loginNoActive()

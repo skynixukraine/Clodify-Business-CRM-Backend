@@ -212,7 +212,7 @@ CREATE TABLE `financial_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `financial_reports`
+-- Table structure for table `financial_yearly_reports`
 --
 
 DROP TABLE IF EXISTS `financial_yearly_reports`;
@@ -302,6 +302,19 @@ CREATE TABLE `settings` (
   `type` enum('INT','STRING') DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `auth_types`
+--
+DROP TABLE IF EXISTS `auth_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_name` text null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -931,6 +944,7 @@ CREATE TABLE `users` (
   `languages` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `official_salary` double null,
+  `auth_type` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;
