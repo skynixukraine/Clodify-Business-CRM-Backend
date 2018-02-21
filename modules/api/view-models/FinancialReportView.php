@@ -38,16 +38,16 @@ class FinancialReportView extends ViewModelAbstract
                         'expense_salary',
                         'num_of_working_days',
                         'income' => function ($financialReport) {
-                            return $this->convertElement($financialReport->income);
+                            return $financialReport->income ? json_decode($financialReport->income) : [];
                         },
                         'expense_constant' => function ($financialReport) {
-                            return $this->convertElement($financialReport->expense_constant);
+                            return $financialReport->expense_constant ? json_decode($financialReport->expense_constant) : [];
                         },
                         'investments' => function ($financialReport) {
-                            return $this->convertElement($financialReport->investments);
+                            return $financialReport->investments ? json_decode($financialReport->investments) : [];
                         },
                         'spent_corp_events' => function ($financialReport) {
-                            return $this->convertElement($financialReport->spent_corp_events);
+                            return $financialReport->spent_corp_events ? json_decode($financialReport->spent_corp_events) : [];
                         },
                     ],
                 ]);
@@ -62,25 +62,5 @@ class FinancialReportView extends ViewModelAbstract
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
-    }
-
-    /**
-     * convert date element to Jul 23 format
-     *
-     * @param $string
-     * @return mixed
-     */
-    private function convertElement($string)
-    {
-        if ($string) {
-            $array = json_decode($string);
-            foreach ($array as $arr) {
-                if (!empty ($arr->date)) {
-                    $arr->date = date('F j', $arr->date);
-                }
-            }
-            return $array;
-        }
-        return [];
     }
 }
