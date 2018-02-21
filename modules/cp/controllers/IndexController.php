@@ -13,6 +13,7 @@ use app\models\Invoice;
 use app\models\Project;
 use app\models\Report;
 use app\models\User;
+use app\modules\api\models\AccessKey;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -185,7 +186,8 @@ class IndexController extends DefaultController
             Yii::$app->request->isPost ) ) {
             if ($data = json_decode($_POST['jsonData'])) {
                 // prohibit any action if session ended
-                if(!isset($_COOKIE[User::READ_COOKIE_NAME]) && !isset($_COOKIE[User::COOKIE_DATABASE])) {
+                $cookieNameUrl = AccessKey::nameFromURL();
+                if(!isset($_COOKIE[User::READ_COOKIE_NAME . $cookieNameUrl]) && !isset($_COOKIE[User::COOKIE_DATABASE . $cookieNameUrl])) {
                     exit();
                 }
                 if (isset($data->id)) {
