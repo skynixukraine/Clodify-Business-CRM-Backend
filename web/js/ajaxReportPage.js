@@ -637,18 +637,12 @@ var ajaxReportPageModule = (function() {
                 return +time;
             }
 
-            //function remove properties from object, and delete error message from page when ajax sent
+            //function remove properties from object, and delete error message from page when ajax sent  2018-02-23T16:12:55.880Z
             function ajaxSuccessFunc(er, data) {
                 if (er == "error") {
                     var ajaxError = $('.ajax-error');
-                    if(typeof data !== 'undefined'){
-                        ajaxError.remove();
-                        lastForm.append('<p class = "ajax-error"> Your session is ended!!! </p>')
-                    } else {
-                        //  var ajaxError = $('.ajax-error');
-                        ajaxError.remove();
-                        lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
-                    }
+                    ajaxError.remove();
+                    lastForm.append('<p class = "ajax-error">' + data.errors.message + '</p>')
                 } else {
                     var ajaxError = $('.ajax-error');
                     ajaxError.remove();
