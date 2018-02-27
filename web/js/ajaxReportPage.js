@@ -637,7 +637,7 @@ var ajaxReportPageModule = (function() {
                 return +time;
             }
 
-            //function remove properties from object, and delete error message from page when ajax sent  2018-02-23T16:12:55.880Z
+            //function remove properties from object, and delete error message from page when ajax sent 
             function ajaxSuccessFunc(er, data) {
                 if (er == "error") {
                     var ajaxError = $('.ajax-error');
