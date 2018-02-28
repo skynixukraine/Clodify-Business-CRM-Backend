@@ -104,6 +104,8 @@ class SalaryReportsCest
                         'currency_rate'          => 'float | integer',
                         'total_to_pay'           => 'float | integer',
                         'number_of_working_days' => 'integer',
+                        "total_reported_hours"   => 'integer',
+                        "total_approved_hours"   => 'integer'
 
                     ]
                 ],
