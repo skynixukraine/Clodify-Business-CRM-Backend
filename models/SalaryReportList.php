@@ -31,6 +31,8 @@ use Yii;
  * @property double $currency_rate
  * @property double $subtotal_uah
  * @property double $total_to_pay
+ * @property integer $approved_hours
+ * @property integer $worked_hours
  *
  * @property SalaryReport $salaryReport
  * @property User $user
@@ -40,6 +42,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
     const SCENARIO_SALARY_REPORT_LISTS_CREATE = 'api-salary_report-lists_create';
     const SCENARIO_SALARY_REPORT_LISTS_UPDATE = 'api-salary_report-lists_update';
 
+    public $worked_hours;
+    public $approved_hours;
 
     /**
      * @inheritdoc
@@ -66,6 +70,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
+            [['worked_hours', 'approved_hours'], 'integer'],
         ];
     }
 
@@ -93,6 +98,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
             'currency_rate' => 'Currency Rate',
             'subtotal_uah' => 'Subtotal Uah',
             'total_to_pay' => 'Total To Pay',
+            'worked_hours' => 'Worked Hours',
+            'approved_hours' => 'Approved Hours'
         ];
     }
 

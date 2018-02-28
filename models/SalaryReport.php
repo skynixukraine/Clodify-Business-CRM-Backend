@@ -111,4 +111,37 @@ class SalaryReport extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @param $salRep
+     * @return int|mixed
+     */
+    public static function getTotalReportedHours($salRep)
+    {
+
+        $date = date('Y-m', $salRep->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
+    }
+
+    /**
+     * @param $salRep
+     * @return int|mixed
+     */
+    public static function getTotalApprovedHours($salRep)
+    {
+
+        $date = date('Y-m', $salRep->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['is_approved' => Report::APPROVED])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
+    }
+
 }

@@ -40,22 +40,23 @@ class SalaryReportDownload extends ViewModelAbstract
 
             if ($salaryReport) {
                 $salaryReportData = ArrayHelper::toArray($salaryReport, [
-                        SalaryReport::className() => [
-                            'total_to_pay' => 'total_to_pay',
-                            'currency_rate',
-                            'total_to_pay_uah' => function ($salaryReport) {
-                                return $salaryReport->total_to_pay *  $salaryReport->currency_rate;
-                            },
-                            'financial_report_status' => function ($salaryReport) {
-                                return FinancialReport::isLock($salaryReport->report_date) ? 'Locked' : 'Unlocked';
-                            }
-                        ],
-                    ]);
+                    SalaryReport::className() => [
+                        'total_to_pay' => 'total_to_pay',
+                        'currency_rate',
+                        'total_to_pay_uah' => function ($salaryReport) {
+                            return $salaryReport->total_to_pay * $salaryReport->currency_rate;
+                        },
+                        'financial_report_status' => function ($salaryReport) {
+                            return FinancialReport::isLock($salaryReport->report_date) ? 'Locked' : 'Unlocked';
+                        }
+                    ],
+                ]);
 
 
                 $salaryReportList = SalaryReportList::find()
                     ->andWhere(['salary_report_id' => $salaryReport->id])
                     ->all();
+
                 if ($salaryReportList) {
                     $salaryReportListData = ArrayHelper::toArray($salaryReportList, [
                         SalaryReportList::className() => [
@@ -70,13 +71,23 @@ class SalaryReportDownload extends ViewModelAbstract
                             'total_to_pay' => function ($salaryReport) {
                                 return $salaryReport->total_to_pay;
                             },
-                            'first_name'  => function ($salaryReport) {
+                            'first_name' => function ($salaryReport) {
                                 return $salaryReport->user->first_name ?: '';
                             },
-                            'last_name'   => function ($salaryReport) {
+                            'last_name' => function ($salaryReport) {
                                 return $salaryReport->user->last_name ?: '';
-                            }
+                            },
+                            'is_admin' => function ($salaryReportList){
+                                return $salaryReportList->user->role == User::ROLE_ADMIN;
+                            },
 
+                            // next params ignored for admin in PDF
+                            'worked_hours' => function ($salaryReportList) {
+                                return SalaryReportList::sumReportedHoursForMonthPerUser($salaryReportList);
+                            },
+                            'approved_hours' => function ($salaryReportList) {
+                                return SalaryReportList::sumApprovedHoursForMonthPerUser($salaryReportList);
+                            }
                         ],
                     ]);
                 }
@@ -101,7 +112,6 @@ class SalaryReportDownload extends ViewModelAbstract
         } else {
             return $this->addError(Processor::ERROR_PARAM, Message::get(Processor::CODE_NOT_ATHORIZED));
         }
-
     }
 
     /**
