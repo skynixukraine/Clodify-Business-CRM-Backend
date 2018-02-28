@@ -110,4 +110,5 @@ class SalaryReport extends \yii\db\ActiveRecord
             }
         }
     }
+
 }

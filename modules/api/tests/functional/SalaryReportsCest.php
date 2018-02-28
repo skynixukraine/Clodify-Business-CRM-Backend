@@ -233,6 +233,8 @@ class SalaryReportsCest
                         'currency_rate'              => 'integer | float',
                         'subtotal_uah'               => 'integer | float',
                         'total_to_pay'               => 'integer | float',
+                        "reported_hours"             => 'integer',
+                        "approved_hours"             => 'integer'
                     ]
                 ],
                 'total_records' => 'string'

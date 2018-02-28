@@ -274,4 +274,39 @@ class SalaryReportList extends \yii\db\ActiveRecord
        return $workDays <= $numWorkDays ? $workDays : $numWorkDays;
     }
 
+    /**
+     * @param $salRepList
+     * @return mixed
+     */
+    public static function sumReportedHoursForMonthPerUser($salRepList)
+    {
+
+        $date = date('Y-m', $salRepList->salaryReport->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['user_id' => $salRepList->user_id])
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
+    }
+
+    /**
+     * @param $salRepList
+     * @return mixed
+     */
+    public static function sumApprovedHoursForMonthPerUser($salRepList)
+    {
+
+        $date = date('Y-m', $salRepList->salaryReport->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['user_id' => $salRepList->user_id])
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['is_approved' => Report::APPROVED])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
+    }
+
 }
