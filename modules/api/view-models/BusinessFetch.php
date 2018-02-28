@@ -29,13 +29,17 @@ class BusinessFetch extends ViewModelAbstract
             $order = Yii::$app->request->getQueryParam('order');
             $start = Yii::$app->request->getQueryParam('start') ?: 0;
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+            $keyword = Yii::$app->request->getQueryParam('search_query');
 
             $query = Business::find();
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
                 ->setLimit($limit)
-                ->setStart($start);
+                ->setStart($start)->setSearchValue($keyword)
+                ->setSearchParams([ 'or',
+                    ['like', 'name', $keyword]
+                ]);
 
             if ($order) {
                 foreach ($order as $name => $value) {
