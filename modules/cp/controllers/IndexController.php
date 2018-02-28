@@ -188,7 +188,11 @@ class IndexController extends DefaultController
                 // prohibit any action if session ended
                 $cookieNameUrl = AccessKey::nameFromURL();
                 if(!isset($_COOKIE[User::READ_COOKIE_NAME . $cookieNameUrl]) && !isset($_COOKIE[User::COOKIE_DATABASE . $cookieNameUrl])) {
-                    exit();
+                    return json_encode([
+                        "success" => false,
+                        "id" => $model->id,
+                        "errors" => ["field" => '', "message" => "Your session is ended!!!"]
+                    ]);
                 }
                 if (isset($data->id)) {
 
