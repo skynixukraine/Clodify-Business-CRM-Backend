@@ -31,6 +31,8 @@ use Yii;
  * @property double $currency_rate
  * @property double $subtotal_uah
  * @property double $total_to_pay
+ * @property integer $approved_hours
+ * @property integer $worked_hours
  *
  * @property SalaryReport $salaryReport
  * @property User $user
@@ -40,8 +42,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
     const SCENARIO_SALARY_REPORT_LISTS_CREATE = 'api-salary_report-lists_create';
     const SCENARIO_SALARY_REPORT_LISTS_UPDATE = 'api-salary_report-lists_update';
 
-    static $worked_hours;
-    static $approved_hours;
+    public $worked_hours;
+    public $approved_hours;
 
     /**
      * @inheritdoc

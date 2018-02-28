@@ -80,7 +80,7 @@ class SalaryReportDownload extends ViewModelAbstract
                             'is_admin' => function ($salaryReportList){
                                 return $salaryReportList->user->role == User::ROLE_ADMIN;
                             },
-                            
+
                             // next params ignored for admin in PDF
                             'worked_hours' => function ($salaryReportList) {
                                 return SalaryReportList::sumReportedHoursForMonthPerUser($salaryReportList);
