@@ -94,7 +94,6 @@ class OperationFetch extends ViewModelAbstract
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
-
     }
 
 }
