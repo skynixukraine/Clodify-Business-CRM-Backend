@@ -13,13 +13,11 @@ use app\modules\api\components\SortHelper;
 use app\components\DataTable;
 use app\components\DateUtil;
 use app\models\Operation;
-use app\models\Report;
-use yii\helpers\ArrayHelper;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 
 /**
- * Class OperationTypeFetch
+ * Class OperationFetch
  * @see     https://jira.skynix.co/browse/SCA-99
  * @package viewModel
  */
