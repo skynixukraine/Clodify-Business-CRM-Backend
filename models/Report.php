@@ -43,6 +43,8 @@ class Report extends \yii\db\ActiveRecord
     const STATUS_WONTPAID   = "WONTPAID";
     const SALARY_HOURS      = 168;
     const ACTIVE            = 0;
+    const APPROVED          = 1;
+
     /**
      * @inheritdoc
      */

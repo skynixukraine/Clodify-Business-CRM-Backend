@@ -40,6 +40,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
     const SCENARIO_SALARY_REPORT_LISTS_CREATE = 'api-salary_report-lists_create';
     const SCENARIO_SALARY_REPORT_LISTS_UPDATE = 'api-salary_report-lists_update';
 
+    static $worked_hours;
+    static $approved_hours;
 
     /**
      * @inheritdoc
@@ -66,6 +68,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
+            [['worked_hours', 'approved_hours'], 'integer'],
         ];
     }
 
@@ -93,6 +96,8 @@ class SalaryReportList extends \yii\db\ActiveRecord
             'currency_rate' => 'Currency Rate',
             'subtotal_uah' => 'Subtotal Uah',
             'total_to_pay' => 'Total To Pay',
+            'worked_hours' => 'Worked Hours',
+            'approved_hours' => 'Approved Hours'
         ];
     }
 
@@ -272,6 +277,41 @@ class SalaryReportList extends \yii\db\ActiveRecord
     {
         $workDays = self::numWorkedDaysInMonth($date);
        return $workDays <= $numWorkDays ? $workDays : $numWorkDays;
+    }
+
+    /**
+     * @param $salRepList
+     * @return mixed
+     */
+    public static function sumReportedHoursForMonthPerUser($salRepList)
+    {
+
+        $date = date('Y-m', $salRepList->salaryReport->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['user_id' => $salRepList->user_id])
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
+    }
+
+    /**
+     * @param $salRepList
+     * @return mixed
+     */
+    public static function sumApprovedHoursForMonthPerUser($salRepList)
+    {
+
+        $date = date('Y-m', $salRepList->salaryReport->report_date);
+
+        $sum = Report::find()
+            ->andWhere(['user_id' => $salRepList->user_id])
+            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['is_approved' => Report::APPROVED])
+            ->andWhere(['like', 'date_added', $date])
+            ->sum(Report::tableName() . '.hours');
+        return $sum ? $sum : 0;
     }
 
 }
