@@ -112,19 +112,17 @@ class SalaryReportDownload extends ViewModelAbstract
         } else {
             return $this->addError(Processor::ERROR_PARAM, Message::get(Processor::CODE_NOT_ATHORIZED));
         }
+    }
 
-}
-
-/**
- * @return int|string
- */
-private
-function countEmployedUsers()
-{
-    return User::find()
-        ->andWhere(['is_active' => User::ACTIVE_USERS])
-        ->andWhere(['is_delete' => !User::DELETED_USERS])
-        ->andWhere(['not', ['salary' => null]])
-        ->count();
-}
+    /**
+     * @return int|string
+     */
+    private function countEmployedUsers()
+    {
+        return User::find()
+            ->andWhere(['is_active' => User::ACTIVE_USERS])
+            ->andWhere(['is_delete' => !User::DELETED_USERS])
+            ->andWhere(['not', ['salary' => null]])
+            ->count();
+    }
 }
