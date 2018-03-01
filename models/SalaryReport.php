@@ -143,4 +143,5 @@ class SalaryReport extends \yii\db\ActiveRecord
             ->sum(Report::tableName() . '.hours');
         return $sum ? $sum : 0;
     }
+
 }
