@@ -100,10 +100,16 @@ class SalaryReportDownload extends ViewModelAbstract
                 ]);
                 $pdf = new mPDF();
                 @$pdf->WriteHTML($content);
-                return $pdf->Output('SalaryReport'
-                    . $salaryReport->id . '_'
-                    . DateUtil::convertDateFromUnix($salaryReport->report_date, 'Y_m')
-                    . '.pdf', 'D');
+
+                $name = 'SalaryReport_' . $salaryReport->id . '_' .
+                    DateUtil::convertDateFromUnix($salaryReport->report_date, 'Y_m') . '.pdf';
+
+                $this->setData(
+                    [
+                        'pdf'  => base64_encode($pdf->Output($name, 'S')),
+                        'name' => $name
+                    ]
+                );
 
             } else {
                 return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Salary report not found'));
