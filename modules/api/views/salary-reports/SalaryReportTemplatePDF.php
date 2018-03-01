@@ -75,6 +75,16 @@
             <td class="tg-yw4l">Currency Rate: $<?=$salaryList['currency_rate']?>/UAH</td>
         </tr>
         <?php endif;?>
+        <?php if (isset($salaryList['worked_hours']) && !$salaryList['is_admin']):?>
+            <tr>
+                <td class="tg-yw4l">Worked Hours: <?=$salaryList['worked_hours'] . ' '?>-hr</td>
+            </tr>
+        <?php endif;?>
+        <?php if (isset($salaryList['approved_hours']) && !$salaryList['is_admin']):?>
+            <tr>
+                <td class="tg-yw4l">Approved Hours: <?=$salaryList['approved_hours'] . ' '?>-hr</td>
+            </tr>
+        <?php endif;?>
         <?php if ($salaryList['bonuses']):?>
             <tr>
                 <td class="tg-yw4l">Bonuses: <?=$salaryList['bonuses']?></td>
@@ -90,9 +100,9 @@
                 <td class="tg-yw4l">Overtime: <?=$salaryList['overtime_value']?></td>
             </tr>
         <?php endif;?>
-        <?php if ($salaryList['hospital']):?>
+        <?php if ($salaryList['hospital_value']):?>
             <tr>
-                <td class="tg-yw4l">Hospital: <?=$salaryList['hospital']?></td>
+                <td class="tg-yw4l">Hospital: <?=$salaryList['hospital_value']?></td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['subtotal']):?>

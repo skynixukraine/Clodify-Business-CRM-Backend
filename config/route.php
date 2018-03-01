@@ -65,6 +65,8 @@ return [
     'GET '      . $API . '/businesses'                                        => $API . '/businesses/fetch',
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
     'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
+    'GET '      . $API . '/operations'                                        => $API . '/operations/fetch',
+
 
 
     // General rules

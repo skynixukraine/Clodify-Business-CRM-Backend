@@ -52,19 +52,21 @@ class SalaryReportFetch extends ViewModelAbstract
 
                 foreach ($salaryReport as $key => $salRep) {
                     $salaryReport[$key] = [
-                        'id' => $salRep->id,
-                        "report_date" => DateUtil::dateRangeForFetch($salRep->report_date),
-                        "total_salary" => $salRep->total_salary,
-                        "official_salary" => $salRep->official_salary,
-                        "bonuses" => $salRep->bonuses,
-                        "hospital" => $salRep->hospital,
-                        "day_off" => $salRep->day_off,
-                        "overtime" => $salRep->overtime,
-                        "other_surcharges" => $salRep->other_surcharges,
-                        "subtotal" => $salRep->subtotal,
-                        "currency_rate" => $salRep->currency_rate,
-                        "total_to_pay" => $salRep->total_to_pay,
-                        "number_of_working_days" => $salRep->number_of_working_days
+                        'id'                     => $salRep->id,
+                        "report_date"            => DateUtil::dateRangeForFetch($salRep->report_date),
+                        "total_salary"           => $salRep->total_salary,
+                        "official_salary"        => $salRep->official_salary,
+                        "bonuses"                => $salRep->bonuses,
+                        "hospital"               => $salRep->hospital,
+                        "day_off"                => $salRep->day_off,
+                        "overtime"               => $salRep->overtime,
+                        "other_surcharges"       => $salRep->other_surcharges,
+                        "subtotal"               => $salRep->subtotal,
+                        "currency_rate"          => $salRep->currency_rate,
+                        "total_to_pay"           => $salRep->total_to_pay,
+                        "number_of_working_days" => $salRep->number_of_working_days,
+                        "total_reported_hours"   => SalaryReport::getTotalReportedHours($salRep),
+                        "total_approved_hours"   => SalaryReport::getTotalApprovedHours($salRep)
                     ];
                 }
 

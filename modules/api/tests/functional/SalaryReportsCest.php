@@ -104,6 +104,8 @@ class SalaryReportsCest
                         'currency_rate'          => 'float | integer',
                         'total_to_pay'           => 'float | integer',
                         'number_of_working_days' => 'integer',
+                        "total_reported_hours"   => 'integer',
+                        "total_approved_hours"   => 'integer'
 
                     ]
                 ],
@@ -233,6 +235,8 @@ class SalaryReportsCest
                         'currency_rate'              => 'integer | float',
                         'subtotal_uah'               => 'integer | float',
                         'total_to_pay'               => 'integer | float',
+                        "reported_hours"             => 'integer',
+                        "approved_hours"             => 'integer'
                     ]
                 ],
                 'total_records' => 'string'
@@ -253,6 +257,18 @@ class SalaryReportsCest
         $I->wantTo('Testing download salary report to pdf');
         $I->sendGET(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId);
         $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
     }
 
     /**

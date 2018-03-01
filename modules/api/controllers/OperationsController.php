@@ -37,4 +37,17 @@ class OperationsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Operation')
+            ->set('viewModel\ViewModelInterface', 'viewModel\OperationFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_GET],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }

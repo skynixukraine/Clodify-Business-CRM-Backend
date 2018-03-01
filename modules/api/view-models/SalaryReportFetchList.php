@@ -71,7 +71,9 @@ class SalaryReportFetchList extends ViewModelAbstract
                         "subtotal"                   => $salRepList->subtotal,
                         "currency_rate"              => $salRepList->currency_rate,
                         "subtotal_uah"               => $salRepList->subtotal_uah,
-                        "total_to_pay"               => $salRepList->total_to_pay
+                        "total_to_pay"               => $salRepList->total_to_pay,
+                        "reported_hours"             => SalaryReportList::sumReportedHoursForMonthPerUser($salRepList),
+                        "approved_hours"             => SalaryReportList::sumApprovedHoursForMonthPerUser($salRepList)
                     ];
                 }
 

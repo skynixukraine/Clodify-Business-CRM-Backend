@@ -304,4 +304,40 @@ class OperationsCest
             "success" => false
         ]);
     }
+
+    /**
+     * @see    https://jira.skynix.company/browse/SCA-99
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchOperationTypesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch all operations data');
+        $I->sendGET(ApiEndpoints::OPERATION);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['operations' =>
+                [
+                    [
+                        'id'		        => 'integer',
+                        'name'	            => 'string',
+                        'status'            => 'string',
+                        'date_created'	    => 'integer',
+                        'date_updated'	    => 'integer',
+                        'operation_type_id' => 'integer'
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
 }
