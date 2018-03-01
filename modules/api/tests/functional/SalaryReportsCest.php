@@ -257,6 +257,18 @@ class SalaryReportsCest
         $I->wantTo('Testing download salary report to pdf');
         $I->sendGET(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId);
         $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
     }
 
     /**
