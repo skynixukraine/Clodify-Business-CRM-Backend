@@ -120,28 +120,37 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['contracts' =>
+            'data' => 'null',
+//                'contracts' =>
+//                [
+//                    [
+//                        'id' => 'integer',
+//                        'contract_id' => 'integer',
+//                        'created_by' => 'array|null',
+//                        'customer' => 'array|null',
+//                        'act_number' => 'integer',
+//                        'start_date' => 'string',
+//                        'end_date' => 'string',
+//                        'act_date' => 'string',
+//                        'total' => 'string',
+//                        'total_hours' => 'integer|string',
+//                        'expenses' => 'string',
+//                    ]
+//                ],
+//                'total_records' => 'string'
+//        ],
+
+            "errors" =>
                 [
                     [
-                        'id' => 'integer',
-                        'contract_id' => 'integer',
-                        'created_by' => 'array|null',
-                        'customer' => 'array|null',
-                        'act_number' => 'integer',
-                        'start_date' => 'string',
-                        'end_date' => 'string',
-                        'act_date' => 'string',
-                        'total' => 'string',
-                        'total_hours' => 'integer|string',
-                        'expenses' => 'string',
+                    "param" => 'string',
+                    "message" => 'string'
                     ]
                 ],
-                'total_records' => 'string'
-            ],
-            'errors' => 'array',
+//       'errors' => 'array',
             'success' => 'boolean'
         ]);
     }
