@@ -15,8 +15,11 @@ use app\models\User;
 
 class ContractEdit extends ViewModelAbstract
 {
+    /** @deprecated */
     public function define()
     {
+        trigger_error('Method ' . Yii::$app->controller->action->id . ' is deprecated', E_USER_DEPRECATED);
+
         if ($id = Yii::$app->request->get('contract_id')) {
             if ($this->validate() && ($this->model = Contract::findOne($id))) {
                 //SALES can view, invoice & edit only own contracts

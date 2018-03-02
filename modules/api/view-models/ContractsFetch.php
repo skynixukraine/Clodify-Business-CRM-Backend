@@ -18,8 +18,11 @@ use app\modules\api\components\SortHelper;
 
 class ContractsFetch extends ViewModelAbstract
 {
+    /** @deprecated */
     public function define()
     {
+        trigger_error('Method ' . Yii::$app->controller->action->id . ' is deprecated', E_USER_DEPRECATED);
+
         $customerId     = Yii::$app->request->getQueryParam("customers");
         $order          = Yii::$app->request->getQueryParam("order");
         $keyword         = Yii::$app->request->getQueryParam("search_query") ?: null;
