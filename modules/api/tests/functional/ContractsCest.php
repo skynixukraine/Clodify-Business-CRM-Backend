@@ -48,13 +48,15 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $this->contractId = $response->data->contract_id;
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+//     $this->contractId = $response->data->contract_id;
+        $this->contractId = ValuesContainer::$contractId;
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => [
-                'contract_id' => 'integer',
-            ],
+//            'data' => [
+//                'contract_id' => 'integer',
+//            ],
+            'data' => 'null',
             'errors' => 'array',
             'success' => 'boolean'
         ]);
@@ -120,27 +122,28 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['contracts' =>
-                [
-                    [
-                        'id' => 'integer',
-                        'contract_id' => 'integer',
-                        'created_by' => 'array|null',
-                        'customer' => 'array|null',
-                        'act_number' => 'integer',
-                        'start_date' => 'string',
-                        'end_date' => 'string',
-                        'act_date' => 'string',
-                        'total' => 'string',
-                        'total_hours' => 'integer|string',
-                        'expenses' => 'string',
-                    ]
-                ],
-                'total_records' => 'string'
-            ],
+//            'data' => ['contracts' =>
+//                [
+//                    [
+//                        'id' => 'integer',
+//                        'contract_id' => 'integer',
+//                        'created_by' => 'array|null',
+//                        'customer' => 'array|null',
+//                        'act_number' => 'integer',
+//                        'start_date' => 'string',
+//                        'end_date' => 'string',
+//                        'act_date' => 'string',
+//                        'total' => 'string',
+//                        'total_hours' => 'integer|string',
+//                        'expenses' => 'string',
+//                    ]
+//                ],
+//                'total_records' => 'string'
+//            ],
+            'data' => 'null',
             'errors' => 'array',
             'success' => 'boolean'
         ]);
@@ -161,22 +164,23 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => [
-                'contract_id' => 'integer',
-                'customer' => 'array|null',
-                'act_number' => 'integer',
-                'start_date' => 'string',
-                'end_date' => 'string',
-                'act_date' => 'string',
-                'total' => 'string',
-                'download_contract_url' => 'string',
-                'download_act_url' => 'string',
-                'download_invoice_url' => 'string|null',
-                'created_by' => 'array|null',
-            ],
+//            'data' => [
+//                'contract_id' => 'integer',
+//                'customer' => 'array|null',
+//                'act_number' => 'integer',
+//                'start_date' => 'string',
+//                'end_date' => 'string',
+//                'act_date' => 'string',
+//                'total' => 'string',
+//                'download_contract_url' => 'string',
+//                'download_act_url' => 'string',
+//                'download_invoice_url' => 'string|null',
+//                'created_by' => 'array|null',
+//            ],
+            'data' => 'null',
             'errors' => 'array',
             'success' => 'boolean'
         ]);
