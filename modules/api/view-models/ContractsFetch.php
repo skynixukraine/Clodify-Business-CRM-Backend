@@ -122,6 +122,9 @@ class ContractsFetch extends ViewModelAbstract
             "contracts" => $list,
             "total_records" => DataTable::getInstance()->getTotal(),
         ];
+        $data = [
+            "message" => 'Method Deprecated'
+        ];
         $this->setData($data);
     }
 
