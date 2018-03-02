@@ -118,13 +118,14 @@ class ServiceCest {
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        ValuesContainer::$contractId = $response->data->contract_id;
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+       // ValuesContainer::$contractId = $response->data->contract_id;
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => [
-                'contract_id' => 'integer',
-            ],
+//            'data' => [
+//                'contract_id' => 'integer',
+//            ],
+            'data' => 'null',
             'errors' => 'array',
             'success' => 'boolean'
         ]);
