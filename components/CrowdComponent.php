@@ -163,7 +163,7 @@ class CrowdComponent extends Component
     {
         if (!isset($obj->reason) && isset($obj->active) && $obj->active) {     // if element 'reason' exist, some autentication error there in crowd
             return true;
-        } else {
+        } elseif(isset($obj->reason)) {
             return false;
         }
     }
