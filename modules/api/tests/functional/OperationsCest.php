@@ -331,7 +331,9 @@ class OperationsCest
                         'status'            => 'string',
                         'date_created'	    => 'integer',
                         'date_updated'	    => 'integer',
-                        'operation_type_id' => 'integer'
+                        'operation_type_id' => 'integer',
+                        'business'          => 'array',
+                        'transactions'      => 'array',
                     ]
                 ],
                 'total_records' => 'string'

@@ -77,4 +77,9 @@ class Operation extends \yii\db\ActiveRecord
     {
         return $this->hasOne(OperationType::className(), ['id' => 'operation_type_id']);
     }
+
+    public function getTransactions()
+    {
+        return $this->hasMany(Transaction::className(), ['operation_id' => 'id']);
+    }
 }
