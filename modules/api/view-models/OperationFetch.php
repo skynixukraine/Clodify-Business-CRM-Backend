@@ -82,7 +82,11 @@ class OperationFetch extends ViewModelAbstract
                         'status'            => $operation->status,
                         'date_created'      => $operation->date_created,
                         'date_updated'      => $operation->date_updated,
-                        'operation_type_id' => $operation->operation_type_id,
+                        'operation_type' =>
+                            [
+                                $operation->operationType->id,
+                                $operation->operationType->name,
+                            ],
                         'business'          =>
                             [
                                 $operation->business->id,
