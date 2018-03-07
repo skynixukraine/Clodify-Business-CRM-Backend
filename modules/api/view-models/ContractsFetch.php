@@ -18,6 +18,7 @@ use app\modules\api\components\SortHelper;
 
 class ContractsFetch extends ViewModelAbstract
 {
+
     /** @deprecated */
     public function define()
     {
@@ -125,7 +126,9 @@ class ContractsFetch extends ViewModelAbstract
             "contracts" => $list,
             "total_records" => DataTable::getInstance()->getTotal(),
         ];
+
         $this->setData($data);
+
     }
 
 }
