@@ -27,14 +27,14 @@ class OperationFetch extends ViewModelAbstract
     {
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
-            $order = Yii::$app->request->getQueryParam('order');
-            $start = Yii::$app->request->getQueryParam('start') ?: 0;
-            $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-            $keyword = Yii::$app->request->getQueryParam('search_query');
-            $dateStart = Yii::$app->request->getQueryParam('from_date');
-            $dateEnd = Yii::$app->request->getQueryParam('to_date');
+            $order             = Yii::$app->request->getQueryParam('order');
+            $start             = Yii::$app->request->getQueryParam('start') ?: 0;
+            $limit             = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+            $keyword           = Yii::$app->request->getQueryParam('search_query');
+            $dateStart         = Yii::$app->request->getQueryParam('from_date');
+            $dateEnd           = Yii::$app->request->getQueryParam('to_date');
             $operation_type_id = Yii::$app->request->getQueryParam('operation_type_id');
-            $business_id = Yii::$app->request->getQueryParam('business_id');
+            $business_id       = Yii::$app->request->getQueryParam('business_id');
 
             $query = Operation::find()->with('business', 'operationType', 'transactions');
 
@@ -77,30 +77,31 @@ class OperationFetch extends ViewModelAbstract
 
                 foreach ($operations as $key => $operation) {
                     $operations[$key] = [
-                        'id' => $operation->id,
-                        'name' => $operation->name,
-                        'status' => $operation->status,
-                        'date_created' => $operation->date_created,
-                        'date_updated' => $operation->date_updated,
+                        'id'                => $operation->id,
+                        'name'              => $operation->name,
+                        'status'            => $operation->status,
+                        'date_created'      => $operation->date_created,
+                        'date_updated'      => $operation->date_updated,
                         'operation_type_id' => $operation->operation_type_id,
-                        'business' => [
-                            $operation->business->id,
-                            $operation->business->name,
-                        ]
+                        'business'          =>
+                            [
+                                $operation->business->id,
+                                $operation->business->name,
+                            ]
                     ];
 
                     $transactions = [];
                     foreach ($operation->transactions as $k => $t) {
                         $transactions[$k] = [
-                            'id' => $t->id,
-                            'type' => $t->type,
-                            'name' => $t->name,
-                            'date' => $t->date,
-                            'amount' => $t->amount,
-                            'currency' => $t->currency,
+                            'id'             => $t->id,
+                            'type'           => $t->type,
+                            'name'           => $t->name,
+                            'date'           => $t->date,
+                            'amount'         => $t->amount,
+                            'currency'       => $t->currency,
                             'reference_book' =>
                                 [
-                                    'id' => $t->referenceBook->id,
+                                    'id'   => $t->referenceBook->id,
                                     'name' => $t->referenceBook->name,
                                 ]
                         ];
