@@ -15,8 +15,11 @@ use app\modules\api\components\Api\Processor;
 
 class ContractDelete extends ViewModelAbstract
 {
+    /** @deprecated */
     public function define()
     {
+        trigger_error('Method ' . Yii::$app->controller->action->id . ' is deprecated', E_USER_DEPRECATED);
+
         $contractId = Yii::$app->request->getQueryParam("contract_id");
         $contract = Contract::findOne($contractId);
        // FIN can view, edit, invoice all contracts, but can delete only own contracts

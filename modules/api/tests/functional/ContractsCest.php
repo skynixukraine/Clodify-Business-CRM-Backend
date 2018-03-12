@@ -96,8 +96,8 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => 'array|null',
             'errors' => 'array',
@@ -201,8 +201,8 @@ class ContractsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => 'array|null',
             'errors' => 'array',
