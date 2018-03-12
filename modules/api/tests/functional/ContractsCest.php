@@ -125,6 +125,7 @@ class ContractsCest
         $I->assertNotEmpty($response->errors);
         $I->assertEquals(false, $response->success);
         $I->seeResponseMatchesJsonType([
+//            'data' =>
 //                'contracts' =>
 //                [
 //                    [

@@ -17,7 +17,7 @@ class ValuesContainer
     public static $userClientId;
 
     public static $projectId;
-    public static $contractId;
+    public static $contractId = 2;
     public static $deleteReportId = 1;
     public static $FinancialReportId = 1;
     public static $FinancialReportDate = 2;
