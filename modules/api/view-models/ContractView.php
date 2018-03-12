@@ -16,8 +16,11 @@ use app\modules\api\components\Api\Processor;
 
 class ContractView extends ViewModelAbstract
 {
+    /** @deprecated */
     public function define()
     {
+        trigger_error('Method ' . Yii::$app->controller->action->id . ' is deprecated', E_USER_DEPRECATED);
+
         $id = Yii::$app->request->get("id");
         $listContract = [];
         if ($contract = Contract::findOne($id)) {
