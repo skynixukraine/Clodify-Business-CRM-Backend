@@ -31,22 +31,27 @@ class Auth extends ViewModelAbstract
             $this->model = $loginForm;
 
             $user = $this->model->getUser();
-            if ($user->auth_type == User::CROWD_AUTH) {
 
-                $checkUser = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
-                if (isset($checkUser['error'])) {
-                    $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $checkUser['error']));
+            if ($user) {
+                if ($user->auth_type == User::CROWD_AUTH) {
+
+                    $checkUser = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
+                    if (isset($checkUser['error'])) {
+                        $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $checkUser['error']));
+                    }
+
+                    if (!is_array($checkUser)) {
+                        $this->token = $this->model->login();
+                    }
                 }
 
-                if (!is_array($checkUser)) {
-                    $this->token = $this->model->login();
+                if ($user->auth_type == User::DATABASE_AUTH) {
+                    if ($this->validate()) {
+                        $this->token = $this->model->login();
+                    }
                 }
-            }
-
-            if ($user->auth_type == User::DATABASE_AUTH) {
-                if ($this->validate()) {
-                    $this->token = $this->model->login();
-                }
+            } else {
+                $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'There is no user with that credentials'));
             }
 
             if (isset($this->token)) {
