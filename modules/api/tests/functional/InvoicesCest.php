@@ -42,6 +42,36 @@ class InvoicesCest
 //        ]);
 //    }
 
+
+    public function testCreateInvoiceCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing create invoice');
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+             "user_id"     =>  100,
+             "business_id" =>  1,
+             "date_start"  => "10/10/2018",
+             "date_end"    => "10/11/2018",
+             "subtotal"    =>  2444,
+             "discount"    =>  20,
+             "total"       =>  20000,
+             "note"        => "bla bla"
+        ]));
+        $response = json_decode($I->grabResponse());
+        $this->invoiceId = $response->data->invoice_id;
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'invoice_id' => 'integer',
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-967
      * @param  FunctionalTester $I
@@ -82,6 +112,7 @@ class InvoicesCest
 //            'success' => 'boolean'
 //        ]);
 //    }
+
 
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-974
