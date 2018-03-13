@@ -14,8 +14,11 @@ use app\modules\api\components\Api\Processor;
 
 class ContractCreate extends ViewModelAbstract
 {
+    /** @deprecated */
     public function define()
     {
+        trigger_error('Method ' . Yii::$app->controller->action->id . ' is deprecated', E_USER_DEPRECATED);
+
         $this->model->created_by = Yii::$app->user->id;
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])){
             if ($this->validate()) {

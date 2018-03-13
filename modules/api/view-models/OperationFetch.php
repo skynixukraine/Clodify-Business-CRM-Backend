@@ -25,6 +25,7 @@ class OperationFetch extends ViewModelAbstract
 {
     public function define()
     {
+
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             $order             = Yii::$app->request->getQueryParam('order');
             $start             = Yii::$app->request->getQueryParam('start') ?: 0;
@@ -33,14 +34,15 @@ class OperationFetch extends ViewModelAbstract
             $dateStart         = Yii::$app->request->getQueryParam('from_date');
             $dateEnd           = Yii::$app->request->getQueryParam('to_date');
             $operation_type_id = Yii::$app->request->getQueryParam('operation_type_id');
+            $business_id       = Yii::$app->request->getQueryParam('business_id');
 
-            $query = Operation::find();
+            $query = Operation::find()->with('business', 'operationType', 'transactions');
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
                 ->setLimit($limit)
-                ->setStart($start) ->setSearchValue($keyword)
-                ->setSearchParams([ 'or',
+                ->setStart($start)->setSearchValue($keyword)
+                ->setSearchParams(['or',
                     ['like', 'name', $keyword]
                 ]);
 
@@ -53,16 +55,20 @@ class OperationFetch extends ViewModelAbstract
                 $dataTable->setOrder(Operation::tableName() . '.id', 'desc');
             }
 
-            if($dateStart) {
-                $dataTable->setFilter(Operation::tableName() . '.date_created >=' . DateUtil::convertData($dateStart) );
+            if ($dateStart) {
+                $dataTable->setFilter(Operation::tableName() . '.date_created >=' . DateUtil::convertData($dateStart));
             }
 
-            if($dateEnd){
-                $dataTable->setFilter(Operation::tableName() . '.date_created <=' . DateUtil::convertData($dateEnd) );
+            if ($dateEnd) {
+                $dataTable->setFilter(Operation::tableName() . '.date_created <=' . DateUtil::convertData($dateEnd));
             }
 
-            if($operation_type_id){
-                $dataTable->setFilter(Operation::tableName() . '.operation_type_id=' . $operation_type_id );
+            if ($operation_type_id) {
+                $dataTable->setFilter(Operation::tableName() . '.operation_type_id=' . $operation_type_id);
+            }
+
+            if ($business_id) {
+                $dataTable->setFilter(Operation::tableName() . '.business_id=' . $business_id);
             }
 
             $operations = $dataTable->getData();
@@ -71,13 +77,41 @@ class OperationFetch extends ViewModelAbstract
 
                 foreach ($operations as $key => $operation) {
                     $operations[$key] = [
-                        'id'		        => $operation->id,
-                        'name'	            => $operation->name,
+                        'id'                => $operation->id,
+                        'name'              => $operation->name,
                         'status'            => $operation->status,
-                        'date_created'	    => $operation->date_created,
-                        'date_updated'	    => $operation->date_updated,
-                        'operation_type_id' => $operation->operation_type_id
+                        'date_created'      => $operation->date_created,
+                        'date_updated'      => $operation->date_updated,
+                        'operation_type' =>
+                            [
+                                $operation->operationType->id,
+                                $operation->operationType->name,
+                            ],
+                        'business'          =>
+                            [
+                                $operation->business->id,
+                                $operation->business->name,
+                            ]
                     ];
+
+                    $transactions = [];
+                    foreach ($operation->transactions as $k => $t) {
+                        $transactions[$k] = [
+                            'id'             => $t->id,
+                            'type'           => $t->type,
+                            'name'           => $t->name,
+                            'date'           => $t->date,
+                            'amount'         => $t->amount,
+                            'currency'       => $t->currency,
+                            'reference_book' =>
+                                [
+                                    'id'   => $t->referenceBook->id,
+                                    'name' => $t->referenceBook->name,
+                                ]
+                        ];
+                    }
+
+                    $operations[$key]['transactions'] = $transactions;
                 }
 
             } else {
