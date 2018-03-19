@@ -42,13 +42,75 @@ class InvoicesCest
 //        ]);
 //    }
 
-
     public function testCreateInvoiceCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+        $I->haveInDatabase('users', array(
+            'id'         => 5,
+            'first_name' => 'devUsers',
+            'last_name'  => 'devUsersLast',
+            'email'      => 'devUser@email.com',
+            'role'       => 'DEV',
+            'password'   => md5('dev')
+        ));
+
+        $I->haveInDatabase('users', array(
+            'id'         => 6,
+            'first_name' => 'pmUsers',
+            'last_name'  => 'pmUsersLast',
+            'email'      => 'pmUser@email.com',
+            'role'       => 'PM',
+            'password'   => md5('pm')
+        ));
+
+        $I->haveInDatabase('users', array(
+            'id'         => 7,
+            'first_name' => 'clientUsers',
+            'last_name'  => 'clientUsersLast',
+            'email'      => 'clientUser@email.com',
+            'role'       => 'CLIENT',
+            'password'   => md5('client')
+        ));
+
+        // test invoice creation forbidden for  DEV, PM, CLIENT role
+        for ($i = 5; $i < 8; $i++) {
+            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
+            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, strtolower($pas));
+
+            $I->wantTo('Testing create invoice with other then ADMIN roles');
+            $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+                "user_id"     =>  $i,
+                "business_id" =>  1,
+                "date_start"  => "10/10/2018",
+                "date_end"    => "10/11/2018",
+                "subtotal"    =>  2444,
+                "discount"    =>  20,
+                "total"       =>  20000,
+                "note"        => "bla bla"
+            ]));
+
+            \Helper\OAuthToken::$key = null;
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+        }
+
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Testing create invoice');
+        $I->wantTo('Testing create invoice as ADMIN');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
              "user_id"     =>  100,
              "business_id" =>  1,
@@ -70,6 +132,7 @@ class InvoicesCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+
     }
 
     /**

@@ -47,16 +47,19 @@ class InvoiceCreate extends ViewModelAbstract
 //            $this->model->total_hours = Yii::$app->Helper->timeLength($this->model->total_hours);
 //        }
 
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            $this->model->created_by = Yii::$app->user->id;
+            $this->model->date_start = date('d/m/Y', strtotime($this->model->date_start));
+            $this->model->date_end = date('d/m/Y', strtotime($this->model->date_end));
+            $this->model->date_created = date('Y-m-d');
 
-        $this->model->created_by = Yii::$app->user->id;
-        $this->model->date_start = date('d/m/Y', strtotime($this->model->date_start));
-        $this->model->date_end   = date('d/m/Y', strtotime($this->model->date_end));
-        $this->model->date_created = date('Y-m-d');
-
-        if ($this->validate() && $this->model->save()) {
-            $this->setData([
-                'invoice_id' => $this->model->id
-            ]);
+            if ($this->validate() && $this->model->save()) {
+                $this->setData([
+                    'invoice_id' => $this->model->id
+                ]);
+            }
+        } else {
+            return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
         }
     }
 }
