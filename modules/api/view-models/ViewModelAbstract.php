@@ -12,6 +12,7 @@ use app\modules\api\components\Api\Message;
 use app\modules\api\components\Api\Processor;
 use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;
+use yii\log\Logger;
 
 abstract class ViewModelAbstract implements ViewModelInterface
 {
@@ -47,6 +48,7 @@ abstract class ViewModelAbstract implements ViewModelInterface
 
                 $this->data = null;
                 $this->addError(Processor::CODE_TEHNICAL_ISSUE, $e->getMessage());
+                Yii::getLogger()->log($e, Logger::LEVEL_ERROR);
 
             }
 

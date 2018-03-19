@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\log\Logger;
 
 /**
  * This is the model class for table "financial_reports".
@@ -86,7 +87,7 @@ class FinancialReport extends \yii\db\ActiveRecord
 
         if ($financialReport) {
             foreach ($financialReport as $income) {
-                $incomeSum += $income->amount;
+                $incomeSum += (int)$income->amount;
             }
         }
 
@@ -106,7 +107,7 @@ class FinancialReport extends \yii\db\ActiveRecord
 
         if ($financialReport) {
             foreach ($financialReport as $exp_con) {
-                $expenseConstantSum += $exp_con->amount;
+                $expenseConstantSum += (int)$exp_con->amount;
             }
         }
 
@@ -137,7 +138,7 @@ class FinancialReport extends \yii\db\ActiveRecord
 
         if ($financialReport) {
             foreach ($financialReport as $investment) {
-                $investmentsSum += $investment->amount;
+                $investmentsSum += (int)$investment->amount;
             }
         }
 
@@ -219,7 +220,7 @@ class FinancialReport extends \yii\db\ActiveRecord
 
         if ($financialReport) {
             foreach ($financialReport as $sp_corp_eve) {
-                $spent_corp_eventsSum += $sp_corp_eve->amount;
+                $spent_corp_eventsSum += (int)$sp_corp_eve->amount;
             }
         }
 

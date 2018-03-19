@@ -66,7 +66,6 @@ class UsersController extends DefaultController
     }
 
     public function actionView(){
-
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
             ->set('viewModel\ViewModelInterface', 'viewModel\UserView')
