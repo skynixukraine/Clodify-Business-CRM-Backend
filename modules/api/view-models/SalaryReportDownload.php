@@ -14,7 +14,7 @@ use app\models\SalaryReportList;
 use app\models\User;
 use app\modules\api\components\Api\Message;
 use app\modules\api\components\Api\Processor;
-use mPDF;
+use Mpdf\Mpdf;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -98,7 +98,7 @@ class SalaryReportDownload extends ViewModelAbstract
                     'salaryReportDate' => DateUtil::convertDateFromUnix($salaryReport->report_date, 'F Y'),
                     'completion' => count($salaryReportListData) . '(' . $this->countEmployedUsers() . ')'
                 ]);
-                $pdf = new mPDF();
+                $pdf = new Mpdf();
                 @$pdf->WriteHTML($content);
 
                 $name = 'SalaryReport_' . $salaryReport->id . '_' .

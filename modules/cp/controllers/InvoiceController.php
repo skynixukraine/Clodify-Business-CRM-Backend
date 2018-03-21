@@ -21,7 +21,7 @@ use app\models\Invoice;
 use app\models\User;
 use app\models\ProjectCustomer;
 use app\models\PaymentMethod;
-use mPDF;
+use Mpdf\Mpdf;
 use app\models\ProjectDeveloper;
 use app\models\Storage;
 
@@ -474,7 +474,7 @@ class InvoiceController extends DefaultController
 
             ]);
 
-            $pdf = new mPDF();
+            $pdf = new Mpdf();
             @$pdf->WriteHTML($html);
             if( ( $dataPdf->user_id == Yii::$app->user->id &&
                  User::hasPermission([User::ROLE_CLIENT]) ) ||
@@ -503,7 +503,7 @@ class InvoiceController extends DefaultController
                 'r'  => $r,
 
             ]);
-            $pdf = new mPDF();
+            $pdf = new Mpdf();
             @$pdf->WriteHTML($html2);
             $pdf->Output($model->id . '.pdf', 'D');
             if( ( $model->user_id == Yii::$app->user->id &&
