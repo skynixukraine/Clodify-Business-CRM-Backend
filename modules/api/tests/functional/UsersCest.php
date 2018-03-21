@@ -161,6 +161,7 @@ class UsersCest
         define('last_name', 'ChangedLast');
         define('salary', 150);
         define('phone', '12345678985');
+        define('AUTH_TYPE_CROWD', 1);
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -170,7 +171,8 @@ class UsersCest
             'last_name'       => last_name,
             'salary'          => salary,
             'phone'           => phone,
-            'official_salary' => 8000
+            'official_salary' => 8000,
+            'auth_type'       => AUTH_TYPE_CROWD
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -187,6 +189,7 @@ class UsersCest
         $I->assertEquals(last_name, $response->data->last_name);
         $I->assertEquals('$' . salary, $response->data->salary);
         $I->assertEquals(phone, $response->data->phone);
+        $I->assertEquals(AUTH_TYPE_CROWD, $response->data->auth_type);
     }
 
     /**

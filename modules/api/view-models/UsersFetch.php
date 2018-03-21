@@ -193,6 +193,7 @@ class UsersFetch extends ViewModelAbstract
                 $row ['official_salary'] = $model->official_salary;
                 $row ['salary_up'] = $salary_up;
                 $row ['role'] = $model->role;
+                $row ['auth_type'] = $model->auth_type;
             }
 
             if (User::hasPermission([User::ROLE_SALES])) {
