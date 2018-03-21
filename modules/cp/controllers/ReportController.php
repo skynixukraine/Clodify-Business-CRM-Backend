@@ -20,8 +20,7 @@ use yii\filters\VerbFilter;
 use app\components\AccessRule;
 use app\components\DataTable;
 use app\components\DateUtil;
-use mPDF;
-
+use Mpdf\Mpdf;
 
 class ReportController extends DefaultController
 {
@@ -112,7 +111,7 @@ class ReportController extends DefaultController
 
         ]);
 
-        $pdf = new mPDF();
+        $pdf = new Mpdf();
         @$pdf->WriteHTML($html);
         $pdf->Output($fileName,  'D');
 

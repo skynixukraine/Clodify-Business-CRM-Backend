@@ -30,6 +30,7 @@ use app\components\DateUtil;
  * @property integer $contract_id
  * @property integer $project_id
  * @property integer $created_by
+ * @property integer $business_id
 
  *
  * @property Report[] $reports
@@ -44,6 +45,7 @@ class Invoice extends \yii\db\ActiveRecord
     const INVOICE_NOT_DELETED   = 0;
 
     public $method;
+    public $business_id;
 
     /**
      * @inheritdoc
@@ -60,8 +62,8 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
             ['user_id', 'required'],
-            [['date_end', 'total'], 'required'],
-            [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id', 'contract_id', 'created_by'], 'integer'],
+            [['date_end', 'total', 'user_id', 'business_id', 'date_start', 'subtotal', 'discount', 'note'], 'required'],
+            [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id', 'contract_id', 'created_by', 'business_id'], 'integer'],
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],

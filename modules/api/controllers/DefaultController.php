@@ -58,6 +58,24 @@ class DefaultController extends Controller
         return $this->render('index');
     }
 
+    public function runAction($id, $params = [])
+    {
+
+        if (Yii::$app->getRequest()->getMethod() == 'OPTIONS') {
+
+            Yii::$app->getResponse()->setStatusCode(200);
+            Yii::$app->getResponse()->getHeaders()->set('Allow', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
+            Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', "*");
+            Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Methods', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
+            Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Headers', implode(", ", ['x-requested-with', 'Content-Type',
+                'origin', 'accept', 'skynix-access-token']));
+
+            Yii::$app->end();
+
+        }
+        return parent::runAction($id, $params);
+    }
+
 	public function beforeAction($action)
     {
 
@@ -73,14 +91,6 @@ class DefaultController extends Controller
 
     public function actionError()
     {
-        if (Yii::$app->getRequest()->getMethod() == 'OPTIONS') {
-
-            Yii::$app->getResponse()->setStatusCode(200);
-            Yii::$app->getResponse()->getHeaders()->set('Allow', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
-            Yii::$app->end();
-
-        }
-
         $trace = [];
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'

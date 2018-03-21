@@ -17,7 +17,7 @@ use Yii;
 use app\components\DataTable;
 use yii\filters\VerbFilter;
 use app\models\Project;
-use mPDF;
+use Mpdf\Mpdf;
 use app\models\Invoice;
 use app\models\Storage;
 
@@ -350,7 +350,7 @@ class ContractController extends DefaultController
                 'signatureContractor'        => $signatureContractor
             ]);
 
-            $pdf = new mPDF();
+            $pdf = new Mpdf();
             @$pdf->WriteHTML($html);
             $pdf->Output($model->id . '.pdf', 'D');
         } else {
@@ -407,7 +407,7 @@ class ContractController extends DefaultController
                 'signatureContractor' => $signatureContractor
             ]);
 
-            $pdf = new mPDF();
+            $pdf = new Mpdf();
             @$pdf->WriteHTML($html);
             $pdf->Output($contract->act_number . '.pdf', 'D');
         } else {

@@ -31,6 +31,6 @@ class ApiEndpoints
     const BUSINESS                = '/api/businesses';
     const OPERATION_TYPES         = '/api/operation-types';
     const REFERENCE_BOOK          = '/api/reference-book-items';
-    const FETCH_FINANCIAL_REPORTS = '/api/financialReports';
-
+    const INVOICES                = '/api/invoices';
+    const FETCH_FINANCIAL_REPORTS = self::FINANCIAL_REPORTS;
 }

@@ -139,11 +139,15 @@ class Processor
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
 
             }
+            //Check crowd TOKEN if only this is a CROWD user
+            if ( $user->auth_type === User::CROWD_AUTH ) {
 
-            // crowd session code go here
-            $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);
-            if(isset($var['error'])){
-                $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
+                // crowd session code go here
+                $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);
+                if(isset($var['error'])){
+                    $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $var['error']));
+                }
+
             }
 
         } elseif ( $checkAccess == true ) {
