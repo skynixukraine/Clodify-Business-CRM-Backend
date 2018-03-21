@@ -66,7 +66,7 @@ class DefaultController extends Controller
             Yii::$app->getResponse()->setStatusCode(200);
             Yii::$app->getResponse()->getHeaders()->set('Allow', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
             Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', "*");
-            Yii::$app->getResponse()->getHeaders()->set('Access-Control-Request-Method', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
+            Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Methods', implode(", ", ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']));
             Yii::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Headers', implode(", ", ['x-requested-with', 'Content-Type',
                 'origin', 'accept', 'skynix-access-token']));
 

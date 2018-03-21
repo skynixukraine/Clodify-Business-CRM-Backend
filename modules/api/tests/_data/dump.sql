@@ -474,6 +474,7 @@ CREATE TABLE `projects` (
   `name` varchar(150) DEFAULT NULL,
   `jira_code` varchar(15) DEFAULT NULL,
   `total_logged_hours` double DEFAULT NULL,
+  `total_approved_hours` double DEFAULT NULL,
   `total_paid_hours` double DEFAULT NULL,
   `status` enum('NEW','ONHOLD','INPROGRESS','DONE','CANCELED') DEFAULT 'NEW',
   `date_start` date DEFAULT NULL,
