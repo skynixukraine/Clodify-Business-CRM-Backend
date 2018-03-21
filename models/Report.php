@@ -360,6 +360,7 @@ class Report extends \yii\db\ActiveRecord
 		//$project = Project::findOne($this->project_id);
 		$user = User::findOne(Yii::$app->user->id);
 
+		/** @var $project Project */
 		$project->cost -= round($this->hours * ($user->salary / self::SALARY_HOURS), 2);
 		$project->total_logged_hours -= $this->hours;
         if ($project->save(true, ['total_logged_hours', 'cost'])){

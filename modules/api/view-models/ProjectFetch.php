@@ -29,7 +29,7 @@ class ProjectFetch extends ViewModelAbstract
         $limit          = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
 
-        if (User::hasPermission([User::ROLE_ADMIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
             $query = Project::find()
                 ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . ".project_id="
                     . Project::tableName() . ".id")
@@ -50,14 +50,6 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectDeveloper::tableName() . ".user_id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id])
-                ->groupBy('id');
-        }
-
-        if (User::hasPermission([User::ROLE_FIN])) {
-            $query = Project::find()
-                ->leftJoin(ProjectCustomer::tableName(), ProjectCustomer::tableName() . ".project_id="
-                    . Project::tableName() . ".id")
-                ->leftJoin(User::tableName(), User::tableName() . ".id=" . ProjectCustomer::tableName() . ".user_id")
                 ->groupBy('id');
         }
 
@@ -159,7 +151,7 @@ class ProjectFetch extends ViewModelAbstract
                       Yii::t('yii', 'You have no permission for this action'));
             }
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_CLIENT])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) {
                 $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
             }
 
@@ -180,7 +172,7 @@ class ProjectFetch extends ViewModelAbstract
     }
 
     /**
-     * @param $model
+     * @param $model Project
      * @param $developersNames
      * @param $customersNames
      * @return Array
@@ -191,6 +183,7 @@ class ProjectFetch extends ViewModelAbstract
         $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
         $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+        $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
         $list['date_start'] = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
         $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
         $list['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
