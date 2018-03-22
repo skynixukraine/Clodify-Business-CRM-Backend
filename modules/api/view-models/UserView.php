@@ -49,6 +49,7 @@ class UserView extends ViewModelAbstract
                 $data['month_paid_hours']   = $model->month_paid_hours;
                 $data['year_paid_hours']    = $model->year_paid_hours;
                 $data['total_paid_hours']   = $model->total_paid_hours;
+                $data['auth_type']          = $model->auth_type;
             }
 
             $data['photo'] = $model->photo ? urldecode(Url::to(['/cp/index/getphoto', 'entry' => Yii::getAlias('@app') .

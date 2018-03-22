@@ -3,3 +3,7 @@
 vendor
 .DS_Store
 web/pma
+modules/api/codeception.yml
+modules/api/codeception.yml.bak
+modules/api/tests/acceptance.suite.yml
+modules/api/tests/functional.suite.yml
