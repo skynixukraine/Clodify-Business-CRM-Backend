@@ -77,8 +77,8 @@ class ProjectsCest
                         'total_paid' => 'float|integer',
                         'date_start' => 'string',
                         'date_end' => 'string',
-                        'developers' => 'string',
-                        'clients' => 'string',
+                        'developers' => 'array',
+                        'clients' => 'array',
                         'status' => 'string',
                     ]
                 ],
