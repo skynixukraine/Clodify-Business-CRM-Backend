@@ -8,6 +8,8 @@
 
 namespace viewModel;
 
+use app\models\FixedAsset;
+use app\models\FixedAssetOperation;
 use app\models\Transaction;
 use app\models\User;
 use app\models\Operation;
@@ -44,6 +46,13 @@ class OperationCreate extends ViewModelAbstract
                 $debit_counterparty_id  = $this->postData['debit_counterparty_id'];
                 $credit_counterparty_id = $this->postData['credit_counterparty_id'];
 
+                // fixed_asset parametrs
+                $fixed_asset_name                = $this->postData['fixed_asset']['name'];
+                $fixed_asset_cost                = $this->postData['fixed_asset']['cost'];
+                $fixed_asset_inventory_number    = $this->postData['fixed_asset']['inventory_number'];
+                $fixed_asset_amortization_method = $this->postData['fixed_asset']['amortization_method'];
+                $fixed_asset_date_of_purchase    = $this->postData['fixed_asset']['date_of_purchase'];
+
                 // create operation
                 $operation = new Operation();
                 $operation->business_id       = $bussiness_id;
@@ -54,6 +63,27 @@ class OperationCreate extends ViewModelAbstract
                 $operation->setScenario(Operation::SCENARIO_OPERATION_CREATE);
                 if ($operation->validate() && $operation->save()) {
                     $this->operationId = $operation->id;
+                    // create new fixed_asset
+                    $fixed_asset = new FixedAsset();
+                    $fixed_asset->name                = $fixed_asset_name;
+                    $fixed_asset->cost                = $fixed_asset_cost;
+                    $fixed_asset->inventory_number    = $fixed_asset_inventory_number;
+                    $fixed_asset->amortization_method = $fixed_asset_amortization_method;
+                    $fixed_asset->date_of_purchase    = $fixed_asset_date_of_purchase;
+                    if ($fixed_asset->validate() && $fixed_asset->save()) {
+                        // create new fixed_assets_operation
+                        $fixed_assets_operation = new FixedAssetOperation();
+                        $fixed_assets_operation->fixed_asset_id        = $fixed_asset->id;
+                        $fixed_assets_operation->operation_id          = $this->operationId;
+                        $fixed_assets_operation->operation_business_id = $operation->business_id;
+                        if($fixed_assets_operation->validate()) {
+                            $fixed_assets_operation->save();
+                        } else {
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_assets_operation failed'));
+                        }
+                    } else {
+                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_asset failed'));
+                    }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Your operation failed'));
                 }

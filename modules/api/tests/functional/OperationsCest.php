@@ -30,16 +30,23 @@ class OperationsCest
         $I->wantTo('Testing create new operation');
         $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
             [
-                'bussiness_id' =>  '1',
-                'name' =>  'myName',
-                'operation_type_id' =>  '1',
-                'transaction_name' =>  'BUY',
-                'amount' =>  '12.5',
-                'currency' =>  'UAH',
-                'debit_reference_id' =>  '1',
-                'credit_reference_id' =>  '1',
-                'debit_counterparty_id' =>  '1',
-                'credit_counterparty_id' =>  '1'
+                'bussiness_id'           =>  '1',
+                'name'                   =>  'myName',
+                'operation_type_id'      =>  '1',
+                'transaction_name'       =>  'BUY',
+                'amount'                 =>  '12.5',
+                'currency'               =>  'UAH',
+                'debit_reference_id'     =>  '1',
+                'credit_reference_id'    =>  '1',
+           //     'debit_counterparty_id'  =>  '1',
+           //     'credit_counterparty_id' =>  '1',
+                "fixed_asset" => [
+                        'name'               => "PC",
+                        'cost'               => 100.50,
+                        'inventory_number'   => 1002,
+                        'amortization_method'=> 'LINEAR',
+                        'date_of_purchase'   => '2017-12-29'
+                ]
             ]
         ));
         $response = json_decode($I->grabResponse());
