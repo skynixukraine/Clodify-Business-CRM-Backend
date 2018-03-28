@@ -142,12 +142,12 @@ class ProjectFetch extends ViewModelAbstract
             $customersNames = [];
 
             foreach ($customers as $customer) {
-
+                $projectCustomer = ProjectCustomer::findOne(['user_id' => $customer->id, 'project_id' => $model->id]);
                 $customersNames[] = [
                     'id'                => $customer->id,
                     'first_name'        => $customer->first_name,
                     'last_name'         => $customer->last_name,
-                    'receive_invoices'  => $customer->receive_invoices
+                    'receive_invoices'  => $projectCustomer->receive_invoices
                 ];
             }
 
