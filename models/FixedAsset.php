@@ -20,6 +20,23 @@ use Yii;
  */
 class FixedAsset extends \yii\db\ActiveRecord
 {
+
+    /**
+     *  at date_of_purchase month amortization = cost / 2
+        other mothes no amortization
+        at date_write_off month amortization = cost / 2
+     * @var
+     */
+    const AMORTIZATION_METHOD_5050 = '50/50';
+
+
+    /**
+     * num months = date_write_off - date_of_purchase
+        amortization = ( cost / num months )
+     * @var
+     */
+    const AMORTIZATION_METHOD_LINEAR = 'LINEAR';
+
     /**
      * @inheritdoc
      */
@@ -36,7 +53,7 @@ class FixedAsset extends \yii\db\ActiveRecord
         return [
             [['cost'], 'number'],
             [['inventory_number'], 'integer'],
-            [['amortization_method'], 'string'],
+            [['amortization_method'], 'in', 'range' => [ self::AMORTIZATION_METHOD_LINEAR, self::AMORTIZATION_METHOD_5050 ]],
             [['date_of_purchase', 'date_write_off'], 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
