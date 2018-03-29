@@ -8,6 +8,8 @@
 
 namespace viewModel;
 
+use app\models\FixedAsset;
+use app\models\FixedAssetOperation;
 use app\models\Transaction;
 use app\models\User;
 use app\models\Operation;
@@ -33,27 +35,50 @@ class OperationCreate extends ViewModelAbstract
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 // get POST data
-                $bussiness_id           = $this->postData['bussiness_id'];
-                $name                   = $this->postData['name'];
-                $operation_type_id      = $this->postData['operation_type_id'];
-                $transaction_name       = $this->postData['transaction_name'];
-                $amount                 = $this->postData['amount'];
-                $currency               = $this->postData['currency'];
-                $debit_reference_id     = $this->postData['debit_reference_id'];
-                $credit_reference_id    = $this->postData['credit_reference_id'];
-                $debit_counterparty_id  = $this->postData['debit_counterparty_id'];
-                $credit_counterparty_id = $this->postData['credit_counterparty_id'];
+                $bussinessId          = $this->postData['bussiness_id'];
+                $name                 = $this->postData['name'];
+                $operationTypeId      = $this->postData['operation_type_id'];
+                $transactionName      = $this->postData['transaction_name'];
+                $amount               = $this->postData['amount'];
+                $currency             = $this->postData['currency'];
+                $debitReferenceId     = $this->postData['debit_reference_id'];
+                $creditReferenceId    = $this->postData['credit_reference_id'];
+                $debitCounterpartyId  = $this->postData['debit_counterparty_id'];
+                $creditCounterpartyId = $this->postData['credit_counterparty_id'];
 
                 // create operation
                 $operation = new Operation();
-                $operation->business_id       = $bussiness_id;
+                $operation->business_id       = $bussinessId;
                 $operation->name              = $name;
                 $operation->status            = Operation::DONE;
                 $operation->date_created      = time();
-                $operation->operation_type_id = $operation_type_id;
+                $operation->operation_type_id = $operationTypeId;
                 $operation->setScenario(Operation::SCENARIO_OPERATION_CREATE);
                 if ($operation->validate() && $operation->save()) {
                     $this->operationId = $operation->id;
+                    // create new fixed_asset if it exist in POST
+                    if (isset($this->postData['fixed_asset'])) {
+                        $fixedAsset = new FixedAsset();
+                        $fixedAsset->name                = $this->postData['fixed_asset']['name'];
+                        $fixedAsset->cost                = $this->postData['fixed_asset']['cost'];
+                        $fixedAsset->inventory_number    = $this->postData['fixed_asset']['inventory_number'];
+                        $fixedAsset->amortization_method = $this->postData['fixed_asset']['amortization_method'];
+                        $fixedAsset->date_of_purchase    = $this->postData['fixed_asset']['date_of_purchase'];
+                        if ($fixedAsset->validate() && $fixedAsset->save()) {
+                            // create new fixed_assets_operation
+                            $fixedAssetsOperation = new FixedAssetOperation();
+                            $fixedAssetsOperation->fixed_asset_id        = $fixedAsset->id;
+                            $fixedAssetsOperation->operation_id          = $this->operationId;
+                            $fixedAssetsOperation->operation_business_id = $operation->business_id;
+                            if ($fixedAssetsOperation->validate()) {
+                                $fixedAssetsOperation->save();
+                            } else {
+                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_assets_operation failed'));
+                            }
+                        } else {
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_asset failed'));
+                        }
+                    }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Your operation failed'));
                 }
@@ -61,25 +86,25 @@ class OperationCreate extends ViewModelAbstract
                 // create two transactions for DEBIT and CREDIT
                 $transaction1 = new Transaction();
                 $transaction1->type                  = Transaction::DEBIT;
-                $transaction1->name                  = $transaction_name;
+                $transaction1->name                  = $transactionName;
                 $transaction1->date                  = time();
                 $transaction1->amount                = $amount;
                 $transaction1->currency              = $currency;
-                $transaction1->reference_book_id     = $debit_reference_id;
-                $transaction1->counterparty_id       = $debit_counterparty_id;
+                $transaction1->reference_book_id     = $debitReferenceId;
+                $transaction1->counterparty_id       = $debitCounterpartyId;
                 $transaction1->operation_id          = $this->operationId;
-                $transaction1->operation_business_id = $bussiness_id;
+                $transaction1->operation_business_id = $bussinessId;
 
                 $transaction2 = new Transaction();
                 $transaction2->type                  = Transaction::CREDIT;
-                $transaction2->name                  = $transaction_name;
+                $transaction2->name                  = $transactionName;
                 $transaction2->date                  = time();
                 $transaction2->amount                = $amount;
                 $transaction2->currency              = $currency;
-                $transaction2->reference_book_id     = $credit_reference_id;
-                $transaction2->counterparty_id       = $credit_counterparty_id;
+                $transaction2->reference_book_id     = $creditReferenceId;
+                $transaction2->counterparty_id       = $creditCounterpartyId;
                 $transaction2->operation_id          = $this->operationId;
-                $transaction2->operation_business_id = $bussiness_id;
+                $transaction2->operation_business_id = $bussinessId;
                 $transaction2->setScenario(Transaction::SCENARIO_TRANSACTION_CREATE);
                 $transaction1->setScenario(Transaction::SCENARIO_TRANSACTION_CREATE);
                 if ($transaction1->save() && $transaction2->save()) {

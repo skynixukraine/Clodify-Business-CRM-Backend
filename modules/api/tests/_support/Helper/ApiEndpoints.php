@@ -33,4 +33,5 @@ class ApiEndpoints
     const REFERENCE_BOOK          = '/api/reference-book-items';
     const INVOICES                = '/api/invoices';
     const FETCH_FINANCIAL_REPORTS = self::FINANCIAL_REPORTS;
+    const FETCH_FIXED_ASSETS      = '/api/fixed-assets';
 }

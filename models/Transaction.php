@@ -43,7 +43,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'required', 'on' => [self::SCENARIO_TRANSACTION_CREATE]],
+            [['reference_book_id', 'operation_id', 'operation_business_id'], 'required', 'on' => [self::SCENARIO_TRANSACTION_CREATE]],
             [['id', 'date', 'reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'integer'],
             [['type', 'currency'], 'string'],
             [['amount'], 'number'],
