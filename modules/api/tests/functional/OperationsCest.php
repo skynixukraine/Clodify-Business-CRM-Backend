@@ -83,11 +83,11 @@ class OperationsCest
 //                'debit_counterparty_id'  =>  '1',
 //                'credit_counterparty_id' =>  '1',
                 "fixed_asset" => [
-                        'name'               => "PC",
-                        'cost'               => 100.50,
-                        'inventory_number'   => 1002,
-                        'amortization_method'=> 'LINEAR',
-                        'date_of_purchase'   => '2017-12-29'
+                    'name'               => "PC",
+                    'cost'               => 100.50,
+                    'inventory_number'   => 1002,
+                    'amortization_method'=> 'LINEAR',
+                    'date_of_purchase'   => '2017-12-29'
                 ]
             ]
         ));
