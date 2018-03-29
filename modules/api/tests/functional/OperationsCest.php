@@ -17,6 +17,48 @@ class OperationsCest
 {
     private $operationId;
 
+    /**@see https://jira.skynix.co/browse/SCA-108
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testOperationCreationForAdminWithoutFixedAsset(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing create new operation');
+        $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
+            [
+                'bussiness_id'           =>  '1',
+                'name'                   =>  'myName',
+                'operation_type_id'      =>  '1',
+                'transaction_name'       =>  'BUY',
+                'amount'                 =>  '12.5',
+                'currency'               =>  'UAH',
+                'debit_reference_id'     =>  '1',
+                'credit_reference_id'    =>  '1',
+            ]
+        ));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $operationId = $response->data->operation;
+        $this->operationId = $operationId;
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType(
+            [
+                'data'    => [
+                    'operation' => 'integer',
+                ],
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        );
+        $I->seeInDatabase('transactions', ['operation_id' => $this->operationId]);
+        $I->cantSeeInDatabase('fixed_assets_operations', ['operation_id' => $this->operationId, 'operation_business_id' => 1]);
+    }
+
     /**
      * @see    https://jira.skynix.company/browse/SCA-55
      * @param  FunctionalTester $I
@@ -70,47 +112,6 @@ class OperationsCest
         $I->cantSeeInDatabase('fixed_assets_operations', ['operation_id' => 7777]);
     }
 
-    /**@see https://jira.skynix.co/browse/SCA-108
-     * @param FunctionalTester $I
-     * @param \Codeception\Scenario $scenario
-     */
-    public function testOperationCreationForAdminWithoutFixedAsset(FunctionalTester $I, \Codeception\Scenario $scenario)
-    {
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
-
-        $I->wantTo('Testing create new operation');
-        $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
-            [
-                'bussiness_id'           =>  '1',
-                'name'                   =>  'myName',
-                'operation_type_id'      =>  '1',
-                'transaction_name'       =>  'BUY',
-                'amount'                 =>  '12.5',
-                'currency'               =>  'UAH',
-                'debit_reference_id'     =>  '1',
-                'credit_reference_id'    =>  '1',
-            ]
-        ));
-        $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $operationId = $response->data->operation;
-        $this->operationId = $operationId;
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $I->seeResponseMatchesJsonType(
-            [
-                'data'    => [
-                    'operation' => 'integer',
-                ],
-                'errors'  => 'array',
-                'success' => 'boolean'
-            ]
-        );
-        $I->seeInDatabase('transactions', ['operation_id' => $this->operationId]);
-        $I->cantSeeInDatabase('fixed_assets_operations', ['operation_id' => $this->operationId, 'operation_business_id' => 1]);
-    }
 
     /**
      * @see    https://jira.skynix.company/browse/SCA-55
