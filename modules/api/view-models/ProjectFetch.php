@@ -24,9 +24,10 @@ class ProjectFetch extends ViewModelAbstract
     public function define()
     {
         $order          = Yii::$app->request->getQueryParam('order', []);
+        $filterById     = Yii::$app->request->getQueryParam('id');
         $keyword        = Yii::$app->request->getQueryParam('search_query');
-        $start          = Yii::$app->request->getQueryParam('start') ?: 0;
-        $limit          = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+        $start          = Yii::$app->request->getQueryParam('start', 0);
+        $limit          = Yii::$app->request->getQueryParam('limit', SortHelper::DEFAULT_LIMIT);
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
@@ -66,7 +67,11 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
+        if ( $filterById > 0 ) {
 
+            $query->andWhere([Project::tableName() . '.id' => $filterById]);
+
+        }
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
             ->setLimit($limit)
@@ -120,7 +125,8 @@ class ProjectFetch extends ViewModelAbstract
                 $dev = [
                     'id'            => $developer->id,
                     'first_name'    => $developer->first_name,
-                    'last_name'     => $developer->last_name
+                    'last_name'     => $developer->last_name,
+                    'role'          => $developer->role
                 ];
                 if ($aliasUserId = ProjectDeveloper::findOne(['user_id' => $developer->id,
                     'project_id' => $model->id])->alias_user_id
@@ -182,7 +188,9 @@ class ProjectFetch extends ViewModelAbstract
     function specialVal($model, $developersNames, $customersNames) : Array
     {
         $list = $this->defaultVal($model);
-        $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
+        $list['is_sales']       = $model->is_sales;
+        $list['is_pm']          = $model->is_pm;
+        $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
         $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
         $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
