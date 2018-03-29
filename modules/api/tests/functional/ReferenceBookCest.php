@@ -33,7 +33,7 @@ class ReferenceBookCest
     public function testFetchReferenceBookCest(FunctionalTester $I)
     {
 
-        $I->wantTo('Testing fetch financial report data');
+        $I->wantTo('Testing fetch reference book data');
         $I->sendGET(ApiEndpoints::REFERENCE_BOOK);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -54,5 +54,17 @@ class ReferenceBookCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+    }
+
+    public function testFetchReferenceBookBySearchQueryCest( FunctionalTester $I )
+    {
+        $I->wantTo('Testing fetch reference book data by search query');
+        $I->sendGET(ApiEndpoints::REFERENCE_BOOK . '?search_query=Бланки суворого обліку');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->assertEquals(1, $response->data->total_records);
     }
 }
