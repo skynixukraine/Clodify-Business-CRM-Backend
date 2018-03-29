@@ -25,6 +25,7 @@ class ReportsCest
     {
         define('DATE_REPORT', date('d/m/Y'));
         define('HOURS', 2);
+        define('MAX_HOURS', 12);
         define('TASK', 'task description, task description, task description');
 
         $I->wantTo('Create report without authorization');
@@ -41,6 +42,53 @@ class ReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
         $this->userId = ValuesContainer::$userId;
+    }
+
+    /**
+     * 2 Report Now Page: change the max value of hours from 10 to 12
+     * @see  https://jira.skynix.co/browse/SCA-118
+     */
+    public function testCreateReportForMaxHours(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Create report with authorization');
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id'    => ValuesContainer::$projectId,
+            'task'          => TASK,
+            'hours'         => MAX_HOURS,
+            'date_report'   => DATE_REPORT
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response->errors);
+        $I->assertEmpty($response->errors);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'report_id' => 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        if ( $response->data->report_id > 0 ) {
+
+            $I->wantTo('Delete previously created report');
+            $I->sendDELETE(ApiEndpoints::REPORT . '/' . $response->data->report_id);
+            $I->seeResponseCodeIs(200);
+            $response = json_decode($I->grabResponse());
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [],
+                "success" => true
+            ]);
+            $I->assertEmpty($response->errors);
+            $I->assertEquals(1, $response->success);
+
+        }
+
     }
 
     /**
@@ -72,6 +120,31 @@ class ReportsCest
             'success' => 'boolean'
         ]);
         $this->ownReportId = $response->data->report_id;
+
+    }
+
+
+    /**
+     * 2 Report Now Page: change the max value of hours from 10 to 12
+     * @see  https://jira.skynix.co/browse/SCA-118
+     */
+    public function testCanNotCreateReportForMoreThanMaxHours(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Create report with authorization');
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id'    => ValuesContainer::$projectId,
+            'task'          => TASK,
+            'hours'         => MAX_HOURS,
+            'date_report'   => DATE_REPORT
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
 
     }
 
