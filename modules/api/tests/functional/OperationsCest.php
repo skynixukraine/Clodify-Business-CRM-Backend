@@ -69,7 +69,7 @@ class OperationsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Testing create new operation');
+        $I->wantTo('Testing create new operation with/for a fixed asset');
         $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
             [
                 'bussiness_id'           =>  '1',
@@ -92,6 +92,7 @@ class OperationsCest
             ]
         ));
         $response = json_decode($I->grabResponse());
+        codecept_debug($response->errors);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $operationId = $response->data->operation;
