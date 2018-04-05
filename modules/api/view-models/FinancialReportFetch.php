@@ -32,10 +32,19 @@ class FinancialReportFetch extends ViewModelAbstract
             $date_raw = Yii::$app->request->getQueryParam('search_query');
 
             if (!empty($date_raw)){
-                $query = FinancialReport::find()
-                    ->where(['between', 'report_date',
-                        DateUtil::toUnixFromSlashFormat($date_raw), DateUtil::getLastDayOfMonth($date_raw)
-                    ]);
+
+                $dates = explode("~", $date_raw);
+
+                if ( count($dates) === 2) {
+
+                    $query = FinancialReport::find()
+                        ->where(['between', 'report_date',
+                            DateUtil::toUnixFromSlashFormat(trim($dates[0])), DateUtil::getLastDayOfMonth(trim($dates[1]))
+                        ]);
+
+
+                }
+
             } else {
                 $query = FinancialReport::find();
             }
