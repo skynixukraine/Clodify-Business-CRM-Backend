@@ -34,4 +34,5 @@ class ApiEndpoints
     const INVOICES                = '/api/invoices';
     const FETCH_FINANCIAL_REPORTS = self::FINANCIAL_REPORTS;
     const FETCH_FIXED_ASSETS      = '/api/fixed-assets';
+    const FETCH_BALANCE           = '/api/balances';
 }
