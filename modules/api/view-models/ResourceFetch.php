@@ -24,7 +24,7 @@ class ResourceFetch extends ViewModelAbstract
     public function define()
     {
 
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM])) {
             $order = Yii::$app->request->getQueryParam('order');
             $start = Yii::$app->request->getQueryParam('start') ?: 0;
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
