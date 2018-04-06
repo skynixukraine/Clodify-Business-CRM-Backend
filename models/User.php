@@ -885,23 +885,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $model->auth_type;
     }
 
-    /**
-     * @param $id
-     *   SELECT date FROM availability_logs WHERE user_id=? ORDER BY id DESC LIMIT 0,1
-     */
-    public static function getAvailabilityTime($id)
-    {
-        $log = AvailabilityLog::find()
-            ->where(['user_id' => $id])
-            ->orderBy('id DESC')
-            ->limit(1)
-            ->asArray()
-            ->all();
-        if($log){
-            return time() - $log[0]['date'];
-        } else {
-            return null;
-        }
-    }
-
 }

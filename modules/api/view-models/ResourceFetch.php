@@ -8,8 +8,6 @@
 
 namespace viewModel;
 
-use app\models\ReferenceBook;
-use app\models\Transaction;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -53,10 +51,11 @@ class ResourceFetch extends ViewModelAbstract
                 foreach ($resources as $k => $v) {
                     $resources[$k] = [
                         "id" => $v->id,
-                        "first_name" => $v->first_name,
-                        "last_name" => $v->last_name,
-                        "is_available" =>  $v->is_available ? true : false,
-                        "available_for" => $v->is_available ? User::getAvailabilityTime($v->id) : null
+                        "first_name"    => $v->first_name,
+                        "last_name"     => $v->last_name,
+                        "skills"        => $v->position,
+                        "is_available"  => $v->is_available ? true : false,
+                        "available_for" => $v->is_available ? (time() - $v->availabilityLog->date) : null
                     ];
                 }
             } else {

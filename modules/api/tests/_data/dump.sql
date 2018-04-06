@@ -738,6 +738,26 @@ CREATE TABLE `fixed_assets_operations` (
 ENGINE = InnoDB;
 
 --
+-- Table structure for table `availability_logs`
+--
+
+DROP TABLE IF EXISTS `availability_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `availability_logs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `date` INT(11) NOT NULL,
+  `is_available` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_availability_logs_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)ENGINE = InnoDB;
+
+--
 -- Table structure for table `access_keys`
 --
 
@@ -989,6 +1009,7 @@ CREATE TABLE `users` (
   `slug` varchar(255) DEFAULT NULL,
   `official_salary` double null,
   `auth_type` tinyint(1) DEFAULT '1',
+  `is_available` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;
