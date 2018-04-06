@@ -15,7 +15,6 @@ use Helper\ValuesContainer;
  */
 class ResourcesCest
 {
-    private $userId;
 
     /**@see https://jira.skynix.co/browse/SCA-125
      * @param FunctionalTester $I
@@ -87,6 +86,4 @@ class ResourcesCest
 
         $I->seeInDatabase('availability_logs', ['user_id' => 5, 'is_available' => 1]);
     }
-
-
 }

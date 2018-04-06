@@ -73,7 +73,6 @@ return [
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
 
 
-
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
     $API . '/<controller>/<action>'     => $API . '/<controller>/<action>',

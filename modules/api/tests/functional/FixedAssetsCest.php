@@ -25,7 +25,7 @@ class FixedAssetsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Testing create new operation');
+        $I->wantTo('Testing fetch fixed assets');
         $I->sendGET(ApiEndpoints::FETCH_FIXED_ASSETS ."?business_id=" . ValuesContainer::$BusinessID);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
@@ -52,7 +52,7 @@ class FixedAssetsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Testing create new operation');
+        $I->wantTo('Testing fetch fixed assets');
         $I->sendGET(ApiEndpoints::FETCH_FIXED_ASSETS);
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
