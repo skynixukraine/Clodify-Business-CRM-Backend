@@ -69,6 +69,7 @@ return [
     'POST '     . $API . '/invoices'                                          => $API . '/invoices/create',
     'GET '      . $API . '/fixed-assets'                                      => $API . '/fixed-assets/fetch',
     'GET '      . $API . '/balances'                                          => $API . '/balances/fetch',
+    'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
 
 
 
