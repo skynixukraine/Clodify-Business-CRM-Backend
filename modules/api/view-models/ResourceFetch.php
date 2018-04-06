@@ -53,7 +53,7 @@ class ResourceFetch extends ViewModelAbstract
                         "id" => $v->id,
                         "first_name"    => $v->first_name,
                         "last_name"     => $v->last_name,
-                        "skills"        => $v->position,
+                        "skills"        => $v->tags,
                         "is_available"  => $v->is_available ? true : false,
                         "available_for" => $v->is_available ? (time() - $v->availabilityLog->date) : null
                     ];
