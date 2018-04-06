@@ -93,7 +93,7 @@ class FinancialReportLock extends ViewModelAbstract
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             $financialReport->save();
                         } else {
-                            foreach ($finyearrep->getErrors() as $param=> $errors) {
+                            foreach ($yearlyReport->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
                                     $this->addError( $param , Yii::t('yii', $error));
                             }
