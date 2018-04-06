@@ -240,6 +240,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(WorkHistory::className(), ['user_id' => 'id']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getAvailabilityLog()
+    {
+        return $this->hasOne(AvailabilityLog::className(), ['user_id' => 'id']);
+    }
+
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
     /**
      * @inheritdoc
