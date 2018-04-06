@@ -71,6 +71,7 @@ return [
     'GET '      . $API . '/balances'                                          => $API . '/balances/fetch',
     'GET '      . $API . '/resources'                                         => $API . '/resources/fetch',
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
+    'POST '     . $API . '/resources'                                         => $API . '/resources/start',
 
 
     // General rules
