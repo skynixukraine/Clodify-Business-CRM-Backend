@@ -46,7 +46,7 @@ class ResourceIavailable extends ViewModelAbstract
                     User::updateAll(['is_available' => 1], ['id' => $userId]);
                 //  if log exist: update logs and users tables
                 } else {
-                    AvailabilityLog::updateAll(['is_available' => 1], ['user_id' => $userId]);
+                    AvailabilityLog::updateAll(['is_available' => 1, 'date' => time()], ['user_id' => $userId]);
                     User::updateAll(['is_available' => 1], ['id' => $userId]);
                 }
             }

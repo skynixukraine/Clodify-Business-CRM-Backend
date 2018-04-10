@@ -92,6 +92,7 @@ class ResourcesCest
      */
     public function testUserAvailableStart(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+        $date = time()-7200; // two hours before
 
         $I->haveInDatabase('users', array(
             'id' => 8,
@@ -105,7 +106,7 @@ class ResourcesCest
         $I->haveInDatabase('availability_logs', array(
             'id' => 1,
             'user_id' => 8,
-            'date' =>  time()-7200,
+            'date' =>  $date,
             'is_available' => 1
         ));
 
@@ -140,7 +141,12 @@ class ResourcesCest
             'success' => 'boolean'
         ]);
 
-        $I->seeInDatabase('reports', ['user_id' => 8, 'task' => "Idle Time - I was waiting for tasks"]);
+        $I->seeInDatabase('reports', [
+            'user_id' => 8,
+            'task' => "Idle Time - I was waiting for tasks",
+            'project_id' => 1,
+            'hours' => round(((time() - $date) / 3600), 2)
+        ]);
 
     }
 }

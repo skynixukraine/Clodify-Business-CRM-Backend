@@ -39,17 +39,21 @@ class ResourceStart extends ViewModelAbstract
 
             $today = date('Y-m-d', time());
             $log = AvailabilityLog::find()->where(['user_id' => $userId])->one();
+
             $dateWhenAvailableRequestPosted = date('Y-m-d', $log->date);
 
-            // if posted and is_available=true
+            // if posted today and is_available=true
             if ($today == $dateWhenAvailableRequestPosted && $log->is_available) {
 
                 // create an automated report for this user
+                $hours = round(((time() - $log->date) / 3600), 2);
+
                 $report = new Report();
                 $report->project_id = Project::find()->where(['name' => Project::INTERNAL_TASK])->one()->id;
                 $report->user_id = $userId;
                 $report->task = 'Idle Time - I was waiting for tasks';
-                $report->hours = round(((time() - $log->date) / 3600), 2);
+                // reports hours can not be less than 0.1
+                $report->hours = $hours > 0.11 ? $hours : 0.11;
                 $report->date_report = $today;
 
                 if (!$report->save()) {
