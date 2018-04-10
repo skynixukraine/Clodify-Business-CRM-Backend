@@ -334,8 +334,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
         if(isset(Yii::$app->user->identity->role)){
 
-        $role = Yii::$app->user->identity->role;
-    } else {
+            $role = Yii::$app->user->identity->role;
+        } else {
             return false;
         }
 
@@ -434,7 +434,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ->setTo($this->email)
                     ->setSubject('Skynix CRM: Your email address to access CRM is changed')
                     ->send();
-            } 
+            }
 
             if ($this->role == User::ROLE_GUEST) {
                 if ($this->rawPassword) {
