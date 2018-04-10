@@ -30,26 +30,13 @@ class ResourceIavailable extends ViewModelAbstract
 
             $userId = Yii::$app->user->id;
 
-            if (!User::findOne($userId)->is_available) {
+            User::updateAll(['is_available' => 1], ['id' => $userId]);
 
-                $log = AvailabilityLog::find()->where(['user_id' => $userId])->one();
-
-                // if log for that user not exist
-                if (!$log){
-                    // create log
-                    $availabilityLog = new AvailabilityLog();
-                    $availabilityLog->user_id = $userId;
-                    $availabilityLog->date = time();
-                    $availabilityLog->is_available = 1;
-                    $availabilityLog->save();
-                    // update user table
-                    User::updateAll(['is_available' => 1], ['id' => $userId]);
-                //  if log exist: update logs and users tables
-                } else {
-                    AvailabilityLog::updateAll(['is_available' => 1], ['user_id' => $userId]);
-                    User::updateAll(['is_available' => 1], ['id' => $userId]);
-                }
-            }
+            $availabilityLog = new AvailabilityLog();
+            $availabilityLog->user_id = $userId;
+            $availabilityLog->date = time();
+            $availabilityLog->is_available = 1;
+            $availabilityLog->save();
 
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
