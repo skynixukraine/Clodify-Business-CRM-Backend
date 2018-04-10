@@ -49,6 +49,8 @@ class ResourceIavailable extends ViewModelAbstract
                     AvailabilityLog::updateAll(['is_available' => 1, 'date' => time()], ['user_id' => $userId]);
                     User::updateAll(['is_available' => 1], ['id' => $userId]);
                 }
+            } else {
+                return $this->addError("You are already available, do not send the same request twice.");
             }
 
         } else {
