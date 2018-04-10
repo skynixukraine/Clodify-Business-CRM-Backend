@@ -25,4 +25,17 @@ class ResourcesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionIavailable()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ResourceIavailable')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }

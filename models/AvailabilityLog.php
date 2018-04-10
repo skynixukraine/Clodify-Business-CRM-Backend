@@ -31,8 +31,7 @@ class AvailabilityLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'date'], 'integer'],
-            [['is_available'], 'string', 'max' => 1],
+            [['user_id', 'date', 'is_available'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
