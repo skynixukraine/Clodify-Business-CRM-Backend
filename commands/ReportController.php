@@ -44,7 +44,11 @@ class ReportController extends Controller
                 $h = Report::sumHoursReportsOfThisDay($user->id, $today);
 
                 if ($h && $h < 8) {
-                    $log = AvailabilityLog::find()->where(['user_id' => $user->id])->one();
+                    $log = AvailabilityLog::find()
+                        ->where(['user_id' => $user->id])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->limit(1)
+                        ->all();
 
                     $dateWhenAvailableRequestPosted = date('Y-m-d', $log->date);
 
