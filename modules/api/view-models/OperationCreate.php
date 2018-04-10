@@ -35,10 +35,10 @@ class OperationCreate extends ViewModelAbstract
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 // get POST data
-                $businessId          = $this->postData['business_id'];
+                $businessId           = $this->postData['business_id'];
                 $name                 = $this->postData['name'];
                 $operationTypeId      = $this->postData['operation_type_id'];
-                $transactionName     = $this->postData['transaction_name'];
+                $transactionName      = $this->postData['transaction_name'];
                 $amount               = $this->postData['amount'];
                 $currency             = $this->postData['currency'];
                 $debitReferenceId     = $this->postData['debit_reference_id'];

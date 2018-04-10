@@ -29,7 +29,7 @@ class OperationsCest
         $I->wantTo('Testing create new operation');
         $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
             [
-                'business_id'           =>  '1',
+                'business_id'            =>  '1',
                 'name'                   =>  'myName',
                 'operation_type_id'      =>  '1',
                 'transaction_name'       =>  'BUY',
@@ -72,7 +72,7 @@ class OperationsCest
         $I->wantTo('Testing create new operation with/for a fixed asset');
         $I->sendPOST(ApiEndpoints::OPERATION, json_encode(
             [
-                'business_id'           =>  '1',
+                'business_id'            =>  '1',
                 'name'                   =>  'myName',
                 'operation_type_id'      =>  '1',
                 'transaction_name'       =>  'BUY',
