@@ -38,7 +38,11 @@ class ResourceStart extends ViewModelAbstract
             User::updateAll(['is_available' => 0], ['id' => $userId]);
 
             $today = date('Y-m-d', time());
-            $log = AvailabilityLog::find()->where(['user_id' => $userId])->one();
+            $log = AvailabilityLog::find()
+                ->where(['user_id' => $userId])
+                ->orderBy(['id' => SORT_DESC])
+                ->limit(1)
+                ->one();
 
             $dateWhenAvailableRequestPosted = date('Y-m-d', $log->date);
 
