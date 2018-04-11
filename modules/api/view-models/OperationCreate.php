@@ -35,7 +35,7 @@ class OperationCreate extends ViewModelAbstract
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 // get POST data
-                $bussinessId          = $this->postData['bussiness_id'];
+                $businessId           = $this->postData['business_id'];
                 $name                 = $this->postData['name'];
                 $operationTypeId      = $this->postData['operation_type_id'];
                 $transactionName      = $this->postData['transaction_name'];
@@ -48,7 +48,7 @@ class OperationCreate extends ViewModelAbstract
 
                 // create operation
                 $operation = new Operation();
-                $operation->business_id       = $bussinessId;
+                $operation->business_id       = $businessId;
                 $operation->name              = $name;
                 $operation->status            = Operation::DONE;
                 $operation->date_created      = time();
@@ -93,7 +93,7 @@ class OperationCreate extends ViewModelAbstract
                 $transaction1->reference_book_id     = $debitReferenceId;
                 $transaction1->counterparty_id       = $debitCounterpartyId;
                 $transaction1->operation_id          = $this->operationId;
-                $transaction1->operation_business_id = $bussinessId;
+                $transaction1->operation_business_id = $businessId;
 
                 $transaction2 = new Transaction();
                 $transaction2->type                  = Transaction::CREDIT;
@@ -104,7 +104,7 @@ class OperationCreate extends ViewModelAbstract
                 $transaction2->reference_book_id     = $creditReferenceId;
                 $transaction2->counterparty_id       = $creditCounterpartyId;
                 $transaction2->operation_id          = $this->operationId;
-                $transaction2->operation_business_id = $bussinessId;
+                $transaction2->operation_business_id = $businessId;
                 $transaction2->setScenario(Transaction::SCENARIO_TRANSACTION_CREATE);
                 $transaction1->setScenario(Transaction::SCENARIO_TRANSACTION_CREATE);
                 if ($transaction1->save() && $transaction2->save()) {
