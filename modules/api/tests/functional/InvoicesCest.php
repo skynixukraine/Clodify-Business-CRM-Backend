@@ -178,6 +178,46 @@ class InvoicesCest
 
 
     /**
+     * @see    https://jira.skynix.co/browse/SCA-132
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewInvoiceData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing view single invoice');
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  => [
+                [
+                    "customer" =>  'array',
+                    "start_date"   => 'string',
+                    "end_date"     => 'string',
+                    "total_hours"  => 'integer | null',
+                    "subtotal"     => 'integer | string',
+                    "discount"     => 'integer | string',
+                    "total"        => 'integer | string',
+                    "notes"        => 'string',
+                    "created_date" => 'string | null',
+                    "sent_date"    => 'string | null',
+                    "paid_date"    => 'string | null',
+                    "status"       => 'string',
+                ]
+            ],
+            'errors' => 'array',
+            'success'=> 'boolean'
+        ]);
+    }
+
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-974
      * @param  FunctionalTester $I
      * @return void
