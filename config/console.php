@@ -45,6 +45,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'user' => [
+            'class' => 'app\models\User',
+            'identityCookie' => [
+                'name' => 'skynix',
+                'domain' => '.skynix.co',
+                'path' => '/',
+            ]
+        ],
     ],
     'params' => $params,
 ];
