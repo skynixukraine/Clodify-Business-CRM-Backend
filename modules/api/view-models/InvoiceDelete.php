@@ -18,14 +18,11 @@ class InvoiceDelete extends ViewModelAbstract
 {
     public function define()
     {
-        $contractId = Yii::$app->request->getQueryParam("id");
-        $invoiceId = Yii::$app->request->getQueryParam("invoice_id");
-        $contract = Contract::findOne($contractId);
-        //SALES can view, invoice & edit only own contracts
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) || (User::hasPermission([User::ROLE_SALES]) && ($contract->created_by == Yii::$app->user->id))) {
-            if ($contractId && $invoiceId) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            $invoiceId = Yii::$app->request->getQueryParam("invoice_id");
+            if ($invoiceId) {
                 $model = Invoice::find()
-                    ->where(['id' => $invoiceId, 'contract_id' => $contractId])
+                    ->where(['id' => $invoiceId])
                     ->one();
                 $model->is_delete = 1;
                 if ($model->save(true, ['is_delete'])) {

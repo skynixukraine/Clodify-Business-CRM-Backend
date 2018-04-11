@@ -112,14 +112,14 @@ class InvoicesCest
 
         $I->wantTo('Testing create invoice as ADMIN');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
-             "user_id"     =>  100,
-             "business_id" =>  1,
-             "date_start"  => "10/10/2018",
-             "date_end"    => "10/11/2018",
-             "subtotal"    =>  2444,
-             "discount"    =>  20,
-             "total"       =>  20000,
-             "note"        => "bla bla"
+            "user_id"     =>  100,
+            "business_id" =>  1,
+            "date_start"  => "10/10/2018",
+            "date_end"    => "10/11/2018",
+            "subtotal"    =>  2444,
+            "discount"    =>  20,
+            "total"       =>  20000,
+            "note"        => "bla bla"
         ]));
         $response = json_decode($I->grabResponse());
         $this->invoiceId = $response->data->invoice_id;
@@ -136,45 +136,45 @@ class InvoicesCest
     }
 
     /**
-     * @see    https://jira-v2.skynix.company/browse/SI-967
+     * @see    https://jira-v2.skynix.company/browse/SI-967  change with https://jira.skynix.co/browse/SCA-130
      * @param  FunctionalTester $I
      * @return void
      */
-//    public function testFetchInvoicesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
-//    {
-//        $oAuth = new OAuthSteps($scenario);
-//        $oAuth->login();
-//
-//        $I->wantTo('Testing fetch invoices data');
-//        $I->sendGET(ApiEndpoints::CONTRACTS . '/' . ValuesContainer::$contractId . '/invoices',  [
-//            'limit' => 1
-//        ]);
-//        $I->seeResponseCodeIs(200);
-//        $I->seeResponseIsJson();
-//        $response = json_decode($I->grabResponse());
-//        $I->assertEmpty($response->errors);
-//        $I->assertEquals(true, $response->success);
-//        $I->seeResponseMatchesJsonType([
-//            'data' => ['invoices' =>
-//                [
-//                    [
-//                        'invoice_id' => 'integer',
-//                        'customer' => 'array|null',
-//                        'subtotal' => 'integer',
-//                        'discount' => 'integer',
-//                        'total' => 'integer|string',
-//                        'created_date' => 'string|null',
-//                        'sent_date' => 'string|null',
-//                        'paid_date' => 'string|null',
-//                        'status' => 'string',
-//                    ]
-//                ],
-//                'total_records' => 'string'
-//            ],
-//            'errors' => 'array',
-//            'success' => 'boolean'
-//        ]);
-//    }
+    public function testFetchInvoicesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch invoices data');
+        $I->sendGET(ApiEndpoints::INVOICES, [
+            'limit' => 1
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => ['invoices' =>
+                [
+                    [
+                        'invoice_id'   => 'integer',
+                        'customer'     => 'array|null',
+                        'subtotal'     => 'integer|string',
+                        'discount'     => 'integer|string',
+                        'total'        => 'integer|string',
+                        'created_date' => 'string|null',
+                        'sent_date'    => 'string|null',
+                        'paid_date'    => 'string|null',
+                        'status'       => 'string',
+                    ]
+                ],
+                'total_records' => 'string'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
 
 
     /**
@@ -218,7 +218,7 @@ class InvoicesCest
 
 
     /**
-     * @see    https://jira-v2.skynix.company/browse/SI-974
+     * @see    https://jira-v2.skynix.company/browse/SI-974  changed with https://jira.skynix.co/browse/SCA-131
      * @param  FunctionalTester $I
      * @return void
      */
@@ -227,8 +227,10 @@ class InvoicesCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
+        $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 0]);
+
         $I->wantTo('Testing delete invoice');
-        $I->sendDELETE(ApiEndpoints::CONTRACTS . '/' . ValuesContainer::$contractId . '/invoices/' . $this->invoiceId);
+        $I->sendDELETE(ApiEndpoints::INVOICES . '/' . $this->invoiceId);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([
@@ -236,6 +238,8 @@ class InvoicesCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+
+        $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 1]);
     }
 
 }

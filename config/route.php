@@ -32,10 +32,10 @@ return [
     'GET '      . $API . '/contracts/<id:\d+>'                                => $API . '/contracts/view',
     'DELETE '   . $API . '/contracts/<contract_id:\d+>'                       => $API . '/contracts/delete',
     'GET '      . $API . '/user/<id:\d+>/photo'                               => $API . '/users/view-photo',
-    'GET '      . $API . '/contracts/<id:\d+>/invoices'                       => $API . '/invoices/fetch',
+    'GET '      . $API . '/invoices'                                          => $API . '/invoices/fetch',
     'POST '     . $API . '/contracts/<id:\d+>/invoices'                       => $API . '/invoices/create',
-    'DELETE '   . $API . '/contracts/<id:\d+>/invoices/<invoice_id:\d+>'      => $API . '/invoices/delete',
     'GET '      . $API . '/invoices/<id:\d+>'                                 => $API . '/invoices/view',
+    'DELETE '   . $API . '/invoices/<invoice_id:\d+>'                         => $API . '/invoices/delete',
     'PUT '      . $API . '/surveys/<survey_id:\d+>'                           => $API . '/surveys/edit',
     'GET '      . $API . '/users/access-token/<user_id:\d+>'                  => $API . '/users/access-token',
     'GET '      . $API . '/financial-reports/<id:\d+>'                        => $API . '/financial-reports/view',
@@ -72,6 +72,7 @@ return [
     'GET '      . $API . '/balances'                                          => $API . '/balances/fetch',
     'GET '      . $API . '/resources'                                         => $API . '/resources/fetch',
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
+    'POST '     . $API . '/resources'                                         => $API . '/resources/start',
 
 
     // General rules
