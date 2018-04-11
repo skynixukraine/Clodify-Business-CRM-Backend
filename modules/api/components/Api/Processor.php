@@ -140,7 +140,7 @@ class Processor
 
             }
             //Check crowd TOKEN if only this is a CROWD user
-            if ( $user->auth_type === User::CROWD_AUTH ) {
+            if ( $checkAccess == true && $user->auth_type === User::CROWD_AUTH ) {
 
                 // crowd session code go here
                 $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);

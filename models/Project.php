@@ -34,6 +34,7 @@ class Project extends \yii\db\ActiveRecord
     const STATUS_INPROGRESS = "INPROGRESS";
     const STATUS_DONE       = "DONE";
     const STATUS_CANCELED   = "CANCELED";
+    const INTERNAL_TASK     = "Internal (Non Paid) Tasks";
 
     const PROJECT_PUBLISHED = 1;
 

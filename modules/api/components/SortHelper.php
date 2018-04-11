@@ -13,6 +13,7 @@ class SortHelper
     const ASC           = 'ASC';
     const DESC          = 'DESC';
     const DEFAULT_LIMIT = 10;
+    const MAX_LIMIT     = 200;
 
     public static function sort( \yii\db\ActiveQuery $query, array $sorts )
     {

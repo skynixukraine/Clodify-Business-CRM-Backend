@@ -77,8 +77,17 @@ class ProjectsCest
                         'total_paid' => 'float|integer',
                         'date_start' => 'string',
                         'date_end' => 'string',
-                        'developers' => 'string',
-                        'clients' => 'string',
+                        "is_pm"         => 'integer|null',
+                        "is_sales"      => 'integer|null',
+                        'developers' => [
+                            [
+                                'id'            => 'integer',
+                                'first_name'    => 'string',
+                                'last_name'     => 'string',
+                                'role'          => 'string'
+                            ]
+                        ],
+                        'clients' => 'array',
                         'status' => 'string',
                     ]
                 ],
@@ -87,6 +96,29 @@ class ProjectsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+    }
+
+    /**
+     * @see    https://jira.skynix.co/browse/SCA-122
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchProjectById(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch one project data by its ID');
+        $I->sendGET(ApiEndpoints::PROJECT, [
+            'id'    => $this->projectId
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->assertEquals(1, $response->data->total_records);
+
     }
 
     /**

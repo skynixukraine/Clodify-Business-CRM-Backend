@@ -197,6 +197,43 @@ class FinancialReportsCest
         ]);
     }
 
+    public function testFetchFinancilReportWithSearchQueryCest(FunctionalTester $I)
+    {
+        $period = urlencode("01/" . (ValuesContainer::$FinancialReportDate - 1) . "/" . date("Y") . " ~ " .
+            "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" . date("Y"));
+        $I->wantTo('Testing fetch financial report data with search_query e.g. d/m/Y ~ d/m/Y');
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . $period);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->meta->errors);
+        $I->assertEquals(true, $response->meta->success);
+        $I->seeResponseMatchesJsonType([
+            'financialReport' =>
+                [
+                    [
+                        'id'                  => 'integer',
+                        'report_date'         => 'string',
+                        'balance'             => 'string',
+                        'currency'            => 'float',
+                        'income'              => 'string',
+                        'expenses'            => 'string',
+                        'profit'              => 'string',
+                        'investments'         => 'string',
+                        'spent_corp_events'   => 'string',
+                        'num_of_working_days' => 'integer|null',
+                        'is_locked'           => 'integer',
+                    ]
+                ],
+
+            'meta'    => [
+                'total'   => 'string',
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        ]);
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-1023
      * @param  FunctionalTester $I

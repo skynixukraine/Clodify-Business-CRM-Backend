@@ -14,6 +14,7 @@ use Yii;
  */
 class OperationType extends \yii\db\ActiveRecord
 {
+    const TYPE_AMORTIZATION = 8;
     /**
      * @inheritdoc
      */

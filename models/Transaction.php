@@ -43,7 +43,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'required', 'on' => [self::SCENARIO_TRANSACTION_CREATE]],
+            [['reference_book_id', 'operation_id', 'operation_business_id'], 'required', 'on' => [self::SCENARIO_TRANSACTION_CREATE]],
             [['id', 'date', 'reference_book_id', 'counterparty_id', 'operation_id', 'operation_business_id'], 'integer'],
             [['type', 'currency'], 'string'],
             [['amount'], 'number'],
@@ -97,6 +97,10 @@ class Transaction extends \yii\db\ActiveRecord
         return $this->hasOne(ReferenceBook::className(), ['id' => 'reference_book_id']);
     }
 
+    /**
+     * @param $id
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public static function getDebitTransactionById($id)
     {
         $transaction = self::find()
@@ -106,6 +110,10 @@ class Transaction extends \yii\db\ActiveRecord
         return $transaction;
     }
 
+    /**
+     * @param $id
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public static function getCreditTransactionById($id)
     {
         $transaction = self::find()
@@ -113,5 +121,37 @@ class Transaction extends \yii\db\ActiveRecord
             ->andWhere(['operation_id' => $id])
             ->one();
         return $transaction;
+    }
+
+    /**
+     * @param $transactions
+     * @param $v
+     * @return int
+     */
+    public static function getSumDebits($transactions, $v)
+    {
+        $debit = 0;
+        foreach ($transactions as $t){
+            if($t->type == Transaction::DEBIT && $t->reference_book_id == $v){
+                $debit += $t->amount;
+            }
+        }
+        return $debit;
+    }
+
+    /**
+     * @param $transactions
+     * @param $v
+     * @return int
+     */
+    public static function getSumCredits($transactions, $v)
+    {
+        $credit = 0;
+        foreach ($transactions as $t){
+            if($t->type == Transaction::CREDIT && $t->reference_book_id == $v){
+                $credit += $t->amount;
+            }
+        }
+        return $credit;
     }
 }

@@ -21,14 +21,14 @@ class InvoicesFetch extends ViewModelAbstract
 {
     public function define()
     {
-        $contractId = Yii::$app->request->getQueryParam("id");
+    //    $contractId = Yii::$app->request->getQueryParam("id");
         $order = Yii::$app->request->getQueryParam("order");
         $keyword = Yii::$app->request->getQueryParam("search_query") ?: null;
         $start = Yii::$app->request->getQueryParam('start') ?: 0;
         $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-        $query = Invoice::find()
-            ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' )
-            ->where(['contract_id' => $contractId]);
+        $query = Invoice::find();
+//            ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' )
+//            ->where(['contract_id' => $contractId]);
 
         $projectIDs = [];
         $dataTable = DataTable::getInstance()
@@ -101,16 +101,16 @@ class InvoicesFetch extends ViewModelAbstract
                 $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
             }
             //SALES can view, invoice & edit only own contracts
-            $contracts = Contract::find()->where(['created_by'=>Yii::$app->user->id])->all();
-            $contractsIDs = [];
-            foreach ($contracts as $contract) {
-                $contractsIDs[] = $contract->id;
-            }
-            if($contractsIDs) {
-                $dataTable->setFilter(Invoice::tableName() . '.contract_id IN ('
-                    . implode(",", $contractsIDs) . ')'
-                ) ;
-            }
+//            $contracts = Contract::find()->where(['created_by'=>Yii::$app->user->id])->all();
+//            $contractsIDs = [];
+//            foreach ($contracts as $contract) {
+//                $contractsIDs[] = $contract->id;
+//            }
+//            if($contractsIDs) {
+//                $dataTable->setFilter(Invoice::tableName() . '.contract_id IN ('
+//                    . implode(",", $contractsIDs) . ')'
+//                ) ;
+//            }
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -141,9 +141,9 @@ class InvoicesFetch extends ViewModelAbstract
                     'id' => $id,
                     'name' => $name
                 ],
-                'subtotal' => '$' . $model->subtotal > 0 ?: 0,
-                'discount' => '$' . $model->discount > 0 ?: 0,
-                'total' => '$' . $model->total > 0 ?: 0,
+                'subtotal' => $model->subtotal > 0 ? '$' . $model->subtotal : 0,
+                'discount' => $model->discount > 0 ? '$' . $model->discount : 0,
+                'total' => $model->total > 0 ? '$' . $model->total : 0,
                 'created_date' => $model->date_created,
                 'sent_date' => $model->date_sent,
                 'paid_date' => $model->date_paid,

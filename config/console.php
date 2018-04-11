@@ -10,6 +10,8 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gii'],
     'controllerNamespace' => 'app\commands',
+    'language' => 'ua-UK',
+    'sourceLanguage' => 'en-US',
     'modules' => [
         'gii' => 'yii\gii\Module',
     ],
@@ -17,15 +19,40 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
         'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'logFile' => '@runtime/logs/profile.log',
+                    'categories' => ['yii\db\Command::query'],
+                    'levels' => ['error', 'warning', 'profile'],
+                ],
             ],
         ],
         'db' => $db,
+        'user' => [
+            'class' => 'app\models\User',
+            'identityCookie' => [
+                'name' => 'skynix',
+                'domain' => '.skynix.co',
+                'path' => '/',
+            ]
+        ],
     ],
     'params' => $params,
 ];

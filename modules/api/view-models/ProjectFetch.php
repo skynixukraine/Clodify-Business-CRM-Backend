@@ -24,9 +24,10 @@ class ProjectFetch extends ViewModelAbstract
     public function define()
     {
         $order          = Yii::$app->request->getQueryParam('order', []);
+        $filterById     = Yii::$app->request->getQueryParam('id');
         $keyword        = Yii::$app->request->getQueryParam('search_query');
-        $start          = Yii::$app->request->getQueryParam('start') ?: 0;
-        $limit          = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+        $start          = Yii::$app->request->getQueryParam('start', 0);
+        $limit          = Yii::$app->request->getQueryParam('limit', SortHelper::DEFAULT_LIMIT);
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
@@ -66,7 +67,11 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
+        if ( $filterById > 0 ) {
 
+            $query->andWhere([Project::tableName() . '.id' => $filterById]);
+
+        }
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
             ->setLimit($limit)
@@ -117,39 +122,42 @@ class ProjectFetch extends ViewModelAbstract
             $developers = $model->getDevelopers()->all();
             $developersNames = [];
             foreach ($developers as $developer) {
-                if ($alias_user = ProjectDeveloper::findOne(['user_id' => $developer->id,
+                $dev = [
+                    'id'            => $developer->id,
+                    'first_name'    => $developer->first_name,
+                    'last_name'     => $developer->last_name,
+                    'role'          => $developer->role
+                ];
+                if ($aliasUserId = ProjectDeveloper::findOne(['user_id' => $developer->id,
                     'project_id' => $model->id])->alias_user_id
                 ) {
-                    $aliases = User::find()
+                    $aliasUser = User::find()
                             ->where('id=:alias', [
-                                ':alias' => $alias_user])->one()->first_name . ' ' .
-                        User::find()
-                            ->where('id=:alias', [
-                                ':alias' => $alias_user])->one()->last_name;
-                    $developer->id == $alias_user ? $developersNames[] = $aliases :
-                        $developersNames[] = $aliases . '(' . $developer->first_name . " " . $developer->last_name . ')';
-                } else {
-                    $developersNames[] = $developer->first_name . ' ' . $developer->last_name;
+                                ':alias' => $aliasUserId])->one();
+
+                    $dev['alias'] = [
+                        'id'            => $aliasUser->id,
+                        'first_name'    => $aliasUser->first_name,
+                        'last_name'     => $aliasUser->last_name
+                    ];
                 }
+                $developersNames[] = $dev;
             }
 
             $customers = $model->getCustomers()->all();
             $customersNames = [];
 
             foreach ($customers as $customer) {
-
-                $customersNames[] = $customer->first_name . " " . $customer->last_name;
+                $projectCustomer = ProjectCustomer::findOne(['user_id' => $customer->id, 'project_id' => $model->id]);
+                $customersNames[] = [
+                    'id'                => $customer->id,
+                    'first_name'        => $customer->first_name,
+                    'last_name'         => $customer->last_name,
+                    'receive_invoices'  => $projectCustomer->receive_invoices
+                ];
             }
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_DEV,
-                User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
-
-                    $list[$key] = $this->defaultVal($model);
-
-            } else {
-                  return $this->addError(Processor::ERROR_PARAM,
-                      Yii::t('yii', 'You have no permission for this action'));
-            }
+            $list[$key] = $this->defaultVal($model);
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_CLIENT])) {
                 $list[$key] = $this->specialVal($model, $developersNames, $customersNames);
@@ -180,14 +188,16 @@ class ProjectFetch extends ViewModelAbstract
     function specialVal($model, $developersNames, $customersNames) : Array
     {
         $list = $this->defaultVal($model);
-        $list['total_logged'] = $model->total_logged_hours ? $model->total_logged_hours : 0;
+        $list['is_sales']       = $model->is_sales;
+        $list['is_pm']          = $model->is_pm;
+        $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
         $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
         $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
         $list['date_start'] = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
         $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
-        $list['developers'] = $developersNames ? implode(", ", $developersNames) : "Developer Not Set";
-        $list['clients'] = $customersNames ? implode(", ", $customersNames) : "Customer Not Set";
+        $list['developers'] = $developersNames;
+        $list['clients'] = $customersNames;
 
         return $list;
     }

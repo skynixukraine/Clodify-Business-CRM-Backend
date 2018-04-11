@@ -670,7 +670,7 @@ CREATE TABLE `transactions` (
 `amount` DECIMAL(15,2) NULL,
 `currency` ENUM('USD', 'UAH') NULL,
 `reference_book_id` INT NOT NULL,
-`counterparty_id` INT NOT NULL,
+`counterparty_id` INT NULL,
 `operation_id` INT NOT NULL,
 `operation_business_id` INT NOT NULL,
 PRIMARY KEY (`id`, `operation_id`, `operation_business_id`),
@@ -693,6 +693,69 @@ REFERENCES `operations` (`id` , `business_id`)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+--
+-- Table structure for table `fixed_assets`
+--
+
+DROP TABLE IF EXISTS `fixed_assets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fixed_assets` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NULL,
+  `cost` FLOAT NULL,
+  `inventory_number` INT NULL,
+  `amortization_method` ENUM('LINEAR', '50/50') NULL DEFAULT 'LINEAR',
+  `date_of_purchase` DATE NULL,
+  `date_write_off` DATE NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+--
+-- Table structure for table `fixed_assets_operations`
+--
+
+DROP TABLE IF EXISTS `fixed_assets_operations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fixed_assets_operations` (
+  `fixed_asset_id` INT NOT NULL,
+  `operation_id` INT(11) NOT NULL,
+  `operation_business_id` INT(11) NOT NULL,
+  PRIMARY KEY (`fixed_asset_id`, `operation_id`, `operation_business_id`),
+  INDEX `fk_fixed_assets_operations_operations1_idx` (`operation_id` ASC, `operation_business_id` ASC),
+  CONSTRAINT `fk_fixed_assets_operations_fixed_assets1`
+    FOREIGN KEY (`fixed_asset_id`)
+    REFERENCES `fixed_assets` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fixed_assets_operations_operations1`
+    FOREIGN KEY (`operation_id` , `operation_business_id`)
+    REFERENCES `operations` (`id` , `business_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+--
+-- Table structure for table `availability_logs`
+--
+
+DROP TABLE IF EXISTS `availability_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `availability_logs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `date` INT(11) NOT NULL,
+  `is_available` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_availability_logs_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)ENGINE = InnoDB;
 
 --
 -- Table structure for table `access_keys`
@@ -946,6 +1009,7 @@ CREATE TABLE `users` (
   `slug` varchar(255) DEFAULT NULL,
   `official_salary` double null,
   `auth_type` tinyint(1) DEFAULT '1',
+  `is_available` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;

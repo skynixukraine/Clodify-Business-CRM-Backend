@@ -43,6 +43,7 @@ use app\modules\api\models\AccessKey;
  * @property string $bank_account_ua
  * @property integer $is_published
  * @property integer $auth_type
+ * @property integer $is_available
 
  *
  * @property ProjectCustomer[] $projectCustomers
@@ -61,7 +62,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_FIN      = "FIN";
     const ROLE_GUEST    = "GUEST";
     const ROLE_SALES    = "SALES";
-    
+
     const ACTIVE_USERS  = 1;
     const DEACTIVATED   = 0;
     const DELETED_USERS = 1;
@@ -240,6 +241,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(WorkHistory::className(), ['user_id' => 'id']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getAvailabilityLog()
+    {
+        return $this->hasOne(AvailabilityLog::className(), ['user_id' => 'id']);
+    }
+
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
     /**
      * @inheritdoc
@@ -326,8 +335,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
         if(isset(Yii::$app->user->identity->role)){
 
-        $role = Yii::$app->user->identity->role;
-    } else {
+            $role = Yii::$app->user->identity->role;
+        } else {
             return false;
         }
 
@@ -372,7 +381,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             if ($this->salary && $this->salary != $oldData['salary']) {
                 $this->date_salary_up = date("Y-m-d");
             }
-            
+
             if ($this->password && $this->password != $oldData['password']) {
                 $this->rawPassword = $this->password;
                 $this->password = md5($this->password);
@@ -426,7 +435,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ->setTo($this->email)
                     ->setSubject('Skynix CRM: Your email address to access CRM is changed')
                     ->send();
-            } 
+            }
 
             if ($this->role == User::ROLE_GUEST) {
                 if ($this->rawPassword) {
@@ -487,7 +496,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
             ->where(User::tableName() . ".is_delete=0 AND " . User::tableName() . ".is_active=1 AND " .
                 User::tableName() . ".role IN ('" . User::ROLE_PM . "', '" . User::ROLE_DEV . "','" . User::ROLE_ADMIN . "','" .
-                                                    User::ROLE_FIN . "','" . User::ROLE_SALES . "')")
+                User::ROLE_FIN . "','" . User::ROLE_SALES . "')")
             ->groupBy(User::tableName() . ".id")
             ->all();
     }
@@ -728,20 +737,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $customersID;
     }
 
-	/**
-	 * 
-	 * @return array
-	 */
-	public static function getRoles(){
-		return [
-			self::ROLE_ADMIN => 'ADMIN',
-			self::ROLE_DEV => 'DEV',
-			self::ROLE_FIN => 'FIN',
-			self::ROLE_CLIENT => 'CLIENT',
-			self::ROLE_PM => 'PM',
-			self::ROLE_SALES => 'SALES'
-		];
-	}
+    /**
+     *
+     * @return array
+     */
+    public static function getRoles(){
+        return [
+            self::ROLE_ADMIN => 'ADMIN',
+            self::ROLE_DEV => 'DEV',
+            self::ROLE_FIN => 'FIN',
+            self::ROLE_CLIENT => 'CLIENT',
+            self::ROLE_PM => 'PM',
+            self::ROLE_SALES => 'SALES'
+        ];
+    }
 
     /**
      * generate and set password_reset_token

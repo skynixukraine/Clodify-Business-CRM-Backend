@@ -20,13 +20,25 @@ $config = [
     ],
 
     'timeZone'=> 'Europe/Kiev',
-    'language' => 'en-US',
+    'language' => 'ua-UK',
+    'sourceLanguage' => 'en-US',
     'components' => [
         'Helper'    => 'app\components\Helper',
         'assetManager' => [
             'bundles' => [
                 'yii\bootstrap\BootstrapAsset' => [
                     'css' => [],
+                ],
+            ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
                 ],
             ],
         ],
@@ -75,7 +87,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'profile'],
                 ],
             ],
         ],

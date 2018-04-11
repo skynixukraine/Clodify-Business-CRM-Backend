@@ -64,7 +64,8 @@ class Report extends \yii\db\ActiveRecord
             [['task'], 'trim'],
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
-            [['hours'], 'double', 'min'=>0.1,'max'=>10.0],
+            // 12 hours according to https://jira.skynix.co/browse/SCA-118
+            [['hours'], 'double', 'min'=>0.1,'max'=>12.0],
             [['date_added', 'date_paid'], 'safe'],
             [['status'], 'string'],
             [['reporter_name'], 'string', 'max' => 150],
@@ -155,7 +156,6 @@ class Report extends \yii\db\ActiveRecord
     {
        // var_dump($this->total);
        // exit();
-
         if( $this->isNewRecord ){
 
             if( !$this->date_added ){
@@ -167,6 +167,7 @@ class Report extends \yii\db\ActiveRecord
             
                 /** @var $pDev ProjectDeveloper */
                 /** @var $aliasUser User */
+
                 if ( ($pDev = ProjectDeveloper::findOne([
                                     'user_id'       => Yii::$app->user->id,
                                     'project_id'    => $this->project_id]) ) &&
@@ -181,7 +182,6 @@ class Report extends \yii\db\ActiveRecord
                         Yii::$app->user->getIdentity()->last_name;
 
                 }
-
 
             }
 
@@ -389,6 +389,14 @@ class Report extends \yii\db\ActiveRecord
     public static function approveTodayReports()
     {
         self::updateAll(['is_approved' => 1], 'date_added=CURDATE() AND is_delete=0 AND is_approved=0');
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getAllTodayUsers()
+    {
+        return self::find()->where('date_added=CURDATE() AND is_delete=0 AND is_approved=0')->all();
     }
 
 }
