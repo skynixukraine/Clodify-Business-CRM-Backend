@@ -34,6 +34,7 @@ return [
     'GET '      . $API . '/user/<id:\d+>/photo'                               => $API . '/users/view-photo',
     'GET '      . $API . '/invoices'                                          => $API . '/invoices/fetch',
     'POST '     . $API . '/contracts/<id:\d+>/invoices'                       => $API . '/invoices/create',
+    'GET '      . $API . '/invoices/<id:\d+>'                                 => $API . '/invoices/view',
     'DELETE '   . $API . '/invoices/<invoice_id:\d+>'                         => $API . '/invoices/delete',
     'PUT '      . $API . '/surveys/<survey_id:\d+>'                           => $API . '/surveys/edit',
     'GET '      . $API . '/users/access-token/<user_id:\d+>'                  => $API . '/users/access-token',
