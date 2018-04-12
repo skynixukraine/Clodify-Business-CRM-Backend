@@ -174,10 +174,7 @@ class UsersFetch extends ViewModelAbstract
                 $photo = "/img/avatar.png";
             }
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_FIN, User::ROLE_SALES])) {
-                $row['id'] = $model->id;
-            }
-            
+            $row ['id'] = $model->id;
             $row ['image'] = $photo;
             $row ['first_name'] = $model->first_name;
             $row ['last_name'] = $model->last_name;
