@@ -27,6 +27,7 @@ class UserView extends ViewModelAbstract
     public function define()
     {
         $userId = Yii::$app->request->getQueryParam('id');
+
         if (($model = $this->model->findOne($userId)) &&  self::hasPermission($userId)) {
 
             if ($model->is_delete == 1) {
@@ -110,8 +111,10 @@ class UserView extends ViewModelAbstract
             }
 
         }
-        //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN
+        //CLIENT can see only active users with roles DEV, SALES, PM, ADMIN and info about themselves
         elseif( User::hasPermission([User::ROLE_CLIENT])) {
+
+            if($userId == Yii::$app->user->id){return true;}
 
             $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
             foreach($workers as $worker){
