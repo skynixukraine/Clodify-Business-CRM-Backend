@@ -53,7 +53,12 @@ class ResourceStart extends ViewModelAbstract
                 $hours = round(((time() - $log->date) / 3600), 2);
 
                 $report = new Report();
-                $report->project_id = Project::find()->where(['name' => Project::INTERNAL_TASK])->one()->id;
+                if ( !($project = Project::find()->where(['name' => Project::INTERNAL_TASK])->one() ) ) {
+
+                    $project = Project::find()->orderBy(['id' => SORT_DESC])->one();
+
+                }
+                $report->project_id = $project->id;
                 $report->user_id = $userId;
                 $report->task = 'Idle Time - I was waiting for tasks';
                 // reports hours can not be less than 0.1
