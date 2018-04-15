@@ -66,9 +66,10 @@ return [
         'crowd_code'        => 'Basic <encoded_crowd_auth>',
         'crowd_domain'      => 'https://crowd-01.skynix.co/crowd',
         'twillio'           => [
-            'from'      => '+37066802569', //LT SMS
-            'sid'       => '<twillio_sid>',
-            'token'     => '<twillio_token>'
+            'serviceSid'    => '<twillio_service_sid>', // Skynix Emergency Service ID: ISac0bb20e481cd93fe43f0dfea1ca57de
+            'from'          => '<twillio_from_number>', //LT SMS: +37066802569
+            'accountSid'    => '<twillio_sid>',
+            'token'         => '<twillio_token>'
         ]
 
     )
