@@ -43,7 +43,7 @@ class EmergencyRegister  extends ViewModelAbstract
                     isset($data['issue']['key'])) {
 
 
-                        $message .= " " . data['issue']['key'];
+                        $message .= " " . $data['issue']['key'];
 
                     }
                     Yii::getLogger()->log($json, Logger::LEVEL_INFO);
