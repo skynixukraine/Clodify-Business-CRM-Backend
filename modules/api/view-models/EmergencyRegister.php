@@ -11,8 +11,6 @@ use app\models\Emergency;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
-// Use the REST API Client to make requests to the Twilio REST API
-use Twilio\Rest\Client;
 use yii\log\Logger;
 
 class EmergencyRegister  extends ViewModelAbstract
@@ -37,33 +35,23 @@ class EmergencyRegister  extends ViewModelAbstract
 
                 if ( !empty($user->phone) && strlen($user->phone) == 13 ) {
 
-                    $client = new Client(
-                        Yii::$app->params['twillio']['accountSid'],
-                        Yii::$app->params['twillio']['token']);
-
-                    $serviceSid = Yii::$app->params['twillio']['serviceSid'];
+                    $message = 'Hey ' . $user->first_name . '! Emergency';
 
                     //Getting Jira Payload
                     if (  ( $json = Yii::$app->request->getRawBody() ) &&
-                    ( $data = json_decode($json, true))) {
+                    ( $data = json_decode($json, true)) &&
+                    isset($data['issue']['key'])) {
 
 
+                        $message .= " " . data['issue']['key'];
 
                     }
                     Yii::getLogger()->log($json, Logger::LEVEL_INFO);
-                    $message = 'Hey ' . $user->first_name . '! Emergency happened!';
                     $emergency = new Emergency();
                     $emergency->user_id         = $userId;
                     $emergency->date_registered = time();
                     $emergency->summary         = $message;
                     $emergency->save();
-                    // Use the client to do fun stuff like send text messages!
-                    $client
-                        ->notify->services($serviceSid)
-                        ->notifications->create([
-                            "toBinding" => '{"binding_type":"sms", "address": "' .  $user->phone . '"}',
-                            'body'      => $message
-                    ]);
 
                 } else {
 
