@@ -45,6 +45,10 @@ class EmergencyRegister  extends ViewModelAbstract
 
                         $message .= " " . $data['issue']['key'];
 
+                        $message .= ": " . strlen($data['issue']['summary']) <= 80 ?
+                            $data['issue']['summary'] :
+                            substr($data['issue']['summary'], 0, 80) . "...";
+
                     }
                     Yii::getLogger()->log($json, Logger::LEVEL_INFO);
                     $emergency = new Emergency();
