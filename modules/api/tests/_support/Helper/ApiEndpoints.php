@@ -36,4 +36,5 @@ class ApiEndpoints
     const FETCH_FIXED_ASSETS      = '/api/fixed-assets';
     const FETCH_BALANCE           = '/api/balances';
     const RESOURCES               = '/api/resources';
+    const EMERGENCY               = '/api/emergency';
 }

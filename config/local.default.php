@@ -64,7 +64,12 @@ return [
         'adminEmail'        => 'admin@skynix.co',
         'basketAwssdk'      => '<aws_basket>',
         'crowd_code'        => 'Basic <encoded_crowd_auth>',
-        'crowd_domain'      => 'https://crowd-01.skynix.co/crowd'
+        'crowd_domain'      => 'https://crowd-01.skynix.co/crowd',
+        'twillio'           => [
+            'from'      => '+37066802569', //LT SMS
+            'sid'       => '<twillio_sid>',
+            'token'     => '<twillio_token>'
+        ]
 
     )
 ];
