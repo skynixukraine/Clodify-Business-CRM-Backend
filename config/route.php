@@ -73,6 +73,7 @@ return [
     'GET '      . $API . '/resources'                                         => $API . '/resources/fetch',
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
     'POST '     . $API . '/resources'                                         => $API . '/resources/start',
+    'POST '     . $API . '/emergency'                                         => $API . '/emergency/register',
 
 
     // General rules
