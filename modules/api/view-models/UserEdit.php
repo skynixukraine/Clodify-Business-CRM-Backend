@@ -71,14 +71,14 @@ class UserEdit extends ViewModelAbstract
                 }
             }
 
-            // Admin can edit all users all columns
-            if (User::hasPermission([User::ROLE_ADMIN])) {
-                $this->model->setAttributes($this->postData);
-            }
-
             if (isset($this->postData['password'])) {
                 $this->postData['xHsluIp'] = $this->postData['password'];
                 unset($this->postData['password']);
+            }
+
+            // Admin can edit all users all columns
+            if (User::hasPermission([User::ROLE_ADMIN])) {
+                $this->model->setAttributes($this->postData);
             }
 
             $this->model->setScenario(User::SCENARIO_UPDATE_USER);
