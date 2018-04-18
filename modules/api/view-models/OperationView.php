@@ -20,7 +20,7 @@ class OperationView extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+        if (User::hasPermission([User::ROLE_ADMIN])) {
 
             $id = Yii::$app->request->getQueryParam('id');
             $operation = Operation::find()
