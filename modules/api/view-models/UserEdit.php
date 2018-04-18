@@ -26,36 +26,12 @@ class UserEdit extends ViewModelAbstract
 
         if ($id && $this->model = $this->model->findOne($id)) {
 
-            // Admin can edit all users all columns
-            if (User::hasPermission([User::ROLE_ADMIN])) {
-
-                if (isset($this->postData['password'])) {
-                    $this->postData['xHsluIp'] = $this->postData['password'];
-                    unset($this->postData['password']);
-                }
-
-                $this->model->setScenario(User::SCENARIO_UPDATE_USER);
-                $this->model->setAttributes($this->postData);
-
-                if ($this->validate()) {
-                    if ($this->model->xHsluIp) {
-
-                        $this->model->password = $this->model->xHsluIp;
-
-                    }
-                    $this->model->save();
-                }
-                // FIN can edit all users only official_salary column
-            } elseif (User::hasPermission([User::ROLE_FIN])) {
-                if (isset($this->postData['official_salary'])) {
-                    $this->model->official_salary = $this->postData['official_salary'];
-                }
-                $this->model->setScenario(User::SCENARIO_UPDATE_USER);
-                if ($this->validate()) {
-                    $this->model->save();
-                }
-                //  Each user can edit own profile except of columns: role, salary, official_salary, auth_type
-            } elseif ($id == Yii::$app->user->id) {
+            if (!User::hasPermission([User::ROLE_FIN]) && !User::hasPermission([User::ROLE_ADMIN]) && $id != Yii::$app->user->id) {
+                return $this->addError(Processor::ERROR_PARAM,
+                    Yii::t('yii', 'You have no permission for this action'));
+            }
+            //  Each user can edit own profile except of columns: role, salary, official_salary, auth_type
+            if ($id == Yii::$app->user->id) {
 
                 if (isset($this->postData['first_name'])) {
                     $this->model->first_name = $this->postData['first_name'];
@@ -86,13 +62,38 @@ class UserEdit extends ViewModelAbstract
                     }
                     $this->model->save();
                 }
-            } else {
-                return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'You have no permission for this action'));
             }
+            
+            // FIN can edit all users only official_salary column
+            if (User::hasPermission([User::ROLE_FIN])) {
+                if (isset($this->postData['official_salary'])) {
+                    $this->model->official_salary = $this->postData['official_salary'];
+                }
+            }
+
+            // Admin can edit all users all columns
+            if (User::hasPermission([User::ROLE_ADMIN])) {
+                $this->model->setAttributes($this->postData);
+            }
+
+            if (isset($this->postData['password'])) {
+                $this->postData['xHsluIp'] = $this->postData['password'];
+                unset($this->postData['password']);
+            }
+
+            $this->model->setScenario(User::SCENARIO_UPDATE_USER);
+
+            if ($this->validate()) {
+                if ($this->model->xHsluIp) {
+
+                    $this->model->password = $this->model->xHsluIp;
+
+                }
+                $this->model->save();
+            }
+
         } else {
             return $this->addError(Processor::ERROR_PARAM, 'The user does not exist');
         }
-
     }
 }
