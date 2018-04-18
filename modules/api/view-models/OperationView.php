@@ -69,10 +69,10 @@ class OperationView extends ViewModelAbstract
                     $operationData['transactions'] = $transactions;
                     $this->setData($operationData);
                 } else {
-                    $this->addError(Processor::ERROR_PARAM, 'Operation is deleted');
+                    $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Operation is deleted'));
                 }
             } else {
-                $this->addError(Processor::ERROR_PARAM, 'Operation not existing');
+                $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Operation not existing'));
             }
 
         } else {
