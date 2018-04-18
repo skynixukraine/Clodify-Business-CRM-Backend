@@ -396,4 +396,29 @@ class OperationsCest
             'success' => 'boolean'
         ]);
     }
+
+    /**
+     * @see   https://jira.skynix.co/browse/SCA-143
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testOperationChangeStatusAsDeleteCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->seeInDatabase('operations', ['id' => $this->operationId, 'is_deleted' => 0]);
+
+        $I->wantTo('Testing delete operation');
+        $I->sendDELETE(ApiEndpoints::OPERATION . '/' . $this->operationId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->seeInDatabase('operations', ['id' => $this->operationId, 'is_deleted' => 1]);
+    }
 }
