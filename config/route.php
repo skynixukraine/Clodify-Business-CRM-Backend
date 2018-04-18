@@ -74,6 +74,7 @@ return [
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
     'POST '     . $API . '/resources'                                         => $API . '/resources/start',
     'POST '     . $API . '/emergency'                                         => $API . '/emergency/register',
+    'DELETE '   . $API . '/operations/<id:\d+>'                               => $API . '/operations/delete',
 
 
     // General rules

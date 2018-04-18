@@ -24,19 +24,4 @@ class m180418_111016_add_is_deleted_col_to_operations_tbl extends Migration
 
         return false;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m180418_111016_add_is_deleted_col_to_operations_tbl cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
