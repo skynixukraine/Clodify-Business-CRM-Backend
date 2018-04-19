@@ -17,7 +17,7 @@ class OperationDelete extends ViewModelAbstract
     /** @deprecated */
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
             $id = Yii::$app->request->getQueryParam("id");
             $operation = Operation::findOne($id);
             $operation->is_deleted = 1;
