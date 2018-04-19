@@ -66,6 +66,7 @@ return [
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
     'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
     'GET '      . $API . '/operations'                                        => $API . '/operations/fetch',
+    'GET '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/view',
     'POST '     . $API . '/invoices'                                          => $API . '/invoices/create',
     'GET '      . $API . '/fixed-assets'                                      => $API . '/fixed-assets/fetch',
     'GET '      . $API . '/balances'                                          => $API . '/balances/fetch',
