@@ -640,6 +640,7 @@ CREATE TABLE `operations` (
 `date_created` INT NULL,
 `date_updated` INT NULL,
 `operation_type_id` INT NOT NULL,
+`is_deleted` INT DEFAULT 0,
 INDEX `fk_operations_busineses1_idx` (`business_id` ASC),
 INDEX `fk_operations_operation_types1_idx` (`operation_type_id` ASC),
 PRIMARY KEY (`id`, `business_id`),

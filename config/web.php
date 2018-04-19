@@ -87,7 +87,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'profile'],
+                    'levels' => ['error', 'warning', 'info'], //'profile' to debug database
                 ],
             ],
         ],

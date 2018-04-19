@@ -17,8 +17,7 @@ return [
     'PUT '      . $API . '/users/<id:\d+>/deactivate'                         => $API . '/users/deactivate',
     'GET '      . $API . '/users/<id:\d+>'                                    => $API . '/users/view',
     'DELETE '   . $API . '/users/<id:\d+>'                                    => $API . '/users/delete',
-    'PUT '      . $API . '/users'                                             => $API . '/users/edit',
-    'PUT '      . $API . '/users/<id:\d+>'                                    => $API . '/users/edit-admin',
+    'PUT '      . $API . '/users/<id:\d+>'                                    => $API . '/users/edit',
     'POST '     . $API . '/users'                                             => $API . '/users/create',
     'DELETE '   . $API . '/surveys/<id:\d+>'                                  => $API . '/surveys/delete',
     'GET '      . $API . '/surveys'                                           => $API . '/surveys/fetch',
@@ -67,12 +66,15 @@ return [
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
     'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
     'GET '      . $API . '/operations'                                        => $API . '/operations/fetch',
+    'GET '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/view',
     'POST '     . $API . '/invoices'                                          => $API . '/invoices/create',
     'GET '      . $API . '/fixed-assets'                                      => $API . '/fixed-assets/fetch',
     'GET '      . $API . '/balances'                                          => $API . '/balances/fetch',
     'GET '      . $API . '/resources'                                         => $API . '/resources/fetch',
     'PUT '      . $API . '/resources'                                         => $API . '/resources/iavailable',
     'POST '     . $API . '/resources'                                         => $API . '/resources/start',
+    'POST '     . $API . '/emergency'                                         => $API . '/emergency/register',
+    'DELETE '   . $API . '/operations/<id:\d+>'                               => $API . '/operations/delete',
 
 
     // General rules

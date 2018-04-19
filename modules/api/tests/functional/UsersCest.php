@@ -193,6 +193,106 @@ class UsersCest
     }
 
     /**
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFinEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->haveInDatabase('users', array(
+            'first_name' => 'finUsers',
+            'last_name' => 'finSNUsers',
+            'email' => 'finUser@email.com',
+            'role' => 'FIN',
+            'password' => md5('fin')
+        ));
+
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'devUsers',
+            'last_name' => 'devSNUsers',
+            'email' => 'devNEWUser@email.com',
+            'role' => 'FIN',
+            'password' => md5('dev'),
+            'official_salary' => 5555
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("finUser@email.com", "fin");
+
+        $I->wantTo('Testing fin can edit user data');
+        $I->sendPUT(ApiEndpoints::USERS . '/' . $userId, json_encode([
+            'official_salary' => 8000
+        ]));
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array | null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $I->seeInDatabase('users', ['id' => $userId, 'official_salary' => 8000]);
+    }
+
+    /**
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFailEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->haveInDatabase('users', array(
+            'first_name' => 'clientUsers',
+            'last_name'  => 'clientUsersLast',
+            'email'      => 'clientUser@email.com',
+            'role'       => 'CLIENT',
+            'password'   => md5('client')
+        ));
+
+        $userId = $I->haveInDatabase('users', array(
+            'first_name' => 'devUsers',
+            'last_name' => 'devSNUsers',
+            'email' => 'devNEWUser@email.com',
+            'role' => 'FIN',
+            'password' => md5('dev'),
+            'official_salary' => 5555
+        ));
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login("clientUser@email.com", "client");
+
+        $I->wantTo('Testing user can not edit another user data');
+        $I->sendPUT(ApiEndpoints::USERS . '/' . $userId, json_encode([
+            'first_name' => 'devSuperUsers',
+            'last_name' => 'devLastName',
+            'official_salary' => 8500
+        ]));
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data"   => null,
+            "errors" => [
+                "param"   => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+    }
+
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-983
      * @param  FunctionalTester $I
      * @return void

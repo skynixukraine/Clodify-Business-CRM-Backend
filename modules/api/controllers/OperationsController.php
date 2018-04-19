@@ -50,4 +50,30 @@ class OperationsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Operation')
+            ->set('viewModel\ViewModelInterface', 'viewModel\OperationDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+               'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionView()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Operation')
+            ->set('viewModel\ViewModelInterface', 'viewModel\OperationView')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }

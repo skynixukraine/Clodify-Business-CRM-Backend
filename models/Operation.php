@@ -14,6 +14,7 @@ use Yii;
  * @property integer $date_created
  * @property integer $date_updated
  * @property integer $operation_type_id
+ * @property integer $is_deleted
  *
  * @property Business $business
  * @property OperationType $operationType

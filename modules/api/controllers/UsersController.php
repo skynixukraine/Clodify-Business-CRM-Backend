@@ -174,7 +174,7 @@ class UsersController extends DefaultController
     {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\User')
-            ->set('viewModel\ViewModelInterface', 'viewModel\UserAdminEdit')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UserEdit')
             ->set('app\modules\api\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_PUT ],
                 'checkAccess'   => true

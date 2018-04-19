@@ -364,7 +364,7 @@ class OperationsCest
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testFetchOperationTypesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testFetchOperationsCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -395,5 +395,63 @@ class OperationsCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+    }
+
+    /**
+     * @see   https://jira.skynix.co/browse/SCA-143
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testViewOneOperationCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing view one operation data');
+        $I->sendGET(ApiEndpoints::OPERATION . '/' . $this->operationId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'id'		        => 'integer',
+                'name'	            => 'string',
+                'status'            => 'string',
+                'date_created'	    => 'integer',
+                'date_updated'	    => 'integer',
+                'operation_type'    => 'array',
+                'business'          => 'array',
+                'transactions'      => 'array',
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+    }
+
+    /**
+    * @see    https://jira.skynix.co/browse/SCA-145
+    * @param  FunctionalTester $I
+    * @return void
+    */
+    public function testOperationChangeStatusAsDeleteCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->seeInDatabase('operations', ['id' => $this->operationId, 'is_deleted' => 0]);
+
+        $I->wantTo('Testing delete operation');
+        $I->sendDELETE(ApiEndpoints::OPERATION . '/' . $this->operationId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->seeInDatabase('operations', ['id' => $this->operationId, 'is_deleted' => 1]);
     }
 }
