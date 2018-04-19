@@ -36,7 +36,7 @@ class OperationFetch extends ViewModelAbstract
             $operation_type_id = Yii::$app->request->getQueryParam('operation_type_id');
             $business_id       = Yii::$app->request->getQueryParam('business_id');
 
-            $query = Operation::find()->with('business', 'operationType', 'transactions');
+            $query = Operation::find()->where(['is_deleted' => 0])->with('business', 'operationType', 'transactions');
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
