@@ -10,7 +10,5 @@ return [
     'invoice_cc_email'  => false,
     'version'           => '1.11.12',
     'contractorId'      => 1,
-    'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
-    //Temporary Synpass API
-    'synpassAdminEmail' => 'admin@synpass.pro'
+    'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw'
 ];
