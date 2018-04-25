@@ -188,19 +188,19 @@ class ProjectFetch extends ViewModelAbstract
     function specialVal($model, $developersNames, $customersNames) : Array
     {
         $list = $this->defaultVal($model);
-        $list['is_sales']       = $model->is_sales;
-        $list['is_pm']          = $model->is_pm;
+        $list['is_sales']       = isset($model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id : null;
+        $list['is_pm']          = isset($model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id : null;
         $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
-        $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
-        $list['total_paid'] = $model->total_paid_hours ? $model->total_paid_hours : 0;
+        $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
+        $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
         $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
-        $list['date_start'] = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
-        $list['date_end'] = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
-        $list['developers'] = $developersNames;
-        $list['clients'] = $customersNames;
+        $list['date_start']     = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
+        $list['date_end']       = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
+        $list['developers']     = $developersNames;
+        $list['clients']        = $customersNames;
 
         return $list;
-    }
+  }
 
     /**
      * @param $model
