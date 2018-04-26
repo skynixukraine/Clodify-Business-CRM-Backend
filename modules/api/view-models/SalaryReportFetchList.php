@@ -44,7 +44,7 @@ class SalaryReportFetchList extends ViewModelAbstract
                 }
 
             } else {
-                $dataTable->setOrder(SalaryReportList::tableName() . '.id', 'desc');
+                $dataTable->setOrder(SalaryReportList::tableName() . '.id', 'asc');
             }
 
             $salaryReportList = $dataTable->getData();
