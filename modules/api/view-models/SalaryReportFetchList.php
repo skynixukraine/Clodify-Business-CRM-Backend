@@ -64,7 +64,7 @@ class SalaryReportFetchList extends ViewModelAbstract
                         "hospital_days"              => $salRepList->hospital_days,
                         "hospital_value"             => $salRepList->hospital_value,
                         "bonuses"                    => $salRepList->bonuses,
-                        "day_off"                    => $salRepList->day_off,
+                        "day_off"                    => $this->getCostDayOff($salRepList),
                         "overtime_days"              => $salRepList->overtime_days,
                         "overtime_value"             => $salRepList->overtime_value,
                         "other_surcharges"           => $salRepList->other_surcharges,
@@ -91,5 +91,16 @@ class SalaryReportFetchList extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
 
+    }
+
+    /**
+     * @param $model
+     * @return float|int
+     * monetary value for day_off (count_of_day_off * day_rate)/2
+     */
+    public function getCostDayOff($model)
+    {
+        $dayRate = ($model->user->salary / $model->worked_days) * $model->currency_rate;
+        return round(($model->day_off * $dayRate) / 2, 2);
     }
 }
