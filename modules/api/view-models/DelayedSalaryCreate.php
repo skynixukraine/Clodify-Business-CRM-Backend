@@ -26,7 +26,7 @@ class DelayedSalaryCreate extends ViewModelAbstract
     {
         // TODO: Implement define() method.
 
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN])) {
 
             $this->model->is_applied = Yii::$app->user->id;
 
