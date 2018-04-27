@@ -75,6 +75,7 @@ return [
     'POST '     . $API . '/resources'                                         => $API . '/resources/start',
     'POST '     . $API . '/emergency'                                         => $API . '/emergency/register',
     'DELETE '   . $API . '/operations/<id:\d+>'                               => $API . '/operations/delete',
+    'POST '     . $API . '/delayed-salary'                                    => $API . '/delayed-salary/create',
 
 
     // General rules
