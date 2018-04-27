@@ -759,6 +759,22 @@ CREATE TABLE `availability_logs` (
 )ENGINE = InnoDB;
 
 --
+-- Table structure for table `delayed_salary`
+--
+
+DROP TABLE IF EXISTS `delayed_salary`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delayed_salary` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `month` INT(11) NOT NULL,
+  `value` INT(11) NOT NULL,
+  `raised_by` INT(11) NULL,
+  `is_applied` INT DEFAULT 0,
+  PRIMARY KEY (`id`))ENGINE = InnoDB;
+
+--
 -- Table structure for table `access_keys`
 --
 
