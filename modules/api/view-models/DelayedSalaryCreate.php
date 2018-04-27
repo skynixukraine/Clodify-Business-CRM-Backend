@@ -28,7 +28,7 @@ class DelayedSalaryCreate extends ViewModelAbstract
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
 
-            $this->model->is_applied = Yii::$app->user->id;
+            $this->model->raised_by = Yii::$app->user->id;
 
             if ($this->validate() && $this->model->save()) {
 

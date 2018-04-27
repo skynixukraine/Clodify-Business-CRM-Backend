@@ -23,4 +23,5 @@ class ValuesContainer
     public static $FinancialReportDate = 2;
     public static $BusinessID = 1;
     public static $unix = 1522912941;
+    public static $DevSalary = 5500;
  }

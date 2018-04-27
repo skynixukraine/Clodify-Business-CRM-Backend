@@ -39,7 +39,7 @@ class DelayedSalaryCest
             [
                 "user_id" => ValuesContainer::$userId,
                 "month" => ValuesContainer::$FinancialReportDate,
-                "value" => 5500
+                "value" => ValuesContainer::$DevSalary
             ]
         ));
         $response = json_decode($I->grabResponse());
