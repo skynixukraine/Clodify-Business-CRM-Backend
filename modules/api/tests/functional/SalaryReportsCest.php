@@ -115,6 +115,32 @@ class SalaryReportsCest
             'success' => 'boolean'
         ]);
     }
+
+    /**
+     * see https://jira.skynix.co/browse/SCA-152
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testFetchSalaryReportById(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch one salary report data by its ID');
+        $I->sendGET(ApiEndpoints::SALARY_REPORTS, [
+            'id'    => $this->salaryReportId
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->assertEquals(1, $response->data->total_records);
+
+    }
+
+
+
     /**
      * @see    https://jira.skynix.company/browse/SCA-6
      * @param  FunctionalTester $I

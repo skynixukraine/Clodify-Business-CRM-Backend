@@ -29,9 +29,13 @@ class SalaryReportFetch extends ViewModelAbstract
             $order = Yii::$app->request->getQueryParam('order');
             $start = Yii::$app->request->getQueryParam('start') ?: 0;
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-            $id = Yii::$app->request->getQueryParam('id');
+            $filterById = Yii::$app->request->getQueryParam('id');
 
-            $query = $id ? SalaryReport::findOne($id) : SalaryReport::find();
+            $query = SalaryReport::find();
+
+            if ( $filterById > 0 ) {
+                $query->andWhere([SalaryReport::tableName() . '.id' => $filterById]);
+            }
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
