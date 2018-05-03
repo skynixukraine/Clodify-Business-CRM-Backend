@@ -103,7 +103,8 @@ class UsersCest
                 'is_active'        => 'integer',
                 'salary'           => 'string',
                 'official_salary'  => 'integer|null',
-                'salary_up'        => 'string'
+                'salary_up'        => 'string',
+                'delayed_salary'   => 'array|null',
                     ]
                 ]
             ],

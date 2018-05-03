@@ -116,8 +116,10 @@ abstract class ViewModelAbstract implements ViewModelInterface
      */
     public function validate()
     {
+//        var_dump('22222222221111111111111111');
+//        var_dump($this->model);
+//        exit();
         if ( $this->model->validate() ) {
-
             return true;
 
         }

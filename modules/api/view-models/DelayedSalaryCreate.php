@@ -8,6 +8,7 @@
 namespace viewModel;
 
 
+use app\models\Report;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
