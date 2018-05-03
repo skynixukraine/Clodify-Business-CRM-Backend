@@ -31,8 +31,8 @@ class DelayedSalary extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'month', 'value'], 'required'],
-            [['user_id', 'month', 'is_applied'], 'integer'],
-            [['value', 'raised_by'], 'number'],
+            [['user_id', 'month', 'is_applied', 'raised_by'], 'integer'],
+            [['value'], 'number'],
             [['month'], 'number', 'max' => 12, 'min' => 1],
             ['user_id', function() {
                 $user =  User::find()->where(['id' => $this->user_id, 'is_active' => 1, 'is_delete' => 0])->one();
