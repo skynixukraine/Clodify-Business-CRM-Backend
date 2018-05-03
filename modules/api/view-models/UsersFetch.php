@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\models\DelayedSalary;
 use Yii;
 use app\models\User;
 use app\components\DataTable;
@@ -203,6 +204,14 @@ class UsersFetch extends ViewModelAbstract
             if (User::hasPermission([User::ROLE_CLIENT])) {
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['is_active'] = $model->is_active;
+            }
+
+            if (User::hasPermission([User::ROLE_ADMIN])) {
+                $delayedSalaryNote = DelayedSalary::find()
+                    ->andWhere(['user_id' => $model->id])
+                    ->andWhere(['is_applied' => 0])
+                    ->all();
+                $row['delayed_salary'] = $delayedSalaryNote ? $model->delayedSalary->getInfo() : null;
             }
 
             $list[] = $row;

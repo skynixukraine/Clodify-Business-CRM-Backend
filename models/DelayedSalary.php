@@ -57,4 +57,18 @@ class DelayedSalary extends \yii\db\ActiveRecord
             'is_applied' => 'Is Applied',
         ];
     }
+
+    /**
+     * @return array
+     *
+     */
+    public function getInfo()
+    {
+        $arr = [];
+        $arr['id']        = $this->id;
+        $arr['value']     = $this->value;
+        $arr['month']     = $this->month;
+        $arr['raised_by'] = $this->raised_by;
+        return $arr;
+    }
 }
