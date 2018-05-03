@@ -130,7 +130,8 @@ class FinancialReportLock extends ViewModelAbstract
         if($records){
             foreach ($records as $record){
                 User::updateAll(['salary' => $record->value], 'id = ' . $record->user_id);
-                DelayedSalary::updateAll(['is_applied' => 1], 'id = ' . $record->id);
+                $record->is_applied = 1;
+                $record->save(false, ['is_applied']);
             }
         }
     }
