@@ -8,6 +8,7 @@
 namespace viewModel;
 
 use app\components\DateUtil;
+use app\models\DelayedSalary;
 use app\models\Invoice;
 use app\models\Report;
 use app\models\User;
@@ -44,6 +45,19 @@ class CreateEditReport extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, 'You can not report in advance');
         }
 
+        $dateChuncks = explode("-", $this->model->date_report);
+
+        $delayedSalaryNote = DelayedSalary::find()
+            ->andWhere(['user_id' => $userId])
+            ->andWhere(['month' => $dateChuncks[1]])
+            ->andWhere(['is_applied' => 0])
+            ->one();
+
+        var_dump($this->model->date_report);
+        var_dump($dateChuncks[1]);
+        var_dump($delayedSalaryNote);
+        exit();
+
         //  convert 8,1 to 8.1 before validation
         if (strpos($this->model->hours, ',')) {
             str_replace(',', '.', $this->model->hours);
@@ -73,7 +87,8 @@ class CreateEditReport extends ViewModelAbstract
                         if ($this->validate()) {
                             $user_id = $this->getAccessTokenModel()->user_id;
                             $user = User::findOne($user_id);
-                            $this->model->cost = $this->model->hours * ($user->salary / Report::SALARY_HOURS);
+                            $salary = $delayedSalaryNote ? $delayedSalaryNote->value : $user->salary;
+                            $this->model->cost = $this->model->hours * ($salary / Report::SALARY_HOURS);
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
                             $this->model->user_id = $user_id;
                             $result = $totalHoursOfThisDay - $oldHours + $this->model->hours;

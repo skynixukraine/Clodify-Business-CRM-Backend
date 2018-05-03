@@ -249,6 +249,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(AvailabilityLog::className(), ['user_id' => 'id']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getDelayedSalary()
+    {
+        return $this->hasOne(DelayedSalary::className(), ['user_id' => 'id']);
+    }
+
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
     /**
      * @inheritdoc
