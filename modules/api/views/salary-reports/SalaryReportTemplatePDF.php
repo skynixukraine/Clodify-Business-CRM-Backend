@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <td class="tx-yw4l">Total to Pay, USD</td>
-        <td class="tx-yw4l"><?=$salaryReportData['total_to_pay']?></td>
+        <td class="tx-yw4l"><?= $salaryReportData['total_to_pay']?></td>
     </tr>
     <tr>
         <td class="tx-yw4l">Currency Rate</td>
@@ -67,7 +67,7 @@
         </tr>
         <?php if ($salaryList['salary']):?>
             <tr>
-                <td class="tg-yw4l">Salary: <?=$salaryList['salary']?></td>
+                <td class="tg-yw4l">Salary: $<?=$salaryList['salary']?></td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['currency_rate']):?>
@@ -77,12 +77,12 @@
         <?php endif;?>
         <?php if (isset($salaryList['worked_hours']) && !$salaryList['is_admin']):?>
             <tr>
-                <td class="tg-yw4l">Worked Hours: <?=$salaryList['worked_hours'] . ' '?>-hr</td>
+                <td class="tg-yw4l">Worked Hours: <?=$salaryList['worked_hours'] . ' '?> h</td>
             </tr>
         <?php endif;?>
         <?php if (isset($salaryList['approved_hours']) && !$salaryList['is_admin']):?>
             <tr>
-                <td class="tg-yw4l">Approved Hours: <?=$salaryList['approved_hours'] . ' '?>-hr</td>
+                <td class="tg-yw4l">Approved Hours: <?=$salaryList['approved_hours'] . ' '?> h</td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['bonuses']):?>
@@ -97,27 +97,27 @@
         <?php endif;?>
         <?php if ($salaryList['overtime_value']):?>
             <tr>
-                <td class="tg-yw4l">Overtime: <?=$salaryList['overtime_value']?></td>
+                <td class="tg-yw4l">Overtime: <?= ceil($salaryList['overtime_value']);?></td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['hospital_value']):?>
             <tr>
-                <td class="tg-yw4l">Hospital: <?=$salaryList['hospital_value']?></td>
+                <td class="tg-yw4l">Hospital: <?= ceil($salaryList['hospital_value']);?></td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['subtotal']):?>
             <tr>
-                <td class="tg-yw4l">Subtotal: <?=$salaryList['subtotal']?></td>
+                <td class="tg-yw4l">Subtotal: $<?= ceil($salaryList['subtotal']);?></td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['official_salary']):?>
             <tr>
-                <td class="tg-yw4l">Official Salary: <?=$salaryList['official_salary']?></td>
+                <td class="tg-yw4l">Official Salary: <?=$salaryList['official_salary']?> UAH</td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['total_to_pay']):?>
             <tr>
-                <td class="tg-yw4l">Total: <?=$salaryList['total_to_pay']?></td>
+                <td class="tg-yw4l">Total: <?= ceil($salaryList['total_to_pay']);?> UAH</td>
             </tr>
         <?php endif;?>
    <?php endforeach;?>
