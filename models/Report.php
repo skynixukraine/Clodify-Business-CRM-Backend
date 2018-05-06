@@ -207,7 +207,8 @@ class Report extends \yii\db\ActiveRecord
 				$project->total_logged_hours -= $changedAttributes['hours'];
 			}
 
-			$project->cost = $project->cost+ round($this->hours * ($user->salary / self::SALARY_HOURS), 2);
+			$project->cost = $project->cost +
+                ( $this->cost > 0 ?$this->cost : round($this->hours * ($user->salary / self::SALARY_HOURS), 2) );
             $project->total_logged_hours += $this->hours;
 			$project->save();
 		}
