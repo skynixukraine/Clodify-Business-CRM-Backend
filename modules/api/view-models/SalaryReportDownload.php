@@ -37,15 +37,17 @@ class SalaryReportDownload extends ViewModelAbstract
             $id = Yii::$app->request->getQueryParam('id');
 
             $salaryReport = SalaryReport::findOne(['id' => $id]);
+            $salaryReportListData = [];
 
             if ($salaryReport) {
                 $salaryReportData = ArrayHelper::toArray($salaryReport, [
                     SalaryReport::className() => [
-                        'total_to_pay' => 'total_to_pay',
-                        'currency_rate',
-                        'total_to_pay_uah' => function ($salaryReport) {
-                            return $salaryReport->total_to_pay * $salaryReport->currency_rate;
+                        'total_to_pay' => function ($salaryReport) {
+                            $salaryReport->currency_rate = $salaryReport->currency_rate ? $salaryReport->currency_rate : 1;
+                            return ceil($salaryReport->total_to_pay / $salaryReport->currency_rate);
                         },
+                        'currency_rate',
+                        'total_to_pay_uah' => 'total_to_pay',
                         'financial_report_status' => function ($salaryReport) {
                             return FinancialReport::isLock($salaryReport->report_date) ? 'Locked' : 'Unlocked';
                         }
