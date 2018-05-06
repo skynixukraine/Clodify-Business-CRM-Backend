@@ -20,8 +20,9 @@ use Yii;
  */
 class Setting extends \yii\db\ActiveRecord
 {
-    const CORP_EVENTS_FACTOR = 'corp_events_percentage';
-    const BONUSES_FACTOR = 'bonuses_percentage';
+    const CORP_EVENTS_FACTOR    = 'corp_events_percentage';
+    const BONUSES_FACTOR        = 'bonuses_percentage';
+    const LABOR_EXPENSES_RATIO  = 'LABOR_EXPENSES_RATIO';
 
     /**
      * @inheritdoc
@@ -76,5 +77,14 @@ class Setting extends \yii\db\ActiveRecord
             ->where(['key' => self::BONUSES_FACTOR])
             ->one();
         return $settingRow->value/100;
+    }
+
+
+    public static function getLaborExpensesRatio()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::LABOR_EXPENSES_RATIO])
+            ->one();
+        return 1 + ((int)$settingRow->value)/100;
     }
 }

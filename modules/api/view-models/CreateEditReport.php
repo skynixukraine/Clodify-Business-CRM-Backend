@@ -11,6 +11,7 @@ use app\components\DateUtil;
 use app\models\DelayedSalary;
 use app\models\Invoice;
 use app\models\Report;
+use app\models\Setting;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
@@ -86,9 +87,15 @@ class CreateEditReport extends ViewModelAbstract
                             $user_id = $this->getAccessTokenModel()->user_id;
                             $user = User::findOne($user_id);
 
-                            $salary = $delayedSalaryNote ? $delayedSalaryNote->value : $user->salary;
+                            //This ratio adds some average other expenses to initial salary
+                            $expensesRatio = Setting::getLaborExpensesRatio();
 
-                            $this->model->cost = $this->model->hours * ($salary / Report::SALARY_HOURS);
+                            $salary = $delayedSalaryNote && $delayedSalaryNote->value > 0 ? $delayedSalaryNote->value : $user->salary;
+
+                            $this->model->cost = $this->model->hours *
+                                ($salary / Report::SALARY_HOURS) *
+                                ($expensesRatio > 0 ? $expensesRatio : 1);
+
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
                             $this->model->user_id = $user_id;
                             $result = $totalHoursOfThisDay - $oldHours + $this->model->hours;
