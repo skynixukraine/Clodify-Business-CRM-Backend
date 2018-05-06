@@ -44,7 +44,7 @@ class Project extends \yii\db\ActiveRecord
     public $invoice_received;
     public $is_pm;
     public $is_sales;
-    public $alias =[];
+    public $alias_name =[];
     /**
      * @inheritdoc
      */
@@ -70,7 +70,7 @@ class Project extends \yii\db\ActiveRecord
             [['date_start', 'date_end'], 'safe'],
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
-            [['customers', 'developers', 'alias'], 'safe'],
+            [['customers', 'developers', 'alias_name'], 'safe'],
             ['is_pm', function() {
                 if(empty($this->developers && $this->is_pm) || ($this->developers && !in_array($this->is_pm, $this->developers))) {
                     $this->addError('is_pm', Yii::t('yii', 'Pm was not assigned'));
@@ -107,7 +107,7 @@ class Project extends \yii\db\ActiveRecord
             'date_start'        => 'Date Start',
             'date_end'          => 'Date End',
             'is_delete'         => 'Is Delete',
-            'alias'             => 'Alias',
+            'alias_name'        => 'Alias',
             'cost'              => 'Cost'
         ];
     }
@@ -234,7 +234,7 @@ class Project extends \yii\db\ActiveRecord
                             'user_id' => $developer->id,
                             'is_sales' => ($this->is_sales == $developer->id),
                             'is_pm' => ($this->is_pm == $developer->id),
-                            'alias_user_id' => isset($this->alias[$developer->id]) ? $this->alias[$developer->id] : null
+                            'alias_user_id' => isset($this->alias_name[$developer->id]) ? $this->alias_name[$developer->id] : null
                         ])->execute();
                 }
             }
@@ -386,9 +386,9 @@ class Project extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function setAlias($alias)
+    public function setAliasName($alias_name)
     {
-        $this->alias = $alias;
+        $this->alias_name = $alias_name;
         return $this;
     }
 
