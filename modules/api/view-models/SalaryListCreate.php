@@ -45,7 +45,7 @@ class SalaryListCreate extends ViewModelAbstract
 
                                     $this->model->salary = $user->salary;
                                     $this->model->salary_report_id = $salaryReportId;
-                                    $this->model->worked_days = SalaryReportList::getNumOfWorkedDays($salaryReport->report_date, $this->working_days);
+                                    $this->model->worked_days = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $this->working_days);
                                     $this->model->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
                                     $this->model->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($this->model, $this->working_days);
                                     $this->model->official_salary = $user->official_salary;
