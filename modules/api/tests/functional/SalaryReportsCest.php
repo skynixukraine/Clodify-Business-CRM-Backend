@@ -166,6 +166,7 @@ class SalaryReportsCest
             ]
         ));
         $response = json_decode($I->grabResponse());
+        codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $this->salaryReportListId = $response->data->list_id;
@@ -211,6 +212,7 @@ class SalaryReportsCest
             ]
         ));
         $response = json_decode($I->grabResponse());
+        codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseCodeIs(200);
@@ -237,6 +239,7 @@ class SalaryReportsCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
+        codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
