@@ -128,7 +128,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['first_name', 'last_name', 'role'], 'required', 'except'=> ['settings','api-login', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             [['first_name', 'last_name'], 'string', 'max' => 45],
             ['email', 'email'],
-            [['date_signup', 'date_login', 'date_salary_up'], 'safe'],
+            [['date_signup', 'date_login', 'date_salary_up', 'official_salary'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours',
                 'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year', 'auth_type'], 'integer'],
             ['phone', 'string', 'max' => 25],
