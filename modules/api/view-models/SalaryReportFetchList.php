@@ -100,7 +100,7 @@ class SalaryReportFetchList extends ViewModelAbstract
      */
     public function getCostDayOff($model)
     {
-        $dayRate = ($model->user->salary / $model->worked_days) * $model->currency_rate;
+        $dayRate = $model->worked_days > 0 ? ($model->user->salary / $model->worked_days) * $model->currency_rate : 0;
         return round(($model->day_off * $dayRate) / 2, 2);
     }
 }
