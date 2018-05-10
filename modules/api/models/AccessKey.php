@@ -205,6 +205,7 @@ class AccessKey extends \yii\db\ActiveRecord
                 $dataResponse['reason']     = $response['message'];
             }
         }
+        return $dataResponse;
     }
 
     /**
@@ -267,6 +268,7 @@ class AccessKey extends \yii\db\ActiveRecord
                 $dataResponse['reason']     = $response['message'];
             }
         }
+        return $dataResponse;
     }
 
     /**
