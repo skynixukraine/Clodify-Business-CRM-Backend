@@ -186,8 +186,9 @@ class AccessKey extends \yii\db\ActiveRecord
         }
     }
 
-    /*
+    /**
      * create crowd session
+     * @return array
      */
     public static function createCrowdSession($name, $pass)
     {
@@ -209,15 +210,39 @@ class AccessKey extends \yii\db\ActiveRecord
             ),
         ));
 
+        $dataResponse = [
+            'expand'        => null,
+            'isSuccess'     => true,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
         $response = curl_exec($curl);
         $err = curl_error($curl);
 
         curl_close($curl);
 
         if ($err) {
-            return "cURL Error #:" . $err;
+
+            $dataResponse['isSuccess']  = false;
+            $dataResponse['reason']     = $err;
+
         } else {
-            return json_decode($response);
+
+            $response = json_decode($response, true);
+            if ( !isset($response['reason'])) {
+
+                $dataResponse['expand']     = $response['expand'];
+                $dataResponse['token']      = $response['token'];
+                $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
+                $dataResponse['createdDate']= $response['created-date'];
+
+            } else {
+
+                $dataResponse['isSuccess']  = false;
+                $dataResponse['reason']     = $response['message'];
+            }
         }
     }
 
