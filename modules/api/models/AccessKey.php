@@ -23,8 +23,8 @@ use yii\helpers\Url;
  */
 class AccessKey extends \yii\db\ActiveRecord
 {
-    const CREATE_CROWD_SESSION_URL = "/rest/usermanagement/1/session";
-    const CHECK_CROWD_SESSION_URL = "/rest/usermanagement/1/session/";
+    const CROWD_SESSION_URL = "/rest/usermanagement/1/session";
+
     const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
     const AVATAR_REQUEST = "/rest/usermanagement/1/user/avatar?username=";
     const GROUP_FROM_CROWD = "/rest/usermanagement/1/user/group/direct?username=";
@@ -76,13 +76,14 @@ class AccessKey extends \yii\db\ActiveRecord
 
     /*
      *check for valid crowd session
+     * @return array
      */
     public static function checkCrowdSession($token)
     {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CHECK_CROWD_SESSION_URL . $token,
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => "GET",
             CURLOPT_HTTPHEADER     => array(
@@ -92,15 +93,80 @@ class AccessKey extends \yii\db\ActiveRecord
             ),
         ));
 
+        $dataResponse = [
+            'isSuccess'     => true,
+            'expand'        => mull,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
         $response = curl_exec($curl);
         $err = curl_error($curl);
 
         curl_close($curl);
 
         if ($err) {
-            return "cURL Error #:" . $err;
+
+            $dataResponse['isSuccess']  = false;
+            $dataResponse['reason']     = $err;
+
         } else {
-            return json_decode($response);
+
+            $response = json_decode($response, true);
+            $dataResponse['expand']     = $response['expand'];
+            $dataResponse['token']      = $response['token'];
+            $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
+            $dataResponse['createdDate']= $response['created-date'];
+        }
+        return $dataResponse;
+    }
+
+    /**
+     * Validate & Prolong Session
+     * @param $token
+     * @return array
+     */
+    public static function validateCrowdSession($token)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_HTTPHEADER     => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $dataResponse = [
+            'expand'        => null,
+            'isSuccess'     => true,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+
+            $dataResponse['isSuccess']  = false;
+            $dataResponse['reason']     = $err;
+
+        } else {
+
+            $response = json_decode($response, true);
+            $dataResponse['expand']     = $response['expand'];
+            $dataResponse['token']      = $response['token'];
+            $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
+            $dataResponse['createdDate']= $response['created-date'];
         }
     }
 
@@ -116,7 +182,7 @@ class AccessKey extends \yii\db\ActiveRecord
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CREATE_CROWD_SESSION_URL,
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => "POST",
             CURLOPT_POSTFIELDS     => Json::encode($params),
@@ -139,13 +205,14 @@ class AccessKey extends \yii\db\ActiveRecord
         }
     }
 
-    /*
+    /**
      * cut timestamp e.g "expiry-date":1513776619706 to 1513776619
+     * @param $exp
+     * @return bool|string
      */
-    public static function getExpireForSession($obj)
+    public static function getExpireForSession($exp)
     {
-        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
-        return substr($sessionObjToArray['expiry-date'], 0, 10);
+        return substr($exp, 0, 10);
     }
 
     /*
@@ -153,15 +220,14 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function createAccessKey($email, $password, $userId, $obj)
     {
-        $sessionObj = self::createCrowdSession($email, $password);
+        $session = self::createCrowdSession($email, $password);
         $objToArray = \yii\helpers\ArrayHelper::toArray($obj, [], false);
 
-        $exp = self::getExpireForSession($sessionObj);
 
         $accessKey = new AccessKey();
-        $accessKey->expand      = $sessionObj->expand;
-        $accessKey->token       = $sessionObj->token;
-        $accessKey->expiry_date = $exp;
+        $accessKey->expand      = $session['expand'];
+        $accessKey->token       = $session['token'];
+        $accessKey->expiry_date = $session['expiryDate'];
         $accessKey->email       = $obj->email;
         $accessKey->first_name  = $objToArray['first-name'];
         $accessKey->last_name   = $objToArray['last-name'];

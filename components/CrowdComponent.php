@@ -14,6 +14,7 @@ use yii\base\Component;
 use app\modules\api\models\AccessKey;
 use app\modules\api\models\ApiAccessToken;
 use app\models\User;
+use yii\log\Logger;
 
 
 class CrowdComponent extends Component
@@ -32,15 +33,33 @@ class CrowdComponent extends Component
 
         if($crowdInfo){
             $crowdSession = AccessKey::checkCrowdSession($crowdInfo->token);
-            if(isset($crowdSession->reason)){
-                $errorArr['error'] = $crowdSession->reason . ' You have to authenticate with email and password!';
+            if($crowdSession['isSuccess'] === false){
+                Yii::getLogger()->log( "CROWD: " . $accessToken . ": crowd session died: " . $crowdSession['reason'], Logger::LEVEL_INFO);
+                $errorArr['error'] = $crowdSession['reason'] . ' You have to authenticate with email and password!';
+            } elseif ( ($crowdSession['expiryDate'] - time()) < 1000 )  {
+
+                $newSession = AccessKey::validateCrowdSession($crowdSession['token']);
+                Yii::getLogger()->log( "CROWD: " . $accessToken . ": crowd session validated: " .
+                    "old token: " . $crowdSession['token'] .
+                    "new token: " . $newSession['token'] .
+                    "old exp: " . $crowdSession['expiryDate'] .
+                    "new exp: " . $newSession['expiryDate'], Logger::LEVEL_INFO);
+
+                $accessTokenModel->exp_date = $newSession['expiryDate'];
+                $accessTokenModel->save(false, ['exp_date']);
+
             }
-            if(isset($crowdSession->active) && !$crowdSession->active){
+            /*
+             *
+             * How this can work? https://docs.atlassian.com/atlassian-crowd/3.2.1/REST/?_ga=2.54972013.718843537.1525972331-183410907.1506410127#usermanagement/1/session-validateToken
+             * Response does not have a key active
+             *if(isset($crowdSession->active) && !$crowdSession->active){
                 if ($user){
                     User::deactivateUser($user);
                 }
                 $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
             }
+            */
         } else {
             if($user->is_active && !$user->is_delete){
                 return true;
@@ -64,27 +83,40 @@ class CrowdComponent extends Component
 
         if ($user) {
             if ($user->auth_type == User::CROWD_AUTH) {
+                Yii::getLogger()->log( "CROWD: " . $email . ": logged in", Logger::LEVEL_INFO);
                 $obj = AccessKey::toCrowd($email, $password);
 
                 if($obj && $this->validCrowdUser($obj)) {   // if element 'reason' exist, some authentication error there in crowd
 
-                        $accesKey = AccessKey::findOne(['email' => $obj->email]);
-                        if ($accesKey) {
-                            // create crowd session
-                            $session = AccessKey::checkCrowdSession($accesKey->token);
-                            if (isset($session->reason)) {
-                                $newSession = AccessKey::createCrowdSession($email, $password);
-                                AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
-                                    ['email' => $email]);
-                            }
+                    Yii::getLogger()->log( "CROWD: " . $email . ": authenticated", Logger::LEVEL_INFO);
+                    $accesKey = AccessKey::findOne(['email' => $obj->email]);
+                    if ($accesKey) {
+                        // create crowd session
+                        Yii::getLogger()->log( "CROWD: " . $email . ": checking crowd session: " . $accesKey->token, Logger::LEVEL_INFO);
+                        $session = AccessKey::checkCrowdSession($accesKey->token);
+                        if ( $session['isSuccess'] === false) {
 
+                            Yii::getLogger()->log( "CROWD: " . $email . ": crowd session invalid: " . $session['reason'], Logger::LEVEL_INFO);
+                            $newSession = AccessKey::createCrowdSession($email, $password);
+                            Yii::getLogger()->log( "CROWD: " . $email . ": created a new crowd session: " . $newSession->reason, Logger::LEVEL_INFO);
+                            AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
+                                ['email' => $email]);
                         } else {
-                            // write to access_keys with existed user
-                            AccessKey::createAccessKey($email, $password, $user->id, $obj);
+
+                            Yii::getLogger()->log( "CROWD: " . $email . ": validated crowd session", Logger::LEVEL_INFO);
+                            AccessKey::validateCrowdSession( $session['token'] );
+
                         }
+
+                    } else {
+                        // write to access_keys with existed user
+                        AccessKey::createAccessKey($email, $password, $user->id, $obj);
+                    }
                     AccessKey::putAvatarInAm($email);
                 } else {
+
                     $errorArr['error'] = $this->getMessageFromCrowd($obj);
+                    Yii::getLogger()->log( "CROWD: " . $email . ": authentication error: " .  $errorArr['error'], Logger::LEVEL_INFO);
                 }
             }  //elseif(check for another auth type){}
 
@@ -126,7 +158,7 @@ class CrowdComponent extends Component
                         if(isset($_COOKIE[User::READ_COOKIE_NAME . $toName])) {
 
                             $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
-                            if(isset($session->reason)){
+                            if( $session['isSuccess'] === false ){
                                 $this->createCrowdSessionAndCookie($email, $password);
                             }
                         } else {
@@ -184,7 +216,7 @@ class CrowdComponent extends Component
         $domain = AccessKey::getStringFromURL();
         $toName = AccessKey::nameFromURL();
         $newSession = AccessKey::createCrowdSession($email, $password);
-        setcookie(User::CREATE_COOKIE_NAME . $toName, $newSession->token, AccessKey::getExpireForSession($newSession), $path, $domain);
+        setcookie(User::CREATE_COOKIE_NAME . $toName, $newSession['token'], $newSession['expiryDate'], $path, $domain);
 
         // delete db authorization cookie
         setcookie(User::COOKIE_DATABASE . $toName, 'authorized_through_database',time()-3600*60, $path, $domain);
@@ -216,10 +248,8 @@ class CrowdComponent extends Component
         $toName = AccessKey::nameFromURL();
 
         // get difference beetwen create and expiry date of the crowd session instead of hardcode 30 min
-        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($session, [], false);
-        $created = substr($sessionObjToArray['created-date'], 0, 10);
-        $sessionObjToArray = \yii\helpers\ArrayHelper::toArray($session, [], false);
-        $expiry = substr($sessionObjToArray['expiry-date'], 0, 10);
+        $created = substr($session['createdDate'], 0, 10);
+        $expiry = substr($session['expiryDate'], 0, 10);
         $dateDiff = $expiry - $created;
 
         // set crowd.token_key cookie with value of current crowd token and expiry extended by expiry crowd date difference(30 min)
