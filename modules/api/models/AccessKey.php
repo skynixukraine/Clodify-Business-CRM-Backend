@@ -95,7 +95,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
         $dataResponse = [
             'isSuccess'     => true,
-            'expand'        => mull,
+            'expand'        => null,
             'reason'        => false,
             'token'         => null,
             'expiryDate'    => null,
