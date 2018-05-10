@@ -81,6 +81,21 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function checkCrowdSession($token)
     {
+        $dataResponse = [
+            'expand'        => null,
+            'isSuccess'     => true,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
+        if ( !$token ) {
+
+            $dataResponse['isSuccess']  = false;
+            $dataResponse['reason']     = "Undefined token";
+            return $dataResponse;
+
+        }
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -94,14 +109,6 @@ class AccessKey extends \yii\db\ActiveRecord
             ),
         ));
 
-        $dataResponse = [
-            'isSuccess'     => true,
-            'expand'        => null,
-            'reason'        => false,
-            'token'         => null,
-            'expiryDate'    => null,
-            'createdDate'   => null
-        ];
         $response = curl_exec($curl);
         $err = curl_error($curl);
 
@@ -114,8 +121,8 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            $response = json_decode($response, true);
             Yii::getLogger()->log( "CROWD: " . $token . ": crowd session check: " . var_export($response, 1), Logger::LEVEL_INFO);
+            $response = json_decode($response, true);
             if ( !isset($response['reason'])) {
 
                 $dataResponse['expand']     = $response['expand'];
@@ -183,8 +190,8 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            $response = json_decode($response, true);
             Yii::getLogger()->log( "CROWD: " . $token . ": crowd session validation: " . var_export($response, 1), Logger::LEVEL_INFO);
+            $response = json_decode($response, true);
 
             if ( !isset($response['reason'])) {
 
@@ -244,8 +251,8 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            $response = json_decode($response, true);
             Yii::getLogger()->log( "CROWD: " . $name . ": crowd session creation: " . var_export($response, 1), Logger::LEVEL_INFO);
+            $response = json_decode($response, true);
 
             if ( !isset($response['reason'])) {
 
