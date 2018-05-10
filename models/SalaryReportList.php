@@ -299,7 +299,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             ->andWhere(['is_delete' => Report::ACTIVE])
             ->andWhere(['like', 'date_added', $date])
             ->sum(Report::tableName() . '.hours');
-        return $sum ? $sum : 0;
+        return $sum ? ceil($sum) : 0;
     }
 
     /**
@@ -317,7 +317,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             ->andWhere(['is_approved' => Report::APPROVED])
             ->andWhere(['like', 'date_added', $date])
             ->sum(Report::tableName() . '.hours');
-        return $sum ? $sum : 0;
+        return $sum ? ceil($sum) : 0;
     }
 
 }

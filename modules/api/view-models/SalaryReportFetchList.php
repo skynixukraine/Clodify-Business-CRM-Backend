@@ -52,6 +52,10 @@ class SalaryReportFetchList extends ViewModelAbstract
 
             if ($salaryReportList) {
 
+                /**
+                 * @var  $key
+                 * @var  $salRepList SalaryReportList
+                 */
                 foreach ($salaryReportList as $key => $salRepList) {
                     $salaryReportList[$key] = [
                         "id"                         => $salRepList->id,
@@ -64,7 +68,7 @@ class SalaryReportFetchList extends ViewModelAbstract
                         "hospital_days"              => $salRepList->hospital_days,
                         "hospital_value"             => $salRepList->hospital_value,
                         "bonuses"                    => $salRepList->bonuses,
-                        "day_off"                    => $this->getCostDayOff($salRepList),
+                        "day_off"                    => $salRepList->day_off,
                         "overtime_days"              => $salRepList->overtime_days,
                         "overtime_value"             => $salRepList->overtime_value,
                         "other_surcharges"           => $salRepList->other_surcharges,
@@ -93,14 +97,4 @@ class SalaryReportFetchList extends ViewModelAbstract
 
     }
 
-    /**
-     * @param $model
-     * @return float|int
-     * monetary value for day_off (count_of_day_off * day_rate)/2
-     */
-    public function getCostDayOff($model)
-    {
-        $dayRate = $model->worked_days > 0 ? ($model->user->salary / $model->worked_days) * $model->currency_rate : 0;
-        return round(($model->day_off * $dayRate) / 2, 2);
-    }
 }
