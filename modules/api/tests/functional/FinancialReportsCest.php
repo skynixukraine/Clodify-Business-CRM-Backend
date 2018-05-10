@@ -6,6 +6,7 @@
  * Time: 11:43
  */
 
+use app\models\FinancialReport;
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
 use Helper\ValuesContainer;
@@ -296,6 +297,10 @@ class FinancialReportsCest
             'errors'  => 'array',
             'success' => 'boolean'
         ]);
+
+        $I->seeInDatabase('financial_reports', ['id' => $this->finacialReportId, 'is_locked' => 1]);
+        $I->seeInDatabase('delayed_salary', ['is_applied' => 1, 'user_id' => ValuesContainer::$userId, 'value' => ValuesContainer::$DevSalary, 'month' => ValuesContainer::$FinancialReportDate]);
+        $I->seeInDatabase('users', ['salary' => ValuesContainer::$DevSalary, 'id' => ValuesContainer::$userId]);
     }
 
     public function testUnlockFinancialReportsCest(FunctionalTester $I)

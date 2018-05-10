@@ -235,12 +235,13 @@ class SalaryReportList extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $userId
      * @param $date
      * @return int
      * take month and year from exp: '1389916800'
      * and return number of working days (Monday - Friday) with more than 6 reported hours
      */
-    public static function numWorkedDaysInMonth($date)
+    public static function numWorkedDaysInMonth($userId, $date)
     {
         $m = date('m', $date);
         $y = date('Y', $date);
@@ -249,7 +250,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
         for($d=1;$d<=$lastday;$d++) {
             $wd = date("w",mktime(0,0,0,$m,$d,$y));
             if($wd > 0 && $wd < 6) {
-                if (self::sumHoursReportsForMonth(date('Y-m-d',mktime(0,0,0,$m,$d,$y))) >= 6) {
+                if (self::sumHoursReportsForMonth($userId, date('Y-m-d',mktime(0,0,0,$m,$d,$y))) >= 6) {
                     $workdays++;
                 }
             }
@@ -258,26 +259,29 @@ class SalaryReportList extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $userId
      * @param $dateReport
      * @return mixed
      * require 'Y-m-d' format of date
      */
-    public static function sumHoursReportsForMonth($dateReport)
+    public static function sumHoursReportsForMonth($userId, $dateReport)
     {
         return Report::find()
-            ->andWhere(['date_report' => $dateReport])
-            ->andWhere(['is_delete' => Report::ACTIVE])
+            ->andWhere(['user_id'       => $userId])
+            ->andWhere(['date_report'   => $dateReport])
+            ->andWhere(['is_delete'     => Report::ACTIVE])
             ->sum(Report::tableName() . '.hours');
     }
 
     /**
+     * @param $userId
      * @param $date
      * @param $numWorkDays
      * @return int
      */
-    public static function getNumOfWorkedDays($date, $numWorkDays)
+    public static function getNumOfWorkedDays($userId, $date, $numWorkDays)
     {
-        $workDays = self::numWorkedDaysInMonth($date);
+        $workDays = self::numWorkedDaysInMonth($userId, $date);
        return $workDays <= $numWorkDays ? $workDays : $numWorkDays;
     }
 
@@ -295,7 +299,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             ->andWhere(['is_delete' => Report::ACTIVE])
             ->andWhere(['like', 'date_added', $date])
             ->sum(Report::tableName() . '.hours');
-        return $sum ? $sum : 0;
+        return $sum ? ceil($sum) : 0;
     }
 
     /**
@@ -313,7 +317,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             ->andWhere(['is_approved' => Report::APPROVED])
             ->andWhere(['like', 'date_added', $date])
             ->sum(Report::tableName() . '.hours');
-        return $sum ? $sum : 0;
+        return $sum ? ceil($sum) : 0;
     }
 
 }

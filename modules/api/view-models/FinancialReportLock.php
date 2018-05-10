@@ -8,6 +8,7 @@
 namespace viewModel;
 
 
+use app\models\DelayedSalary;
 use app\models\FinancialReport;
 use app\models\FinancialYearlyReport;
 use app\models\SalaryReport;
@@ -68,7 +69,9 @@ class FinancialReportLock extends ViewModelAbstract
                         $finyearrep->spent_corp_events += FinancialReport::sumSpentCorpEvents($id);
                         if ($finyearrep->validate() && $finyearrep->save()) {
                             $financialReport->is_locked = FinancialReport::LOCKED;
-                            $financialReport->save();
+                            if($financialReport->save()){
+                                $this->applyDelayedSalary($financialReport);
+                            }
                         } else {
                             foreach ($finyearrep->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
@@ -91,7 +94,9 @@ class FinancialReportLock extends ViewModelAbstract
                         $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
                         if ($yearlyReport->save()) {
                             $financialReport->is_locked = FinancialReport::LOCKED;
-                            $financialReport->save();
+                            if($financialReport->save()){
+                                $this->applyDelayedSalary($financialReport);
+                            }
                         } else {
                             foreach ($yearlyReport->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
@@ -110,6 +115,25 @@ class FinancialReportLock extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
         }
 
+    }
+
+    /**
+     * @param $finRep
+     * find delayed_salary where is_applied=0 and Locked FIN Report month = delayed_salary→month
+     * set user's salary column = delayed_salary→value
+     * set delayed_salary`s is_applied=1
+     */
+    public function applyDelayedSalary($finRep)
+    {
+        $m = date("m", $finRep->report_date);
+        $records =  DelayedSalary::find()->where(['is_applied' => 0, 'month' => $m])->all();
+        if($records){
+            foreach ($records as $record){
+                User::updateAll(['salary' => $record->value], 'id = ' . $record->user_id);
+                $record->is_applied = 1;
+                $record->save(false, ['is_applied']);
+            }
+        }
     }
 
 }

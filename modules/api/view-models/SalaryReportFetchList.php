@@ -52,6 +52,10 @@ class SalaryReportFetchList extends ViewModelAbstract
 
             if ($salaryReportList) {
 
+                /**
+                 * @var  $key
+                 * @var  $salRepList SalaryReportList
+                 */
                 foreach ($salaryReportList as $key => $salRepList) {
                     $salaryReportList[$key] = [
                         "id"                         => $salRepList->id,
@@ -92,4 +96,5 @@ class SalaryReportFetchList extends ViewModelAbstract
         }
 
     }
+
 }

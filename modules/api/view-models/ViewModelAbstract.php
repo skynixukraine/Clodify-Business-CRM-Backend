@@ -117,7 +117,6 @@ abstract class ViewModelAbstract implements ViewModelInterface
     public function validate()
     {
         if ( $this->model->validate() ) {
-
             return true;
 
         }

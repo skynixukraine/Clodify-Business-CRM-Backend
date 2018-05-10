@@ -37,4 +37,5 @@ class ApiEndpoints
     const FETCH_BALANCE           = '/api/balances';
     const RESOURCES               = '/api/resources';
     const EMERGENCY               = '/api/emergency';
+    const DELAYED_SALARY          = '/api/delayed-salary';
 }
