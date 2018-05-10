@@ -121,7 +121,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            Yii::getLogger()->log( "CROWD: " . $token . ": crowd session check: " . var_export($response, 1), Logger::LEVEL_INFO);
+            //Yii::getLogger()->log( "CROWD: " . $token . ": crowd session check: " . var_export($response, 1), Logger::LEVEL_INFO);
             $response = json_decode($response, true);
             if ( !isset($response['reason'])) {
 
@@ -190,7 +190,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            Yii::getLogger()->log( "CROWD: " . $token . ": crowd session validation: " . var_export($response, 1), Logger::LEVEL_INFO);
+            //Yii::getLogger()->log( "CROWD: " . $token . ": crowd session validation: " . var_export($response, 1), Logger::LEVEL_INFO);
             $response = json_decode($response, true);
 
             if ( !isset($response['reason'])) {
@@ -252,7 +252,7 @@ class AccessKey extends \yii\db\ActiveRecord
 
         } else {
 
-            Yii::getLogger()->log( "CROWD: " . $name . ": crowd session creation: " . var_export($response, 1), Logger::LEVEL_INFO);
+            //Yii::getLogger()->log( "CROWD: " . $name . ": crowd session creation: " . var_export($response, 1), Logger::LEVEL_INFO);
             $response = json_decode($response, true);
 
             if ( !isset($response['reason'])) {
