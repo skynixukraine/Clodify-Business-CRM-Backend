@@ -98,7 +98,7 @@ class CrowdComponent extends Component
 
                             Yii::getLogger()->log( "CROWD: " . $email . ": crowd session invalid: " . $session['reason'], Logger::LEVEL_INFO);
                             $newSession = AccessKey::createCrowdSession($email, $password);
-                            Yii::getLogger()->log( "CROWD: " . $email . ": created a new crowd session: " . $newSession->reason, Logger::LEVEL_INFO);
+                            Yii::getLogger()->log( "CROWD: " . $email . ": created a new crowd session: " . $newSession['reason'], Logger::LEVEL_INFO);
                             AccessKey::updateAll(['token' => $newSession->token, 'expiry_date' => AccessKey::getExpireForSession($newSession)],
                                 ['email' => $email]);
                         } else {
