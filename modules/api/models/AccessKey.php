@@ -7,6 +7,7 @@ use app\models\User;
 use yii\helpers\Json;
 use app\models\Storage;
 use yii\helpers\Url;
+use yii\log\Logger;
 
 
 /**
@@ -114,6 +115,7 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
 
             $response = json_decode($response, true);
+            Yii::getLogger()->log( "CROWD: " . $token . ": crowd session check: " . var_export($response, 1), Logger::LEVEL_INFO);
             if ( !isset($response['reason'])) {
 
                 $dataResponse['expand']     = $response['expand'];
@@ -137,19 +139,6 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function validateCrowdSession($token)
     {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_HTTPHEADER     => array(
-                "accept: application/json",
-                "authorization:" . Yii::$app->params['crowd_code'],
-                "content-type: application/json",
-            ),
-        ));
-
         $dataResponse = [
             'expand'        => null,
             'isSuccess'     => true,
@@ -158,6 +147,30 @@ class AccessKey extends \yii\db\ActiveRecord
             'expiryDate'    => null,
             'createdDate'   => null
         ];
+        if ( !$token ) {
+
+            $dataResponse['isSuccess']  = false;
+            $dataResponse['reason']     = "Undefined token";
+            return $dataResponse;
+
+        }
+        $curl = curl_init();
+        $params = array(
+            "validationFactors" => [],
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => Json::encode($params),
+            CURLOPT_HTTPHEADER     => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+
         $response = curl_exec($curl);
         $err = curl_error($curl);
 
@@ -171,9 +184,10 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
 
             $response = json_decode($response, true);
+            Yii::getLogger()->log( "CROWD: " . $token . ": crowd session validation: " . var_export($response, 1), Logger::LEVEL_INFO);
+
             if ( !isset($response['reason'])) {
 
-                $dataResponse['expand']     = $response['expand'];
                 $dataResponse['token']      = $response['token'];
                 $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
                 $dataResponse['createdDate']= $response['created-date'];
@@ -231,6 +245,8 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
 
             $response = json_decode($response, true);
+            Yii::getLogger()->log( "CROWD: " . $name . ": crowd session creation: " . var_export($response, 1), Logger::LEVEL_INFO);
+
             if ( !isset($response['reason'])) {
 
                 $dataResponse['expand']     = $response['expand'];
@@ -253,7 +269,7 @@ class AccessKey extends \yii\db\ActiveRecord
      */
     public static function getExpireForSession($exp)
     {
-        return substr($exp, 0, 10);
+        return (int)substr($exp, 0, 10);
     }
 
     /*
