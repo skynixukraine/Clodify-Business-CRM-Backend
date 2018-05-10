@@ -114,10 +114,18 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
 
             $response = json_decode($response, true);
-            $dataResponse['expand']     = $response['expand'];
-            $dataResponse['token']      = $response['token'];
-            $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
-            $dataResponse['createdDate']= $response['created-date'];
+            if ( !isset($response['reason'])) {
+
+                $dataResponse['expand']     = $response['expand'];
+                $dataResponse['token']      = $response['token'];
+                $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
+                $dataResponse['createdDate']= $response['created-date'];
+
+            } else {
+
+                $dataResponse['isSuccess']  = false;
+                $dataResponse['reason']     = $response['message'];
+            }
         }
         return $dataResponse;
     }
@@ -163,10 +171,18 @@ class AccessKey extends \yii\db\ActiveRecord
         } else {
 
             $response = json_decode($response, true);
-            $dataResponse['expand']     = $response['expand'];
-            $dataResponse['token']      = $response['token'];
-            $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
-            $dataResponse['createdDate']= $response['created-date'];
+            if ( !isset($response['reason'])) {
+
+                $dataResponse['expand']     = $response['expand'];
+                $dataResponse['token']      = $response['token'];
+                $dataResponse['expiryDate'] = AccessKey::getExpireForSession($response['expiry-date']);
+                $dataResponse['createdDate']= $response['created-date'];
+
+            } else {
+
+                $dataResponse['isSuccess']  = false;
+                $dataResponse['reason']     = $response['message'];
+            }
         }
     }
 
