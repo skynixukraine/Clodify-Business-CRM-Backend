@@ -25,6 +25,8 @@ class SalaryReportFetchList extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+
+            $listId = Yii::$app->request->getQueryParam('listId');
             $order = Yii::$app->request->getQueryParam('order');
             $start = Yii::$app->request->getQueryParam('start') ?: 0;
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
@@ -32,6 +34,12 @@ class SalaryReportFetchList extends ViewModelAbstract
 
             $query = SalaryReportList::find()
                 ->where([SalaryReportList::tableName() . '.salary_report_id' => $id]);
+
+            if ( $listId > 0 ) {
+                $query = SalaryReportList::find()
+                    ->where([SalaryReportList::tableName() . '.id' => $listId]);
+
+            }
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
