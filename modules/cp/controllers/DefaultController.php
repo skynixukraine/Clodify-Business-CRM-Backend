@@ -23,9 +23,9 @@ class DefaultController extends Controller
 
             $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
 
-            if (isset($session->reason)) {
+            if ( $session['isSuccess'] === false ) {
                 Yii::$app->getSession()->setFlash('success',
-                    Yii::t("app", $session->reason . " You have to authenticate with email and password"));
+                    Yii::t("app", $session['reason'] . " You have to authenticate with email and password"));
                 return $this->redirect(["/site/login"]);
             } else {
                 if (isset($_COOKIE[User::COOKIE_DATABASE . $toName])) {
