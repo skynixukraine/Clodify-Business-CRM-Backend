@@ -69,43 +69,16 @@ class CounterpartiesCest
      */
     public function testCounterpartyCreateAndUpdateForbiddenForDevClientPm(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'id'         => 5,
-            'first_name' => 'devUsers',
-            'last_name'  => 'devUsersLast',
-            'email'      => 'devUser@email.com',
-            'role'       => 'DEV',
-            'password'   => md5('dev')
-        ));
 
-        $I->haveInDatabase('users', array(
-            'id'         => 6,
-            'first_name' => 'pmUsers',
-            'last_name'  => 'pmUsersLast',
-            'email'      => 'pmUser@email.com',
-            'role'       => 'PM',
-            'password'   => md5('pm')
-        ));
+        $I->wantTo('Test that counterparty creation forbidden for  PM role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
 
-        $I->haveInDatabase('users', array(
-            'id'         => 7,
-            'first_name' => 'clientUsers',
-            'last_name'  => 'clientUsersLast',
-            'email'      => 'clientUser@email.com',
-            'role'       => 'CLIENT',
-            'password'   => md5('client')
-        ));
+        \Helper\OAuthToken::$key = null;
 
-        for ($i = 5; $i < 8; $i++) {
-            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
-            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, ValuesContainer::$userPm['password']);
 
-            \Helper\OAuthToken::$key = null;
 
-            $oAuth = new OAuthSteps($scenario);
-            $oAuth->login($email, strtolower($pas));
-
-        $I->wantTo('Test that counterparty creation forbidden for  DEV, PM, CLIENT role');
         $I->sendPOST(ApiEndpoints::COUNTERPARTY );
 
         \Helper\OAuthToken::$key = null;
@@ -120,35 +93,136 @@ class CounterpartiesCest
             ],
             "success" => false
         ]);
-    }
 
-        for ($i = 5; $i < 8; $i++) {
-            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
-            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+        $I->wantTo('Test that counterparty update forbidden for  PM role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
 
-            \Helper\OAuthToken::$key = null;
+        \Helper\OAuthToken::$key = null;
 
-            $oAuth = new OAuthSteps($scenario);
-            $oAuth->login($email, strtolower($pas));
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
 
-            $I->wantTo('Test that counterparty update forbidden for  DEV, PM, CLIENT role');
-            $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
-                "name" => "Projectxxx"
-            ]));
 
-            \Helper\OAuthToken::$key = null;
+        $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
+            "name" => "Projectxxx"
+        ]));
 
-            $response = json_decode($I->grabResponse());
-            $I->assertNotEmpty($response->errors);
-            $I->seeResponseContainsJson([
-                "data" => null,
-                "errors" => [
-                    "param" => "error",
-                    "message" => "You have no permission for this action"
-                ],
-                "success" => false
-            ]);
-        }
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+
+        $I->wantTo('Test that counterparty creation forbidden for  DEV role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::COUNTERPARTY );
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that counterparty update forbidden for  DEV role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
+            "name" => "Projectxxx"
+        ]));
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+
+        $I->wantTo('Test that counterparty creation forbidden for  CLIENT role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::COUNTERPARTY );
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that counterparty update forbidden for  CLIENT role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId, json_encode([
+            "name" => "Projectxxx"
+        ]));
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
     }
 
     /**
@@ -220,37 +294,25 @@ class CounterpartiesCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $id = 1;
-
         $I->haveInDatabase('reference_book', array(
-            'id' => 3,
-            'code' => 454
+            'id'    => 331,
+            'code'  => 454,
+            'name'  => 'Test Reference'
         ));
-
-        $I->haveInDatabase('busineses', array(
-            'id' => 4
-        ));
-
-        $I->haveInDatabase('operation_types', array(
-            'id' => 3
-        ));
-
         $I->haveInDatabase('operations', array(
-            'id' => 2,
-            'business_id' => 4,
-            'operation_type_id' => 3
+            'id' => 1,
+            'business_id' => 1,
+            'operation_type_id' => 1
         ));
-
         $I->haveInDatabase('transactions', array(
-            'id'                    => 13,
-            'counterparty_id'       => $id,
-            'reference_book_id'     => 3,
-            'operation_id'          => 2,
-            'operation_business_id' => 4
+            'id'                    => 1,
+            'counterparty_id'       => $this->counterpartyId,
+            'reference_book_id'     => 331,
+            'operation_id'          => 1,
+            'operation_business_id' => 1
         ));
-
         $I->wantTo('Counterparty can`t be deleted if it used in transactions');
-        $I->sendDELETE(ApiEndpoints::COUNTERPARTY. '/' .$id );
+        $I->sendDELETE(ApiEndpoints::COUNTERPARTY. '/' .$this->counterpartyId );
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
         $I->seeResponseContainsJson([
@@ -284,7 +346,7 @@ class CounterpartiesCest
         ));
 
         $I->haveInDatabase('reference_book', array(
-            'id' => 3,
+            'id' => 332,
             'code' => 454
         ));
 
@@ -292,22 +354,20 @@ class CounterpartiesCest
             'id' => 4
         ));
 
-        $I->haveInDatabase('operation_types', array(
-            'id' => 3
-        ));
+
 
         $I->haveInDatabase('operations', array(
             'id'                => 2,
-            'business_id'       => 4,
+            'business_id'       => 1,
             'operation_type_id' => 3
         ));
 
         $I->haveInDatabase('transactions', array(
             'id'                    => 13,
             'counterparty_id'       => 3,
-            'reference_book_id'     => 3,
+            'reference_book_id'     => 332,
             'operation_id'          => 2,
-            'operation_business_id' => 4
+            'operation_business_id' => 1
         ));
 
         $I->wantTo('Delete counterparty if not used in transactions');

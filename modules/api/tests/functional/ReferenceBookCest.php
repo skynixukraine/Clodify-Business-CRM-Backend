@@ -46,7 +46,7 @@ class ReferenceBookCest
                     [
                         'id' => 'integer',
                         'name' => 'string',
-                        'code' => 'integer',
+                        'code' => 'string',
                     ]
                 ],
                 'total_records' => 'string'
@@ -65,6 +65,6 @@ class ReferenceBookCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $I->assertEquals(1, $response->data->total_records);
+        $I->assertEquals(1, count($response->data->references));
     }
 }
