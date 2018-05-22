@@ -346,6 +346,8 @@ CREATE TABLE `invoices` (
   `user_projects` varchar(255) DEFAULT NULL,
   `contract_id` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
+  `business_id` int(11) DEFAULT NULL,
+  `currency` enum('USD', 'UAH') NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `idx-invoice_contract` (`contract_id`),
