@@ -35,6 +35,7 @@ class FinancialReportsCest
     public function testCreateFinancialReportCest(FunctionalTester $I)
     {
 
+
         $I->wantTo('Testing create financial reports');
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
             [
@@ -299,7 +300,7 @@ class FinancialReportsCest
         ]);
 
         $I->seeInDatabase('financial_reports', ['id' => $this->finacialReportId, 'is_locked' => 1]);
-        $I->seeInDatabase('delayed_salary', ['is_applied' => 1, 'user_id' => ValuesContainer::$userDev['id'], 'value' => ValuesContainer::$DevSalary, 'month' => ValuesContainer::$FinancialReportDate]);
+        $I->seeInDatabase('delayed_salary', ['is_applied' => 1, 'user_id' => ValuesContainer::$userDev['id'], 'value' => ValuesContainer::$DevSalary, 'month' => ValuesContainer::$DelayedSalaryDate]);
         $I->seeInDatabase('users', ['salary' => ValuesContainer::$DevSalary, 'id' => ValuesContainer::$userDev['id']]);
     }
 

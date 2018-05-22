@@ -14,8 +14,9 @@ class ValuesContainer
     public static $nonPaidProjectId = 2;
 
     public static $contractId = 2;
-    public static $FinancialReportId = 1;
-    public static $FinancialReportDate = 2;
+    public static $FinancialReportId;
+    public static $FinancialReportDate; //This value will be set during fin reports cest
+    public static $DelayedSalaryDate;
     public static $BusinessID = 1;
     public static $unix = 1522912941;
     public static $DevSalary = 5500;
