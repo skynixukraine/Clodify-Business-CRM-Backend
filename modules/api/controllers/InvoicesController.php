@@ -68,7 +68,7 @@ class InvoicesController extends DefaultController
     }
 
     /**
-     * see  https://jira.skynix.co/browse/SCA-132
+     * see  https://jira.skynix.co/browse/SCA-154
      */
     public function actionPaid()
     {
