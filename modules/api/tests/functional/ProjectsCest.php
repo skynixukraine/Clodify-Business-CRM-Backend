@@ -30,11 +30,11 @@ class ProjectsCest
             "jira_code"          =>  "SI-21",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "developers"         => [ValuesContainer::$userDevId, ValuesContainer::$userSalesId],
-            "customers"          => [ValuesContainer::$userClientId],
-            "invoice_received"   => ValuesContainer::$userClientId,
-            "is_pm"              => ValuesContainer::$userDevId,
-            "is_sales"           => ValuesContainer::$userSalesId,
+            "developers"         => [ValuesContainer::$userDev['id'], ValuesContainer::$userSales['id']],
+            "customers"          => [ValuesContainer::$userClient['id']],
+            "invoice_received"   => ValuesContainer::$userClient['id'],
+            "is_pm"              => ValuesContainer::$userDev['id'],
+            "is_sales"           => ValuesContainer::$userSales['id'],
             "is_published"       => 1,
             "status"             => "INPROGRESS"
         ]));
@@ -156,17 +156,17 @@ class ProjectsCest
         $oAuth->login();
 
         $I->wantTo('Testing edit projects data');
-        $I->sendPUT(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectId, json_encode([
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId, json_encode([
             "name"               =>  "Project",
             "jira_code"          =>  "SI-21",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
             "status"             => "INPROGRESS",
-            "customers"          => [ValuesContainer::$userClientId],
-            "invoice_received"   => ValuesContainer::$userClientId,
-            "developers"         => [ValuesContainer::$userDevId, ValuesContainer::$userSalesId, ValuesContainer::$userId],
-            "is_pm"              => ValuesContainer::$userDevId,
-            "is_sales"           => ValuesContainer::$userSalesId,
+            "customers"          => [ValuesContainer::$userClient['id']],
+            "invoice_received"   => ValuesContainer::$userClient['id'],
+            "developers"         => [ValuesContainer::$userDev['id'], ValuesContainer::$userSales['id'], ValuesContainer::$userAdmin['id']],
+            "is_pm"              => ValuesContainer::$userDev['id'],
+            "is_sales"           => ValuesContainer::$userSales['id'],
             "alias_name"         => [13, 45],
             "is_published"       => 1,
         ]));

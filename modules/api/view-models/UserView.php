@@ -73,9 +73,9 @@ class UserView extends ViewModelAbstract
             }
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
-                $data['salary'] = '$' . $model->salary;
-                $data['official_salary'] = $model->official_salary;
-                $data['salary_up'] = $model->date_salary_up ? DateUtil:: convertDateTimeWithoutHours($model->date_salary_up) : 'No changes';
+                $data['salary']             = $model->salary;
+                $data['official_salary']    = $model->official_salary;
+                $data['salary_up']          = $model->date_salary_up ? DateUtil:: convertDateTimeWithoutHours($model->date_salary_up) : null;
             }
 
             $this->setData($data);

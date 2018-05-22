@@ -80,8 +80,6 @@ class OperationsCest
                 'currency'               =>  'UAH',
                 'debit_reference_id'     =>  '1',
                 'credit_reference_id'    =>  '1',
-//                'debit_counterparty_id'  =>  '1',
-//                'credit_counterparty_id' =>  '1',
                 "fixed_asset" => [
                     'name'               => "PC",
                     'cost'               => 100.50,
@@ -121,67 +119,102 @@ class OperationsCest
      */
     public function testOperationCreateForbiddenForDevClientPmSales(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'id' => 4,
-            'first_name' => 'salesUsers',
-            'last_name' => 'salesUsersLast',
-            'email' => 'salesUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
 
-        $I->haveInDatabase('users', array(
-            'id' => 5,
-            'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
-        ));
+        $I->wantTo('Test that operation creation forbidden for  DEV role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
 
-        $I->haveInDatabase('users', array(
-            'id' => 6,
-            'first_name' => 'pmUsers',
-            'last_name' => 'pmUsersLast',
-            'email' => 'pmUser@email.com',
-            'role' => 'PM',
-            'password' => md5('pm')
-        ));
+        \Helper\OAuthToken::$key = null;
 
-        $I->haveInDatabase('users', array(
-            'id' => 7,
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientUsersLast',
-            'email' => 'clientUser@email.com',
-            'role' => 'CLIENT',
-            'password' => md5('client')
-        ));
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
 
-        for ($i = 4; $i < 8; $i++) {
-            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
-            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+        $I->sendPOST(ApiEndpoints::OPERATION);
 
-            \Helper\OAuthToken::$key = null;
+        \Helper\OAuthToken::$key = null;
 
-            $oAuth = new OAuthSteps($scenario);
-            $oAuth->login($email, strtolower($pas));
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
 
-            $I->wantTo('Test that operation creation forbidden for  DEV, PM, CLIENT, SALES role');
-            $I->sendPOST(ApiEndpoints::OPERATION);
+        $I->wantTo('Test that operation creation forbidden for  PM role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
 
-            \Helper\OAuthToken::$key = null;
+        \Helper\OAuthToken::$key = null;
 
-            $response = json_decode($I->grabResponse());
-            $I->assertNotEmpty($response->errors);
-            $I->seeResponseContainsJson([
-                "data" => null,
-                "errors" => [
-                    "param" => "error",
-                    "message" => "You have no permission for this action"
-                ],
-                "success" => false
-            ]);
-        }
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::OPERATION);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that operation creation forbidden for  CLIENT role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::OPERATION);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that operation creation forbidden for  SALES role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::OPERATION);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
 
     }
 
@@ -226,76 +259,132 @@ class OperationsCest
      */
     public function testOperationUpdateForbiddenForFinDevClientPmSales(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'id' => 4,
-            'first_name' => 'salesUsers',
-            'last_name' => 'salesUsersLast',
-            'email' => 'salesUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
 
-        $I->haveInDatabase('users', array(
-            'id' => 5,
-            'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
-        ));
+        $I->wantTo('Test that operation updating forbidden for DEV role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
 
-        $I->haveInDatabase('users', array(
-            'id' => 6,
-            'first_name' => 'pmUsers',
-            'last_name' => 'pmUsersLast',
-            'email' => 'pmUser@email.com',
-            'role' => 'PM',
-            'password' => md5('pm')
-        ));
+        \Helper\OAuthToken::$key = null;
 
-        $I->haveInDatabase('users', array(
-            'id' => 7,
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientUsersLast',
-            'email' => 'clientUser@email.com',
-            'role' => 'CLIENT',
-            'password' => md5('client')
-        ));
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
 
-        $I->haveInDatabase('users', array(
-            'id' => 8,
-            'first_name' => 'finUsers',
-            'last_name' => 'finUsersLast',
-            'email' => 'finUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('fin')
-        ));
 
-        for ($i = 4; $i < 9; $i++) {
-            $email = $I->grabFromDatabase('users', 'email', array('id' => $i));
-            $pas = $I->grabFromDatabase('users', 'role', array('id' => $i));
+        $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
 
-            \Helper\OAuthToken::$key = null;
+        \Helper\OAuthToken::$key = null;
 
-            $oAuth = new OAuthSteps($scenario);
-            $oAuth->login($email, strtolower($pas));
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
 
-            $I->wantTo('Test that operation updating forbidden for  DEV, PM, CLIENT, SALES, FIN role');
-            $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
 
-            \Helper\OAuthToken::$key = null;
+        $I->wantTo('Test that operation updating forbidden for PM role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
 
-            $response = json_decode($I->grabResponse());
-            $I->assertNotEmpty($response->errors);
-            $I->seeResponseContainsJson([
-                "data" => null,
-                "errors" => [
-                    "param" => "error",
-                    "message" => "You have no permission for this action"
-                ],
-                "success" => false
-            ]);
-        }
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+
+        $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that operation updating forbidden for CLIENT role');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas    = ValuesContainer::$userClient['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+
+        $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that operation updating forbidden for SALES role');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+
+        $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        $I->wantTo('Test that operation updating forbidden for FIN role');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userFin['id']));
+        $pas    = ValuesContainer::$userFin['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+
+        $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId);
+
+        \Helper\OAuthToken::$key = null;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
 
     }
 
@@ -337,7 +426,7 @@ class OperationsCest
         $I->sendPUT(ApiEndpoints::OPERATION. '/' . $this->operationId,
             json_encode([
                 'name'                   => 'dudfjjjjjf',
-                'operation_type_id'      => 3,             // operation_type_id is out of allowed
+                'operation_type_id'      => 3000,             // operation_type_id is out of allowed
                 'transaction_name'       => 'ubunfffjjj',
                 'amount'                 => 775577,
                 'currency'               => 'UAH',

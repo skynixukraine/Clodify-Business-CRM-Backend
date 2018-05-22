@@ -492,7 +492,7 @@ class SiteController extends Controller
 
     public function actionStatus()
     {
-        $f = Career::find()->all();
+        $f = User::find()->one();
         return $this->render('for_status', ['f' => $f]);
     }
 
