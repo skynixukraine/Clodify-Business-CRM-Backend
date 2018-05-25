@@ -136,10 +136,11 @@ class UsersCest
             'data' => [
                 'first_name'  => 'string',
                 'last_name'   => 'string',
-                'middle_name' => 'string',
+                'role'        => 'string',
+                'middle_name' => 'string|null',
                 'company'     => 'string',
                 'tags'        => 'string',
-                'about'       => 'string',
+                'about'       => 'string|null',
                 'photo'       => 'string',
                 'sign'        => 'string',
                 'bank_account_en' => 'string|null',
@@ -147,6 +148,17 @@ class UsersCest
                 'official_salary' => 'integer|null',
                 'email'       => 'string',
                 'phone'       => 'string',
+                'salary_up'   => 'string|null',
+                'month_logged_hours'    => 'integer',
+                'year_logged_hours'     => 'integer',
+                'total_logged_hours'    => 'integer',
+                'month_paid_hours'      => 'integer',
+                'year_paid_hours'       => 'integer',
+                'total_paid_hours'      => 'integer',
+                'auth_type'             => 'integer',
+                'joined'                => 'string',
+                'is_active'             => 'integer',
+                'salary'                => 'integer',
             ]
         ]);
     }
@@ -188,7 +200,7 @@ class UsersCest
         $response = json_decode($I->grabResponse());
         $I->assertEquals(first_name, $response->data->first_name);
         $I->assertEquals(last_name, $response->data->last_name);
-        $I->assertEquals('$' . salary, $response->data->salary);
+        $I->assertEquals( salary, $response->data->salary);
         $I->assertEquals(phone, $response->data->phone);
         $I->assertEquals(AUTH_TYPE_CROWD, $response->data->auth_type);
     }
@@ -199,30 +211,13 @@ class UsersCest
      */
     public function testFinEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'first_name' => 'finUsers',
-            'last_name' => 'finSNUsers',
-            'email' => 'finUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('fin')
-        ));
-
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'devUsers',
-            'last_name' => 'devSNUsers',
-            'email' => 'devNEWUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('dev'),
-            'official_salary' => 5555
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("finUser@email.com", "fin");
+        $oAuth->login( ValuesContainer::$userFin['email'], ValuesContainer::$userFin['password']);
 
         $I->wantTo('Testing fin can edit user data');
-        $I->sendPUT(ApiEndpoints::USERS . '/' . $userId, json_encode([
+        $I->sendPUT(ApiEndpoints::USERS . '/' .  ValuesContainer::$userDev['id'], json_encode([
             'official_salary' => 8000
         ]));
 
@@ -238,7 +233,7 @@ class UsersCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
-        $I->seeInDatabase('users', ['id' => $userId, 'official_salary' => 8000]);
+        $I->seeInDatabase('users', ['id' => ValuesContainer::$userDev['id'], 'official_salary' => 8000]);
     }
 
     /**
@@ -247,30 +242,14 @@ class UsersCest
      */
     public function testFailEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'first_name' => 'clientUsers',
-            'last_name'  => 'clientUsersLast',
-            'email'      => 'clientUser@email.com',
-            'role'       => 'CLIENT',
-            'password'   => md5('client')
-        ));
-
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'devUsers',
-            'last_name' => 'devSNUsers',
-            'email' => 'devNEWUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('dev'),
-            'official_salary' => 5555
-        ));
 
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("clientUser@email.com", "client");
+        $oAuth->login(ValuesContainer::$userClient['email'], ValuesContainer::$userClient['password']);
 
         $I->wantTo('Testing user can not edit another user data');
-        $I->sendPUT(ApiEndpoints::USERS . '/' . $userId, json_encode([
+        $I->sendPUT(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'], json_encode([
             'first_name' => 'devSuperUsers',
             'last_name' => 'devLastName',
             'official_salary' => 8500
@@ -303,7 +282,7 @@ class UsersCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->sendGET(ApiEndpoints::USER . '/' . ValuesContainer::$userId . '/photo');
+        $I->sendGET(ApiEndpoints::USER . '/' . ValuesContainer::$userAdmin['id'] . '/photo');
         $I->seeResponseCodeIs(200);
     }
 
@@ -397,7 +376,7 @@ class UsersCest
     public function getAccessToken(FunctionalTester $I, \Codeception\Scenario $scenario) {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
-        $I->sendGET(ApiEndpoints::USERS . '/access-token/' . ValuesContainer::$userId);
+        $I->sendGET(ApiEndpoints::USERS . '/access-token/' . ValuesContainer::$userAdmin['id']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

@@ -8,6 +8,10 @@ use Helper\OAuthSteps;
  */
 
 use Helper\ValuesContainer;
+define('DATE_REPORT', date('d/m/Y'));
+define('HOURS', 2);
+define('MAX_HOURS', 12);
+define('TASK', 'task description, task description, task description');
 
 class ReportsCest
 {
@@ -16,17 +20,60 @@ class ReportsCest
     private $userId;
     private $notOwnReportId;
 
+    public function testCreateReportAsDev(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
 
+        $I->wantTo('Create create a report as a dev user');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas    = ValuesContainer::$userDev['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => ValuesContainer::$projectId,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => DATE_REPORT
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'report_id' => 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $this->notOwnReportId = $response->data->report_id;
+
+
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => ValuesContainer::$projectId,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => date('d/m/Y', strtotime('now -1day'))
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+    }
 
     /* 2.1.1 Create Report Data
      * @see    http://jira.skynix.company:8070/browse/SI-837
      */
     public function testCreateWithotAuthReports(FunctionalTester $I)
     {
-        define('DATE_REPORT', date('d/m/Y'));
-        define('HOURS', 2);
-        define('MAX_HOURS', 12);
-        define('TASK', 'task description, task description, task description');
+
 
         $I->wantTo('Create report without authorization');
 
@@ -41,7 +88,7 @@ class ReportsCest
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
         $I->assertNotEmpty($response->errors);
-        $this->userId = ValuesContainer::$userId;
+        $this->userId = ValuesContainer::$userAdmin['id'];
     }
 
     /**
@@ -58,7 +105,7 @@ class ReportsCest
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
             'project_id'    => ValuesContainer::$projectId,
             'task'          => TASK,
-            'hours'         => MAX_HOURS,
+            'hours'         => (MAX_HOURS-HOURS),
             'date_report'   => DATE_REPORT
         ]));
         $I->seeResponseCodeIs(200);
@@ -159,7 +206,9 @@ class ReportsCest
 
         $I->wantTo('Check if report was created with using fetch method');
         $I->sendGET(ApiEndpoints::REPORT, [
-            'limit' => 1
+            'limit' => 1,
+            'order' => ['id' => 'DESC']
+
         ]);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
@@ -168,7 +217,7 @@ class ReportsCest
                 'reports' => 'array',
                 "total_records" => 'string',
                 "total_hours" => 'string',
-                "total_cost" => 'string'
+                "total_cost" => 'float|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -226,7 +275,7 @@ class ReportsCest
                 ],
                 'total_records' => 'string',
                 'total_hours' => 'string',
-                'total_cost' => 'string'
+                'total_cost' => 'float|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -272,7 +321,8 @@ class ReportsCest
 
         $I->wantTo('Check if report was updated with using fetch method');
         $I->sendGET(ApiEndpoints::REPORT, [
-            'limit' => 1
+            'limit' => 1,
+            'order' => ['id' => 'DESC']
         ]);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
@@ -281,45 +331,16 @@ class ReportsCest
                 'reports' => 'array',
                 "total_records" => 'string',
                 "total_hours" => 'string',
-                "total_cost" => 'string'
+                "total_cost" => 'float|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'
         ]);
         $I->seeResponseContainsJson([
-            'data' =>
-                [
-                    'reports' => [
-                        'report_id' => $this->ownReportId,
-                        'task' => $this->newTask
-                    ],
-
-                ]
+            'report_id' => $this->ownReportId,
+            'task' => $this->newTask
         ]);
 
-    }
-
-    //Try to get id of not own report by using fetch method
-    public function testGetNotOwnReports(FunctionalTester $I, \Codeception\Scenario $scenario)
-    {
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
-
-        $I->wantTo('Get not own id of report');
-        $I->sendGET(ApiEndpoints::REPORT, [
-            'from_date' => date('Y-m-d', strtotime('-1 year')),
-            'to_date' => date('Y-m-d')
-        ]);
-
-        $response = json_decode($I->grabResponse());
-        $reports = $response->data->reports;
-        //Get not own report id from all reports
-        $this->notOwnReportId = ValuesContainer::$deleteReportId;
-        foreach ($reports as $report) {
-            if (($report->reporter->id != $this->userId) && ($report->is_invoiced == 0)) {
-                $this->notOwnReportId = $report->report_id;
-            }
-        }
     }
 
 
@@ -378,10 +399,10 @@ class ReportsCest
         $I->assertEmpty($response->errors);
         $I->seeResponseMatchesJsonType([
             'data' => [
-                'reports' => 'array',
+                'reports'       => 'array',
                 "total_records" => 'string',
-                "total_hours" => 'string',
-                "total_cost" => 'string|integer'
+                "total_hours"   => 'string',
+                "total_cost"    => 'float|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -390,9 +411,11 @@ class ReportsCest
             'data' =>
                 [
                     'reports' => [
-                        'report_id' => $this->ownReportId,
-                        'task' => $this->newTask
-                    ],
+                        [
+                            'report_id' => $this->ownReportId,
+                            'task' => $this->newTask
+                        ],
+                    ]
 
                 ]
         ]);
@@ -444,21 +467,10 @@ class ReportsCest
      */
     public function testFetchReportsForClient(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientSNUsers',
-            'email' => 'clientUser@email.com',
-            'role' => 'CLIENT',
-            'password' => md5('client')
-        ));
-
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $I->haveInDatabase('reports', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
+            'user_id'       => ValuesContainer::$userClient['id'],
+            'project_id'    =>  ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -467,15 +479,10 @@ class ReportsCest
             'is_approved' => 1
         ));
 
-        $I->haveInDatabase('project_customers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("clientUser@email.com", "client");
+        $oAuth->login( ValuesContainer::$userClient['email'],  ValuesContainer::$userClient['password']);
 
         $I->wantTo('Testing fetch reports data');
         $I->sendGET(ApiEndpoints::REPORT);
@@ -511,7 +518,6 @@ class ReportsCest
                 ],
                 'total_records' => 'string',
                 'total_hours' => 'string',
-// no           'total_cost' => 'string'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -525,38 +531,22 @@ class ReportsCest
      */
     public function testFetchReportsForDev(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientSNUsers',
-            'email' => 'clientUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
-        ));
 
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $I->haveInDatabase('reports', array(
-            'user_id' => ValuesContainer::$userDevId,
-            'project_id' => $projectId,
-            'date_added' => '2017-03-09',
+            'user_id'       => ValuesContainer::$userDev['id'],
+            'project_id'    => ValuesContainer::$projectId,
+            'date_added'    => date('Y-m-d'),
             'task' => 'bla task',
             'hours' => 5,
             'cost' => 35.5,
             'invoice_id' => null
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'is_sales'  => 0
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("clientUser@email.com", "dev");
+        $oAuth->login(ValuesContainer::$userDev['email'], ValuesContainer::$userDev['password']);
 
         $I->wantTo('Testing fetch only own reports data for dev');
         $I->sendGET(ApiEndpoints::REPORT);
@@ -572,7 +562,8 @@ class ReportsCest
             'data' => ['reports' =>
                 [],
                 'total_records' => 'string',
-                 'total_cost' => 'integer'
+                'total_cost'    => 'float|integer',
+                'total_hours'   => 'string'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -586,21 +577,10 @@ class ReportsCest
      */
     public function testFetchReportsForSales(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientSNUsers',
-            'email' => 'clientUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
-
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
+            'user_id'    => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -608,16 +588,11 @@ class ReportsCest
             'invoice_id' => null
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'is_sales'  => 0
-        ));
 
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("clientUser@email.com", "sales");
+        $oAuth->login(ValuesContainer::$userSales['email'], ValuesContainer::$userSales['password']);
 
         $I->wantTo('Testing fetch reports data for sales projects');
         $I->sendGET(ApiEndpoints::REPORT);
@@ -634,7 +609,7 @@ class ReportsCest
                 [],
                 'total_records' => 'string',
                 'total_hours' => 'string',
-                'total_cost' => 'integer'
+                'total_cost' => 'float|integer'
             ],
             'errors' => 'array',
             'success' => 'boolean'
@@ -648,21 +623,11 @@ class ReportsCest
      */
     public function testSalesCanApproveReport(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'clientUsers',
-            'last_name' => 'clientSNUsers',
-            'email' => 'clientUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
 
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $repId = $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -670,16 +635,10 @@ class ReportsCest
             'invoice_id' => null
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'is_sales'  => 1
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("clientUser@email.com", "sales");
+        $oAuth->login(ValuesContainer::$userSales['email'], ValuesContainer::$userSales['password']);
 
         $I->wantTo('Test approving report');
         $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/approve');
@@ -707,21 +666,11 @@ class ReportsCest
      */
     public function testFinCanApproveReportExeptOwn(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'finUsers',
-            'last_name' => 'finUserLast',
-            'email' => 'finUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('fin')
-        ));
 
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $repId = $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
+            'user_id' => ValuesContainer::$userFin['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -729,16 +678,10 @@ class ReportsCest
             'invoice_id' => null
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'is_sales'  => 1
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("finUser@email.com", "fin");
+        $oAuth->login(ValuesContainer::$userFin['email'], ValuesContainer::$userFin['password']);
 
         $I->wantTo('Test approving report for fin exept own');
         $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/approve');
@@ -766,21 +709,10 @@ class ReportsCest
      */
     public function testDisApproveReport(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'adminUsers',
-            'last_name' => 'adminUsersLast',
-            'email' => 'adminUser@email.com',
-            'role' => 'ADMIN',
-            'password' => md5('admin')
-        ));
-
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $repId = $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -792,7 +724,7 @@ class ReportsCest
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("adminUser@email.com", "admin");
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
 
         $I->wantTo('Test disapproving report');
         $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');
@@ -817,21 +749,11 @@ class ReportsCest
      */
     public function testSalesCanDisApproveReport(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'saleUsers',
-            'last_name' => 'saleUsersLast',
-            'email' => 'saleUser@email.com',
-            'role' => 'SALES',
-            'password' => md5('sales')
-        ));
 
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $repId = $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
+            'user_id' => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
             'date_added' => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
@@ -840,16 +762,10 @@ class ReportsCest
             'is_approved' => 1
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'is_sales'  => 1
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("saleUser@email.com", "sales");
+        $oAuth->login(ValuesContainer::$userSales['email'], ValuesContainer::$userSales['password']);
 
         $I->wantTo('Test approving report for client exept own');
         $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');
@@ -877,22 +793,11 @@ class ReportsCest
      */
     public function testFinCanDisApproveReportExeptOwn(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $userId = $I->haveInDatabase('users', array(
-            'first_name' => 'finUsers',
-            'last_name' => 'finUserLast',
-            'email' => 'finUser@email.com',
-            'role' => 'FIN',
-            'password' => md5('fin')
-        ));
-
-        $projectId = $I->haveInDatabase('projects', array(
-            'name' => 'Hello World!'
-        ));
 
         $repId = $I->haveInDatabase('reports', array(
-            'user_id' => $userId,   // 5
-            'project_id' => $projectId,
-            'date_added' => '2017-03-09',
+            'user_id'       => ValuesContainer::$userFin['id'],   // 5
+            'project_id'    => ValuesContainer::$projectId,
+            'date_added'    => '2017-03-09',
             'task' => 'bla task',
             'hours' => 5,
             'cost' => 35.5,
@@ -900,15 +805,10 @@ class ReportsCest
             'is_approved' => 1
         ));
 
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => $userId,
-            'project_id' => $projectId,
-        ));
-
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("finUser@email.com", "fin");
+        $oAuth->login(ValuesContainer::$userFin['email'], ValuesContainer::$userFin['password']);
 
         $I->wantTo('Test disapproving report for fin exept own');
         $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove');

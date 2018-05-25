@@ -16,29 +16,28 @@ class OAuthSteps extends \FunctionalTester
      * @param $email
      * @param $password
      */
-    public function login($email = "maryt@skynix.co", $password = "admin")
+    public function login($email = 'crm-admin@skynix.co', $password = 'B19E$d4n$yc@Lu6fQIO#1d')
     {
         $I = $this;
-        if ( !OAuthToken::$key ) {
-            //Request Access Token using simple auth
-            $I->sendPOST('/api/auth', json_encode([
-                'email'  => $email,
-                'password'  => $password
-            ]));
-            $I->seeResponseCodeIs(200);
+        //Request Access Token using simple auth
+        $I->sendPOST('/api/auth', json_encode([
+            'email'  => $email,
+            'password'  => $password
+        ]));
+        $I->seeResponseCodeIs(200);
 
-            $I->seeResponseMatchesJsonType([
-                'data' => [
-                    'access_token'   => 'string',
-                    'user_id'		 => 'integer',
-                    'role'           => 'string'
-                ]
-            ]);
-            $response  = json_decode($I->grabResponse());
-            $accessToken = $response->data->access_token;
-            codecept_debug($accessToken);
-            OAuthToken::$key = $accessToken;
-        }
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'access_token'   => 'string',
+                'user_id'		 => 'integer',
+                'role'           => 'string'
+            ]
+        ]);
+        $response  = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $accessToken = $response->data->access_token;
+        OAuthToken::$key = $accessToken;
+
         $I->haveHttpHeader('skynix-access-token', OAuthToken::$key);
     }
 
