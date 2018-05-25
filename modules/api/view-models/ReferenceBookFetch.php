@@ -25,16 +25,21 @@ class ReferenceBookFetch extends ViewModelAbstract
     public function define()
     {
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+            $id = Yii::$app->request->getQueryParam('id');
             $order = Yii::$app->request->getQueryParam('order');
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-            $nameFilter = Yii::$app->request->getQueryParam('name');
+            $keyword = Yii::$app->request->getQueryParam('search_query');
             $codeFilter = Yii::$app->request->getQueryParam('code');
 
             $query = ReferenceBook::find();
 
             $dataTable = DataTable::getInstance()
                 ->setQuery($query)
-                ->setLimit($limit);
+                ->setLimit($limit)
+                ->setSearchValue($keyword)
+                ->setSearchParams([ 'or',
+                    ['like', 'name', $keyword]
+                ]);
 
             if ($order) {
                 foreach ($order as $name => $value) {
@@ -45,12 +50,11 @@ class ReferenceBookFetch extends ViewModelAbstract
                 $dataTable->setOrder(ReferenceBook::tableName() . '.id', 'desc');
             }
 
-            if ($nameFilter && $nameFilter != null){
-                $dataTable->setFilter('name=\'' . $nameFilter . '\'');
-            }
-
             if ($codeFilter && $codeFilter != null){
                 $dataTable->setFilter('code=\'' . $codeFilter . '\'');
+            }
+            if ($id && $id != null){
+                $dataTable->setFilter('id=\'' . $id . '\'');
             }
 
             $refBook = $dataTable->getData();

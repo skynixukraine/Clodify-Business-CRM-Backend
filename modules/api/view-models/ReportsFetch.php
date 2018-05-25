@@ -229,13 +229,13 @@ class ReportsFetch extends ViewModelAbstract
 
         $activeRecordInstance->limit(null)->offset(null);
         $totalHours = Yii::$app->Helper->timeLength( $activeRecordInstance->sum('hours') * 3600);
-        $totalCost = $activeRecordInstance->sum('cost') ? '$' . $activeRecordInstance->sum('cost') : 0;
+        $totalCost = $activeRecordInstance->sum('cost') ? $activeRecordInstance->sum('cost') : 0;
 
         $data = [
             "reports"            => $list,
             "total_records"      => DataTable::getInstance()->getTotal(),
             "total_hours"        => $totalHours,
-            "total_cost"         => $totalCost,
+            "total_cost"         => (float)$totalCost,
         ];
 
         if(User::hasPermission([User::ROLE_CLIENT])) {

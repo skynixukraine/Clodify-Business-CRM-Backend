@@ -299,8 +299,8 @@ class FinancialReportsCest
         ]);
 
         $I->seeInDatabase('financial_reports', ['id' => $this->finacialReportId, 'is_locked' => 1]);
-        $I->seeInDatabase('delayed_salary', ['is_applied' => 1, 'user_id' => ValuesContainer::$userId, 'value' => ValuesContainer::$DevSalary, 'month' => ValuesContainer::$FinancialReportDate]);
-        $I->seeInDatabase('users', ['salary' => ValuesContainer::$DevSalary, 'id' => ValuesContainer::$userId]);
+        $I->seeInDatabase('delayed_salary', ['is_applied' => 1, 'user_id' => ValuesContainer::$userDev['id'], 'value' => ValuesContainer::$DevSalary, 'month' => ValuesContainer::$FinancialReportDate]);
+        $I->seeInDatabase('users', ['salary' => ValuesContainer::$DevSalary, 'id' => ValuesContainer::$userDev['id']]);
     }
 
     public function testUnlockFinancialReportsCest(FunctionalTester $I)

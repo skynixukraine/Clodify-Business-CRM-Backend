@@ -37,7 +37,7 @@ class DelayedSalaryCest
         $I->wantTo('Testing create delayed salary request');
         $I->sendPOST(ApiEndpoints::DELAYED_SALARY, json_encode(
             [
-                "user_id" => ValuesContainer::$userId,
+                "user_id" => ValuesContainer::$userDev['id'],
                 "month" => ValuesContainer::$FinancialReportDate,
                 "value" => ValuesContainer::$DevSalary
             ]
@@ -58,6 +58,6 @@ class DelayedSalaryCest
             ]
         );
 
-        $I->seeInDatabase('delayed_salary', ['id' => $this->delayedSalaryId, 'user_id' => ValuesContainer::$userId]);
+        $I->seeInDatabase('delayed_salary', ['id' => $this->delayedSalaryId, 'user_id' => ValuesContainer::$userDev['id']]);
     }
 }
