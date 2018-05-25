@@ -177,15 +177,6 @@ class InvoicesCest
      */
     public function testMakeInvoicePaidCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-            $I->haveInDatabase('users', array(
-            'first_name' => 'adminUsers',
-            'last_name' => 'adminUsersLast',
-            'email' => 'adminUser@email.com',
-            'role' => 'ADMIN',
-            'password' => md5('admin')
-        ));
-
-
         $inv = $I->haveInDatabase('invoices', [
             'is_delete' => 0,
             'status' => 'NEW',
@@ -193,7 +184,7 @@ class InvoicesCest
             'note' => 'hello',
             'date_end' => '2017-01-25',
             'total' => 200,
-            'user_id' => ValuesContainer::$userId,
+            'user_id' => ValuesContainer::$userClient['id'],
             'date_start' => '2017-01-5',
             'subtotal' => 100,
             'discount' => 10
@@ -202,7 +193,7 @@ class InvoicesCest
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login("adminUser@email.com", "admin");
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
 
 
         $I->wantTo('Testing delete invoice');
