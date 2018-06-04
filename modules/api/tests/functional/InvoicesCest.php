@@ -170,6 +170,50 @@ class InvoicesCest
         ]);
     }
 
+    /**
+     * see https://jira.skynix.co/browse/SCA-154
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testMakeInvoicePaidCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $inv = $I->haveInDatabase('invoices', [
+            'is_delete' => 0,
+            'status' => 'NEW',
+            'business_id' => 1,
+            'note' => 'hello',
+            'date_end' => '2017-01-25',
+            'total' => 200,
+            'user_id' => ValuesContainer::$userClient['id'],
+            'date_start' => '2017-01-5',
+            'subtotal' => 100,
+            'discount' => 10
+        ]);
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+
+        $I->wantTo('Testing delete invoice');
+        $I->sendPUT(ApiEndpoints::INVOICES . '/' . $inv . '/paid');
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'invoice_id' => 'string',
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->seeInDatabase('invoices', ['id' => $inv, 'status' => 'PAID']);
+
+    }
 
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-974  changed with https://jira.skynix.co/browse/SCA-131

@@ -67,4 +67,19 @@ class InvoicesController extends DefaultController
             ->respond();
     }
 
+    /**
+     * see  https://jira.skynix.co/browse/SCA-154
+     */
+    public function actionPaid()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Invoice')
+            ->set('viewModel\ViewModelInterface', 'viewModel\InvoicePaid')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT ],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }

@@ -44,6 +44,8 @@ class Invoice extends \yii\db\ActiveRecord
     const INVOICE_DELETED       = 1;
     const INVOICE_NOT_DELETED   = 0;
 
+    const SCENARIO_INVOICE_CREATE = 'api-invoice-create';
+
     public $method;
     public $business_id;
 
@@ -62,7 +64,9 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
             ['user_id', 'required'],
-            [['date_end', 'total', 'user_id', 'business_id', 'date_start', 'subtotal', 'discount', 'note'], 'required'],
+            [['date_end', 'total', 'user_id', 'date_start', 'subtotal', 'discount', 'note'], 'required'],
+            [['business_id'], 'required',
+                'on' => [self::SCENARIO_INVOICE_CREATE]],
             [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id', 'contract_id', 'created_by', 'business_id'], 'integer'],
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
