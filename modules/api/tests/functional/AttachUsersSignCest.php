@@ -20,7 +20,11 @@ class AttachUsersSignCest
         $oAuth->login();
 
         $I->wantTo('Test attaching users sign');
-        $I->sendPOST(ApiEndpoints::ATTACH_SIGN, [], ['sign' => 'tests/_data/skynix-office.jpg']);
+
+//     save to db
+//        $I->sendPOST(ApiEndpoints::ATTACH_SIGN, [], ['sign' => 'tests/_data/skynix-office.jpg']);
+
+        $I->sendPOST(ApiEndpoints::ATTACH_SIGN, json_encode(['sing' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAMMCACYII=']));
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);

@@ -115,8 +115,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['role', 'code', 'slug', 'languages', 'residence', 'link_linkedin',
                 'link_video', 'birthday', 'position', 'degree'], 'string'],
-            [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
-            [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
+//    for save in db
+//    [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
+//    [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],
+            [['photo'], 'string', 'on' => [self::ATTACH_PHOTO_USERS]],
+            [['sing'], 'string', 'on' => self::ATTACH_USERS_SIGN],
             ['email', 'required', 'except' => ['settings', self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             ['password', 'required', 'except' => ['settings',self::SCENARIO_UPDATE_USER, self::SCENARIO_CREATE_USER, self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             ['role', function () {
@@ -889,9 +892,39 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * @param $model
+     * @return mixed
+     */
     public static function getAuthType($model)
     {
         return $model->auth_type;
+    }
+
+    /**
+     * @param $photo
+     * @return mixed
+     */
+    public static function uploadPhoto($photo)
+    {
+        $s = new Storage();
+        if (is_string($photo)) {
+            $pathFile = 'users/' . Yii::$app->user->id . '/files/photo/photo';
+            return $s->uploadBase64($pathFile, $photo);
+        }
+    }
+
+    /**
+     * @param $sign
+     * @return mixed
+     */
+    public static function uploadSign($sign)
+    {
+        $s = new Storage();
+        if (is_string($sign)) {
+            $pathFile = 'users/' . Yii::$app->user->id . '/files/sign/sign';
+            return $s->uploadBase64($pathFile, $sign);
+        }
     }
 
 }

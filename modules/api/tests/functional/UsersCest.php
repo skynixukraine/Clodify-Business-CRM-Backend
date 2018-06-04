@@ -142,7 +142,7 @@ class UsersCest
                 'tags'        => 'string',
                 'about'       => 'string|null',
                 'photo'       => 'string',
-                'sign'        => 'string',
+                'sign'        => 'string|null',
                 'bank_account_en' => 'string|null',
                 'bank_account_ua' => 'string|null',
                 'official_salary' => 'integer|null',

@@ -124,10 +124,11 @@ CREATE TABLE careers (
   description text COLLATE utf8_unicode_ci,
   is_active tinyint(1) DEFAULT '0',
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE careers DISABLE KEYS */;
+INSERT INTO careers VALUES (1,'first','description for first',1),(8,'First','simple description',1);
 /*!40000 ALTER TABLE careers ENABLE KEYS */;
 DROP TABLE IF EXISTS contact;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -7,6 +7,7 @@
 
 namespace app\models;
 use Yii;
+use yii\base\Exception;
 
 class Storage
 {
@@ -113,5 +114,25 @@ class Storage
         }
 
         return $file;
+    }
+
+    /**
+     * @param $key
+     * @param $sourceFile
+     * @return mixed
+     * @throws Exception
+     */
+    public function uploadBase64($key, $sourceFile)
+    {
+        try {
+            $upload = $this->s3->putObject(array(
+                'Bucket' => $this->basket,
+                'Key'    => $key,
+                'Body'   => $sourceFile
+            ));
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $upload;
     }
 }
