@@ -147,7 +147,26 @@ class ReportsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->wantTo('Create report with authorization');
+        $I->wantTo('Create some reports with authorization');
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => ValuesContainer::$projectId,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => date('d/m/Y', strtotime(DATE_REPORT . ' -1 day'))
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => ValuesContainer::$projectId,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => date('d/m/Y', strtotime(DATE_REPORT . ' -2 days'))
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
 
         $I->sendPOST(ApiEndpoints::REPORT, json_encode([
             'project_id' => ValuesContainer::$projectId,

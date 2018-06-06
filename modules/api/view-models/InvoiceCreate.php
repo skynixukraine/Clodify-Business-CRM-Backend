@@ -47,7 +47,7 @@ class InvoiceCreate extends ViewModelAbstract
 //            $this->model->total_hours = Yii::$app->Helper->timeLength($this->model->total_hours);
 //        }
 
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             $this->model->created_by = Yii::$app->user->id;
             $this->model->date_start = date('d/m/Y', strtotime($this->model->date_start));
             $this->model->date_end = date('d/m/Y', strtotime($this->model->date_end));

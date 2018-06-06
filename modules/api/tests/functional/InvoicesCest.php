@@ -26,7 +26,7 @@ class InvoicesCest
     public function testCreateInvoiceCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
-        // test invoice creation forbidden for  DEV, PM, CLIENT role
+        $I->wantTo('test invoice creation forbidden for  DEV, PM, CLIENT role');
         $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
         $pas = ValuesContainer::$userDev['password'];
 
@@ -37,7 +37,7 @@ class InvoicesCest
 
         $I->wantTo('Testing create invoice with other then ADMIN roles');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
-            "user_id"     =>  ValuesContainer::$userAdmin['id'],
+            "user_id"     =>  ValuesContainer::$userClient['id'],
             "business_id" =>  1,
             "date_start"  => "10/10/2018",
             "date_end"    => "10/11/2018",
@@ -60,19 +60,46 @@ class InvoicesCest
             "success" => false
         ]);
 
+        $I->wantTo('Testing create invoice as SALES');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "business_id" =>  1,
+            "date_start"  => date('d/m/Y', strtotime('now -2 days')),
+            "date_end"    => date('d/m/Y', strtotime('now -2 days')),
+            "subtotal"    =>  100,
+            "discount"    =>  0,
+            "total"       =>  100,
+            "note"        => "Some Note"
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'invoice_id' => 'integer',
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
         $I->wantTo('Testing create invoice as ADMIN');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
-            "user_id"     =>  100,
+            "user_id"     =>  ValuesContainer::$userClient['id'],
             "business_id" =>  1,
-            "date_start"  => "10/10/2018",
-            "date_end"    => "10/11/2018",
-            "subtotal"    =>  2444,
-            "discount"    =>  20,
-            "total"       =>  20000,
+            "date_start"  => date('d/m/Y', strtotime('now -1 day')),
+            "date_end"    => date('d/m/Y', strtotime('now')),
+            "subtotal"    =>  200,
+            "discount"    =>  10,
+            "total"       =>  190,
             "note"        => "Some Note"
         ]));
         $response = json_decode($I->grabResponse());
