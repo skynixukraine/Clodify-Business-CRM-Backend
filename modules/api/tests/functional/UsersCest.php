@@ -3,6 +3,9 @@
 use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
 use Helper\ValuesContainer;
+define('ROLE', 'DEV');
+define('ROLE_PM', 'PM');
+define('ROLE_SALES', 'SALES');
 
 class UsersCest
 {
@@ -22,7 +25,8 @@ class UsersCest
      */
     public function testCreateUser(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('ROLE', 'DEV');
+
+
         define('FIRST_NAME', 'Test');
         define('LAST_NAME', 'Test');
         define('EMAIL', substr(md5(rand(1, 1000)), 0, 5) .  '@gmail.com');
@@ -388,6 +392,53 @@ class UsersCest
                 'access_token' => 'string'
             ]
         ]);
+    }
+
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-853
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchUsersFilterbyRoles(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $roles = [
+            ROLE,
+            ROLE_PM,
+            ROLE_SALES
+        ];
+
+        $I->sendGET(ApiEndpoints::USERS, [
+            'limit'     => 100,
+            'roles'     => $roles
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        foreach( $response->data->users as $user ) {
+
+            if ( in_array( $user->role, $roles)) {
+
+                foreach ( $roles as $k=>$v ) {
+
+                    if ( $user->role == $v ) {
+
+                        unset($roles[$k]);
+
+                    }
+
+                }
+
+            }
+
+        }
+        $I->assertEquals(0, count($roles));
     }
 
 }
