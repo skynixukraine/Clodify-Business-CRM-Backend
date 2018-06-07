@@ -25,6 +25,7 @@ class UsersFetch extends ViewModelAbstract
 
         $order       = Yii::$app->request->getQueryParam('order', []);
         $keyword     = Yii::$app->request->getQueryParam('search_query');
+        $rolesFilter = Yii::$app->request->getQueryParam("roles");
         $role		 = Yii::$app->request->getQueryParam("role");
         $active		 = Yii::$app->request->getQueryParam("is_active");
         $start       = Yii::$app->request->getQueryParam('start') ? Yii::$app->request->getQueryParam('start') : 0;
@@ -102,6 +103,12 @@ class UsersFetch extends ViewModelAbstract
         //column ID is shown only to ADMIN
         if(  User::hasPermission([User::ROLE_ADMIN])) {
             $columns [] = 'id';
+        }
+
+        if ( $rolesFilter && count($rolesFilter) ) {
+
+            $query->andWhere(['role'=> $rolesFilter]);
+
         }
 
         $columns   []     = 'photo';
