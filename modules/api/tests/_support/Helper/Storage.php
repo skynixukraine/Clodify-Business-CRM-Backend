@@ -28,4 +28,9 @@ class Storage
     {
         return true;
     }
+
+    public function downloadToFile()
+    {
+        return true;
+    }
 }

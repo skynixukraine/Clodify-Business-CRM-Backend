@@ -17,6 +17,8 @@ class InvoicesCest
 {
     private $invoiceId;
 
+    private $invoceIdCreatedBySales;
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-972
      * @param  FunctionalTester $I
@@ -80,6 +82,8 @@ class InvoicesCest
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $this->invoceIdCreatedBySales = $response->data->invoice_id;
         $I->seeResponseMatchesJsonType([
             'data' => [
                 'invoice_id' => 'integer',
@@ -94,7 +98,7 @@ class InvoicesCest
         $I->wantTo('Testing create invoice as ADMIN');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
             "user_id"     =>  ValuesContainer::$userClient['id'],
-            "business_id" =>  1,
+            "business_id" =>  ValuesContainer::$BusinessID,
             "date_start"  => date('d/m/Y', strtotime('now -1 day')),
             "date_end"    => date('d/m/Y', strtotime('now')),
             "subtotal"    =>  200,
@@ -139,7 +143,9 @@ class InvoicesCest
             'data' => ['invoices' =>
                 [
                     [
+                        'id'            => 'integer',
                         'invoice_id'   => 'integer',
+                        'business_id'   => 'integer',
                         'customer'     => 'array|null',
                         'subtotal'     => 'integer|string',
                         'discount'     => 'integer|string',
@@ -178,6 +184,8 @@ class InvoicesCest
         $I->seeResponseMatchesJsonType([
             'data'  => [
                 [
+                    'invoice_id'   => 'integer',
+                    'business_id'   => 'integer',
                     "customer" =>  'array',
                     "start_date"   => 'string',
                     "end_date"     => 'string',
@@ -243,6 +251,136 @@ class InvoicesCest
     }
 
     /**
+     * @see https://jira.skynix.co/browse/SCA-155
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testDownloadPDFInvoice(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Test download PDF invoice function is not available for DEV');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->wantTo('Test download PDF invoice function is not available for CLIENT');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->wantTo('Test download PDF invoice function is not available for PM');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->wantTo('Test download PDF invoice function is available for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response->errors);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+        $I->wantTo('Test download PDF invoice function is available for FIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userFin['id']));
+        $pas = ValuesContainer::$userFin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->wantTo('Test download PDF invoice function does not work when SALES is trying to download not own invoice');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->wantTo('Test download PDF invoice function works when SALES is trying to download own invoice');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoceIdCreatedBySales . '/download');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+    }
+
+    /**
      * @see    https://jira-v2.skynix.company/browse/SI-974  changed with https://jira.skynix.co/browse/SCA-131
      * @param  FunctionalTester $I
      * @return void
@@ -266,5 +404,6 @@ class InvoicesCest
 
         $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 1]);
     }
+
 
 }

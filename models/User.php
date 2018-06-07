@@ -44,6 +44,7 @@ use app\modules\api\models\AccessKey;
  * @property integer $is_published
  * @property integer $auth_type
  * @property integer $is_available
+ * @property string $address
 
  *
  * @property ProjectCustomer[] $projectCustomers
@@ -114,7 +115,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['role', 'code', 'slug', 'languages', 'residence', 'link_linkedin',
-                'link_video', 'birthday', 'position', 'degree'], 'string'],
+                'link_video', 'birthday', 'position', 'degree', 'address'], 'string'],
 //    for save in db
 //    [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'Upload {extensions} files only', 'on' => [self::ATTACH_PHOTO_USERS]],
 //    [['sing'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpeg, jpg, png, gif', 'wrongExtension'=>'You can\'t upload files of this type.', 'on' => self::ATTACH_USERS_SIGN],

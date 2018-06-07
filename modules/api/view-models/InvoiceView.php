@@ -25,6 +25,7 @@ class InvoiceView extends ViewModelAbstract
 
             $id = Yii::$app->request->getQueryParam('id');
            $invoice = [];
+           /** @var  $invoiceModel Invoice */
             $invoiceModel = Invoice::find()
                 ->where(['id' => $id])
                 ->with('user')
@@ -32,6 +33,8 @@ class InvoiceView extends ViewModelAbstract
 
             if ($invoiceModel) {
                 $invoice[] = [
+                    'invoice_id'    => $invoiceModel->invoice_id,
+                    "business_id"   => $invoiceModel->business_id,
                     "customer" =>  [
                         "id" => $invoiceModel->user->id,
                         "name" => $invoiceModel->user->first_name . ' ' . $invoiceModel->user->last_name ,
