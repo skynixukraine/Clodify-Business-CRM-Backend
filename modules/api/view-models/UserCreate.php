@@ -30,6 +30,7 @@ class UserCreate extends ViewModelAbstract
         if( User::hasPermission( [User::ROLE_ADMIN] ) ) {
             if ($this->validate()) {
                 /** Create new user*/
+                $this->model->is_active = 1;
                 $this->model->save();
                 $this->setData([
                     'user_id' => $this->model->id
