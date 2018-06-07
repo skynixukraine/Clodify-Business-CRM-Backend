@@ -61,7 +61,8 @@ class UsersCest
                     'first_name' => FIRST_NAME,
                     'last_name'  => LAST_NAME,
                     'email'      => EMAIL,
-                    'role'       => ROLE
+                    'role'       => ROLE,
+                    'is_active' => 1
                 ]
             ]
         ]);
