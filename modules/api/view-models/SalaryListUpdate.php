@@ -43,8 +43,10 @@ class SalaryListUpdate extends ViewModelAbstract
                         $salaryListReport->setAttributes(
                             array_intersect_key($this->postData, array_flip($this->model->safeAttributes())), false
                         );
-                        $salaryListReport->worked_days  = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $working_days);
-                        $salaryListReport->day_off      =  $working_days - $salaryListReport->worked_days;
+                        $salaryListReport->worked_days      = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $working_days);
+                        $salaryListReport->vacation_value   = SalaryReportList::getVacationValue($salaryListReport, $working_days);
+
+                        $salaryListReport->day_off      =  $working_days + $salaryListReport->vacation_days - $salaryListReport->worked_days;
                         $salaryListReport->salary       = $user->salary;
                         $salaryListReport->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
                         $salaryListReport->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($salaryListReport, $working_days);

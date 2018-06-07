@@ -158,11 +158,12 @@ class SalaryReportsCest
         $I->wantTo('Testing create salary report lists');
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS . '/' . $this->salaryReportId . '/lists', json_encode(
             [
-                'user_id'          => ValuesContainer::$userSales['id'],
-                'hospital_days'    => '1',
-                'bonuses'          => '40',
-                'overtime_days'    => '0',
-                'other_surcharges' => '0',
+                'user_id'           => ValuesContainer::$userSales['id'],
+                'hospital_days'     => '1',
+                'bonuses'           => '40',
+                'overtime_days'     => '0',
+                'other_surcharges'  => '0',
+                'vacation_days'     => 0
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -259,6 +260,8 @@ class SalaryReportsCest
                         'day_off'                    => 'integer',
                         'overtime_days'              => 'integer',
                         'overtime_value'             => 'integer | float',
+                        'vacation_days'              => 'integer',
+                        'vacation_value'             => 'integer | float',
                         'other_surcharges'           => 'integer | float',
                         'subtotal'                   => 'integer | float',
                         'currency_rate'              => 'integer | float',

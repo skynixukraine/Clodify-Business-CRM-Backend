@@ -33,7 +33,8 @@ use Yii;
  * @property double $total_to_pay
  * @property integer $approved_hours
  * @property integer $worked_hours
- *
+ * @property integer $vacation_days
+ * @property double $vacation_value
  * @property SalaryReport $salaryReport
  * @property User $user
  */
@@ -61,14 +62,27 @@ class SalaryReportList extends \yii\db\ActiveRecord
         return [
             [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'bonuses', 'day_off', 'overtime_days', 'other_surcharges'], 'required',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
-            [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'day_off', 'overtime_days'],'integer',
+            [['salary_report_id', 'user_id', 'worked_days', 'hospital_days', 'day_off', 'vacation_days', 'overtime_days'],'integer',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
-            [['bonuses', 'other_surcharges', 'actually_worked_out_salary', 'overtime_value', 'currency_rate', 'subtotal_uah', 'total_to_pay', 'official_salary', 'hospital_value', 'subtotal'],'double',
-                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
+            [[
+                'bonuses',
+                'other_surcharges',
+                'actually_worked_out_salary',
+                'overtime_value',
+                'currency_rate',
+                'subtotal_uah',
+                'total_to_pay',
+                'official_salary',
+                'hospital_value',
+                'vacation_value',
+                'subtotal'
+            ],'double',
+                'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]
+            ],
             [['salary_report_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalaryReport::className(), 'targetAttribute' => ['salary_report_id' => 'id'],'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id'], 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_CREATE]],
-            [['worked_days', 'hospital_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
-            [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'subtotal_uah', 'total_to_pay'], 'double',
+            [['worked_days', 'hospital_days', 'vacation_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
+            [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'vacation_value', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['worked_hours', 'approved_hours'], 'integer'],
         ];
@@ -96,10 +110,13 @@ class SalaryReportList extends \yii\db\ActiveRecord
             'other_surcharges' => 'Other Surcharges',
             'subtotal' => 'Subtotal',
             'currency_rate' => 'Currency Rate',
-            'subtotal_uah' => 'Subtotal Uah',
-            'total_to_pay' => 'Total To Pay',
-            'worked_hours' => 'Worked Hours',
-            'approved_hours' => 'Approved Hours'
+            'subtotal_uah'  => 'Subtotal Uah',
+            'total_to_pay'  => 'Total To Pay',
+            'worked_hours'  => 'Worked Hours',
+            'approved_hours'    => 'Approved Hours',
+            'vacation_days'     => 'Vacation Days',
+            'vacation_value'    => 'Vacation Value',
+
         ];
     }
 
@@ -157,6 +174,20 @@ class SalaryReportList extends \yii\db\ActiveRecord
         $result = null;
         if ($workingDays) {
             $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->worked_days;
+        }
+        return $result;
+    }
+
+    /**
+     * @param SalaryReportList $salaryListReport
+     * @param $workingDays
+     * @return float|int|null
+     */
+    public static function getVacationValue(SalaryReportList $salaryListReport, $workingDays)
+    {
+        $result = null;
+        if ($workingDays) {
+            $result = $salaryListReport->vacation_days * ($salaryListReport->salary / $workingDays);
         }
         return $result;
     }

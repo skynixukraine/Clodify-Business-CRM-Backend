@@ -84,6 +84,8 @@ class SalaryReportFetchList extends ViewModelAbstract
                         "currency_rate"              => $salRepList->currency_rate,
                         "subtotal_uah"               => $salRepList->subtotal_uah,
                         "total_to_pay"               => $salRepList->total_to_pay,
+                        "vacation_days"              => $salRepList->vacation_days,
+                        "vacation_value"             => $salRepList->vacation_value,
                         "reported_hours"             => SalaryReportList::sumReportedHoursForMonthPerUser($salRepList),
                         "approved_hours"             => SalaryReportList::sumApprovedHoursForMonthPerUser($salRepList)
                     ];
