@@ -9,6 +9,14 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $name_ua
+ * @property string $address
+ * @property string $address_ua
+ * @property string $represented_by
+ * @property string $represented_by_ua
+ * @property string $bank_information
+ * @property string $bank_information_ua
+ * @property integer $invoice_increment_id
  *
  * @property Operation[] $operations
  */
@@ -28,7 +36,9 @@ class Business extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
+            [['name', 'name_ua', 'address', 'address_ua'], 'string', 'max' => 255],
+            [['bank_information', 'bank_information_ua'], 'string', 'max' => 1500],
+            [['invoice_increment_id'], 'integer'],
         ];
     }
 

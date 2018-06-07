@@ -7,6 +7,7 @@
 
 namespace app\modules\api\controllers;
 
+use app\models\Invoice;
 use app\modules\api\components\Api\Processor;
 
 class InvoicesController extends DefaultController
@@ -28,6 +29,7 @@ class InvoicesController extends DefaultController
     public function actionCreate()
     {
         $this->di
+            ->set('app\models\Invoice', ['scenario' => Invoice::SCENARIO_INVOICE_CREATE])
             ->set('yii\db\ActiveRecordInterface', 'app\models\Invoice')
             ->set('viewModel\ViewModelInterface', 'viewModel\InvoiceCreate')
             ->set('app\modules\api\components\Api\Access', [
@@ -77,6 +79,19 @@ class InvoicesController extends DefaultController
             ->set('viewModel\ViewModelInterface', 'viewModel\InvoicePaid')
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [Processor::METHOD_PUT ],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionDownload()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Invoice')
+            ->set('viewModel\ViewModelInterface', 'viewModel\InvoiceDownload')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'     => [Processor::METHOD_GET],
                 'checkAccess' => true
             ])
             ->get('Processor')

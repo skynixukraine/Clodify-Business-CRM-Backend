@@ -34,7 +34,7 @@ class OAuthSteps extends \FunctionalTester
             ]
         ]);
         $response  = json_decode($I->grabResponse());
-        codecept_debug($response);
+        codecept_debug("Logged In As " . $email);
         $accessToken = $response->data->access_token;
         OAuthToken::$key = $accessToken;
 
