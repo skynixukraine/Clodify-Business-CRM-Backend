@@ -43,18 +43,20 @@ class SalaryListCreate extends ViewModelAbstract
 
                                     $this->working_days = FinancialReport::getNumOfWorkingDays($salaryReport->report_date);
 
-                                    $this->model->salary = $user->salary;
-                                    $this->model->salary_report_id = $salaryReportId;
-                                    $this->model->worked_days = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $this->working_days);
-                                    $this->model->currency_rate = FinancialReport::getCurrency($salaryReport->report_date);
+                                    $this->model->salary            = $user->salary;
+                                    $this->model->salary_report_id  = $salaryReportId;
+                                    $this->model->worked_days       = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $this->working_days);
+                                    $this->model->currency_rate     = FinancialReport::getCurrency($salaryReport->report_date);
                                     $this->model->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($this->model, $this->working_days);
-                                    $this->model->official_salary = $user->official_salary;
-                                    $this->model->hospital_value = SalaryReportList::getHospitalValue($this->model, $this->working_days);
-                                    $this->model->day_off =  $this->working_days - $this->model->worked_days;
-                                    $this->model->overtime_value = SalaryReportList::getOvertimeValue($this->model, $this->working_days);
-                                    $this->model->subtotal = SalaryReportList::getSubtotal($this->model);
-                                    $this->model->subtotal_uah = SalaryReportList::getSubtotalUah($this->model);
-                                    $this->model->total_to_pay = SalaryReportList::getTotalToPay($this->model);
+                                    $this->model->official_salary   = $user->official_salary;
+                                    $this->model->hospital_value    = SalaryReportList::getHospitalValue($this->model, $this->working_days);
+                                    $this->model->vacation_value    = SalaryReportList::getVacationValue($this->model, $this->working_days);
+                                    $this->model->day_off           = $this->working_days + $this->model->vacation_days -  $this->model->worked_days;
+                                    $this->model->overtime_value    = SalaryReportList::getOvertimeValue($this->model, $this->working_days);
+                                    $this->model->subtotal          = SalaryReportList::getSubtotal($this->model);
+                                    $this->model->subtotal_uah      = SalaryReportList::getSubtotalUah($this->model);
+                                    $this->model->total_to_pay      = SalaryReportList::getTotalToPay($this->model);
+
                                     if ($this->validate() && $this->model->save()) {
 
                                         $this->setData([
