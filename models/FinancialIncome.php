@@ -14,6 +14,7 @@ use Yii;
  * @property int $project_id
  * @property int $added_by_user_id
  * @property int $developer_user_id
+ * @property int $financial_report_id
  *
  * @property Projects $project
  * @property Users $addedByUser
@@ -34,7 +35,7 @@ class FinancialIncome extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'project_id', 'added_by_user_id', 'developer_user_id'], 'integer'],
+            [['date', 'project_id', 'added_by_user_id', 'developer_user_id', 'financial_report_id'], 'integer'],
             [['amount'], 'number'],
             [['description'], 'string'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
@@ -64,6 +65,14 @@ class FinancialIncome extends \yii\db\ActiveRecord
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinancialReport()
+    {
+        return $this->hasOne(FinancialReport::className(), ['id' => 'financial_report_id']);
     }
 
     /**

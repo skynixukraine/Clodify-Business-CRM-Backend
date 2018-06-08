@@ -71,17 +71,17 @@ class FinancialReportFetch extends ViewModelAbstract
                     $financialReport[$key] = [
                         'id'                  => $finRep->id,
                         'report_date'         => DateUtil::dateRangeForFetch($finRep->report_date),
-                        'balance'             => '$' . strval(FinancialReport::getBalance($finRep->id)),
+                        'balance'             => strval(FinancialReport::getBalance($finRep->id)),
                         'currency'            => $finRep->currency ? $finRep->currency : 0,
-                        'expenses'            => '$' . strval(FinancialReport::sumExpenses($finRep->id)),
-                        'investments'         => '$' . strval(FinancialReport::sumInvestments($finRep->id)),
-                        'spent_corp_events'   => '$' . strval(FinancialReport::sumSpentCorpEvents($finRep->id)),
+                        'expenses'            => strval(FinancialReport::sumExpenses($finRep->id)),
+                        'investments'         => strval(FinancialReport::sumInvestments($finRep->id)),
+                        'spent_corp_events'   => strval(FinancialReport::sumSpentCorpEvents($finRep->id)),
                         'num_of_working_days' => $finRep->num_of_working_days,
                         'is_locked'           => $finRep->is_locked
                     ];
                     if (User::hasPermission([User::ROLE_ADMIN])) {
-                        $financialReport[$key]['income'] = '$' . strval(FinancialReport::sumIncome($finRep->id));
-                        $financialReport[$key]['profit'] = '$' . strval(FinancialReport::getProfit($finRep->id));
+                        $financialReport[$key]['income'] = FinancialReport::sumIncome($finRep->id);
+                        $financialReport[$key]['profit'] = FinancialReport::getProfit($finRep->id);
                     }
                 }
 
