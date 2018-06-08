@@ -66,15 +66,6 @@ class FinancialReportsCest
      */
     public function testUpdateFinancialReportsCest(FunctionalTester $I)
     {
-        $income = array(
-            array(
-
-                "amount" => 2000,
-                "description" => "Some Income1",
-                "date" => 1521676800
-            ),
-        );
-
         $expenses = array(
             array(
                 "amount" => 200,
@@ -106,7 +97,6 @@ class FinancialReportsCest
                 'currency'            => 26.6,
                 'expense_salary'      => 3000,
                 'num_of_working_days' => 30,
-                'income'              => $income,
                 'expense_constant'    => $expenses,
                 'investments'         => $investments,
                 'spent_corp_events'   => $spent_corp_events,
@@ -146,7 +136,6 @@ class FinancialReportsCest
                 'id'                  => 'integer',
                 'report_date'         => 'string',
                 'num_of_working_days' => 'integer|null',
-                'income'              => 'array',
                 'currency'            => 'float',
                 'expense_constant'    => 'array',
                 'expense_salary'      => 'integer',
@@ -181,9 +170,8 @@ class FinancialReportsCest
                         'report_date'         => 'string',
                         'balance'             => 'string',
                         'currency'            => 'float',
-                        'income'              => 'string',
                         'expenses'            => 'string',
-                        'profit'              => 'string',
+                        'profit'              => 'integer',
                         'investments'         => 'string',
                         'spent_corp_events'   => 'string',
                         'num_of_working_days' => 'integer|null',
@@ -192,9 +180,9 @@ class FinancialReportsCest
                 ],
             
             'meta'    => [
-            'total'   => 'string',
-            'errors'  => 'array',
-            'success' => 'boolean'
+                'total'   => 'string',
+                'errors'  => 'array',
+                'success' => 'boolean'
             ]
         ]);
     }
@@ -218,9 +206,8 @@ class FinancialReportsCest
                         'report_date'         => 'string',
                         'balance'             => 'string',
                         'currency'            => 'float',
-                        'income'              => 'string',
                         'expenses'            => 'string',
-                        'profit'              => 'string',
+                        'profit'              => 'integer',
                         'investments'         => 'string',
                         'spent_corp_events'   => 'string',
                         'num_of_working_days' => 'integer|null',
@@ -243,14 +230,6 @@ class FinancialReportsCest
      */
     public function testLockFinancialReportsCest(FunctionalTester $I)
     {
-        $income = array(
-            array(
-
-                "amount" => 2000,
-                "description" => "Some Income1",
-                "date" => 123243543545
-            ),
-        );
 
         $expenses = array(
             array(
@@ -281,7 +260,6 @@ class FinancialReportsCest
             json_encode([
                 'year'              => 2111,
                 'expense_salary'    => 3000,
-                'income'            => $income,
                 'expense_constant'  => $expenses,
                 'investments'       => $investments,
                 'spent_corp_events' => $spent_corp_events,
@@ -339,7 +317,6 @@ class FinancialReportsCest
                 [
                     'id'                => 'integer',
                     'year'              => 'integer',
-                    'income'            => 'integer',
                     'expense_constant'  => 'integer',
                     'investments'       => 'integer',
                     'expense_salary'    => 'integer',

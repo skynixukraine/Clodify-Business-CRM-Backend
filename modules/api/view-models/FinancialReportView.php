@@ -37,9 +37,6 @@ class FinancialReportView extends ViewModelAbstract
                         'currency',
                         'expense_salary',
                         'num_of_working_days',
-                        'income' => function ($financialReport) {
-                            return $financialReport->income ? json_decode($financialReport->income) : [];
-                        },
                         'expense_constant' => function ($financialReport) {
                             return $financialReport->expense_constant ? json_decode($financialReport->expense_constant) : [];
                         },

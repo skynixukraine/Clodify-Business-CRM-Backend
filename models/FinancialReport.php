@@ -10,7 +10,6 @@ use yii\log\Logger;
  *
  * @property integer $id
  * @property integer $report_date
- * @property string $income
  * @property double $currency
  * @property string $expense_constant
  * @property double $expense_salary
@@ -46,7 +45,7 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
-            [['income', 'expense_constant', 'investments', 'spent_corp_events'], 'string',
+            [['expense_constant', 'investments', 'spent_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
@@ -64,7 +63,6 @@ class FinancialReport extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'report_date' => 'Report Date',
-            'income' => 'Income',
             'currency' => 'Currency',
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
@@ -75,23 +73,38 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinancialIncome()
+    {
+        return $this->hasMany(FinancialIncome::className(), ['financial_report_id' => 'id']);
+    }
+
+    /**
      * income = sum of all income amounts
      * @param $id
      * @return int
      */
     public static function sumIncome($id)
     {
+        /** @var  $financialReport $this */
         $financialReport = FinancialReport::findOne($id);
-        $financialReport = json_decode($financialReport->income);
+        $incomeItems = $financialReport->getFinancialIncome()->all();
         $incomeSum = 0;
 
-        if ($financialReport) {
-            foreach ($financialReport as $income) {
-                $incomeSum += (int)$income->amount;
+        if ($financialReport && $incomeItems) {
+            /** @var  $income FinancialIncome */
+            foreach ($incomeItems as $income) {
+                $incomeSum += (float)$income->amount;
             }
         }
 
-        return $incomeSum;
+        return round($incomeSum, 2);
+    }
+
+    public static function processIncome()
+    {
+
     }
 
     /**

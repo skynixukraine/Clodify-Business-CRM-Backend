@@ -32,14 +32,6 @@ class FinancialReportUpdate extends ViewModelAbstract
 
                 if (!$financialReport->is_locked) {
 
-                    if (isset($this->postData['income']) && User::hasPermission([User::ROLE_ADMIN])) {
-
-                        $this->postData['income'] = $this->getElement('income');
-
-                    } else {
-                        unset($this->postData['income']);
-                    }
-
                     if (isset($this->postData['expense_constant'])) {
 
                         $this->postData['expense_constant'] = $this->getElement('expense_constant');
