@@ -168,12 +168,12 @@ class FinancialReportsCest
                     [
                         'id'                  => 'integer',
                         'report_date'         => 'string',
-                        'balance'             => 'string',
+                        'balance'             => 'integer',
                         'currency'            => 'float',
-                        'expenses'            => 'string',
+                        'expenses'            => 'integer',
                         'profit'              => 'integer',
-                        'investments'         => 'string',
-                        'spent_corp_events'   => 'string',
+                        'investments'         => 'integer',
+                        'spent_corp_events'   => 'integer',
                         'num_of_working_days' => 'integer|null',
                         'is_locked'           => 'integer',
                     ]
@@ -204,14 +204,53 @@ class FinancialReportsCest
                     [
                         'id'                  => 'integer',
                         'report_date'         => 'string',
-                        'balance'             => 'string',
+                        'balance'             => 'integer',
                         'currency'            => 'float',
-                        'expenses'            => 'string',
+                        'expenses'            => 'integer',
                         'profit'              => 'integer',
-                        'investments'         => 'string',
-                        'spent_corp_events'   => 'string',
+                        'investments'         => 'integer',
+                        'spent_corp_events'   => 'integer',
                         'num_of_working_days' => 'integer|null',
                         'is_locked'           => 'integer',
+                    ]
+                ],
+
+            'meta'    => [
+                'total'   => 'string',
+                'errors'  => 'array',
+                'success' => 'boolean'
+            ]
+        ]);
+    }
+
+
+    public function testFetchFinancilReportBySALESCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $period = urlencode("01/" . (ValuesContainer::$FinancialReportDate - 1) . "/" . date("Y") . " ~ " .
+            "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" . date("Y"));
+
+        $I->wantTo('Testing fetch financial report data by SALES with search_query e.g. d/m/Y ~ d/m/Y');
+
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . $period);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->meta->errors);
+        $I->assertEquals(true, $response->meta->success);
+        $I->seeResponseMatchesJsonType([
+            'financialReport' =>
+                [
+                    [
+                        'id'                    => 'integer',
+                        'report_date'           => 'string',
+                        'developer_expenses'    => 'float|integer',
+                        'income'                => 'float|integer',
+                        'bonuses'               => 'float|integer'
                     ]
                 ],
 
