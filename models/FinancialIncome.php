@@ -21,6 +21,9 @@ use Yii;
  */
 class FinancialIncome extends \yii\db\ActiveRecord
 {
+
+    const SCENARIO_FINANCIAL_INCOME_CREATE = 'api-financial_income-create';
+
     /**
      * @inheritdoc
      */
@@ -35,7 +38,8 @@ class FinancialIncome extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'project_id', 'added_by_user_id', 'developer_user_id', 'financial_report_id'], 'integer'],
+            [['date', 'project_id', 'developer_user_id'], 'integer'],
+            [['added_by_user_id', 'financial_report_id'], 'integer', 'on' => self::SCENARIO_FINANCIAL_INCOME_CREATE],
             [['amount'], 'number'],
             [['description'], 'string'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],

@@ -38,4 +38,6 @@ class ApiEndpoints
     const RESOURCES               = '/api/resources';
     const EMERGENCY               = '/api/emergency';
     const DELAYED_SALARY          = '/api/delayed-salary';
+    const FINANCIAL_REPORTS_INCOME= '/income';
+
 }
