@@ -83,13 +83,20 @@ class FinancialReport extends \yii\db\ActiveRecord
     /**
      * income = sum of all income amounts
      * @param $id
+     * @param $userId
      * @return int
      */
-    public static function sumIncome($id)
+    public static function sumIncome($id, $userId = null)
     {
         /** @var  $financialReport $this */
         $financialReport = FinancialReport::findOne($id);
-        $incomeItems = $financialReport->getFinancialIncome()->all();
+        $incomeQuery = $financialReport->getFinancialIncome();
+        if ( $userId > 0 ) {
+
+            $incomeQuery->where(['added_by_user_id' => $userId]);
+
+        }
+        $incomeItems   = $incomeQuery->all();
         $incomeSum = 0;
 
         if ($financialReport && $incomeItems) {
@@ -100,11 +107,6 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return round($incomeSum, 2);
-    }
-
-    public static function processIncome()
-    {
-
     }
 
     /**
@@ -125,6 +127,34 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return $expenseConstantSum;
+    }
+
+    /**
+     * @param $id
+     * @param $userSalesId
+     * @return int|mixed
+     */
+    public static function sumDeveloperExpenses($id, $userSalesId)
+    {
+        $financialReport = FinancialReport::findOne($id);
+
+        $projectsDeveloper = ProjectDeveloper::getReportsOfSales( $userSalesId );
+        $projectIds = [];
+        foreach($projectsDeveloper as $project){
+
+            $projectIds[] = $project->project_id;
+
+        }
+        $projectIds = $projectIds ? implode(', ', $projectIds) : 0;
+
+        $dateFrom   = date('Y-m-01', $financialReport->report_date);
+        $toDate     = date('Y-m-t', $financialReport->report_date);
+        $expenses = Report::find()
+            ->where(Report::tableName() . '.project_id IN (' . $projectIds . ') ')
+            ->andWhere(['between', 'date_report', $dateFrom, $toDate ])
+            ->sum('cost');
+
+        return $expenses > 0 ? $expenses : 0;
     }
 
     /**

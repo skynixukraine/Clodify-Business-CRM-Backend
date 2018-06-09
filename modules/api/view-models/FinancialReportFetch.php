@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\models\FinancialIncome;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -25,7 +26,7 @@ class FinancialReportFetch extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             $order    = Yii::$app->request->getQueryParam('order');
             $start    = Yii::$app->request->getQueryParam('start') ?: 0;
             $limit    = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
@@ -68,21 +69,36 @@ class FinancialReportFetch extends ViewModelAbstract
             if ($financialReport) {
 
                 foreach ($financialReport as $key => $finRep) {
-                    $financialReport[$key] = [
+
+                    $rep = [
                         'id'                  => $finRep->id,
                         'report_date'         => DateUtil::dateRangeForFetch($finRep->report_date),
-                        'balance'             => strval(FinancialReport::getBalance($finRep->id)),
-                        'currency'            => $finRep->currency ? $finRep->currency : 0,
-                        'expenses'            => strval(FinancialReport::sumExpenses($finRep->id)),
-                        'investments'         => strval(FinancialReport::sumInvestments($finRep->id)),
-                        'spent_corp_events'   => strval(FinancialReport::sumSpentCorpEvents($finRep->id)),
-                        'num_of_working_days' => $finRep->num_of_working_days,
-                        'is_locked'           => $finRep->is_locked
                     ];
-                    if (User::hasPermission([User::ROLE_ADMIN])) {
-                        $financialReport[$key]['income'] = FinancialReport::sumIncome($finRep->id);
-                        $financialReport[$key]['profit'] = FinancialReport::getProfit($finRep->id);
+
+                    if (User::hasPermission([User::ROLE_SALES])) {
+
+                        //For SALES output only income posted by themself
+                        $rep['income']              = FinancialReport::sumIncome($finRep->id, Yii::$app->user->id);
+                        $rep['developer_expenses']  = FinancialReport::sumDeveloperExpenses($finRep->id, Yii::$app->user->id);
+                        $rep['bonuses']             = round(( $rep['income'] - $rep['developer_expenses'] ) * 0.1, 2);
+
+                    } else {
+
+                        $rep['balance']             = FinancialReport::getBalance($finRep->id);
+                        $rep['currency']            = $finRep->currency ? $finRep->currency : 0;
+                        $rep['expenses']            = FinancialReport::sumExpenses($finRep->id);
+                        $rep['investments']         = FinancialReport::sumInvestments($finRep->id);
+                        $rep['spent_corp_events']   = FinancialReport::sumSpentCorpEvents($finRep->id);
+                        $rep['num_of_working_days'] = $finRep->num_of_working_days;
+                        $rep['is_locked']   = $finRep->is_locked;
+
                     }
+                    if (User::hasPermission([User::ROLE_ADMIN])) {
+                        $rep['income'] = FinancialReport::sumIncome($finRep->id);
+                        $rep['profit'] = FinancialReport::getProfit($finRep->id);
+                    }
+                    $financialReport[$key] = $rep;
+
                 }
 
             } else {
