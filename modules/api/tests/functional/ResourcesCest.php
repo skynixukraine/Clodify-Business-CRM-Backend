@@ -85,7 +85,7 @@ class ResourcesCest
     public function testUserUnAvailableStartedWorking(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
-        $date = time()-7200; // two hours before
+        $date = time()-60; // two hours before
 
         $I->haveInDatabase('availability_logs', array(
             'id'        => 2,
