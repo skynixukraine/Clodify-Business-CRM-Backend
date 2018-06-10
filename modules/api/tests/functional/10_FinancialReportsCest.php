@@ -440,4 +440,64 @@ class FinancialReportsCest
 
     }
 
+    public function testFetchFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing fetch financial income data by SALES');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME);
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'array',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+        $amount = 0;
+        foreach ( $response->data as $item ) {
+
+            $amount += $item->amount;
+
+        }
+        $I->assertEquals($amount, $this->salesIncome);
+
+
+        $I->wantTo('Testing fetch financial income data by ADMIN');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas    = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME);
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'array',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+        $amount = 0;
+        foreach ( $response->data as $item ) {
+
+            $amount += $item->amount;
+
+        }
+        $I->assertEquals($amount, ($this->salesIncome + $this->adminIncome));
+
+    }
+
 }

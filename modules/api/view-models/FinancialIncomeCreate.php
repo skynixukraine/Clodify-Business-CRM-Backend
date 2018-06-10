@@ -8,11 +8,7 @@
 
 namespace viewModel;
 
-use app\models\DelayedSalary;
 use app\models\FinancialReport;
-use app\models\FinancialYearlyReport;
-use app\models\SalaryReport;
-use app\models\SalaryReportList;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;

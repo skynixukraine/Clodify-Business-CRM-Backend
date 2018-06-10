@@ -125,4 +125,17 @@ class FinancialReportsController extends DefaultController
             ->respond();
     }
 
+    public function actionIncomeFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialIncome')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialIncomeFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
