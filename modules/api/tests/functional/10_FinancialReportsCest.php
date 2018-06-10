@@ -20,7 +20,11 @@ class FinancialReportsCest
 
     private $salesIncome = 500.5;
 
+    private $salesIncomeId;
+
     private $adminIncome = 300;
+
+    private $adminIncomeId;
 
     /**
      * @param \Codeception\Scenario $scenario
@@ -440,6 +444,11 @@ class FinancialReportsCest
 
     }
 
+    /**
+     * @see https://jira.skynix.co/browse/SCA-177
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
     public function testFetchFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
@@ -466,6 +475,7 @@ class FinancialReportsCest
         foreach ( $response->data as $item ) {
 
             $amount += $item->amount;
+            $this->salesIncomeId = $item->id;
 
         }
         $I->assertEquals($amount, $this->salesIncome);
@@ -494,10 +504,98 @@ class FinancialReportsCest
         foreach ( $response->data as $item ) {
 
             $amount += $item->amount;
+            if ( $item->added_by_user_id == ValuesContainer::$userAdmin['id'] ) {
+
+                $this->adminIncomeId = $item->id;
+
+            }
 
         }
         $I->assertEquals($amount, ($this->salesIncome + $this->adminIncome));
 
+    }
+
+
+    public function testDeleteFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing delete not own financial income data by SALES is not available');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendDELETE(ApiEndpoints::FINANCIAL_REPORTS . '/' .
+            $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME . "/" . $this->adminIncomeId );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+
+        $I->wantTo('Testing delete own financial income data by SALES is available');
+
+        $I->sendDELETE(ApiEndpoints::FINANCIAL_REPORTS . '/' .
+            $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME . "/" . $this->salesIncomeId );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'null',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+        $I->wantTo('Testing delete financial income data by ADMIN');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas    = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendDELETE(ApiEndpoints::FINANCIAL_REPORTS . '/' .
+            $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME . "/" . $this->adminIncomeId );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'null',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+        $I->wantTo('Testing fetch financial income data by ADMIN, no income, it is all deleted');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas    = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME);
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'array',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->assertEquals(count($response->data), 0);
     }
 
 }
