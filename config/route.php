@@ -45,6 +45,7 @@ return [
     'PUT '      . $API . '/financial-reports/<id:\d+>'                        => $API . '/financial-reports/update',
     'PUT '      . $API . '/financial-reports/<id:\d+>/lock'                   => $API . '/financial-reports/lock',
     'POST '     . $API . '/financial-reports/<id:\d+>/income'                 => $API . '/financial-reports/income-add',
+    'GET '      . $API . '/financial-reports/<id:\d+>/income'                 => $API . '/financial-reports/income-fetch',
     'GET '      . $API . '/financial-reports/yearly'                          => $API . '/financial-reports/yearly',
     'GET '      . $API . '/salary-reports'                                    => $API . '/salary-reports/fetch',
     'POST '     . $API . '/salary-reports'                                    => $API . '/salary-reports/create',
