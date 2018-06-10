@@ -138,4 +138,17 @@ class FinancialReportsController extends DefaultController
             ->respond();
     }
 
+    public function actionIncomeDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialIncome')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialIncomeDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
