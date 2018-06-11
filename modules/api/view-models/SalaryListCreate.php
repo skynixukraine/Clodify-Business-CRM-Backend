@@ -7,6 +7,7 @@
  */
 namespace viewModel;
 
+use app\models\WorkHistory;
 use Yii;
 use app\models\FinancialReport;
 use app\models\SalaryReportList;
@@ -58,6 +59,18 @@ class SalaryListCreate extends ViewModelAbstract
                                     $this->model->total_to_pay      = SalaryReportList::getTotalToPay($this->model);
 
                                     if ($this->validate() && $this->model->save()) {
+
+                                        if ( $this->model->day_off > 0 ) {
+
+                                            WorkHistory::create(
+                                                WorkHistory::TYPE_USER_FAILS,
+                                                $user->id,
+                                                \Yii::t('app', '- Did not work {num} days', [
+                                                    'num' => $this->model->day_off
+                                                ])
+                                            );
+
+                                        }
 
                                         $this->setData([
                                             'list_id' => $this->model->id

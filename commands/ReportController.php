@@ -10,6 +10,7 @@ namespace app\commands;
 use app\models\Report;
 use app\models\User;
 use app\models\Project;
+use app\models\WorkHistory;
 use yii\console\Controller;
 use app\models\AvailabilityLog;
 use app\models\ProjectDeveloper;
@@ -24,6 +25,81 @@ class ReportController extends Controller
     {
         try {
             Report::approveTodayReports();
+
+            if ( date('N') < 6 ) {
+
+
+                $itemsReported = \Yii::$app->db->createCommand("
+                    SELECT users.id, sum(reports.hours) AS s FROM users 
+                    LEFT JOIN reports ON users.id=reports.user_id 
+                    WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
+                    users.is_active=1 AND
+                     ( reports.date_report IS NULL OR reports.date_report =':date_report' )
+                    GROUP By users.id
+                    HAVING s > 6;", [
+                    ':date_report'  => date('Y-m-d')
+                ])->queryAll();
+                foreach ( $itemsReported as $user ) {
+
+                    if ( $user['s'] > 8 ) {
+
+                        WorkHistory::create(
+                            WorkHistory::TYPE_USER_EFFORTS,
+                            $user['id'],
+                            \Yii::t('app', '+ Reported more then 8 hours - Overtimed, reported {hours} hours on {date}', [
+                                'hours' => $user['s'],
+                                'date'  => date('Y-m-d')
+                            ])
+                        );
+
+                    }
+                }
+                //BE sure this is working day and other were reported hours
+                if ( count($itemsReported ) > 5) {
+
+                    //Fetch users with less then 8 reported hours
+                    $items = \Yii::$app->db->createCommand("
+                        SELECT users.*, sum(reports.hours) AS s FROM users 
+                        LEFT JOIN reports ON users.id=reports.user_id 
+                        WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
+                        users.is_active=1 AND
+                         ( reports.date_report IS NULL OR reports.date_report =':date_report' )
+                        GROUP By users.id
+                        HAVING s < 6;", [
+                        ':date_report'  => date('Y-m-d')
+                    ])->queryAll();
+
+                    foreach ( $items as $user ) {
+
+                        $mail = \Yii::$app->mailer->compose('missedHoursNotification', [
+                            'username'  => $user['first_name'],
+                            'hours'     => $user['s']
+                        ])
+                            ->setFrom(\Yii::$app->params['adminEmail'])
+                            ->setTo($user['email'])
+                            ->setSubject('Skynix CRM: Missed Hours Notification');
+
+                        $mail->send();
+
+                        WorkHistory::create(
+                            WorkHistory::TYPE_USER_FAILS,
+                            $user['id'],
+                            \Yii::t('app', '- Reported less then 8 hours - Reported only {hours} hours on {date}', [
+                                'hours' => $user['s'],
+                                'date'  => date('Y-m-d')
+                            ])
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+
+
+
             echo 0;
         } catch (\Exception $e) {
             \Yii::error($e->getMessage());

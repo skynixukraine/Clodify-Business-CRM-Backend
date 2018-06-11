@@ -5,9 +5,7 @@ namespace app\models;
 use app\modules\cp\controllers\IndexController;
 use Yii;
 use yii\web\IdentityInterface;
-use yii\db\Expression;
 use yii\db\ActiveQuery;
-use yii\web\UploadedFile;
 use app\modules\api\models\AccessKey;
 
 /**
@@ -45,8 +43,7 @@ use app\modules\api\models\AccessKey;
  * @property integer $auth_type
  * @property integer $is_available
  * @property string $address
-
- *
+ * @property integer $official_salary
  * @property ProjectCustomer[] $projectCustomers
  * @property Project[] $projects
  * @property ProjectDeveloper[] $projectDevelopers
@@ -392,6 +389,36 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $oldData = $this->getOldAttributes();
             if ($this->salary && $this->salary != $oldData['salary']) {
                 $this->date_salary_up = date("Y-m-d");
+                WorkHistory::create(
+                    WorkHistory::TYPE_ADMIN_BENEFITS,
+                    $this->id,
+                    Yii::t('app', '~ Salary changes - Salary changed from ${from} to ${to} on {on}', [
+                        'from'  => $this->salary,
+                        'to'    => $oldData['salary'],
+                        'on'    => $this->date_salary_up
+                    ])
+                );
+            }
+            if ($this->official_salary && $this->official_salary != $oldData['official_salary']) {
+                WorkHistory::create(
+                    WorkHistory::TYPE_ADMIN_BENEFITS,
+                    $this->id,
+                    Yii::t('app', '~ Official Salary changes - Official Salary changed from ${from} to ${to} on {on}', [
+                        'from'  => $this->official_salary,
+                        'to'    => $oldData['official_salary'],
+                        'on'    => date("Y-m-d")
+                    ])
+                );
+            }
+
+            if ($this->tags && isset($oldData['tags']) && $this->tags != $oldData['tags']) {
+                WorkHistory::create(
+                    WorkHistory::TYPE_ADMIN_BENEFITS,
+                    $this->id,
+                    Yii::t('app', '+ Added a new skill: {skill}', [
+                        'skill'  => ltrim(str_replace( $this->tags, "", $oldData['tags']), ',')
+                    ])
+                );
             }
 
             if ($this->password && $this->password != $oldData['password']) {
