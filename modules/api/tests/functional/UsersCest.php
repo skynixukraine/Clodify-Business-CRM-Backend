@@ -174,7 +174,6 @@ class UsersCest
      */
     public function testEditUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        define('userIdEdit', 1);
         define('first_name', 'ChangedFirst');
         define('last_name', 'ChangedLast');
         define('salary', 150);
@@ -184,13 +183,15 @@ class UsersCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->sendPUT(ApiEndpoints::USERS . '/' . userIdEdit, json_encode([
+        $I->sendPUT(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'], json_encode([
             'first_name'      => first_name,
             'last_name'       => last_name,
             'salary'          => salary,
             'phone'           => phone,
             'official_salary' => 8000,
-            'auth_type'       => AUTH_TYPE_CROWD
+            'auth_type'       => AUTH_TYPE_CROWD,
+            'slug'            => 'crm-dev',
+            'is_published'    => true
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -199,7 +200,7 @@ class UsersCest
         $I->assertEquals(true, $response->success);
 
         // Make sure that user's data was updated
-        $I->sendGET(ApiEndpoints::USERS . '/' . userIdEdit);
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

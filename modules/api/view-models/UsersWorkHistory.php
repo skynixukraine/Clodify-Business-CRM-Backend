@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\WorkHistory;
 use app\models\User;
@@ -17,16 +18,36 @@ class UsersWorkHistory extends ViewModelAbstract
 
     public function define()
     {
-        $slug = Yii::$app->request->getQueryParam('slug');
 
-        if (!($user = User::findOne(['slug' => $slug])) || $user->is_published != true) {
-            return $this->addError('work-history', 'Sorry, no access to data');
+        $dateFrom   = Yii::$app->request->getQueryParam("dateFrom", date('Y-m-d'));
+        $dateTo     = Yii::$app->request->getQueryParam("dateTo", date('Y-m-d'));
+        $workHistory = WorkHistory::find();
+        $workHistory->where(['between', 'date_start', $dateFrom, $dateTo]);
+        if ( User::hasPermission([User::ROLE_ADMIN]) &&
+            ($id = Yii::$app->request->getQueryParam('id')) &&
+            ($user = User::findOne($id)) ) {
+
+
+            $workHistory = $workHistory
+                ->andWhere([WorkHistory::tableName() . '.user_id' => $user->id])
+                ->orderBy(['id' => SORT_DESC])
+                ->all();
+
+        } else if ( ($slug = Yii::$app->request->getQueryParam('slug')) &&
+            ($user = User::findOne(['slug' => $slug])) &&
+            $user->is_published == true) {
+
+            $workHistory = $workHistory
+                ->andWhere(['type' => WorkHistory::TYPE_PUBLIC])
+                ->andWhere([WorkHistory::tableName() . '.user_id' => $user->id])
+                ->orderBy(['id' => SORT_DESC])
+                ->all();
+
+        } else {
+
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, no access to data'));
         }
 
-        $workHistory = WorkHistory::find()
-            ->andWhere([WorkHistory::tableName() . '.user_id' => $user->id])
-            ->orderBy(['date_start' => SORT_DESC])
-            ->all();
 
         $workHistory = ArrayHelper::toArray($workHistory, [
             WorkHistory::className() => [

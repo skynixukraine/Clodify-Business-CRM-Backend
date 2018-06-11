@@ -24,6 +24,7 @@ return [
     'POST '     . $API . '/surveys'                                           => $API . '/surveys/create',
     'GET '      . $API . '/surveys/<id:\d+>'                                  => $API . '/surveys/view',
     'GET '      . $API . '/profiles'                                          => $API . '/profiles/fetch',
+    'GET '      . $API . '/users/<id:\d+>/work-history'                       => $API . '/users/work-history-internal',
     'GET '      . $API . '/users/<slug:\w+(-\w+)*>/work-history'              => $API . '/users/work-history',
     'POST '     . $API . '/contracts'                                         => $API . '/contracts/create',
     'GET '      . $API . '/contracts'                                         => $API . '/contracts/fetch',
