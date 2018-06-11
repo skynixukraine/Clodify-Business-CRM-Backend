@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DateUtil;
+use app\models\SalaryReportList;
 use Yii;
 use app\modules\api\components\SortHelper;
 use app\components\DataTable;
@@ -56,6 +57,15 @@ class SalaryReportFetch extends ViewModelAbstract
             if ($salaryReport) {
 
                 foreach ($salaryReport as $key => $salRep) {
+                    if ( !$salRep->total_salary ) {
+
+                        $salaryReportLists = SalaryReportList::findAll([
+                            'salary_report_id' => $salRep->id,
+                        ]);
+
+                        $salRep->total_salary = SalaryReportList::getSumOf($salaryReportLists, 'total_to_pay');
+
+                    }
                     $salaryReport[$key] = [
                         'id'                     => $salRep->id,
                         "report_date"            => DateUtil::dateRangeForFetch($salRep->report_date),
