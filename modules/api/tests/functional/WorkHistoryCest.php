@@ -19,6 +19,28 @@ class WorkHistoryCest
 
     const TYPE_PUBLIC           = 'public';
 
+
+    public function testPostACustomItemOfWorkHistoryCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing add a custom work history item');
+        $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history', json_encode([
+            'type'          => self::TYPE_USER_FAILS,
+            'title'         => 'Some fail happened, contract was lost.',
+            'date_start'    => date('Y-m-d'),
+            'date_end'      => date('Y-m-d'),
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+    }
+
     /**
      * @see    https://jira.skynix.co/browse/SCA-172
      * @param  FunctionalTester $I
@@ -72,6 +94,7 @@ class WorkHistoryCest
             }
 
         }
+        $I->assertEquals(true, $typeFailsExist);
         $I->assertEquals(true, $typeBenefitsExist);
         $I->assertEquals(true, $typeEffortsExist);
     }
