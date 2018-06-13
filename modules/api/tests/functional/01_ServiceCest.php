@@ -117,7 +117,15 @@ class ServiceCest {
             "status"             => "INPROGRESS",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "developers"         => [$this->userDevId, $this->userSalesId],
+            "developers"         => [
+                [
+
+                    'id'    => $this->userDevId,
+                ],
+                [
+                    'id'    => $this->userSalesId
+                ]
+            ],
             "customers"          => [$this->userClientId],
             "invoice_received"   => $this->userClientId,
             "is_pm"              => $this->userDevId,
@@ -125,6 +133,7 @@ class ServiceCest {
             "is_published"       => 1,
         ]));
         $response = json_decode($I->grabResponse());
+        codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $this->projectId = $response->data->project_id;
