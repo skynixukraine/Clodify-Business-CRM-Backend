@@ -504,7 +504,7 @@ class FinancialReportsCest
         foreach ( $response->data as $item ) {
 
             $amount += $item->amount;
-            if ( $item->added_by_user_id == ValuesContainer::$userAdmin['id'] ) {
+            if ( $item->added_by_user->id == ValuesContainer::$userAdmin['id'] ) {
 
                 $this->adminIncomeId = $item->id;
 

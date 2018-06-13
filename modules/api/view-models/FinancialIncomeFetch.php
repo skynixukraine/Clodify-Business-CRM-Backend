@@ -11,6 +11,7 @@ namespace viewModel;
 use app\components\DataTable;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
+use app\models\Project;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
@@ -59,14 +60,25 @@ class FinancialIncomeFetch extends ViewModelAbstract
                         /** @var  $finIncome FinancialIncome */
                         foreach ( $data as $finIncome ) {
 
+                            /** @var $project Project */
+                            /** @var $u User */
                             $incomeItems[] = [
                                 'id'        => $finIncome->id,
                                 'amount'    => $finIncome->amount,
                                 'date'      => $finIncome->date,
                                 'description'   => $finIncome->description,
-                                'project_id'    => $finIncome->project_id,
-                                'developer_user_id' => $finIncome->developer_user_id,
-                                'added_by_user_id'  => $finIncome->added_by_user_id
+                                'project'    => [
+                                    'id'    => $finIncome->project_id,
+                                    'name'  => ( $project = $finIncome->getProject()->one() ) ? $project->name : "Unknown"
+                                ],
+                                'developer_user' => [
+                                    'id'    => $finIncome->developer_user_id,
+                                    'name'  => ( $u = User::findOne($finIncome->developer_user_id)) ? $u->first_name . ' ' . $u->last_name : "Unknown"
+                                ],
+                                'added_by_user'  => [
+                                    'id'    => $finIncome->added_by_user_id,
+                                    'name'  => ( $u = $finIncome->getAddedByUser()->one()) ? $u->first_name . ' ' . $u->last_name : "Unknown"
+                                ]
 
                             ];
 
