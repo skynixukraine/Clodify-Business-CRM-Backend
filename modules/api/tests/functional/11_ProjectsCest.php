@@ -30,7 +30,14 @@ class ProjectsCest
             "jira_code"          =>  "SI-21",
             "date_start"         => date('d/m/Y'),
             "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "developers"         => [ValuesContainer::$userDev['id'], ValuesContainer::$userSales['id']],
+            "developers"         => [
+                [
+                    'id'    => ValuesContainer::$userDev['id']
+                ],
+                [
+                    'id'    => ValuesContainer::$userSales['id']
+                ]
+            ],
             "customers"          => [ValuesContainer::$userClient['id']],
             "invoice_received"   => ValuesContainer::$userClient['id'],
             "is_pm"              => ValuesContainer::$userDev['id'],
@@ -164,10 +171,20 @@ class ProjectsCest
             "status"             => "INPROGRESS",
             "customers"          => [ValuesContainer::$userClient['id']],
             "invoice_received"   => ValuesContainer::$userClient['id'],
-            "developers"         => [ValuesContainer::$userDev['id'], ValuesContainer::$userSales['id'], ValuesContainer::$userAdmin['id']],
+            "developers"         => [
+                [
+                    'id'        => ValuesContainer::$userDev['id'],
+                    'alias'     => ValuesContainer::$userAdmin['id']
+                ],
+                [
+                    'id'    => ValuesContainer::$userSales['id'],
+                ],
+                [
+                    'id'    => ValuesContainer::$userAdmin['id']
+                ]
+            ],
             "is_pm"              => ValuesContainer::$userDev['id'],
             "is_sales"           => ValuesContainer::$userSales['id'],
-            "alias_name"         => [13, 45],
             "is_published"       => 1,
         ]));
         $response = json_decode($I->grabResponse());
