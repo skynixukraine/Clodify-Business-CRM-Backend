@@ -234,7 +234,8 @@ class Project extends \yii\db\ActiveRecord
                             'user_id' => $developer->id,
                             'is_sales' => ($this->is_sales == $developer->id),
                             'is_pm' => ($this->is_pm == $developer->id),
-                            'alias_user_id' => isset($this->alias_name[$developer->id]) ? $this->alias_name[$developer->id] : null
+                            'alias_user_id' => in_array($developer->id, $this->alias_name) ?
+                                $this->alias_name[array_search($developer->id, $this->alias_name)] : null
                         ])->execute();
                 }
             }
