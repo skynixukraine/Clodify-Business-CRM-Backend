@@ -70,6 +70,8 @@ class SalaryReportDownload extends ViewModelAbstract
                             'hospital_value',
                             'subtotal',
                             'official_salary',
+                            'vacation_value',
+                            'vacation_days',
                             'total_to_pay' => function ($salaryReport) {
                                 return $salaryReport->total_to_pay;
                             },

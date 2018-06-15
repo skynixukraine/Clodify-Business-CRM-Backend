@@ -122,7 +122,7 @@ class Report extends \yii\db\ActiveRecord
     {
         $r = ProjectDeveloper::findOne(['user_id' => $this->user_id, 'project_id' => $this->project_id]);
         if( !$r ) {
-            $this->addError($attribute, 'Sorry, but you are not concern with that project.');
+            $this->addError($attribute, 'Sorry, but you are not connected to this project.');
         }
 
         if( $r && $r->project->is_delete == 1) {

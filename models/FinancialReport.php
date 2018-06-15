@@ -10,7 +10,6 @@ use yii\log\Logger;
  *
  * @property integer $id
  * @property integer $report_date
- * @property string $income
  * @property double $currency
  * @property string $expense_constant
  * @property double $expense_salary
@@ -46,7 +45,7 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
-            [['income', 'expense_constant', 'investments', 'spent_corp_events'], 'string',
+            [['expense_constant', 'investments', 'spent_corp_events'], 'string',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             [['currency', 'expense_salary', 'is_locked'], 'number',
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
@@ -64,7 +63,6 @@ class FinancialReport extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'report_date' => 'Report Date',
-            'income' => 'Income',
             'currency' => 'Currency',
             'expense_constant' => 'Expense Constant',
             'expense_salary' => 'Expense Salary',
@@ -75,23 +73,40 @@ class FinancialReport extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinancialIncome()
+    {
+        return $this->hasMany(FinancialIncome::className(), ['financial_report_id' => 'id']);
+    }
+
+    /**
      * income = sum of all income amounts
      * @param $id
+     * @param $userId
      * @return int
      */
-    public static function sumIncome($id)
+    public static function sumIncome($id, $userId = null)
     {
+        /** @var  $financialReport $this */
         $financialReport = FinancialReport::findOne($id);
-        $financialReport = json_decode($financialReport->income);
+        $incomeQuery = $financialReport->getFinancialIncome();
+        if ( $userId > 0 ) {
+
+            $incomeQuery->where(['added_by_user_id' => $userId]);
+
+        }
+        $incomeItems   = $incomeQuery->all();
         $incomeSum = 0;
 
-        if ($financialReport) {
-            foreach ($financialReport as $income) {
-                $incomeSum += (int)$income->amount;
+        if ($financialReport && $incomeItems) {
+            /** @var  $income FinancialIncome */
+            foreach ($incomeItems as $income) {
+                $incomeSum += (float)$income->amount;
             }
         }
 
-        return $incomeSum;
+        return round($incomeSum, 2);
     }
 
     /**
@@ -112,6 +127,34 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
 
         return $expenseConstantSum;
+    }
+
+    /**
+     * @param $id
+     * @param $userSalesId
+     * @return int|mixed
+     */
+    public static function sumDeveloperExpenses($id, $userSalesId)
+    {
+        $financialReport = FinancialReport::findOne($id);
+
+        $projectsDeveloper = ProjectDeveloper::getReportsOfSales( $userSalesId );
+        $projectIds = [];
+        foreach($projectsDeveloper as $project){
+
+            $projectIds[] = $project->project_id;
+
+        }
+        $projectIds = $projectIds ? implode(', ', $projectIds) : 0;
+
+        $dateFrom   = date('Y-m-01', $financialReport->report_date);
+        $toDate     = date('Y-m-t', $financialReport->report_date);
+        $expenses = Report::find()
+            ->where(Report::tableName() . '.project_id IN (' . $projectIds . ') ')
+            ->andWhere(['between', 'date_report', $dateFrom, $toDate ])
+            ->sum('cost');
+
+        return $expenses > 0 ? $expenses : 0;
     }
 
     /**

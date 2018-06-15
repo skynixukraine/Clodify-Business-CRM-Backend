@@ -47,24 +47,16 @@ class ResourcesCest
      * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario
      */
-    public function testResourcesIavailable(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testResourcesIsAvailable(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->haveInDatabase('users', array(
-            'id' => 5,
-            'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev')
-        ));
 
-        $email = $I->grabFromDatabase('users', 'email', array('id' => 5));
-        $pas = $I->grabFromDatabase('users', 'role', array('id' => 5));
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
 
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, strtolower($pas));
+        $oAuth->login($email, $pas);
 
         $I->wantTo('Testing resources I am available');
         $I->sendPUT(ApiEndpoints::RESOURCES);
@@ -84,49 +76,31 @@ class ResourcesCest
             ]
         );
 
-        $I->seeInDatabase('availability_logs', ['user_id' => 5, 'is_available' => 1]);
+        $I->seeInDatabase('availability_logs', ['user_id' => ValuesContainer::$userDev['id'], 'is_available' => 1]);
     }
 
     /**
      * @see   https://jira.skynix.co/browse/SCA-127
      */
-    public function testUserAvailableStart(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testUserUnAvailableStartedWorking(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $date = time()-7200; // two hours before
 
-        $I->haveInDatabase('users', array(
-            'id' => 8,
-            'first_name' => 'devUsers',
-            'last_name' => 'devUsersLast',
-            'email' => 'devUser@email.com',
-            'role' => 'DEV',
-            'password' => md5('dev'),
-        ));
+        $date = time()-60; // two hours before
 
         $I->haveInDatabase('availability_logs', array(
-            'id' => 1,
-            'user_id' => 8,
-            'date' =>  $date,
+            'id'        => 2,
+            'user_id'   => ValuesContainer::$userDev['id'],
+            'date'      =>  $date,
             'is_available' => 1
         ));
 
-        $I->haveInDatabase('projects', array(
-            'id' => 1,
-            'name' => "Internal (Non Paid) Tasks",
-        ));
-
-        $I->haveInDatabase('project_developers', array(
-            'user_id' => 8,
-            'project_id' => 1,
-        ));
-
-        $email = $I->grabFromDatabase('users', 'email', array('id' => 8));
-        $pas = $I->grabFromDatabase('users', 'role', array('id' => 8));
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas    = ValuesContainer::$userDev['password'];
 
         \Helper\OAuthToken::$key = null;
 
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, strtolower($pas));
+        $oAuth->login($email, $pas);
 
         $I->wantTo('Testing resources I am available');
         $I->sendPOST(ApiEndpoints::RESOURCES);
@@ -142,10 +116,9 @@ class ResourcesCest
         ]);
 
         $I->seeInDatabase('reports', [
-            'user_id' => 8,
+            'user_id' => ValuesContainer::$userDev['id'],
             'task' => "Idle Time - I was waiting for tasks",
-            'project_id' => 1,
-            'hours' => round(((time() - $date) / 3600), 2)
+            'project_id' => ValuesContainer::$nonPaidProjectId
         ]);
 
     }

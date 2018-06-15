@@ -105,6 +105,14 @@
                 <td class="tg-yw4l">Hospital: <?= ceil($salaryList['hospital_value']);?></td>
             </tr>
         <?php endif;?>
+        <?php if ($salaryList['vacation_value'] && $salaryList['vacation_days'] > 0 ):?>
+            <tr>
+                <td class="tg-yw4l">Vacation Days: <?=$salaryList['vacation_days'];?></td>
+            </tr>
+            <tr>
+                <td class="tg-yw4l">Vacation Compensation: <?=ceil($salaryList['vacation_value']);?></td>
+            </tr>
+        <?php endif;?>
         <?php if ($salaryList['subtotal']):?>
             <tr>
                 <td class="tg-yw4l">Subtotal: $<?= ceil($salaryList['subtotal']);?></td>

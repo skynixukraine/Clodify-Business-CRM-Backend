@@ -145,6 +145,32 @@ class UsersController extends DefaultController
             ->respond();
     }
 
+    public function actionWorkHistoryInternal()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UsersWorkHistory')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionWorkHistoryAdd()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\WorkHistory')
+            ->set('viewModel\ViewModelInterface', 'viewModel\UsersWorkHistoryAdd')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
     public function actionViewPhoto()
     {
         $this->di

@@ -11,8 +11,38 @@ use Helper\ValuesContainer;
 
 class WorkHistoryCest
 {
+    const TYPE_USER_FAILS       = 'fails';
+
+    const TYPE_USER_EFFORTS     = 'efforts';
+
+    const TYPE_ADMIN_BENEFITS   = 'benefits';
+
+    const TYPE_PUBLIC           = 'public';
+
+
+    public function testPostACustomItemOfWorkHistoryCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing add a custom work history item');
+        $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history', json_encode([
+            'type'          => self::TYPE_USER_FAILS,
+            'title'         => 'Some fail happened, contract was lost.',
+            'date_start'    => date('Y-m-d'),
+            'date_end'      => date('Y-m-d'),
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+    }
+
     /**
-     * @see    https://jira-v2.skynix.company/browse/SI-850
+     * @see    https://jira.skynix.co/browse/SCA-172
      * @param  FunctionalTester $I
      */
     public function testViewWorkHisrtoryCest(FunctionalTester $I, \Codeception\Scenario $scenario)
@@ -21,10 +51,12 @@ class WorkHistoryCest
         $oAuth->login();
 
         $I->wantTo('Testing view work history data');
-        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userSlug . '/work-history');
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history',
+            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
+        codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
@@ -42,6 +74,50 @@ class WorkHistoryCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+        $typeBenefitsExist  = false;
+        $typeEffortsExist   = false;
+        $typeFailsExist     = false;
+        foreach ( $response->data->workHistory as $item) {
+
+            if ( $item->type === self::TYPE_ADMIN_BENEFITS ) {
+
+                $typeBenefitsExist = true;
+
+            } else if ( $item->type === self::TYPE_USER_EFFORTS ) {
+
+                $typeEffortsExist = true;
+
+            } else if ( $item->type === self::TYPE_USER_FAILS ) {
+
+                $typeFailsExist = true;
+
+            }
+
+        }
+        $I->assertEquals(true, $typeFailsExist);
+        $I->assertEquals(true, $typeBenefitsExist);
+        $I->assertEquals(true, $typeEffortsExist);
     }
+
+    public function testViewPUBLICWorkHisrtoryIsNotAvailableCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('Testing view Public work history data is not avaialble because is not implemented yet');
+        $I->sendGET(ApiEndpoints::USERS . '/crm-dev/work-history',
+            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $I->assertEquals(0, count($response->data->workHistory));
+
+    }
+
 
 }

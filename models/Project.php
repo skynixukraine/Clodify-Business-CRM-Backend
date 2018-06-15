@@ -44,7 +44,6 @@ class Project extends \yii\db\ActiveRecord
     public $invoice_received;
     public $is_pm;
     public $is_sales;
-    public $alias_name =[];
     /**
      * @inheritdoc
      */
@@ -70,9 +69,23 @@ class Project extends \yii\db\ActiveRecord
             [['date_start', 'date_end'], 'safe'],
             [['name'], 'string', 'max' => 150],
             [['jira_code'], 'string', 'max' => 15],
-            [['customers', 'developers', 'alias_name'], 'safe'],
+            [['customers', 'developers'], 'safe'],
             ['is_pm', function() {
-                if(empty($this->developers && $this->is_pm) || ($this->developers && !in_array($this->is_pm, $this->developers))) {
+                $exists = false;
+                if ( $this->developers && count($this->developers) ) {
+
+                    foreach ( $this->developers as $dev ) {
+
+                        if ( $dev['id'] === $this->is_pm ) {
+
+                            $exists = true;
+                            break;
+
+                        }
+                    }
+
+                }
+                if(empty($this->developers && $this->is_pm) || $exists === false) {
                     $this->addError('is_pm', Yii::t('yii', 'Pm was not assigned'));
                 }
             }],
@@ -83,7 +96,22 @@ class Project extends \yii\db\ActiveRecord
                     }
                 }
 
-                if(empty($this->developers && $this->is_sales) || ($this->developers && !in_array($this->is_sales, $this->developers))) {
+                $exists = false;
+                if ( $this->developers && count($this->developers) ) {
+
+                    foreach ( $this->developers as $dev ) {
+
+                        if ( $dev['id'] === $this->is_sales ) {
+
+                            $exists = true;
+                            break;
+
+                        }
+                    }
+
+                }
+
+                if(empty($this->developers && $this->is_sales) || $exists === false) {
 
                     $this->addError('is_sales', Yii::t('yii', 'Sales was not assigned'));
                 }
@@ -226,17 +254,16 @@ class Project extends \yii\db\ActiveRecord
                 ->execute();
 
             /* Add to ProjectDevelopers*/
-            foreach (User::allDevelopers() as $developer) {
-                if ($this->is_pm == $developer->id || (($this->is_sales == $developer->id) ) || in_array($developer->id, $this->developers)) {
-                    $connection->createCommand()
-                        ->insert(ProjectDeveloper::tableName(), [
-                            'project_id' => $this->id,
-                            'user_id' => $developer->id,
-                            'is_sales' => ($this->is_sales == $developer->id),
-                            'is_pm' => ($this->is_pm == $developer->id),
-                            'alias_user_id' => isset($this->alias_name[$developer->id]) ? $this->alias_name[$developer->id] : null
-                        ])->execute();
-                }
+            foreach ($this->developers as $developer) {
+                $connection->createCommand()
+                    ->insert(ProjectDeveloper::tableName(), [
+                        'project_id' => $this->id,
+                        'user_id' => $developer['id'],
+                        'is_sales' => ($this->is_sales == $developer['id']),
+                        'is_pm' => ($this->is_pm == $developer['id']),
+                        'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
+                    ])->execute();
+
             }
 
         }

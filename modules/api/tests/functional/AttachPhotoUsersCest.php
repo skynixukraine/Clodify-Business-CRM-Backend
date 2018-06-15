@@ -19,7 +19,11 @@ class AttachPhotoUsersCest
         $oAuth->login();
 
         $I->wantTo('Test attaching the photo');
-        $I->sendPOST(ApiEndpoints::ATTACH_PHOTO, [], ['photo' => 'tests/_data/skynix-office.jpg']);
+
+//     save to db
+//       $I->sendPOST(ApiEndpoints::ATTACH_PHOTO, [], ['photo' => 'tests/_data/skynix-office.jpg']);
+
+        $I->sendPOST(ApiEndpoints::ATTACH_PHOTO, json_encode(['photo' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAMMCACYII=']));
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);

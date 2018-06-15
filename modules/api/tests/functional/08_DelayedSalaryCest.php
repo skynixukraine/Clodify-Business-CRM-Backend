@@ -34,12 +34,15 @@ class DelayedSalaryCest
     public function testCreateDelayedSalaryRequestCest(FunctionalTester $I)
     {
 
+        ValuesContainer::$FinancialReportDate = date('m', strtotime(date('Y-m-d') . ' -1month'));
+        ValuesContainer::$DelayedSalaryDate     = date('m');
+
         $I->wantTo('Testing create delayed salary request');
         $I->sendPOST(ApiEndpoints::DELAYED_SALARY, json_encode(
             [
-                "user_id" => ValuesContainer::$userId,
-                "month" => ValuesContainer::$FinancialReportDate,
-                "value" => ValuesContainer::$DevSalary
+                "user_id"   => ValuesContainer::$userDev['id'],
+                "month"     => ValuesContainer::$DelayedSalaryDate,
+                "value"     => ValuesContainer::$DevSalary
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -58,6 +61,6 @@ class DelayedSalaryCest
             ]
         );
 
-        $I->seeInDatabase('delayed_salary', ['id' => $this->delayedSalaryId, 'user_id' => ValuesContainer::$userId]);
+        $I->seeInDatabase('delayed_salary', ['id' => $this->delayedSalaryId, 'user_id' => ValuesContainer::$userDev['id']]);
     }
 }

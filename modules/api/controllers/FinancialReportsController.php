@@ -8,6 +8,7 @@
 namespace app\modules\api\controllers;
 
 
+use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\modules\api\components\Api\Processor;
 
@@ -105,6 +106,46 @@ class FinancialReportsController extends DefaultController
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [Processor::METHOD_PUT],
                 'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionIncomeAdd()
+    {
+        $this->di
+            ->set('app\models\FinancialIncome', ['scenario' => FinancialIncome::SCENARIO_FINANCIAL_INCOME_CREATE])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialIncome')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialIncomeCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionIncomeFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialIncome')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialIncomeFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionIncomeDelete()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialIncome')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialIncomeDelete')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
             ])
             ->get('Processor')
             ->respond();
