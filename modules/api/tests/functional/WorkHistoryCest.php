@@ -30,8 +30,8 @@ class WorkHistoryCest
         $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history', json_encode([
             'type'          => self::TYPE_USER_FAILS,
             'title'         => 'Some fail happened, contract was lost.',
-            'date_start'    => date('Y-m-d'),
-            'date_end'      => date('Y-m-d'),
+            'date_start'    => date('m/d/Y'),
+            'date_end'      => date('m/d/Y'),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -52,7 +52,7 @@ class WorkHistoryCest
 
         $I->wantTo('Testing view work history data');
         $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history',
-            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
+            ['from_date' => date('m/d/Y', strtotime('now -10 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -103,7 +103,7 @@ class WorkHistoryCest
     {
         $I->wantTo('Testing view Public work history data is not avaialble because is not implemented yet');
         $I->sendGET(ApiEndpoints::USERS . '/crm-dev/work-history',
-            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
+            ['from_date' => date('m/d/Y', strtotime('now -10 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

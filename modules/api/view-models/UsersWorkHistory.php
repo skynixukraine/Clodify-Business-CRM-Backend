@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\components\DateUtil;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\WorkHistory;
@@ -19,10 +20,10 @@ class UsersWorkHistory extends ViewModelAbstract
     public function define()
     {
 
-        $dateFrom   = Yii::$app->request->getQueryParam("dateFrom", date('Y-m-d'));
-        $dateTo     = Yii::$app->request->getQueryParam("dateTo", date('Y-m-d'));
+        $dateFrom   = Yii::$app->request->getQueryParam("from_date", date('d/m/Y'));
+        $dateTo     = Yii::$app->request->getQueryParam("to_date", date('d/m/Y'));
         $workHistory = WorkHistory::find();
-        $workHistory->where(['between', 'date_start', $dateFrom, $dateTo]);
+        $workHistory->where(['between', 'date_start', DateUtil::convertData($dateFrom), DateUtil::convertData($dateTo)]);
         if ( User::hasPermission([User::ROLE_ADMIN]) &&
             ($id = Yii::$app->request->getQueryParam('id')) &&
             ($user = User::findOne($id)) ) {
