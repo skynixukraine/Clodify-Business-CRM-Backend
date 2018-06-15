@@ -28,17 +28,25 @@ class m180607_205300_financial_income_migration extends Migration
         $reports = \app\models\FinancialReport::find()->all();
         foreach ( $reports as $report ) {
 
-            $incomeItems = json_decode($report->income, true);
-            foreach ( $incomeItems as $item ) {
+            if ( ( $incomeItems = json_decode($report->income, true) ) &&
+            count($incomeItems)) {
 
-                $finIncomeItem = new \app\models\FinancialIncome();
-                $finIncomeItem->amount      = (float)$item['amount'];
-                $finIncomeItem->description = $item['description'];
-                $finIncomeItem->date        = (int)$item['date'];
-                $finIncomeItem->project_id  = $projectId;
-                $finIncomeItem->added_by_user_id    = 1;
-                $finIncomeItem->developer_user_id   = 1;
-                $finIncomeItem->save();
+                foreach ( $incomeItems as $item ) {
+
+                    if ( isset($item['amount']) && isset($item['description']) && isset($item['date']) ) {
+
+                        $finIncomeItem = new \app\models\FinancialIncome();
+                        $finIncomeItem->amount      = (float)$item['amount'];
+                        $finIncomeItem->description = $item['description'];
+                        $finIncomeItem->date        = (int)$item['date'];
+                        $finIncomeItem->project_id  = $projectId;
+                        $finIncomeItem->added_by_user_id    = 1;
+                        $finIncomeItem->developer_user_id   = 1;
+                        $finIncomeItem->save();
+
+                    }
+
+                }
 
             }
 
