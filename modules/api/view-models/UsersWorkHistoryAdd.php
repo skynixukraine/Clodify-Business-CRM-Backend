@@ -7,6 +7,7 @@
  */
 
 namespace viewModel;
+use app\components\DateUtil;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\WorkHistory;
@@ -26,6 +27,8 @@ class UsersWorkHistoryAdd extends ViewModelAbstract
 
             if ($this->validate()) {
 
+                $this->model->date_start = DateUtil::convertData( $this->model->date_start  );
+                $this->model->date_end = DateUtil::convertData( $this->model->date_end  );
                 $this->model->user_id = $user->id;
                 $this->model->save();
                 $this->setData([
