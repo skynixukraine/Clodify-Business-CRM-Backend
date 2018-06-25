@@ -94,7 +94,7 @@ class DefaultController extends Controller
         $trace = [];
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'
-            $message = Yii::t('yii', 'API Method not found.');
+            $message = Yii::t('app', 'API Method not found.');
 
         } else {
 
@@ -105,7 +105,7 @@ class DefaultController extends Controller
 
             } else {
 
-                $message = Yii::t('yii', 'An internal server error occurred.');
+                $message = Yii::t('app', 'An internal server error occurred.');
 
             }
 

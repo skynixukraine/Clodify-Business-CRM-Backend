@@ -130,7 +130,7 @@ class TeammateController extends DefaultController
 
             // Add protection against changed in URL team id for roles PM and DEV
             if (!$this->checkAccess($teamId)) {
-                throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
+                throw new ForbiddenHttpException(Yii::t('app', 'You are not allowed to perform this action.'));
             }
 
             if ( $model->load(Yii::$app->request->post()) ) {

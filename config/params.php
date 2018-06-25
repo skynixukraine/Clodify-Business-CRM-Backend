@@ -4,6 +4,7 @@ return [
     'adminEmail'        => 'admin@skynix.co',
     'applicationName'   => 'Skynix Ukraine',
     'url_crm'           => 'https://skynix.co',
+    'url_crm_app'       => 'https://app.skynix.co',
     'url_site'          => 'https://skynix.company',
     'port'              => "",
     'success'           => true,

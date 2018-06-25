@@ -61,21 +61,21 @@ class SalaryListUpdate extends ViewModelAbstract
                             $salaryListReport->save();
                         } else {
                             return $this->addError(Processor::ERROR_PARAM,
-                                Yii::t('yii', 'Sorry, but the entered data is not correct'));
+                                Yii::t('app', 'Sorry, but the entered data is not correct'));
                         }
 
                     } else {
                         return $this->addError(Processor::ERROR_PARAM,
-                            Yii::t('yii', 'Sorry, but this report period is locked. It is not editable'));
+                            Yii::t('app', 'Sorry, but this report period is locked. It is not editable'));
                     }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM,
-                        Yii::t('yii', 'This salary list not exist. It is not editable'));
+                        Yii::t('app', 'This salary list not exist. It is not editable'));
                 }
             }
         } else {
             return $this->addError(Processor::ERROR_PARAM,
-                Yii::t('yii', 'You have no permission for this action'));
+                Yii::t('app', 'You have no permission for this action'));
         }
     }
 
