@@ -17,35 +17,7 @@ class DefaultController extends Controller
 
     public function beforeAction( $action )
     {
-        $toName = AccessKey::nameFromURL();
-
-        if(isset($_COOKIE[User::READ_COOKIE_NAME . $toName]) || isset($_COOKIE[User::COOKIE_DATABASE . $toName])) {
-
-            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
-
-            if ( $session['isSuccess'] === false ) {
-                Yii::$app->getSession()->setFlash('success',
-                    Yii::t("app", $session['reason'] . " You have to authenticate with email and password"));
-                return $this->redirect(["/site/login"]);
-            } else {
-                if (isset($_COOKIE[User::COOKIE_DATABASE . $toName])) {
-                    // prolong db cookie to 20min
-                    Yii::$app->crowdComponent->createCookie();
-                }
-                if (isset($_COOKIE[User::READ_COOKIE_NAME . $toName])) {
-                    // prolong crowd cookie to 30min
-                    Yii::$app->crowdComponent->prolongCrowdCookie($session);
-                }
-                Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
-                Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapPluginAsset'] = false;
-                Yii::$app->assetManager->bundles['yii\bootstrap\BootstrapAsset'] = false;
-                return parent::beforeAction( $action );
-            }
-        } else {
-            Yii::$app->getSession()->setFlash('error',
-                Yii::t("app",  "You have to authenticate with email and password"));
-            return $this->redirect(["/site/login"]);
-        }
+        return $this->redirect(Yii::$app->params['url_crm_app']);
 
     }
 

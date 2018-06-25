@@ -34,19 +34,19 @@ class CounterpartyUpdate extends ViewModelAbstract
                         $counterparty->save(true);
                     } else {
                         return $this->addError(Processor::ERROR_PARAM,
-                            Yii::t('yii', 'Sorry, but the entered data is not correct'));
+                            Yii::t('app', 'Sorry, but the entered data is not correct'));
                     }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM,
-                        Yii::t('yii', 'You have to provide name of the counterparty'));
+                        Yii::t('app', 'You have to provide name of the counterparty'));
                 }
             } else {
                 return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'You are trying to update data for not existent counterparty '));
+                    Yii::t('app', 'You are trying to update data for not existent counterparty '));
             }
         } else {
             return $this->addError(Processor::ERROR_PARAM,
-                Yii::t('yii', 'You have no permission for this action'));
+                Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

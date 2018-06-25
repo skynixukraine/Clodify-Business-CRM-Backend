@@ -73,14 +73,14 @@ class OperationCreate extends ViewModelAbstract
                             if ($fixedAssetsOperation->validate()) {
                                 $fixedAssetsOperation->save();
                             } else {
-                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_assets_operation failed'));
+                                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Creating fixed_assets_operation failed'));
                             }
                         } else {
-                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Creating fixed_asset failed'));
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Creating fixed_asset failed'));
                         }
                     }
                 } else {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Your operation failed'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Your operation failed'));
                 }
 
                 // create two transactions for DEBIT and CREDIT
@@ -114,13 +114,13 @@ class OperationCreate extends ViewModelAbstract
                     ]);
                 } else {
                     $transaction->rollBack();
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Your transactions failed'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Your transactions failed'));
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
             }
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
     }
 

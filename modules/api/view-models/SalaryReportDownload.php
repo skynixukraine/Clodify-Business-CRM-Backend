@@ -116,7 +116,7 @@ class SalaryReportDownload extends ViewModelAbstract
                 );
 
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Salary report not found'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Salary report not found'));
             }
 
         } else {

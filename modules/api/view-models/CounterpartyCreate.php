@@ -30,7 +30,7 @@ class CounterpartyCreate extends ViewModelAbstract
             if ($name) {
                 $this->model->name = $name;
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have to provide name of the counterparty'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have to provide name of the counterparty'));
             }
 
             if ($this->validate() && $this->model->save()) {
@@ -40,7 +40,7 @@ class CounterpartyCreate extends ViewModelAbstract
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

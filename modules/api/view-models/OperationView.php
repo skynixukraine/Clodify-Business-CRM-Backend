@@ -69,14 +69,14 @@ class OperationView extends ViewModelAbstract
                     $operationData['transactions'] = $transactions;
                     $this->setData($operationData);
                 } else {
-                    $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Operation is deleted'));
+                    $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Operation is deleted'));
                 }
             } else {
-                $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Operation not existing'));
+                $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Operation not existing'));
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

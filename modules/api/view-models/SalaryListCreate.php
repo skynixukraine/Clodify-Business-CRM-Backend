@@ -77,28 +77,28 @@ class SalaryListCreate extends ViewModelAbstract
                                         ]);
                                     }
                                 } else {
-                                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Only one list per month per user can be created'));
+                                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Only one list per month per user can be created'));
                                 }
                             } else {
-                                return $this->addError(Processor::ID_PARAM, Yii::t('yii', ' Sorry, The financial report is locked'));
+                                return $this->addError(Processor::ID_PARAM, Yii::t('app', ' Sorry, The financial report is locked'));
                             }
                         } else {
-                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', ' Please specify a salary & official salary for a passed user before creating a salary list.'));
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', ' Please specify a salary & official salary for a passed user before creating a salary list.'));
                         }
 
                     } else {
-                        return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Sorry, but you can create a list report for  DEV, SALES and FIN employees only'));
+                        return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, but you can create a list report for  DEV, SALES and FIN employees only'));
                     }
 
                 } else {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Please create a financial report first and fill in the number of working days and currency rate proper values.'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Please create a financial report first and fill in the number of working days and currency rate proper values.'));
                 }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'Sorry, you can not create a salary list for a blocked user.'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, you can not create a salary list for a blocked user.'));
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

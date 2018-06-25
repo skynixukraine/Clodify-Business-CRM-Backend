@@ -35,12 +35,12 @@ class SettingUpdate extends ViewModelAbstract
                     $settingRow->save();
                 }
             } else {
-                return $this->addError($key, Yii::t('yii', 'The ' . $key . ' does not exist'));
+                return $this->addError($key, Yii::t('app', 'The ' . $key . ' does not exist'));
             }
 
         } else {
             return $this->addError(Processor::ERROR_PARAM,
-                Yii::t('yii', 'You have no permission for this action'));
+                Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

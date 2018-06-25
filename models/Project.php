@@ -86,13 +86,13 @@ class Project extends \yii\db\ActiveRecord
 
                 }
                 if(empty($this->developers && $this->is_pm) || $exists === false) {
-                    $this->addError('is_pm', Yii::t('yii', 'Pm was not assigned'));
+                    $this->addError('is_pm', Yii::t('app', 'Pm was not assigned'));
                 }
             }],
             ['is_sales', function() {
                 if ($user = User::findOne($this->is_sales)) {
                     if ($user->role != User::ROLE_SALES) {
-                        $this->addError('is_sales', Yii::t('yii', 'Selected user can not be sales'));
+                        $this->addError('is_sales', Yii::t('app', 'Selected user can not be sales'));
                     }
                 }
 
@@ -113,7 +113,7 @@ class Project extends \yii\db\ActiveRecord
 
                 if(empty($this->developers && $this->is_sales) || $exists === false) {
 
-                    $this->addError('is_sales', Yii::t('yii', 'Sales was not assigned'));
+                    $this->addError('is_sales', Yii::t('app', 'Sales was not assigned'));
                 }
             }]
 

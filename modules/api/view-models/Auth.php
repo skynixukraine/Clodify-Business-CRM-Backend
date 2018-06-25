@@ -37,7 +37,7 @@ class Auth extends ViewModelAbstract
 
                     $checkUser = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
                     if (isset($checkUser['error'])) {
-                        $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('yii', $checkUser['error']));
+                        $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('app', $checkUser['error']));
                     }
 
                     if (!is_array($checkUser)) {
@@ -51,7 +51,7 @@ class Auth extends ViewModelAbstract
                     }
                 }
             } else {
-                $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'There is no user with that credentials'));
+                $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'There is no user with that credentials'));
             }
 
             if (isset($this->token)) {

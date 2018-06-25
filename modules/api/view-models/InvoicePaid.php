@@ -31,7 +31,7 @@ class InvoicePaid extends ViewModelAbstract
                 } else {
                     foreach ($model->getErrors() as $param=> $errors) {
                         foreach ( $errors as $error )
-                            $this->addError( $param , Yii::t('yii', $error));
+                            $this->addError( $param , Yii::t('app', $error));
                     }
                 }
             } else {

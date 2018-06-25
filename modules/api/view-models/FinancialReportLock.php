@@ -75,7 +75,7 @@ class FinancialReportLock extends ViewModelAbstract
                         } else {
                             foreach ($finyearrep->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
-                                    $this->addError( $param , Yii::t('yii', $error));
+                                    $this->addError( $param , Yii::t('app', $error));
                             }
                         }
 
@@ -100,19 +100,19 @@ class FinancialReportLock extends ViewModelAbstract
                         } else {
                             foreach ($yearlyReport->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
-                                    $this->addError( $param , Yii::t('yii', $error));
+                                    $this->addError( $param , Yii::t('app', $error));
                             }
                         }
                     }
 
                 } else {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add twise the same report'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to add twise the same report'));
                 }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to add not existent report'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to add not existent report'));
             }
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

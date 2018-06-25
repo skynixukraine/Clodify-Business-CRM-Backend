@@ -39,7 +39,7 @@ class OperationUpdate extends ViewModelAbstract
                                 $operation->operation_type_id = $this->postData['operation_type_id'];
                             } else {
                                 return $this->addError(Processor::ERROR_PARAM,
-                                    Yii::t('yii', 'Your operation_type_id is out of allowed'));
+                                    Yii::t('app', 'Your operation_type_id is out of allowed'));
                             }
                         }
                         if (isset($this->postData['transaction_name'])) {
@@ -87,7 +87,7 @@ class OperationUpdate extends ViewModelAbstract
                         } else {
                             $transaction->rollBack();
                             return $this->addError(Processor::ERROR_PARAM,
-                                Yii::t('yii', 'Sorry, but the entered data is not correct and updating failed'));
+                                Yii::t('app', 'Sorry, but the entered data is not correct and updating failed'));
                         }
 
                     } catch (Exception $e) {
@@ -96,16 +96,16 @@ class OperationUpdate extends ViewModelAbstract
                     }
                 } else {
                     return $this->addError(Processor::ERROR_PARAM,
-                        Yii::t('yii', 'You are trying to update data for deleted operation'));
+                        Yii::t('app', 'You are trying to update data for deleted operation'));
                 }
             } else {
                 return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'You are trying to update data for not existing operation'));
+                    Yii::t('app', 'You are trying to update data for not existing operation'));
             }
 
         } else {
             return $this->addError(Processor::ERROR_PARAM,
-                Yii::t('yii', 'You have no permission for this action'));
+                Yii::t('app', 'You have no permission for this action'));
         }
     }
 
