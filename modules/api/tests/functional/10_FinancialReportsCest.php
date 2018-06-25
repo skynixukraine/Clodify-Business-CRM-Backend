@@ -258,7 +258,8 @@ class FinancialReportsCest
                         'report_date'           => 'string',
                         'developer_expenses'    => 'float|integer',
                         'income'                => 'float|integer',
-                        'bonuses'               => 'float|integer'
+                        'bonuses'               => 'float|integer',
+                        'is_locked'             => 'integer'
                     ]
                 ],
 
