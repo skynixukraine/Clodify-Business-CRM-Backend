@@ -25,10 +25,12 @@ class UsersWorkHistoryAdd extends ViewModelAbstract
             ($id = Yii::$app->request->getQueryParam('id')) &&
             ($user = User::findOne($id)) ) {
 
+            $this->model->date_start = DateUtil::convertData( $this->model->date_start  );
+            $this->model->date_end = DateUtil::convertData( $this->model->date_end  );
+
+
             if ($this->validate()) {
 
-                $this->model->date_start = DateUtil::convertData( $this->model->date_start  );
-                $this->model->date_end = DateUtil::convertData( $this->model->date_end  );
                 $this->model->user_id = $user->id;
                 $this->model->save();
                 $this->setData([
