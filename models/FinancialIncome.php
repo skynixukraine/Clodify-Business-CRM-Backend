@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property int $date
+ * @property int $from_date
+ * @property int $to_date
  * @property double $amount
  * @property string $description
  * @property int $project_id
@@ -38,7 +40,8 @@ class FinancialIncome extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'project_id', 'developer_user_id'], 'integer'],
+            [['from_date', 'to_date'], 'required'],
+            [['date', 'from_date', 'to_date', 'project_id', 'developer_user_id'], 'integer'],
             [['added_by_user_id', 'financial_report_id'], 'integer', 'on' => self::SCENARIO_FINANCIAL_INCOME_CREATE],
             [['amount'], 'number'],
             [['description'], 'string'],
