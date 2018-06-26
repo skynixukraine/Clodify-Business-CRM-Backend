@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\modules\cp\controllers\IndexController;
 use Yii;
+use yii\log\Logger;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
 use app\modules\api\models\AccessKey;
@@ -953,6 +954,38 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $pathFile = 'users/' . Yii::$app->user->id . '/files/sign/sign';
             return $s->uploadBase64($pathFile, $sign);
         }
+    }
+
+    /**
+     * @param $data
+     * @param $password
+     * @return User
+     */
+    public static function createASingleDevUser($data, $password)
+    {
+        $newUser                = new User();
+        $newUser->role          = self::ROLE_DEV;
+        $newUser->first_name    = $data['first-name'];
+        $newUser->last_name     = $data['last-name'];
+        $newUser->email         = $data['email'];
+        $newUser->password      = $password;
+        $newUser->is_active     = self::ACTIVE_USERS;
+        $newUser->auth_type     = self::CROWD_AUTH;
+        $newUser->save();
+        //Assign Non Paid Project
+        if ( ( $project = Project::find()->where(['name' => Project::INTERNAL_TASK])->one())) {
+
+            $pd = new ProjectDeveloper();
+            $pd->user_id    = $newUser->id;
+            $pd->project_id = $project->id;
+            $pd->save();
+
+        } else {
+
+            Yii::getLogger()->log( "Project: " . Project::INTERNAL_TASK . " not found. User was not assigned to it.", Logger::LEVEL_WARNING);
+
+        }
+        return $newUser;
     }
 
 }

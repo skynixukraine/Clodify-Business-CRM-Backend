@@ -14,6 +14,7 @@ use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
 use app\modules\api\models\ApiAccessToken;
 use app\modules\api\models\AccessKey;
+use yii\log\Logger;
 
 class Processor
 {
@@ -140,14 +141,29 @@ class Processor
 
             }
             //Check crowd TOKEN if only this is a CROWD user
-            if ( $checkAccess == true && $user->auth_type === User::CROWD_AUTH ) {
+            if ( $checkAccess == true &&
+                $user->auth_type === User::CROWD_AUTH
+            ) {
 
                 // crowd session code go here
-                $var = Yii::$app->crowdComponent->checkByAccessToken($accessToken);
-                if(isset($var['error'])){
-                    $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('app', $var['error']));
-                }
+                if ( $this->accessTokenModel->crowd_exp_date > time() &&
+                    !empty($this->accessTokenModel->crowd_token) &&
+                    ( $response= Yii::$app->crowdComponent->validateCrowdSession($this->accessTokenModel->crowd_token) ) &&
+                    $response['success'] === true
+                ) {
 
+                    $this->accessTokenModel->crowd_exp_date = $response['expiryDate'];
+                    $this->accessTokenModel->save(false, ['crowd_exp_date']);
+
+                } else {
+                    if ( isset($response)) {
+
+                        Yii::getLogger()->log( "CROWD Error: " . var_export($response, 1), Logger::LEVEL_INFO);
+
+                    }
+                    $this->addError(Processor::CROWD_ERROR_PARAM, (isset($response['reason']) ? $response['reason'] : 'not authorized with crowd'));
+
+                }
             }
 
         } elseif ( $checkAccess == true ) {

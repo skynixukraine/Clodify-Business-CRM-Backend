@@ -27,7 +27,7 @@ class AccessToken extends ViewModelAbstract
         }
 
         if ( $userId && ($user = $this->model->findOne($userId)) ) {
-            if($token = ApiAccessToken::generateNewToken($user)) {
+            if( ($token = ApiAccessToken::generateNewToken($user) ) && $token->save()) {
                 $this->setData([
                     'access_token' => $token->access_token
                 ]);

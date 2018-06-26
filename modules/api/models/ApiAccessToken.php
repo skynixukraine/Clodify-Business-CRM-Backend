@@ -11,6 +11,8 @@ use Yii;
  * @property integer $user_id
  * @property string  $access_token
  * @property string $exp_date
+ * @property integer $crowd_exp_date
+ * @property string $crowd_token
  */
 class ApiAccessToken extends \yii\db\ActiveRecord
 {
@@ -32,9 +34,9 @@ class ApiAccessToken extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'access_token', 'exp_date'], 'required'],
-            [['user_id'], 'integer'],
+            [['user_id', 'crowd_exp_date'], 'integer'],
             [['access_token'], 'string'],
-            [['access_token'], 'string', 'max' => 40]
+            [['access_token', 'crowd_token'], 'string', 'max' => 40]
         ];
     }
 
@@ -77,11 +79,10 @@ class ApiAccessToken extends \yii\db\ActiveRecord
         $accessToken = ApiAccessToken::find()->where(['user_id' => $user->id])->one();
         if (!$accessToken) {
             $accessToken = new ApiAccessToken();
+            $accessToken->user_id       = $user->id;
         }
-        $accessToken->user_id       = $user->id;
         $accessToken->access_token  = Yii::$app->security->generateRandomString( self::ACCESS_TOKEN_LENGTH );
         $accessToken->exp_date      = date('Y-m-d H:i:s', strtotime("now +" . self::EXPIRATION_PERIOD ));
-        $accessToken->save();
         return $accessToken;
     }
 }

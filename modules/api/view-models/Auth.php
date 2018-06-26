@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\modules\api\models\ApiAccessToken;
 use Yii;
 use app\models\User;
 use app\modules\api\models\ApiLoginForm;
@@ -26,41 +27,26 @@ class Auth extends ViewModelAbstract
 
         if ($this->validate()) {
             $loginForm = new ApiLoginForm();
-            $loginForm->email = $this->model->email;
-            $loginForm->password = $this->model->password;
-            $this->model = $loginForm;
+            $loginForm->email       = $this->model->email;
+            $loginForm->password    = $this->model->password;
+            $this->model            = $loginForm;
 
-            $user = $this->model->getUser();
+            if ( $this->validate() ) {
 
-            if ($user) {
-                if ($user->auth_type == User::CROWD_AUTH) {
+                /** @var $token ApiAccessToken */
+                if ( ( $token = $this->model->login() ) ) {
 
-                    $checkUser = Yii::$app->crowdComponent->checkByEmailPassword($loginForm->email, $loginForm->password);
-                    if (isset($checkUser['error'])) {
-                        $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('app', $checkUser['error']));
-                    }
+                    $this->setData([
+                        'access_token'  => $token->access_token,
+                        'user_id'       => $token->user_id,
+                        'role'          => User::findOne( $token->user_id )->role,
+                        'crowd_token'   => $token->crowd_token
+                    ]);
 
-                    if (!is_array($checkUser)) {
-                        $this->token = $this->model->login();
-                    }
                 }
 
-                if ($user->auth_type == User::DATABASE_AUTH) {
-                    if ($this->validate()) {
-                        $this->token = $this->model->login();
-                    }
-                }
-            } else {
-                $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'There is no user with that credentials'));
             }
 
-            if (isset($this->token)) {
-                $this->setData([
-                    'access_token' => $this->token->access_token,
-                    'user_id' => $this->token->user_id,
-                    'role' => $user->role
-                ]);
-            }
         }
     }
 
