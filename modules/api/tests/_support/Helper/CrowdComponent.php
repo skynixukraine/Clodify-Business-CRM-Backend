@@ -10,14 +10,5 @@ namespace app\components;
 class CrowdComponent
 {
 
-    public function checkByAccessToken($accessToken, $checkAccess = true)
-    {
-        return true;
-    }
-
-    public function checkByEmailPassword($email, $password)
-    {
-        return true;
-    }
 
 }
