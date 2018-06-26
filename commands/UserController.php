@@ -29,9 +29,13 @@ class UserController extends Controller
             if (($role = CrowdComponent::refToGroupInCrowd( $user->email )) ) {
 
                 $user->role = $role;
-                $user->save(false, ['role']);
+                
+            } else {
+
+                $user->role = User::ROLE_GUEST;
 
             }
+            $user->save(false, ['role']);
 
         }
     }
