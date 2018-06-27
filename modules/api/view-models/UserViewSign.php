@@ -15,16 +15,16 @@ use yii\helpers\Url;
 
 
 
-class UserViewPhoto extends ViewModelAbstract
+class UserViewSign extends ViewModelAbstract
 {
 
     public function define()
     {
         $id = Yii::$app->request->getQueryParam('id');
         $s = new Storage();
-        $pathFile = 'users/' . $id . '/photo/';
+        $pathFile = 'users/' . $id . '/sign';
         try {
-            $photo = $s->download($pathFile . 'avatar');
+            $photo = $s->download( $pathFile );
             if(isset($photo['Body'])) {
                 $str = $photo['Body'];
             } else {
