@@ -48,7 +48,7 @@ class ApiLoginForm extends LoginForm
                 $accessToken->crowd_exp_date    = $response['expiryDate'];
                 $accessToken->crowd_token       = $response['token'];
 
-                Yii::$app->crowdComponent->putAvatarInAm( $this->email );
+                //Yii::$app->crowdComponent->putAvatarInAm( $this->email );
 
             } else {
 
