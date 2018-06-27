@@ -334,7 +334,7 @@ class CrowdComponent extends Component
             try {
                 $content = file_get_contents(self::findAddress($response,'found at '));
                 $s = new Storage();
-                $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
+                $pathFile = 'users/' . Yii::$app->user->id . '/photo/';
                 $s->uploadData($pathFile . 'avatar', $content);
             }
             catch (\Exception $e) {
