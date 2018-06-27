@@ -27,11 +27,11 @@ class SalaryListDelete extends ViewModelAbstract
                 $salaryListReport = SalaryReportList::findOne($salaryReportListId);
                 $salaryListReport->delete();
             } else {
-                return $this->addError(Processor::ID_PARAM, Yii::t('yii', 'The list can not be deleted because the financial report is locked'));
+                return $this->addError(Processor::ID_PARAM, Yii::t('app', 'The list can not be deleted because the financial report is locked'));
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

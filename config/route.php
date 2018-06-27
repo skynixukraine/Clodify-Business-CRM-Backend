@@ -32,7 +32,8 @@ return [
     'PUT '      . $API . '/contracts/<contract_id:\d+>'                       => $API . '/contracts/edit',
     'GET '      . $API . '/contracts/<id:\d+>'                                => $API . '/contracts/view',
     'DELETE '   . $API . '/contracts/<contract_id:\d+>'                       => $API . '/contracts/delete',
-    'GET '      . $API . '/user/<id:\d+>/photo'                               => $API . '/users/view-photo',
+    'GET '      . $API . '/users/<id:\d+>/photo'                              => $API . '/users/view-photo',
+    'GET '      . $API . '/users/<id:\d+>/sign'                               => $API . '/users/view-sign',
     'GET '      . $API . '/invoices'                                          => $API . '/invoices/fetch',
     'POST '     . $API . '/contracts/<id:\d+>/invoices'                       => $API . '/invoices/create',
     'GET '      . $API . '/invoices/<id:\d+>'                                 => $API . '/invoices/view',
@@ -83,6 +84,8 @@ return [
     'POST '     . $API . '/emergency'                                         => $API . '/emergency/register',
     'DELETE '   . $API . '/operations/<id:\d+>'                               => $API . '/operations/delete',
     'POST '     . $API . '/delayed-salary'                                    => $API . '/delayed-salary/create',
+    'GET '      . $API . '/sso/config'                                        => $API . '/sso/get-config',
+    'POST '     . $API . '/sso/check'                                         => $API . '/sso/check',
 
 
     // General rules

@@ -43,7 +43,7 @@ class WorkHistory extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'integer'],
-            [['date_start', 'date_end'], 'safe'],
+            [['date_start', 'date_end'], 'required'],
             [['type', 'title'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

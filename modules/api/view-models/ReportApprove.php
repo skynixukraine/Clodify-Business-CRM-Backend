@@ -53,11 +53,11 @@ class ReportApprove extends ViewModelAbstract
                                 if ($curReport->user_id != $salesId) {
                                     $this->noteToActionTable($curReport);
                                 } else {
-                                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You (role sales) can not approve own report'));
+                                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role sales) can not approve own report'));
                                 }
 
                             } else {
-                                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for approving this report '));
+                                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for approving this report '));
                             }
                         }
                     }
@@ -67,17 +67,17 @@ class ReportApprove extends ViewModelAbstract
                         if ($curReport->user_id != $finId) {
                             $this->noteToActionTable($curReport);
                         } else {
-                            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You (role fin) can not approve own report'));
+                            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role fin) can not approve own report'));
                         }
                     }
                 } else {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to approve already approved report'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to approve already approved report'));
                 }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You are trying to approve not existent report'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to approve not existent report'));
             }
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

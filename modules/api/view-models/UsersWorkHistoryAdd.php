@@ -7,6 +7,7 @@
  */
 
 namespace viewModel;
+use app\components\DateUtil;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\WorkHistory;
@@ -23,6 +24,10 @@ class UsersWorkHistoryAdd extends ViewModelAbstract
         if ( User::hasPermission([User::ROLE_ADMIN]) &&
             ($id = Yii::$app->request->getQueryParam('id')) &&
             ($user = User::findOne($id)) ) {
+
+            $this->model->date_start = DateUtil::convertData( $this->model->date_start  );
+            $this->model->date_end = DateUtil::convertData( $this->model->date_end  );
+
 
             if ($this->validate()) {
 

@@ -23,7 +23,7 @@ class OperationDelete extends ViewModelAbstract
             $operation->is_deleted = 1;
             $operation->update();
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
     }
 }

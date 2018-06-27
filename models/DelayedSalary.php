@@ -37,7 +37,7 @@ class DelayedSalary extends \yii\db\ActiveRecord
             ['user_id', function() {
                 $user =  User::find()->where(['id' => $this->user_id, 'is_active' => 1, 'is_delete' => 0])->one();
                     if (! $user) {
-                        $this->addError('user_id', Yii::t('yii', 'Not active user'));
+                        $this->addError('user_id', Yii::t('app', 'Not active user'));
                     }
             }]
         ];

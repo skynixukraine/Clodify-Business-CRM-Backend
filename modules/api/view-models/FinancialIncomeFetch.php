@@ -66,6 +66,8 @@ class FinancialIncomeFetch extends ViewModelAbstract
                                 'id'        => $finIncome->id,
                                 'amount'    => $finIncome->amount,
                                 'date'      => $finIncome->date,
+                                'from_date' => $finIncome->from_date,
+                                'to_date'   => $finIncome->to_date,
                                 'description'   => $finIncome->description,
                                 'project'    => [
                                     'id'    => $finIncome->project_id,

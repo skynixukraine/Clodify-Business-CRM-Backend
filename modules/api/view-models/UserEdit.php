@@ -28,7 +28,7 @@ class UserEdit extends ViewModelAbstract
 
             if (!User::hasPermission([User::ROLE_FIN]) && !User::hasPermission([User::ROLE_ADMIN]) && $id != Yii::$app->user->id) {
                 return $this->addError(Processor::ERROR_PARAM,
-                    Yii::t('yii', 'You have no permission for this action'));
+                    Yii::t('app', 'You have no permission for this action'));
             }
             //  Each user can edit own profile except of columns: role, salary, official_salary, auth_type
             if ($id == Yii::$app->user->id) {

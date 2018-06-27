@@ -34,7 +34,7 @@ class SalaryReportCreate extends ViewModelAbstract
             $reportDate = DateUtil::convertDateToUnix($date);
 
             if (!SalaryReport::validateSalaryReportDate($reportDate)) {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'The report is already created or time for report invalid'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The report is already created or time for report invalid'));
             }
 
             $this->model->report_date = $reportDate;
@@ -47,7 +47,7 @@ class SalaryReportCreate extends ViewModelAbstract
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

@@ -96,14 +96,14 @@ class FinancialReportUnlock extends ViewModelAbstract
                 if (!$finyearrep->validate() || !$finyearrep->save()) {
                     foreach ($finyearrep->getErrors() as $param=> $errors) {
                         foreach ( $errors as $error )
-                            $this->addError( $param , Yii::t('yii', $error));
+                            $this->addError( $param , Yii::t('app', $error));
                     }
                 }
 
             }
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

@@ -27,17 +27,38 @@ class WorkHistoryCest
         $oAuth->login();
 
         $I->wantTo('Testing add a custom work history item');
-        $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history', json_encode([
+        $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userFin['id'] . '/work-history', json_encode([
             'type'          => self::TYPE_USER_FAILS,
             'title'         => 'Some fail happened, contract was lost.',
-            'date_start'    => date('Y-m-d'),
-            'date_end'      => date('Y-m-d'),
+            'date_start'    => date('d/m/Y'),
+            'date_end'      => date('d/m/Y'),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
+
+        $I->wantTo('Testing a custom work history data added');
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userFin['id'] . '/work-history',
+            ['from_date' => date('d/m/Y'), 'end_date' => date('d/m/Y')]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->assertEquals(1, count($response->data->workHistory));
+
+
+        $I->sendPOST(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history', json_encode([
+            'type'          => self::TYPE_USER_FAILS,
+            'title'         => 'Some fail happened, contract was lost.',
+            'date_start'    => date('d/m/Y'),
+            'date_end'      => date('d/m/Y'),
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
 
     }
 
@@ -52,7 +73,7 @@ class WorkHistoryCest
 
         $I->wantTo('Testing view work history data');
         $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history',
-            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
+            ['from_date' => date('d/m/Y', strtotime('now -10 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -94,8 +115,11 @@ class WorkHistoryCest
             }
 
         }
+        $I->wantTo('Testing fail work history data exists');
         $I->assertEquals(true, $typeFailsExist);
+        $I->wantTo('Testing benefits work history data exists');
         $I->assertEquals(true, $typeBenefitsExist);
+        $I->wantTo('Testing effort work history data exists');
         $I->assertEquals(true, $typeEffortsExist);
     }
 
@@ -103,7 +127,7 @@ class WorkHistoryCest
     {
         $I->wantTo('Testing view Public work history data is not avaialble because is not implemented yet');
         $I->sendGET(ApiEndpoints::USERS . '/crm-dev/work-history',
-            ['dateFrom' => date('Y-m-d', strtotime('now -10 days'))]);
+            ['from_date' => date('d/m/Y', strtotime('now -10 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

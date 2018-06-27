@@ -78,7 +78,7 @@ class SettingsCest
                     [
                         'id'              => 'integer',
                         'key'             => 'string',
-                        'value'           => 'integer',
+                        'value'           => 'integer|string',
                         'type'            => 'string',
                     ]
             ],

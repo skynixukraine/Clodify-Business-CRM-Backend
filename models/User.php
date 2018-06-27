@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\modules\cp\controllers\IndexController;
 use Yii;
+use yii\log\Logger;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
 use app\modules\api\models\AccessKey;
@@ -122,7 +123,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['password', 'required', 'except' => ['settings',self::SCENARIO_UPDATE_USER, self::SCENARIO_CREATE_USER, self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_PHOTO_USERS, self::ATTACH_USERS_SIGN]],
             ['role', function () {
                 if(!in_array (strtoupper($this->role), [self::ROLE_ADMIN, self::ROLE_PM,  self::ROLE_CLIENT, self::ROLE_SALES, self::ROLE_FIN , self::ROLE_DEV])) {
-                    $this->addError('role', Yii::t('yii', 'Role is invalid'));
+                    $this->addError('role', Yii::t('app', 'Role is invalid'));
                 }
             }],
             [['email'], 'unique', 'except'=> ['api-login', self::SCENARIO_CHANGE_PASSWORD, self::ATTACH_USERS_SIGN, self::ATTACH_PHOTO_USERS]],
@@ -935,9 +936,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function uploadPhoto($photo)
     {
+        Yii::getLogger()->log( "S3 uploadPhoto " . var_export($photo, 1), Logger::LEVEL_WARNING);
         $s = new Storage();
         if (is_string($photo)) {
-            $pathFile = 'users/' . Yii::$app->user->id . '/files/photo/photo';
+            $pathFile = 'users/' . Yii::$app->user->id . '/photo/avatar';
             return $s->uploadBase64($pathFile, $photo);
         }
     }
@@ -950,9 +952,43 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $s = new Storage();
         if (is_string($sign)) {
-            $pathFile = 'users/' . Yii::$app->user->id . '/files/sign/sign';
+            $pathFile = 'users/' . Yii::$app->user->id . '/sign';
             return $s->uploadBase64($pathFile, $sign);
         }
+    }
+
+    /**
+     * @param $data
+     * @param $password
+     * @return User
+     */
+    public static function createASingleDevUser($data, $password)
+    {
+        $newUser                = new User();
+        $newUser->role          = self::ROLE_DEV;
+        $newUser->first_name    = $data['first-name'];
+        $newUser->last_name     = $data['last-name'];
+        $newUser->email         = $data['email'];
+        $newUser->password      = $password;
+        $newUser->is_active     = self::ACTIVE_USERS;
+        $newUser->auth_type     = self::CROWD_AUTH;
+        $r = $newUser->save();
+        Yii::getLogger()->log( "createASingleDevUser: " . var_export($newUser->getErrors(), 1), Logger::LEVEL_INFO);
+
+        //Assign Non Paid Project
+        if ( ( $project = Project::find()->where(['name' => Project::INTERNAL_TASK])->one())) {
+
+            $pd = new ProjectDeveloper();
+            $pd->user_id    = $newUser->id;
+            $pd->project_id = $project->id;
+            $pd->save();
+
+        } else {
+
+            Yii::getLogger()->log( "Project: " . Project::INTERNAL_TASK . " not found. User was not assigned to it.", Logger::LEVEL_WARNING);
+
+        }
+        return $newUser;
     }
 
 }

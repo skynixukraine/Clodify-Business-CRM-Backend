@@ -7,17 +7,51 @@
  */
 namespace app\components;
 
+
 class CrowdComponent
 {
-
-    public function checkByAccessToken($accessToken, $checkAccess = true)
+    public static function validateCrowdSession( $token )
     {
-        return true;
-    }
+        $dataResponse = [
+            'expand' => null,
+            'success' => true,
+            'reason' => false,
+            'token' => null,
+            'expiryDate' => null,
+            'createdDate' => null
+        ];
+        if (!$token) {
 
-    public function checkByEmailPassword($email, $password)
-    {
-        return true;
+            $dataResponse['success'] = false;
+            $dataResponse['reason'] = "Undefined token";
+            return $dataResponse;
+
+        }
+        if ( $token === 'D00000001230000123') {
+
+
+            $dataResponse['token']  = $token;
+            $dataResponse['user']   = [
+                'first-name'    => 'Crowd User First Name',
+                'last-name'     => 'Crowd User Last Name',
+                'email'         => 'crowd@skynix.co'
+            ];
+
+        } else if ( $token === 'D00000001230000124' ) {
+
+            $dataResponse['token']  = $token;
+            $dataResponse['user']   = [
+                'first-name'    => 'Dev First Name',
+                'last-name'     => 'Dev Last Name',
+                'email'         => 'crm-dev@skynix.co'
+            ];
+
+        } else {
+
+            $dataResponse['success'] = false;
+
+        }
+        return $dataResponse;
     }
 
 }

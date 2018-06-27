@@ -258,7 +258,8 @@ class FinancialReportsCest
                         'report_date'           => 'string',
                         'developer_expenses'    => 'float|integer',
                         'income'                => 'float|integer',
-                        'bonuses'               => 'float|integer'
+                        'bonuses'               => 'float|integer',
+                        'is_locked'             => 'integer'
                     ]
                 ],
 
@@ -393,7 +394,8 @@ class FinancialReportsCest
         $oAuth->login($email, $pas);
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
             json_encode([
-                'date'              => 1,
+                'from_date'         => 1,
+                'to_date'           => 2,
                 'amount'            => $this->salesIncome,
                 'description'       => "Upwork Contract May #32",
                 'project_id'        => ValuesContainer::$projectId,
@@ -422,7 +424,8 @@ class FinancialReportsCest
         $oAuth->login($email, $pas);
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
             json_encode([
-                'date'              => 2,
+                'from_date'         => 2,
+                'to_date'           => 3,
                 'amount'            => $this->adminIncome,
                 'description'       => "Upwork Contract #33",
                 'project_id'        => ValuesContainer::$projectId,

@@ -73,6 +73,7 @@ class FinancialReportFetch extends ViewModelAbstract
                     $rep = [
                         'id'                  => $finRep->id,
                         'report_date'         => DateUtil::dateRangeForFetch($finRep->report_date),
+                        'is_locked'           => $finRep->is_locked
                     ];
 
                     if (User::hasPermission([User::ROLE_SALES])) {
@@ -90,7 +91,6 @@ class FinancialReportFetch extends ViewModelAbstract
                         $rep['investments']         = FinancialReport::sumInvestments($finRep->id);
                         $rep['spent_corp_events']   = FinancialReport::sumSpentCorpEvents($finRep->id);
                         $rep['num_of_working_days'] = $finRep->num_of_working_days;
-                        $rep['is_locked']   = $finRep->is_locked;
 
                     }
                     if (User::hasPermission([User::ROLE_ADMIN])) {
@@ -108,7 +108,7 @@ class FinancialReportFetch extends ViewModelAbstract
             $this->setData($financialReport);
 
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
     }

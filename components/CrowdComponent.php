@@ -9,196 +9,22 @@
 namespace app\components;
 
 
+use app\models\User;
 use Yii;
 use yii\base\Component;
 use app\modules\api\models\AccessKey;
-use app\modules\api\models\ApiAccessToken;
-use app\models\User;
-use yii\log\Logger;
-
+use yii\helpers\Json;
 
 class CrowdComponent extends Component
 {
-    /**
-     * @param $accessToken
-     * @return array|bool
-     */
-    public function checkByAccessToken($accessToken)
-    {
-        $errorArr = [];
-        $accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] );
 
-        $crowdInfo = AccessKey::findOne(['user_id' => $accessTokenModel->user_id]);
-        $user= User::findOne($accessTokenModel->user_id);
+    const CROWD_SESSION_URL = "/rest/usermanagement/1/session";
 
-        if($crowdInfo){
-            $crowdSession = AccessKey::checkCrowdSession($crowdInfo->token);
-            if($crowdSession['isSuccess'] === false){
-                Yii::getLogger()->log( "CROWD: " . $accessToken . ": crowd session died: " . $crowdSession['reason'], Logger::LEVEL_INFO);
-                $errorArr['error'] = $crowdSession['reason'] . ' You have to authenticate with email and password!';
-            } elseif ( ($crowdSession['expiryDate'] - time()) < 1000 )  {
+    const CROWD_REQUEST = "/rest/usermanagement/1/authentication?username=";
+    const AVATAR_REQUEST = "/rest/usermanagement/1/user/avatar?username=";
+    const GROUP_FROM_CROWD = "/rest/usermanagement/1/user/group/direct?username=";
+    const CHECK_USER_BY_EMAIL = "/rest/usermanagement/1/user?username=";
 
-                $newSession = AccessKey::validateCrowdSession($crowdSession['token']);
-                Yii::getLogger()->log( "CROWD: " . $accessToken . ": crowd session validated: " .
-                    "old token: " . $crowdSession['token'] .
-                    "new token: " . $newSession['token'] .
-                    "old exp: " . $crowdSession['expiryDate'] .
-                    "new exp: " . $newSession['expiryDate'], Logger::LEVEL_INFO);
-
-                $accessTokenModel->exp_date = $newSession['expiryDate'];
-                $accessTokenModel->save(false, ['exp_date']);
-
-            }
-            /*
-             *
-             * How this can work? https://docs.atlassian.com/atlassian-crowd/3.2.1/REST/?_ga=2.54972013.718843537.1525972331-183410907.1506410127#usermanagement/1/session-validateToken
-             * Response does not have a key active
-             *if(isset($crowdSession->active) && !$crowdSession->active){
-                if ($user){
-                    User::deactivateUser($user);
-                }
-                $errorArr['error'] = 'Your account is suspended, contact Skynix administrator';
-            }
-            */
-        } else {
-            if($user->is_active && !$user->is_delete){
-                return true;
-            } else {
-                $errorArr['error'] = 'No user is registered with this credentials';
-            }
-        }
-
-        return $errorArr;
-    }
-
-    /**
-     * @param $email
-     * @param $password
-     * @return array|bool
-     */
-    public function checkByEmailPassword($email, $password)
-    {
-        $errorArr = [];
-        $user = User::findOne(['email' => $email]);
-
-        if ($user) {
-            if ($user->auth_type == User::CROWD_AUTH) {
-                Yii::getLogger()->log( "CROWD: " . $email . ": logged in", Logger::LEVEL_INFO);
-                $obj = AccessKey::toCrowd($email, $password);
-
-                if($obj && $this->validCrowdUser($obj)) {   // if element 'reason' exist, some authentication error there in crowd
-
-                    Yii::getLogger()->log( "CROWD: " . $email . ": authenticated", Logger::LEVEL_INFO);
-                    $accesKey = AccessKey::findOne(['email' => $obj->email]);
-                    if ($accesKey) {
-                        // create crowd session
-                        Yii::getLogger()->log( "CROWD: " . $email . ": checking crowd session: " . $accesKey->token, Logger::LEVEL_INFO);
-                        $session = AccessKey::checkCrowdSession($accesKey->token);
-                        if ( $session['isSuccess'] === false) {
-
-                            Yii::getLogger()->log( "CROWD: " . $email . ": crowd session invalid: " . $session['reason'], Logger::LEVEL_INFO);
-                            $newSession = AccessKey::createCrowdSession($email, $password);
-                            Yii::getLogger()->log( "CROWD: " . $email . ": created a new crowd session: " . $newSession['reason'], Logger::LEVEL_INFO);
-                            AccessKey::updateAll(['token' => $newSession['token'], 'expiry_date' => AccessKey::getExpireForSession($newSession['expiryDate'])],
-                                ['email' => $email]);
-                        } else {
-
-                            Yii::getLogger()->log( "CROWD: " . $email . ": validated crowd session", Logger::LEVEL_INFO);
-                            AccessKey::validateCrowdSession( $session['token'] );
-
-                        }
-
-                    } else {
-                        // write to access_keys with existed user
-                        AccessKey::createAccessKey($email, $password, $user->id, $obj);
-                    }
-                    AccessKey::putAvatarInAm($email);
-                } else {
-
-                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
-                    Yii::getLogger()->log( "CROWD: " . $email . ": authentication error: " .  $errorArr['error'], Logger::LEVEL_INFO);
-                }
-            }  //elseif(check for another auth type){}
-
-        } else {
-
-            $obj = AccessKey::toCrowd($email, $password);
-            if($obj && $this->validCrowdUser($obj)) {     // if element 'reason' exist, some autentication error there in crowd
-                    AccessKey::createUser($obj, $password);
-                    AccessKey::putAvatarInAm($email);
-            } else {
-                $errorArr['error'] = $this->getMessageFromCrowd($obj);
-            }
-        }
-
-        return !empty($errorArr) ? $errorArr : true;
-    }
-
-    /**
-     * @param $email
-     * @param $password
-     * @return array|bool
-     */
-    public function checkByEmailPasswordCRM($email, $password)
-    {
-        $toName = AccessKey::nameFromURL();
-        $errorArr = [];
-
-        $user = User::findOne(['email' => $email]);
-
-        if ($user){
-            if($user->auth_type == User::CROWD_AUTH){
-                $obj = AccessKey::toCrowd($email, $password);
-
-                if($obj && $this->validCrowdUser($obj)) {
-//                        $roleInCrowd = AccessKey::refToGroupInCrowd($email);
-//                        if ($roleInCrowd && $user->role !== $roleInCrowd) {
-//                            AccessKey::changeUserRole($user, $roleInCrowd);
-//                        }
-                        if(isset($_COOKIE[User::READ_COOKIE_NAME . $toName])) {
-
-                            $session = AccessKey::checkCrowdSession($_COOKIE[User::READ_COOKIE_NAME . $toName]);
-                            if( $session['isSuccess'] === false ){
-                                $this->createCrowdSessionAndCookie($email, $password);
-                            }
-                        } else {
-
-                            $this->createCrowdSessionAndCookie($email, $password);
-                        }
-                    AccessKey::putAvatarInAm($email);
-                } else {
-                    $errorArr['error'] = $this->getMessageFromCrowd($obj);
-                }
-
-            } elseif($user->auth_type == User::DATABASE_AUTH){
-                $this->createCookie();
-                AccessKey::putAvatarInAm($email);
-            }       // another auth types
-
-        } else {
-            $obj = AccessKey::toCrowd($email, $password);
-            if($obj && $this->validCrowdUser($obj)) {     // if element 'reason' exist, some autentication error there in crowd
-                        AccessKey::createUser($obj, $password);
-                        AccessKey::putAvatarInAm($email);
-            } else {
-                $errorArr['error'] = $this->getMessageFromCrowd($obj);
-            }
-        }
-        return !empty($errorArr) ? $errorArr : true;
-    }
-
-    /**
-     * @param $obj
-     * @return bool
-     */
-    public function validCrowdUser($obj)
-    {
-        if (!isset($obj->reason) && isset($obj->active) && $obj->active) {     // if element 'reason' exist, some autentication error there in crowd
-            return true;
-        } elseif(isset($obj->reason)) {
-            return false;
-        }
-    }
 
     public function getMessageFromCrowd($obj)
     {
@@ -206,54 +32,326 @@ class CrowdComponent extends Component
         return $obj->message . " in Crowd";
     }
 
+
     /**
+     * Validate & Prolong Session
+     * @param $token
+     * @return array
+     */
+    public static function validateCrowdSession( $token )
+    {
+        $dataResponse = [
+            'expand'        => null,
+            'success'       => true,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
+        if ( !$token ) {
+
+            $dataResponse['success']    = false;
+            $dataResponse['reason']     = "Undefined token";
+            return $dataResponse;
+
+        }
+        $curl = curl_init();
+        $params = array(
+            "validationFactors" => [],
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => Json::encode($params),
+            CURLOPT_HTTPHEADER     => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+
+            $dataResponse['success']    = false;
+            $dataResponse['reason']     = $err;
+
+        } else {
+
+            $response = json_decode($response, true);
+
+            if ( !isset($response['reason'])) {
+
+                $dataResponse['token']      = $response['token'];
+                $dataResponse['expiryDate'] = self::getExpireForSession($response['expiry-date']);
+                $dataResponse['createdDate']= $response['created-date'];
+
+            } else {
+
+                $dataResponse['success']    = false;
+                $dataResponse['reason']     = $response['message'];
+            }
+        }
+        return $dataResponse;
+    }
+
+    /**
+     * create crowd session
+     * @param $name
+     * @param $pass
+     * @return array
+     */
+    public static function createCrowdSession($name, $pass)
+    {
+        $params = array(
+            "username" => "$name",
+            "password" => "$pass",
+        );
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => Json::encode($params),
+            CURLOPT_HTTPHEADER     => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $dataResponse = [
+            'expand'        => null,
+            'success'       => true,
+            'reason'        => false,
+            'token'         => null,
+            'expiryDate'    => null,
+            'createdDate'   => null
+        ];
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+
+            $dataResponse['success']  = false;
+            $dataResponse['reason']   = $err;
+
+        } else {
+
+            $response = json_decode($response, true);
+            if ( !isset($response['reason'])) {
+
+                $dataResponse['expand']     = $response['expand'];
+                $dataResponse['token']      = $response['token'];
+                $dataResponse['expiryDate'] = self::getExpireForSession($response['expiry-date']);
+                $dataResponse['createdDate']= $response['created-date'];
+
+            } else {
+
+                $dataResponse['success']    = false;
+                $dataResponse['reason']     = $response['message'];
+            }
+        }
+        return $dataResponse;
+    }
+
+    /**
+     * cut timestamp e.g "expiry-date":1513776619706 to 1513776619
+     * @param $exp
+     * @return bool|string
+     */
+    public static function getExpireForSession($exp)
+    {
+        return (int)substr($exp, 0, 10);
+    }
+
+    /**
+     * function for authentication and check if user active in crowd
      * @param $email
      * @param $password
+     * @return array
      */
-    private function createCrowdSessionAndCookie($email, $password)
+    public static function authenticateToCrowd($email, $password)
     {
-        $path = "/";
-        $domain = AccessKey::getStringFromURL();
-        $toName = AccessKey::nameFromURL();
-        $newSession = AccessKey::createCrowdSession($email, $password);
-        setcookie(User::CREATE_COOKIE_NAME . $toName, $newSession['token'], $newSession['expiryDate'], $path, $domain);
+        $params = array(
+            "value" => "$password",
+        );
 
-        // delete db authorization cookie
-        setcookie(User::COOKIE_DATABASE . $toName, 'authorized_through_database',time()-3600*60, $path, $domain);
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL             => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_CUSTOMREQUEST   => "POST",
+            CURLOPT_POSTFIELDS      => Json::encode($params),
+            CURLOPT_HTTPHEADER      => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        $returnData = [
+            'success'   => false,
+            'errors'    => [],
+            'user'      => null
+        ];
+        if ($err) {
+
+            $returnData['errors'][]  = "cURL Error #:" . $err;
+
+        } elseif (($data = json_decode($response, true))) {
+
+            if ( isset($data['reason']) ) {
+
+                $returnData['errors'][] = $data['message'];
+
+            } else {
+
+                $returnData['success']  = true;
+                $returnData['user']     = $data;
+            }
+
+        } else {
+
+            $returnData['errors'][] = Yii::t("app", "Crowd response error");
+
+        }
+        return $returnData;
 
     }
 
-    /**
+    /*
      *
      */
-    public function createCookie()
+    /*public static function getAvatarFromCrowd($email)
     {
-        $path = "/";
-        $domain = AccessKey::getStringFromURL();
-        $toName = AccessKey::nameFromURL();
+        $curl = curl_init();
 
-        setcookie(User::COOKIE_DATABASE . $toName, 'authorized_through_database',time()+(60*30), $path, $domain);
-        //delete crowd cookie
-        setcookie(User::CREATE_COOKIE_NAME . $toName,"",time()-3600*60, $path, $domain);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::AVATAR_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            $j = json_decode($response);
+            if(isset($j->reason)){
+                return "/img/avatar.png";
+            } else {
+                return self::findAddress($response,'found at ');
+            }
+        }
+    }*/
+
+    /*
+     *
+     */
+    public static function refToGroupInCrowd($email)
+    {
+        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN];
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::GROUP_FROM_CROWD . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $array = json_decode($response,TRUE);
+        $elem = array_shift($array['groups']);
+        if(in_array($elem['name'], $roleArr)) {
+            return $elem['name'];
+        } else {
+            return false;
+        }
 
     }
 
-    /**
-     * @param $session
+    /*
+     *
      */
-    public function prolongCrowdCookie($session)
+    public static function putAvatarInAm($email)
     {
-        $path = "/";
-        $domain = AccessKey::getStringFromURL();
-        $toName = AccessKey::nameFromURL();
+        $curl = curl_init();
 
-        // get difference beetwen create and expiry date of the crowd session instead of hardcode 30 min
-        $created = substr($session['createdDate'], 0, 10);
-        $expiry = substr($session['expiryDate'], 0, 10);
-        $dateDiff = $expiry - $created;
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => Yii::$app->params['crowd_domain'] . self::AVATAR_REQUEST . $email,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "authorization:" . Yii::$app->params['crowd_code'],
+                "content-type: application/json",
+            ),
+        ));
 
-        // set crowd.token_key cookie with value of current crowd token and expiry extended by expiry crowd date difference(30 min)
-        setcookie(User::CREATE_COOKIE_NAME . $toName, $_COOKIE[User::READ_COOKIE_NAME . $toName],time() + $dateDiff, $path, $domain);
+        $response = curl_exec($curl);
 
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+
+            try {
+                $content = file_get_contents(self::findAddress($response,'found at '));
+                $s = new Storage();
+                $pathFile = 'data/' . Yii::$app->user->id . '/photo/';
+                $s->uploadData($pathFile . 'avatar', $content);
+            }
+            catch (\Exception $e) {
+            }
+
+        }
+    }
+
+
+    /*
+     * return string(url of the avatar image) after specified substring
+     */
+    public static function findAddress($string, $substring) {
+        $pos = strpos($string, $substring);
+        if ($pos === false)
+            return $string;
+        else
+            return strval(substr($string, $pos+strlen($substring)));
     }
 }

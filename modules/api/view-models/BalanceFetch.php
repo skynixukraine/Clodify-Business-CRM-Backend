@@ -92,13 +92,13 @@ class BalanceFetch extends ViewModelAbstract
                     $this->setData($data);
 
                 } else {
-                    return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You have no permission for this action'));
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
                 }
             } else {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You should provide date from'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You should provide date from'));
             }
         } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('yii', 'You should provide business_id'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You should provide business_id'));
         }
     }
 
