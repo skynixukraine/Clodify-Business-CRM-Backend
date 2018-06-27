@@ -14,6 +14,7 @@ use Yii;
 use yii\base\Component;
 use app\modules\api\models\AccessKey;
 use yii\helpers\Json;
+use app\models\Storage;
 
 class CrowdComponent extends Component
 {
