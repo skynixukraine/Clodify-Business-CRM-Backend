@@ -39,6 +39,7 @@ class ApiEndpoints
     const EMERGENCY               = '/api/emergency';
     const DELAYED_SALARY          = '/api/delayed-salary';
     const SSO_CONFIG              = '/api/sso/config';
+    const SSO_TOKEN_CHECK         = '/api/sso/check';
     const FINANCIAL_REPORTS_INCOME= '/income';
 
 }

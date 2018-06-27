@@ -84,6 +84,7 @@ return [
     'DELETE '   . $API . '/operations/<id:\d+>'                               => $API . '/operations/delete',
     'POST '     . $API . '/delayed-salary'                                    => $API . '/delayed-salary/create',
     'GET '      . $API . '/sso/config'                                        => $API . '/sso/get-config',
+    'POST '     . $API . '/sso/check'                                         => $API . '/sso/check',
 
 
     // General rules

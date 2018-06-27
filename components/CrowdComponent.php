@@ -72,7 +72,7 @@ class CrowdComponent extends Component
         ));
 
 
-        $response = curl_exec($curl);
+        echo $response = curl_exec($curl);
         $err = curl_error($curl);
 
         curl_close($curl);
