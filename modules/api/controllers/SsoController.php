@@ -27,4 +27,17 @@ class SsoController extends DefaultController
             ->respond();
     }
 
+    public function actionCheck()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Setting')
+            ->set('viewModel\ViewModelInterface', 'viewModel\SSOCheck')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => false
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

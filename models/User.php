@@ -971,7 +971,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $newUser->password      = $password;
         $newUser->is_active     = self::ACTIVE_USERS;
         $newUser->auth_type     = self::CROWD_AUTH;
-        $newUser->save();
+        $r = $newUser->save();
+        Yii::getLogger()->log( "createASingleDevUser: " . var_export($newUser->getErrors(), 1), Logger::LEVEL_INFO);
+
         //Assign Non Paid Project
         if ( ( $project = Project::find()->where(['name' => Project::INTERNAL_TASK])->one())) {
 
