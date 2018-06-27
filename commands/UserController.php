@@ -26,16 +26,19 @@ class UserController extends Controller
         /** @var  $user User */
         foreach ( $users as $user ) {
 
+            $params = ['role'];
             if (($role = CrowdComponent::refToGroupInCrowd( $user->email )) ) {
 
                 $user->role = $role;
-                
+
             } else {
 
-                $user->role = User::ROLE_GUEST;
+                $user->role         = User::ROLE_GUEST;
+                $user->is_active    = 0;
+                $params[]           = 'is_active';
 
             }
-            $user->save(false, ['role']);
+            $user->save(false, $params);
 
         }
     }

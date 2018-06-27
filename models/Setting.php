@@ -24,6 +24,9 @@ class Setting extends \yii\db\ActiveRecord
     const BONUSES_FACTOR        = 'bonuses_percentage';
     const LABOR_EXPENSES_RATIO  = 'LABOR_EXPENSES_RATIO';
 
+    const SSO_COOKIE_COMAIN_NAME    = 'SSO_COOKIE_COMAIN_NAME';
+
+
     /**
      * @inheritdoc
      */
@@ -86,5 +89,16 @@ class Setting extends \yii\db\ActiveRecord
             ->where(['key' => self::LABOR_EXPENSES_RATIO])
             ->one();
         return 1 + ((int)$settingRow->value)/100;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getSSOCookieDomain()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::SSO_COOKIE_COMAIN_NAME])
+            ->one();
+        return (string)$settingRow->value;
     }
 }
