@@ -936,9 +936,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function uploadPhoto($photo)
     {
+        Yii::getLogger()->log( "S3 uploadPhoto " . var_export($photo, 1), Logger::LEVEL_WARNING);
         $s = new Storage();
         if (is_string($photo)) {
-            $pathFile = 'users/' . Yii::$app->user->id . '/files/photo/photo';
+            $pathFile = 'users/' . Yii::$app->user->id . '/photo/avatar';
             return $s->uploadBase64($pathFile, $photo);
         }
     }
@@ -951,7 +952,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $s = new Storage();
         if (is_string($sign)) {
-            $pathFile = 'users/' . Yii::$app->user->id . '/files/sign/sign';
+            $pathFile = 'users/' . Yii::$app->user->id . '/sign';
             return $s->uploadBase64($pathFile, $sign);
         }
     }

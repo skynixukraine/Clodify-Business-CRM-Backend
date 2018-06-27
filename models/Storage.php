@@ -8,6 +8,7 @@
 namespace app\models;
 use Yii;
 use yii\base\Exception;
+use yii\log\Logger;
 
 class Storage
 {
@@ -131,6 +132,8 @@ class Storage
                 'Body'   => $sourceFile
             ));
         } catch (Exception $e) {
+
+            Yii::getLogger()->log( "S3 Unable Put Object " . var_export($e, 1), Logger::LEVEL_WARNING);
             throw $e;
         }
         return $upload;
