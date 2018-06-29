@@ -50,6 +50,7 @@ return [
     'POST '     . $API . '/financial-reports/<id:\d+>/income'                 => $API . '/financial-reports/income-add',
     'GET '      . $API . '/financial-reports/<id:\d+>/income'                 => $API . '/financial-reports/income-fetch',
     'DELETE '   . $API . '/financial-reports/<id:\d+>/income/<income_item_id:\d+>' => $API . '/financial-reports/income-delete',
+    'GET '      . $API . '/financial-reports/<id:\d+>/bonuses'                => $API . '/financial-reports/bonuses-fetch',
     'GET '      . $API . '/financial-reports/yearly'                          => $API . '/financial-reports/yearly',
     'GET '      . $API . '/salary-reports'                                    => $API . '/salary-reports/fetch',
     'POST '     . $API . '/salary-reports'                                    => $API . '/salary-reports/create',

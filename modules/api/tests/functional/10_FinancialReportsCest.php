@@ -518,6 +518,41 @@ class FinancialReportsCest
 
     }
 
+    public function testFetchFinancialBonusesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing fetch own financial bonuses  by SALES');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_BONUSES);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                [
+                    'id'                => 'integer',
+                    'added_by'          => 'array',
+                    'project'           => 'array',
+                    'expenses'          => 'integer',
+                    'income'            => 'integer',
+                    'bonuses'           => 'integer'
+
+                ],
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+
+        ]);
+
+    }
+
 
     public function testDeleteFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
@@ -600,5 +635,7 @@ class FinancialReportsCest
 
         $I->assertEquals(count($response->data), 0);
     }
+
+
 
 }
