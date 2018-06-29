@@ -385,6 +385,14 @@ class Report extends \yii\db\ActiveRecord
             ->sum('cost');
     }
 
+    public static function getReportsCostByProjectAndDates($projectId, $fromDate, $toDate)
+    {
+        return self::find()
+            ->where([Report::tableName() . '.project_id' => $projectId])
+            ->andWhere(['between', 'date_report', $fromDate, $toDate])
+            ->sum('cost');
+    }
+
     /**
      * 
      */

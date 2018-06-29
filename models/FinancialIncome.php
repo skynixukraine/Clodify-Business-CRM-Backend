@@ -24,6 +24,8 @@ use Yii;
 class FinancialIncome extends \yii\db\ActiveRecord
 {
 
+    public $sumAmount;
+
     const SCENARIO_FINANCIAL_INCOME_CREATE = 'api-financial_income-create';
 
     /**
