@@ -10,14 +10,19 @@ namespace app\components;
 
 
 use app\models\User;
+use PhpMyAdmin\MoTranslator\Loader;
 use Yii;
 use yii\base\Component;
 use app\modules\api\models\AccessKey;
 use yii\helpers\Json;
 use app\models\Storage;
+use yii\log\Logger;
 
 class CrowdComponent extends Component
 {
+
+    const CODE_NOT_FOUND    = 404;
+    const CODE_SUCCESS      = 200;
 
     const CROWD_SESSION_URL = "/rest/usermanagement/1/session";
 
@@ -272,12 +277,13 @@ class CrowdComponent extends Component
         }
     }*/
 
-    /*
-     *
+    /**
+     * @param $email
+     * @return array
      */
     public static function refToGroupInCrowd($email)
     {
-        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN];
+        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN, User::ROLE_GUEST];
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -291,17 +297,29 @@ class CrowdComponent extends Component
             ),
         ));
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+        $response       = curl_exec($curl);
+        $info           = curl_getinfo($curl);
+        $returnData     = [
+            'success'   => false,
+            'code'      => $info['http_code'],
+            'role'      => null
+        ];
+        if ( ($error = curl_error($curl)) || $info['http_code'] != self::CODE_SUCCESS ) {
 
-        $array = json_decode($response,TRUE);
-        $elem = array_shift($array['groups']);
-        if(in_array($elem['name'], $roleArr)) {
-            return $elem['name'];
+            Yii::getLogger()->log( "CROWD refToGroupInCrowd Error: " . $error . var_export($info, 1), Logger::LEVEL_WARNING);
+
         } else {
-            return false;
-        }
 
+            $array = json_decode($response,TRUE);
+            $elem = array_shift($array['groups']);
+            $returnData['success']  = true;
+            if(in_array($elem['name'], $roleArr)) {
+                $returnData['role']     = $elem['name'];
+            }
+
+        }
+        curl_close($curl);
+        return $returnData;
     }
 
     /*
@@ -339,6 +357,8 @@ class CrowdComponent extends Component
                 $s->uploadData($pathFile . 'avatar', $content);
             }
             catch (\Exception $e) {
+
+                Yii::getLogger()->log( "CROWD Error: " . $e->getMessage(), Logger::LEVEL_WARNING);
             }
 
         }
