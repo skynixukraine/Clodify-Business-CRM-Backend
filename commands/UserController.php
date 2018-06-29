@@ -22,23 +22,40 @@ class UserController extends Controller
      */
     public function actionSync()
     {
-        $users = User::find()->where(['auth_type'   => User::CROWD_AUTH])->all();
+        $users = User::find()->where(['auth_type'   => User::CROWD_AUTH, 'is_delete' => 0])->all();
         /** @var  $user User */
         foreach ( $users as $user ) {
 
-            $params = ['role'];
-            if (($role = CrowdComponent::refToGroupInCrowd( $user->email )) ) {
+            if (($response = CrowdComponent::refToGroupInCrowd( $user->email )) ) {
 
-                $user->role = $role;
+                $role       = $response['role'];
+                $success    = $response['success'];
+                $code       = $response['code'];
 
-            } else {
+                if ( $success === true && $role != null ) {
 
-                $user->role         = User::ROLE_GUEST;
-                $user->is_active    = 0;
-                $params[]           = 'is_active';
+                    $user->role         = $role;
+                    $user->is_active    = 1;
+                    $user->save(false, ['role', 'is_active']);
+
+                } elseif ( $success === true && $role === null ) {
+
+                    $user->role         = User::ROLE_GUEST;
+                    $user->is_active    = 0;
+                    $user->save(false, ['role', 'is_active']);
+
+                } elseif ( $code === CrowdComponent::CODE_NOT_FOUND ) {
+                    //User does not exist, delete it from CRM
+                    $user->role         = User::ROLE_GUEST;
+                    $user->is_active    = 0;
+                    $user->is_delete    = 1;
+                    $params[]           = 'is_active';
+                    $params[]           = 'is_delete';
+                    $user->save(false, ['role', 'is_active', 'is_delete']);
+
+                }
 
             }
-            $user->save(false, $params);
 
         }
     }
