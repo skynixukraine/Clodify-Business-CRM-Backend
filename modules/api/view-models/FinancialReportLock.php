@@ -9,13 +9,17 @@ namespace viewModel;
 
 
 use app\models\DelayedSalary;
+use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\FinancialYearlyReport;
+use app\models\Report;
 use app\models\SalaryReport;
 use app\models\SalaryReportList;
 use app\models\User;
+use app\models\WorkHistory;
 use app\modules\api\components\Api\Processor;
 use Yii;
+use yii\log\Logger;
 
 /**
  * Class FinancialReportCreate
@@ -104,6 +108,39 @@ class FinancialReportLock extends ViewModelAbstract
                             }
                         }
                     }
+                    Yii::getLogger()->log('Applying Financial Income Histories', Logger::LEVEL_INFO);
+                    $dateFrom   = date('Y-m-01 00:00:00', $financialReport->report_date);
+                    $toDate     = date('Y-m-t 00:00:00', $financialReport->report_date);
+
+                    $query  = FinancialIncome::find();
+                    $query->where(['financial_report_id' => $financialReport->id]);
+                    $query->groupBy('developer_user_id');
+                    $query->select(['SUM(amount) AS sumAmount', 'developer_user_id']);
+                    $data = $query->all();
+
+                    /** @var  $finIncome FinancialIncome */
+                    foreach ( $data as $finIncome ) {
+
+
+                        if ( ( $user = User::findOne($finIncome->developer_user_id ) ) ) {
+
+                            $earned = round(($finIncome->sumAmount - Report::getReportCostPerMonthPerUser( $finIncome->developer_user_id )) * 0.8 );
+
+                            WorkHistory::create(
+                                WorkHistory::TYPE_USER_EFFORTS,
+                                $finIncome->developer_user_id,
+                                Yii::t('app', '~ Earned ${earned}', [
+                                    'earned'  => $earned
+                                ]),
+                                $dateFrom,
+                                $toDate
+                            );
+
+
+
+                        }
+                    }
+
 
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to add twise the same report'));
@@ -126,12 +163,27 @@ class FinancialReportLock extends ViewModelAbstract
      */
     public function applyDelayedSalary( $date )
     {
+        Yii::getLogger()->log('applyDelayedSalary', Logger::LEVEL_INFO);
+
         $date = date('Y-m-d', $date);
         $m = date("m", strtotime($date . ' +1 month')); //Applying salaries for next period
         $records =  DelayedSalary::find()->where(['is_applied' => 0, 'month' => $m])->all();
+
+        Yii::getLogger()->log('DelayedSalary Month: ' . $m, Logger::LEVEL_INFO);
+        Yii::getLogger()->log('DelayedSalary Records: ' . count($records), Logger::LEVEL_INFO);
         if($records){
+            /** @var  $record DelayedSalary */
             foreach ($records as $record){
-                User::updateAll(['salary' => $record->value], 'id = ' . $record->user_id);
+
+                /** @var $user User */
+                if ( ( $user = $record->getUser()->one() ) ) {
+
+                    Yii::getLogger()->log('DelayedSalary Applied : ' . $record->value, Logger::LEVEL_INFO);
+
+                    $user->salary = $record->value;
+                    $user->save(false, ['salary']);
+
+                }
                 $record->is_applied = 1;
                 $record->save(false, ['is_applied']);
             }

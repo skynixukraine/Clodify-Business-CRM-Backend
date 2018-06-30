@@ -340,21 +340,25 @@ class Report extends \yii\db\ActiveRecord
         return self::find()
             ->where ('TO_DAYS(NOW()) - TO_DAYS(date_report) <= 7 AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser] )->sum('hours');
     }
-    public static function getReportHoursMonth($currUser)
-    {
 
+    public static function getReportHoursMonth($userId)
+    {
         return self::find()
-            ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser])->sum('hours');
+            ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $userId])
+            ->sum('hours');
     }
 
-
-
-    /*public static function getUserAlias($user_id)
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public static function getReportCostPerMonthPerUser($userId)
     {
         return self::find()
-            ->from(User::tableName())
-            ->leftJoin()
-    }*/
+            ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $userId])
+            ->sum('cost');
+    }
+
     public function hoursDelete()
     {
 		$project = $this->project;

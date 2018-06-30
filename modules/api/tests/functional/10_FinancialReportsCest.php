@@ -271,6 +271,70 @@ class FinancialReportsCest
         ]);
     }
 
+    public function testAddFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing add financial income data by SALES');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
+            json_encode([
+                'from_date'         => 1,
+                'to_date'           => 2,
+                'amount'            => $this->salesIncome,
+                'description'       => "Upwork Contract May #32",
+                'project_id'        => ValuesContainer::$projectId,
+                'developer_user_id' => ValuesContainer::$userDev['id'],
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'array|null',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+        $I->wantTo('Testing add financial income data by ADMIN');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas    = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
+            json_encode([
+                'from_date'         => 2,
+                'to_date'           => 3,
+                'amount'            => $this->adminIncome,
+                'description'       => "Upwork Contract #33",
+                'project_id'        => ValuesContainer::$projectId,
+                'developer_user_id' => ValuesContainer::$userDev['id'],
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'    => 'array|null',
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+    }
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-1023
      * @param  FunctionalTester $I
@@ -383,69 +447,7 @@ class FinancialReportsCest
         ]);
     }
 
-    public function testAddFinancialIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
-    {
 
-        $I->wantTo('Testing add financial income data by SALES');
-        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
-        $pas    = ValuesContainer::$userSales['password'];
-
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, $pas);
-        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
-            json_encode([
-                'from_date'         => 1,
-                'to_date'           => 2,
-                'amount'            => $this->salesIncome,
-                'description'       => "Upwork Contract May #32",
-                'project_id'        => ValuesContainer::$projectId,
-                'developer_user_id' => ValuesContainer::$userDev['id'],
-            ])
-        );
-
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        codecept_debug($response);
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data'    => 'array|null',
-            'errors'  => 'array',
-            'success' => 'boolean'
-        ]);
-
-
-        $I->wantTo('Testing add financial income data by ADMIN');
-        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
-        $pas    = ValuesContainer::$userAdmin['password'];
-
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, $pas);
-        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
-            json_encode([
-                'from_date'         => 2,
-                'to_date'           => 3,
-                'amount'            => $this->adminIncome,
-                'description'       => "Upwork Contract #33",
-                'project_id'        => ValuesContainer::$projectId,
-                'developer_user_id' => ValuesContainer::$userDev['id'],
-            ])
-        );
-
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-        $response = json_decode($I->grabResponse());
-        codecept_debug($response);
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data'    => 'array|null',
-            'errors'  => 'array',
-            'success' => 'boolean'
-        ]);
-
-    }
 
     /**
      * @see https://jira.skynix.co/browse/SCA-177
