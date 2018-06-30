@@ -848,4 +848,70 @@ class ReportsCest
         ]);
     }
 
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-200
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testSalesCanSeeOwnReportsForProjectsWhereTheyAreNotSalesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('create a report as a sales user');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => ValuesContainer::$projectIDWithoutSales,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => date('d/m/Y', strtotime('now -1 day'))
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'report_id' => 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $ownReportId = $response->data->report_id;
+
+        $I->wantTo('check that sales sees own report');
+        $I->sendGET(ApiEndpoints::REPORT, [
+            'limit'     => 1,
+            'order'     => ['id' => 'DESC'],
+            'user_id'   => ValuesContainer::$userSales['id']
+
+        ]);
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'reports' => 'array',
+                "total_records" => 'string',
+                "total_hours" => 'string',
+                "total_cost" => 'float|integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        $I->seeResponseContainsJson([
+            'data' =>
+                [
+                    'reports' => [
+                        'report_id' => $ownReportId,
+                        'task' => TASK
+                    ],
+
+                ]
+        ]);
+
+    }
 }

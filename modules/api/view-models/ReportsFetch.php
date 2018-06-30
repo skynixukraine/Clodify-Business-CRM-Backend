@@ -106,7 +106,7 @@ class ReportsFetch extends ViewModelAbstract
 
             $salesid = Yii::$app->user->id;
 
-            if($salesid && $salesid != null){
+            if($salesid && $salesid != null && $salesid != $usersId){
 
                 $projectsDeveloper = ProjectDeveloper::getReportsOfSales($salesid );
                 $projectId = [];
@@ -124,13 +124,20 @@ class ReportsFetch extends ViewModelAbstract
         }
 
         if(User::hasPermission([User::ROLE_PM])) {
-            $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
-            $projectId = [];
-            foreach ($projects as $project) {
-                $projectId[] = $project->id;
+            $pmid = Yii::$app->user->id;
+
+            if($pmid && $pmid != null && $pmid != $usersId){
+
+                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
+                $projectId = [];
+                foreach ($projects as $project) {
+                    $projectId[] = $project->id;
+                }
+                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+
             }
-            $projects = $projectId ? implode(', ', $projectId) : 0;
-            $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+
         }
 
         if (User::hasPermission([User::ROLE_DEV])) {
