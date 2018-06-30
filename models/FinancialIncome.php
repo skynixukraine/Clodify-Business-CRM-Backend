@@ -24,6 +24,8 @@ use Yii;
 class FinancialIncome extends \yii\db\ActiveRecord
 {
 
+    public $sumAmount;
+
     const SCENARIO_FINANCIAL_INCOME_CREATE = 'api-financial_income-create';
 
     /**
@@ -93,17 +95,6 @@ class FinancialIncome extends \yii\db\ActiveRecord
     /** Save the  field’s value in the database if this is s new record */
     public function beforeSave($insert)
     {
-
-        if ($this->isNewRecord) {
-
-            WorkHistory::create(
-                WorkHistory::TYPE_USER_EFFORTS,
-                $this->developer_user_id,
-                Yii::t('app', '~ Earned ${earned}', [
-                    'earned'  => $this->amount
-                ])
-            );
-        }
         return parent::beforeSave($insert);
     }
 }

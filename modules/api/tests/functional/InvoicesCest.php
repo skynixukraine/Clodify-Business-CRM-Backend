@@ -308,7 +308,6 @@ class InvoicesCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        codecept_debug($response->errors);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
