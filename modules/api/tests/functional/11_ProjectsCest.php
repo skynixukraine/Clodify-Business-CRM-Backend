@@ -26,24 +26,24 @@ class ProjectsCest
         $oAuth->login();
 
         $I->sendPOST(ApiEndpoints::PROJECT, json_encode([
-            "name"               =>  "Project",
-            "jira_code"          =>  "SI-21",
-            "date_start"         => date('d/m/Y'),
-            "date_end"           => date('Y-m-d', strtotime('-1 year')),
-            "developers"         => [
+            "name" => "Project",
+            "jira_code" => "SI-21",
+            "date_start"    => date('d/m/Y'),
+            "date_end"      => date('d/m/Y', strtotime('+1 year')),
+            "developers" => [
                 [
-                    'id'    => ValuesContainer::$userDev['id']
+                    'id' => ValuesContainer::$userDev['id']
                 ],
                 [
-                    'id'    => ValuesContainer::$userSales['id']
+                    'id' => ValuesContainer::$userSales['id']
                 ]
             ],
-            "customers"          => [ValuesContainer::$userClient['id']],
-            "invoice_received"   => ValuesContainer::$userClient['id'],
-            "is_pm"              => ValuesContainer::$userDev['id'],
-            "is_sales"           => ValuesContainer::$userSales['id'],
-            "is_published"       => 1,
-            "status"             => "INPROGRESS"
+            "customers" => [ValuesContainer::$userClient['id']],
+            "invoice_received" => ValuesContainer::$userClient['id'],
+            "is_pm" => ValuesContainer::$userDev['id'],
+            "is_sales" => ValuesContainer::$userSales['id'],
+            "is_published" => 1,
+            "status" => "INPROGRESS"
         ]));
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);

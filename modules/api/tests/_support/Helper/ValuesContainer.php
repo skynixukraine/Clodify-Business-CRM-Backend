@@ -21,6 +21,8 @@ class ValuesContainer
     public static $unix = 1522912941;
     public static $DevSalary = 5500;
 
+    public static $projectIDWithoutSales;
+
     public static $userAdmin = [
         'id'        => 1,
         'email'     => 'crm-admin@skynix.co',

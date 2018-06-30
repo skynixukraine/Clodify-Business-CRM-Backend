@@ -106,17 +106,21 @@ class ServiceCest {
         $this->userClientId = $response->data->user_id;
     }
 
-    public function createProjectTest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    /**
+     * @see https://jira.skynix.co/browse/SCA-200
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testCreateAProjectWithAnotherSalesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
         $I->sendPOST(ApiEndpoints::PROJECT, json_encode([
-            "name"               =>  "Project",
-            "jira_code"          =>  "SI-1",
-            "status"             => "INPROGRESS",
-            "date_start"         => date('d/m/Y'),
-            "date_end"           => date('Y-m-d', strtotime('-1 year')),
+            "name"               =>  "Project Without Sales",
+            "jira_code"          =>  "PWS-1",
+            "date_start"         => date('d/m/Y', strtotime('now -10 days')),
+            "date_end"           => date('d/m/Y', strtotime('+1 year')),
             "developers"         => [
                 [
 
@@ -124,19 +128,31 @@ class ServiceCest {
                 ],
                 [
                     'id'    => $this->userSalesId
+                ],
+                [
+                    'id'    => ValuesContainer::$userSales['id']
                 ]
             ],
             "customers"          => [$this->userClientId],
             "invoice_received"   => $this->userClientId,
             "is_pm"              => $this->userDevId,
             "is_sales"           => $this->userSalesId,
-            "is_published"       => 1,
+            "is_published"       => 1
         ]));
         $response = json_decode($I->grabResponse());
         codecept_debug($response);
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->projectId = $response->data->project_id;
+        ValuesContainer::$projectIDWithoutSales = $response->data->project_id;
+
+        $I->wantTo('enable project for reports');
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectIDWithoutSales . '/activate');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
     }
 
 
