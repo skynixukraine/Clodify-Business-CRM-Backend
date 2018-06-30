@@ -283,7 +283,7 @@ class CrowdComponent extends Component
      */
     public static function refToGroupInCrowd($email)
     {
-        $roleArr = [User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN, User::ROLE_GUEST];
+        $roleArr = [User::ROLE_SALES, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN, User::ROLE_GUEST];
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
