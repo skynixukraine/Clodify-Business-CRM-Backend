@@ -79,7 +79,7 @@ class WorkHistory extends \yii\db\ActiveRecord
      * @param null $dateStart
      * @return WorkHistory
      */
-    public static function create($type, $userId, $title, $dateStart = null)
+    public static function create($type, $userId, $title, $dateStart = null, $dataEnd = null)
     {
         $workHistory = new WorkHistory();
         $workHistory->type      = $type;
@@ -92,6 +92,11 @@ class WorkHistory extends \yii\db\ActiveRecord
         } else {
 
             $workHistory->date_start = $dateStart;
+
+        }
+        if ( $dataEnd ) {
+
+            $workHistory->date_end = $dataEnd;
 
         }
         $workHistory->save();

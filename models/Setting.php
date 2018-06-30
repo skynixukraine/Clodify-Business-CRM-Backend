@@ -83,12 +83,12 @@ class Setting extends \yii\db\ActiveRecord
     }
 
 
-    public static function getLaborExpensesRatio()
+    public static function getLaborExpensesRatio( $randPart = 0 )
     {
         $settingRow = Setting::find()
             ->where(['key' => self::LABOR_EXPENSES_RATIO])
             ->one();
-        return 1 + ((int)$settingRow->value)/100;
+        return 1 + ((int)$settingRow->value + $randPart)/100;
     }
 
     /**

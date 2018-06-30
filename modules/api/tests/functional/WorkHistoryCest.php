@@ -73,7 +73,7 @@ class WorkHistoryCest
 
         $I->wantTo('Testing view work history data');
         $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'] . '/work-history',
-            ['from_date' => date('d/m/Y', strtotime('now -10 days'))]);
+            ['from_date' => date('d/m/Y', strtotime('now -61 days'))]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

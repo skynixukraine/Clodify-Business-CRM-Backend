@@ -88,7 +88,7 @@ class CreateEditReport extends ViewModelAbstract
                             $user = User::findOne($user_id);
 
                             //This ratio adds some average other expenses to initial salary
-                            $expensesRatio = Setting::getLaborExpensesRatio();
+                            $expensesRatio = Setting::getLaborExpensesRatio( (3 - rand(0, 6)));
 
                             $salary = $delayedSalaryNote && $delayedSalaryNote->value > 0 ? $delayedSalaryNote->value : $user->salary;
 

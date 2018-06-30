@@ -15,7 +15,6 @@ use yii\console\Controller;
 use app\models\AvailabilityLog;
 use app\models\ProjectDeveloper;
 
-
 class ReportController extends Controller
 {
     /**
