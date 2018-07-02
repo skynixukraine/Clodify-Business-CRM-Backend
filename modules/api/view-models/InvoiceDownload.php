@@ -38,7 +38,7 @@ class InvoiceDownload extends ViewModelAbstract
             /** @var $customer User */
             /** @var $director User */
             if ( ( $id = Yii::$app->request->getQueryParam('id') ) &&
-                ( $invoice = Invoice::findOne($id) ) &&
+                ( $invoice = Invoice::find()->where(['invoice_id' => $id])->one()) &&
                 ( $business = $invoice->getBusiness()->one()) &&
                 ( $customer = $invoice->getUser()->one()) &&
                 ( $director = User::findOne( $business->director_id))) {
@@ -130,17 +130,17 @@ class InvoiceDownload extends ViewModelAbstract
                     $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Requested invoice has not been found.'));
 
                 }
-                if ( !$business ) {
+                if ( $invoice && !$business ) {
 
                     $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Business has not been found.'));
 
                 }
-                if ( !$customer ) {
+                if ( $invoice && $business && !$customer ) {
 
                     $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Customer has not been found.'));
 
                 }
-                if ( !$director ) {
+                if ( $invoice && $business && !$director ) {
 
                     $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Director has not been found.'));
 
