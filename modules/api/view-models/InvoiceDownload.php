@@ -50,31 +50,24 @@ class InvoiceDownload extends ViewModelAbstract
                     $name = "Invoice" . $invoice->invoice_id . ".pdf";
 
                     //-------------- Download contractor signature from Amazon Simple Storage Service--------//
-                    $contractorSign     = 'data/' . $director->id . '/sign/' . $director->sing;
+                    $contractorSign     = 'users/' . $director->id . '/sign';
                     $contractorSignData = "";
                     $s = new Storage();
-                    $folder = Yii::getAlias('@app') . '/data/sign/';
-
-                    if(!is_dir($folder)){
-                        mkdir($folder );
-                    }
-                    $conractorImgPath  = $folder . 'contractor.'. pathinfo( $director->sing, PATHINFO_EXTENSION);
                     try {
                         $contractorSignData = $s->download($contractorSign);
                     }catch (\Aws\S3\Exception\S3Exception $e) {}
 
                     //----------------Download customer signature from Amazon Simple Storage Service---------//
 
-                    $customerSign       = 'data/' . $customer->id . '/sign/' . $customer->sing;
+                    $customerSign       = 'users/' . $customer->id . '/sign';
                     $customerSignData   = "";
-                    $customerImgPath  = $folder . 'customer.'. pathinfo( $customer->sing, PATHINFO_EXTENSION);
                     try {
                         $customerSignData = $s->download($customerSign);
                     } catch (\Aws\S3\Exception\S3Exception $e) {}
 
-                    $signatureContractor = 'data: '. ( file_exists($conractorImgPath ) ? mime_content_type($conractorImgPath) : 'image/jpeg' ).';base64,'.base64_encode( $contractorSignData );
+                    $signatureContractor = 'data: image/jpeg;base64,'.base64_encode( $contractorSignData );
 
-                    $signatureCustomer = 'data: '.( file_exists($customerImgPath ) ? mime_content_type($customerImgPath) : 'image/jpeg' ) .';base64,'.base64_encode($customerSignData);
+                    $signatureCustomer = 'data: image/jpeg;base64,'.base64_encode($customerSignData);
 
                     $html = Yii::$app->controller->renderPartial('invoicePDF', [
                         'id'                    => $invoice->invoice_id,
