@@ -148,7 +148,7 @@
                 <tr>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">1</td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">
-                        Software Development from <?=$dataFrom?> to <?=$dataTo?>
+                        Software Development from <?=$dataFrom?> to <?=$dataTo?><br>
                         /Розробка програмного забезпечення від <?=$dataFromUkr?> до <?=$dataToUkr?>
                     </td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">1</td>
@@ -182,13 +182,13 @@
         </a>
     </td>
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             All charges of correspondent banks are at the Customer’s expenses. / Усі комісії банків-кореспондентів сплачує Замовник.
         </td>
     </tr>
 
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             This Invoice is an offer to enter into the agreement. Payment according hereto shall be deemed as an
             acceptation of the offer to enter into the agreement on the terms and conditions set out herein.
             Payment according hereto may be made not later than <span style="font-weight: 900;"><?=$dateToPay?></span>. / Цей Інвойс є пропозицією укласти договір.
@@ -197,11 +197,11 @@
         </td>
     </tr>
     <tr>
-        <td colspan = "2" height="17" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" height="17" width = "570" style="padding: 0; margin: 0;">
         </td>
     </tr>
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             Please note, that payment according hereto at the same time is the evidence of the work performance and the
             service delivery in full scope, acceptation thereof and the confirmation of final mutual installments between
             Parties. / Оплата згідно цього Інвойсу одночасно є свідченням виконання робіт та надання послуг в повному
@@ -209,11 +209,11 @@
         </td>
     </tr>
     <tr>
-        <td colspan = "2" height="17" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" height="17" width = "570" style="padding: 0; margin: 0;">
         </td>
     </tr>
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             Payment according hereto shall be also the confirmation that Parties have no claims to each other and have no
             intention to submit any claims. The agreement shall not include penalty and fine clauses. / Оплата згідно
             цього Інвойсу є підтвердженням того, що Сторони не мають взаємних претензій та не мають наміру направляти
@@ -221,29 +221,29 @@
         </td>
     </tr>
     <tr>
-        <td colspan = "2" height="17" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" height="17" width = "570" style="padding: 0; margin: 0;">
         </td>
     </tr>
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             The Parties shall not be liable for non-performance or improper performance of the obligations under the
             agreement during the term of insuperable force circumstances. / Сторони звільняються від відповідальності
             за невиконання чи неналежне виконаннязобов’язань за договором на час дії форс-мажорних обставин.
         </td>
     </tr>
     <tr>
-        <td colspan = "2" height="17" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" height="17" width = "570" style="padding: 0; margin: 0;">
         </td>
     </tr>
     <tr>
-        <td colspan = "2" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             Any disputes arising out of the agreement between the Parties shall be settled by the competent court at the
             location of a defendant. / Всі спори, що виникнуть між Сторонами по договору будуть розглядатись компетентним
             судом за місцезнаходження відповідача.
         </td>
     </tr>
     <tr>
-        <td colspan = "2" height="30" width = "285" style="padding: 0; margin: 0;">
+        <td colspan = "2" height="30" width = "570" style="padding: 0; margin: 0;">
         </td>
     </tr>
     <tr>
