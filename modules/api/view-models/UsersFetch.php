@@ -65,7 +65,7 @@ class UsersFetch extends ViewModelAbstract
 
             $query2 = User::find()
                 ->andWhere(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_ADMIN]]);
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_PM, User::ROLE_FIN]]);
 
             $query = $query1->union($query2);
         }
