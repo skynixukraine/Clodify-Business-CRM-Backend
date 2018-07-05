@@ -393,7 +393,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 WorkHistory::create(
                     WorkHistory::TYPE_ADMIN_BENEFITS,
                     $this->id,
-                    Yii::t('app', '~ Salary changes - Salary changed from ${from} to ${to} on {on}', [
+                    Yii::t('app', '~ Salary changed from ${from} to ${to} on {on}', [
                         'from'  => $this->salary,
                         'to'    => $oldData['salary'],
                         'on'    => $this->date_salary_up
@@ -404,7 +404,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 WorkHistory::create(
                     WorkHistory::TYPE_ADMIN_BENEFITS,
                     $this->id,
-                    Yii::t('app', '~ Official Salary changes - Official Salary changed from ${from} to ${to} on {on}', [
+                    Yii::t('app', '~ Official Salary changed from {from}UAH to {to}UAH on {on}', [
                         'from'  => $this->official_salary,
                         'to'    => $oldData['official_salary'],
                         'on'    => date("Y-m-d")
@@ -989,6 +989,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
         }
         return $newUser;
+    }
+
+    /**
+     * Outputs a system user
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function getSystemUser()
+    {
+
+        return self::find()->where([
+            'first_name'   => 'SKYNIX',
+            'last_name'    => 'SYSTEM'
+        ])->one();
+
     }
 
 }
