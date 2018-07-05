@@ -20,6 +20,11 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="570" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e;">
     <tr>
+        <td colspan = "2"  height="17" width = "570" style="padding: 0; margin: 0; font-size: 10px">
+            Page <b>1</b>
+        </td>
+    </tr>
+    <tr>
         <td width = "285" height="17" style="padding: 0; margin: 0;"></td>
         <td width = "285" height="17" style="padding: 0; margin: 0;"></td>
     </tr>
@@ -76,18 +81,18 @@
     </tr>
     <tr>
         <td width = "285" height="12" valign="top" style="padding: 4px 5px; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb;">
-            <span style="font-weight: 900;">Currency: </span>USD
+            <span style="font-weight: 900;">Currency: </span><?=$currency?>
         </td>
         <td width = "285" height="12" valign="top" style="padding: 4px 5px; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb;">
-            <span style="font-weight: 900;">Валюта: </span>Долар США
+            <span style="font-weight: 900;">Валюта: </span><?=$currency?>
         </td>
     </tr>
     <tr>
         <td width = "285" height="12" valign="top" style="padding: 4px 5px; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb;">
-            <span style="font-weight: 900;">Price (amount) of the goods/services: </span><?=$priceTotal?>
+            <span style="font-weight: 900;">Price (amount) of the goods/services: </span><?=$priceTotal?> <?=$currency?>
         </td>
         <td width = "285" height="12" valign="top" style="padding: 4px 5px; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb;">
-            <span style="font-weight: 900;">Ціна (загальна вартість) товарів/послуг: </span><?=$priceTotal?>
+            <span style="font-weight: 900;">Ціна (загальна вартість) товарів/послуг: </span><?=$priceTotal?> <?=$currency?>
         </td>
     </tr>
     <tr>
@@ -107,10 +112,10 @@
         </td>
     </tr>
     <tr>
-        <td width = "285" valign="top" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
+        <td width = "285" valign="top" align="left" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
             <?=$supplierBank?>
         </td>
-        <td width = "285" valign="top" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
+        <td width = "285" valign="top" align="left" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
             <?=$supplierBankUa?>
         </td>
     </tr>
@@ -123,10 +128,10 @@
         </td>
     </tr>
     <tr>
-        <td width = "285" valign="top" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
+        <td width = "285" valign="top" align="left" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
             <?=$customerBank?>
         </td>
-        <td width = "285" valign="top" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
+        <td width = "285" valign="top" align="left" style="padding: 0; margin: 0; font-size: 12px; font-family: 'HelveticaNeue Regular', sans-serif; font-weight: normal; text-align: left; border: 1px solid #dbdbdb; border-top: none;">
             <?=$customerBankUa?>
         </td>
     </tr>
@@ -135,54 +140,63 @@
 
         </td>
     </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="570" style="font-size: 12px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e;">
+
     <tr>
         <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             <table border="0" cellpadding="0" cellspacing="0" width="570" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e;">
                 <tr>
+                    <td colspan = "2"  height="17" width = "570" style="padding: 0; margin: 0; text-align: left; padding-bottom: 20px; font-size: 10px;">
+                        Page <b>2</b>
+                    </td>
+                </tr>
+                <tr>
                     <td width = "48" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;">№</td>
                     <td width = "244" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Descripion /</div><div>Опис</div></td>
                     <td width = "72" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Quantity /</div><div>Кількість</div></td>
-                    <td width = "105" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Price,USD /</div><div>Ціна, Долар</div><div>США</div></td>
-                    <td width = "101" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Amount, USD /</div><div>Загальна</div><div>вартість,</div><div>Долар США</div></td>
+                    <td width = "105" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Price,<?=$currency?> /</div><div>Ціна, <?=$currency?></div></td>
+                    <td width = "101" height="100" valign="top" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb; font-style: italic;"><div>Amount, <?=$currency?> /</div><div>Загальна</div><div>вартість,</div><div><?=$currency?></div></td>
                 </tr>
                 <tr>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">1</td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">
-                        Software Development
-                        <br> from <?=$dataFrom?> to <?=$dataTo?><br>
-                        /Розробка програмного забезпечення<br>
+                        Software Development from <?=$dataFrom?> to <?=$dataTo?><br>
+                        /Розробка програмного забезпечення
                         від <?=$dataFromUkr?> до <?=$dataToUkr?>
                     </td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;">1</td>
-                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><?=$priceTotal?></td>
-                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><?=$priceTotal?></td>
+                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><?=$priceTotal?> <?=$currency?></td>
+                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><?=$priceTotal?> <?=$currency?></td>
                 </tr>
                 <tr>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"></td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"></td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"></td>
                     <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><span style="font-weight: 900;">Total/Усього: </span></td>
-                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><span style="font-weight: 900;"><?=$priceTotal?></span></td>
+                    <td height="17" style="padding: 4px 5px; margin: 0; border: 1px solid #dbdbdb;"><span style="font-weight: 900;"><?=$priceTotal?></span> <?=$currency?></td>
                 </tr>
             </table >
         </td>
     </tr>
     <tr>
-        <td colspan = "2"  height="17" width = "570" style="padding: 0; margin: 0;">
+        <td colspan = "2"  height="17" width = "570" style="padding: 0; margin: 0; text-align: left">
 
         </td>
     </tr>
-</table >
-<table border="0" cellpadding="0" cellspacing="0" width="570" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e;">
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="570" style="font-size: 12px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e;">
     <tr>
         <td width = "285" height="1" style="padding: 0; margin: 0;"></td>
         <td width = "285" height="1" style="padding: 0; margin: 0;"></td>
     </tr>
-    <td colspan = "2" width = "570"  valign="top" style="padding: 0; margin: 0;">
-        <a href="https://skynix.co" title="logo Skynix" target="_blank">
-            <img src="<?=Yii::getAlias('@app') . '/web/img/logo_skynix_color_horizontal.png'?>" alt="Skynix" border="0" width="105" height="28" style="display: block; padding: 0px; margin: 0px; border: none; background-color: white;">
-        </a>
-    </td>
+    <tr>
+        <td colspan="2" width = "570"  valign="top" style="padding: 10px; margin: 0;">
+            <a href="https://skynix.co" title="logo Skynix" target="_blank">
+                <img src="<?=Yii::getAlias('@app') . '/web/img/logo_skynix_color_horizontal.png'?>" alt="Skynix" border="0" width="105" height="28" style="display: block; padding: 0px; margin: 0px; border: none; background-color: white;">
+            </a>
+        </td>
+    </tr>
     <tr>
         <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             All charges of correspondent banks are at the Customer’s expenses. / Усі комісії банків-кореспондентів сплачує Замовник.
@@ -278,11 +292,7 @@
         <td width="200" height="12" valign="top" style="padding: 0; margin: 0;"><div><?=$customerName?></div><div>Director of <?=$customerCompany?></div></td>
         <td width="70" height="12" valign="top" style="padding: 0; margin: 0;"></td>
     </tr>
-
 </table >
-
-
-
 
 
 </body>

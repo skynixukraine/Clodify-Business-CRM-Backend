@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\components\DateUtil;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\User;
@@ -33,18 +34,20 @@ class InvoiceView extends ViewModelAbstract
 
             if ($invoiceModel) {
                 $invoice[] = [
+                    'id'            => $invoiceModel->id,
                     'invoice_id'    => $invoiceModel->invoice_id,
                     "business_id"   => $invoiceModel->business_id,
                     "customer" =>  [
                         "id" => $invoiceModel->user->id,
                         "name" => $invoiceModel->user->first_name . ' ' . $invoiceModel->user->last_name ,
                     ],
-                    "start_date"   => $invoiceModel->date_start,
-                    "end_date"     => $invoiceModel->date_end,
+                    "start_date"   => DateUtil::reConvertData( $invoiceModel->date_start ),
+                    "end_date"     => DateUtil::reConvertData( $invoiceModel->date_end ),
                     "total_hours"  => $invoiceModel->total_hours,
-                    "subtotal"     => $invoiceModel->subtotal > 0 ? '$' . $invoiceModel->subtotal : 0,
-                    "discount"     => $invoiceModel->discount > 0 ? '$' . $invoiceModel->discount : 0,
-                    "total"        => $invoiceModel->total > 0 ? '$' . $invoiceModel->total : 0,
+                    "subtotal"     => $invoiceModel->subtotal > 0 ? $invoiceModel->subtotal : 0,
+                    "discount"     => $invoiceModel->discount > 0 ? $invoiceModel->discount : 0,
+                    "total"        => $invoiceModel->total > 0 ? $invoiceModel->total : 0,
+                    "currency"     => $invoiceModel->currency,
                     "notes"        => $invoiceModel->note,
                     "created_date" => $invoiceModel->date_created,
                     "sent_date"    => $invoiceModel->date_sent,
