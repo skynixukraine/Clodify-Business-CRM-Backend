@@ -38,7 +38,7 @@ class InvoiceDownload extends ViewModelAbstract
             /** @var $customer User */
             /** @var $director User */
             if ( ( $id = Yii::$app->request->getQueryParam('id') ) &&
-                ( $invoice = Invoice::find()->where(['invoice_id' => $id])->one()) &&
+                ( $invoice = Invoice::findOne( $id )) &&
                 ( $business = $invoice->getBusiness()->one()) &&
                 ( $customer = $invoice->getUser()->one()) &&
                 ( $director = User::findOne( $business->director_id))) {
@@ -86,7 +86,7 @@ class InvoiceDownload extends ViewModelAbstract
                         'customerName'          => $customer->first_name . ' ' . $customer->last_name,
                         'customerBank'          => $customer->bank_account_en,
                         'customerBankUa'        => $customer->bank_account_ua,
-
+                        'currency'              => $invoice->currency,
                         'priceTotal'            => $invoice->total > 0 ? round( $invoice->total, 2):0,
                         'notes'                 => $invoice->note,
 

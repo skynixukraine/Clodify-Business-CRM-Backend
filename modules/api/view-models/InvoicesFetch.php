@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\components\DateUtil;
 use Yii;
 use app\models\User;
 use app\models\Project;
@@ -143,12 +144,13 @@ class InvoicesFetch extends ViewModelAbstract
                     'id' => $id,
                     'name' => $name
                 ],
-                'subtotal' => $model->subtotal > 0 ? '$' . $model->subtotal : 0,
-                'discount' => $model->discount > 0 ? '$' . $model->discount : 0,
-                'total' => $model->total > 0 ? '$' . $model->total : 0,
+                'subtotal' => $model->subtotal > 0 ? $model->subtotal : 0,
+                'discount' => $model->discount > 0 ? $model->discount : 0,
+                "currency" => $model->currency,
+                'total' => $model->total > 0 ? $model->total : 0,
                 'created_date' => $model->date_created,
-                'sent_date' => $model->date_sent,
-                'paid_date' => $model->date_paid,
+                'sent_date' => DateUtil::reConvertData( $model->date_sent ),
+                'paid_date' => DateUtil::reConvertData( $model->date_paid ),
                 'status' => $model->status
             ];
 
