@@ -13,6 +13,14 @@ use Helper\OAuthSteps;
 use Helper\ApiEndpoints;
 use Helper\ValuesContainer;
 
+define('INVOICE_DATE_START', date('d/m/Y', strtotime('now -1 day')));
+define('INVOICE_DATE_END', date('d/m/Y', strtotime('now')));
+define('INVOICE_SUBTOTAL', 200);
+define('INVOICE_DISCOUNT', 10);
+define('INVOICE_TOTAL', 190);
+define('INVOICE_NOTE', "Some Note");
+define('INVOICE_CURRENCY', "USD");
+
 class InvoicesCest
 {
     private $invoiceId;
@@ -46,7 +54,8 @@ class InvoicesCest
             "subtotal"    =>  2444,
             "discount"    =>  20,
             "total"       =>  20000,
-            "note"        => "Some Note"
+            "note"        => "Some Note",
+            "currency"    => INVOICE_CURRENCY
         ]));
 
         \Helper\OAuthToken::$key = null;
@@ -78,7 +87,8 @@ class InvoicesCest
             "subtotal"    =>  100,
             "discount"    =>  0,
             "total"       =>  100,
-            "note"        => "Some Note"
+            "note"        => "Some Note",
+            "currency"    => INVOICE_CURRENCY
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -99,12 +109,13 @@ class InvoicesCest
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
             "user_id"     =>  ValuesContainer::$userClient['id'],
             "business_id" =>  ValuesContainer::$BusinessID,
-            "date_start"  => date('d/m/Y', strtotime('now -1 day')),
-            "date_end"    => date('d/m/Y', strtotime('now')),
-            "subtotal"    =>  200,
-            "discount"    =>  10,
-            "total"       =>  190,
-            "note"        => "Some Note"
+            "date_start"  => INVOICE_DATE_START,
+            "date_end"    => INVOICE_DATE_END,
+            "subtotal"    => INVOICE_SUBTOTAL,
+            "discount"    => INVOICE_DISCOUNT,
+            "total"       => INVOICE_TOTAL,
+            "note"        => INVOICE_NOTE,
+            "currency"    => INVOICE_CURRENCY
         ]));
         $response = json_decode($I->grabResponse());
         $this->invoiceId = $response->data->invoice_id;
@@ -150,6 +161,7 @@ class InvoicesCest
                         'subtotal'     => 'integer|string',
                         'discount'     => 'integer|string',
                         'total'        => 'integer|string',
+                        'currency'     => 'string',
                         'created_date' => 'string|null',
                         'sent_date'    => 'string|null',
                         'paid_date'    => 'string|null',
@@ -184,6 +196,7 @@ class InvoicesCest
         $I->seeResponseMatchesJsonType([
             'data'  => [
                 [
+                    'id'            => 'integer',
                     'invoice_id'   => 'integer',
                     'business_id'   => 'integer',
                     "customer" =>  'array',
@@ -193,6 +206,7 @@ class InvoicesCest
                     "subtotal"     => 'integer | string',
                     "discount"     => 'integer | string',
                     "total"        => 'integer | string',
+                    "currency"     => 'string',
                     "notes"        => 'string',
                     "created_date" => 'string | null',
                     "sent_date"    => 'string | null',
@@ -203,6 +217,18 @@ class InvoicesCest
             'errors' => 'array',
             'success'=> 'boolean'
         ]);
+
+        $invoice = $response->data[0];
+        $I->assertEquals(ValuesContainer::$userClient['id'], $invoice->customer->id);
+        $I->assertEquals(ValuesContainer::$BusinessID, $invoice->business_id);
+        $I->assertEquals(INVOICE_DATE_START, $invoice->start_date);
+        $I->assertEquals( INVOICE_DATE_END, $invoice->end_date);
+        $I->assertEquals(INVOICE_SUBTOTAL, $invoice->subtotal);
+        $I->assertEquals(INVOICE_DISCOUNT, $invoice->discount);
+        $I->assertEquals(INVOICE_TOTAL, $invoice->total);
+        $I->assertEquals(INVOICE_NOTE, $invoice->notes);
+        $I->assertEquals(INVOICE_CURRENCY, $invoice->currency);
+        $I->assertEquals("NEW", $invoice->status);
     }
 
     /**

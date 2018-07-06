@@ -323,12 +323,13 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function sumReportedHoursForMonthPerUser($salRepList)
     {
 
-        $date = date('Y-m', $salRepList->salaryReport->report_date);
+        $dateFrom = date('Y-m-01', $salRepList->salaryReport->report_date);
+        $toDate     = date('Y-m-t', $salRepList->salaryReport->report_date);
 
         $sum = Report::find()
             ->andWhere(['user_id' => $salRepList->user_id])
             ->andWhere(['is_delete' => Report::ACTIVE])
-            ->andWhere(['like', 'date_added', $date])
+            ->andWhere(['between', 'date_report', $dateFrom, $toDate])
             ->sum(Report::tableName() . '.hours');
         return $sum ? ceil($sum) : 0;
     }
@@ -340,13 +341,14 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function sumApprovedHoursForMonthPerUser($salRepList)
     {
 
-        $date = date('Y-m', $salRepList->salaryReport->report_date);
+        $dateFrom = date('Y-m-01', $salRepList->salaryReport->report_date);
+        $toDate     = date('Y-m-t', $salRepList->salaryReport->report_date);
 
         $sum = Report::find()
             ->andWhere(['user_id' => $salRepList->user_id])
             ->andWhere(['is_delete' => Report::ACTIVE])
             ->andWhere(['is_approved' => Report::APPROVED])
-            ->andWhere(['like', 'date_added', $date])
+            ->andWhere(['between', 'date_report', $dateFrom, $toDate])
             ->sum(Report::tableName() . '.hours');
         return $sum ? ceil($sum) : 0;
     }

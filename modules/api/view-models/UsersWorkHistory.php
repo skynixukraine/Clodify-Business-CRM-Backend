@@ -24,7 +24,7 @@ class UsersWorkHistory extends ViewModelAbstract
         $dateTo     = Yii::$app->request->getQueryParam("to_date", date('d/m/Y'));
         $workHistory = WorkHistory::find();
         $workHistory->where(['between', 'date_start', DateUtil::convertData($dateFrom), DateUtil::convertData($dateTo)]);
-        if ( User::hasPermission([User::ROLE_ADMIN]) &&
+        if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES]) &&
             ($id = Yii::$app->request->getQueryParam('id')) &&
             ($user = User::findOne($id)) ) {
 
@@ -48,16 +48,35 @@ class UsersWorkHistory extends ViewModelAbstract
 
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, no access to data'));
         }
+        $workHistoryData = [];
+        /** @var  $wItem WorkHistory */
+        foreach ( $workHistory as $wItem) {
+
+            if ( !$wItem->added_by_user_id ||
+                !( $postedBy = User::findOne($wItem->added_by_user_id) ) ) {
+
+                $postedBy = User::getSystemUser();
+
+            }
+
+            $workHistoryData[] = [
+
+                'id'            => $wItem->id,
+                'date_start'    => $wItem->date_start,
+                'date_end'      => $wItem->date_end,
+                'type'          => $wItem->type,
+                'title'         => $wItem->title,
+                'posted_by'     => [
+                    'id'        => $postedBy->id,
+                    'name'      => $postedBy->first_name . ' ' . $postedBy->last_name
+                ]
+            ];
 
 
-        $workHistory = ArrayHelper::toArray($workHistory, [
-            WorkHistory::className() => [
-              'id', 'date_start', 'date_end', 'type', 'title'
-            ],
-        ]);
+        }
 
         $data = [
-            'workHistory' => $workHistory,
+            'workHistory' => $workHistoryData,
         ];
         $this->setData($data);
     }

@@ -914,4 +914,135 @@ class ReportsCest
         ]);
 
     }
+
+
+    public function testDownloadPDFReports(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Test download PDF reports function is not available for DEV');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+        $I->wantTo('Test download PDF reports function works for CLIENT');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->wantTo('Test download PDF reports function is available for PM');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->wantTo('Test download PDF reports function is available for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+        $I->wantTo('Test download PDF reports function is available for FIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userFin['id']));
+        $pas = ValuesContainer::$userFin['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+        $I->wantTo('Test download PDF reports function works when SALES');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::REPORT . '/download-pdf');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  =>  [
+                'pdf'  => 'string',
+                'name' => 'string'
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+    }
 }

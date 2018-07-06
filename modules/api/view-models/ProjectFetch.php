@@ -112,6 +112,7 @@ class ProjectFetch extends ViewModelAbstract
                 }
                 $projects = $projectId ? implode(', ', $projectId) : 0;
                 $dataTable->setFilter(Project::tableName() . '.id IN (' . $projects . ') ');
+                $dataTable->setFilter(Project::tableName() . '.status="' . Project::STATUS_INPROGRESS . '"');
            }
         }
 

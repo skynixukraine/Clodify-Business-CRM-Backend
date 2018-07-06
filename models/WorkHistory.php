@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\log\Logger;
 
 /**
  * This is the model class for table "work_history".
@@ -13,6 +14,7 @@ use Yii;
  * @property string $date_end
  * @property string $type
  * @property string $title
+ * @property integer $added_by_user_id
  *
  * @property User $user
  */
@@ -42,10 +44,10 @@ class WorkHistory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
+            [['user_id', 'added_by_user_id'], 'integer'],
             [['date_start', 'date_end'], 'required'],
             [['type', 'title'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id', 'added_by_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -99,6 +101,17 @@ class WorkHistory extends \yii\db\ActiveRecord
             $workHistory->date_end = $dataEnd;
 
         }
+        if ( ($sysUser = User::getSystemUser() ) ) {
+
+            $workHistory->added_by_user_id = $sysUser->id;
+
+        } else {
+            //Sys user does not exist add at least something and report
+            $workHistory->added_by_user_id = 1;
+            Yii::getLogger()->log('WorkHistory -> System User does not exist, please fix', Logger::LEVEL_WARNING);
+
+        }
+
         $workHistory->save();
         return $workHistory;
 

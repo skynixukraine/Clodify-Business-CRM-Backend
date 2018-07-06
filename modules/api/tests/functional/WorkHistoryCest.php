@@ -89,6 +89,7 @@ class WorkHistoryCest
                         'date_end' => 'string',
                         'type' => 'string',
                         'title' => 'string',
+                        'posted_by'  => 'array'
                     ]
                 ]
             ],
