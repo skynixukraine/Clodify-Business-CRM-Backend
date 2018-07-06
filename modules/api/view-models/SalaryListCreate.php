@@ -52,7 +52,7 @@ class SalaryListCreate extends ViewModelAbstract
                                     $this->model->official_salary   = $user->official_salary;
                                     $this->model->hospital_value    = SalaryReportList::getHospitalValue($this->model, $this->working_days);
                                     $this->model->vacation_value    = SalaryReportList::getVacationValue($this->model, $this->working_days);
-                                    $this->model->day_off           = $this->working_days + $this->model->vacation_days -  $this->model->worked_days;
+                                    $this->model->day_off           = $this->working_days - $this->model->vacation_days -  $this->model->worked_days;
                                     $this->model->overtime_value    = SalaryReportList::getOvertimeValue($this->model, $this->working_days);
                                     $this->model->subtotal          = SalaryReportList::getSubtotal($this->model);
                                     $this->model->subtotal_uah      = SalaryReportList::getSubtotalUah($this->model);
