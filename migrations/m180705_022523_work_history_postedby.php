@@ -13,15 +13,6 @@ class m180705_022523_work_history_postedby extends Migration
     public function safeUp()
     {
         $this->addColumn('work_history', 'added_by_user_id', $this->integer(11));
-        $this->addForeignKey(
-            'fk_work_history_postedby_users',
-            'work_history',
-            'added_by_user_id',
-            'users',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
     }
 
     /**
