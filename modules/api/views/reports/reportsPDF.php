@@ -93,12 +93,7 @@ mso-table-rspace: 0pt; margin-left: auto; margin-right: auto; background-color: 
             <strong>Time, hours</strong>
         </th>
     </tr>
-    <?php
-        $totalHours = 0;
-            foreach( $reportData as $report ):
-
-            $totalHours += $report['hour'];
-        ?>
+    <?php foreach( $reportData as $report ): ?>
     <tr>
         <td colspan="1" width="100" height="12" valign="top" style="border: 1px solid darkgray; padding: 4px 5px 13px 5px; margin: 0;
              font-size: 13px; font-family: 'HelveticaNeue UltraLight', sans-serif; font-weight: 600; text-align: center;">
