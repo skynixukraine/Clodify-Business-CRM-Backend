@@ -121,6 +121,7 @@ class ServiceCest {
             "jira_code"          =>  "PWS-1",
             "date_start"         => date('d/m/Y', strtotime('now -10 days')),
             "date_end"           => date('d/m/Y', strtotime('+1 year')),
+            "type"               => "HOURLY",
             "developers"         => [
                 [
 

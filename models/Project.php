@@ -16,6 +16,7 @@ use yii\filters\RateLimiter;
  * @property integer $total_logged_hours
  * @property integer $total_paid_hours
  * @property integer $total_approved_hours
+ * @property string $type
  * @property string $status
  * @property string $date_start
  * @property string $date_end
@@ -36,7 +37,14 @@ class Project extends \yii\db\ActiveRecord
     const STATUS_CANCELED   = "CANCELED";
     const INTERNAL_TASK     = "Internal (Non Paid) Tasks";
 
+    const TYPE_HOURLY       = 'HOURLY';
+    const TYPE_FIXED_PRICE  = 'FIXED_PRICE';
+
     const PROJECT_PUBLISHED = 1;
+
+    const SCENARIO_CREATE   = 'api-create';
+    const SCENARIO_UPDATE_ADMIN   = 'api-update-admin';
+    const SCENARIO_UPDATE_SALES   = 'api-update-sales';
 
 
     public $customers;
@@ -59,17 +67,22 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['name', 'required'],
-            ['status', 'required', 'except'=>['api-create']],
-            [['customers', 'developers','invoice_received'], 'required', 'on' => ['admin', 'api-create']],
-            [['is_sales', 'is_pm'], 'required', 'on' => ['api-create']],
-            [['invoice_received', 'is_pm', 'is_delete', 'is_sales', 'is_published'], 'integer'],
-            [['total_logged_hours', 'total_paid_hours'], 'number'],
-            [['status'], 'string'],
-            [['date_start', 'date_end'], 'safe'],
-            [['name'], 'string', 'max' => 150],
-            [['jira_code'], 'string', 'max' => 15],
-            [['customers', 'developers'], 'safe'],
+            ['name', 'required', 'on'=>[ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_UPDATE_SALES ]],
+            ['status', 'required', 'on'=>[ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['customers', 'developers','invoice_received', 'type'], 'required',
+                'on' => [self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_CREATE, self::SCENARIO_UPDATE_SALES]
+            ],
+            [['is_sales', 'is_pm'], 'required', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['invoice_received', 'is_pm', 'is_delete', 'is_sales', 'is_published'], 'integer',
+                'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]
+            ],
+            [['total_logged_hours', 'total_paid_hours'], 'number', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['status'], 'string', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['date_start', 'date_end'], 'safe', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['name'], 'string', 'max' => 150, 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_UPDATE_SALES ]],
+            [['jira_code'], 'string', 'max' => 15, 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['customers'], 'safe', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
+            [['developers'], 'safe', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_UPDATE_SALES ]],
             ['is_pm', function() {
                 $exists = false;
                 if ( $this->developers && count($this->developers) ) {
@@ -88,7 +101,7 @@ class Project extends \yii\db\ActiveRecord
                 if(empty($this->developers && $this->is_pm) || $exists === false) {
                     $this->addError('is_pm', Yii::t('app', 'Pm was not assigned'));
                 }
-            }],
+            }, 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
             ['is_sales', function() {
                 if ($user = User::findOne($this->is_sales)) {
                     if ($user->role != User::ROLE_SALES) {
@@ -115,7 +128,7 @@ class Project extends \yii\db\ActiveRecord
 
                     $this->addError('is_sales', Yii::t('app', 'Sales was not assigned'));
                 }
-            }]
+            }, 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]]
 
         ];
     }
@@ -219,7 +232,7 @@ class Project extends \yii\db\ActiveRecord
 
         $connection = Yii::$app->db;
 
-        if($this->customers) {
+        if(User::hasPermission([User::ROLE_ADMIN]) && $this->customers) {
 
             /* Delete from ProjectCustomers*/
             $connection->createCommand()
