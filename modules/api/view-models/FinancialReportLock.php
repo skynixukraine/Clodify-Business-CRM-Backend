@@ -12,6 +12,8 @@ use app\models\DelayedSalary;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\FinancialYearlyReport;
+use app\models\Milestone;
+use app\models\Project;
 use app\models\Report;
 use app\models\SalaryReport;
 use app\models\SalaryReportList;
@@ -136,9 +138,64 @@ class FinancialReportLock extends ViewModelAbstract
                                 $toDate
                             );
 
+                        }
+                    }
+                    /**
+                     * @see https://jira.skynix.co/browse/SCA-215
+                     * When locking a fun report, if end_date >= closed_date → benefits (User X get the project Y/Milestone XY completed in time)
+                     * When locking a fun report, if end_date < closed_date → fail (User X did not get the project Y/Milestone XY completed in time)
+                     */
+                    $dateFrom   = date('Y-m-01', $financialReport->report_date);
+                    $toDate     = date('Y-m-t', $financialReport->report_date);
+                    if ( ($milestones = Milestone::findAll([
+                        'between', 'closed_date', $dateFrom, $toDate
+                    ]) ) ) {
 
+                        /** @var $milestone Milestone */
+                        foreach ( $milestones as $milestone ) {
+
+                            $developers = [];
+                            /** @var $project Project */
+                            if ( ( $project = $milestone->getProject()->one() ) &&
+                                ( $developers = $project->getDevelopers()->all() ) ) {
+
+                                /** @var $dev User */
+                                foreach ( $developers as $dev ) {
+
+                                    if ( strtotime( $milestone->end_date ) >= strtotime($milestone->closed_date) ) {
+
+                                        WorkHistory::create(
+                                            WorkHistory::TYPE_USER_EFFORTS,
+                                            $dev->id,
+                                            Yii::t('app', '+ get the project ${project}/${milestone} completed in time', [
+                                                'project'   => $project->name,
+                                                'milestone' => $milestone->name
+                                            ]),
+                                            $dateFrom,
+                                            $toDate
+                                        );
+
+                                    } else {
+
+                                        WorkHistory::create(
+                                            WorkHistory::TYPE_USER_FAILS,
+                                            $dev->id,
+                                            Yii::t('app', '- did not get the project ${project}/${milestone} completed in time', [
+                                                'project'   => $project->name,
+                                                'milestone' => $milestone->name
+                                            ]),
+                                            $dateFrom,
+                                            $toDate
+                                        );
+
+                                    }
+
+                                }
+
+                            }
 
                         }
+
                     }
 
 
