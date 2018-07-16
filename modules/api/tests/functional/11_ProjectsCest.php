@@ -15,6 +15,8 @@ class ProjectsCest
 {
     private $projectId;
 
+    private $fixedPriceProjectId;
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SI-876
      * @param  FunctionalTester $I
@@ -361,12 +363,10 @@ class ProjectsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $projectId = $response->data->project_id;
-        codecept_debug($projectId);
-
+        $this->fixedPriceProjectId = $response->data->project_id;
 
         $I->wantTo('Create a Milestone');
-        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $projectId . '/milestones', json_encode([
+        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones', json_encode([
             "name"          => "Milestone 1 - Install third party modules",
             "start_date"    => date('d/m/Y'),
             "end_date"      => date('d/m/Y', strtotime('+5 days')),
@@ -380,7 +380,7 @@ class ProjectsCest
         //$milestoneId = $response->data->milestone_id;
 
         $I->wantTo('Create another Milestone when one OPENed exists. This should not be possible');
-        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $projectId . '/milestones', json_encode([
+        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones', json_encode([
             "name"          => "Milestone 2 - Theme coding",
             "start_date"    => date('d/m/Y'),
             "end_date"      => date('d/m/Y', strtotime('+15 days')),
@@ -394,7 +394,7 @@ class ProjectsCest
 
 
         $I->wantTo('Close a Milestone');
-        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $projectId . '/milestones' );
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones' );
 
         $I->seeResponseCodeIs(200);
         $response = json_decode($I->grabResponse());
@@ -403,7 +403,7 @@ class ProjectsCest
         $I->assertEquals(true, $response->success);
 
         $I->wantTo('Create another Milestone when all are CLOSED');
-        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $projectId . '/milestones', json_encode([
+        $I->sendPOST(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones', json_encode([
             "name"          => "Milestone 2 - Theme coding",
             "start_date"    => date('d/m/Y'),
             "end_date"      => date('d/m/Y', strtotime('+15 days')),
@@ -416,5 +416,105 @@ class ProjectsCest
         $I->assertEquals(true, $response->success);
 
     }
+
+    public function testAddFinancialIncomeForFixedPriceProjectCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing add financial income data by SALES for a Fixed Price project when milestone is OPENed');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
+            json_encode([
+                'from_date' => 1,
+                'to_date'   => 2,
+                'amount'    => 1250,
+                'description' => "Upwork Contract May #32",
+                'project_id' => $this->fixedPriceProjectId,
+                'developer_user_id' => ValuesContainer::$userDev['id'],
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), true);
+        codecept_debug($response);
+        $I->assertNotEmpty($response['errors']);
+        $I->assertEquals(false, $response['success']);
+        $I->assertEquals([
+            [
+                'param'     => 'project_id',
+                'message'   => 'Please CLOSE the milestone to add financial income'
+            ]
+        ], $response['errors']);
+
+
+        $I->wantTo('Close a Milestone');
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones' );
+        $I->seeResponseCodeIs(200);
+
+
+        /*$I->wantTo('Testing add financial income data by SALES for a Fixed Price project when milestones are CLOSED');
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME,
+            json_encode([
+                'from_date' => 1,
+                'to_date'   => 2,
+                'amount'    => 1250,
+                'description' => "Upwork Contract May #32",
+                'project_id' => $this->fixedPriceProjectId,
+                'developer_user_id' => ValuesContainer::$userDev['id'],
+            ])
+        );
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty( $response->errors );
+        $I->assertEquals(true, $response->success);*/
+
+    }
+
+    /*public function testFetchFinancialIncomeForAFixedPriceProjectWithMilestoneCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('Testing fetch financial income data by SALES with milestones');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME);
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        codecept_debug($response);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            "data"  => [
+                "id"        => 'integer',
+                "from_date" => 'integer',
+                "to_date"   => 'integer',
+                "date"      => 'integer',
+                "amount"    => 'integer',
+                "description"   => "string",
+                "project"   => [
+                    "id"    => "intgers",
+                    "name"  => "string",
+                    "milestones"    => 'array'
+                ],
+                "developer_user"    => "array",
+                "added_by_user"     => "array"
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+    }*/
 
 }
