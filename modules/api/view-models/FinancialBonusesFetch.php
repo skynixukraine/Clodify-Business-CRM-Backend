@@ -11,11 +11,13 @@ namespace viewModel;
 use app\components\DataTable;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
+use app\models\Milestone;
 use app\models\Project;
 use app\models\Report;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class FinancialBonusesFetch extends ViewModelAbstract
 {
@@ -28,8 +30,6 @@ class FinancialBonusesFetch extends ViewModelAbstract
             if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
                 ( $financialReport = FinancialReport::findOne($id) )) {
 
-                $dateFrom   = date('Y-m-01', $financialReport->report_date);
-                $toDate     = date('Y-m-t', $financialReport->report_date);
 
                 $query  = FinancialIncome::find();
                 $query->where(['financial_report_id' => $financialReport->id]);
@@ -43,22 +43,62 @@ class FinancialBonusesFetch extends ViewModelAbstract
                 $data = $query->all();
 
                 $incomeItems = [];
+                $toDate     = date('Y-m-t', $financialReport->report_date);
                 /** @var  $finIncome FinancialIncome */
                 foreach ( $data as $finIncome ) {
 
-                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $toDate);
+                    $dateFrom   = date('Y-m-01', $financialReport->report_date);
+
                     /** @var $project Project */
                     if ( ($project = $finIncome->getProject()->one() ) ) {
 
+                        $milestones = [];
+                        //if a project_type=FIXED_PRICE and only if milestones are closed this month calculate them and for expenses use reports for milestone periods start_date ~ closed_date
+                        if ( $project->type === Project::TYPE_FIXED_PRICE ) {
+
+                            $milestonesList = Milestone::find()
+                                ->where([
+                                    'project_id'    => $project->id,
+                                    'status'        => Milestone::STATUS_CLOSED
+                                ])
+                                ->andWhere(['between', 'closed_date', $dateFrom, $toDate])
+                                ->all();
+
+                            $milestones = ArrayHelper::toArray($milestonesList, [
+                                'app\models\Milestone' => [
+                                    'id',
+                                    'name',
+                                    'start_date',
+                                    'end_date',
+                                    'closed_date'
+
+                                ],
+                            ]);
+
+                            foreach ( $milestones as $milestone ) {
+
+                                if ( strtotime( $milestone['start_date'] ) < strtotime($dateFrom) ) {
+
+                                    $dateFrom = $milestone['start_date'];
+
+                                }
+
+                            }
+
+                        }
+
                         $project = [
-                            'id'    => $project->id,
-                            'name'  => $project->name
+                            'id'            => $project->id,
+                            'name'          => $project->name,
+                            'milestones'    => $milestones
                         ];
 
                     } else {
 
                         $project = ['name' => "Unknown"];
                     }
+                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $toDate);
+
                     /** @var $project Project */
                     /** @var $u User */
                     $incomeItems[] = [

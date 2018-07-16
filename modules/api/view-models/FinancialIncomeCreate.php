@@ -8,6 +8,7 @@
 
 namespace viewModel;
 
+use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
@@ -20,6 +21,9 @@ use Yii;
  */
 class FinancialIncomeCreate extends ViewModelAbstract
 {
+    /** @var  FinancialIncome */
+    protected $model;
+
     public function define()
     {
 
@@ -31,7 +35,11 @@ class FinancialIncomeCreate extends ViewModelAbstract
 
                     $this->model->financial_report_id   = $id;
                     $this->model->added_by_user_id      = Yii::$app->user->id;
-                    $this->model->save();
+                    if ( $this->validate() ) {
+
+                        $this->model->save();
+
+                    }
 
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Financial Report is locked any operations are forbidden'));

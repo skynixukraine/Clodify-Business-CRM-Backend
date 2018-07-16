@@ -193,7 +193,7 @@ class UsersFetch extends ViewModelAbstract
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 $row ['is_active'] = $model->is_active;
-                $row ['salary'] = '$' . number_format($model->salary);
+                $row ['salary'] =  number_format($model->salary);
                 $row ['official_salary'] = $model->official_salary;
                 $row ['salary_up'] = $salary_up;
                 $row ['role'] = $model->role;
@@ -201,6 +201,9 @@ class UsersFetch extends ViewModelAbstract
             }
 
             if (User::hasPermission([User::ROLE_SALES])) {
+
+                $row ['salary'] =  number_format($model->salary);
+                $row ['salary_up'] = $salary_up;
                 $row ['role'] = $model->role;
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
