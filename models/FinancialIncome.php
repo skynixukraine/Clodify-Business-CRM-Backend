@@ -67,9 +67,9 @@ class FinancialIncome extends \yii\db\ActiveRecord
                         ->andWhere(['between', 'closed_date', $dateFrom, $toDate])->one())) {
 
                         $this->addError('project_id',
-                            Yii::t('app', 'The project has no any CLOSEd milestones during :s ~ :e', [
-                                ':s'    => $dateFrom,
-                                ':e'    => $toDate
+                            Yii::t('app', 'The project has no any CLOSEd milestones during ${s} ~ ${e}', [
+                                's'    => $dateFrom,
+                                'e'    => $toDate
                             ]));
 
                     }
