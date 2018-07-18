@@ -211,13 +211,13 @@ class ProjectFetch extends ViewModelAbstract
                     'id',
                     'name',
                     'start_date' => function ($item) {
-                        return DateUtil::convertDateFromUnix($item->start_date);
+                        return DateUtil::reConvertData($item->start_date);
                     },
                     'end_date' => function ($item) {
-                        return DateUtil::convertDateFromUnix($item->end_date);
+                        return DateUtil::reConvertData($item->end_date);
                     },
                     'closed_date' => function ($item) {
-                        return DateUtil::convertDateFromUnix($item->closed_date);
+                        return DateUtil::reConvertData($item->closed_date);
                     },
                     'estimated_amount',
                     'status'
