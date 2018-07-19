@@ -177,7 +177,7 @@ class ProjectsCest
             'success' => 'boolean',
         ]);
 
-        $I->wantTo('Testing edit project by SALES. Can edit name and developers only');
+        $I->wantTo('Testing edit project by SALES. Can edit name and developers only, posting other params as well');
         $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
         $pas    = ValuesContainer::$userSales['password'];
 
@@ -194,6 +194,9 @@ class ProjectsCest
             ],
             [
                 'id'    => ValuesContainer::$userPm['id']
+            ],
+            [
+                'id'    => ValuesContainer::$fakeSalesID
             ]
         ];
 
@@ -204,14 +207,14 @@ class ProjectsCest
             "name"               =>  "Project [edited]",
             "jira_code"          =>  "SI-21  [edited]",
             "date_start"         => date('d/m/Y', strtotime('-1 day')),
-            "date_end"           => date('d/m/Y', strtotime('+1 year')),
+            "date_end"           => date('d/m/Y', strtotime('+2 years')),
             "status"             => "DONE",
             "customers"          => [ 123 ],
             "invoice_received"   => 123,
             "type"               => "FIXED_PRICE",
             "developers"         => $initialDevelopers,
             "is_pm"              => ValuesContainer::$userDev['id'],
-            "is_sales"           => ValuesContainer::$userSales['id'],
+            "is_sales"           => ValuesContainer::$fakeSalesID,
             "is_published"       => 1,
         ]));
         $response = json_decode($I->grabResponse());
@@ -242,6 +245,87 @@ class ProjectsCest
         $I->assertEquals("HOURLY", $project['type']);
         $I->assertEquals("SI-21", $project['jira']);
         $I->assertEquals("INPROGRESS", $project['status']);
+        $I->assertEquals(date('d/m/Y'), $project['date_start']);
+        $I->assertEquals(date('d/m/Y', strtotime('+1 year')), $project['date_end']);
+        $I->assertEquals(ValuesContainer::$userDev['id'], $project["is_pm"]);
+        $I->assertEquals(ValuesContainer::$userSales['id'], $project["is_sales"]);
+
+
+        $I->assertEquals([ValuesContainer::$userClient['id']], [$project['clients'][0]['id']]);
+
+        foreach ( $project['developers'] as $dev ) {
+
+            foreach ( $initialDevelopers as $k=>$v ) {
+
+                if ( $v['id'] === $dev['id'] ) {
+
+                    unset($initialDevelopers[$k]);
+                    break;
+
+                }
+            }
+
+        }
+        $I->assertEquals(0, count($initialDevelopers));
+        $I->wantTo('Now testing edit project by SALES. Can edit name and developers only');
+        $initialDevelopers = [
+            [
+                'id'        => ValuesContainer::$userDev['id'],
+                'alias'     => ValuesContainer::$userAdmin['id']
+            ],
+            [
+                'id'    => ValuesContainer::$userSales['id'],
+            ],
+            [
+                'id'    => ValuesContainer::$userAdmin['id']
+            ],
+            [
+                'id'    => ValuesContainer::$userPm['id']
+            ],
+            [
+                'id'    => ValuesContainer::$fakeSalesID
+            ]
+        ];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $I->sendPUT(ApiEndpoints::PROJECT . '/' . $this->projectId, json_encode([
+            "name"               =>  "Project [edited 2]",
+            "developers"         => $initialDevelopers,
+        ]));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+
+        $I->wantTo('Login as admin');
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendGET(ApiEndpoints::PROJECT, [
+            'id'    => $this->projectId
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), true);
+        codecept_debug($response);
+        $I->assertEmpty($response['errors']);
+        $I->assertEquals(true, $response['success']);
+        $I->assertEquals(1, $response['data']['total_records']);
+        $project = $response['data']['projects'][0];
+        $I->assertEquals("Project [edited 2]", $project['name']);
+        $I->assertEquals("HOURLY", $project['type']);
+        $I->assertEquals("SI-21", $project['jira']);
+        $I->assertEquals("INPROGRESS", $project['status']);
+        $I->assertEquals(date('d/m/Y'), $project['date_start']);
+        $I->assertEquals(date('d/m/Y', strtotime('+1 year')), $project['date_end']);
+        $I->assertEquals(ValuesContainer::$userDev['id'], $project["is_pm"]);
+        $I->assertEquals(ValuesContainer::$userSales['id'], $project["is_sales"]);
+
+
         $I->assertEquals([ValuesContainer::$userClient['id']], [$project['clients'][0]['id']]);
 
         foreach ( $project['developers'] as $dev ) {

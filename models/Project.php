@@ -69,7 +69,10 @@ class Project extends \yii\db\ActiveRecord
         return [
             ['name', 'required', 'on'=>[ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_UPDATE_SALES ]],
             ['status', 'required', 'on'=>[ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
-            [['customers', 'developers','invoice_received', 'type'], 'required',
+            [['customers', 'invoice_received', 'type'], 'required',
+                'on' => [self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_CREATE]
+            ],
+            [['developers'], 'required',
                 'on' => [self::SCENARIO_UPDATE_ADMIN, self::SCENARIO_CREATE, self::SCENARIO_UPDATE_SALES]
             ],
             [['is_sales', 'is_pm'], 'required', 'on' => [ self::SCENARIO_CREATE, self::SCENARIO_UPDATE_ADMIN ]],
@@ -259,23 +262,81 @@ class Project extends \yii\db\ActiveRecord
 
         if ($this->developers) {
 
-            /* Delete from ProjectCustomers*/
-            $connection->createCommand()
-                ->delete(ProjectDeveloper::tableName(), [
-                    'project_id' => $this->id,
-                ])
-                ->execute();
-
-            /* Add to ProjectDevelopers*/
-            foreach ($this->developers as $developer) {
+            if( User::hasPermission([User::ROLE_ADMIN]) ) {
+                /* Delete from ProjectCustomers*/
                 $connection->createCommand()
-                    ->insert(ProjectDeveloper::tableName(), [
+                    ->delete(ProjectDeveloper::tableName(), [
                         'project_id' => $this->id,
-                        'user_id' => $developer['id'],
-                        'is_sales' => ($this->is_sales == $developer['id']),
-                        'is_pm' => ($this->is_pm == $developer['id']),
-                        'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
-                    ])->execute();
+                    ])
+                    ->execute();
+
+                /* Add to ProjectDevelopers*/
+                foreach ($this->developers as $developer) {
+                    $connection->createCommand()
+                        ->insert(ProjectDeveloper::tableName(), [
+                            'project_id' => $this->id,
+                            'user_id' => $developer['id'],
+                            'is_sales' => ($this->is_sales == $developer['id']),
+                            'is_pm' => ($this->is_pm == $developer['id']),
+                            'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
+                        ])->execute();
+
+                }
+
+            } else if ( User::hasPermission([User::ROLE_SALES ]) ) {
+
+                $existingDevelopers = ProjectDeveloper::findAll(['project_id' => $this->id]);
+                //Deleting DELETED developers
+                //SALES can not delete sales or PM
+                /** @var  $dev ProjectDeveloper */
+                foreach ($existingDevelopers as $dev) {
+
+                    foreach ($this->developers as $developer) {
+
+                        $shouldDelete = true;
+                        if ($dev->user_id === $developer['id']) {
+
+                            $shouldDelete = false;
+                            break;
+
+                        }
+
+                    }
+                    if (!$dev->is_sales && !$dev->is_pm && $shouldDelete === true) {
+
+                        $dev->delete();
+
+                    }
+
+                }
+                /* Add to ProjectDevelopers*/
+                foreach ($this->developers as $developer) {
+                    foreach ($existingDevelopers as $dev) {
+
+                        $shouldAdd = true;
+                        if ($dev->user_id === $developer['id']) {
+
+                            $shouldAdd = false;
+                            break;
+
+                        }
+
+                    }
+                    if ($shouldAdd === true) {
+
+                        $connection->createCommand()
+                            ->insert(ProjectDeveloper::tableName(), [
+                                'project_id'    => $this->id,
+                                'user_id'       => $developer['id'],
+                                'is_sales'      => false,
+                                'is_pm'         => false,
+                                'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
+                            ])->execute();
+
+                    }
+
+
+                }
 
             }
 

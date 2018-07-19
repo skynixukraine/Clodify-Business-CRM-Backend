@@ -40,7 +40,7 @@ class ServiceCest {
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->userSalesId = $response->data->user_id;
+        $this->userSalesId = ValuesContainer::$fakeSalesID = $response->data->user_id;
 
         $I->sendPOST(ApiEndpoints::USERS, json_encode(
             [

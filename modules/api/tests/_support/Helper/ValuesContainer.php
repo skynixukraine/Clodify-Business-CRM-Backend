@@ -23,6 +23,8 @@ class ValuesContainer
 
     public static $projectIDWithoutSales;
 
+    public static $fakeSalesID;
+
     public static $userAdmin = [
         'id'        => 1,
         'email'     => 'crm-admin@skynix.co',
