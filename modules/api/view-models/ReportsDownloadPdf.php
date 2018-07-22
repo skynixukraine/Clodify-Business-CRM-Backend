@@ -187,16 +187,12 @@ class ReportsDownloadPdf extends ViewModelAbstract
                 $aliasUser = User::findOne( $pD->alias_user_id );
 
             }
+            if (!$aliasUser ) {
+                //This is in case if it is a simple user
+                $aliasUser = User::findOne($model->user_id);
+            }
 
-            $user = (($aliasUser != null) ?
-                $aliasUser->first_name . ' ' .
-                $aliasUser->last_name .
-                '(' . User::findOne($model->user_id)->first_name . ' ' .
-                User::findOne($model->user_id)->last_name . ')' :
-                (User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
-                    $aliasUser->first_name . ' ' . $aliasUser->last_name :
-                    User::findOne($model->user_id)->first_name . ' ' .
-                    User::findOne($model->user_id)->last_name));
+            $user = $aliasUser->first_name . ' ' . $aliasUser->last_name;
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
