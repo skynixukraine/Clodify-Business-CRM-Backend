@@ -90,9 +90,9 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
                 }
 
-                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
 
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
                 $dataTable->setFilter(Report::tableName() . '.is_approved=1 ');
             }
         }
@@ -111,9 +111,9 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
                 }
 
-                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
 
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
 
             }
         }
@@ -128,8 +128,8 @@ class ReportsDownloadPdf extends ViewModelAbstract
                 foreach ($projects as $project) {
                     $projectId[] = $project->id;
                 }
-                $projects = $projectId ? implode(', ', $projectId) : 0;
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
 
             }
 
