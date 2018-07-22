@@ -90,9 +90,9 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
                 }
 
-                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
 
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
                 $dataTable->setFilter(Report::tableName() . '.is_approved=1 ');
             }
         }
@@ -111,9 +111,9 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
                 }
 
-                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
 
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
 
             }
         }
@@ -128,8 +128,8 @@ class ReportsDownloadPdf extends ViewModelAbstract
                 foreach ($projects as $project) {
                     $projectId[] = $project->id;
                 }
-                $projects = $projectId ? implode(', ', $projectId) : 0;
-                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
+                $projectId = $projectId ? implode(', ', $projectId) : 0;
+                $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projectId . ') ');
 
             }
 
@@ -174,7 +174,8 @@ class ReportsDownloadPdf extends ViewModelAbstract
         $activeRecordInstance   = $dataTable->getQuery();
         $activeRecordsData      = $dataTable->getData();
 
-        $list = [];
+        $list       = [];
+        $totalHours = 0;
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $key=>$model ) {
             $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
@@ -186,20 +187,16 @@ class ReportsDownloadPdf extends ViewModelAbstract
                 $aliasUser = User::findOne( $pD->alias_user_id );
 
             }
+            if (!$aliasUser ) {
+                //This is in case if it is a simple user
+                $aliasUser = User::findOne($model->user_id);
+            }
 
-            $user = (($aliasUser != null) ?
-                $aliasUser->first_name . ' ' .
-                $aliasUser->last_name .
-                '(' . User::findOne($model->user_id)->first_name . ' ' .
-                User::findOne($model->user_id)->last_name . ')' :
-                (User::hasPermission([User::ROLE_CLIENT]) && $aliasUser ?
-                    $aliasUser->first_name . ' ' . $aliasUser->last_name :
-                    User::findOne($model->user_id)->first_name . ' ' .
-                    User::findOne($model->user_id)->last_name));
+            $user = $aliasUser->first_name . ' ' . $aliasUser->last_name;
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
-
+            $totalHours += $model->hours;
             $list[$key] = [
                 'report_id'     => $model->id,
                 'project'       => [
@@ -256,7 +253,8 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
         $html = Yii::$app->controller->renderPartial('reportsPDF', [
             'filters'       => $filters,
-            'reportData'    => $list
+            'reportData'    => $list,
+            'totalHours'    => gmdate('H:i', floor($totalHours * 3600))
 
         ]);
 

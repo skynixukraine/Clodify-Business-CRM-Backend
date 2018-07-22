@@ -12,6 +12,7 @@ use Yii;
 use app\models\User;
 use app\components\DataTable;
 use app\components\DateUtil;
+use yii\db\Expression;
 use yii\helpers\Url;
 use app\modules\api\components\SortHelper;
 use app\models\ProjectCustomer;
@@ -52,22 +53,20 @@ class UsersFetch extends ViewModelAbstract
             foreach($workers as $worker){
                 $arrayWorkers[] = $worker->id;
             }
-            if(!empty($arrayWorkers)) {
-                $devUser = implode(', ' , $arrayWorkers);
-            } else {
-                $devUser = 'null';
-            }
 
-            $query1 = User::find()
-                ->where(User::tableName() . '.id IN (' . $devUser . ')')
+
+            $expression = new Expression('(role=:role AND id IN(' . implode( ", ", $arrayWorkers) . ')) OR '.
+                " role IN(
+                " . "'" . User::ROLE_DEV . "', '" . User::ROLE_ADMIN . "', '" . User::ROLE_SALES . "', '" . User::ROLE_PM . "', '" .  User::ROLE_FIN . "'"  . "
+                
+                )", [
+                ':role'     => User::ROLE_CLIENT,
+            ]);
+
+            $query = User::find()
                 ->andWhere(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_CLIENT]]);
+                ->andWhere($expression);
 
-            $query2 = User::find()
-                ->andWhere(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_PM, User::ROLE_FIN]]);
-
-            $query = $query1->union($query2);
         }
 
         //CLIENT has an access to all active users who are DEV, ADMIN or SALES of their projects
@@ -89,7 +88,7 @@ class UsersFetch extends ViewModelAbstract
             $query = User::find()
                 ->where(User::tableName() . '.id IN (' . $devUser . ')')
                 ->andWhere(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN]]);
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_ADMIN]]);
 
         }
 
@@ -97,7 +96,7 @@ class UsersFetch extends ViewModelAbstract
         // to the following columns: id, first_name, last_name, company, email, phone
         if(User::hasPermission([User::ROLE_DEV])) {
             $query = User::find()->where(['is_active' => 1])
-                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN]]);
+                ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN]]);
         }
 
         //column ID is shown only to ADMIN
@@ -194,7 +193,7 @@ class UsersFetch extends ViewModelAbstract
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 $row ['is_active'] = $model->is_active;
-                $row ['salary'] = '$' . number_format($model->salary);
+                $row ['salary'] =  number_format($model->salary);
                 $row ['official_salary'] = $model->official_salary;
                 $row ['salary_up'] = $salary_up;
                 $row ['role'] = $model->role;
@@ -202,6 +201,9 @@ class UsersFetch extends ViewModelAbstract
             }
 
             if (User::hasPermission([User::ROLE_SALES])) {
+
+                $row ['salary'] =  number_format($model->salary);
+                $row ['salary_up'] = $salary_up;
                 $row ['role'] = $model->role;
                 $row ['last_login'] = $model->date_login ? DateUtil::convertDatetimeWithoutSecund($model->date_login) : "The user didn't login";
                 $row ['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);

@@ -20,6 +20,8 @@ use yii\log\Logger;
 
 class CreateEditReport extends ViewModelAbstract
 {
+    /** @var  Report */
+    protected $model;
 
     public function define()
     {
@@ -88,7 +90,7 @@ class CreateEditReport extends ViewModelAbstract
                             $user = User::findOne($user_id);
 
                             //This ratio adds some average other expenses to initial salary
-                            $expensesRatio = Setting::getLaborExpensesRatio( (3 - rand(0, 6)));
+                            $expensesRatio = Setting::getLaborExpensesRatio( (1 - rand(0, 2)));
 
                             $salary = $delayedSalaryNote && $delayedSalaryNote->value > 0 ? $delayedSalaryNote->value : $user->salary;
 

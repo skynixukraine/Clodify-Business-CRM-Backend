@@ -53,7 +53,7 @@ class FinancialReportsCest
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->finacialReportId = $response->data->report_id;
+        $this->finacialReportId = ValuesContainer::$FinancialReportId = $response->data->report_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(

@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\models\Milestone;
 use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 use app\modules\api\components\SortHelper;
@@ -18,6 +19,7 @@ use app\models\Report;
 use app\models\ProjectDeveloper;
 use app\models\ProjectCustomer;
 use app\modules\api\components\Api\Processor;
+use yii\helpers\ArrayHelper;
 
 class ProjectFetch extends ViewModelAbstract
 {
@@ -100,7 +102,9 @@ class ProjectFetch extends ViewModelAbstract
         $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         //Implement filter subscribedOnly, if it is set to true output the projects where user ticked box as ACTIVE(subscribe)
-        if (!empty($subscribedOnly) && $subscribedOnly === ProjectDeveloper::IS_SUBSCRIBED) {
+        if ( !User::hasPermission([User::ROLE_CLIENT]) &&
+            !empty($subscribedOnly) &&
+            $subscribedOnly === ProjectDeveloper::IS_SUBSCRIBED) {
             $emplId = Yii::$app->user->id;
 
             if($emplId && $emplId != null){
@@ -199,6 +203,32 @@ class ProjectFetch extends ViewModelAbstract
         $list['date_end']       = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
         $list['developers']     = $developersNames;
         $list['clients']        = $customersNames;
+        $milestones = [];
+        if ( $model->type == Project::TYPE_FIXED_PRICE ) {
+
+            $milestones = Milestone::findAll(['project_id'  => $model->id]);
+
+            $milestones = ArrayHelper::toArray($milestones, [
+                'app\models\Milestone' => [
+                    'id',
+                    'name',
+                    'start_date' => function ($item) {
+                        return DateUtil::reConvertData($item->start_date);
+                    },
+                    'end_date' => function ($item) {
+                        return DateUtil::reConvertData($item->end_date);
+                    },
+                    'closed_date' => function ($item) {
+                        return DateUtil::reConvertData($item->closed_date);
+                    },
+                    'estimated_amount',
+                    'status'
+
+                ],
+            ]);
+
+        }
+        $list['milestones'] = $milestones;
 
         return $list;
   }
@@ -211,6 +241,7 @@ class ProjectFetch extends ViewModelAbstract
     {
         $list['id'] = $model->id;
         $list['name'] = $model->name;
+        $list['type'] = $model->type;
         $list['jira'] = $model->jira_code;
         $list['status'] = $model->status;
 
