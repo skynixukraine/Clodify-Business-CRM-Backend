@@ -102,7 +102,7 @@ class ProjectFetch extends ViewModelAbstract
         $dataTable->setFilter(Project::tableName() . '.is_delete=0');
 
         //Implement filter subscribedOnly, if it is set to true output the projects where user ticked box as ACTIVE(subscribe)
-        if (!empty($subscribedOnly) && $subscribedOnly === ProjectDeveloper::IS_SUBSCRIBED) {
+        if ( !User::hasPermission(User::ROLE_CLIENT) && !empty($subscribedOnly) && $subscribedOnly === ProjectDeveloper::IS_SUBSCRIBED) {
             $emplId = Yii::$app->user->id;
 
             if($emplId && $emplId != null){
