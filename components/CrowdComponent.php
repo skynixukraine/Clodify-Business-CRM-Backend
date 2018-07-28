@@ -66,7 +66,7 @@ class CrowdComponent extends Component
             "validationFactors" => [
                 [
                     "name"  => "remote_address",
-                    "value" => "10.40.10.4"
+                    "value" => Yii::$app->getRequest()->getUserIP()
                 ]
             ],
         );
