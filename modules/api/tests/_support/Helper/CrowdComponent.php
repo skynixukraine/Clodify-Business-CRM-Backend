@@ -32,18 +32,14 @@ class CrowdComponent
 
             $dataResponse['token']  = $token;
             $dataResponse['user']   = [
-                'first-name'    => 'Crowd User First Name',
-                'last-name'     => 'Crowd User Last Name',
-                'email'         => 'crowd@skynix.co'
+                'name'         => 'crowd@skynix.co'
             ];
 
         } else if ( $token === 'D00000001230000124' ) {
 
             $dataResponse['token']  = $token;
             $dataResponse['user']   = [
-                'first-name'    => 'Dev First Name',
-                'last-name'     => 'Dev Last Name',
-                'email'         => 'crm-dev@skynix.co'
+                'name'         => 'crm-dev@skynix.co'
             ];
 
         } else {
