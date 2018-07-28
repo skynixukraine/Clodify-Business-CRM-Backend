@@ -63,7 +63,12 @@ class CrowdComponent extends Component
         }
         $curl = curl_init();
         $params = array(
-            "validationFactors" => [],
+            "validationFactors" => [
+                [
+                    "name"  => "remote_address",
+                    "value" => "10.40.10.4"
+                ]
+            ],
         );
         curl_setopt_array($curl, array(
             CURLOPT_URL            => Yii::$app->params['crowd_domain'] . self::CROWD_SESSION_URL . '/' . $token,
@@ -91,12 +96,12 @@ class CrowdComponent extends Component
         } else {
 
             $response = json_decode($response, true);
-
             if ( !isset($response['reason'])) {
 
                 $dataResponse['token']      = $response['token'];
                 $dataResponse['expiryDate'] = self::getExpireForSession($response['expiry-date']);
                 $dataResponse['createdDate']= $response['created-date'];
+                $dataResponse['user']       = $response['user'];
 
             } else {
 

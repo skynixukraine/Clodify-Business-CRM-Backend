@@ -34,9 +34,13 @@ class SSOCheck extends ViewModelAbstract
 
                     } else {
 
-                        if ( !($user = User::find()->where(['email' => $response['user']['email']])->one() ) ) {
+                        if ( !($user = User::find()->where(['email' => $response['user']['name']])->one() ) ) {
 
-                            $user = User::createASingleDevUser($response['user'], Yii::$app->security->generateRandomString( 30));
+                            $user = User::createASingleDevUser([
+                                'email'         => $response['user']['name'],
+                                'first-name'    => $response['user']['name'],
+                                'last-name'     => $response['user']['name']
+                            ], Yii::$app->security->generateRandomString( 30));
 
                         }
 
