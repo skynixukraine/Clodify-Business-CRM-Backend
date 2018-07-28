@@ -113,32 +113,6 @@ class SiteController extends Controller
         return $this->redirect( "/" );
     }
 
-    /**
-     * @deprecated 
-     * @return string|Response
-     */
-    public function actionContact()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/contacts');
-    }
-
-    /**
-     * @deprecated 
-     * @return string
-     */
-    public function actionCareer()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/careers');
-    }
-
-    /**
-     * @deprecated 
-     * @return string
-     */
-    public function actionPrivacy()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/privacy-policy');
-    }
 
     /**
      * @deprecated  

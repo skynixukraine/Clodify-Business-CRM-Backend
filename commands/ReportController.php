@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use Yii;
 use app\models\Report;
 use app\models\User;
 use app\models\Project;
@@ -14,6 +15,7 @@ use app\models\WorkHistory;
 use yii\console\Controller;
 use app\models\AvailabilityLog;
 use app\models\ProjectDeveloper;
+use yii\log\Logger;
 
 class ReportController extends Controller
 {
@@ -23,7 +25,10 @@ class ReportController extends Controller
     public function actionApproveToday()
     {
         try {
+            Yii::getLogger()->log('actionApproveToday: running', Logger::LEVEL_INFO);
             Report::approveTodayReports();
+
+            Yii::getLogger()->log('actionApproveToday: Weekday ' .  date('N'), Logger::LEVEL_INFO);
 
             if ( date('N') < 6 ) {
 
@@ -38,9 +43,14 @@ class ReportController extends Controller
                     HAVING s > 6;", [
                     ':date_report'  => date('Y-m-d')
                 ])->queryAll();
+
+                Yii::getLogger()->log('actionApproveToday: Found ' .  count($itemsReported) . ' reported items', Logger::LEVEL_INFO);
+
                 foreach ( $itemsReported as $user ) {
 
                     if ( $user['s'] > 8 ) {
+
+                        Yii::getLogger()->log('actionApproveToday: Adding benefit ' .  var_export($user, 1) , Logger::LEVEL_INFO);
 
                         WorkHistory::create(
                             WorkHistory::TYPE_USER_EFFORTS,
@@ -69,6 +79,8 @@ class ReportController extends Controller
                     ])->queryAll();
 
                     foreach ( $items as $user ) {
+
+                        Yii::getLogger()->log('actionApproveToday: Sending Missed Hours Notification ' .  var_export($user, 1) , Logger::LEVEL_INFO);
 
                         $mail = \Yii::$app->mailer->compose('missedHoursNotification', [
                             'username'  => $user['first_name'],
