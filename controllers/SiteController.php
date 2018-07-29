@@ -315,4 +315,12 @@ class SiteController extends Controller
         return $this->render('for_status', ['f' => $f]);
     }
 
+    public function actionTest500()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->getResponse()->setStatusCode(500);
+        Yii::$app->response->content = '{"data":null,"errors":{"param":"error","message":"An internal server error occurred.","trace":[]},"success":false}';
+        Yii::$app->end();
+    }
+
 }

@@ -79,7 +79,7 @@ class Report extends \yii\db\ActiveRecord
                     Milestone::find()->where([
                         'project_id' => $project->id,
                         'status' => Milestone::STATUS_NEW
-                        ])->andWhere('<=', 'start_date', date('Y-m-d'))->count() === 0 ) {
+                        ])->andWhere(['<=', 'start_date', date('Y-m-d')])->count() === 0 ) {
 
                     $this->addError('project_id', Yii::t('app', 'This project does not have any active milestones.'));
 
