@@ -82,6 +82,12 @@ class FinancialBonusesFetch extends ViewModelAbstract
                                     $dateFrom = $milestone['start_date'];
 
                                 }
+                                if ( strtotime($milestone['closed_date']) < strtotime($toDate) ) {
+
+
+                                    $toDate = $milestone['closed_date'];
+
+                                }
 
                             }
 
