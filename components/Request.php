@@ -18,4 +18,23 @@ class Request extends \yii\web\Request
         'X-Forwarded-For', // Common
     ];
 
+    public function getUserIP()
+    {
+        if ( isset($_SERVER['HTTP_X_REAL_IP']) ) {
+
+            //This is internal network, most probably staging server
+            if ( strstr($_SERVER['HTTP_X_REAL_IP'], '192.168') !== false ) {
+
+                return '213.160.139.198';
+
+            } else {
+
+                return $_SERVER['HTTP_X_REAL_IP'];
+
+            }
+
+        }
+        return parent::getUserIP();
+    }
+
 }
