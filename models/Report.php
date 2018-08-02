@@ -79,7 +79,7 @@ class Report extends \yii\db\ActiveRecord
                     Milestone::find()->where([
                         'project_id' => $project->id,
                         'status' => Milestone::STATUS_NEW
-                        ])->andWhere('<=', 'start_date', date('Y-m-d'))->count() === 0 ) {
+                        ])->andWhere(['<=', 'start_date', date('Y-m-d')])->count() === 0 ) {
 
                     $this->addError('project_id', Yii::t('app', 'This project does not have any active milestones.'));
 
@@ -352,6 +352,7 @@ class Report extends \yii\db\ActiveRecord
     public static function getReportHours($currUser)
     {
         return self::find()
+            ->andWhere(['is_delete' => 0])
             ->where ('TO_DAYS(NOW()) - TO_DAYS(date_report) <= 7 AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $currUser] )->sum('hours');
     }
 
@@ -359,6 +360,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return self::find()
             ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $userId])
+            ->andWhere(['is_delete' => 0])
             ->sum('hours');
     }
 
@@ -369,6 +371,7 @@ class Report extends \yii\db\ActiveRecord
     public static function getReportCostPerMonthPerUser($userId)
     {
         return self::find()
+            ->andWhere(['is_delete' => 0])
             ->where('MONTH(`date_report`) = MONTH(NOW()) AND YEAR(`date_report`) = YEAR(NOW()) AND ' . Report::tableName() . '.user_id=:userId',[':userId' => $userId])
             ->sum('cost');
     }
@@ -407,6 +410,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return self::find()
             ->where([Report::tableName() . '.project_id' => $projectId])
+            ->andWhere(['is_delete' => 0])
             ->andWhere(['between', 'date_report', $fromDate, $toDate])
             ->sum('cost');
     }

@@ -34,14 +34,32 @@ class SSOCheck extends ViewModelAbstract
 
                     } else {
 
-                        if ( !($user = User::find()->where(['email' => $response['user']['email']])->one() ) ) {
+                        if ( !($user = User::find()->where(['email' => $response['user']['name']])->one() ) ) {
 
-                            $user = User::createASingleDevUser($response['user'], Yii::$app->security->generateRandomString( 30));
+                            $user = User::createASingleDevUser([
+                                'email'         => $response['user']['name'],
+                                'first-name'    => Yii::t('app', 'New User'),
+                                'last-name'     => Yii::t('app', 'New User')
+                            ], Yii::$app->security->generateRandomString( 30));
 
                         }
 
                     }
-                    $accessToken = ApiAccessToken::generateNewToken( $user );
+                    if ($user && $user->id > 0 ) {
+
+                        $accessToken = ApiAccessToken::generateNewToken( $user );
+
+                    } else {
+
+                        foreach ($user->getErrors() as $attribute => $error ) {
+
+                            $this->addError($attribute, implode(", ", $error));
+
+                        }
+                        $this->addError(Processor::CROWD_ERROR_PARAM, Yii::t('app', 'Can not create a user account'));
+                        return false;
+
+                    }
 
                 }
                 $accessToken->crowd_exp_date = $response['expiryDate'];

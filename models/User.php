@@ -394,8 +394,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     WorkHistory::TYPE_ADMIN_BENEFITS,
                     $this->id,
                     Yii::t('app', '~ Salary changed from ${from} to ${to} on {on}', [
-                        'from'  => $this->salary,
-                        'to'    => $oldData['salary'],
+                        'from'  => $oldData['salary'],
+                        'to'    => $this->salary,
                         'on'    => $this->date_salary_up
                     ])
                 );
@@ -405,8 +405,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     WorkHistory::TYPE_ADMIN_BENEFITS,
                     $this->id,
                     Yii::t('app', '~ Official Salary changed from {from}UAH to {to}UAH on {on}', [
-                        'from'  => $this->official_salary,
-                        'to'    => $oldData['official_salary'],
+                        'from'  => $oldData['official_salary'],
+                        'to'    => $this->official_salary,
                         'on'    => date("Y-m-d")
                     ])
                 );

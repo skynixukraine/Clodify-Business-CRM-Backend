@@ -249,6 +249,25 @@ class SalaryReportList extends \yii\db\ActiveRecord
     }
 
     /**
+     * FOPs Salaries in USD
+     * @param $salaryReportLists
+     * @return float|int
+     */
+    public static function getSumOfSalariesOfFOPs($salaryReportLists)
+    {
+        $total = 0;
+        /** @var  $salaryReportList SalaryReportList */
+        foreach ($salaryReportLists as $salaryReportList) {
+            if ( $salaryReportList->official_salary < 10 ) {
+
+                $total += $salaryReportList->subtotal;
+
+            }
+        }
+        return $total;
+    }
+
+    /**
      * @param $salaryReportId
      * @param $userId
      * @return bool

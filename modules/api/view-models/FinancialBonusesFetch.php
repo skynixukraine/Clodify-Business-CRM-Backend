@@ -43,11 +43,11 @@ class FinancialBonusesFetch extends ViewModelAbstract
                 $data = $query->all();
 
                 $incomeItems = [];
-                $toDate     = date('Y-m-t', $financialReport->report_date);
                 /** @var  $finIncome FinancialIncome */
                 foreach ( $data as $finIncome ) {
 
                     $dateFrom   = date('Y-m-01', $financialReport->report_date);
+                    $toDate     = date('Y-m-t', $financialReport->report_date);
 
                     /** @var $project Project */
                     if ( ($project = $finIncome->getProject()->one() ) ) {
@@ -80,6 +80,11 @@ class FinancialBonusesFetch extends ViewModelAbstract
                                 if ( strtotime( $milestone['start_date'] ) < strtotime($dateFrom) ) {
 
                                     $dateFrom = $milestone['start_date'];
+
+                                }
+                                if ( strtotime($milestone['closed_date']) < strtotime($toDate) ) {
+
+                                    $toDate = $milestone['closed_date'];
 
                                 }
 

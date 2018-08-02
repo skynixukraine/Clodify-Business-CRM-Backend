@@ -113,32 +113,6 @@ class SiteController extends Controller
         return $this->redirect( "/" );
     }
 
-    /**
-     * @deprecated 
-     * @return string|Response
-     */
-    public function actionContact()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/contacts');
-    }
-
-    /**
-     * @deprecated 
-     * @return string
-     */
-    public function actionCareer()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/careers');
-    }
-
-    /**
-     * @deprecated 
-     * @return string
-     */
-    public function actionPrivacy()
-    {
-        return $this->redirect( Yii::$app->params['url_site'] . '/privacy-policy');
-    }
 
     /**
      * @deprecated  
@@ -339,6 +313,14 @@ class SiteController extends Controller
     {
         $f = User::find()->one();
         return $this->render('for_status', ['f' => $f]);
+    }
+
+    public function actionTest500()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->getResponse()->setStatusCode(500);
+        Yii::$app->response->content = '{"data":null,"errors":{"param":"error","message":"An internal server error occurred.","trace":[]},"success":false}';
+        Yii::$app->end();
     }
 
 }
