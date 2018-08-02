@@ -38,7 +38,7 @@ class ReportController extends Controller
                     LEFT JOIN reports ON users.id=reports.user_id 
                     WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
                     users.is_active=1 AND
-                     ( reports.date_report IS NULL OR reports.date_report =':date_report' )
+                     ( reports.date_report IS NULL OR reports.date_report =:date_report )
                     GROUP By users.id
                     HAVING s > 6;", [
                     ':date_report'  => date('Y-m-d')
@@ -64,20 +64,18 @@ class ReportController extends Controller
                     }
                 }
                 //BE sure this is working day and other were reported hours
-                if ( count($itemsReported ) > 5) {
+                if ( count($itemsReported ) >= 1) {
 
                     //Fetch users with less then 8 reported hours
                     $items = \Yii::$app->db->createCommand("
                         SELECT users.*, sum(reports.hours) AS s FROM users 
-                        LEFT JOIN reports ON users.id=reports.user_id 
+                        LEFT JOIN reports ON users.id=reports.user_id AND reports.date_report =:date_report
                         WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
-                        users.is_active=1 AND
-                         ( reports.date_report IS NULL OR reports.date_report =':date_report' )
+                        users.is_active=1 
                         GROUP By users.id
-                        HAVING s < 6;", [
+                        HAVING s < 6  OR s IS NULL;", [
                         ':date_report'  => date('Y-m-d')
                     ])->queryAll();
-
                     foreach ( $items as $user ) {
 
                         Yii::getLogger()->log('actionApproveToday: Sending Missed Hours Notification ' .  var_export($user, 1) , Logger::LEVEL_INFO);

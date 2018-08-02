@@ -94,7 +94,18 @@ class SalaryReportDownload extends ViewModelAbstract
                             }
                         ],
                     ]);
+                    if ( !$salaryReportData['total_to_pay'] ) {
+
+                        $salaryReportData['total_to_pay']	= round(SalaryReportList::getSumOf($salaryReportList, 'subtotal'));
+                        $salaryReportData['currency_rate']	= FinancialReport::getCurrency($salaryReport->report_date);
+                        $salaryReportData['total_to_pay_uah']   = round( $salaryReportData['currency_rate'] * $salaryReportData['total_to_pay']);
+
+                    }
                 }
+
+                $salaryReportData['total_to_payout'] = round($salaryReportData['total_to_pay_uah']
+                    - SalaryReportList::getSumOf($salaryReportList, 'official_salary')
+                    - (SalaryReportList::getSumOfSalariesOfFOPs($salaryReportList) * $salaryReportData['currency_rate']));
 
                 $content = Yii::$app->controller->renderPartial('/salary-reports/SalaryReportTemplatePDF', [
                     'salaryReportData' => $salaryReportData,
