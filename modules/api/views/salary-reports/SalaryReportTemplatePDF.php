@@ -25,6 +25,9 @@
     <tr>
         <th class="tx-amwm" colspan="2">Salary Summary</th>
     </tr>
+    <td class="tx-yw4l">Prepare cash UAH to Pay Salaries</td>
+        <td class="tx-yw4l"><?= $salaryReportData['total_to_payout']?></td>
+    </tr>
     <tr>
         <td class="tx-yw4l">Total to Pay, USD</td>
         <td class="tx-yw4l"><?= $salaryReportData['total_to_pay']?></td>
