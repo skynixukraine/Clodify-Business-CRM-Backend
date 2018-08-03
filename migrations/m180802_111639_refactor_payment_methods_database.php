@@ -73,8 +73,8 @@ class m180802_111639_refactor_payment_methods_database extends Migration
                 $this->update('invoices', ['payment_method_id' => $elem['business_id']], 'invoices.id = ' . $elem['id']);
             }
         }
-//
-//        $this->dropColumn('invoices', 'business_id');
+
+        $this->dropColumn('invoices', 'business_id');
 
     }
 
@@ -109,7 +109,7 @@ class m180802_111639_refactor_payment_methods_database extends Migration
 //
 //        $this->dropColumn('busineses', 'is_default');
 //
-//        $this->addColumn('invoices', 'business_id', 'integer');
+        $this->addColumn('invoices', 'business_id', 'integer');
 
     }
 
