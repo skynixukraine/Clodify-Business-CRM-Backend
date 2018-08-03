@@ -28,34 +28,34 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->addColumn('payment_methods', 'business_id', 'integer');
 
 
-//        $data = (new Query())
-//            ->select('*')
-//            ->from('busineses')
-//            ->all();
-//
-//
-//        if(!empty($data)) {
-//            foreach($data as $elem) {
-//
-//                $columns = ['name', 'name_alt', 'address_alt', 'represented_by_alt', 'bank_information_alt'];
-//
-//                $insert_data['name'] = $elem['name'];
-//                $insert_data['name_alt'] = $elem['name'];
-//                $insert_data['address_alt'] = $elem['address'];
-//                $insert_data['represented_by_alt'] = $elem['represented_by'];
-//                $insert_data['bank_information_alt'] = $elem['bank_information'];
-//
-//                $this->batchInsert('payment_methods', $columns, [$insert_data]);
-//            }
-//        }
-//
-//        $this->dropColumn('busineses', 'invoice_increment_id');
-//        $this->dropColumn('busineses', 'represented_by');
-//        $this->dropColumn('busineses', 'bank_information');
-//        $this->dropColumn('busineses', 'name_ua');
-//        $this->dropColumn('busineses', 'address_ua');
-//        $this->dropColumn('busineses', 'represented_by_ua');
-//        $this->dropColumn('busineses', 'bank_information_ua');
+        $data = (new Query())
+            ->select('*')
+            ->from('busineses')
+            ->all();
+
+
+        if(!empty($data)) {
+            foreach($data as $elem) {
+
+                $columns = ['name', 'name_alt', 'address_alt', 'represented_by_alt', 'bank_information_alt'];
+
+                $insert_data['name'] = $elem['name'];
+                $insert_data['name_alt'] = $elem['name'];
+                $insert_data['address_alt'] = $elem['address'];
+                $insert_data['represented_by_alt'] = $elem['represented_by'];
+                $insert_data['bank_information_alt'] = $elem['bank_information'];
+
+                $this->batchInsert('payment_methods', $columns, [$insert_data]);
+            }
+        }
+
+        $this->dropColumn('busineses', 'invoice_increment_id');
+        $this->dropColumn('busineses', 'represented_by');
+        $this->dropColumn('busineses', 'bank_information');
+        $this->dropColumn('busineses', 'name_ua');
+        $this->dropColumn('busineses', 'address_ua');
+        $this->dropColumn('busineses', 'represented_by_ua');
+        $this->dropColumn('busineses', 'bank_information_ua');
 //
 //        $this->addColumn('busineses', 'is_default', 'boolean');
 //
@@ -97,13 +97,13 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->dropColumn('payment_methods', 'business_id');
 
 
-//        $this->addColumn('busineses', 'invoice_increment_id', 'integer');
-//        $this->addColumn('busineses', 'represented_by', 'string');
-//        $this->addColumn('busineses', 'bank_information', 'text');
-//        $this->addColumn('busineses', 'name_ua', 'string');
-//        $this->addColumn('busineses', 'address_ua', 'string');
-//        $this->addColumn('busineses', 'represented_by_ua', 'string');
-//        $this->addColumn('busineses', 'bank_information_ua', 'text');
+        $this->addColumn('busineses', 'invoice_increment_id', 'integer');
+        $this->addColumn('busineses', 'represented_by', 'string');
+        $this->addColumn('busineses', 'bank_information', 'text');
+        $this->addColumn('busineses', 'name_ua', 'string');
+        $this->addColumn('busineses', 'address_ua', 'string');
+        $this->addColumn('busineses', 'represented_by_ua', 'string');
+        $this->addColumn('busineses', 'bank_information_ua', 'text');
 //
 //        $this->dropForeignKey('business_id', 'payment_methods');
 //
