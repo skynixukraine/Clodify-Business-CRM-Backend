@@ -56,10 +56,9 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->dropColumn('busineses', 'address_ua');
         $this->dropColumn('busineses', 'represented_by_ua');
         $this->dropColumn('busineses', 'bank_information_ua');
-//
-//        $this->addColumn('busineses', 'is_default', 'boolean');
-//
-//        $this->addForeignKey('business_id', 'payment_methods', 'business_id', 'busineses', 'id');
+
+        $this->addColumn('busineses', 'is_default', 'boolean');
+        $this->addForeignKey('business_id', 'payment_methods', 'business_id', 'busineses', 'id');
 //
 //        $this->addColumn('invoices', 'payment_method_id', 'integer');
 //
@@ -104,11 +103,9 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->addColumn('busineses', 'address_ua', 'string');
         $this->addColumn('busineses', 'represented_by_ua', 'string');
         $this->addColumn('busineses', 'bank_information_ua', 'text');
-//
-//        $this->dropForeignKey('business_id', 'payment_methods');
-//
-//
-//        $this->dropColumn('invoices', 'payment_method_id');
+
+        $this->dropForeignKey('business_id', 'payment_methods');
+        $this->dropColumn('invoices', 'payment_method_id');
 //
 //        $this->dropColumn('busineses', 'is_default');
 //
