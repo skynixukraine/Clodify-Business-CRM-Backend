@@ -106,9 +106,9 @@ class m180802_111639_refactor_payment_methods_database extends Migration
 
         $this->dropForeignKey('business_id', 'payment_methods');
         $this->dropColumn('invoices', 'payment_method_id');
-//
-//        $this->dropColumn('busineses', 'is_default');
-//
+
+        $this->dropColumn('busineses', 'is_default');
+
         $this->addColumn('invoices', 'business_id', 'integer');
 
     }
