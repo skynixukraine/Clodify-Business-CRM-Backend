@@ -59,20 +59,20 @@ class m180802_111639_refactor_payment_methods_database extends Migration
 
         $this->addColumn('busineses', 'is_default', 'boolean');
         $this->addForeignKey('business_id', 'payment_methods', 'business_id', 'busineses', 'id');
-//
-//        $this->addColumn('invoices', 'payment_method_id', 'integer');
-//
-//        $invoices = (new Query())
-//            ->select('*')
-//            ->from('invoices')
-//            ->all();
-//
-//
-//        if(!empty($invoices)) {
-//            foreach($invoices as $elem) {
-//                $this->update('invoices', ['payment_method_id' => $elem['business_id']], 'invoices.id = ' . $elem['id']);
-//            }
-//        }
+
+        $this->addColumn('invoices', 'payment_method_id', 'integer');
+
+        $invoices = (new Query())
+            ->select('*')
+            ->from('invoices')
+            ->all();
+
+
+        if(!empty($invoices)) {
+            foreach($invoices as $elem) {
+                $this->update('invoices', ['payment_method_id' => $elem['business_id']], 'invoices.id = ' . $elem['id']);
+            }
+        }
 //
 //        $this->dropColumn('invoices', 'business_id');
 
