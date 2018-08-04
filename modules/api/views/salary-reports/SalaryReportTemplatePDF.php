@@ -25,7 +25,8 @@
     <tr>
         <th class="tx-amwm" colspan="2">Salary Summary</th>
     </tr>
-    <td class="tx-yw4l">Prepare cash UAH to Pay Salaries</td>
+    <tr>
+        <td class="tx-yw4l">Prepare cash UAH to Pay Salaries</td>
         <td class="tx-yw4l"><?= $salaryReportData['total_to_payout']?></td>
     </tr>
     <tr>
@@ -78,14 +79,19 @@
             <td class="tg-yw4l">Currency Rate: $<?=$salaryList['currency_rate']?>/UAH</td>
         </tr>
         <?php endif;?>
-        <?php if (isset($salaryList['worked_hours']) && !$salaryList['is_admin']):?>
+        <?php if (isset($salaryList['non_approved_hours'])):?>
+
+            <?php if (isset($salaryList['is_approving_hours_enabled']) && $salaryList['is_approving_hours_enabled'] === 1):?>
+                <tr>
+                    <td class="tg-yw4l">Non approved are not paid.</td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td class="tg-yw4l">Non approved are paid this time.</td>
+                </tr>
+            <?php endif;?>
             <tr>
-                <td class="tg-yw4l">Worked Hours: <?=$salaryList['worked_hours'] . ' '?> h</td>
-            </tr>
-        <?php endif;?>
-        <?php if (isset($salaryList['approved_hours']) && !$salaryList['is_admin']):?>
-            <tr>
-                <td class="tg-yw4l">Approved Hours: <?=$salaryList['approved_hours'] . ' '?> h</td>
+                <td class="tg-yw4l">Non Approved Hours: <?=$salaryList['non_approved_hours'] . ' '?> h</td>
             </tr>
         <?php endif;?>
         <?php if ($salaryList['bonuses']):?>

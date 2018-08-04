@@ -72,6 +72,10 @@ class SalaryReportDownload extends ViewModelAbstract
                             'official_salary',
                             'vacation_value',
                             'vacation_days',
+                            'non_approved_hours',
+                            'is_approving_hours_enabled'    => function ($salaryReport) {
+                                return $salaryReport->user->pay_only_approved_hours;
+                            },
                             'total_to_pay' => function ($salaryReport) {
                                 return $salaryReport->total_to_pay;
                             },
@@ -131,6 +135,7 @@ class SalaryReportDownload extends ViewModelAbstract
             }
 
         } else {
+
             return $this->addError(Processor::ERROR_PARAM, Message::get(Processor::CODE_NOT_ATHORIZED));
         }
     }
@@ -143,7 +148,8 @@ class SalaryReportDownload extends ViewModelAbstract
         return User::find()
             ->andWhere(['is_active' => User::ACTIVE_USERS])
             ->andWhere(['is_delete' => !User::DELETED_USERS])
-            ->andWhere(['not', ['salary' => null]])
+            ->andWhere(['in', 'role', [User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN]])
+            ->andWhere(['>', 'salary', 100])
             ->count();
     }
 }
