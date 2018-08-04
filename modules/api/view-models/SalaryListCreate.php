@@ -67,7 +67,9 @@ class SalaryListCreate extends ViewModelAbstract
                                                 $user->id,
                                                 \Yii::t('app', '- Did not work {num} days', [
                                                     'num' => $this->model->day_off
-                                                ])
+                                                ]),
+                                                date('Y-m-01', $salaryReport->report_date),
+                                                date('Y-m-t', $salaryReport->report_date)
                                             );
 
                                         }
