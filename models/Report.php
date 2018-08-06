@@ -416,6 +416,21 @@ class Report extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $userId
+     * @param $fromDate
+     * @param $toDate
+     * @return mixed
+     */
+    public static function getReportsCostByUserAndDates($userId, $fromDate, $toDate)
+    {
+        return self::find()
+            ->where([Report::tableName() . '.user_id' => $userId])
+            ->andWhere(['is_delete' => 0])
+            ->andWhere(['between', 'date_report', $fromDate, $toDate])
+            ->sum('cost');
+    }
+
+    /**
      * 
      */
     public static function approveTodayReports()

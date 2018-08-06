@@ -20,18 +20,25 @@ class Request extends \yii\web\Request
 
     public function getUserIP()
     {
+        $SKYNIX_IP = '213.160.139.198';
+
         if ( isset($_SERVER['HTTP_X_REAL_IP']) ) {
 
             //This is internal network, most probably staging server
             if ( strstr($_SERVER['HTTP_X_REAL_IP'], '192.168') !== false ) {
 
-                return '213.160.139.198';
+
+                return $SKYNIX_IP;
 
             } else {
 
                 return $_SERVER['HTTP_X_REAL_IP'];
 
             }
+
+        } else if ( $_SERVER['REMOTE_ADDR'] === "172.20.0.1") {
+
+            return $SKYNIX_IP;
 
         }
         return parent::getUserIP();
