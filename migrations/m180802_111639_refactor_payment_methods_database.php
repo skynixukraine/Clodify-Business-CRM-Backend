@@ -21,8 +21,11 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->truncateTable('payment_methods');
 
         $this->addColumn('payment_methods', 'name_alt', 'string');
+        $this->addColumn('payment_methods', 'address', 'string');
         $this->addColumn('payment_methods', 'address_alt', 'string');
+        $this->addColumn('payment_methods', 'represented_by', 'string');
         $this->addColumn('payment_methods', 'represented_by_alt', 'string');
+        $this->addColumn('payment_methods', 'bank_information', 'text');
         $this->addColumn('payment_methods', 'bank_information_alt', 'text');
         $this->addColumn('payment_methods', 'is_default', 'boolean');
         $this->addColumn('payment_methods', 'business_id', 'integer');
@@ -37,13 +40,25 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         if(!empty($data)) {
             foreach($data as $elem) {
 
-                $columns = ['name', 'name_alt', 'address_alt', 'represented_by_alt', 'bank_information_alt'];
+                $columns = [
+                    'name',
+                    'name_alt',
+                    'address',
+                    'address_alt',
+                    'represented_by',
+                    'represented_by_alt',
+                    'bank_information',
+                    'bank_information_alt'
+                ];
 
                 $insert_data['name'] = $elem['name'];
-                $insert_data['name_alt'] = $elem['name'];
-                $insert_data['address_alt'] = $elem['address'];
-                $insert_data['represented_by_alt'] = $elem['represented_by'];
-                $insert_data['bank_information_alt'] = $elem['bank_information'];
+                $insert_data['name_alt'] = $elem['name_ua'];
+                $insert_data['address'] = $elem['address'];
+                $insert_data['address_alt'] = $elem['address_ua'];
+                $insert_data['represented_by'] = $elem['represented_by'];
+                $insert_data['represented_by_alt'] = $elem['represented_by_ua'];
+                $insert_data['bank_information'] = $elem['bank_information'];
+                $insert_data['bank_information_alt'] = $elem['bank_information_ua'];
 
                 $this->batchInsert('payment_methods', $columns, [$insert_data]);
             }
@@ -89,11 +104,14 @@ class m180802_111639_refactor_payment_methods_database extends Migration
 
 
         $this->dropColumn('payment_methods', 'name_alt');
+        $this->dropColumn('payment_methods', 'address');
         $this->dropColumn('payment_methods', 'address_alt');
+        $this->dropColumn('payment_methods', 'represented_by');
         $this->dropColumn('payment_methods', 'represented_by_alt');
+        $this->dropColumn('payment_methods', 'bank_information');
         $this->dropColumn('payment_methods', 'bank_information_alt');
         $this->dropColumn('payment_methods', 'is_default');
-        $this->dropColumn('payment_methods', 'business_id');
+
 
 
         $this->addColumn('busineses', 'invoice_increment_id', 'integer');
@@ -105,6 +123,8 @@ class m180802_111639_refactor_payment_methods_database extends Migration
         $this->addColumn('busineses', 'bank_information_ua', 'text');
 
         $this->dropForeignKey('business_id', 'payment_methods');
+        $this->dropColumn('payment_methods', 'business_id');
+
         $this->dropColumn('invoices', 'payment_method_id');
 
         $this->dropColumn('busineses', 'is_default');

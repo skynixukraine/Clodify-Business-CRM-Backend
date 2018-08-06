@@ -36,9 +36,7 @@ class Business extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'name_ua', 'address', 'address_ua'], 'string', 'max' => 255],
-            [['bank_information', 'bank_information_ua'], 'string', 'max' => 1500],
-            [['invoice_increment_id'], 'integer'],
+            [['name', 'address'], 'string', 'max' => 255],
         ];
     }
 
@@ -51,14 +49,6 @@ class Business extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOperations()
-    {
-        return $this->hasMany(Operation::className(), ['business_id' => 'id']);
     }
 
 }

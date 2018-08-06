@@ -31,7 +31,7 @@ use app\components\DateUtil;
  * @property integer $contract_id
  * @property integer $project_id
  * @property integer $created_by
- * @property integer $business_id
+ * @property integer $payment_method_id
  * @property integer $invoice_id
 
  *
@@ -66,9 +66,9 @@ class Invoice extends \yii\db\ActiveRecord
         return [
             ['user_id', 'required'],
             [['date_end', 'total', 'user_id', 'date_start', 'subtotal', 'discount', 'note', 'currency'], 'required'],
-            [['business_id'], 'required',
+            [['payment_method_id'], 'required',
                 'on' => [self::SCENARIO_INVOICE_CREATE]],
-            [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id', 'contract_id', 'created_by', 'business_id'], 'integer'],
+            [['id', 'user_id', 'contract_number', 'act_of_work', 'project_id', 'contract_id', 'created_by', 'payment_method_id'], 'integer'],
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
@@ -125,7 +125,7 @@ class Invoice extends \yii\db\ActiveRecord
 
     public function getBusiness()
     {
-        return $this->hasOne(Business::className(), ['id' => 'business_id']);
+        return $this->hasOne(Business::className(), ['id' => 'payment_method_id']);
     }
 
     public function beforeSave($insert)
