@@ -99,6 +99,7 @@ class Invoice extends \yii\db\ActiveRecord
             'total_hours' => 'Total Hours',
             'contract_number' => 'Contract Number',
             'act_of_work' => 'Act of Work',
+            'payment_method_id' => 'Payment Method Id'
         ];
     }
 
@@ -123,9 +124,9 @@ class Invoice extends \yii\db\ActiveRecord
         return $this->hasOne(Contract::className(), ['id' => 'contract_id']);
     }
 
-    public function getBusiness()
+    public function getPaymentMethods()
     {
-        return $this->hasOne(Business::className(), ['id' => 'payment_method_id']);
+        return $this->hasOne(PaymentMethod::className(), [ 'id' => 'payment_method_id']);
     }
 
     public function beforeSave($insert)

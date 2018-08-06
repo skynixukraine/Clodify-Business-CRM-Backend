@@ -10,7 +10,6 @@ use yii\base\Model;
  *
  * @property integer $id
  * @property string $name
- * @property string $description
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {
@@ -75,5 +74,6 @@ class PaymentMethod extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Operation::className(), ['business_id' => 'id']);
     }
+
 
 }
