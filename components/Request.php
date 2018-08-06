@@ -25,9 +25,9 @@ class Request extends \yii\web\Request
         if ( isset($_SERVER['HTTP_X_REAL_IP']) ) {
 
             //This is internal network, most probably staging server
-            if ( strstr($_SERVER['HTTP_X_REAL_IP'], '192.168') !== false ) {
+            if ( false && strstr($_SERVER['HTTP_X_REAL_IP'], '192.168') !== false ) {
 
-
+                //Never use it, better move CRM to intranet
                 return $SKYNIX_IP;
 
             } else {

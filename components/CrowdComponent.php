@@ -66,7 +66,7 @@ class CrowdComponent extends Component
             "validationFactors" => [
                 [
                     "name"  => "remote_address",
-                    "value" => "192.168.86.140"
+                    "value" => Yii::$app->getRequest()->getUserIP()
                 ]
             ],
         );
@@ -87,7 +87,6 @@ class CrowdComponent extends Component
         $err = curl_error($curl);
 
         curl_close($curl);
-var_dump($response);exit;
         if ($err) {
 
             $dataResponse['success']    = false;
