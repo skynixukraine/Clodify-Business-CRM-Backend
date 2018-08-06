@@ -54,21 +54,20 @@ class SalaryListUpdate extends ViewModelAbstract
                         $salaryListReport->official_salary = $user->official_salary;
                         $salaryListReport->hospital_value = SalaryReportList::getHospitalValue($salaryListReport, $working_days);
                         $salaryListReport->overtime_value = SalaryReportList::getOvertimeValue($salaryListReport, $working_days);
-
+                        $salaryListReport->subtotal = SalaryReportList::getSubtotal($salaryListReport);
                         if ( $user->pay_only_approved_hours === 1 && $this->model->non_approved_hours > 0 ) {
 
                             $hourlyRate = SalaryReportList::getHourlyRate($this->model, $working_days);
                             $salaryListReport->subtotal = ( $salaryListReport->subtotal - $hourlyRate * $salaryListReport->non_approved_hours);
 
                         }
-
-                        $salaryListReport->subtotal = SalaryReportList::getSubtotal($salaryListReport);
                         $salaryListReport->subtotal_uah = SalaryReportList::getSubtotalUah($salaryListReport);
                         $salaryListReport->total_to_pay = SalaryReportList::getTotalToPay($salaryListReport);
 
                         if ($salaryListReport->validate()) {
                             $salaryListReport->save();
                         } else {
+                            Yii::getLogger()->log( var_export($salaryListReport->getErrors(), 1), yii\log\Logger::LEVEL_WARNING);
                             return $this->addError(Processor::ERROR_PARAM,
                                 Yii::t('app', 'Sorry, but the entered data is not correct'));
                         }

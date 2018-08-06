@@ -206,10 +206,11 @@ class SalaryReportList extends \yii\db\ActiveRecord
      * @param $salaryListReport
      * @return mixed
      */
-    public static function getSubtotal($salaryListReport)
+    public static function getSubtotal(SalaryReportList $salaryListReport)
     {
         return $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
-            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
+            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges
+            + $salaryListReport->vacation_value;
     }
 
     /**
@@ -259,7 +260,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
     }
 
     /**
-     * FOPs Salaries in USD
+     * FOPs Salaries in UAH
      * @param $salaryReportLists
      * @return float|int
      */
@@ -268,9 +269,9 @@ class SalaryReportList extends \yii\db\ActiveRecord
         $total = 0;
         /** @var  $salaryReportList SalaryReportList */
         foreach ($salaryReportLists as $salaryReportList) {
-            if ( $salaryReportList->official_salary < 10 ) {
+            if ( $salaryReportList->official_salary > 0 && $salaryReportList->official_salary < 0.05 ) {
 
-                $total += $salaryReportList->subtotal;
+                $total += $salaryReportList->total_to_pay;
 
             }
         }
@@ -338,7 +339,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
                 }
             }
         }
-        return $hours;
+        return round($hours);
     }
 
     /**
