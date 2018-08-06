@@ -137,7 +137,7 @@ class InvoicesFetch extends ViewModelAbstract
             }
 
             $list[] = [
-                "business_id"   => $model->business_id,
+                "payment_method_id"   => $model->payment_method_id,
                 'id'            => $model->id,
                 'invoice_id'    => $model->invoice_id,
                 'customer' => [

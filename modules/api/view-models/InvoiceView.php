@@ -36,7 +36,7 @@ class InvoiceView extends ViewModelAbstract
                 $invoice[] = [
                     'id'            => $invoiceModel->id,
                     'invoice_id'    => $invoiceModel->invoice_id,
-                    "business_id"   => $invoiceModel->business_id,
+                    "payment_method_id"   => $invoiceModel->payment_method_id,
                     "customer" =>  [
                         "id" => $invoiceModel->user->id,
                         "name" => $invoiceModel->user->first_name . ' ' . $invoiceModel->user->last_name ,
