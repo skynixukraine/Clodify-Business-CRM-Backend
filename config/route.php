@@ -90,6 +90,8 @@ return [
     'POST '     . $API . '/delayed-salary'                                    => $API . '/delayed-salary/create',
     'GET '      . $API . '/sso/config'                                        => $API . '/sso/get-config',
     'POST '     . $API . '/sso/check'                                         => $API . '/sso/check',
+    'GET '      . $API . '/reviews'                                           => $API . '/reviews/fetch',
+    'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
 
 
     // General rules

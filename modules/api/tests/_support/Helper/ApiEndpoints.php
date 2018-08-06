@@ -40,6 +40,7 @@ class ApiEndpoints
     const DELAYED_SALARY          = '/api/delayed-salary';
     const SSO_CONFIG              = '/api/sso/config';
     const SSO_TOKEN_CHECK         = '/api/sso/check';
+    const REVIEWS                 = '/api/reviews';
     const FINANCIAL_REPORTS_INCOME= '/income';
     const FINANCIAL_REPORTS_BONUSES= '/bonuses';
 
