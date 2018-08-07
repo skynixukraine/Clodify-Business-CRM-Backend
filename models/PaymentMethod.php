@@ -10,7 +10,6 @@ use yii\base\Model;
  *
  * @property integer $id
  * @property string $name
- * @property string $description
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {
@@ -29,8 +28,11 @@ class PaymentMethod extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 45],
-            [['description'], 'string', 'max' => 1000]
+            [['name', 'name_alt'], 'string', 'max' => 45],
+            [['address', 'address_alt', 'represented_by', 'represented_by_alt'], 'string', 'max' => 255],
+            [['bank_information', 'bank_information_alt'], 'string', 'max' => 1500],
+            [['is_default'], 'boolean'],
+            [['business_id'], 'number']
         ];
     }
 
@@ -42,7 +44,15 @@ class PaymentMethod extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'description' => 'Description',
+            'name_alt' => 'Name Alt',
+            'address' => 'Address',
+            'address_alt' => 'Address alt',
+            'represented_by' => 'Represented By',
+            'represented_by_alt' => 'Represented By Alt',
+            'bank_information' => 'Bank Information',
+            'bank_information_alt' => 'Bank Information Alt',
+            'is_default' => 'Is Default',
+            'business_id' => 'Business Id'
         ];
     }
 
@@ -55,5 +65,15 @@ class PaymentMethod extends \yii\db\ActiveRecord
         }
         return $result;
     }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOperations()
+    {
+        return $this->hasMany(Operation::className(), ['business_id' => 'id']);
+    }
+
 
 }
