@@ -25,6 +25,7 @@ use Yii;
  * @property double $bonuses
  * @property integer $day_off
  * @property integer $overtime_days
+ * @property integer $non_approved_hours
  * @property double $overtime_value
  * @property double $other_surcharges
  * @property double $subtotal
@@ -84,7 +85,7 @@ class SalaryReportList extends \yii\db\ActiveRecord
             [['worked_days', 'hospital_days', 'vacation_days', 'day_off', 'overtime_days'], 'integer', 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
             [['official_salary', 'hospital_value', 'bonuses', 'actually_worked_out_salary', 'overtime_value', 'other_surcharges', 'subtotal', 'currency_rate', 'vacation_value', 'subtotal_uah', 'total_to_pay'], 'double',
                 'on' => [self::SCENARIO_SALARY_REPORT_LISTS_UPDATE]],
-            [['worked_hours', 'approved_hours'], 'integer'],
+            [['worked_hours', 'approved_hours', 'non_approved_hours'], 'integer'],
         ];
     }
 
@@ -164,6 +165,15 @@ class SalaryReportList extends \yii\db\ActiveRecord
         return $result;
     }
 
+    public static function getHourlyRate(SalaryReportList $salaryListReport, $workingDays)
+    {
+        $result = 0;
+        if ($workingDays > 0) {
+            $result = round( ($salaryListReport->salary / $workingDays)  / 8 );
+        }
+        return $result;
+    }
+
     /**
      * @param SalaryReportList $salaryListReport
      * @param $workingDays
@@ -196,10 +206,11 @@ class SalaryReportList extends \yii\db\ActiveRecord
      * @param $salaryListReport
      * @return mixed
      */
-    public static function getSubtotal($salaryListReport)
+    public static function getSubtotal(SalaryReportList $salaryListReport)
     {
         return $salaryListReport->actually_worked_out_salary + $salaryListReport->hospital_value +
-            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges;
+            $salaryListReport->bonuses + $salaryListReport->overtime_value + $salaryListReport->other_surcharges
+            + $salaryListReport->vacation_value;
     }
 
     /**
@@ -249,6 +260,25 @@ class SalaryReportList extends \yii\db\ActiveRecord
     }
 
     /**
+     * FOPs Salaries in UAH
+     * @param $salaryReportLists
+     * @return float|int
+     */
+    public static function getSumOfSalariesOfFOPs($salaryReportLists)
+    {
+        $total = 0;
+        /** @var  $salaryReportList SalaryReportList */
+        foreach ($salaryReportLists as $salaryReportList) {
+            if ( $salaryReportList->official_salary > 0 && $salaryReportList->official_salary < 0.05 ) {
+
+                $total += $salaryReportList->total_to_pay;
+
+            }
+        }
+        return $total;
+    }
+
+    /**
      * @param $salaryReportId
      * @param $userId
      * @return bool
@@ -291,6 +321,29 @@ class SalaryReportList extends \yii\db\ActiveRecord
 
     /**
      * @param $userId
+     * @param $date
+     * @return int|mixed
+     */
+    public static function getNumNonApprovedHoursInMonthDuringWorkingDays($userId, $date)
+    {
+        $m = date('m', $date);
+        $y = date('Y', $date);
+        $lastday    = date("t",mktime(0,0,0,$m,1,$y));
+        $hours      = 0;
+        for($d=1;$d<=$lastday;$d++) {
+            $wd = date("w",mktime(0,0,0,$m,$d,$y));
+            if($wd > 0 && $wd < 6) {
+                if (($h = self::sumNonApprovedHoursReportsForDay($userId, date('Y-m-d',mktime(0,0,0,$m,$d,$y))))) {
+
+                    $hours += $h;
+                }
+            }
+        }
+        return round($hours);
+    }
+
+    /**
+     * @param $userId
      * @param $dateReport
      * @return mixed
      * require 'Y-m-d' format of date
@@ -300,6 +353,21 @@ class SalaryReportList extends \yii\db\ActiveRecord
         return Report::find()
             ->andWhere(['user_id'       => $userId])
             ->andWhere(['date_report'   => $dateReport])
+            ->andWhere(['is_delete'     => Report::ACTIVE])
+            ->sum(Report::tableName() . '.hours');
+    }
+
+    /**
+     * @param $userId
+     * @param $dateReport
+     * @return mixed
+     */
+    public static function sumNonApprovedHoursReportsForDay($userId, $dateReport)
+    {
+        return Report::find()
+            ->andWhere(['user_id'       => $userId])
+            ->andWhere(['date_report'   => $dateReport])
+            ->andWhere(['is_approved'   => 0])
             ->andWhere(['is_delete'     => Report::ACTIVE])
             ->sum(Report::tableName() . '.hours');
     }

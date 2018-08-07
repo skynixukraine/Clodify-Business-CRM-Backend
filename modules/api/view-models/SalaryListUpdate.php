@@ -45,6 +45,7 @@ class SalaryListUpdate extends ViewModelAbstract
                         );
                         $salaryListReport->worked_days      = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $working_days);
                         $salaryListReport->vacation_value   = SalaryReportList::getVacationValue($salaryListReport, $working_days);
+                        $salaryListReport->non_approved_hours= SalaryReportList::getNumNonApprovedHoursInMonthDuringWorkingDays($user->id, $salaryReport->report_date);
 
                         $salaryListReport->day_off      =  $working_days - $salaryListReport->vacation_days - $salaryListReport->worked_days;
                         $salaryListReport->salary       = $user->salary;
@@ -54,12 +55,19 @@ class SalaryListUpdate extends ViewModelAbstract
                         $salaryListReport->hospital_value = SalaryReportList::getHospitalValue($salaryListReport, $working_days);
                         $salaryListReport->overtime_value = SalaryReportList::getOvertimeValue($salaryListReport, $working_days);
                         $salaryListReport->subtotal = SalaryReportList::getSubtotal($salaryListReport);
+                        if ( $user->pay_only_approved_hours === 1 && $this->model->non_approved_hours > 0 ) {
+
+                            $hourlyRate = SalaryReportList::getHourlyRate($this->model, $working_days);
+                            $salaryListReport->subtotal = ( $salaryListReport->subtotal - $hourlyRate * $salaryListReport->non_approved_hours);
+
+                        }
                         $salaryListReport->subtotal_uah = SalaryReportList::getSubtotalUah($salaryListReport);
                         $salaryListReport->total_to_pay = SalaryReportList::getTotalToPay($salaryListReport);
 
                         if ($salaryListReport->validate()) {
                             $salaryListReport->save();
                         } else {
+                            Yii::getLogger()->log( var_export($salaryListReport->getErrors(), 1), yii\log\Logger::LEVEL_WARNING);
                             return $this->addError(Processor::ERROR_PARAM,
                                 Yii::t('app', 'Sorry, but the entered data is not correct'));
                         }

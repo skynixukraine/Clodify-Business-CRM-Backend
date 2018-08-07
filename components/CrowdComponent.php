@@ -87,7 +87,6 @@ class CrowdComponent extends Component
         $err = curl_error($curl);
 
         curl_close($curl);
-
         if ($err) {
 
             $dataResponse['success']    = false;
@@ -123,6 +122,16 @@ class CrowdComponent extends Component
         $params = array(
             "username" => "$name",
             "password" => "$pass",
+            "validation-factors" => [
+
+                "validationFactors" => [
+                    [
+                        "name"  => "remote_address",
+                        "value" => Yii::$app->getRequest()->getUserIP()
+                    ]
+                ],
+
+            ]
         );
         $curl = curl_init();
 
@@ -150,7 +159,6 @@ class CrowdComponent extends Component
         $err = curl_error($curl);
 
         curl_close($curl);
-
         if ($err) {
 
             $dataResponse['success']  = false;
