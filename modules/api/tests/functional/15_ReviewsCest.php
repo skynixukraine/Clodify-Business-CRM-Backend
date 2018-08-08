@@ -136,7 +136,7 @@ class ReviewsCest
                     'id'            => 'integer',
                     'date_start'    => 'string',
                     'date_end'      => 'string',
-                    'earned'        => 'integer',
+                    'earned'        => 'float|integer',
                     'user'          => [
                         'id'            => 'integer',
                         'last_name'     => 'string',
