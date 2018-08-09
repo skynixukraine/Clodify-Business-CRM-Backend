@@ -6,6 +6,7 @@
  */
 
 use Helper\OAuthSteps;
+use Helper\ValuesContainer;
 
 class PaymentMethodsCest
 {
@@ -16,6 +17,106 @@ class PaymentMethodsCest
      */
     public function testFetchPaymentMethods(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+
+        $I->wantTo('test payment method fetch is forbidden for DEV, PM, CLIENT role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->wantTo('test payment method fetch is forbidden for DEV role');
+        $I->sendGET('/api/businesses/1/methods');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test payment method fetch is forbidden for SALES role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET('/api/businesses/1/methods');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test payment method fetch is forbidden for CLIENT role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
+        $pas = ValuesContainer::$userClient['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET('/api/businesses/1/methods');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        \Helper\OAuthToken::$key = null;
+
+
+        $I->wantTo('test payment method fetch is forbidden for PM role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userPm['id']));
+        $pas = ValuesContainer::$userPm['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET('/api/businesses/1/methods');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You have no permission for this action"
+            ],
+            "success" => false
+        ]);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test payment method fetch is  forbidden for not authorized');
 
         $I->sendGET('/api/businesses/1/methods');
         $I->seeResponseCodeIs(200);
@@ -31,6 +132,8 @@ class PaymentMethodsCest
 
             'success' => 'boolean'
         ]);
+
+        $I->wantTo('test payment method fetch is allowed for ADMIN role and has the correct structure');
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
