@@ -24,4 +24,17 @@ class PaymentMethodsController extends DefaultController
             ->respond();
     }
 
+    public function actionFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\PaymentMethod')
+            ->set('viewModel\ViewModelInterface', 'viewModel\PaymentMethodFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_GET],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
