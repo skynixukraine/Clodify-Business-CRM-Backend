@@ -92,7 +92,7 @@ return [
     'POST '     . $API . '/sso/check'                                         => $API . '/sso/check',
     'GET '      . $API . '/reviews'                                           => $API . '/reviews/fetch',
     'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
-
+    'POST '     . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/create',
 
     // General rules
     $API . '/<controller>'              => $API . '/<controller>',
