@@ -92,7 +92,9 @@ return [
     'POST '     . $API . '/sso/check'                                         => $API . '/sso/check',
     'GET '      . $API . '/reviews'                                           => $API . '/reviews/fetch',
     'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
+    'POST '     . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/create',
     'GET '      . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/fetch',
+    'PUT '      . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/update',
     'DELETE '   . $API . '/businesses/<business_id:\d+>/methods/<method_id:\d+>' => $API . '/payment-methods/delete',
 
 
