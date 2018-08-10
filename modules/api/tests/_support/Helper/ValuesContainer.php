@@ -67,7 +67,7 @@ class ValuesContainer
         'address' => 'Kyiv 22, ap 33',
         'represented_by' => 'Privat 24',
         'bank_information' => 'The P24 is a large bank of Ukraine',
-        'is_default' => 0,
+        'is_default' => 1,
         'business_id' => 1
     ];
 

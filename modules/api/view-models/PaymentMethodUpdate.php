@@ -36,14 +36,19 @@ class PaymentMethodUpdate extends ViewModelAbstract
             }
 
             if ($this->validate()) {
+
                 PaymentMethod::updateAll(
                     $this->postData,
-                    'business_id = :business_id AND id = :payment_method_id',
+
+                    ' business_id=:business_id AND id=:payment_method_id ',
                     [
                         ':business_id' => $businessId,
                         ':payment_method_id' => $paymentMethodId
                     ]
                 );
+
+//                if(!$updated)
+//                    return $this->addError(Processor::ERROR_PARAM, 'update failed');
 
                 $data = $this->postData;
                 $data = ['id'=> 2] + $data;
