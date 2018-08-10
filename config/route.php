@@ -93,6 +93,7 @@ return [
     'GET '      . $API . '/reviews'                                           => $API . '/reviews/fetch',
     'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
     'GET '      . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/fetch',
+    'DELETE '   . $API . '/businesses/<business_id:\d+>/methods/<method_id:\d+>' => $API . '/payment-methods/delete',
 
 
     // General rules
