@@ -72,4 +72,7 @@ class ValuesContainer
     ];
 
     public static $updatePaymentMethodUrlApi = '/api/businesses/1/methods/1';
+
+    public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
+
  }

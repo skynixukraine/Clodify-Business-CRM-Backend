@@ -278,54 +278,41 @@ class PaymentMethodsCest
 
     public function testUpdatePaymentMethodResetsIsDefault(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-//        $I->wantTo('test payment method creation is allowed for ADMIN role');
+//        $I->wantTo('test payment method updating when is_default = 1 set is_default = 0 for another methods');
 //        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
 //        $pas = ValuesContainer::$userAdmin['password'];
 //        $oAuth = new OAuthSteps($scenario);
 //        $oAuth->login($email, $pas);
 //
+//        $paymentMethodData = \Helper\ValuesContainer::$paymentMethodData;
+//        unset($paymentMethodData['id']);
+//
+//        $paymentMethodData['is_default'] = 1;
+//
 //        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
-//
-//        \Helper\OAuthToken::$key = null;
-//
 //        $I->seeResponseCodeIs('200');
-//        $I->seeResponseIsJson();
 //
 //        $response = json_decode($I->grabResponse());
-//        $I->assertEmpty($response->errors);
-//        $I->seeResponseMatchesJsonType([
-//            'data' => [
-//                'payment_method_id' => 'integer',
-//            ],
-//            'errors' => 'array',
-//            'success' => 'boolean'
-//        ]);
+//
+//        $previousPaymentMethodId = $response->data['payment_method_id'];
+//
+//        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+//
+//        $I->seeResponseCodeIs('200');
+//
+//        $is_default = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $previousPaymentMethodId ));
+//
+//        if($is_default == 1) {
+//            $I->fail('failed reset is_default previous methods');
+//        }
+//
+//        \Helper\OAuthToken::$key = null;
+
     }
 
     public function testUpdatePaymentMethodSafeIsDefault(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-//        $I->wantTo('test payment method creation is allowed for ADMIN role');
-//        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
-//        $pas = ValuesContainer::$userAdmin['password'];
-//        $oAuth = new OAuthSteps($scenario);
-//        $oAuth->login($email, $pas);
-//
-//        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
-//
-//        \Helper\OAuthToken::$key = null;
-//
-//        $I->seeResponseCodeIs('200');
-//        $I->seeResponseIsJson();
-//
-//        $response = json_decode($I->grabResponse());
-//        $I->assertEmpty($response->errors);
-//        $I->seeResponseMatchesJsonType([
-//            'data' => [
-//                'payment_method_id' => 'integer',
-//            ],
-//            'errors' => 'array',
-//            'success' => 'boolean'
-//        ]);
+
     }
 
 }
