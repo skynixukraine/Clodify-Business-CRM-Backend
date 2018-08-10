@@ -60,4 +60,16 @@ class ValuesContainer
         'email'     => 'crm-pm@skynix.co',
         'password'  => 'Q$zR3yk2c4R4D'
     ];
+
+    public static $paymentMethodData = [
+        'id' => 1,
+        'name' => 'p24',
+        'address' => 'Kyiv 22, ap 33',
+        'represented_by' => 'Privat 24',
+        'bank_information' => 'The P24 is a large bank of Ukraine',
+        'is_default' => 0,
+        'business_id' => 1
+    ];
+
+    public static $updatePaymentMethodUrlApi = '/api/businesses/1/methods/1';
  }
