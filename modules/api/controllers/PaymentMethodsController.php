@@ -37,4 +37,17 @@ class PaymentMethodsController extends DefaultController
             ->respond();
     }
 
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\PaymentMethod')
+            ->set('viewModel\ViewModelInterface', 'viewModel\PaymentMethodUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

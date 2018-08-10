@@ -94,6 +94,7 @@ return [
     'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
     'POST '     . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/create',
     'GET '      . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/fetch',
+    'PUT '      . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/update',
 
 
     // General rules

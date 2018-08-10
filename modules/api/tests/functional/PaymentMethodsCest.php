@@ -354,4 +354,211 @@ class PaymentMethodsCest
 
     }
 
+    public function testUpdatePaymentMethodDeniedNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test payment method update is forbidden for ' . $role .' role');
+            $I->sendPUT(\Helper\ValuesContainer::$updatePaymentMethodUrlApi , json_encode(\Helper\ValuesContainer::$paymentMethodData));
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
+
+    }
+
+    public function testUpdatePaymentMethodAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('test payment method updating is allowed for ADMIN role');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT(\Helper\ValuesContainer::$updatePaymentMethodUrlApi, json_encode(\Helper\ValuesContainer::$paymentMethodData));
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'id' => 'integer',
+                'name'=> 'string',
+                'address'=> 'string',
+                'represented_by'=> 'string',
+                'bank_information' => 'string',
+                'is_default'=> 'integer',
+                'business_id'=> 'integer'
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+    }
+
+    public function testUpdatePaymentMethodRequiredFields(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('test a payment method updating is unable on missing a required field');
+
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        $paymentMethodData = \Helper\ValuesContainer::$paymentMethodData;
+        unset($paymentMethodData['id']);
+
+        foreach($paymentMethodData as $key => $elem) {
+
+            $testData = $paymentMethodData;
+            unset($testData[$key]);
+
+            $I->sendPUT(\Helper\ValuesContainer::$updatePaymentMethodUrlApi, json_encode($testData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseCodeIs('200');
+            $I->seeResponseIsJson();
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+
+            $I->seeResponseMatchesJsonType([
+                'data' => "null",
+                'errors' => [[
+                    "param" => "string",
+                    "message" => "string"
+                ]],
+                'success' => 'boolean'
+            ]);
+        }
+    }
+
+    public function testUpdatePaymentMethodResetsIsDefault(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test payment method updating when is_default = 1 set is_default = 0 for another methods');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $paymentMethodData = \Helper\ValuesContainer::$paymentMethodData;
+        $addPaymentMethodurl = \Helper\ValuesContainer::$createPaymentMethodUrlApi;
+
+        unset($paymentMethodData['id']);
+
+        $paymentMethodData['is_default'] = 1;
+
+        $I->sendPOST($addPaymentMethodurl, json_encode($paymentMethodData));
+        $I->seeResponseCodeIs('200');
+
+        $response = json_decode($I->grabResponse());
+
+        $previousPaymentMethodId = $response->data->payment_method_id;
+
+        $I->sendPOST($addPaymentMethodurl, json_encode($paymentMethodData));
+
+        $I->seeResponseCodeIs('200');
+
+        $response = json_decode($I->grabResponse());
+
+        $currentPaymentMethodId = $response->data->payment_method_id;
+
+        $I->seeResponseCodeIs('200');
+
+        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $previousPaymentMethodId ));
+
+        if($is_default_previous_pm == 1) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        $is_default_current_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $currentPaymentMethodId ));
+
+        if($is_default_current_pm == 0) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        \Helper\OAuthToken::$key = null;
+
+    }
+
+    public function testUpdatePaymentMethodSafeIsDefault(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test payment method updating when is_default = 0');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $paymentMethodData = \Helper\ValuesContainer::$paymentMethodData;
+        $addPaymentMethodurl = \Helper\ValuesContainer::$createPaymentMethodUrlApi;
+
+        unset($paymentMethodData['id']);
+
+        $paymentMethodData['is_default'] = 1;
+
+        $I->sendPOST($addPaymentMethodurl, json_encode($paymentMethodData));
+        $I->seeResponseCodeIs('200');
+
+        $response = json_decode($I->grabResponse());
+
+        $previousPaymentMethodId = $response->data->payment_method_id;
+
+        $paymentMethodData['is_default'] = 0;
+
+        $I->sendPOST($addPaymentMethodurl, json_encode($paymentMethodData));
+
+        $I->seeResponseCodeIs('200');
+
+        $response = json_decode($I->grabResponse());
+
+        $currentPaymentMethodId = $response->data->payment_method_id;
+
+        $I->seeResponseCodeIs('200');
+
+        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $previousPaymentMethodId ));
+
+        if($is_default_previous_pm == 0) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        $is_default_current_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $currentPaymentMethodId ));
+
+        if($is_default_current_pm == 1) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        \Helper\OAuthToken::$key = null;
+    }
+
 }
