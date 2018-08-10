@@ -561,4 +561,70 @@ class PaymentMethodsCest
         \Helper\OAuthToken::$key = null;
     }
 
+    public function testDeletePaymentMethodDeniedNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test payment method delete is forbidden for ' . $role .' role');
+            $I->sendDELETE(\Helper\ValuesContainer::$deletePaymentMethodUrlApi);
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
+
+    }
+
+    public function testDeletePaymentMethodAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('test payment method deleting is allowed for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE(\Helper\ValuesContainer::$updatePaymentMethodUrlApi);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+    }
+
+
+
 }

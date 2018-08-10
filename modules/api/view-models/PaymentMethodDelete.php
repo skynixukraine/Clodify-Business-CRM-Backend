@@ -9,6 +9,7 @@ namespace viewModel;
 
 use Yii;
 use app\models\PaymentMethod;
+use app\models\Invoice;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 
@@ -20,32 +21,32 @@ class PaymentMethodDelete extends ViewModelAbstract
     {
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
-            $id = Yii::$app->request->getQueryParam('id');
+            $paymentMethodId = Yii::$app->request->getQueryParam('payment_method_id');
+            $paymentMethod = PaymentMethod::find($paymentMethodId)->one();
 
-            $paymentMethodData = PaymentMethod::find()->where(['id' => $id])->one();
-
-            $data = [];
-            if ($paymentMethodData) {
-                $data[] = $paymentMethodData->toArray([
-                    'name',
-                    'name_alt',
-                    'address',
-                    'address_alt',
-                    'represented_by',
-                    'represented_by_alt',
-                    'bank_information',
-                    'bank_information_alt',
-                    'is_default'
-                ]);
-
-            } else {
-                $this->addError('data', 'Payment method not found');
+            if(count($paymentMethod) == 0) {
+                return $this->addError(Processor::ERROR_PARAM, 'Cannot delete payment method, not found by id');
             }
+
+            if($paymentMethod->is_default == 1) {
+                return $this->addError(Processor::ERROR_PARAM, 'Cannot delete default method');
+            }
+
+            $invoices = Invoice::findAll(['payment_method_id' => $paymentMethodId]);
+
+
+            if(count($invoices) > 0) {
+                return $this->addError(Processor::ERROR_PARAM, 'Cannot delete payment method, method attached to invoices');
+            }
+
+            $paymentMethod->delete();
+
+
         } else {
             return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
         }
 
-        $this->setData($data);
+
 
     }
 
