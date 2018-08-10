@@ -27,7 +27,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'address', 'represented_by', 'bank_information', 'is_default', 'business_id'], 'required'],
             [['name', 'name_alt'], 'string', 'max' => 45],
             [['address', 'address_alt', 'represented_by', 'represented_by_alt'], 'string', 'max' => 255],
             [['bank_information', 'bank_information_alt'], 'string', 'max' => 1500],
