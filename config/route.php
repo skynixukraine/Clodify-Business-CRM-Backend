@@ -96,6 +96,8 @@ return [
     'GET '      . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/fetch',
     'PUT '      . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/update',
     'DELETE '   . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/delete',
+    'POST '     . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/set-default',
+
 
 
     // General rules
