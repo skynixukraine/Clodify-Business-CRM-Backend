@@ -671,7 +671,9 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST(\Helper\ValuesContainer::$setDefaultPaymentMethodUrlApi);
+        $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+        $I->sendPOST('/api/businesses/1/methods/' . $id);
 
         \Helper\OAuthToken::$key = null;
 
@@ -716,11 +718,13 @@ class PaymentMethodsCest
 
         $previousPaymentMethodId = $response->data->payment_method_id;
 
-        $I->sendPOST(\Helper\ValuesContainer::$setDefaultPaymentMethodUrlApi);
+        $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+        $I->sendPOST('/api/businesses/1/methods/' . $id);
 
         $I->seeResponseCodeIs('200');
 
-        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => 1 ));
+        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $id ));
 
         if($is_default_previous_pm == 0) {
             $I->fail('failed reset is_default previous methods');
