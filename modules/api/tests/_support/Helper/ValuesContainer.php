@@ -75,4 +75,6 @@ class ValuesContainer
 
     public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
 
+    public static $deletePaymentMethodUrlApi = '/api/businesses/1/methods/1';
+
  }
