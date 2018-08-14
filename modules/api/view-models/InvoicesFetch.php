@@ -137,12 +137,13 @@ class InvoicesFetch extends ViewModelAbstract
             }
 
             $list[] = [
+                'id' => $model->id,
                 'invoice_id'    => $model->invoice_id,
                 'customer' => [
                     'id' => $id,
                     'name' => $name
                 ],
-                "payment_method"   => $model->getPaymentMethods()->one(),
+                "payment_method"   => $model->getPaymentMethod()->one(),
                 'subtotal' => $model->subtotal > 0 ? $model->subtotal : 0,
                 'discount' => $model->discount > 0 ? $model->discount : 0,
                 "currency" => $model->currency,
