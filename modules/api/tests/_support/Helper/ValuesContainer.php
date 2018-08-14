@@ -20,6 +20,7 @@ class ValuesContainer
     public static $BusinessID = 1;
     public static $unix = 1522912941;
     public static $DevSalary = 5500;
+    public static $BusinessId = 1;
 
     public static $projectIDWithoutSales;
 
@@ -76,5 +77,7 @@ class ValuesContainer
     public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
 
     public static $deletePaymentMethodUrlApi = '/api/businesses/1/methods/1';
+
+    public static $setDefaultPaymentMethodUrlApi = '/api/businesses/1/methods/1';
 
  }

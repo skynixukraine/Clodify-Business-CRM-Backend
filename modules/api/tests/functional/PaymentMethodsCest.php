@@ -411,7 +411,7 @@ class PaymentMethodsCest
 
         $I->seeResponseMatchesJsonType([
             'data' => [
-                'id' => 'integer',
+                'id' => 'integer|string',
                 'name'=> 'string',
                 'address'=> 'string',
                 'represented_by'=> 'string',
@@ -606,7 +606,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendDELETE(\Helper\ValuesContainer::$updatePaymentMethodUrlApi);
+        $I->sendDELETE(\Helper\ValuesContainer::$deletePaymentMethodUrlApi);
 
         \Helper\OAuthToken::$key = null;
 
@@ -622,6 +622,124 @@ class PaymentMethodsCest
             'success' => 'boolean'
         ]);
 
+
+    }
+
+    public function testSetDefaultPaymentMethodDeniedNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test payment method set default is forbidden for ' . $role .' role');
+
+            $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+            $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID . '/methods/' . $id);
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
+
+    }
+
+
+    public function testSetDefaultPaymentMethodAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $I->wantTo('test payment method set default is allowed for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+        $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID . '/methods/' . $id);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => 'array|null',
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+
+
+    }
+
+
+    public function testSafeDefaultPaymentMethodResetsOtherIsDefault(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test payment method set default when is_default = 1 set is_default = 0 for another payment methods');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $paymentMethodData = \Helper\ValuesContainer::$paymentMethodData;
+        $addPaymentMethodUrl = \Helper\ValuesContainer::$createPaymentMethodUrlApi;
+
+        unset($paymentMethodData['id']);
+
+        $paymentMethodData['is_default'] = 1;
+
+        $I->sendPOST($addPaymentMethodUrl, json_encode($paymentMethodData));
+        $I->seeResponseCodeIs('200');
+
+        $I->sendPOST($addPaymentMethodUrl, json_encode($paymentMethodData));
+        $I->seeResponseCodeIs('200');
+
+        $response = json_decode($I->grabResponse());
+
+        $previousPaymentMethodId = $response->data->payment_method_id;
+
+        $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+        $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID .'/methods/' . $id);
+
+        $I->seeResponseCodeIs('200');
+
+        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $id ));
+
+        if($is_default_previous_pm == 0) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        $is_default_previous_pm = $I->grabFromDatabase('payment_methods', 'is_default', array('id' => $previousPaymentMethodId ));
+
+        if($is_default_previous_pm == 1) {
+            $I->fail('failed reset is_default previous methods');
+        }
+
+        \Helper\OAuthToken::$key = null;
 
     }
 

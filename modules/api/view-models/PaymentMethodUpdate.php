@@ -51,7 +51,7 @@ class PaymentMethodUpdate extends ViewModelAbstract
 //                    return $this->addError(Processor::ERROR_PARAM, 'update failed');
 
                 $data = $this->postData;
-                $data = ['id'=> 2] + $data;
+                $data = ['id'=> $paymentMethodId] + $data;
 
                 $this->setData($data);
                 if($this->model->is_default == 1) {
