@@ -642,7 +642,10 @@ class PaymentMethodsCest
             $oAuth->login($email, $pas);
 
             $I->wantTo('test payment method set default is forbidden for ' . $role .' role');
-            $I->sendPOST(\Helper\ValuesContainer::$setDefaultPaymentMethodUrlApi);
+
+            $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
+
+            $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID . '/methods/' . $id);
 
             $response = json_decode($I->grabResponse());
             $I->assertNotEmpty($response->errors);
@@ -673,7 +676,7 @@ class PaymentMethodsCest
 
         $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
 
-        $I->sendPOST('/api/businesses/1/methods/' . $id);
+        $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID . '/methods/' . $id);
 
         \Helper\OAuthToken::$key = null;
 
@@ -720,7 +723,7 @@ class PaymentMethodsCest
 
         $id = $I->grabFromDatabase('payment_methods', 'id', array('is_default' => 0 ));
 
-        $I->sendPOST('/api/businesses/1/methods/' . $id);
+        $I->sendPOST('/api/businesses/' . \Helper\ValuesContainer::$BusinessID .'/methods/' . $id);
 
         $I->seeResponseCodeIs('200');
 
