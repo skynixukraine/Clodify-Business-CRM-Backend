@@ -606,15 +606,10 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->haveInDatabase('payment_methods', [
-            'id' => 55,
-            'name' => 'aaa',
-            'business_id' => 1,
-            'is_default' => 0,
-            'address' => 'ddd',
-            'represented_by' => 'THTH!!!',
-            'bank_information' => 'the bank info'
-        ]);
+        $paymentMethodData = Helper\ValuesContainer::$paymentMethodData;
+        $paymentMethodData['id'] = 55;
+
+        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
 
         $I->sendDELETE('/api/businesses/1/methods/55');
 

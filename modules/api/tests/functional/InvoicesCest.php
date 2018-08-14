@@ -159,9 +159,6 @@ class InvoicesCest
 
         $I->assertEmpty($response->errors);
 
-
-        if($response->data->total_records > 0)
-            $a=2;
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => ['invoices' =>
@@ -250,27 +247,27 @@ class InvoicesCest
      */
     public function testMakeInvoicePaidCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $inv = $I->haveInDatabase('invoices', [
-            'is_delete' => 0,
-            'status' => 'NEW',
-            'payment_method_id' => 1,
-            'note' => 'hello',
-            'date_end' => '2017-01-25',
-            'total' => 200,
-            'user_id' => ValuesContainer::$userClient['id'],
-            'date_start' => '2017-01-5',
-            'subtotal' => 100,
-            'discount' => 10
-        ]);
-
-        \Helper\OAuthToken::$key = null;
-
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+        $oAuth->login();
 
+        $I->wantTo('Testing create invoice as ADMIN');
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "date_start"  => INVOICE_DATE_START,
+            "date_end"    => INVOICE_DATE_END,
+            "subtotal"    => INVOICE_SUBTOTAL,
+            "discount"    => INVOICE_DISCOUNT,
+            "total"       => INVOICE_TOTAL,
+            "note"        => INVOICE_NOTE,
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => PAYMENT_METHOD_ID
+        ]));
+
+        $response = json_decode($I->grabResponse());
+        $id = $response->data->invoice_id;
 
         $I->wantTo('Testing delete invoice');
-        $I->sendPUT(ApiEndpoints::INVOICES . '/' . $inv . '/paid');
+        $I->sendPUT(ApiEndpoints::INVOICES . '/' . $id . '/paid');
 
         \Helper\OAuthToken::$key = null;
 
@@ -284,7 +281,7 @@ class InvoicesCest
             'success' => 'boolean'
         ]);
 
-        $I->seeInDatabase('invoices', ['id' => $inv, 'status' => 'PAID']);
+        $I->seeInDatabase('invoices', ['id' => $id, 'status' => 'PAID']);
 
     }
 
