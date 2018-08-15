@@ -38,7 +38,7 @@ class PaymentMethodsCest
         $oAuth->login($email, $pas);
 
         $I->wantTo('test payment method creation is forbidden for DEV role');
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
         \Helper\OAuthToken::$key = null;
 
@@ -60,7 +60,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
         \Helper\OAuthToken::$key = null;
 
@@ -84,7 +84,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
         \Helper\OAuthToken::$key = null;
 
@@ -109,7 +109,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
         \Helper\OAuthToken::$key = null;
 
@@ -133,7 +133,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
         \Helper\OAuthToken::$key = null;
 
@@ -176,7 +176,7 @@ class PaymentMethodsCest
             $testData = $paymentMethodData;
             unset($testData[$key]);
 
-            $I->sendPOST('/api/businesses/1/methods', json_encode($testData));
+            $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($testData));
 
             \Helper\OAuthToken::$key = null;
 
@@ -215,7 +215,7 @@ class PaymentMethodsCest
         $oAuth->login($email, $pas);
 
         $I->wantTo('test payment method fetch is forbidden for DEV role');
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
 
@@ -239,7 +239,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
 
@@ -262,7 +262,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
 
@@ -286,7 +286,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
 
@@ -305,7 +305,7 @@ class PaymentMethodsCest
 
         $I->wantTo('test payment method fetch is  forbidden for not authorized');
 
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         @$I->seeResponseMatchesJsonType([
@@ -325,7 +325,7 @@ class PaymentMethodsCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
 
-        $I->sendGET('/api/businesses/1/methods');
+        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -609,9 +609,9 @@ class PaymentMethodsCest
         $paymentMethodData = Helper\ValuesContainer::$paymentMethodData;
         $paymentMethodData['id'] = 55;
 
-        $I->sendPOST('/api/businesses/1/methods', json_encode($paymentMethodData));
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
-        $I->sendDELETE('/api/businesses/1/methods/55');
+        $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessID . '/methods/55');
 
         \Helper\OAuthToken::$key = null;
 
