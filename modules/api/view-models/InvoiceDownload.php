@@ -39,9 +39,8 @@ class InvoiceDownload extends ViewModelAbstract
             /** @var $director User */
             if ( ( $id = Yii::$app->request->getQueryParam('id') ) &&
                 ( $invoice = Invoice::findOne( $id )) &&
-                ( $business = $invoice->getBusiness()->one()) &&
-                ( $customer = $invoice->getUser()->one()) &&
-                ( $director = User::findOne( $business->director_id))) {
+                ( $paymentMethod = $invoice->getPaymentMethod()->one()) &&
+                ( $customer = $invoice->getUser()->one()) ) {
 
                 if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ||
                     (User::hasPermission([User::ROLE_SALES]) && $invoice->created_by == Yii::$app->user->id)) {
@@ -50,7 +49,7 @@ class InvoiceDownload extends ViewModelAbstract
                     $name = "Invoice" . $invoice->invoice_id . ".pdf";
 
                     //-------------- Download contractor signature from Amazon Simple Storage Service--------//
-                    $contractorSign     = 'users/' . $director->id . '/sign';
+                    $contractorSign     = 'users/1/sign';
                     $contractorSignData = "";
                     $s = new Storage();
                     try {
@@ -73,14 +72,14 @@ class InvoiceDownload extends ViewModelAbstract
                         'id'                    => $invoice->invoice_id,
                         'dateInvoiced'          => DateUtil::reConvertData( $invoice->date_created ),
                         'dateToPay'             => DateUtil::reConvertData( date('Y-m-d', strtotime($invoice->date_created . ' +3 days')) ),
-                        'supplierName'          => $business->name,
-                        'supplierNameUa'        => $business->name_ua,
-                        'supplierAddress'       => $business->address,
-                        'supplierAddressUa'     => $business->address_ua,
-                        'supplierDirector'      => $business->represented_by,
-                        'supplierDirectorUa'    => $business->represented_by_ua,
-                        'supplierBank'          => $business->bank_information,
-                        'supplierBankUa'        => $business->bank_information_ua,
+                        'supplierName'          => $paymentMethod->name,
+                        'supplierNameUa'        => $paymentMethod->name_alt,
+                        'supplierAddress'       => $paymentMethod->address,
+                        'supplierAddressUa'     => $paymentMethod->address_alt,
+                        'supplierDirector'      => $paymentMethod->represented_by,
+                        'supplierDirectorUa'    => $paymentMethod->represented_by_alt,
+                        'supplierBank'          => $paymentMethod->bank_information,
+                        'supplierBankUa'        => $paymentMethod->bank_information_alt,
                         'customerCompany'       => $customer->company,
                         'customerAddress'       => $customer->address,
                         'customerName'          => $customer->first_name . ' ' . $customer->last_name,
