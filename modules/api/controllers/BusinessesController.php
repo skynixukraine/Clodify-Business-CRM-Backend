@@ -12,14 +12,13 @@ use app\modules\api\components\Api\Processor;
 
 class BusinessesController extends DefaultController
 {
-
     public function actionFetch()
     {
         $this->di
             ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
             ->set('viewModel\ViewModelInterface', 'viewModel\BusinessFetch')
             ->set('app\modules\api\components\Api\Access', [
-                'methods' => [Processor::METHOD_GET],
+                'methods'        => [Processor::METHOD_GET],
                 'checkAccess' => true
             ])
             ->get('Processor')
@@ -32,11 +31,12 @@ class BusinessesController extends DefaultController
             ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
             ->set('viewModel\ViewModelInterface', 'viewModel\BusinessCreate')
             ->set('app\modules\api\components\Api\Access', [
-                'methods' => [Processor::METHOD_POST],
-                'checkAccess' => true
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
             ])
             ->get('Processor')
             ->respond();
     }
+
 
 }

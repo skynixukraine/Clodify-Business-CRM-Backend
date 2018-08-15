@@ -37,6 +37,8 @@ class Business extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'address'], 'string', 'max' => 255],
+            [['name', 'address', 'director_id', 'is_default'], 'required'],
+            [['is_default'], 'boolean']
         ];
     }
 
@@ -48,7 +50,12 @@ class Business extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'address' => 'Address',
+            'director_id' => 'Director ID',
+            'is_default' => 'Is Default'
         ];
     }
+
+
 
 }
