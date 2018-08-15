@@ -25,4 +25,18 @@ class BusinessesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionCreate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
+            ->set('viewModel\ViewModelInterface', 'viewModel\BusinessCreate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [Processor::METHOD_POST],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
