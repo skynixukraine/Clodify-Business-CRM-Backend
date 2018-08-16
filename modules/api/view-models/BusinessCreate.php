@@ -29,15 +29,6 @@ class BusinessCreate extends ViewModelAbstract
                 $this->setData([
                     'business_id' => $this->model->id
                 ]);
-                if($this->model->is_default == 1) {
-                    Business::updateAll(
-                        ['is_default' => 0],
-                        'id != :id',
-                        [
-                            ':id' => $this->model->id
-                        ]
-                    );
-                }
             }
         } else {
             return $this->addError(Processor::ERROR_PARAM, 'You have no permission for this action');
