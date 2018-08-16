@@ -228,15 +228,6 @@ class BusinessesCest
             $response = json_decode($I->grabResponse());
             $I->assertNotEmpty($response->errors);
 
-            $I->seeResponseContainsJson([
-                "data" => null,
-                "errors" => [
-                    "param" => "error",
-                    "message" => "director cannot have this role"
-                ],
-                "success" => false
-            ]);
-
         }
 
     }

@@ -38,7 +38,8 @@ class Business extends \yii\db\ActiveRecord
         return [
             [['name', 'address'], 'string', 'max' => 255],
             [['name', 'address', 'director_id', 'is_default'], 'required'],
-            [['is_default'], 'boolean']
+            [['is_default'], 'boolean'],
+            [['director_id'], 'validateDirectorId']
         ];
     }
 
@@ -54,6 +55,23 @@ class Business extends \yii\db\ActiveRecord
             'director_id' => 'Director ID',
             'is_default' => 'Is Default'
         ];
+    }
+
+    public function validateDirectorId($attribute){
+        $directorUser = $this->getUser()->one();
+        if(is_null($directorUser)) {
+            return $this->addError($attribute, 'Cannot find user by director_id');
+        }
+
+        $allowed = ['CLIENT', 'ADMIN', 'SALES', 'FIN'];
+
+        if(!in_array($directorUser->role, $allowed)) {
+            return $this->addError($attribute, 'director cannot have this role');
+        }
+    }
+
+    public function getUser(){
+        return $this->hasOne(User::className(), ['id' => 'director_id']);
     }
 
 

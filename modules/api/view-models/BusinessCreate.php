@@ -24,19 +24,6 @@ class BusinessCreate extends ViewModelAbstract
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $this->model->load(Yii::$app->request->post());
-            $directorId = $this->model->director_id;
-            $user = User::findOne($directorId);
-
-            if(is_null($user)) {
-                return $this->addError(Processor::ERROR_PARAM, 'Cannot find user by director_id');
-            }
-
-            $allowed = ['CLIENT', 'ADMIN', 'SALES', 'FIN'];
-
-            if(!in_array($user->role, $allowed)) {
-                return $this->addError(Processor::ERROR_PARAM, 'director cannot have this role');
-            }
-
 
             if($this->validate() && $this->model->save()) {
                 $this->setData([
