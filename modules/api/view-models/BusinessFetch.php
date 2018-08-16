@@ -28,24 +28,30 @@ class BusinessFetch extends ViewModelAbstract
             $businessId = Yii::$app->request->getQueryParam('id');
             if (!is_null($businessId)) {
 
+                $business = Business::findOne($businessId);
+                if(is_null($business)){
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'business was not found by id'));
+                }
+                $result['name'] = $business->name;
+                $result['address'] = $business->address;
+                $result['is_default'] = $business->is_default;
+                $result['director'] = $business->getDirector();
+                return $this->setData([$result]);
             }
 
 
             $businesses = Business::find()->all();
-            //print_r($businesses);
+
             if(!empty($businesses)) {
                 foreach( $businesses as $business) {
-                    $elem['name'] = $business['name'];
-                    $elem['address'] = $business['address'];
-                    $elem['is_default'] = $business['is_default'];
+                    $elem['name'] = $business->name;
+                    $elem['address'] = $business->address;
+                    $elem['is_default'] = $business->is_default;
                     $elem['director'] = $business->getDirector();
                     $result[] = $elem;
                 }
             }
 
-//            echo 2;
-//
-//            die;
             $this->setData($result);
 
         } else {
