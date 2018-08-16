@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 
 /**
  * This is the model class for table "busineses".
@@ -49,6 +48,12 @@ class Business extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
+    }
+
+
+    public function getDirector()
+    {
+        return $this->hasOne(User::className(), ['id' => 'director_id'])->one();
     }
 
 }
