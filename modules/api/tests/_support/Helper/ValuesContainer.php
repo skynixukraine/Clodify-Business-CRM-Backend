@@ -73,12 +73,21 @@ class ValuesContainer
         'business_id' => 1
     ];
 
-    public static $updatePaymentMethodUrlApi = '/api/businesses/1/methods/1';
+    public static $createBusinessData = [
+        'name' => 'Method 1',
+        'director_id' => 1,
+        'address' => 'Solnechnaia street 2',
+        'is_default' => 1
+    ];
+
+    public static $updatePaymentMethodUrlApi = "/api/businesses/1/methods/1";
 
     public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
 
     public static $deletePaymentMethodUrlApi = '/api/businesses/1/methods/1';
 
     public static $setDefaultPaymentMethodUrlApi = '/api/businesses/1/methods/1';
+
+    public static $createBusinessUrlApi = '/api/businesses';
 
  }

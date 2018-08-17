@@ -75,6 +75,7 @@ return [
     'DELETE '   . $API . '/counterparties/<id:\d+>'                           => $API . '/counterparties/delete',
     'GET '      . $API . '/counterparties'                                    => $API . '/counterparties/fetch',
     'GET '      . $API . '/businesses'                                        => $API . '/businesses/fetch',
+    'POST '     . $API . '/businesses'                                        => $API . '/businesses/create',
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
     'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
     'GET '      . $API . '/operations'                                        => $API . '/operations/fetch',
