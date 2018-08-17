@@ -10,9 +10,6 @@ namespace viewModel;
 
 use app\models\Business;
 use Yii;
-use app\modules\api\components\SortHelper;
-use app\components\DataTable;
-use yii\helpers\ArrayHelper;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
 
@@ -25,57 +22,45 @@ class BusinessFetch extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
-            $order = Yii::$app->request->getQueryParam('order');
-            $start = Yii::$app->request->getQueryParam('start') ?: 0;
-            $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-            $keyword = Yii::$app->request->getQueryParam('search_query');
+        if (User::hasPermission([User::ROLE_ADMIN])) {
 
-            $query = Business::find();
+            $result = [];
+            $businessId = Yii::$app->request->getQueryParam('id');
+            if (!is_null($businessId)) {
 
-            $dataTable = DataTable::getInstance()
-                ->setQuery($query)
-                ->setLimit($limit)
-                ->setStart($start)->setSearchValue($keyword)
-                ->setSearchParams([ 'or',
-                    ['like', 'name', $keyword]
-                ]);
-
-            if ($order) {
-                foreach ($order as $name => $value) {
-                    $dataTable->setOrder(Business::tableName() . '.' . $name, $value);
+                $business = Business::findOne($businessId);
+                if(is_null($business)){
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'business was not found by id'));
                 }
 
-            } else {
-                $dataTable->setOrder(Business::tableName() . '.id', 'desc');
+                $result[] = $this->defaultVal($business);
+                return $this->setData($result);
             }
 
-            $business = $dataTable->getData();
+            $businesses = Business::find()->all();
 
-            if ($business) {
-
-                foreach ($business as $key => $busi) {
-                    $business[$key] = [
-                        'id' => $busi->id,
-                        'name' => $busi->name
-                    ];
+            if(!empty($businesses)) {
+                foreach( $businesses as $business) {
+                    $result[] = $this->defaultVal($business);
                 }
-
-            } else {
-                $business = [];
             }
 
-            $data = [
-                'businesses' => $business,
-                'total_records' => DataTable::getInstance()->getTotal()
-            ];
-
-            $this->setData($data);
+            $this->setData($result);
 
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
+    }
+
+    private function defaultVal($model)
+    {
+        $list['id'] = $model->id;
+        $list['name'] = $model->name;
+        $list['address'] = $model->address;
+        $list['is_default'] = $model->is_default;
+        $list['director'] = $model->director;
+        return $list;
     }
 
 }

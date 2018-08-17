@@ -16,11 +16,11 @@ use Helper\ValuesContainer;
 class BusinessesCest
 {
     /**
-     * @see    https://jira.skynix.company/browse/SCA-54
+     * @see    https://jira.skynix.co/browse/SCA-233
      * @param  FunctionalTester $I
      * @return void
      */
-    public function testFetchBusinessesCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function testFetchBusinessesAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -33,18 +33,126 @@ class BusinessesCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => ['businesses' =>
-                [
-                    [
-                        'id' => 'integer',
-                        'name' => 'string',
-                    ]
-                ],
-                'total_records' => 'string'
-            ],
-            'errors' => 'array',
+            'data' => [[
+                'id' => 'integer',
+                'name' => 'string',
+                'address' => 'string',
+                'is_default' => 'integer|null',
+                'director' => [
+                    'id' => 'integer',
+                    'first_name' => 'string',
+                    'last_name' => 'string'
+                ]
+
+            ]],
+            'errors' => [],
             'success' => 'boolean'
         ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-232
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     *
+     */
+    public function testFetchBusinessAdminFilterById(FunctionalTester $I, \Codeception\Scenario $scenario){
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('test fetch business filter by is');
+        $I->sendGET(ApiEndpoints::BUSINESS . '/' . ValuesContainer::$BusinessId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+
+        if(!isset($response->data[0]->id))
+        {
+            $I->fail('failed receive data associated with specified business');
+        }
+
+        if($response->data[0]->id != 1)
+        {
+            $I->fail('the received business doesn\'t correspond to the searching value');
+        }
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-232
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchBusinessForbiddenNotAuthorized(FunctionalTester $I)
+    {
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test business create is forbidden for not authorized');
+        $I->sendGET(ApiEndpoints::BUSINESS);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-232
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchBusinessForbiddenNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+
+        foreach($roles as $role) {
+
+            \Helper\OAuthToken::$key = null;
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test business create is forbidden for ' . $role .' role');
+            $I->sendGET(ApiEndpoints::BUSINESS);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->assertEquals(false, $response->success);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
     }
 
 
