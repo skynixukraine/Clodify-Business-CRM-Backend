@@ -71,9 +71,7 @@ class Business extends \yii\db\ActiveRecord
     }
 
     public function getDirector(){
-        //return $this->director_id;
         return User::findOne($this->director_id)->toArray(['id', 'first_name', 'last_name']);
-        return $this->hasOne(User::className(), ['id' => 'director_id'])->id;
     }
 
     public function afterSave($insert, $changedAttributes)

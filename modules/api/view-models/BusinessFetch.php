@@ -35,7 +35,7 @@ class BusinessFetch extends ViewModelAbstract
                 $result['name'] = $business->name;
                 $result['address'] = $business->address;
                 $result['is_default'] = $business->is_default;
-                $result['director'] = $business->getDirector();
+                $result['director'] = $business->director;
                 return $this->setData([$result]);
             }
 
@@ -47,7 +47,7 @@ class BusinessFetch extends ViewModelAbstract
                     $elem['name'] = $business->name;
                     $elem['address'] = $business->address;
                     $elem['is_default'] = $business->is_default;
-                    $elem['director'] = $business->getDirector();
+                    $elem['director'] = $business->director;
                     $result[] = $elem;
                 }
             }
