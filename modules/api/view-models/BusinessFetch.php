@@ -22,7 +22,7 @@ class BusinessFetch extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
+        if (User::hasPermission([User::ROLE_ADMIN])) {
 
             $result = [];
             $businessId = Yii::$app->request->getQueryParam('id');
@@ -32,23 +32,16 @@ class BusinessFetch extends ViewModelAbstract
                 if(is_null($business)){
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'business was not found by id'));
                 }
-                $result['name'] = $business->name;
-                $result['address'] = $business->address;
-                $result['is_default'] = $business->is_default;
-                $result['director'] = $business->director;
-                return $this->setData([$result]);
-            }
 
+                $result[] = $this->defaultVal($business);
+                return $this->setData($result);
+            }
 
             $businesses = Business::find()->all();
 
             if(!empty($businesses)) {
                 foreach( $businesses as $business) {
-                    $elem['name'] = $business->name;
-                    $elem['address'] = $business->address;
-                    $elem['is_default'] = $business->is_default;
-                    $elem['director'] = $business->director;
-                    $result[] = $elem;
+                    $result[] = $this->defaultVal($business);
                 }
             }
 
@@ -58,6 +51,16 @@ class BusinessFetch extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
+    }
+
+    private function defaultVal($model)
+    {
+        $list['id'] = $model->id;
+        $list['name'] = $model->name;
+        $list['address'] = $model->address;
+        $list['is_default'] = $model->is_default;
+        $list['director'] = $model->director;
+        return $list;
     }
 
 }
