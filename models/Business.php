@@ -12,6 +12,7 @@ use Yii;
  * @property integer director_id
  * @property string $address
  * @property integer $is_default
+ * @property integer $is_delete
  *
  * @property Operation[] $operations
  */

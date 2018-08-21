@@ -564,4 +564,132 @@ class BusinessesCest
         $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
     }
 
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-235
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testDeleteBusinessAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test delete business  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessId);
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-235
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testDeleteBusinessForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test delete business is not allowed for not authorized');
+
+
+        $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-235
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testDeleteBusinessForbiddenForNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test delete business is forbidden for ' . $role .' role');
+            $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessId);
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-235
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testDeleteBusinessNotExistBusiness(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test delete business  return error on case when set business id, what business doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE('/api/businesses/222');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
+    }
+
 }
