@@ -692,4 +692,134 @@ class BusinessesCest
         $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
     }
 
+    /**
+     * @see https://jira.skynix.co/browse/SCA-236
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUploadLogoBusinessAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test upload logo business  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessId . '/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'logo' => 'string'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-236
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUploadLogoBusinessForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test upload logo business is not allowed for not authorized');
+
+
+        $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessId . '/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-236
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUploadLogoBusinessForbiddenForNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test upload logo business is forbidden for ' . $role .' role');
+            $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessId . '/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-236
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUploadLogoBusinessNotExistBusiness(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test upload logo business  return error on case when set business id, what business doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST('/api/businesses/555/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
+    }
+
 }

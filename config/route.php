@@ -79,6 +79,7 @@ return [
     'POST '     . $API . '/businesses'                                        => $API . '/businesses/create',
     'PUT '      . $API . '/businesses/<id:\d+>'                               => $API . '/businesses/update',
     'DELETE '   . $API . '/businesses/<id:\d+>'                               => $API . '/businesses/delete',
+    'POST '     . $API . '/businesses/<id:\d+>/logo'                          => $API . '/businesses/upload-logo',
     'GET '      . $API . '/operation-types'                                   => $API . '/operation-types/fetch',
     'PUT '      . $API . '/operations/<id:\d+>'                               => $API . '/operations/update',
     'GET '      . $API . '/operations'                                        => $API . '/operations/fetch',

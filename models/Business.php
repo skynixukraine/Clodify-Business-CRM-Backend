@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\log\Logger;
 
 /**
  * This is the model class for table "busineses".
@@ -18,6 +19,8 @@ use Yii;
  */
 class Business extends \yii\db\ActiveRecord
 {
+
+    const ATTACH_LOGO_BUSINESS = 'api-attach-logo';
     /**
      * @inheritdoc
      */
@@ -78,6 +81,24 @@ class Business extends \yii\db\ActiveRecord
             );
         }
         parent::afterSave($insert, $changedAttributes);
+    }
+
+
+    /**
+     * @param $logo
+     * @return mixed
+     */
+    public static function uploadLogo($logo, $businessId)
+    {
+
+
+        Yii::getLogger()->log( "S3 uploadPhoto " . var_export($logo, 1), Logger::LEVEL_WARNING);
+
+        $s = new Storage();
+        if (is_string($logo)) {
+            $pathFile = 'businesses/' . $businessId . '/logo';
+            return $s->uploadBase64($pathFile, $logo);
+        }
     }
 
     public function getUser(){
