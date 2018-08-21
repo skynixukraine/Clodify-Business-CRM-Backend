@@ -340,4 +340,228 @@ class BusinessesCest
 
     }
 
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update business  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode(ValuesContainer::$updateBusinessData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'name' => 'string',
+                'director_id' => 'integer',
+                'address' => 'string',
+                'is_default' => 'boolean|integer'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test update business is not allowed for not authorized');
+
+
+        $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode(ValuesContainer::$updateBusinessData));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessForbiddenForNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test update business is forbidden for ' . $role .' role');
+            $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode(ValuesContainer::$updateBusinessData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessRequiredFields(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $businessData = ValuesContainer::$updateBusinessData;
+
+        $I->wantTo('test a update business is unable on missing a required field');
+
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        foreach($businessData as $key => $elem) {
+
+            $testData = $businessData;
+            unset($testData[$key]);
+
+            $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode($testData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseCodeIs('200');
+            $I->seeResponseIsJson();
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+
+            $errors = $response->errors;
+
+            $check = false;
+
+            foreach ($errors as $error) {
+                if(strpos($error->message,'missed required field') !== false){
+                    $check = true;
+                }
+            }
+
+            if(!$check) {
+                $I->fail('missed required field');
+            }
+
+            $I->seeResponseMatchesJsonType([
+                'data' => "null",
+                'errors' => [[
+                    "param" => "string",
+                    "message" => "string"
+                ]],
+                'success' => 'boolean'
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessUpdatedValues(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update business  save correctly same data as was put');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode(ValuesContainer::$updateBusinessData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            'data' => [
+                'name' => "Method 22",
+                'director_id' => 4,
+                'address' => "New Address 55",
+                'is_default' => 1
+            ],
+            'errors' => [],
+            'success' => true
+        ]);
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-234
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateBusinessNotExistBusiness(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update business  return error on case when set business id, what business doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/businesses/222', json_encode(ValuesContainer::$updateBusinessData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
+    }
+
 }

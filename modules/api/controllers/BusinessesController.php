@@ -38,5 +38,18 @@ class BusinessesController extends DefaultController
             ->respond();
     }
 
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
+            ->set('viewModel\ViewModelInterface', 'viewModel\BusinessUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [ Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 
 }
