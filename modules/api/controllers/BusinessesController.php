@@ -7,6 +7,7 @@
  */
 
 namespace app\modules\api\controllers;
+use app\models\Business;
 
 use app\modules\api\components\Api\Processor;
 
@@ -59,6 +60,20 @@ class BusinessesController extends DefaultController
             ->set('app\modules\api\components\Api\Access', [
                 'methods' => [ Processor::METHOD_DELETE],
                 'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionUploadLogo()
+    {
+        $this->di
+            ->set('app\models\Business', ['scenario' => Business::ATTACH_LOGO_BUSINESS])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
+            ->set('viewModel\ViewModelInterface', 'viewModel\BusinessUploadLogo')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
             ])
             ->get('Processor')
             ->respond();

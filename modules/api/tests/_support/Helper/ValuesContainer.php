@@ -87,6 +87,10 @@ class ValuesContainer
         'is_default' => 1
     ];
 
+    public static $uploadLogoBusinessData = [
+        'logo' => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAMMCACYII="
+    ];
+
     public static $updatePaymentMethodUrlApi = "/api/businesses/1/methods/1";
 
     public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
