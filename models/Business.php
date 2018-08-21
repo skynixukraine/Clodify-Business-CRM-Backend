@@ -9,14 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property string $name_ua
+ * @property integer director_id
  * @property string $address
- * @property string $address_ua
- * @property string $represented_by
- * @property string $represented_by_ua
- * @property string $bank_information
- * @property string $bank_information_ua
- * @property integer $invoice_increment_id
+ * @property integer $is_default
  *
  * @property Operation[] $operations
  */

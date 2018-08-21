@@ -80,6 +80,13 @@ class ValuesContainer
         'is_default' => 1
     ];
 
+    public static $updateBusinessData = [
+        'name' => "Method 22",
+        'director_id' => 4,
+        'address' => "New Address 55",
+        'is_default' => 1
+    ];
+
     public static $updatePaymentMethodUrlApi = "/api/businesses/1/methods/1";
 
     public static $createPaymentMethodUrlApi = '/api/businesses/1/methods';
@@ -89,5 +96,6 @@ class ValuesContainer
     public static $setDefaultPaymentMethodUrlApi = '/api/businesses/1/methods/1';
 
     public static $createBusinessUrlApi = '/api/businesses';
+
 
  }
