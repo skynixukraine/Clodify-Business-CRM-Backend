@@ -328,6 +328,31 @@ LOCK TABLES `delayed_salary` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `email_templates`
+--
+
+DROP TABLE IF EXISTS `email_templates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `email_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) DEFAULT NULL,
+  `reply_to` varchar(255) DEFAULT NULL,
+  `body` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `email_templates`
+--
+
+LOCK TABLES `email_templates` WRITE;
+/*!40000 ALTER TABLE `email_templates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `email_templates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `emergencies`
 --
 
@@ -749,6 +774,7 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180804_125259_salary
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180810_125648_payment_methods_set_business_id',1534178933);
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180821_132253_business_add_is_deleted_field',1534857935);
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180821_133517_business_set_is_default',1534858579);
+INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180822_092951_create_email_templates_table',1534930469);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1951,4 +1977,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-21 13:36:55
+-- Dump completed on 2018-08-22  9:35:07
