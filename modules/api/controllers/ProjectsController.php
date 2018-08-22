@@ -126,4 +126,17 @@ class ProjectsController extends DefaultController
 
     }
 
+    public function actionSubscribe()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Project')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ProjectSubscribe')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
