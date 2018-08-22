@@ -27,6 +27,7 @@ class ProjectSubscribe extends ViewModelAbstract
 
             if($this->validate()) {
                 $projectDeveloper->save();
+                $this->setData([]);
             }
 
     }
