@@ -23,6 +23,7 @@ class ValuesContainer
     public static $unix = 1522912941;
     public static $DevSalary = 5500;
     public static $BusinessId = 1;
+    public static $EmailTemplateId = 1;
 
     public static $projectIDWithoutSales;
 
