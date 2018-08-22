@@ -601,6 +601,30 @@ class ProjectsCest
 
     }*/
 
+    public function testSubscribeProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test delete business  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST('/api/projects/' . ValuesContainer::$ProjectId . '/subscription');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => [],
+            "errors" => [],
+            "success" => true
+        ]);
+
+    }
+
 
     /**
      * @see https://jira.skynix.co/browse/SCA-237
