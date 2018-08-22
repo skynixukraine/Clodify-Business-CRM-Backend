@@ -603,7 +603,7 @@ class ProjectsCest
 
     public function testSubscribeProject(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->wantTo('test delete business  is successful for ADMIN');
+        $I->wantTo('test subscribe  is successful');
         $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
         $pas = ValuesContainer::$userAdmin['password'];
         $oAuth = new OAuthSteps($scenario);
@@ -680,6 +680,30 @@ class ProjectsCest
         $I->assertNotEmpty($response->errors);
         $I->assertEquals(false, $response->success);
         $I->assertEquals('project is\'t found by Id', $response->errors[0]->message);
+    }
+
+    public function testUnsubscribeProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test unsubscribe  is successful');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE('/api/projects/' . ValuesContainer::$ProjectId . '/subscription');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => [],
+            "errors" => [],
+            "success" => true
+        ]);
+
     }
 
     /**

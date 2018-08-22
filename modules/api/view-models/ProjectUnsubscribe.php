@@ -11,7 +11,7 @@ use Yii;
 use app\models\ProjectDeveloper;
 use app\modules\api\components\Api\Processor;
 
-class ProjectSubscribe extends ViewModelAbstract
+class ProjectUnsubscribe extends ViewModelAbstract
 {
     public function define(){
 
@@ -27,6 +27,7 @@ class ProjectSubscribe extends ViewModelAbstract
 
         if($this->validate()) {
             $projectDeveloper->save();
+            $this->setData([]);
         }
 
     }
