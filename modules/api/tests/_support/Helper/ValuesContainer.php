@@ -89,6 +89,12 @@ class ValuesContainer
         'is_default' => 1
     ];
 
+    public static $updateEmailTemplateData = [
+        'subject' => "Update Email Template",
+        'reply_to' => "Someone",
+        'body' => "Hello, Update Email Template"
+    ];
+
     public static $uploadLogoBusinessData = [
         'logo' => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAMMCACYII="
     ];
