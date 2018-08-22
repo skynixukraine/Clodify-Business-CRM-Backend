@@ -603,7 +603,7 @@ class ProjectsCest
 
     public function testSubscribeProject(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->wantTo('test delete business  is successful for ADMIN');
+        $I->wantTo('test subscribe  is successful');
         $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
         $pas = ValuesContainer::$userAdmin['password'];
         $oAuth = new OAuthSteps($scenario);
@@ -672,6 +672,86 @@ class ProjectsCest
         $oAuth->login($email, $pas);
 
         $I->sendPOST('/api/projects/555/subscription');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('project is\'t found by Id', $response->errors[0]->message);
+    }
+
+    public function testUnsubscribeProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test unsubscribe  is successful');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE('/api/projects/' . ValuesContainer::$ProjectId . '/subscription');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => [],
+            "errors" => [],
+            "success" => true
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-238
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUnsubscribeProjectForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test subscribe project is not allowed for not authorized');
+
+
+        $I->sendDELETE('/api/projects/' . ValuesContainer::$ProjectId . '/subscription');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-238
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUnsubscribeProjectNotExistProject(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test subscribe project  return error on case when set id, what project doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendDELETE('/api/projects/555/subscription');
 
         \Helper\OAuthToken::$key = null;
         $I->seeResponseCodeIs('200');

@@ -13,6 +13,7 @@ return [
     'PUT '      . $API . '/projects/<id:\d+>/activate'                        => $API . '/projects/activate',
     'DELETE '   . $API . '/projects/<id:\d+>'                                 => $API . '/projects/delete',
     'POST '     . $API . '/projects/<id:\d+>/subscription'                    => $API . '/projects/subscribe',
+    'DELETE '   . $API . '/projects/<id:\d+>/subscription'                    => $API . '/projects/unsubscribe',
     'DELETE '   . $API . '/reports/<id:\d+>'                                  => $API . '/reports/delete',
     'PUT '      . $API . '/reports/<id:\d+>'                                  => $API . '/reports/create-edit',
     'POST '     . $API . '/reports'                                           => $API . '/reports/create-edit',
