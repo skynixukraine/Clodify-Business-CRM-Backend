@@ -106,6 +106,7 @@ return [
     'POST '     . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/set-default',
     'GET '      . $API . '/email-templates'                                   => $API . '/email-templates/fetch',
     'GET '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/fetch',
+    'PUT '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/update',
 
 
 

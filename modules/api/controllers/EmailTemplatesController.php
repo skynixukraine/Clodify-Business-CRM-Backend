@@ -27,6 +27,19 @@ class EmailTemplatesController extends DefaultController
             ->respond();
     }
 
+    public function actionUpdate()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\EmailTemplate')
+            ->set('viewModel\ViewModelInterface', 'viewModel\EmailTemplateUpdate')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [ Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 
 
 }
