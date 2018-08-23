@@ -24,6 +24,7 @@ class ValuesContainer
     public static $DevSalary = 5500;
     public static $BusinessId = 1;
     public static $EmailTemplateId = 1;
+    public static $InvoiceTemplateId = 1;
 
     public static $projectIDWithoutSales;
 

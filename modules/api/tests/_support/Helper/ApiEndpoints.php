@@ -30,6 +30,7 @@ class ApiEndpoints
     const OPERATION               = '/api/operations';
     const BUSINESS                = '/api/businesses';
     const EMAIL_TEMPLATE          = '/api/email-templates';
+    const INVOICE_TEMPLATE        = '/api/invoice-templates';
     const OPERATION_TYPES         = '/api/operation-types';
     const REFERENCE_BOOK          = '/api/reference-book-items';
     const INVOICES                = '/api/invoices';
