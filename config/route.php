@@ -104,6 +104,8 @@ return [
     'PUT '      . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/update',
     'DELETE '   . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/delete',
     'POST '     . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/set-default',
+    'GET '      . $API . '/email-templates'                                   => $API . '/email-templates/fetch',
+    'GET '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/fetch',
 
 
 

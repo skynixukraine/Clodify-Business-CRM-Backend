@@ -29,6 +29,7 @@ class ApiEndpoints
     const COUNTERPARTY            = '/api/counterparties';
     const OPERATION               = '/api/operations';
     const BUSINESS                = '/api/businesses';
+    const EMAIL_TEMPLATE          = '/api/email-templates';
     const OPERATION_TYPES         = '/api/operation-types';
     const REFERENCE_BOOK          = '/api/reference-book-items';
     const INVOICES                = '/api/invoices';
