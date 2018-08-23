@@ -572,4 +572,224 @@ class InvoicesCest
 
     }
 
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update email template  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'name' => 'string',
+                'body' => 'string'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test update email template is not allowed for not authorized');
+
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateForbiddenForNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test update email template is forbidden for ' . $role .' role');
+            $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateRequiredFields(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $InvoiceTemplateData = ValuesContainer::$updateInvoiceTemplateData;
+
+        $I->wantTo('test a update invoice template is unable on missing a required field');
+
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        foreach($InvoiceTemplateData as $key => $elem) {
+
+            $testData = $InvoiceTemplateData;
+            unset($testData[$key]);
+
+            $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode($testData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseCodeIs('200');
+            $I->seeResponseIsJson();
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+
+            $errors = $response->errors;
+
+            $check = false;
+
+            foreach ($errors as $error) {
+                if(strpos($error->message,'missed required field') !== false){
+                    $check = true;
+                }
+            }
+
+            if(!$check) {
+                $I->fail('missed required field');
+            }
+
+            $I->seeResponseMatchesJsonType([
+                'data' => "null",
+                'errors' => [[
+                    "param" => "string",
+                    "message" => "string"
+                ]],
+                'success' => 'boolean'
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateUpdatedValues(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update invoice template  save correctly same data as was put');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            'data' => [
+                'name' => "Update invoice template",
+                'body' => "Hello, Update invoice template"
+            ],
+            'errors' => [],
+            'success' => true
+        ]);
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateNotExistInvoiceTemplate(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update invoice template  return error on case when set id, what business doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/222', json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('invoice template is\'t found by Id', $response->errors[0]->message);
+    }
+
 }

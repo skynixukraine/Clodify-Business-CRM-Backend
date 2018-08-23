@@ -96,6 +96,11 @@ class ValuesContainer
         'body' => "Hello, Update Email Template"
     ];
 
+    public static $updateInvoiceTemplateData = [
+        'name' => "Update invoice template",
+        'body' => "Hello, Update invoice template"
+    ];
+
     public static $uploadLogoBusinessData = [
         'logo' => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAMMCACYII="
     ];
