@@ -439,5 +439,137 @@ class InvoicesCest
         $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 1]);
     }
 
+    /**
+     * @see    https://jira.skynix.co/browse/SCA-245
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch counterparties data');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [[
+                'id' => 'integer',
+                'name' => 'string',
+                'body' => 'string'
+            ]],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     *
+     */
+    public function testFetchInvoiceTemplatesAdminFilterById(FunctionalTester $I, \Codeception\Scenario $scenario){
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('test fetch invoice templates filter by is');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE . '/' . ValuesContainer::$InvoiceTemplateId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+
+        if(!isset($response->data[0]->id))
+        {
+            $I->fail('failed receive data associated with specified business');
+        }
+
+        if($response->data[0]->id != 1)
+        {
+            $I->fail('the received business doesn\'t correspond to the searching value');
+        }
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesForbiddenNotAuthorized(FunctionalTester $I)
+    {
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test fetch invoice templates is forbidden for not authorized');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesForbiddenNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+
+        foreach($roles as $role) {
+
+            \Helper\OAuthToken::$key = null;
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test fetch invoice templates is forbidden for ' . $role .' role');
+            $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->assertEquals(false, $response->success);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
+    }
 
 }
