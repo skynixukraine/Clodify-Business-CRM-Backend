@@ -566,6 +566,30 @@ LOCK TABLES `fixed_assets_operations` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `invoice_template`
+--
+
+DROP TABLE IF EXISTS `invoice_template`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invoice_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `body` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice_template`
+--
+
+LOCK TABLES `invoice_template` WRITE;
+/*!40000 ALTER TABLE `invoice_template` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice_template` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `invoices`
 --
 
@@ -778,6 +802,7 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180821_132253_busine
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180821_133517_business_set_is_default',1534858579);
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180822_092951_create_email_templates_table',1534930469);
 INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180822_122257_refactor_all_emails_sent_by_system',1534942663);
+INSERT INTO `migration` (`version`, `apply_time`) VALUES ('m180823_082338_create_invoice_template_table',1535014842);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1980,4 +2005,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-22 12:57:52
+-- Dump completed on 2018-08-23  9:00:56
