@@ -47,6 +47,7 @@ return [
     'PUT '      . $API . '/invoices/<id:\d+>/paid'                            => $API . '/invoices/paid',
     'GET '      . $API . '/invoice-templates'                                 => $API . '/invoices/fetch-templates',
     'GET '      . $API . '/invoice-templates/<id:\d+>'                        => $API . '/invoices/fetch-templates',
+    'PUT '      . $API . '/invoice-templates/<id:\d+>'                        => $API . '/invoices/update-templates',
     'PUT '      . $API . '/surveys/<survey_id:\d+>'                           => $API . '/surveys/edit',
     'GET '      . $API . '/users/access-token/<user_id:\d+>'                  => $API . '/users/access-token',
     'GET '      . $API . '/financial-reports/<id:\d+>'                        => $API . '/financial-reports/view',

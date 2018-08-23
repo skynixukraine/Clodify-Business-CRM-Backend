@@ -110,4 +110,17 @@ class InvoicesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionUpdateTemplates(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\InvoiceTemplate')
+            ->set('viewModel\ViewModelInterface', 'viewModel\InvoiceUpdateTemplates')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [ Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
