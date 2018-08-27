@@ -822,4 +822,73 @@ class BusinessesCest
         $I->assertEquals('business is\'t found by Id', $response->errors[0]->message);
     }
 
+
+
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-249
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testGetLogoDefaultBusiness(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test get logo default business  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::GET_DEFAULT_LOGO);
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'logo' => 'string'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-249
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testGetLogoDefaultBusinessForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test get logo default business is not allowed for not authorized');
+
+
+        $I->sendGET(ApiEndpoints::GET_DEFAULT_LOGO);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+
+
 }

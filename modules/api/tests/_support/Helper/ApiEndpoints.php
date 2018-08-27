@@ -18,6 +18,7 @@ class ApiEndpoints
     const PROJECT                 = '/api/projects';
     const ATTACH_SIGN             = '/api/users/sign';
     const ATTACH_PHOTO            = '/api/users/photo';
+    const GET_DEFAULT_LOGO        = '/api/businesses/logo';
     const CAREERS_VIEW            = '/api/careers';
     const SURVEY                  = '/api/surveys';
     const PROFILES                = '/api/profiles';

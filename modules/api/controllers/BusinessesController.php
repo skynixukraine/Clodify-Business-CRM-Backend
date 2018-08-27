@@ -79,5 +79,18 @@ class BusinessesController extends DefaultController
             ->respond();
     }
 
+    public function actionGetDefaultLogo()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Business')
+            ->set('viewModel\ViewModelInterface', 'viewModel\BusinessGetDefaultLogo')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_GET ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 
 }
