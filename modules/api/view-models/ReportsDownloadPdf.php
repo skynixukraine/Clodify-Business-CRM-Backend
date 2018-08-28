@@ -196,7 +196,7 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
-            $totalHours += $model->hours;
+            $totalHours += floatval($model->hours);
             $list[$key] = [
                 'report_id'     => $model->id,
                 'project'       => [
