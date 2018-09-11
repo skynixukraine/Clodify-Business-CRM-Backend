@@ -256,7 +256,7 @@ class FinancialReportsCest
                     [
                         'id'                    => 'integer',
                         'report_date'           => 'string',
-                        'developer_expenses'    => 'float|integer',
+                        'developer_expenses'    => 'float|integer|string',
                         'income'                => 'float|integer',
                         'bonuses'               => 'float|integer',
                         'is_locked'             => 'integer'
