@@ -251,10 +251,22 @@ class ReportsDownloadPdf extends ViewModelAbstract
 
         $fileName .=  '.pdf';
 
+
+        $hour = floor($totalHours) > 10 ? floor($totalHours) : "0" . floor($totalHours);
+        $min = floor(($totalHours - floor($totalHours)) * 60);
+
+        if($min == 0) {
+            $min = "00";
+        } else if($min < 10){
+            $min = "0" . $min;
+        }
+
+        $totalHours = $hour . ":" . $min;
+
         $html = Yii::$app->controller->renderPartial('reportsPDF', [
             'filters'       => $filters,
             'reportData'    => $list,
-            'totalHours'    => gmdate('H:i', floor($totalHours * 3600))
+            'totalHours'    => $totalHours
 
         ]);
 
