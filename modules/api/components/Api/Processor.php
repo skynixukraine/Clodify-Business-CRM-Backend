@@ -77,7 +77,7 @@ class Processor
             $this->model &&
             ( $json = Yii::$app->request->getRawBody() ) ) {
 
-            if  ( ($data = @json_decode($json, true) ) ) {
+            if  ( ($data = @json_decode($json, true) ) !== null ) {
 
                 $this->model->setAttributes( $data );
                 $this->viewModel->setPostData( $data );
