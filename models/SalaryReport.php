@@ -89,7 +89,7 @@ class SalaryReport extends \yii\db\ActiveRecord
         $financialReports = SalaryReport::find()->all();
 
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
+            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)) {
                 return false;
             }
         }
@@ -105,7 +105,7 @@ class SalaryReport extends \yii\db\ActiveRecord
     {
         $salaryReports = SalaryReport::find()->all();
         foreach ($salaryReports as $salaryReport) {
-            if (date('Y-m', $salaryReport->report_date) == date('Y-m', $financialReport->report_date)) {
+            if (date('Y-m', $salaryReport->report_date) == date('Y-m', strtotime($financialReport->report_date))) {
                 return $salaryReport;
             }
         }
