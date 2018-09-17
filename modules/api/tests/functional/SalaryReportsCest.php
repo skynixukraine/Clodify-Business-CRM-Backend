@@ -149,7 +149,7 @@ class SalaryReportsCest
     public function testCreateSalaryReportListsCest(FunctionalTester $I)
     {
         $I->haveInDatabase('financial_reports', array(
-            'report_date' => '1514888742',  //  02 Jan 2018
+            'report_date' => '2018-01-02',  //  02 Jan 2018
             'currency' => 26.6,
             'expense_salary' => 3000,
             'num_of_working_days' => 30,
@@ -194,7 +194,7 @@ class SalaryReportsCest
     {
 
         $I->haveInDatabase('financial_reports', array(
-            'report_date'         => '1517522400',   //  01 Feb 2018
+            'report_date'         => '2018-02-01',   //  01 Feb 2018
             'currency'            => 26.6,
             'expense_salary'      => 3000,
             'num_of_working_days' => 30,

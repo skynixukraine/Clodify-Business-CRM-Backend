@@ -59,6 +59,8 @@ class ReviewsFetch extends ViewModelAbstract
             $query->orderBy(['id'   => 'ASC']);
             $reviewsData = [];
             if ( ($reviews = $query->all() ) )  {
+
+
                 /**
                  * @var  $k integer
                  * @var  $v User
@@ -69,7 +71,7 @@ class ReviewsFetch extends ViewModelAbstract
                         ->leftJoin(FinancialReport::tableName(),
                             FinancialIncome::tableName() . '.financial_report_id=' .
                                 FinancialReport::tableName() . '.id')
-                        ->where(['between', 'report_date', $fromDate, $toDate])
+                        ->where(['between', 'report_date', date('Y-m-d', $fromDate), date('Y-m-d', $toDate)])
                         ->andWhere(['developer_user_id' => $v->id])
                         ->sum('amount');
 

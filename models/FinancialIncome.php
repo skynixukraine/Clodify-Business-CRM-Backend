@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\DateUtil;
 use Yii;
 
 /**
@@ -54,9 +55,7 @@ class FinancialIncome extends \yii\db\ActiveRecord
                 if(($project = $this->getProject()->one()) &&
                     ( $project->type === Project::TYPE_FIXED_PRICE) ) {
 
-                    $rd         = $this->getFinancialReport()->one()->report_date;
-                    $dateFrom   = date('Y-m-01', $rd);
-                    $toDate     = date('Y-m-t', $rd);
+                    $finReportRange = DateUtil::getUnixMonthDateRangesByDate( $this->getFinancialReport()->one()->report_date );
 
                     if ( ($milestone = Milestone::find()->where(['project_id' => $this->project_id, 'status' => Milestone::STATUS_NEW])->one()) ) {
 
@@ -64,12 +63,12 @@ class FinancialIncome extends \yii\db\ActiveRecord
 
                     } else if (!($milestone = Milestone::find()
                         ->where(['project_id' => $this->project_id, 'status' => Milestone::STATUS_CLOSED])
-                        ->andWhere(['between', 'closed_date', $dateFrom, $toDate])->one())) {
+                        ->andWhere(['between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate])->one())) {
 
                         $this->addError('project_id',
                             Yii::t('app', 'The project has no any CLOSEd milestones during ${s} ~ ${e}', [
-                                's'    => $dateFrom,
-                                'e'    => $toDate
+                                's'    => $finReportRange->fromDate,
+                                'e'    => $finReportRange->toDate
                             ]));
 
                     }

@@ -120,11 +120,28 @@ class DateUtil
 
     /**
      * @param $date
+     * @return \stdClass
+     */
+    public static function getUnixMonthDateRangesByDate($date)
+    {
+        $date = strtotime($date);
+        $o = new \stdClass();
+        $o->fromDate = date('Y-m-01', $date);
+        $o->toDate = date('Y-m-t', $date);
+        $o->from    = strtotime( $o->fromDate .' 00:00:00' );
+        $o->to      = strtotime($o->toDate . ' 23:59:59');
+
+        return $o;
+    }
+
+    /**
+     * @param $date
      * @return string
      *  return something like that 01/01/2016 ~ 31/01/2016
      */
     public static function dateRangeForFetch($date)
     {
+        $date = strtotime($date);
         $range = '';
         $month_from_date = date('m', $date);
         $year_from_date = date('Y',$date);
