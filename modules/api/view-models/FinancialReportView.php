@@ -32,7 +32,7 @@ class FinancialReportView extends ViewModelAbstract
                     'app\models\FinancialReport' => [
                         'id',
                         'report_date' => function ($financialReport) {
-                            return DateUtil::convertDateFromUnix($financialReport->report_date);
+                            return DateUtil::reConvertData($financialReport->report_date);
                         },
                         'currency',
                         'expense_salary',
