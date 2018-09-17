@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DataTable;
+use app\components\DateUtil;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\Milestone;
@@ -46,8 +47,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                 /** @var  $finIncome FinancialIncome */
                 foreach ( $data as $finIncome ) {
 
-                    $dateFrom   = date('Y-m-01', $financialReport->report_date);
-                    $toDate     = date('Y-m-t', $financialReport->report_date);
+                    $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
 
                     /** @var $project Project */
                     if ( ($project = $finIncome->getProject()->one() ) ) {
@@ -61,7 +61,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                                     'project_id'    => $project->id,
                                     'status'        => Milestone::STATUS_CLOSED
                                 ])
-                                ->andWhere(['between', 'closed_date', $dateFrom, $toDate])
+                                ->andWhere(['between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate])
                                 ->all();
 
                             $milestones = ArrayHelper::toArray($milestonesList, [
@@ -77,12 +77,12 @@ class FinancialBonusesFetch extends ViewModelAbstract
 
                             foreach ( $milestones as $milestone ) {
 
-                                if ( strtotime( $milestone['start_date'] ) < strtotime($dateFrom) ) {
+                                if ( strtotime( $milestone['start_date'] ) < $finReportRange->from ) {
 
                                     $dateFrom = $milestone['start_date'];
 
                                 }
-                                if ( strtotime($milestone['closed_date']) < strtotime($toDate) ) {
+                                if ( strtotime($milestone['closed_date']) < $finReportRange->to ) {
 
                                     $toDate = $milestone['closed_date'];
 
@@ -102,7 +102,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
 
                         $project = ['name' => "Unknown"];
                     }
-                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $toDate);
+                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $finReportRange->fromDate, $finReportRange->toDate);
 
                     /** @var $project Project */
                     /** @var $u User */

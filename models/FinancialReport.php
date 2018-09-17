@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\DateUtil;
 use Yii;
 use yii\log\Logger;
 
@@ -41,7 +42,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date'], 'integer',
+            [['report_date'], 'date', 'message' => '{attribute}: is not a date!', 'format' => 'yyyy-MM-dd',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_FINANCIAL_REPORT_CREATE]],
@@ -147,11 +148,10 @@ class FinancialReport extends \yii\db\ActiveRecord
         }
         $projectIds = $projectIds ? implode(', ', $projectIds) : 0;
 
-        $dateFrom   = date('Y-m-01', $financialReport->report_date);
-        $toDate     = date('Y-m-t', $financialReport->report_date);
+        $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
         $expenses = Report::find()
             ->where(Report::tableName() . '.project_id IN (' . $projectIds . ') ')
-            ->andWhere(['between', 'date_report', $dateFrom, $toDate ])
+            ->andWhere(['between', 'date_report', $finReportRange->from, $finReportRange->to ])
             ->sum('cost');
 
         return $expenses > 0 ? $expenses : 0;
@@ -241,7 +241,7 @@ class FinancialReport extends \yii\db\ActiveRecord
         $financialReports = FinancialReport::find()->all();
 
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)) {
+            if (date('Y-m', strtotime( $financialReport->report_date)) == date('Y-m', strtotime( $date ))) {
                 return false;
             }
         }
@@ -279,7 +279,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if ((date('Y-m', $financialReport->report_date) == date('Y-m', $date)) &&
+            if ((date('Y-m', strtotime($financialReport->report_date)) == date('Y-m', $date)) &&
                 $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
                 return true;
             }
@@ -297,7 +297,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
                 return $financialReport->currency;
             }
         }
@@ -312,7 +312,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
                 return $financialReport->num_of_working_days;
             }
         }
@@ -328,7 +328,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     {
         $financialReports = FinancialReport::find()->all();
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', $financialReport->report_date) == date('Y-m', $date)){
+            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
                 return $financialReport->is_locked;
             }
         }

@@ -34,10 +34,8 @@ class FinancialReportUnlock extends ViewModelAbstract
 
             $id = Yii::$app->request->getQueryParam('id');
             $financialReport = FinancialReport::findOne($id);
-            $year = date("Y", $financialReport->report_date);
 
-            $fromDate = DateUtil::convertDateToUnix('01-01-' . $year);
-            $toDate = DateUtil::convertDateToUnix('31-12-' . $year);
+            $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
 
             $financialReport->is_locked = FinancialReport::NOT_LOCKED;
             $financialReport->save();
@@ -57,11 +55,11 @@ class FinancialReportUnlock extends ViewModelAbstract
                 $salaryReport->save();
             }
 
-            if ($finyearrep = FinancialYearlyReport::findYearlyReport($year)) {
+            if ($finyearrep = FinancialYearlyReport::findYearlyReport(date('Y', $finReportRange->from))) {
 
                 $financialReports = FinancialReport::find()
-                    ->andWhere(['>=', 'report_date', $fromDate])
-                    ->andWhere(['<=', 'report_date', $toDate])
+                    ->andWhere(['>=', 'report_date', $finReportRange->from])
+                    ->andWhere(['<=', 'report_date', $finReportRange->to])
                     ->andWhere(['is_locked' => FinancialReport::LOCKED])
                     ->all();
 
