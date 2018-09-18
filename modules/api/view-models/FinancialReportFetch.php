@@ -37,10 +37,9 @@ class FinancialReportFetch extends ViewModelAbstract
                 $dates = explode("~", $date_raw);
 
                 if ( count($dates) === 2) {
-
                     $query = FinancialReport::find()
                         ->where(['between', 'report_date',
-                            DateUtil::toUnixFromSlashFormat(trim($dates[0])), DateUtil::getLastDayOfMonth(trim($dates[1]))
+                            DateUtil::convertData(trim($dates[0])), DateUtil::convertData(trim($dates[1]))
                         ]);
 
 
@@ -72,7 +71,7 @@ class FinancialReportFetch extends ViewModelAbstract
 
                     $rep = [
                         'id'                  => $finRep->id,
-                        'report_date'         => DateUtil::dateRangeForFetch($finRep->report_date),
+                        'report_date'         => DateUtil::dateRangeForFetch(strtotime($finRep->report_date)),
                         'is_locked'           => $finRep->is_locked
                     ];
 

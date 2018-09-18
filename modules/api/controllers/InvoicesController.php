@@ -8,6 +8,7 @@
 namespace app\modules\api\controllers;
 
 use app\models\Invoice;
+use app\models\InvoiceTemplate;
 use app\modules\api\components\Api\Processor;
 
 class InvoicesController extends DefaultController
@@ -97,4 +98,29 @@ class InvoicesController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionFetchTemplates(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\InvoiceTemplate')
+            ->set('viewModel\ViewModelInterface', 'viewModel\InvoiceFetchTemplates')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [ Processor::METHOD_GET],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionUpdateTemplates(){
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\InvoiceTemplate')
+            ->set('viewModel\ViewModelInterface', 'viewModel\InvoiceUpdateTemplates')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods' => [ Processor::METHOD_PUT],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

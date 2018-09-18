@@ -42,12 +42,13 @@ class SalaryReportDownload extends ViewModelAbstract
             if ($salaryReport) {
                 $salaryReportData = ArrayHelper::toArray($salaryReport, [
                     SalaryReport::className() => [
-                        'total_to_pay' => function ($salaryReport) {
-                            $salaryReport->currency_rate = $salaryReport->currency_rate ? $salaryReport->currency_rate : 1;
-                            return ceil($salaryReport->total_to_pay / $salaryReport->currency_rate);
-                        },
                         'currency_rate',
-                        'total_to_pay_uah' => 'total_to_pay',
+                        'total_to_pay',
+                        'subtotal',
+                        'total_to_pay_uah' => function ($salaryReport) {
+                            $salaryReport->currency_rate = $salaryReport->currency_rate ? $salaryReport->currency_rate : 1;
+                            return ceil($salaryReport->subtotal * $salaryReport->currency_rate);
+                        },
                         'financial_report_status' => function ($salaryReport) {
                             return FinancialReport::isLock($salaryReport->report_date) ? 'Locked' : 'Unlocked';
                         }
@@ -72,6 +73,10 @@ class SalaryReportDownload extends ViewModelAbstract
                             'official_salary',
                             'vacation_value',
                             'vacation_days',
+                            'non_approved_hours',
+                            'is_approving_hours_enabled'    => function ($salaryReport) {
+                                return $salaryReport->user->pay_only_approved_hours;
+                            },
                             'total_to_pay' => function ($salaryReport) {
                                 return $salaryReport->total_to_pay;
                             },
@@ -96,16 +101,16 @@ class SalaryReportDownload extends ViewModelAbstract
                     ]);
                     if ( !$salaryReportData['total_to_pay'] ) {
 
-                        $salaryReportData['total_to_pay']	= round(SalaryReportList::getSumOf($salaryReportList, 'subtotal'));
+                        $salaryReportData['total_to_pay']	= round(SalaryReportList::getSumOf($salaryReportList, 'total_to_pay'));
                         $salaryReportData['currency_rate']	= FinancialReport::getCurrency($salaryReport->report_date);
-                        $salaryReportData['total_to_pay_uah']   = round( $salaryReportData['currency_rate'] * $salaryReportData['total_to_pay']);
-
+                        $salaryReportData['subtotal']       = round(SalaryReportList::getSumOf($salaryReportList, 'subtotal'));
+                        $salaryReportData['total_to_pay_uah'] = round($salaryReportData['subtotal'] * $salaryReportData['currency_rate']);
                     }
+
                 }
 
-                $salaryReportData['total_to_payout'] = round($salaryReportData['total_to_pay_uah']
-                    - SalaryReportList::getSumOf($salaryReportList, 'official_salary')
-                    - (SalaryReportList::getSumOfSalariesOfFOPs($salaryReportList) * $salaryReportData['currency_rate']));
+                $salaryReportData['total_to_payout_uah'] = round($salaryReportData['total_to_pay']
+                    - SalaryReportList::getSumOfSalariesOfFOPs($salaryReportList));
 
                 $content = Yii::$app->controller->renderPartial('/salary-reports/SalaryReportTemplatePDF', [
                     'salaryReportData' => $salaryReportData,
@@ -131,6 +136,7 @@ class SalaryReportDownload extends ViewModelAbstract
             }
 
         } else {
+
             return $this->addError(Processor::ERROR_PARAM, Message::get(Processor::CODE_NOT_ATHORIZED));
         }
     }
@@ -143,7 +149,8 @@ class SalaryReportDownload extends ViewModelAbstract
         return User::find()
             ->andWhere(['is_active' => User::ACTIVE_USERS])
             ->andWhere(['is_delete' => !User::DELETED_USERS])
-            ->andWhere(['not', ['salary' => null]])
+            ->andWhere(['in', 'role', [User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN]])
+            ->andWhere(['>', 'salary', 100])
             ->count();
     }
 }

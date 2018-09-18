@@ -9,6 +9,7 @@
 namespace viewModel;
 
 use app\components\DataTable;
+use app\components\DateUtil;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\Milestone;
@@ -58,8 +59,7 @@ class FinancialIncomeFetch extends ViewModelAbstract
                         $dataTable->setOrder(FinancialIncome::tableName() . '.id', 'desc');
                     }
                     $incomeItems    = [];
-                    $dateFrom   = date('Y-m-01', $financialReport->report_date);
-                    $toDate     = date('Y-m-t', $financialReport->report_date);
+                    $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
 
                     if ( ( $data = $dataTable->getData() ) )  {
 
@@ -71,13 +71,13 @@ class FinancialIncomeFetch extends ViewModelAbstract
                             if ( ( $project = $finIncome->getProject()->one() ) &&
                                 $project->type === Project::TYPE_FIXED_PRICE ) {
 
-                                Yii::getLogger()->log('Fetch Milestones for ' . $dateFrom . '~'.$toDate, Logger::LEVEL_INFO);
+                                Yii::getLogger()->log('Fetch Milestones for ' . $finReportRange->fromDate . '~'.$finReportRange->toDate, Logger::LEVEL_INFO);
                                 $milestonesList = Milestone::find()
                                     ->where([
                                         'project_id'    => $project->id,
                                         'status'        => Milestone::STATUS_CLOSED
                                         ])
-                                    ->andWhere(['between', 'closed_date', $dateFrom, $toDate])
+                                    ->andWhere(['between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate])
                                     ->all();
 
                                 $milestones = ArrayHelper::toArray($milestonesList, [

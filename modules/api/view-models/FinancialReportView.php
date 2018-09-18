@@ -22,7 +22,7 @@ class FinancialReportView extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN,])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             $id = Yii::$app->request->getQueryParam('id');
 
             $financialReport = FinancialReport::findOne(['id' => $id]);
@@ -32,7 +32,7 @@ class FinancialReportView extends ViewModelAbstract
                     'app\models\FinancialReport' => [
                         'id',
                         'report_date' => function ($financialReport) {
-                            return DateUtil::convertDateFromUnix($financialReport->report_date);
+                            return DateUtil::reConvertData($financialReport->report_date);
                         },
                         'currency',
                         'expense_salary',

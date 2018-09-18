@@ -122,6 +122,7 @@ abstract class ViewModelAbstract implements ViewModelInterface
         }
         if ( ( $errors = $this->model->getErrors() ) ) {
 
+            $this->errors = [];
             foreach ( $errors as $key => $error ) {
 
                 $this->addError( $key, implode(", ", $error) );

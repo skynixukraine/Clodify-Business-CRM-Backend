@@ -256,7 +256,7 @@ class FinancialReportsCest
                     [
                         'id'                    => 'integer',
                         'report_date'           => 'string',
-                        'developer_expenses'    => 'float|integer',
+                        'developer_expenses'    => 'float|integer|string',
                         'income'                => 'float|integer',
                         'bonuses'               => 'float|integer',
                         'is_locked'             => 'integer'
@@ -333,6 +333,49 @@ class FinancialReportsCest
             'success' => 'boolean'
         ]);
 
+    }
+
+    public function testFetchFinancilIncomeCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('Testing fetch financial income data by ADMIN');
+
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+        $I->sendGET(ApiEndpoints::FINANCIAL_REPORTS . '/' . $this->finacialReportId . ApiEndpoints::FINANCIAL_REPORTS_INCOME);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            "data" => [
+                [
+                    "id"            => 'integer',
+                    "from_date"     => 'integer',
+                    "to_date"       => 'integer',
+                    "date"          => 'integer',
+                    "amount"        => 'integer',
+                    "description"   => "string",
+                    "project"       => [
+                        "id"            => "integer",
+                        "name"          => "string",
+                        "milestones"    => "array"
+                    ],
+                    "developer_user" => [
+                        "id"    => "integer",
+                        "name"  => "string"
+                    ],
+                    "added_by_user" => [
+                        "id"    => "integer",
+                        "name"  => "string"
+                    ]
+                ]
+            ],
+            'errors'  => 'array',
+            'success' => 'boolean'
+
+        ]);
     }
 
     /**

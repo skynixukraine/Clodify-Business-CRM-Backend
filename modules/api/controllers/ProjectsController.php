@@ -126,4 +126,30 @@ class ProjectsController extends DefaultController
 
     }
 
+    public function actionSubscribe()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Project')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ProjectSubscribe')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionUnsubscribe()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Project')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ProjectUnsubscribe')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_DELETE ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }

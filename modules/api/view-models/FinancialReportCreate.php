@@ -7,8 +7,6 @@
 
 namespace viewModel;
 
-
-use app\components\DateUtil;
 use app\models\FinancialReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
@@ -26,18 +24,13 @@ class FinancialReportCreate extends ViewModelAbstract
 
     public function define()
     {
-        // TODO: Implement define() method.
-
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-            $date = date("Y-") . $this->model->report_date . date("-d");
-            $reportDate = DateUtil::convertDateToUnix($date);
-
+            $reportDate = date("Y-") . $this->model->report_date . date("-d");
             if (!FinancialReport::validateReportDate($reportDate)) {
                 return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The report is already created or time for report invalid'));
             }
 
             $this->model->report_date = $reportDate;
-
             if ($this->validate() && $this->model->save()) {
 
                 $this->setData([

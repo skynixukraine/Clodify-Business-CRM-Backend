@@ -20,6 +20,7 @@ define('INVOICE_DISCOUNT', 10);
 define('INVOICE_TOTAL', 190);
 define('INVOICE_NOTE', "Some Note");
 define('INVOICE_CURRENCY', "USD");
+define('PAYMENT_METHOD_ID', "1");
 
 class InvoicesCest
 {
@@ -48,7 +49,6 @@ class InvoicesCest
         $I->wantTo('Testing create invoice with other then ADMIN roles');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
             "user_id"     =>  ValuesContainer::$userClient['id'],
-            "business_id" =>  1,
             "date_start"  => "10/10/2018",
             "date_end"    => "10/11/2018",
             "subtotal"    =>  2444,
@@ -81,18 +81,20 @@ class InvoicesCest
 
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
             "user_id"     =>  ValuesContainer::$userClient['id'],
-            "business_id" =>  1,
             "date_start"  => date('d/m/Y', strtotime('now -2 days')),
             "date_end"    => date('d/m/Y', strtotime('now -2 days')),
             "subtotal"    =>  100,
             "discount"    =>  0,
             "total"       =>  100,
             "note"        => "Some Note",
-            "currency"    => INVOICE_CURRENCY
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => PAYMENT_METHOD_ID
         ]));
+
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
+
         $this->invoceIdCreatedBySales = $response->data->invoice_id;
         $I->seeResponseMatchesJsonType([
             'data' => [
@@ -108,19 +110,21 @@ class InvoicesCest
         $I->wantTo('Testing create invoice as ADMIN');
         $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
             "user_id"     =>  ValuesContainer::$userClient['id'],
-            "business_id" =>  ValuesContainer::$BusinessID,
             "date_start"  => INVOICE_DATE_START,
             "date_end"    => INVOICE_DATE_END,
             "subtotal"    => INVOICE_SUBTOTAL,
             "discount"    => INVOICE_DISCOUNT,
             "total"       => INVOICE_TOTAL,
             "note"        => INVOICE_NOTE,
-            "currency"    => INVOICE_CURRENCY
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => PAYMENT_METHOD_ID
         ]));
+
         $response = json_decode($I->grabResponse());
         $this->invoiceId = $response->data->invoice_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
+        $I->assertEmpty($response->errors);
         $I->seeResponseMatchesJsonType([
             'data' => [
                 'invoice_id' => 'integer',
@@ -128,6 +132,10 @@ class InvoicesCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+
+
+
+
 
     }
 
@@ -148,7 +156,9 @@ class InvoicesCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
+
         $I->assertEmpty($response->errors);
+
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => ['invoices' =>
@@ -156,7 +166,6 @@ class InvoicesCest
                     [
                         'id'            => 'integer',
                         'invoice_id'   => 'integer',
-                        'business_id'   => 'integer',
                         'customer'     => 'array|null',
                         'subtotal'     => 'integer|string',
                         'discount'     => 'integer|string',
@@ -198,7 +207,7 @@ class InvoicesCest
                 [
                     'id'            => 'integer',
                     'invoice_id'   => 'integer',
-                    'business_id'   => 'integer',
+                    'payment_method_id' => 'integer',
                     "customer" =>  'array',
                     "start_date"   => 'string',
                     "end_date"     => 'string',
@@ -220,9 +229,9 @@ class InvoicesCest
 
         $invoice = $response->data[0];
         $I->assertEquals(ValuesContainer::$userClient['id'], $invoice->customer->id);
-        $I->assertEquals(ValuesContainer::$BusinessID, $invoice->business_id);
+        $I->assertEquals(ValuesContainer::$PaymentMethodId, $invoice->payment_method_id);
         $I->assertEquals(INVOICE_DATE_START, $invoice->start_date);
-        $I->assertEquals( INVOICE_DATE_END, $invoice->end_date);
+        $I->assertEquals(INVOICE_DATE_END, $invoice->end_date);
         $I->assertEquals(INVOICE_SUBTOTAL, $invoice->subtotal);
         $I->assertEquals(INVOICE_DISCOUNT, $invoice->discount);
         $I->assertEquals(INVOICE_TOTAL, $invoice->total);
@@ -238,27 +247,27 @@ class InvoicesCest
      */
     public function testMakeInvoicePaidCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $inv = $I->haveInDatabase('invoices', [
-            'is_delete' => 0,
-            'status' => 'NEW',
-            'business_id' => 1,
-            'note' => 'hello',
-            'date_end' => '2017-01-25',
-            'total' => 200,
-            'user_id' => ValuesContainer::$userClient['id'],
-            'date_start' => '2017-01-5',
-            'subtotal' => 100,
-            'discount' => 10
-        ]);
-
-        \Helper\OAuthToken::$key = null;
-
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+        $oAuth->login();
 
+        $I->wantTo('Testing create invoice as ADMIN');
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "date_start"  => INVOICE_DATE_START,
+            "date_end"    => INVOICE_DATE_END,
+            "subtotal"    => INVOICE_SUBTOTAL,
+            "discount"    => INVOICE_DISCOUNT,
+            "total"       => INVOICE_TOTAL,
+            "note"        => INVOICE_NOTE,
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => PAYMENT_METHOD_ID
+        ]));
+
+        $response = json_decode($I->grabResponse());
+        $id = $response->data->invoice_id;
 
         $I->wantTo('Testing delete invoice');
-        $I->sendPUT(ApiEndpoints::INVOICES . '/' . $inv . '/paid');
+        $I->sendPUT(ApiEndpoints::INVOICES . '/' . $id . '/paid');
 
         \Helper\OAuthToken::$key = null;
 
@@ -272,7 +281,7 @@ class InvoicesCest
             'success' => 'boolean'
         ]);
 
-        $I->seeInDatabase('invoices', ['id' => $inv, 'status' => 'PAID']);
+        $I->seeInDatabase('invoices', ['id' => $id, 'status' => 'PAID']);
 
     }
 
@@ -430,5 +439,357 @@ class InvoicesCest
         $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 1]);
     }
 
+    /**
+     * @see    https://jira.skynix.co/browse/SCA-245
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing fetch counterparties data');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [[
+                'id' => 'integer',
+                'name' => 'string',
+                'body' => 'string'
+            ]],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     *
+     */
+    public function testFetchInvoiceTemplatesAdminFilterById(FunctionalTester $I, \Codeception\Scenario $scenario){
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('test fetch invoice templates filter by is');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE . '/' . ValuesContainer::$InvoiceTemplateId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+
+        if(!isset($response->data[0]->id))
+        {
+            $I->fail('failed receive data associated with specified business');
+        }
+
+        if($response->data[0]->id != 1)
+        {
+            $I->fail('the received business doesn\'t correspond to the searching value');
+        }
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesForbiddenNotAuthorized(FunctionalTester $I)
+    {
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test fetch invoice templates is forbidden for not authorized');
+        $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-245
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testFetchInvoiceTemplatesForbiddenNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+
+        foreach($roles as $role) {
+
+            \Helper\OAuthToken::$key = null;
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test fetch invoice templates is forbidden for ' . $role .' role');
+            $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->assertEquals(false, $response->success);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update email template  is successful for ADMIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'name' => 'string',
+                'body' => 'string'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateForbiddenNotAuthorized(FunctionalTester $I)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $I->wantTo('test update email template is not allowed for not authorized');
+
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateForbiddenForNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+
+        foreach($roles as $role) {
+
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
+
+            \Helper\OAuthToken::$key = null;
+
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
+
+            $I->wantTo('test update email template is forbidden for ' . $role .' role');
+            $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateRequiredFields(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $InvoiceTemplateData = ValuesContainer::$updateInvoiceTemplateData;
+
+        $I->wantTo('test a update invoice template is unable on missing a required field');
+
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        foreach($InvoiceTemplateData as $key => $elem) {
+
+            $testData = $InvoiceTemplateData;
+            unset($testData[$key]);
+
+            $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode($testData));
+
+            \Helper\OAuthToken::$key = null;
+
+            $I->seeResponseCodeIs('200');
+            $I->seeResponseIsJson();
+
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+
+            $errors = $response->errors;
+
+            $check = false;
+
+            foreach ($errors as $error) {
+                if(strpos($error->message,'missed required field') !== false){
+                    $check = true;
+                }
+            }
+
+            if(!$check) {
+                $I->fail('missed required field');
+            }
+
+            $I->seeResponseMatchesJsonType([
+                'data' => "null",
+                'errors' => [[
+                    "param" => "string",
+                    "message" => "string"
+                ]],
+                'success' => 'boolean'
+            ]);
+
+        }
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateUpdatedValues(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update invoice template  save correctly same data as was put');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/' . ValuesContainer::$InvoiceTemplateId, json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseContainsJson([
+            'data' => [
+                'name' => "Update invoice template",
+                'body' => "Hello, Update invoice template"
+            ],
+            'errors' => [],
+            'success' => true
+        ]);
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-246
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function testUpdateInvoiceTemplateNotExistInvoiceTemplate(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test update invoice template  return error on case when set id, what business doesn\'t exist in database');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPUT('/api/invoice-templates/222', json_encode(ValuesContainer::$updateInvoiceTemplateData));
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals('invoice template is\'t found by Id', $response->errors[0]->message);
+    }
 
 }

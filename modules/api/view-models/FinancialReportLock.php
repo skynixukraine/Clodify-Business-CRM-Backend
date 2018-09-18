@@ -8,6 +8,7 @@
 namespace viewModel;
 
 
+use app\components\DateUtil;
 use app\models\DelayedSalary;
 use app\models\FinancialIncome;
 use app\models\FinancialReport;
@@ -39,7 +40,7 @@ class FinancialReportLock extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $id = Yii::$app->request->getQueryParam('id');
             $financialReport = FinancialReport::findOne($id);
-            $year = date("Y", $financialReport->report_date);
+            $year = date("Y", strtotime( $financialReport->report_date));
 
             if ($financialReport) {
                 if (!$financialReport->is_locked) {
@@ -110,9 +111,8 @@ class FinancialReportLock extends ViewModelAbstract
                             }
                         }
                     }
+                    $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
                     Yii::getLogger()->log('Applying Financial Income Histories', Logger::LEVEL_INFO);
-                    $dateFrom   = date('Y-m-01 00:00:00', $financialReport->report_date);
-                    $toDate     = date('Y-m-t 00:00:00', $financialReport->report_date);
 
                     $query  = FinancialIncome::find();
                     $query->where(['financial_report_id' => $financialReport->id]);
@@ -134,8 +134,8 @@ class FinancialReportLock extends ViewModelAbstract
                                 Yii::t('app', '~ Earned ${earned}', [
                                     'earned'  => $earned
                                 ]),
-                                $dateFrom,
-                                $toDate
+                                $finReportRange->fromDate,
+                                $finReportRange->toDate
                             );
 
                         }
@@ -145,10 +145,8 @@ class FinancialReportLock extends ViewModelAbstract
                      * When locking a fun report, if end_date >= closed_date → benefits (User X get the project Y/Milestone XY completed in time)
                      * When locking a fun report, if end_date < closed_date → fail (User X did not get the project Y/Milestone XY completed in time)
                      */
-                    $dateFrom   = date('Y-m-01', $financialReport->report_date);
-                    $toDate     = date('Y-m-t', $financialReport->report_date);
                     if ( ($milestones = Milestone::findAll([
-                        'between', 'closed_date', $dateFrom, $toDate
+                        'between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate
                     ]) ) ) {
 
                         /** @var $milestone Milestone */
@@ -171,8 +169,8 @@ class FinancialReportLock extends ViewModelAbstract
                                                 'project'   => $project->name,
                                                 'milestone' => $milestone->name
                                             ]),
-                                            $dateFrom,
-                                            $toDate
+                                            $finReportRange->fromDate,
+                                            $finReportRange->toDate
                                         );
 
                                     } else {
@@ -184,8 +182,8 @@ class FinancialReportLock extends ViewModelAbstract
                                                 'project'   => $project->name,
                                                 'milestone' => $milestone->name
                                             ]),
-                                            $dateFrom,
-                                            $toDate
+                                            $finReportRange->fromDate,
+                                            $finReportRange->toDate
                                         );
 
                                     }
@@ -221,8 +219,6 @@ class FinancialReportLock extends ViewModelAbstract
     public function applyDelayedSalary( $date )
     {
         Yii::getLogger()->log('applyDelayedSalary', Logger::LEVEL_INFO);
-
-        $date = date('Y-m-d', $date);
         $m = date("m", strtotime($date . ' +1 month')); //Applying salaries for next period
         $records =  DelayedSalary::find()->where(['is_applied' => 0, 'month' => $m])->all();
 

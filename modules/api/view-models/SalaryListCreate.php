@@ -47,14 +47,24 @@ class SalaryListCreate extends ViewModelAbstract
                                     $this->model->salary            = $user->salary;
                                     $this->model->salary_report_id  = $salaryReportId;
                                     $this->model->worked_days       = SalaryReportList::getNumOfWorkedDays($user->id, $salaryReport->report_date, $this->working_days);
+                                    $this->model->non_approved_hours= SalaryReportList::getNumNonApprovedHoursInMonthDuringWorkingDays($user->id, $salaryReport->report_date);
                                     $this->model->currency_rate     = FinancialReport::getCurrency($salaryReport->report_date);
                                     $this->model->actually_worked_out_salary = SalaryReportList::getActuallyWorkedOutSalary($this->model, $this->working_days);
                                     $this->model->official_salary   = $user->official_salary;
                                     $this->model->hospital_value    = SalaryReportList::getHospitalValue($this->model, $this->working_days);
                                     $this->model->vacation_value    = SalaryReportList::getVacationValue($this->model, $this->working_days);
                                     $this->model->day_off           = $this->working_days - $this->model->vacation_days -  $this->model->worked_days;
+
                                     $this->model->overtime_value    = SalaryReportList::getOvertimeValue($this->model, $this->working_days);
                                     $this->model->subtotal          = SalaryReportList::getSubtotal($this->model);
+
+                                    if ( $user->pay_only_approved_hours === 1 && $this->model->non_approved_hours > 0 ) {
+
+                                        $hourlyRate = SalaryReportList::getHourlyRate($this->model, $this->working_days);
+                                        $this->model->subtotal = ( $this->model->subtotal - $hourlyRate * $this->model->non_approved_hours);
+
+                                    }
+
                                     $this->model->subtotal_uah      = SalaryReportList::getSubtotalUah($this->model);
                                     $this->model->total_to_pay      = SalaryReportList::getTotalToPay($this->model);
 
@@ -67,7 +77,9 @@ class SalaryListCreate extends ViewModelAbstract
                                                 $user->id,
                                                 \Yii::t('app', '- Did not work {num} days', [
                                                     'num' => $this->model->day_off
-                                                ])
+                                                ]),
+                                                date('Y-m-01', $salaryReport->report_date),
+                                                date('Y-m-t', $salaryReport->report_date)
                                             );
 
                                         }
