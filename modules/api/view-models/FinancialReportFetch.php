@@ -71,7 +71,7 @@ class FinancialReportFetch extends ViewModelAbstract
 
                     $rep = [
                         'id'                  => $finRep->id,
-                        'report_date'         => DateUtil::dateRangeForFetch($finRep->report_date),
+                        'report_date'         => DateUtil::dateRangeForFetch(strtotime($finRep->report_date)),
                         'is_locked'           => $finRep->is_locked
                     ];
 

@@ -141,7 +141,6 @@ class DateUtil
      */
     public static function dateRangeForFetch($date)
     {
-        $date = strtotime($date);
         $range = '';
         $month_from_date = date('m', $date);
         $year_from_date = date('Y',$date);
