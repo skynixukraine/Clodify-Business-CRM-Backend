@@ -27,6 +27,7 @@ class PaymentMethodFetch extends ViewModelAbstract
             $data = [];
             if ($paymentMethodData) {
                 $data[] = $paymentMethodData->toArray([
+                    'id',
                     'name',
                     'name_alt',
                     'address',

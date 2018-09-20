@@ -335,6 +335,7 @@ class PaymentMethodsCest
         @$I->seeResponseMatchesJsonType([
             'data' => [
                 [
+                    'id' => 'integer',
                     'name'            => 'string',
                     'name_alt'   => 'string',
                     'address'     => 'string',
