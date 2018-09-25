@@ -121,7 +121,7 @@ class InvoicesCest
         ]));
 
         $response = json_decode($I->grabResponse());
-        $this->invoiceId = $response->data->id;
+        $this->invoiceId = $response->data->invoice_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->assertEmpty($response->errors);
@@ -148,6 +148,18 @@ class InvoicesCest
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
+
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "date_start"  => "10/10/2018",
+            "date_end"    => "10/11/2018",
+            "subtotal"    =>  2444,
+            "discount"    =>  20,
+            "total"       =>  20000,
+            "note"        => "Some Note",
+            "currency"    => INVOICE_CURRENCY
+        ]));
+
 
         $I->wantTo('Testing fetch invoices data');
         $I->sendGET(ApiEndpoints::INVOICES, [
@@ -202,6 +214,17 @@ class InvoicesCest
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
+
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "date_start"  => "10/10/2018",
+            "date_end"    => "10/11/2018",
+            "subtotal"    =>  2444,
+            "discount"    =>  20,
+            "total"       =>  20000,
+            "note"        => "Some Note",
+            "currency"    => INVOICE_CURRENCY
+        ]));
 
         $I->wantTo('Testing view single invoice');
         $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId);
