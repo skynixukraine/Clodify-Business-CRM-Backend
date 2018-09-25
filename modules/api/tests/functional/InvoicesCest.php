@@ -160,28 +160,36 @@ class InvoicesCest
         $I->assertEmpty($response->errors);
 
         $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data' => ['invoices' =>
-                [
+
+        if(!isset($response->data->total_records)) {
+            $I->fail("wrong data");
+        }
+
+        if($response->data->total_records > 0) {
+            $I->seeResponseMatchesJsonType([
+                'data' => ['invoices' =>
                     [
-                        'id'            => 'integer',
-                        'invoice_id'   => 'integer',
-                        'customer'     => 'array|null',
-                        'subtotal'     => 'integer|string',
-                        'discount'     => 'integer|string',
-                        'total'        => 'integer|string',
-                        'currency'     => 'string',
-                        'created_date' => 'string|null',
-                        'sent_date'    => 'string|null',
-                        'paid_date'    => 'string|null',
-                        'status'       => 'string',
-                    ]
+                        [
+                            'id'            => 'integer',
+                            'invoice_id'   => 'integer',
+                            'customer'     => 'array|null',
+                            'subtotal'     => 'integer|string',
+                            'discount'     => 'integer|string',
+                            'total'        => 'integer|string',
+                            'currency'     => 'string',
+                            'created_date' => 'string|null',
+                            'sent_date'    => 'string|null',
+                            'paid_date'    => 'string|null',
+                            'status'       => 'string',
+                        ]
+                    ],
+                    'total_records' => 'string'
                 ],
-                'total_records' => 'string'
-            ],
-            'errors' => 'array',
-            'success' => 'boolean'
-        ]);
+                'errors' => 'array',
+                'success' => 'boolean'
+            ]);
+        }
+
     }
 
 

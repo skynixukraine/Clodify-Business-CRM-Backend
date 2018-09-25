@@ -136,6 +136,21 @@ class Invoice extends \yii\db\ActiveRecord
             $this->date_start   = DateUtil::convertData($this->date_start);
             $this->date_end     = DateUtil::convertData($this->date_end);
             $this->status       = Invoice::STATUS_NEW;
+
+            $paymentMethod = PaymentMethod::findOne(['id' => $this->payment_method_id]);
+
+            if($paymentMethod) {
+                $businesses = Business::find()->where('id=' . $paymentMethod->business_id)->all();
+                if(count($businesses) > 0) {
+                    foreach ($businesses as $business){
+                        $business->invoice_increment_id = $business->invoice_increment_id + 1;
+                        $business->save();
+                        $this->invoice_id = $business->invoice_increment_id;
+                    }
+
+                }
+            }
+
             /** @var $business Business */
         }
 
