@@ -10,6 +10,7 @@ use yii\log\Logger;
  *
  * @property integer $id
  * @property string $name
+ * @property integer invoice_increment_id
  * @property integer director_id
  * @property string $address
  * @property integer $is_default
