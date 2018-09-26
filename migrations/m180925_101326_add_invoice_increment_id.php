@@ -18,7 +18,6 @@ class m180925_101326_add_invoice_increment_id extends Migration
         if(!isset($table->columns['invoice_increment_id'])) {
             $this->addColumn('busineses', 'invoice_increment_id', $this->integer(11)->defaultValue(0) . ' AFTER name');
         }
-
     }
 
     /**
