@@ -17,18 +17,6 @@ class m180925_101326_add_invoice_increment_id extends Migration
         $table = Yii::$app->db->schema->getTableSchema('busineses');
         if(!isset($table->columns['invoice_increment_id'])) {
             $this->addColumn('busineses', 'invoice_increment_id', $this->integer(11)->defaultValue(0) . ' AFTER name');
-
-            $busineses = (new Query())
-                ->select('*')
-                ->from('busineses')
-                ->all();
-
-
-            if(!empty($busineses)) {
-                foreach($busineses as $elem) {
-                    $this->update('busineses', ['invoice_increment_id' => $elem['id']], '1');
-                }
-            }
         }
 
     }
