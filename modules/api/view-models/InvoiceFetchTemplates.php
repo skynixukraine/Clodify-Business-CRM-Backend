@@ -53,11 +53,18 @@ class InvoiceFetchTemplates extends ViewModelAbstract
 
     }
 
+    /**
+     * Does the result structure from the model
+     *
+     * @param \yii\db\ActiveRecord $model
+     * @return array the array structure to return by method
+     */
     private function defaultVal($model)
     {
         $list['id'] = $model->id;
         $list['name'] = $model->name;
         $list['body'] = $model->body;
+        $list['variables'] = $model->variables;
         return $list;
     }
 

@@ -503,7 +503,8 @@ class InvoicesCest
             'data' => [[
                 'id' => 'integer',
                 'name' => 'string',
-                'body' => 'string'
+                'body' => 'string',
+                'variable' => 'string'
             ]],
             'errors' => [],
             'success' => 'boolean'
