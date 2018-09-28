@@ -64,7 +64,16 @@ class InvoiceFetchTemplates extends ViewModelAbstract
         $list['id'] = $model->id;
         $list['name'] = $model->name;
         $list['body'] = $model->body;
-        $list['variables'] = $model->variables;
+
+        // tests cannot see property variables, while it exists
+        // checked via Postman
+        if(!isset($model->variables)){
+            $list['variables'] = '';
+        } else{
+            $list['variables'] = $model->variables;
+        }
+
+
         return $list;
     }
 
