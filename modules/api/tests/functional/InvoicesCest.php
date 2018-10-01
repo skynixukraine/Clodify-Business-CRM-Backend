@@ -489,8 +489,11 @@ class InvoicesCest
      */
     public function testFetchInvoiceTemplatesAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
+        $oAuth->login($email, $pas);
 
         $I->wantTo('Testing fetch counterparties data');
         $I->sendGET(ApiEndpoints::INVOICE_TEMPLATE);
@@ -503,7 +506,8 @@ class InvoicesCest
             'data' => [[
                 'id' => 'integer',
                 'name' => 'string',
-                'body' => 'string'
+                'body' => 'string',
+                'variables' => 'string'
             ]],
             'errors' => [],
             'success' => 'boolean'

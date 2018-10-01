@@ -9,6 +9,7 @@ namespace app\models;
  * @property integer $id
  * @property string $name
  * @property string $body
+ * @property string $variables
 
  */
 class InvoiceTemplate extends \yii\db\ActiveRecord
@@ -40,7 +41,8 @@ class InvoiceTemplate extends \yii\db\ActiveRecord
         return [
             'id' => 'Id',
             'name' => 'Name',
-            'body' => 'Body'
+            'body' => 'Body',
+            'variables' => 'Variables'
         ];
     }
 
