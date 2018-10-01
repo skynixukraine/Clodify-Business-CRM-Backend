@@ -21,7 +21,7 @@ use app\modules\api\components\Api\Processor;
 use Mpdf\Mpdf;
 use Yii;
 use yii\helpers\ArrayHelper;
-
+ini_set("pcre.backtrack_limit", "5000000");
 /**
  * @see https://jira.skynix.co/browse/SCA-155
  * Class InvoiceDownload
@@ -64,9 +64,16 @@ class InvoiceDownload extends ViewModelAbstract
                         $customerSignData = $s->download($customerSign);
                     } catch (\Aws\S3\Exception\S3Exception $e) {}
 
-                    $signatureContractor = 'data: image/jpeg;base64,'.base64_encode( $contractorSignData );
+                    $signatureContractor = "";
+                    $signatureCustomer = "";
 
-                    $signatureCustomer = 'data: image/jpeg;base64,'.base64_encode($customerSignData);
+                    if(isset($contractorSignData['Body'])) {
+                        $signatureContractor = $contractorSignData['Body'];
+                    }
+
+                    if(isset($contractorSignData['Body'])) {
+                        $signatureCustomer = $customerSignData['Body'];
+                    }
 
                     $html = Yii::$app->controller->renderPartial('invoicePDF', [
                         'id'                    => $invoice->invoice_id,
