@@ -21,7 +21,7 @@ use app\modules\api\components\Api\Processor;
 use Mpdf\Mpdf;
 use Yii;
 use yii\helpers\ArrayHelper;
-ini_set("pcre.backtrack_limit", "5000000");
+
 /**
  * @see https://jira.skynix.co/browse/SCA-155
  * Class InvoiceDownload
