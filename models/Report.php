@@ -273,7 +273,12 @@ class Report extends \yii\db\ActiveRecord
         return $query;
     }
 
-    public static function sumHoursReportsOfThisDay($currUser, $dateReport)
+    /**
+     * @param $currUserId
+     * @param $dateReport
+     * @return mixed
+     */
+    public static function sumHoursReportsOfThisDay($currUserId, $dateReport)
     {
         return self::find()
 
@@ -281,7 +286,7 @@ class Report extends \yii\db\ActiveRecord
                     Report::tableName() . '.user_id=:userId AND ' .
                     Report::tableName() . '.is_delete=0',
                 [
-                    ':userId' => $currUser,
+                    ':userId' => $currUserId,
                     ':DateReport' => $dateReport,
                 ])
             ->sum(Report::tableName() . '.hours');
