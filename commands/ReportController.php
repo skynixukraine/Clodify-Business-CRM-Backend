@@ -38,6 +38,7 @@ class ReportController extends Controller
                     LEFT JOIN reports ON users.id=reports.user_id 
                     WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
                     users.is_active=1 AND
+                    users.is_system=0 AND
                      ( reports.date_report IS NULL OR reports.date_report =:date_report )
                     GROUP By users.id
                     HAVING s > 6;", [
@@ -71,7 +72,8 @@ class ReportController extends Controller
                         SELECT users.*, sum(reports.hours) AS s FROM users 
                         LEFT JOIN reports ON users.id=reports.user_id AND reports.date_report =:date_report
                         WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
-                        users.is_active=1 
+                        users.is_active=1 AND
+                        users.is_system=0 
                         GROUP By users.id
                         HAVING s < 6  OR s IS NULL;", [
                         ':date_report'  => date('Y-m-d')
@@ -122,7 +124,7 @@ class ReportController extends Controller
     public function actionIdleTime()
     {
         try {
-            $users = User::find()->all();
+            $users = User::find()->where(['is_system' => 0])->all();
             $today = date('Y-m-d', time());
 
             foreach ($users as $user) {
