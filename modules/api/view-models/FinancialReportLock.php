@@ -15,6 +15,7 @@ use app\models\FinancialReport;
 use app\models\FinancialYearlyReport;
 use app\models\Milestone;
 use app\models\Project;
+use app\models\ProjectDebt;
 use app\models\Report;
 use app\models\SalaryReport;
 use app\models\SalaryReportList;
@@ -44,6 +45,17 @@ class FinancialReportLock extends ViewModelAbstract
 
             if ($financialReport) {
                 if (!$financialReport->is_locked) {
+
+                    //Create next Fin Report if not created
+                    $sRepDate = date("Y-m-01", strtotime( $financialReport->report_date . ' +1month'));
+                    $eRepDate = date("Y-m-t", strtotime( $financialReport->report_date . ' +1month'));
+                    if ( !($nextFinRep = FinancialReport::find()->where(['between', 'report_date', $sRepDate, $eRepDate])->one()) ) {
+
+                        $nextFinRep = new FinancialReport();
+                        $nextFinRep->report_date = $sRepDate;
+                        $nextFinRep->save(false);
+
+                    }
 
                     $salaryReport = SalaryReport::findSalaryReport($financialReport);
                     if ($salaryReport) {
@@ -145,10 +157,13 @@ class FinancialReportLock extends ViewModelAbstract
                      * When locking a fun report, if end_date >= closed_date → benefits (User X get the project Y/Milestone XY completed in time)
                      * When locking a fun report, if end_date < closed_date → fail (User X did not get the project Y/Milestone XY completed in time)
                      */
-                    if ( ($milestones = Milestone::findAll([
+                    if ( ($milestones = Milestone::find()->where([
                         'between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate
-                    ]) ) ) {
-
+                    ])->orderBy('project_id ASC')->all() ) ) {
+                        $currentMilestone   = null;
+                        $dateFrom           = $finReportRange->fromDate;
+                        $toDate             = $finReportRange->toDate;
+                        Yii::getLogger()->log('Found ' . count($milestones) . ' closed milestones', Logger::LEVEL_INFO);
                         /** @var $milestone Milestone */
                         foreach ( $milestones as $milestone ) {
 
@@ -189,8 +204,92 @@ class FinancialReportLock extends ViewModelAbstract
                                     }
 
                                 }
+                                if ( !$currentMilestone ) {
+
+                                    $dateFrom   = $finReportRange->fromDate;
+                                    $toDate     = $finReportRange->toDate;
+                                    $currentMilestone = $milestone;
+
+                                } else if ( $milestone->project_id != $currentMilestone->project_id ) {
+
+                                    /**
+                                     * @see https://jira.skynix.co/browse/SCA-271
+                                     * When a Financial Report is locked and period has any closed milestones, check debts -> if exists add a record to project_debts
+                                     */
+                                    $expenses = Report::getReportsCostByProjectAndDates($currentMilestone->project_id, $dateFrom, $toDate);
+
+                                    $query  = FinancialIncome::find();
+                                    $query->where([
+                                        'financial_report_id'   => $financialReport->id,
+                                        'project_id'            => $currentMilestone->project_id
+                                    ]);
+                                    $query->select(['SUM(amount)']);
+                                    $amount = $query->scalar();
+
+                                    if ( $expenses > $amount ) {
+
+                                        $pD = new ProjectDebt();
+                                        $pD->project_id             = $currentMilestone->project_id;
+                                        $pD->financial_report_id    = $nextFinRep->id;
+                                        $pD->amount                 = ceil( $expenses - $amount);
+                                        $pD->save();
+
+                                    }
+                                    $dateFrom   = $finReportRange->fromDate;
+                                    $toDate     = $finReportRange->toDate;
+                                    $currentMilestone = $milestone;
+
+                                }
+                                if ( strtotime( $milestone->start_date ) < $finReportRange->from ) {
+
+                                    $dateFrom = $milestone->start_date;
+
+                                }
+                                if ( strtotime($milestone->closed_date) < $finReportRange->to ) {
+
+                                    $toDate = $milestone->closed_date;
+
+                                }
+
 
                             }
+
+                        }
+
+                    }
+                    /**
+                     * @see https://jira.skynix.co/browse/SCA-271
+                     * For HOURLY Projects
+                     * When a Financial Report is locked and during the period the project has debts -> add a record to project_debts
+                     */
+                    Yii::getLogger()->log('Checking hourly projects for debts', Logger::LEVEL_INFO);
+                    $allProjects = Project::find()
+                        ->where([
+                            'is_delete' => 0,
+                            'status'    => Project::STATUS_INPROGRESS,
+                            'type'      => Project::TYPE_HOURLY
+                        ])->all();
+                    $dateFrom           = $finReportRange->fromDate;
+                    $toDate             = $finReportRange->toDate;
+                    foreach ( $allProjects as $project ) {
+
+                        $expenses = Report::getReportsCostByProjectAndDates($project->id, $dateFrom, $toDate);
+
+                        $query  = FinancialIncome::find();
+                        $query->where([
+                            'financial_report_id'   => $financialReport->id,
+                            'project_id'            => $project->id
+                        ]);
+                        $query->select(['SUM(amount)']);
+                        $amount = $query->scalar();
+
+                        if ( $expenses > $amount ) {
+
+                            $pD = new ProjectDebt();
+                            $pD->project_id             = $project->id;
+                            $pD->financial_report_id    = $nextFinRep->id;
+                            $pD->amount                 = ceil( $expenses - $amount);
+                            $pD->save();
 
                         }
 
