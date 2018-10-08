@@ -56,6 +56,13 @@ class SalaryReportFetch extends ViewModelAbstract
 
             if ($salaryReport) {
 
+                $totalUsers = User::find()
+                    ->where(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM],
+                        'is_active' => 1,
+                        'is_delete' => 0,
+                        'is_system' => 0
+                    ])->count('*');
+
                 foreach ($salaryReport as $key => $salRep) {
                     if ( !$salRep->total_salary ) {
 
@@ -81,7 +88,11 @@ class SalaryReportFetch extends ViewModelAbstract
                         "total_to_pay"           => $salRep->total_to_pay,
                         "number_of_working_days" => $salRep->number_of_working_days,
                         "total_reported_hours"   => SalaryReport::getTotalReportedHours($salRep),
-                        "total_approved_hours"   => SalaryReport::getTotalApprovedHours($salRep)
+                        "total_approved_hours"   => SalaryReport::getTotalApprovedHours($salRep),
+                        'total_users'            => (int)$totalUsers,
+                        'total_lists'            => (int)SalaryReportList::find()
+                            ->where([SalaryReportList::tableName() . '.salary_report_id' => $salRep->id])
+                            ->count('*')
                     ];
                 }
 
