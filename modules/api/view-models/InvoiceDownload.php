@@ -20,7 +20,6 @@ use app\modules\api\components\Api\Message;
 use app\modules\api\components\Api\Processor;
 use Mpdf\Mpdf;
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * @see https://jira.skynix.co/browse/SCA-155
