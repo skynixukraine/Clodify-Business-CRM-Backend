@@ -140,15 +140,22 @@ class Invoice extends \yii\db\ActiveRecord
             $paymentMethod = PaymentMethod::findOne(['id' => $this->payment_method_id]);
 
             if($paymentMethod) {
-                $business = Business::find()->where('id=' . $paymentMethod->business_id)->one();
-                if($business) {
-                        if(isset($business->invoice_increment_id)){
-                            $business->invoice_increment_id = $business->invoice_increment_id + 1;
-                            $business->save();
+                $business = Business::findOne($paymentMethod->business_id);
 
-                            $this->invoice_id = $business->invoice_increment_id;
-                        }
-                }
+                $invoice_increment_id =  $business->invoice_increment_id;
+
+                $connection = Yii::$app->db;
+
+                $connection->createCommand()
+                    ->update(Business::tableName(), [
+                        'invoice_increment_id' => $invoice_increment_id +1,
+
+                    ], 'id=' . $business->id)
+                    ->execute();
+
+                $this->invoice_id = $business->invoice_increment_id;
+
+
             }
 
             /** @var $business Business */
