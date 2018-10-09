@@ -29,6 +29,7 @@ class ProjectMilestoneCreate extends ViewModelAbstract
     public function define()
     {
         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) {
+
             $this->model->start_date    = DateUtil::convertData( $this->model->start_date );
             $this->model->end_date      = DateUtil::convertData( $this->model->end_date );
             $this->model->project_id    = \Yii::$app->request->getQueryParam('id');
@@ -39,6 +40,7 @@ class ProjectMilestoneCreate extends ViewModelAbstract
                     'milestone_id'=> $this->model->id
                 ]);
             }
+
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
