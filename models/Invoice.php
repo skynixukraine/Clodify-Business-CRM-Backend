@@ -147,22 +147,17 @@ class Invoice extends \yii\db\ActiveRecord
                         if(!isset($business->invoice_increment_id)){
                             continue;
                         }
+                        $business->invoice_increment_id = $business->invoice_increment_id + 1;
 
-                        $invoice_increment_id = $business->invoice_increment_id;
-                        $invoice_increment_id += 1;
-                        $business->invoice_increment_id = $invoice_increment_id;
+                        if(!$business->save()){
+                            return false;
+                            //print_r($business->getErrors());die;
+                                //$this->addError() = $business->getErrors();
+                                //print_r();die;
+                        }
 
-                        $connection = Yii::$app->db;
 
-                        $connection->createCommand()
-                            ->update(Business::tableName(), [
-                                'invoice_increment_id' => $invoice_increment_id,
-
-                            ], 'id=' . $business->id)
-                            ->execute();
-                        $business->save();
-
-                        $this->invoice_id = $invoice_increment_id;
+                        $this->invoice_id = $business->invoice_increment_id;
                     }
 
                 }
@@ -202,7 +197,7 @@ class Invoice extends \yii\db\ActiveRecord
         $connection->createCommand()
             ->update(Report::tableName(), [
 
-                'invoice_id' => $this->id,
+                'invoice_id' => $this->invoice_id,
                 'status' => Report::STATUS_INVOICED,
 
             ], 'project_id IN (' . $projects . ') AND date_report BETWEEN :start AND :end AND is_delete=0',
