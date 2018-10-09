@@ -151,11 +151,7 @@ class Invoice extends \yii\db\ActiveRecord
 
                         if(!$business->save()){
                             return false;
-                            //print_r($business->getErrors());die;
-                                //$this->addError() = $business->getErrors();
-                                //print_r();die;
                         }
-
 
                         $this->invoice_id = $business->invoice_increment_id;
                     }
