@@ -140,21 +140,17 @@ class Invoice extends \yii\db\ActiveRecord
             $paymentMethod = PaymentMethod::findOne(['id' => $this->payment_method_id]);
 
             if($paymentMethod) {
-                $businesses = Business::find()->where('id=' . $paymentMethod->business_id)->all();
-                if(count($businesses) > 0) {
-                    foreach ($businesses as $business){
-                        //print_r($business);die;
-                        if(!isset($business->invoice_increment_id)){
-                            continue;
-                        }
+                $business = Business::findOne($paymentMethod->business_id);
+                if($business) {
+
                         $business->invoice_increment_id = $business->invoice_increment_id + 1;
 
                         if(!$business->save()){
+
                             return false;
                         }
 
                         $this->invoice_id = $business->invoice_increment_id;
-                    }
 
                 }
             }
