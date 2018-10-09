@@ -41,7 +41,9 @@ class ProjectMilestoneClose extends ViewModelAbstract
             }
 
         } else {
+
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
+
         }
 
     }

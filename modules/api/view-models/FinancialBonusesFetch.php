@@ -14,6 +14,7 @@ use app\models\FinancialIncome;
 use app\models\FinancialReport;
 use app\models\Milestone;
 use app\models\Project;
+use app\models\ProjectDebt;
 use app\models\Report;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
@@ -48,7 +49,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                 foreach ( $data as $finIncome ) {
 
                     $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
-
+                    $dateFrom = $finReportRange->fromDate;
                     /** @var $project Project */
                     if ( ($project = $finIncome->getProject()->one() ) ) {
 
@@ -71,7 +72,6 @@ class FinancialBonusesFetch extends ViewModelAbstract
                                     'start_date',
                                     'end_date',
                                     'closed_date'
-
                                 ],
                             ]);
 
@@ -91,7 +91,6 @@ class FinancialBonusesFetch extends ViewModelAbstract
                             }
 
                         }
-
                         $project = [
                             'id'            => $project->id,
                             'name'          => $project->name,
@@ -102,14 +101,18 @@ class FinancialBonusesFetch extends ViewModelAbstract
 
                         $project = ['name' => "Unknown"];
                     }
-                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $finReportRange->fromDate, $finReportRange->toDate);
+                    $deptExpenses = ProjectDebt::find()->where([
+                        'project_id'            => $finIncome->project_id,
+                        'financial_report_id'   => $financialReport->id
+                    ])->select(['SUM(amount)'])->scalar();
+                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $finReportRange->toDate);
 
                     /** @var $project Project */
                     /** @var $u User */
                     $incomeItems[] = [
                         'id'        => $finIncome->project_id,
                         'income'    => round( $finIncome->sumAmount ),
-                        'expenses'  => round($expenses),
+                        'expenses'  => round( $expenses + $deptExpenses),
                         'project'   => $project,
                         'bonuses'   => round( ($finIncome->sumAmount - $expenses) * 0.1 ),
                         'added_by'  => [

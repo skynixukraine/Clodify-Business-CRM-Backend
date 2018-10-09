@@ -84,10 +84,10 @@ class CreateEditReport extends ViewModelAbstract
                         if (strlen(trim($this->model->task)) <= 19) {
                             return $this->addError(Processor::ERROR_PARAM, 'Task should contain at least 20 characters.');
                         }
-
                         if ($this->validate()) {
-                            $user_id = $this->getAccessTokenModel()->user_id;
-                            $user = User::findOne($user_id);
+
+                            $user_id    = $this->getAccessTokenModel()->user_id;
+                            $user       = User::findOne($user_id);
 
                             //This ratio adds some average other expenses to initial salary
                             $expensesRatio = Setting::getLaborExpensesRatio( (1 - rand(0, 2)));
@@ -113,18 +113,22 @@ class CreateEditReport extends ViewModelAbstract
                                     }
 
                                 } else {
+
                                     Yii::getLogger()->log($this->model->getErrors(), Logger::LEVEL_ERROR);
                                     return $this->addError(Processor::ERROR_PARAM, 'Report can not be saved');
                                 }
 
                             } else {
+
                                 return $this->addError('hours', 'You can not add/edit this report. Maximum total hours is 12');
                             }
                         } else {
+
                             Yii::getLogger()->log($this->model->getErrors(), Logger::LEVEL_ERROR);
                             return $this->addError(Processor::ERROR_PARAM, implode(' ', $this->model->getFirstErrors()));
                         }
                     } else {
+
                         return $this->addError(Processor::ERROR_PARAM, 'The invoice has been created on this project');
                     }
                 } else {

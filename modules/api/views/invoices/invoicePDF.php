@@ -271,11 +271,15 @@
     </tr>
     <tr>
         <td width = "200" valign="middle" align="right" style="padding: 0; margin: 0; vertical-align: middle;">
+            <?php if(!empty($signatureContractor)): ?>
             <img src="<?=$signatureContractor?>" alt="signatures contractor" border="0"  style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
+            <?endif; ?>
         </td>
         <td width="100" height="75" style="padding: 0; margin: 0;"></td>
         <td width="200" valign="middle" align="right" style="padding: 0; margin: 0;">
+            <?php if(!empty($signatureCustomer)): ?>
             <img src="<?=$signatureCustomer?>" alt="signatures customer" border="0" style="padding: 0px; margin: 0px; border: none; display: block; max-width: 120px; ">
+            <?endif; ?>
         </td>
         <td width = "70" style="padding: 0; margin: 0;">
         </td>

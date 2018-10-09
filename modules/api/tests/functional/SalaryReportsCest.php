@@ -105,7 +105,9 @@ class SalaryReportsCest
                         'total_to_pay'           => 'float | integer',
                         'number_of_working_days' => 'integer',
                         "total_reported_hours"   => 'integer',
-                        "total_approved_hours"   => 'integer'
+                        "total_approved_hours"   => 'integer',
+                        'total_users'            => 'integer',
+                        'total_lists'            => 'integer'
 
                     ]
                 ],
