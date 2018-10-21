@@ -128,7 +128,7 @@ class UsersCest
             'errors' => [
                 [
                     'param'     => 'password',
-                    'message'   => 'There is no user with the passed credentials'
+                    'message'   => 'Username or password is wrong'
                 ]
             ]
         ]);
