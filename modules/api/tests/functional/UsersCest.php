@@ -72,6 +72,68 @@ class UsersCest
         ]);
     }
 
+    public function testFailedUserLogin(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        define('WRONG_EMAIL', 'wrong.email@gmail.com');
+        define('WRONG_PASSWORD', '324324fdvdfvsfv');
+
+        //Request Access Token using simple auth
+        $I->sendPOST('/api/auth', json_encode([
+            'email'     => WRONG_EMAIL,
+            'password'  => WRONG_PASSWORD
+        ]));
+        $I->seeResponseCodeIs(200);
+
+        $I->seeResponseMatchesJsonType([
+            'errors' => [
+                [
+                    'param'     => 'string',
+                    'message'   => 'string'
+                ]
+            ]
+        ]);
+        $I->seeResponseContainsJson([
+            'errors' => [
+                [
+                    'param'     => 'password',
+                    'message'   => 'Username or password is wrong'
+                ]
+            ],
+            'success' => false
+        ]);
+    }
+
+    public function testFailedUserLoginToCrowd(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        define('WRONG_CROWD_EMAIL', 'wrong.email@skynix.co');
+
+        //Request Access Token using simple auth
+        $I->sendPOST('/api/auth', json_encode([
+            'email'     => WRONG_CROWD_EMAIL,
+            'password'  => WRONG_PASSWORD
+        ]));
+        $I->seeResponseCodeIs(200);
+
+        $I->seeResponseMatchesJsonType([
+            'errors' => [
+                [
+                    'param'     => 'string',
+                    'message'   => 'string'
+                ]
+            ]
+        ]);
+        $I->seeResponseContainsJson([
+            'errors' => [
+                [
+                    'param'     => 'password',
+                    'message'   => 'There is no user with the passed credentials'
+                ]
+            ]
+        ]);
+    }
+
     /**
      * @see    http://jira.skynix.company:8070/browse/SI-853
      * @param  FunctionalTester $I
