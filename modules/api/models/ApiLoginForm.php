@@ -68,13 +68,9 @@ class ApiLoginForm extends LoginForm
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if ( $user->is_system !== 0 ) {
-
-                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
-                Yii::getLogger()->log( "Tried to login as system user" . $user->email, Logger::LEVEL_WARNING);
-
-            } else if ( $user &&
-                ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH)) {
+            if ( $user &&
+                ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH) &&
+                $user->is_system === 0 ) {
 
                 if ( $user->auth_type === User::DATABASE_AUTH ) {
 
@@ -101,6 +97,11 @@ class ApiLoginForm extends LoginForm
                     }
 
                 }
+
+            } elseif ( $user && $user->is_system !== 0 ) {
+
+                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
+                Yii::getLogger()->log( "Tried to login as system user" . $user->email, Logger::LEVEL_WARNING);
 
             } else {
 
