@@ -68,7 +68,11 @@ class ApiLoginForm extends LoginForm
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if ( $user &&
+            if ( !$user ) {
+
+                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
+      
+            } elseif ( $user &&
                 ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH) &&
                 $user->is_system === 0 ) {
 
