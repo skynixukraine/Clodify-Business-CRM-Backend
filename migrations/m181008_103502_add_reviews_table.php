@@ -37,7 +37,7 @@ class m181008_103502_add_reviews_table extends Migration
             'user_id',
             'users',
             'id',
-            'NO ACTION',
+            'CASCADE',
             'NO ACTION'
         );
 

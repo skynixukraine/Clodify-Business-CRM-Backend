@@ -172,4 +172,9 @@ class ReportController extends Controller
             echo $e->getMessage();
         }
     }
+
+    public function actionOlegSexyBoy(){
+        echo "Oleg get success";
+    }
+
 }
