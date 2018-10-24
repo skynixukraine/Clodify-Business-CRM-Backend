@@ -150,11 +150,17 @@ class ReviewController extends Controller
 
 
     private function correctValue($number){
+
+        $number = ceil($number);
+
         if($number < 0)
             return 0;
 
         if($number > 100)
             return 100;
+
+        return $number;
+
     }
     /**
      *
