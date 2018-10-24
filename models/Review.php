@@ -35,7 +35,7 @@ class Review extends \yii\db\ActiveRecord
             [['user_id', 'date_from', 'date_to', 'score_loyalty', 'score_performance', 'score_earnings', 'score_total'], 'required'],
             [['user_id', 'score_loyalty', 'score_performance', 'score_earnings', 'score_total'], 'integer'],
             [['notes'], 'string'],
-            [['date_from', 'date_to'], 'date'],
+            [['date_from', 'date_to'], 'string'],
         ];
     }
 

@@ -33,11 +33,11 @@ class ReviewController extends Controller
             ])->queryOne();
 
 
-            \Yii::getLogger()->log($monthReport, Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($monthReport, Logger::LEVEL_ERROR);
 
-            \Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
             $month = date("n",strtotime($monthReport['report_date']));
-            \Yii::getLogger()->log($month, Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($month, Logger::LEVEL_ERROR);
 
             //return;
             if(is_null($monthReport))
@@ -52,7 +52,7 @@ class ReviewController extends Controller
                 ':search_month'  => $month
             ])->queryOne();
 
-            \Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+            ///\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
 
             $salaryReportListAndUsers = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_report_lists
@@ -61,7 +61,7 @@ class ReviewController extends Controller
                 ':salary_report_id'  => $salaryReport['id']
             ])->queryAll();
 
-            \Yii::getLogger()->log($salaryReportListAndUsers, Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($salaryReportListAndUsers, Logger::LEVEL_ERROR);
 
             if(empty($salaryReportListAndUsers))
                 return;
@@ -71,22 +71,24 @@ class ReviewController extends Controller
                 $review = new Review;
                 $dateFrom = date('Y-m-01', strtotime($monthReport['report_date']));
                 $dateTo = date('Y-m-t', strtotime($monthReport['report_date']));
+                \Yii::getLogger()->log($dateFrom, Logger::LEVEL_ERROR);
+                \Yii::getLogger()->log($dateTo, Logger::LEVEL_ERROR);
                 $review->user_id = $salaryReportListAndUser['user_id'];
                 $review->date_from = $dateFrom;
                 $review->date_to = $dateTo;
 
-                \Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
+                ///\Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
 
-                \Yii::getLogger()->log($dateFrom, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log($dateFrom, Logger::LEVEL_ERROR);
 
-                \Yii::getLogger()->log($dateTo, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log($dateTo, Logger::LEVEL_ERROR);
 
                 $workHistoryFails = \Yii::$app->db->createCommand("
                 SELECT COUNT(*) FROM work_history WHERE work_history.type='fails' AND date_start >= :date_from AND  date_start <= :date_to", [
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
 
-                \Yii::getLogger()->log($workHistoryFails, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log($workHistoryFails, Logger::LEVEL_ERROR);
 
                 //return;
 
@@ -120,7 +122,7 @@ class ReviewController extends Controller
                 $laborExpensesRato = \Yii::$app->db->createCommand("
                 SELECT * FROM settings WHERE settings.key='LABOR_EXPENSES_RATIO'")->queryOne();
 
-                \Yii::getLogger()->log($laborExpensesRato, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log($laborExpensesRato, Logger::LEVEL_ERROR);
                 //return;
                 $fin_income = \Yii::$app->db->createCommand("
                 SELECT SUM(amount) FROM financial_income
@@ -128,16 +130,21 @@ class ReviewController extends Controller
                         ':financial_report_id'  => $monthReport['id'],
                         ':developer_user_id' => $salaryReportListAndUser['user_id']
                     ])->queryOne();
-                \Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
 
                 //return;
 
                 //( SalaryReportList→subtotal * (1 + Settings→LABOR_EXPENSES_RATIO / 100)  - (SELECT SUM(amount) FROM financial_income WHERE financial_report_id=? AND developer_user_id=?)  ) * 0.1
                 $score_earnings = (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100) - intval($fin_income['SUM(amount)'])) *0.1;
+                \Yii::getLogger()->log($score_earnings, Logger::LEVEL_ERROR);
                 $review->score_earnings = $this->correctValue($score_earnings);
+
                 $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
+                \Yii::getLogger()->log($score_total, Logger::LEVEL_ERROR);
                 $review->score_total = $this->correctValue($score_total);
                 $review->save();
+                \Yii::getLogger()->log($review->getErrors(), Logger::LEVEL_ERROR);
+
             }
 
             Yii::getLogger()->log('actionApproveToday: Weekday ' .  date('N'), Logger::LEVEL_INFO);
@@ -159,7 +166,7 @@ class ReviewController extends Controller
         if($number > 100)
             return 100;
 
-        return $number;
+        return intval($number);
 
     }
     /**
