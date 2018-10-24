@@ -137,7 +137,7 @@ class Invoice extends \yii\db\ActiveRecord
             $this->date_end     = DateUtil::convertData($this->date_end);
             $this->status       = Invoice::STATUS_NEW;
 
-            $paymentMethod = PaymentMethod::findOne(['id' => $this->payment_method_id]);
+            $paymentMethod = PaymentMethod::findOne($this->payment_method_id);
 
             if($paymentMethod) {
                 $business = Business::findOne($paymentMethod->business_id);
