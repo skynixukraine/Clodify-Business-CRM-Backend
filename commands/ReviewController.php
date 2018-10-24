@@ -95,9 +95,14 @@ class ReviewController extends Controller
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
 
+
+                if(intval($salaryReportListAndUser['worked_days']) == 0) {
+                    $salaryReportListAndUser['worked_days'] = 1;
+                }
+
                 //return;
-                $score_loyalty = 100 - ($salaryReportListAndUser['day_off'] + $salaryReportListAndUser['hospital_days'])*
-                    (100/$salaryReportListAndUser['worked_days']) - ($workHistoryFails['COUNT(*)'] - $workHistoryEffords['COUNT(*)'])*10;
+                $score_loyalty = 100 - (intval($salaryReportListAndUser['day_off']) + intval($salaryReportListAndUser['hospital_days']))*
+                    (100/$salaryReportListAndUser['worked_days']) - (intval($workHistoryFails['COUNT(*)']) - intval($workHistoryEffords['COUNT(*)']))*10;
 
 
                 //return;
@@ -109,7 +114,7 @@ class ReviewController extends Controller
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
 //return;
-                $score_performance = 100 - $salaryReportListAndUser['non_approved_hours'] - (5 - $reportsPerformance['COUNT(*)'])*10 ;
+                $score_performance = 100 - intval($salaryReportListAndUser['non_approved_hours']) - (5 - intval($reportsPerformance['COUNT(*)']))*10 ;
                 $review->score_performance = $this->correctValue($score_performance);
 
                 $laborExpensesRato = \Yii::$app->db->createCommand("
@@ -125,13 +130,10 @@ class ReviewController extends Controller
                     ])->queryOne();
                 \Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
 
-                if($fin_income['SUM(amount)'] == 'null')
-                    $fin_income['SUM(amount)'] = 0;
-
                 //return;
 
                 //( SalaryReportList→subtotal * (1 + Settings→LABOR_EXPENSES_RATIO / 100)  - (SELECT SUM(amount) FROM financial_income WHERE financial_report_id=? AND developer_user_id=?)  ) * 0.1
-                $score_earnings = ($salaryReportListAndUser['subtotal'] * ( 1 + $laborExpensesRato['value']/100) - $fin_income['SUM(amount)']) *0.1;
+                $score_earnings = (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100) - intval($fin_income['SUM(amount)'])) *0.1;
                 $review->score_earnings = $this->correctValue($score_earnings);
                 $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
                 $review->score_total = $this->correctValue($score_total);
