@@ -30,7 +30,11 @@ class ResourceFetch extends ViewModelAbstract
             $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
 
             $query = User::find()
-                ->where(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM], 'is_active' => 1, 'is_delete' => 0])
+                ->where(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM],
+                    'is_active' => 1,
+                    'is_delete' => 0,
+                    'is_system' => 0
+                ])
                 ->with('availabilityLog');
 
             $dataTable = DataTable::getInstance()
@@ -44,7 +48,7 @@ class ResourceFetch extends ViewModelAbstract
                 }
 
             } else {
-                $dataTable->setOrder(User::tableName() . '.id', 'desc');
+                $dataTable->setOrder(User::tableName() . '.is_available', 'desc');
             }
 
             $resources = $dataTable->getData();

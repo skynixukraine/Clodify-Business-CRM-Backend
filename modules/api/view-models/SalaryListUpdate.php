@@ -55,9 +55,9 @@ class SalaryListUpdate extends ViewModelAbstract
                         $salaryListReport->hospital_value = SalaryReportList::getHospitalValue($salaryListReport, $working_days);
                         $salaryListReport->overtime_value = SalaryReportList::getOvertimeValue($salaryListReport, $working_days);
                         $salaryListReport->subtotal = SalaryReportList::getSubtotal($salaryListReport);
-                        if ( $user->pay_only_approved_hours === 1 && $this->model->non_approved_hours > 0 ) {
+                        if ( $user->pay_only_approved_hours === 1 && $salaryListReport->non_approved_hours > 0 ) {
 
-                            $hourlyRate = SalaryReportList::getHourlyRate($this->model, $working_days);
+                            $hourlyRate = SalaryReportList::getHourlyRate($salaryListReport, $working_days);
                             $salaryListReport->subtotal = ( $salaryListReport->subtotal - $hourlyRate * $salaryListReport->non_approved_hours);
 
                         }

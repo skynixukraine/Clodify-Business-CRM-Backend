@@ -68,8 +68,13 @@ class ApiLoginForm extends LoginForm
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if ( $user &&
-                ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH)) {
+            if ( !$user ) {
+
+                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
+      
+            } elseif ( $user &&
+                ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH) &&
+                $user->is_system === 0 ) {
 
                 if ( $user->auth_type === User::DATABASE_AUTH ) {
 
@@ -90,11 +95,17 @@ class ApiLoginForm extends LoginForm
                     if ( ( $response = Yii::$app->crowdComponent->authenticateToCrowd( $this->email, $this->password) ) &&
                         $response['success'] === false ) {
 
-                        $this->addError($attribute, implode(', ', $response['errors']));
+                        $this->addError($attribute, "Faild request to crowd. Try again please.");
+                        Yii::getLogger()->log( "Faild request to crowd. Try again please." . implode(', ', $response['errors']), Logger::LEVEL_WARNING);
 
                     }
 
                 }
+
+            } elseif ( $user && $user->is_system !== 0 ) {
+
+                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
+                Yii::getLogger()->log( "Tried to login as system user" . $user->email, Logger::LEVEL_WARNING);
 
             } else {
 

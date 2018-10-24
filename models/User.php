@@ -43,6 +43,7 @@ use app\modules\api\models\AccessKey;
  * @property integer $is_published
  * @property integer $auth_type
  * @property integer $is_available
+ * @property integer $is_system
  * @property string $address
  * @property integer $pay_only_approved_hours
  * @property integer $official_salary
@@ -133,7 +134,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['email', 'email'],
             [['date_signup', 'date_login', 'date_salary_up', 'official_salary'], 'safe'],
             [['is_active', 'salary', 'month_logged_hours', 'year_logged_hours', 'total_logged_hours', 'month_paid_hours',
-                'year_paid_hours', 'total_paid_hours', 'is_delete', 'ticketId', 'is_published', 'experience_year', 'auth_type', 'pay_only_approved_hours'], 'integer'],
+                'year_paid_hours', 'total_paid_hours', 'is_delete', 'is_system', 'ticketId', 'is_published', 'experience_year', 'auth_type', 'pay_only_approved_hours'], 'integer'],
             ['phone', 'string', 'max' => 25],
             ['company', 'string', 'max' => 55],
             [['email'], 'string', 'max' => 150],
