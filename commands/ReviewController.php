@@ -43,10 +43,8 @@ class ReviewController extends Controller
             if(is_null($monthReport))
                 return;
 
-            if(!$monthReport['is_locked'] == 0)
+            if(!$monthReport['is_locked'] == 1)
                 return;
-
-
 
             $salaryReport = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_reports                     
