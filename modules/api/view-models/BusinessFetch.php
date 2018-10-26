@@ -33,11 +33,15 @@ class BusinessFetch extends ViewModelAbstract
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'business was not found by id'));
                 }
 
+                if($business->is_delete==1){
+                    return $this->addError(Processor::ERROR_PARAM, Yii::t('app','business is\'t found by Id'));
+                }
+
                 $result[] = $this->defaultVal($business);
                 return $this->setData($result);
             }
 
-            $businesses = Business::find()->all();
+            $businesses = Business::find()->where('is_delete=0')->all();
 
             if(!empty($businesses)) {
                 foreach( $businesses as $business) {
