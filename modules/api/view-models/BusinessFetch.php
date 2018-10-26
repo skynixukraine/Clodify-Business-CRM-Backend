@@ -41,7 +41,7 @@ class BusinessFetch extends ViewModelAbstract
                 return $this->setData($result);
             }
 
-            $businesses = Business::find()->where('is_delete=0')->all();
+            $businesses = Business::find()->where(['is_delete' => 0])->all();
 
             if(!empty($businesses)) {
                 foreach( $businesses as $business) {
