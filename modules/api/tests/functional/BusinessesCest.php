@@ -712,15 +712,24 @@ class BusinessesCest
         $I->seeResponseCodeIs('200');
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEmpty($response->errors);
-        $I->assertEquals(true, $response->success);
-        $I->seeResponseMatchesJsonType([
-            'data' => [
-                'logo' => 'string'
-            ],
-            'errors' => [],
-            'success' => 'boolean'
-        ]);
+
+
+        if(!empty($response->errors)) {
+            if (strpos($I->grabResponse(), "business is't found by Id") === false) {
+                $I->fail('something is wrong' . $response->errors);
+            }
+        } else {
+            $I->assertEquals(true, $response->success);
+            $I->seeResponseMatchesJsonType([
+                'data' => [
+                    'logo' => 'string'
+                ],
+                'errors' => [],
+                'success' => 'boolean'
+            ]);
+        }
+
+
 
     }
 
