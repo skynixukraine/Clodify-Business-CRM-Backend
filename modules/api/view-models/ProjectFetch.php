@@ -199,7 +199,7 @@ class ProjectFetch extends ViewModelAbstract
         $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
 
-        if((User::hasPermission([User::ROLE_ADMIN] )) || (User::hasPermission([User::ROLE_DEV] )) || (User::hasPermission([User::ROLE_PM] )) || (User::hasPermission([User::ROLE_SALES] )) || (User::hasPermission([User::ROLE_FIN] ))) {
+        if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ]))) {
             if( $model->getProjectDevelopers()->one()->status == 'ACTIVE' ) {
                 $list['is_subscribed']  = true;
             } else if($model->getProjectDevelopers()->one()->status == 'INACTIVE') {
