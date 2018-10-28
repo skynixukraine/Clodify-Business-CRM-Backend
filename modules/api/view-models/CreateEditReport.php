@@ -10,7 +10,9 @@ namespace viewModel;
 use app\components\DateUtil;
 use app\models\DelayedSalary;
 use app\models\Invoice;
+use app\models\Milestone;
 use app\models\Report;
+use app\models\FinancialReport;
 use app\models\Setting;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
@@ -94,8 +96,48 @@ class CreateEditReport extends ViewModelAbstract
 
                             $salary = $delayedSalaryNote && $delayedSalaryNote->value > 0 ? $delayedSalaryNote->value : $user->salary;
 
+
+                            $financialReport = FinancialReport::findOne(['MONTH(report_date)=:month'], [':month' => date('n', strtotime($this->model->date_report))]);
+                            if(!is_null($financialReport)) {
+                                $number_of_working_hours_in_the_month = $financialReport->num_of_working_days > 0 ? $financialReport->num_of_working_days * 8 : 168;
+                            } else {
+                                $number_of_working_hours_in_the_month = Report::SALARY_HOURS;
+                            }
+
+
+                            if($project->type == 'HOURLY') {
+                                $expensesRatio = 1;
+                            } else if($project->type == 'FIXED_PRICE') {
+                                $milestone = Milestone::findOne(['start_date<=NOW()', 'end_date>=NOW()']);
+                                if(!is_null($milestone)){
+                                    $milestone->estimated_amount;
+                                    $cost_sum = Report::find()->where([
+                                        'date_report>=:milestone_start',
+                                        'date_report<=:milestone_end'
+                                    ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])->select('SUM[cost]')->scalar();
+                                    if(($milestone->estimated_amount - $cost_sum * 2) > 0){
+                                        $expensesRatio = 1;
+                                    }
+                                } else {
+                                    $milestone = Milestone::findOne(['start_date<=NOW()', 'end_date>=NOW()']);
+                                    if(!is_null($milestone)) {
+                                        $cost_sum = Report::find()->where([
+                                            'date_report>=:milestone_start',
+                                            'date_report<=:milestone_end'
+                                        ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])->select('SUM[cost]')->scalar();
+                                        if(($milestone->estimated_amount - $cost_sum * 2) > 0){
+                                            $expensesRatio = 1 + Setting::getLaborExpensesRatio()/100;
+                                        } else if(($milestone->estimated_amount - $cost_sum ) > 0) {
+                                            $expensesRatio = 1 + Setting::getLaborExpensesRatio()/80;
+                                        } else if(($milestone->estimated_amount - $cost_sum ) <= 0) {
+                                            $expensesRatio = 1 + Setting::getLaborExpensesRatio()/50;
+                                        }
+                                    }
+                                }
+                            }
+
                             $this->model->cost = $this->model->hours *
-                                ($salary / Report::SALARY_HOURS) *
+                                ($salary / $number_of_working_hours_in_the_month) *
                                 ($expensesRatio > 0 ? $expensesRatio : 1);
 
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
