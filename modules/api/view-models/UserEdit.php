@@ -45,6 +45,12 @@ class UserEdit extends ViewModelAbstract
                 if (isset($this->postData['email'])) {
                     $this->model->email = $this->postData['email'];
                 }
+                if (isset($this->postData['tags'])) {
+                    $this->model->tags = $this->postData['tags'];
+                }
+                if (isset($this->postData['about'])) {
+                    $this->model->about = $this->postData['about'];
+                }
                 if (isset($this->postData['company'])) {
                     $this->model->company = $this->postData['company'];
                 }
