@@ -98,13 +98,11 @@ class CreateEditReport extends ViewModelAbstract
 
 
                             $financialReport = FinancialReport::findOne(['MONTH(report_date)=:month'], [':month' => date('n', strtotime($this->model->date_report))]);
-                            if(!is_null($financialReport)) {
-                                $number_of_working_hours_in_the_month = $financialReport->num_of_working_days > 0 ? $financialReport->num_of_working_days * 8 : 168;
-                            } else {
-                                $number_of_working_hours_in_the_month = Report::SALARY_HOURS;
-                            }
 
-
+                            if(!is_null($financialReport))
+                                $numberOfWorkingHoursInTheMonth = $financialReport->num_of_working_days > 0 ? $financialReport->num_of_working_days * 8 : 168;
+                            else
+                                $numberOfWorkingHoursInTheMonth = Report::SALARY_HOURS;
 
 
                             if($project->type == 'HOURLY') {
@@ -114,6 +112,7 @@ class CreateEditReport extends ViewModelAbstract
                                 $milestone = Milestone::find()
                                     ->where(['and', 'start_date<=NOW()', 'end_date>=NOW()'])
                                     ->andWhere(['project_id' => $project->id])
+                                    ->orderBy(['id' => 'DESC'])
                                     ->one();
 
                                 if(!is_null($milestone)){
@@ -126,6 +125,7 @@ class CreateEditReport extends ViewModelAbstract
                                             'date_report<=:milestone_end'
                                             ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])
                                         ->andWhere(['project_id' => $project->id])
+                                        ->andWhere(['is_delete' => 0])
                                         ->select('SUM(cost)')->scalar();
 
                                     $cost_sum = floatval($cost_sum);
@@ -137,6 +137,7 @@ class CreateEditReport extends ViewModelAbstract
                                     $milestone = Milestone::find()
                                         ->where(['and', 'start_date<=NOW()', 'end_date<=NOW()'])
                                         ->andWhere(['project_id' => $project->id])
+                                        ->orderBy(['id' => 'DESC'])
                                         ->one();
 
                                     if(!is_null($milestone)) {
@@ -147,6 +148,7 @@ class CreateEditReport extends ViewModelAbstract
                                                 'date_report<=:milestone_end'
                                             ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])
                                             ->andWhere(['project_id' => $project->id])
+                                            ->andWhere(['is_delete' => 0])
                                             ->select('SUM(cost)')->scalar();
 
                                         $cost_sum = floatval($cost_sum);
@@ -164,7 +166,7 @@ class CreateEditReport extends ViewModelAbstract
                             }
 
                             $this->model->cost = $this->model->hours *
-                                ($salary / $number_of_working_hours_in_the_month) *
+                                ($salary / $numberOfWorkingHoursInTheMonth) *
                                 ($expensesRatio > 0 ? $expensesRatio : 1);
 
                             $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
