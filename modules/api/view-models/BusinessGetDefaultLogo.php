@@ -16,14 +16,14 @@ class BusinessGetDefaultLogo extends ViewModelAbstract
 {
     public function define(){
 
-        $defaultBusiness = Business::findOne(['is_default' => 1]);
+        $businessId = Yii::$app->request->getQueryParam('id');
 
-        if(is_null($defaultBusiness)){
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app','cannot find default business'));
+        if(!($business = Business::findOne($businessId))){
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app','cannot find a business'));
         }
 
         $s = new Storage();
-        $pathFile = 'businesses/' . $defaultBusiness->id. '/logo';
+        $pathFile = 'businesses/' . $business->id. '/logo';
 
         try {
             $str = $s->download($pathFile);
@@ -35,6 +35,6 @@ class BusinessGetDefaultLogo extends ViewModelAbstract
         $data = ['logo' => $base];
         $this->setData($data);
 
-        }
+    }
 
 }

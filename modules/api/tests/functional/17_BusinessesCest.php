@@ -820,7 +820,7 @@ class BusinessesCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendPOST('/api/businesses/555/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
+        $I->sendPOST('/api/businesses/4423432/logo', json_encode(ValuesContainer::$uploadLogoBusinessData));
 
         \Helper\OAuthToken::$key = null;
         $I->seeResponseCodeIs('200');
@@ -849,7 +849,7 @@ class BusinessesCest
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
 
-        $I->sendGET(ApiEndpoints::GET_DEFAULT_LOGO);
+        $I->sendGET(ApiEndpoints::BUSINESS . "/" . ValuesContainer::$alternateBusinessID . ApiEndpoints::GET_DEFAULT_LOGO);
 
         \Helper\OAuthToken::$key = null;
         $I->seeResponseCodeIs('200');
@@ -881,7 +881,7 @@ class BusinessesCest
         $I->wantTo('test get logo default business is not allowed for not authorized');
 
 
-        $I->sendGET(ApiEndpoints::GET_DEFAULT_LOGO);
+        $I->sendGET(ApiEndpoints::BUSINESS . "/" . ValuesContainer::$BusinessId . ApiEndpoints::GET_DEFAULT_LOGO);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
