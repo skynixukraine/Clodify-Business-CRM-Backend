@@ -105,26 +105,52 @@ class CreateEditReport extends ViewModelAbstract
                             }
 
 
+
+
                             if($project->type == 'HOURLY') {
                                 $expensesRatio = 1;
                             } else if($project->type == 'FIXED_PRICE') {
-                                $milestone = Milestone::findOne(['start_date<=NOW()', 'end_date>=NOW()']);
+
+                                $milestone = Milestone::find()
+                                    ->where(['and', 'start_date<=NOW()', 'end_date>=NOW()'])
+                                    ->andWhere(['project_id' => $project->id])
+                                    ->one();
+
                                 if(!is_null($milestone)){
+
                                     $milestone->estimated_amount;
-                                    $cost_sum = Report::find()->where([
-                                        'date_report>=:milestone_start',
-                                        'date_report<=:milestone_end'
-                                    ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])->select('SUM[cost]')->scalar();
+                                    $cost_sum = Report::find()
+                                        ->where([
+                                            'and',
+                                            'date_report>=:milestone_start',
+                                            'date_report<=:milestone_end'
+                                            ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])
+                                        ->andWhere(['project_id' => $project->id])
+                                        ->select('SUM(cost)')->scalar();
+
+                                    $cost_sum = floatval($cost_sum);
+
                                     if(($milestone->estimated_amount - $cost_sum * 2) > 0){
                                         $expensesRatio = 1;
                                     }
                                 } else {
-                                    $milestone = Milestone::findOne(['start_date<=NOW()', 'end_date>=NOW()']);
+                                    $milestone = Milestone::find()
+                                        ->where(['and', 'start_date<=NOW()', 'end_date<=NOW()'])
+                                        ->andWhere(['project_id' => $project->id])
+                                        ->one();
+
                                     if(!is_null($milestone)) {
-                                        $cost_sum = Report::find()->where([
-                                            'date_report>=:milestone_start',
-                                            'date_report<=:milestone_end'
-                                        ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])->select('SUM[cost]')->scalar();
+                                        $cost_sum = Report::find()
+                                            ->where([
+                                                'and',
+                                                'date_report>=:milestone_start',
+                                                'date_report<=:milestone_end'
+                                            ], [':milestone_start' => $milestone->start_date, ':milestone_end' => $milestone->end_date ])
+                                            ->andWhere(['project_id' => $project->id])
+                                            ->select('SUM(cost)')->scalar();
+
+                                        $cost_sum = floatval($cost_sum);
+
                                         if(($milestone->estimated_amount - $cost_sum * 2) > 0){
                                             $expensesRatio = 1 + Setting::getLaborExpensesRatio()/100;
                                         } else if(($milestone->estimated_amount - $cost_sum ) > 0) {
@@ -132,6 +158,7 @@ class CreateEditReport extends ViewModelAbstract
                                         } else if(($milestone->estimated_amount - $cost_sum ) <= 0) {
                                             $expensesRatio = 1 + Setting::getLaborExpensesRatio()/50;
                                         }
+
                                     }
                                 }
                             }
