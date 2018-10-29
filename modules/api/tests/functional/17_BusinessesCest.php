@@ -898,6 +898,15 @@ class BusinessesCest
 
     }
 
+    public function testBusinessInvoiceIncrementsWereIncrementedCorrectly(FunctionalTester $I)
+    {
 
+        $invoiceIncrementId = $I->grabFromDatabase('busineses', 'invoice_increment_id', array('id' => ValuesContainer::$BusinessId));
+        $I->assertEquals( ValuesContainer::$BusinessInvoiceIncrementId, $invoiceIncrementId);
+
+        $invoiceIncrementId = $I->grabFromDatabase('busineses', 'invoice_increment_id', array('id' => ValuesContainer::$alternateBusinessID));
+        $I->assertEquals( ValuesContainer::$altBusinessInvoiceIncrementId, $invoiceIncrementId);
+
+    }
 
 }

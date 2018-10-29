@@ -20,7 +20,7 @@ define('INVOICE_DISCOUNT', 10);
 define('INVOICE_TOTAL', 190);
 define('INVOICE_NOTE', "Some Note");
 define('INVOICE_CURRENCY', "USD");
-define('PAYMENT_METHOD_ID', "1");
+
 
 class InvoicesCest
 {
@@ -88,7 +88,7 @@ class InvoicesCest
             "total"       =>  100,
             "note"        => "Some Note",
             "currency"    => INVOICE_CURRENCY,
-            "payment_method_id" => PAYMENT_METHOD_ID
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
 
         $I->seeResponseCodeIs(200);
@@ -103,6 +103,7 @@ class InvoicesCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -117,7 +118,7 @@ class InvoicesCest
             "total"       => INVOICE_TOTAL,
             "note"        => INVOICE_NOTE,
             "currency"    => INVOICE_CURRENCY,
-            "payment_method_id" => PAYMENT_METHOD_ID
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
 
         $response = json_decode($I->grabResponse());
@@ -132,10 +133,7 @@ class InvoicesCest
             'errors' => 'array',
             'success' => 'boolean'
         ]);
-
-
-
-
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
     }
 
@@ -157,9 +155,14 @@ class InvoicesCest
             "discount"    =>  20,
             "total"       =>  20000,
             "note"        => "Some Note",
-            "currency"    => INVOICE_CURRENCY
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
-
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
         $I->wantTo('Testing fetch invoices data');
         $I->sendGET(ApiEndpoints::INVOICES, [
@@ -223,8 +226,14 @@ class InvoicesCest
             "discount"    =>  20,
             "total"       =>  20000,
             "note"        => "Some Note",
-            "currency"    => INVOICE_CURRENCY
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
         $I->wantTo('Testing view single invoice');
         $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId);
@@ -269,6 +278,8 @@ class InvoicesCest
         $I->assertEquals(INVOICE_NOTE, $invoice->notes);
         $I->assertEquals(INVOICE_CURRENCY, $invoice->currency);
         $I->assertEquals("NEW", $invoice->status);
+        $I->assertGreaterThan(0, $invoice->invoice_id);
+        $I->assertEquals(ValuesContainer::$BusinessInvoiceIncrementId - 2, $invoice->invoice_id);
     }
 
     /**
@@ -291,8 +302,13 @@ class InvoicesCest
             "total"       => INVOICE_TOTAL,
             "note"        => INVOICE_NOTE,
             "currency"    => INVOICE_CURRENCY,
-            "payment_method_id" => PAYMENT_METHOD_ID
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
         $response = json_decode($I->grabResponse());
         $id = $response->data->invoice_id;
@@ -464,8 +480,13 @@ class InvoicesCest
             "total"       =>  20000,
             "note"        => "Some Note",
             "currency"    => INVOICE_CURRENCY,
-            "payment_method_id" => 1
+            "payment_method_id" => ValuesContainer::$PaymentMethodId
         ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        ValuesContainer::$BusinessInvoiceIncrementId++;
 
         $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 0]);
 
@@ -837,6 +858,87 @@ class InvoicesCest
         $I->assertNotEmpty($response->errors);
         $I->assertEquals(false, $response->success);
         $I->assertEquals('invoice template is\'t found by Id', $response->errors[0]->message);
+    }
+
+    public function testCreateInvoiceForAlternateBusinessToCheckInvoiceIdCest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Testing create invoice as ADMIN');
+        $I->sendPOST(ApiEndpoints::INVOICES, json_encode([
+            "user_id"     =>  ValuesContainer::$userClient['id'],
+            "date_start"  => INVOICE_DATE_START,
+            "date_end"    => INVOICE_DATE_END,
+            "subtotal"    => INVOICE_SUBTOTAL,
+            "discount"    => INVOICE_DISCOUNT,
+            "total"       => INVOICE_TOTAL,
+            "note"        => INVOICE_NOTE,
+            "currency"    => INVOICE_CURRENCY,
+            "payment_method_id" => ValuesContainer::$alternatePaymentMethodID
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'invoice_id' => 'integer',
+            ],
+            'errors' => 'array',
+            'success' => 'boolean'
+        ]);
+        ValuesContainer::$altBusinessInvoiceIncrementId++;
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $this->invoiceId = $response->data->invoice_id;
+
+        $I->wantTo('Testing view single invoice for alternate business and incremented invoice ID');
+        $I->sendGET(ApiEndpoints::INVOICES . "/" . $this->invoiceId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data'  => [
+                [
+                    'id'            => 'integer',
+                    'invoice_id'   => 'integer',
+                    'payment_method_id' => 'integer',
+                    "customer" =>  'array',
+                    "start_date"   => 'string',
+                    "end_date"     => 'string',
+                    "total_hours"  => 'integer | null',
+                    "subtotal"     => 'integer | string',
+                    "discount"     => 'integer | string',
+                    "total"        => 'integer | string',
+                    "currency"     => 'string',
+                    "notes"        => 'string',
+                    "created_date" => 'string | null',
+                    "sent_date"    => 'string | null',
+                    "paid_date"    => 'string | null',
+                    "status"       => 'string',
+                ]
+            ],
+            'errors' => 'array',
+            'success'=> 'boolean'
+        ]);
+
+        $invoice = $response->data[0];
+        $I->assertEquals(ValuesContainer::$userClient['id'], $invoice->customer->id);
+        $I->assertEquals(ValuesContainer::$alternatePaymentMethodID, $invoice->payment_method_id);
+        $I->assertEquals(INVOICE_DATE_START, $invoice->start_date);
+        $I->assertEquals(INVOICE_DATE_END, $invoice->end_date);
+        $I->assertEquals(INVOICE_SUBTOTAL, $invoice->subtotal);
+        $I->assertEquals(INVOICE_DISCOUNT, $invoice->discount);
+        $I->assertEquals(INVOICE_TOTAL, $invoice->total);
+        $I->assertEquals(INVOICE_NOTE, $invoice->notes);
+        $I->assertEquals(INVOICE_CURRENCY, $invoice->currency);
+        $I->assertEquals("NEW", $invoice->status);
+        $I->assertGreaterThan(0, $invoice->invoice_id);
+        $I->assertEquals(ValuesContainer::$altBusinessInvoiceIncrementId, $invoice->invoice_id);
+
     }
 
 }

@@ -18,6 +18,8 @@ class ValuesContainer
     public static $FinancialReportDate; //This value will be set during fin reports cest
     public static $DelayedSalaryDate;
     public static $BusinessID = 1;
+    public static $alternateBusinessID = 2;
+    public static $alternatePaymentMethodID = 2;
     public static $ProjectId = 1;
     public static $PaymentMethodId = 1;
     public static $unix = 1522912941;
@@ -29,6 +31,10 @@ class ValuesContainer
     public static $projectIDWithoutSales;
 
     public static $fakeSalesID;
+
+    public static $BusinessInvoiceIncrementId = 0;
+    public static $altBusinessInvoiceIncrementId = 0;
+
 
     public static $userAdmin = [
         'id'        => 1,
