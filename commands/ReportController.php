@@ -39,7 +39,8 @@ class ReportController extends Controller
                     WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
                     users.is_active=1 AND
                     users.is_system=0 AND
-                     ( reports.date_report IS NULL OR reports.date_report =:date_report )
+                     ( reports.date_report IS NULL OR reports.date_report =:date_report ) AND
+                    reports.is_delete=0
                     GROUP By users.id
                     HAVING s > 6;", [
                     ':date_report'  => date('Y-m-d')
@@ -49,6 +50,7 @@ class ReportController extends Controller
 
                 foreach ( $itemsReported as $user ) {
 
+                    $user['s'] = round($user['s']);
                     if ( $user['s'] > 8 ) {
 
                         Yii::getLogger()->log('actionApproveToday: Adding benefit ' .  var_export($user, 1) , Logger::LEVEL_INFO);
@@ -73,7 +75,8 @@ class ReportController extends Controller
                         LEFT JOIN reports ON users.id=reports.user_id AND reports.date_report =:date_report
                         WHERE users.role IN('ADMIN', 'FIN', 'DEV', 'PM', 'SALES') AND
                         users.is_active=1 AND
-                        users.is_system=0 
+                        users.is_system=0  AND
+                        reports.is_delete=0
                         GROUP By users.id
                         HAVING s < 6  OR s IS NULL;", [
                         ':date_report'  => date('Y-m-d')
@@ -92,14 +95,29 @@ class ReportController extends Controller
 
                         $mail->send();
 
-                        WorkHistory::create(
-                            WorkHistory::TYPE_USER_FAILS,
-                            $user['id'],
-                            \Yii::t('app', '- Reported less then 8 hours - Reported only {hours} hours on {date}', [
-                                'hours' => $user['s'],
-                                'date'  => date('Y-m-d')
-                            ])
-                        );
+                        if ( $user['s'] > 0 ) {
+
+                            WorkHistory::create(
+                                WorkHistory::TYPE_USER_FAILS,
+                                $user['id'],
+                                \Yii::t('app', '- Reported less then 8 hours - Reported only {hours} hours on {date}', [
+                                    'hours' => round($user['s'], 2),
+                                    'date'  => date('Y-m-d')
+                                ])
+                            );
+
+                        } else {
+
+                            WorkHistory::create(
+                                WorkHistory::TYPE_USER_FAILS,
+                                $user['id'],
+                                \Yii::t('app', '- Did not report on {date}', [
+                                    'hours' => $user['s']
+                                ])
+                            );
+
+                        }
+
 
                     }
 
