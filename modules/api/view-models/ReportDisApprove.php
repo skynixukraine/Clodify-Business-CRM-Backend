@@ -34,10 +34,21 @@ class ReportDisApprove extends ViewModelAbstract
             if ($curReport) {
                 if ($curReport->is_approved) {
 
-                    if (User::hasPermission([User::ROLE_ADMIN])) {
-                        $this->noteToActionTableForDisapproving($curReport);
+                    if(isset($this->postData['hours'])){
+                        $hoursToDisapprove = $this->postData['hours'];
+                    } else {
+                        $hoursToDisapprove = 0;
                     }
 
+                    if($hoursToDisapprove > $curReport->hours) {
+                        return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, you can not disapprove more hours than were reported'));
+                    }
+
+
+                    if (User::hasPermission([User::ROLE_ADMIN])) {
+                        $this->disapproveReport($curReport, $hoursToDisapprove);
+                    }
+                    // $this->postData['hours']
                     if (User::hasPermission([User::ROLE_SALES])) {
                         $salesId = Yii::$app->user->id;
 
@@ -50,7 +61,7 @@ class ReportDisApprove extends ViewModelAbstract
                             }
                             if(in_array($curReport->project_id, $projectId)){
                                 if($curReport->user_id != $salesId) {
-                                    $this->noteToActionTableForDisapproving($curReport);
+                                    $this->disapproveReport($curReport, $hoursToDisapprove);
                                 } else {
                                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role sales) can not disapprove own report'));
                                 }
@@ -63,7 +74,7 @@ class ReportDisApprove extends ViewModelAbstract
                     if (User::hasPermission([User::ROLE_FIN])) {
                         $finId = Yii::$app->user->id;
                         if($curReport->user_id != $finId){
-                            $this->noteToActionTableForDisapproving($curReport);
+                            $this->disapproveReport($curReport, $hoursToDisapprove);
                         } else {
                             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role fin) can not disapprove own report'));
                         }
@@ -78,6 +89,21 @@ class ReportDisApprove extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }
 
+    }
+
+
+    public function disapproveReport($report, $hoursToDisapprove){
+        if($hoursToDisapprove < $report->hours && $hoursToDisapprove != 0) {
+            $clone = new Report;
+            $clone->attributes = $report->attributes;
+            $clone->hours = $hoursToDisapprove;
+            $clone->save();
+            $this->noteToActionTableForDisapproving($clone);
+            $report->hours = $report->hours - $hoursToDisapprove;
+            $report->save(false);
+        } else if($hoursToDisapprove == $report->hours || $hoursToDisapprove == 0) {
+            $this->noteToActionTableForDisapproving($report);
+        }
     }
 
     public function noteToActionTableForDisapproving($curReport)
