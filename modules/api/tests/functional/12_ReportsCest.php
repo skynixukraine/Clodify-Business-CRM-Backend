@@ -762,6 +762,85 @@ class ReportsCest
     }
 
     /**
+     * on disapprove hours parameter can be set
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testDisApproveHoursReport(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->wantTo('Test disapproving report');
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove', json_encode([
+                "hours"   => 6,
+        ]));
+
+        $response = json_decode($I->grabResponse());
+
+        $I->assertNotEmpty($response->errors);
+
+        $I->seeResponseMatchesJsonType([
+            "data" => 'null',
+            "errors" => 'array',
+            "success" => 'boolean'
+        ]);
+
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId . '/disapprove', json_encode([
+            "hours"   => 4,
+        ]));
+
+        $isApproved = $I->grabFromDatabase('reports', 'is_approved', array(
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 4,
+        ));
+
+        $I->assertEquals(0, $isApproved);
+
+        $isApproved = $I->grabFromDatabase('reports', 'is_approved', array(
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 1,
+        ));
+
+        $I->assertEquals(1, $isApproved);
+
+        $response = json_decode($I->grabResponse());
+
+        $I->assertEmpty($response->errors);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [],
+            "success" => true
+        ]);
+
+
+    }
+
+
+
+
+    /**
      * SALES can disapprove only reports of participants of their projects and  CAN NOT DISapprove own reports
      * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario

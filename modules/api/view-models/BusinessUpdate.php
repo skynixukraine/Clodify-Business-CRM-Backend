@@ -23,6 +23,10 @@ class BusinessUpdate extends ViewModelAbstract
                 return $this->addError(Processor::ERROR_PARAM, Yii::t('app','business is\'t found by Id'));
             }
 
+            if($business->is_delete==1){
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app','business is\'t found by Id'));
+            }
+
             $requiredFields = [
                 'name',
                 'director_id',

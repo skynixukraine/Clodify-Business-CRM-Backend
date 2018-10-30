@@ -198,6 +198,15 @@ class ProjectFetch extends ViewModelAbstract
         $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
         $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
+
+        if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ]))) {
+            if( $model->getProjectDevelopers()->one()->status == 'ACTIVE' ) {
+                $list['is_subscribed']  = true;
+            } else if($model->getProjectDevelopers()->one()->status == 'INACTIVE') {
+                $list['is_subscribed']  = false;
+            }
+        }
+
         $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
         $list['date_start']     = $model->date_start ? date("d/m/Y", strtotime($model->date_start)) : "Date Start Not Set";
         $list['date_end']       = $newDateEnd = $model->date_end ? date("d/m/Y", strtotime($model->date_end)) : "Date End Not Set";
