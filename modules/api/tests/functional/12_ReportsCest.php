@@ -805,6 +805,26 @@ class ReportsCest
             "hours"   => 4,
         ]));
 
+        $isApproved = $I->grabFromDatabase('reports', 'is_approved', array(
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 4,
+        ));
+
+        $I->assertEquals(0, $isApproved);
+
+        $isApproved = $I->grabFromDatabase('reports', 'is_approved', array(
+            'user_id'   => ValuesContainer::$userSales['id'],   // 5
+            'project_id' => ValuesContainer::$projectId,
+            'date_added' => '2017-03-09',
+            'task' => 'bla task',
+            'hours' => 1,
+        ));
+
+        $I->assertEquals(1, $isApproved);
+
         $response = json_decode($I->grabResponse());
 
         $I->assertEmpty($response->errors);
