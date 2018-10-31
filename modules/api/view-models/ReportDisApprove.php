@@ -97,9 +97,12 @@ class ReportDisApprove extends ViewModelAbstract
             $clone = new Report;
             $clone->attributes = $report->attributes;
             $clone->hours = $hoursToDisapprove;
+            $cloneCost = $hoursToDisapprove * ($report->cost/$report->hours);
+            $clone->cost = $cloneCost;
             $clone->save();
             $this->noteToActionTableForDisapproving($clone);
             $report->hours = $report->hours - $hoursToDisapprove;
+            $report->cost = $report->cost - $cloneCost;
             $report->save(false);
         } else if($hoursToDisapprove == $report->hours || $hoursToDisapprove == 0) {
             $this->noteToActionTableForDisapproving($report);

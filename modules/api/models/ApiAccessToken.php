@@ -69,6 +69,11 @@ class ApiAccessToken extends \yii\db\ActiveRecord
         return static::findOne(['access_token' => $token]);
     }
 
+    public static function findIdentityByCrowdToken($token, $type = null)
+    {
+        return static::findOne(['crowd_token' => $token]);
+    }
+
     /**
      * This function generates a new Access Token for a passed user
      * @param \app\models\User $user
