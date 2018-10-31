@@ -29,7 +29,7 @@ class SalaryReportCreate extends ViewModelAbstract
         // TODO: Implement define() method.
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-            $date = date("Y-") . $this->model->report_date . date("-d");
+            $date = date("Y-") . $this->model->report_date . '-01';
 
             $reportDate = DateUtil::convertDateToUnix($date);
 

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Setting;
 use Yii;
 use app\models\SupportTicket;
 use app\models\Survey;
@@ -73,7 +74,8 @@ class SiteController extends Controller
             return $this->redirect(['cp/default/index']);
 
         }
-        return $this->redirect( Yii::$app->params['url_site'] );
+        return $this->render('index');
+        //return $this->redirect( Yii::$app->params['url_site'] );
     }
 
     /** New or invited user login  */
@@ -321,6 +323,44 @@ class SiteController extends Controller
         Yii::$app->getResponse()->setStatusCode(500);
         Yii::$app->response->content = '{"data":null,"errors":{"param":"error","message":"An internal server error occurred.","trace":[]},"success":false}';
         Yii::$app->end();
+    }
+
+    public function actionChecksso()
+    {
+
+
+        if ( ($domain = str_replace(".", "_", Setting::getSSOCookieDomain()) ) &&
+            isset($_COOKIE[$domain]) &&
+            ($keyValue = $_COOKIE[$domain]) &&
+            ($response = Yii::$app->crowdComponent->validateCrowdSession( $keyValue )) &&
+            $response['success'] === true) {
+
+            if ( ($accessToken = ApiAccessToken::findIdentityByCrowdToken($keyValue) ) ) {
+
+                $accessToken->crowd_exp_date = $response['expiryDate'];
+                $accessToken->save(false, ['crowd_exp_date']);
+
+            } else if ( !empty($response['user']['name']) &&
+                ($user = User::findByEmail($response['user']['name'])) &&
+                ($user->is_delete = 0 ) &&
+                ($user->is_active = 1) ) {
+
+                $accessToken = ApiAccessToken::generateNewToken( $user );
+                $accessToken->crowd_token       = $keyValue;
+                $accessToken->crowd_exp_date    = $response['expiryDate'];
+                $accessToken->save(false, ['crowd_token', 'crowd_exp_date']);
+
+            }
+            if ( $accessToken && ($user = User::findOne( $accessToken->user_id ))) {
+
+                Yii::$app->request->cookies->offsetSet('skynix-access-token', $accessToken->access_token);
+                Yii::$app->request->cookies->offsetSet('skynix-userId', $user->id);
+                Yii::$app->request->cookies->offsetSet('skynix-role', $user->role);
+            }
+
+
+        }
+        return $this->redirect( Yii::$app->params['url_crm_app'] . '/login' );
     }
 
 }

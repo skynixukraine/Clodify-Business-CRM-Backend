@@ -76,6 +76,7 @@ class FinancialReportLock extends ViewModelAbstract
                     }
 
                     if ($finyearrep = FinancialYearlyReport::findYearlyReport($year)) {          //add to current year
+                        Yii::getLogger()->log('Fin Year Report exists', Logger::LEVEL_INFO);
                         $finyearrep->income += FinancialReport::sumIncome($id);
                         $finyearrep->expense_constant += FinancialReport::sumExpenseConstant($id);
                         $finyearrep->investments += FinancialReport::sumInvestments($id);
@@ -87,6 +88,7 @@ class FinancialReportLock extends ViewModelAbstract
                         $finyearrep->balance += FinancialReport::getBalance($id);
                         $finyearrep->spent_corp_events += FinancialReport::sumSpentCorpEvents($id);
                         if ($finyearrep->validate() && $finyearrep->save()) {
+                            Yii::getLogger()->log('SAVED BOTH REPORTS', Logger::LEVEL_INFO);
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             if($financialReport->save()){
                                 $this->applyDelayedSalary($financialReport->report_date);
@@ -96,9 +98,13 @@ class FinancialReportLock extends ViewModelAbstract
                                 foreach ( $errors as $error )
                                     $this->addError( $param , Yii::t('app', $error));
                             }
+                            Yii::getLogger()->log('Fin Year Report Errors: ' .var_export($finyearrep->getErrors(), 1), Logger::LEVEL_INFO);
+                            Yii::getLogger()->log('Fin Report Errors: ' .var_export($financialReport->getErrors(), 1), Logger::LEVEL_INFO);
+
                         }
 
                     } else {
+                        Yii::getLogger()->log('NEW Fin Year Report exists', Logger::LEVEL_INFO);
                         $yearlyReport = new FinancialYearlyReport();                  // create new yearly report
                         $yearlyReport->year = $year;
                         $yearlyReport->income = FinancialReport::sumIncome($id);
@@ -112,15 +118,22 @@ class FinancialReportLock extends ViewModelAbstract
                         $yearlyReport->balance = FinancialReport::getBalance($id);
                         $yearlyReport->spent_corp_events = FinancialReport::sumSpentCorpEvents($id);
                         if ($yearlyReport->save()) {
+                            Yii::getLogger()->log('SAVED Year Report', Logger::LEVEL_INFO);
                             $financialReport->is_locked = FinancialReport::LOCKED;
                             if($financialReport->save()){
+                                Yii::getLogger()->log('SAVED Fin Report', Logger::LEVEL_INFO);
                                 $this->applyDelayedSalary($financialReport->report_date);
+                            } else {
+
+                                Yii::getLogger()->log('Fin  Report Errors: ' .var_export($financialReport->getErrors(), 1), Logger::LEVEL_INFO);
                             }
                         } else {
                             foreach ($yearlyReport->getErrors() as $param=> $errors) {
                                 foreach ( $errors as $error )
                                     $this->addError( $param , Yii::t('app', $error));
                             }
+                            Yii::getLogger()->log('Fin Year Report Errors: ' .var_export($yearlyReport->getErrors(), 1), Logger::LEVEL_INFO);
+
                         }
                     }
                     $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);

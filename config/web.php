@@ -74,6 +74,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' =>array_merge($route, [
+                'check-my-sso-and-login'                    => 'site/checksso',
                 'check-status'                              => 'site/status',
                 's/<shortcode:\w+>'                         => 'site/survey',
                 '<controller>/<action>'                     => '<controller>/<action>',

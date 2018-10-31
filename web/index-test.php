@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_get('UTC');
 // NOTE: Make sure this file is not accessible when deployed to production
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'test');
