@@ -722,7 +722,7 @@ class BusinessesCest
             $I->assertEquals(true, $response->success);
             $I->seeResponseMatchesJsonType([
                 'data' => [
-                    'logo' => 'string'
+                    'logo' => 'string|null'
                 ],
                 'errors' => [],
                 'success' => 'boolean'
@@ -859,7 +859,7 @@ class BusinessesCest
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
             'data' => [
-                'logo' => 'string'
+                'logo' => 'string | null'
             ],
             'errors' => [],
             'success' => 'boolean'
