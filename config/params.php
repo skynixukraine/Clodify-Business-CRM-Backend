@@ -9,7 +9,7 @@ return [
     'port'              => "",
     'success'           => true,
     'invoice_cc_email'  => false,
-    'version'           => '1.11.12',
+    'version'           => '2.9.0',
     'contractorId'      => 1,
     'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw'
 ];

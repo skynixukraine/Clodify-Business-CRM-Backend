@@ -34,7 +34,16 @@ class DelayedSalaryCest
     public function testCreateDelayedSalaryRequestCest(FunctionalTester $I)
     {
 
-        ValuesContainer::$FinancialReportDate = date('m', strtotime(date('Y-m-d') . ' -1month'));
+        ValuesContainer::$FinancialReportDate = (int)date('n');
+        if ( ValuesContainer::$FinancialReportDate > 1 ) {
+
+            ValuesContainer::$FinancialReportDate--;
+
+        } else {
+
+            ValuesContainer::$FinancialReportDate = 12;
+
+        }
         ValuesContainer::$DelayedSalaryDate     = date('m');
 
         $I->wantTo('Testing create delayed salary request');
