@@ -32,7 +32,6 @@ class BusinessGetDefaultLogo extends ViewModelAbstract
                 $base = base64_encode($str);
                 $data = ['logo' => [$base]];
             } else {
-                $base = null;
                 $data = ['logo' => null];
             }
         } catch (\Exception $e) {
