@@ -12,7 +12,7 @@ class m181031_152433_correct_project_status_canceled extends Migration
      */
     public function safeUp()
     {
-        $this->alterColumn('projects', 'status', "enum('NEW', 'ONHOLD', 'INPROGRESS', 'DONE','CANCELLED')");
+        $this->alterColumn('projects', 'status', "enum('NEW', 'ONHOLD', 'INPROGRESS', 'DONE','CANCELLED') DEFAULT 'NEW'");
     }
 
     /**
