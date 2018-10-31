@@ -29,15 +29,16 @@ class BusinessGetDefaultLogo extends ViewModelAbstract
             $logo = $s->download($pathFile);
             if(isset($logo['Body'])) {
                 $str = $logo['Body'];
+                $base = base64_encode($str);
+                $data = ['logo' => [$base]];
             } else {
-                $str = file_get_contents(Yii::getAlias('@webroot').'/img/avatar.png');
+                $base = null;
+                $data = ['logo' => null];
             }
         } catch (\Exception $e) {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app','cannot find image'));
         }
 
-        $base = base64_encode($str);
-        $data = [$base];
         $this->setData($data);
 
     }
