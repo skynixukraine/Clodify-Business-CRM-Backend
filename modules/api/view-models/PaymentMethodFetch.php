@@ -20,25 +20,26 @@ class PaymentMethodFetch extends ViewModelAbstract
     {
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
-            $id = Yii::$app->request->getQueryParam('id');
+            $businessId = Yii::$app->request->getQueryParam('id');
 
-            $paymentMethodData = PaymentMethod::find()->where(['id' => $id])->one();
+            $paymentMethodData = PaymentMethod::find()->where(['business_id' => $businessId])->all();
 
             $data = [];
             if ($paymentMethodData) {
-                $data[] = $paymentMethodData->toArray([
-                    'id',
-                    'name',
-                    'name_alt',
-                    'address',
-                    'address_alt',
-                    'represented_by',
-                    'represented_by_alt',
-                    'bank_information',
-                    'bank_information_alt',
-                    'is_default'
-                ]);
-
+                foreach ($paymentMethodData as $paymentMethodDatum) {
+                    $data[] = $paymentMethodDatum->toArray([
+                        'id',
+                        'name',
+                        'name_alt',
+                        'address',
+                        'address_alt',
+                        'represented_by',
+                        'represented_by_alt',
+                        'bank_information',
+                        'bank_information_alt',
+                        'is_default'
+                    ]);
+                }
             } else {
                 $this->addError('data', 'Payment method not found');
             }
