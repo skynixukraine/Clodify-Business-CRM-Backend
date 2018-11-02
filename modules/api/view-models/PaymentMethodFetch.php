@@ -20,9 +20,14 @@ class PaymentMethodFetch extends ViewModelAbstract
     {
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
-            $businessId = Yii::$app->request->getQueryParam('id');
+            $businessId = Yii::$app->request->getQueryParam('business_id');
+            $id = Yii::$app->request->getQueryParam('id');
 
-            $paymentMethodData = PaymentMethod::find()->where(['business_id' => $businessId])->all();
+            if(isset($id)){
+                $paymentMethodData = PaymentMethod::find()->where(['business_id' => $businessId, 'id' => $id])->all();
+            } else {
+                $paymentMethodData = PaymentMethod::find()->where(['business_id' => $businessId])->all();
+            }
 
             $data = [];
             if ($paymentMethodData) {
