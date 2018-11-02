@@ -36,7 +36,7 @@ class ApiAccessToken extends \yii\db\ActiveRecord
             [['user_id', 'access_token', 'exp_date'], 'required'],
             [['user_id', 'crowd_exp_date'], 'integer'],
             [['access_token'], 'string'],
-            [['access_token', 'crowd_token'], 'string', 'max' => 40]
+            [['access_token', 'crowd_token'], 'string', 'max' => 100]
         ];
     }
 
