@@ -35,7 +35,7 @@ class UsersFetch extends ViewModelAbstract
         //Admin can see all users (active & suspended)
         if( User::hasPermission([User::ROLE_ADMIN])) {
 
-            $query = User::find()->where(['is_active' => 1]);
+            $query = User::find();
         }
 
         //FIN has an access to all active users of roles DEV, SALES, FIN, ADMIN to all columns
