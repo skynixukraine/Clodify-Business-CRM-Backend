@@ -114,7 +114,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                         'income'    => round( $finIncome->sumAmount ),
                         'expenses'  => round( $expenses + $deptExpenses),
                         'project'   => $project,
-                        'bonuses'   => round( ($finIncome->sumAmount - $expenses) * 0.1 ),
+                        'bonuses'   => round( ($finIncome->sumAmount - $expenses - $deptExpenses) * 0.1 ),
                         'added_by'  => [
                             'id'    => $finIncome->added_by_user_id,
                             'name'  => ( $u = $finIncome->getAddedByUser()->one()) ? $u->first_name . ' ' . $u->last_name : "Unknown"
