@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `operation_types`.
  */
-class m171108_104332_create_operation_types_table extends Migration
+class m171108_104332_create_operation_types_table extends SkynixMigration
 {
     /**
      * @inheritdoc

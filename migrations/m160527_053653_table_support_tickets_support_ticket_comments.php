@@ -1,9 +1,11 @@
 <?php
 
-use yii\db\Migration;
+
+use app\components\SkynixMigration;
+
 use app\models\User;
 
-class m160527_053653_table_support_tickets_support_ticket_comments extends Migration
+class m160527_053653_table_support_tickets_support_ticket_comments extends SkynixMigration
 {
     public function safeUp()
     {

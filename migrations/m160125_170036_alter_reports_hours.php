@@ -1,10 +1,10 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
+use app\components\SkynixMigration;
 
-class m160125_170036_alter_reports_hours extends Migration
+class m160125_170036_alter_reports_hours extends SkynixMigration
 {
+
     public function up()
     {
         $this->alterColumn('reports', 'hours', $this->double());

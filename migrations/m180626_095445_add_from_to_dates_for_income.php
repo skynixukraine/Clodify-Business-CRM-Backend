@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180626_095445_add_from_to_dates_for_income
  */
-class m180626_095445_add_from_to_dates_for_income extends Migration
+class m180626_095445_add_from_to_dates_for_income extends SkynixMigration
 {
     /**
      * {@inheritdoc}

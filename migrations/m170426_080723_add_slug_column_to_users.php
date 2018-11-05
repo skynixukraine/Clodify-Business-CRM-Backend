@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170426_080723_add_slug_column_to_users extends Migration
+class m170426_080723_add_slug_column_to_users extends SkynixMigration
 {
     public function up()
     {

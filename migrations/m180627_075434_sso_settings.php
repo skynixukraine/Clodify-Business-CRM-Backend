@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180627_075434_sso_settings
  */
-class m180627_075434_sso_settings extends Migration
+class m180627_075434_sso_settings extends SkynixMigration
 {
     /**
      * {@inheritdoc}

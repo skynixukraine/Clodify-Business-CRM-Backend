@@ -117,6 +117,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'dbCore' => require(__DIR__ . '/db-core.php'),
         'crowdComponent' => [
             'class' => 'app\components\CrowdComponent',
         ],

@@ -1,10 +1,10 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 use app\models\Invoice;
 use app\models\User;
 
-class m170220_091553_added_created_by_column_in_invoices_table extends Migration
+class m170220_091553_added_created_by_column_in_invoices_table extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160526_132832_rename_table_table_extensions extends Migration
+use app\components\SkynixMigration;
+
+
+class m160526_132832_rename_table_table_extensions extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170404_140151_users_remove_not_null_for_invite_hash extends Migration
+class m170404_140151_users_remove_not_null_for_invite_hash extends SkynixMigration
 {
     public function up()
     {

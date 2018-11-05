@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170213_133256_new_table_contact_form extends Migration
+class m170213_133256_new_table_contact_form extends SkynixMigration
 {
     public function up()
     {

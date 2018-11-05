@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles adding official_salary to table `users`.
  */
-class m170825_105204_add_official_salary_column_to_users_table extends Migration
+class m170825_105204_add_official_salary_column_to_users_table extends SkynixMigration
 {
     /**
      * @inheritdoc

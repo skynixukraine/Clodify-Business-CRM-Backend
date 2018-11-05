@@ -1,9 +1,10 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160219_101829_invoices_id_AUTO_INCREMENT extends Migration
+use app\components\SkynixMigration;
+
+
+class m160219_101829_invoices_id_AUTO_INCREMENT extends SkynixMigration
 {
     public function safeUp()
     {

@@ -1,9 +1,8 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
+use app\components\SkynixMigration;
 
-class m160204_083656_projects_id_AUTO_INCREMENT extends Migration
+class m160204_083656_projects_id_AUTO_INCREMENT extends SkynixMigration
 {
     public function safeUp()
     {

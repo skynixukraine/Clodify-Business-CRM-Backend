@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `invoice_template`.
  */
-class m180823_082338_create_invoice_template_table extends Migration
+class m180823_082338_create_invoice_template_table extends SkynixMigration
 {
     /**
      * {@inheritdoc}

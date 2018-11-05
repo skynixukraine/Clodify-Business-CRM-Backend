@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `transactions`.
  */
-class m171109_093636_create_transactions_table extends Migration
+class m171109_093636_create_transactions_table extends SkynixMigration
 {
     /**
      * @inheritdoc

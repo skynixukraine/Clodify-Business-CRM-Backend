@@ -1,13 +1,13 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 use yii\db\Query;
 
 
 /**
  * Class m180925_101326_add_invoice_increment_id
  */
-class m180925_101326_add_invoice_increment_id extends Migration
+class m180925_101326_add_invoice_increment_id extends SkynixMigration
 {
     /**
      * {@inheritdoc}

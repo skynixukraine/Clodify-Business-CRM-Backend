@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170301_170626_ON_DELETE_action_for_invoices_when_delete_related_contract extends Migration
+class m170301_170626_ON_DELETE_action_for_invoices_when_delete_related_contract extends SkynixMigration
 {
     public function up()
     {

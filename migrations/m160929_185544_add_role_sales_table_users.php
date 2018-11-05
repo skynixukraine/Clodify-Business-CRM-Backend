@@ -1,10 +1,11 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
+
+use app\components\SkynixMigration;
+
 use app\models\User;
 
-class m160929_185544_add_role_sales_table_users extends Migration
+class m160929_185544_add_role_sales_table_users extends SkynixMigration
 {
     public function safeUp()
     {

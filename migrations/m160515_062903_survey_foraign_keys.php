@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160515_062903_survey_foraign_keys extends Migration
+use app\components\SkynixMigration;
+
+
+class m160515_062903_survey_foraign_keys extends SkynixMigration
 {
     public function up()
     {

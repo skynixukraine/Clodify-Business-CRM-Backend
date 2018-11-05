@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180810_125648_payment_methods_set_business_id
  */
-class m180810_125648_payment_methods_set_business_id extends Migration
+class m180810_125648_payment_methods_set_business_id extends SkynixMigration
 {
     /**
      * {@inheritdoc}

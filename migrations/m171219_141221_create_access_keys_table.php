@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `access_keys`.
  */
-class m171219_141221_create_access_keys_table extends Migration
+class m171219_141221_create_access_keys_table extends SkynixMigration
 {
     /**
      * @inheritdoc

@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180714_072024_project_type
  */
-class m180714_072024_project_type extends Migration
+class m180714_072024_project_type extends SkynixMigration
 {
     /**
      * {@inheritdoc}

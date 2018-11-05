@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m171109_093535_alter_column_id_in_operations extends Migration
+class m171109_093535_alter_column_id_in_operations extends SkynixMigration
 {
     public function safeUp()
     {

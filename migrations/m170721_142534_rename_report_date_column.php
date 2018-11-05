@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170721_142534_rename_report_date_column extends Migration
+class m170721_142534_rename_report_date_column extends SkynixMigration
 {
     public function up()
     {

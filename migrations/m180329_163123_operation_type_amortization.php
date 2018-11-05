@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180329_163123_operation_type_amortization
  */
-class m180329_163123_operation_type_amortization extends Migration
+class m180329_163123_operation_type_amortization extends SkynixMigration
 {
     /**
      * {@inheritdoc}

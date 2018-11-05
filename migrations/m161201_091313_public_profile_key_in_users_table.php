@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m161201_091313_public_profile_key_in_users_table extends Migration
+use app\components\SkynixMigration;
+
+
+class m161201_091313_public_profile_key_in_users_table extends SkynixMigration
 {
     public function up()
     {

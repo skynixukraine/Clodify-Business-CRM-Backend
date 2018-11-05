@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170823_092953_create_salary_report_lists_tab extends Migration
+class m170823_092953_create_salary_report_lists_tab extends SkynixMigration
 {
     public function up()
     {

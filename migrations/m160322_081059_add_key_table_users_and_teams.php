@@ -1,8 +1,9 @@
 <?php
 
-use yii\db\Migration;
 
-class m160322_081059_add_key_table_users_and_teams extends Migration
+use app\components\SkynixMigration;
+
+class m160322_081059_add_key_table_users_and_teams extends SkynixMigration
 {
     public function up()
     {

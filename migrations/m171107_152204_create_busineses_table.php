@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `busineses`.
  */
-class m171107_152204_create_busineses_table extends Migration
+class m171107_152204_create_busineses_table extends SkynixMigration
 {
     /**
      * @inheritdoc

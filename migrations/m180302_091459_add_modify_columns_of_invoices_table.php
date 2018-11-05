@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180302_091459_add_modify_columns_of_invoices_table extends Migration
+class m180302_091459_add_modify_columns_of_invoices_table extends SkynixMigration
 {
     public function up()
     {

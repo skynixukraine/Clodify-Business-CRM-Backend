@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170405_133928_create_table_careers extends Migration
+class m170405_133928_create_table_careers extends SkynixMigration
 {
     /**
      * create table careers

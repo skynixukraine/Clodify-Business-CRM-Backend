@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180626_185114_refactor_crowd_token
  */
-class m180626_185114_refactor_crowd_token extends Migration
+class m180626_185114_refactor_crowd_token extends SkynixMigration
 {
     /**
      * {@inheritdoc}

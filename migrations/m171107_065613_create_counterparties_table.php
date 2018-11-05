@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `counterparties`.
  */
-class m171107_065613_create_counterparties_table extends Migration
+class m171107_065613_create_counterparties_table extends SkynixMigration
 {
     /**
      * @inheritdoc

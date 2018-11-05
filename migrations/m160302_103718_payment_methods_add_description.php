@@ -1,8 +1,9 @@
 <?php
 
-use yii\db\Migration;
 
-class m160302_103718_payment_methods_add_description extends Migration
+use app\components\SkynixMigration;
+
+class m160302_103718_payment_methods_add_description extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160507_135846_add_is_delete_surveys extends Migration
+use app\components\SkynixMigration;
+
+
+class m160507_135846_add_is_delete_surveys extends SkynixMigration
 {
     public function up()
     {

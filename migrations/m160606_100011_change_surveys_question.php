@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160606_100011_change_surveys_question extends Migration
+use app\components\SkynixMigration;
+
+
+class m160606_100011_change_surveys_question extends SkynixMigration
 {
     public function up()
     {

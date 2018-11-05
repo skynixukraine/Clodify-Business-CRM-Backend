@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180917_071155_convert_fin_report_date
  */
-class m180917_071155_convert_fin_report_date extends Migration
+class m180917_071155_convert_fin_report_date extends SkynixMigration
 {
     /**
      * {@inheritdoc}
