@@ -21,11 +21,14 @@ class PaymentMethodDelete extends ViewModelAbstract
     {
 
         if (User::hasPermission([User::ROLE_ADMIN])) {
-            $paymentMethodId = Yii::$app->request->getQueryParam('payment_method_id');
-            $paymentMethod = PaymentMethod::find($paymentMethodId)->one();
 
-            if(count($paymentMethod) == 0) {
-                return $this->addError(Processor::ERROR_PARAM, 'Cannot delete payment method, not found by id');
+            $businessId = Yii::$app->request->getQueryParam('business_id');
+            $paymentMethodId = Yii::$app->request->getQueryParam('payment_method_id');
+            $paymentMethod = PaymentMethod::findOne(['business_id' => $businessId, 'id' => $paymentMethodId]);
+
+
+            if(is_null($paymentMethod)) {
+                return $this->addError(Processor::ERROR_PARAM, 'payment method isn\'t found');
             }
 
             if($paymentMethod->is_default == 1) {

@@ -608,11 +608,15 @@ class PaymentMethodsCest
         $oAuth->login($email, $pas);
 
         $paymentMethodData = Helper\ValuesContainer::$paymentMethodData;
-        $paymentMethodData['id'] = 55;
+        $paymentMethodData['is_default'] = 0;
 
         $I->sendPOST('/api/businesses/' . ValuesContainer::$BusinessID . '/methods', json_encode($paymentMethodData));
 
-        $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessID . '/methods/55');
+        $response = json_decode($I->grabResponse());
+
+        $newPaymentMethodId = $response->data->payment_method_id;
+
+        $I->sendDELETE('/api/businesses/' . ValuesContainer::$BusinessID . '/methods/' . $newPaymentMethodId);
 
         \Helper\OAuthToken::$key = null;
 
