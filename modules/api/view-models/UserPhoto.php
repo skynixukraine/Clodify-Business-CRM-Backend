@@ -8,6 +8,7 @@
 namespace viewModel;
 
 use Yii;
+use yii\db\Exception;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 use app\models\User;
@@ -23,9 +24,10 @@ class UserPhoto extends ViewModelAbstract
     public function define()
     {
 
-        $imageSize = getimagesize($this->model->photo);
 
-        if($imageSize[0] > 150 || $imageSize[1] > 150) {
+        $imageSize = @getimagesize($this->model->photo);
+
+        if(is_array($imageSize) && count($imageSize) && ($imageSize[0] > 150 || $imageSize[1] > 150)) {
             $photo = $this->resizeImage($this->model->photo, 150, 150);
             ob_start();
             imagejpeg($photo);
