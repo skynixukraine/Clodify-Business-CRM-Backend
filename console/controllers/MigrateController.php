@@ -7,6 +7,7 @@
 
 namespace app\console\controllers;
 
+use app\models\CoreClient;
 use yii\console\ExitCode;
 use yii\db\Connection;
 use yii\di\Instance;
@@ -43,11 +44,42 @@ class MigrateController extends \yii\console\controllers\MigrateController
     public function actionUp($limit = 0)
     {
         $this->domain = self::CORE_DOMAIN;
-        $this->domainMigrations[ $this->domain ] = $this->getNewMigrations();
+        //Core migrations history
+        $dsnParts = explode(";", $this->db->dsn);
+        $this->domainMigrations[ $this->domain ] = [
+            'migrations'    => $this->getNewMigrations(),
+            'connection'    => $this->db,
+            'dbname'        => explode('=', $dsnParts[1])[1]
+        ];
+        //Clients migrations history
+        $clients = $this->db->createCommand('SELECT * FROM clients')->queryAll();
+
+        $dsn = $dsnParts[0] . ';name=<dbname>';
+
+        /** @var  $client CoreClient */
+        foreach ( $clients as $row ) {
+
+            $dbName = "skynixcrm_db_" . $row['domain'];
+            $connection = new \yii\db\Connection([
+                'dsn' => str_replace('<dbname>', $dbName, $dsn),
+                'username' => $row['mysql_user'],
+                'password' =>  $row['mysql_password'],
+                'charset' => 'utf8',
+            ]);
+            $connection->open();
+            $connection->createCommand("use " . $dbName)->execute();
+
+            $this->db = $connection;
+            $this->domainMigrations[ $row['domain'] ] = [
+                'migrations'    => $this->getNewMigrations(),
+                'connection'    => $connection,
+                'dbname'        => $dbName
+            ];
+        }
         $totalMigrations = 0;
         foreach ($this->domainMigrations as $m ) {
 
-            $totalMigrations += count($m);
+            $totalMigrations += count($m['migrations']);
         }
         if ($totalMigrations === 0 ) {
             $this->stdout("No new migrations found. Your system is up-to-date.\n", Console::FG_GREEN);
@@ -62,21 +94,34 @@ class MigrateController extends \yii\console\controllers\MigrateController
         }*/
 
         $this->stdout("Total $totalMigrations new " . ($totalMigrations === 1 ? 'migration' : 'migrations') . " to be applied:\n", Console::FG_YELLOW);
+        $this->stdout("\n");
 
-        foreach ($this->domainMigrations[$this->domain] as $migration) {
-            $nameLimit = $this->getMigrationNameLimit();
-            if ($nameLimit !== null && strlen($migration) > $nameLimit) {
-                $this->stdout("\nThe migration name '$migration' is too long. Its not possible to apply this migration.\n", Console::FG_RED);
-                return ExitCode::UNSPECIFIED_ERROR;
+        $nameLimit = $this->getMigrationNameLimit();
+        foreach ($this->domainMigrations as $domain => $m) {
+
+            $this->stdout("\n\tClient: $domain\n", Console::FG_PURPLE);
+            foreach ($m['migrations'] as $migration ) {
+                if ($nameLimit !== null && strlen($migration) > $nameLimit) {
+                    $this->stdout("\nThe migration name '$migration' is too long. Its not possible to apply this migration.\n", Console::FG_RED);
+                    return ExitCode::UNSPECIFIED_ERROR;
+                }
+                $this->stdout("\t$migration\n");
             }
-            $this->stdout("\t$migration\n");
         }
         $this->stdout("\n");
 
         if ($this->confirm('Apply the above ' . ($totalMigrations === 1 ? 'migration' : 'migrations') . ' to all clients?')) {
-            foreach ($this->domainMigrations as $domain => $migrations) {
+            foreach ($this->domainMigrations as $domain => $row) {
+                $this->domain = $domain;
+                $migrations = $row['migrations'];
+                $this->db->close();
+                $this->db   = $row['connection'];
+                $this->db->open();
+                $this->db->createCommand("use " . $row['dbname'])->execute();
                 $this->stdout("\nApplying migration for {$domain}\n", Console::FG_BLUE);
                 $applied = 0;
+
+
                 foreach ($migrations as $migration ) {
 
                     if (!$this->migrateUp($migration)) {
@@ -107,7 +152,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
         if ( ($migration->isCore === true && $this->domain !== self::CORE_DOMAIN ) ||
             ($migration->isCore === false && self::CORE_DOMAIN === $this->domain )) {
 
-            echo 'Skipped migration : ' . self::className(). " on " . (self::CORE_DOMAIN === $this->domain ? "core" : "client" ) . " db \n";
+            echo 'Skipped migration : ' . $class. " on " . (self::CORE_DOMAIN === $this->domain ? "core" : "client" ) . " db \n";
             $this->addMigrationHistory($class);
             return true;
 

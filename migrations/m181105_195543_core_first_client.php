@@ -33,7 +33,6 @@ class m181105_195543_core_first_client extends SkynixMigration
         $clientKeys->access_key     = Yii::$app->security->generateRandomString( 45 );
         $clientKeys->save();
 
-
     }
 
     /**
