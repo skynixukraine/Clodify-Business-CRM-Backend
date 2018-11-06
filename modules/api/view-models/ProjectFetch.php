@@ -117,7 +117,7 @@ class ProjectFetch extends ViewModelAbstract
                 $projects = $projectId ? implode(', ', $projectId) : 0;
                 $dataTable->setFilter(Project::tableName() . '.id IN (' . $projects . ') ');
                 $dataTable->setFilter(Project::tableName() . '.status="' . Project::STATUS_INPROGRESS . '"');
-           }
+            }
         }
 
         $activeRecordsData = $dataTable->getData();
@@ -127,18 +127,21 @@ class ProjectFetch extends ViewModelAbstract
             $developers = $model->getDevelopers()->all();
             $developersNames = [];
             foreach ($developers as $developer) {
+                if($developer->is_active == 0)
+                    continue;
+
                 $dev = [
                     'id'            => $developer->id,
                     'first_name'    => $developer->first_name,
                     'last_name'     => $developer->last_name,
-                    'role'          => $developer->role
+                    'role'          => $developer->role,
                 ];
                 if ($aliasUserId = ProjectDeveloper::findOne(['user_id' => $developer->id,
                     'project_id' => $model->id])->alias_user_id
                 ) {
                     $aliasUser = User::find()
-                            ->where('id=:alias', [
-                                ':alias' => $aliasUserId])->one();
+                        ->where('id=:alias', [
+                            ':alias' => $aliasUserId])->one();
 
                     $dev['alias'] = [
                         'id'            => $aliasUser->id,
@@ -153,6 +156,8 @@ class ProjectFetch extends ViewModelAbstract
             $customersNames = [];
 
             foreach ($customers as $customer) {
+                if($customer->is_active == 0)
+                    continue;
                 $projectCustomer = ProjectCustomer::findOne(['user_id' => $customer->id, 'project_id' => $model->id]);
                 $customersNames[] = [
                     'id'                => $customer->id,
@@ -240,7 +245,7 @@ class ProjectFetch extends ViewModelAbstract
         $list['milestones'] = $milestones;
 
         return $list;
-  }
+    }
 
     /**
      * @param $model
