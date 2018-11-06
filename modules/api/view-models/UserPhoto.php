@@ -28,10 +28,18 @@ class UserPhoto extends ViewModelAbstract
 
         if(is_array($imageSize) && count($imageSize) && ($imageSize[0] > 150 || $imageSize[1] > 150)) {
 
-            $d = $imageSize[0]/150;
-            $newWidth = ceil($imageSize[1]/$d);
+            $oldImageWidth = $imageSize[0];
+            $oldImageHeight = $imageSize[1];
 
-            $photo = $this->resizeImage($this->model->photo, $newWidth, 150);
+            if($oldImageWidth <= $oldImageHeight) {
+                $newImageWidth = 150;
+                $newImasgeHeight = ceil($oldImageHeight/$oldImageWidth*150);
+            } else {
+                $newImasgeHeight = 150;
+                $newImageWidth = ceil($oldImageWidth/$oldImageHeight*150);
+            }
+
+            $photo = $this->resizeImage($this->model->photo, $newImageWidth, $newImasgeHeight);
             ob_start();
             imagejpeg($photo);
             $contents = ob_get_contents();
