@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180804_114438_only_approved_hours
  */
-class m180804_114438_only_approved_hours extends Migration
+class m180804_114438_only_approved_hours extends SkynixMigration
 {
     /**
      * {@inheritdoc}

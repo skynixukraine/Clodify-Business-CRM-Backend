@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160204_160915_projects_date_start_date_end_DATE extends Migration
+use app\components\SkynixMigration;
+
+class m160204_160915_projects_date_start_date_end_DATE extends SkynixMigration
 {
     public function safeUp()
     {

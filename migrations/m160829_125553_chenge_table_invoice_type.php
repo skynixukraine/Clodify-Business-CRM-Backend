@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160829_125553_chenge_table_invoice_type extends Migration
+use app\components\SkynixMigration;
+
+
+class m160829_125553_chenge_table_invoice_type extends SkynixMigration
 {
     public function up()
     {

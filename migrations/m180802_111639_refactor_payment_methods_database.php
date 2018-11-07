@@ -1,12 +1,12 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 use yii\db\Query;
 
 /**
  * Class m180802_111639_refactor_payment_methods_database
  */
-class m180802_111639_refactor_payment_methods_database extends Migration
+class m180802_111639_refactor_payment_methods_database extends SkynixMigration
 {
     /**
      * {@inheritdoc}

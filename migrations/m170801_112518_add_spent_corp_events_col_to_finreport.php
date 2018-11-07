@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170801_112518_add_spent_corp_events_col_to_finreport extends Migration
+class m170801_112518_add_spent_corp_events_col_to_finreport extends SkynixMigration
 {
     public function up()
     {

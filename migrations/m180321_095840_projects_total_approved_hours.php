@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180321_095840_projects_total_approved_hours extends Migration
+class m180321_095840_projects_total_approved_hours extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170914_080452_change_type_of_columns_in_fin_yearly_report extends Migration
+class m170914_080452_change_type_of_columns_in_fin_yearly_report extends SkynixMigration
 {
     public function up()
     {

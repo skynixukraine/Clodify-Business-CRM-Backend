@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160504_151046_surveys extends Migration
+use app\components\SkynixMigration;
+
+
+class m160504_151046_surveys extends SkynixMigration
 {
     public function safeUp()
     {

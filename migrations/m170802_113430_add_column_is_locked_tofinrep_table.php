@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170802_113430_add_column_is_locked_tofinrep_table extends Migration
+class m170802_113430_add_column_is_locked_tofinrep_table extends SkynixMigration
 {
     public function up()
     {

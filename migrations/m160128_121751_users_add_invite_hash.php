@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160128_121751_users_add_invite_hash extends Migration
+use app\components\SkynixMigration;
+
+class m160128_121751_users_add_invite_hash extends SkynixMigration
 {
     public function up()
     {

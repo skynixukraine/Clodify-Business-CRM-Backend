@@ -1,8 +1,11 @@
 <?php
 
-use yii\db\Migration;
 
-class m160301_141851_create_table_paiment_methods extends Migration
+
+use app\components\SkynixMigration;
+
+
+class m160301_141851_create_table_paiment_methods extends SkynixMigration
 {
     public function up()
     {

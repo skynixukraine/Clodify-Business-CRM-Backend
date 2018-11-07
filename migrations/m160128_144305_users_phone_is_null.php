@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160128_144305_users_phone_is_null extends Migration
+use app\components\SkynixMigration;
+
+class m160128_144305_users_phone_is_null extends SkynixMigration
 {
     public function up()
     {

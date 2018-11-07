@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180302_085003_add_new_columns_to_businesses_tbl extends Migration
+class m180302_085003_add_new_columns_to_businesses_tbl extends SkynixMigration
 {
     public function up()
     {

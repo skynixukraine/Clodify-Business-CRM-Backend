@@ -1,8 +1,9 @@
 <?php
 
-use yii\db\Migration;
 
-class m160414_082424_teammate_add_is_deleted extends Migration
+use app\components\SkynixMigration;
+
+class m160414_082424_teammate_add_is_deleted extends SkynixMigration
 {
     public function up()
     {

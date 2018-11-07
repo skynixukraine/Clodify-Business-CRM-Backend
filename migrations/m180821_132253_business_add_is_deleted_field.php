@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180821_132253_business_add_is_deleted_field
  */
-class m180821_132253_business_add_is_deleted_field extends Migration
+class m180821_132253_business_add_is_deleted_field extends SkynixMigration
 {
     /**
      * {@inheritdoc}

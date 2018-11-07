@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160925_134505_create_table_projects_total_hours extends Migration
+use app\components\SkynixMigration;
+
+
+class m160925_134505_create_table_projects_total_hours extends SkynixMigration
 {
     public function safeUp()
     {

@@ -1,8 +1,11 @@
 <?php
 
-use yii\db\Migration;
 
-class m170121_110057_insert_in_contractr_template extends Migration
+
+use app\components\SkynixMigration;
+
+
+class m170121_110057_insert_in_contractr_template extends SkynixMigration
 {
     public function up()
     {

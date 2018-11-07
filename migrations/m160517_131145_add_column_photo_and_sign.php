@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160517_131145_add_column_photo_and_sign extends Migration
+use app\components\SkynixMigration;
+
+
+class m160517_131145_add_column_photo_and_sign extends SkynixMigration
 {
     public function safeUp()
     {

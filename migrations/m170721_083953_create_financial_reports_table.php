@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `financial_reports`.
  */
-class m170721_083953_create_financial_reports_table extends Migration
+class m170721_083953_create_financial_reports_table extends SkynixMigration
 {
     /**
      * @inheritdoc

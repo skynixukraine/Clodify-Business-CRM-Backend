@@ -1,9 +1,12 @@
 <?php
 
-use yii\db\Migration;
+
+
+use app\components\SkynixMigration;
+
 use app\models\User;
 
-class m170112_125354_new_columns_bank_account_enUa_in_users_table extends Migration
+class m170112_125354_new_columns_bank_account_enUa_in_users_table extends SkynixMigration
 {
     public function up()
     {

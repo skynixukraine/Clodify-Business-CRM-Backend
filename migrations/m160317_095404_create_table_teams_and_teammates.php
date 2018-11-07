@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160317_095404_create_table_teams_and_teammates extends Migration
+use app\components\SkynixMigration;
+
+
+class m160317_095404_create_table_teams_and_teammates extends SkynixMigration
 {
     public function safeUp()
     {

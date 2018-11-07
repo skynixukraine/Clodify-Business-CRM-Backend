@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m181031_152433_correct_project_status_canceled
  */
-class m181031_152433_correct_project_status_canceled extends Migration
+class m181031_152433_correct_project_status_canceled extends SkynixMigration
 {
     /**
      * {@inheritdoc}

@@ -1,8 +1,9 @@
 <?php
 
-use yii\db\Migration;
 
-class m160613_121331_add_column_date_cancelled_table_support_ticket extends Migration
+use app\components\SkynixMigration;
+
+class m160613_121331_add_column_date_cancelled_table_support_ticket extends SkynixMigration
 {
     public function safeUp()
     {

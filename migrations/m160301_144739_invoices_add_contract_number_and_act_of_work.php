@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160301_144739_invoices_add_contract_number_and_act_of_work extends Migration
+use app\components\SkynixMigration;
+
+
+class m160301_144739_invoices_add_contract_number_and_act_of_work extends SkynixMigration
 {
     public function safeUp()
     {

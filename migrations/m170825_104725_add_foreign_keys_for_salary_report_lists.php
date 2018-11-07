@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 use app\models\SalaryReportList;
 use app\models\User;
 use app\models\SalaryReport;
 
-class m170825_104725_add_foreign_keys_for_salary_report_lists extends Migration
+class m170825_104725_add_foreign_keys_for_salary_report_lists extends SkynixMigration
 {
     public function safeUp()
     {

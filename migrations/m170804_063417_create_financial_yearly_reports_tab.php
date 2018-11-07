@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170804_063417_create_financial_yearly_reports_tab extends Migration
+class m170804_063417_create_financial_yearly_reports_tab extends SkynixMigration
 {
     /**
      * @inheritdoc

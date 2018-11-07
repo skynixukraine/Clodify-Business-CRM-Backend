@@ -1,9 +1,10 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160217_092401_invoices_add_note extends Migration
+use app\components\SkynixMigration;
+
+
+class m160217_092401_invoices_add_note extends SkynixMigration
 {
     public function up()
     {

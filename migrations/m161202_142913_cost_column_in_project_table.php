@@ -1,7 +1,10 @@
 <?php
-use yii\db\Migration;
 
-class m161202_142913_cost_column_in_project_table extends Migration
+
+use app\components\SkynixMigration;
+
+
+class m161202_142913_cost_column_in_project_table extends SkynixMigration
 {
     public function up()
     {

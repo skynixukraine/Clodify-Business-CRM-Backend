@@ -1,11 +1,13 @@
 <?php
 
-use yii\db\Migration;
+
+use app\components\SkynixMigration;
+
 
 /**
  * Handles the creation for table `table_extensions`.
  */
-class m160526_111906_create_table_extensions extends Migration
+class m160526_111906_create_table_extensions extends SkynixMigration
 {
     /**
      * @inheritdoc

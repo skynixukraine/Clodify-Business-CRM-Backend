@@ -1,9 +1,10 @@
 <?php
 
-use yii\db\Migration;
+
+use app\components\SkynixMigration;
 use app\models\Invoice;
 
-class m170105_105052_new_column_in_table_invoice extends Migration
+class m170105_105052_new_column_in_table_invoice extends SkynixMigration
 {
     public function up()
     {

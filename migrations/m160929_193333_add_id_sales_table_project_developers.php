@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160929_193333_add_id_sales_table_project_developers extends Migration
+use app\components\SkynixMigration;
+
+
+class m160929_193333_add_id_sales_table_project_developers extends SkynixMigration
 {
     public function safeUp()
     {

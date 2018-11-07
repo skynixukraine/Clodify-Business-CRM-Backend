@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `work_history`.
  */
-class m170419_095059_create_work_history_table extends Migration
+class m170419_095059_create_work_history_table extends SkynixMigration
 {
     /**
      * @inheritdoc

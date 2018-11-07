@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170404_081923_users_add_password_reset_token extends Migration
+class m170404_081923_users_add_password_reset_token extends SkynixMigration
 {
     public function up()
     {

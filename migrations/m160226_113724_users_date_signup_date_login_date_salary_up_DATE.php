@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160226_113724_users_date_signup_date_login_date_salary_up_DATE extends Migration
+use app\components\SkynixMigration;
+
+
+class m160226_113724_users_date_signup_date_login_date_salary_up_DATE extends SkynixMigration
 {
     public function safeUp()
     {

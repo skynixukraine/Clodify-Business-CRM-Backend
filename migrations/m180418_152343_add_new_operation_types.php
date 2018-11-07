@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180418_152343_add_new_operation_types
  */
-class m180418_152343_add_new_operation_types extends Migration
+class m180418_152343_add_new_operation_types extends SkynixMigration
 {
     /**
      * {@inheritdoc}

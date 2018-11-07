@@ -1,9 +1,10 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160219_150941_invoices_date_to_DATE extends Migration
+use app\components\SkynixMigration;
+
+
+class m160219_150941_invoices_date_to_DATE extends SkynixMigration
 {
     public function safeUp()
     {

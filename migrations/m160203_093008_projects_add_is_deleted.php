@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160203_093008_projects_add_is_deleted extends Migration
+use app\components\SkynixMigration;
+
+class m160203_093008_projects_add_is_deleted extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160322_101526_add_key_pk__teammates_and_add_key_table_users_team_teammates extends Migration
+use app\components\SkynixMigration;
+
+
+class m160322_101526_add_key_pk__teammates_and_add_key_table_users_team_teammates extends SkynixMigration
 {
     public function safeUp()
     {

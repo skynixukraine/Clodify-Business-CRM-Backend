@@ -1,8 +1,9 @@
 <?php
 
-use yii\db\Migration;
 
-class m161220_132038_added extends Migration
+use app\components\SkynixMigration;
+
+class m161220_132038_added extends SkynixMigration
 {
     public function up()
     {

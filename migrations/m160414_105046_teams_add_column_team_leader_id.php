@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160414_105046_teams_add_column_team_leader_id extends Migration
+use app\components\SkynixMigration;
+
+
+class m160414_105046_teams_add_column_team_leader_id extends SkynixMigration
 {
     public function up()
     {

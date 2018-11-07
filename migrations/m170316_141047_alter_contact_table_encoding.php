@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170316_141047_alter_contact_table_encoding extends Migration
+class m170316_141047_alter_contact_table_encoding extends SkynixMigration
 {
     public function up()
     {
