@@ -504,4 +504,54 @@ class UsersCest
         $I->assertEquals(0, count($roles));
     }
 
+
+
+    /**
+     * @see    http://jira.skynix.company:8070/browse/SI-853
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testAdminCanLoginAsAnotherUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $roles = [
+            ROLE,
+            ROLE_PM,
+            ROLE_SALES
+        ];
+
+        $I->sendGET(ApiEndpoints::USERS, [
+            'limit'     => 100,
+            'roles'     => $roles
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        foreach( $response->data->users as $user ) {
+
+            if ( in_array( $user->role, $roles)) {
+
+                foreach ( $roles as $k=>$v ) {
+
+                    if ( $user->role == $v ) {
+
+                        unset($roles[$k]);
+
+                    }
+
+                }
+
+            }
+
+        }
+        $I->assertEquals(0, count($roles));
+    }
+
+
 }
