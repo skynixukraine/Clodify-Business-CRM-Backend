@@ -6,7 +6,10 @@ $route = require(__DIR__ . '/route.php');
 $config = [
     'id' => 'basic',
     'basePath'  => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'app\components\Bootstrap'
+    ],
     'modules'   => [
         'cp' => [
             'class' => 'app\modules\cp\ControlPanel',
@@ -17,8 +20,11 @@ $config = [
         'api' => [
             'class' => 'app\modules\api\Module',
         ],
+        'core-api' => [
+            'class' => 'app\modules\coreApi\Module',
+        ],
     ],
-
+   // 'onBeginRequest' => ['app\components\SkynixBootstrap', 'init'],
     'timeZone'=> 'Europe/Kiev',
     'language' => 'ua-UK',
     'sourceLanguage' => 'en-US',
