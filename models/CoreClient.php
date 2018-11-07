@@ -114,19 +114,39 @@ class CoreClient extends ActiveRecord
                     ->createCommand(file_get_contents( Yii::$app->basePath . '/modules/api/tests/_data/dump.sql' ))
                     ->execute();
 
-                Yii::$app->dbCore
-                    ->createCommand('
-                    TRUNCATE `api_auth_access_tokens`;
-                    TRUNCATE `availability_logs`;
-                    TRUNCATE `busineses`;
-                    TRUNCATE `financial_reports`;
-                    TRUNCATE `operation_types`;
-                    TRUNCATE `payment_methods`;
-                    TRUNCATE `projects`;
-                    TRUNCATE `project_customers`;
-                    TRUNCATE `project_developers`;
-                    TRUNCATE `users`;')
-                    ->execute();
+                //Prepare a new database
+                //Truncate old test data
+                $tables = [
+                    'api_auth_access_tokens',
+                    'availability_logs',
+                    'busineses',
+                    'financial_reports',
+                    'operation_types',
+                    'payment_methods',
+                    'projects',
+                    'project_customers',
+                    'project_developers',
+                    'users',
+                    'reports'
+                ];
+
+                foreach ( $tables as $table ) {
+
+                    Yii::$app->dbCore
+                        ->createCommand("TRUNCATE `" . $table . "`;")
+                        ->execute();
+
+                }
+                //Create ADMIN user
+                $user = new User();
+                $user->role          = User::ROLE_ADMIN;
+                $user->first_name    = $this->first_name;
+                $user->last_name     = $this->last_name;
+                $user->email         = $this->email;
+                $user->password      = Yii::$app->security->generateRandomString( 12 );
+                $user->is_active     = User::ACTIVE_USERS;
+                $user->auth_type     = User::DATABASE_AUTH;
+                $user->save();
             }
 
             $clientKeys = new \app\models\CoreClientKey();
@@ -134,8 +154,7 @@ class CoreClient extends ActiveRecord
             $clientKeys->valid_until    = date('Y-m-d', strtotime('now +1day'));
             $clientKeys->access_key     = Yii::$app->security->generateRandomString( 45 );
             $clientKeys->save();
-
-
+            
         }
     }
 
