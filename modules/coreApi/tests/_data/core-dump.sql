@@ -1,4 +1,3 @@
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -30,7 +29,7 @@ CREATE TABLE clients (
 /*!40000 ALTER TABLE clients DISABLE KEYS */;
 INSERT INTO clients VALUES (1,'skynix_llc','Skynix LLC','admin@skynix.co','Skynix','Admin','2021-11-07',NULL,'develop_skynix','NGY0ODYzZWFjMGViMzA2OGYwMTlmMmY1',1,1);
 /*!40000 ALTER TABLE clients ENABLE KEYS */;
-DROP TABLE IF EXISTS keys;
+DROP TABLE IF EXISTS client_keys;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `client_keys` (
@@ -44,9 +43,9 @@ CREATE TABLE `client_keys` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE keys DISABLE KEYS */;
+/*!40000 ALTER TABLE client_keys DISABLE KEYS */;
 INSERT INTO client_keys VALUES (1,1,'XDGAC20m7IxrP5KuqXVDXBHU-3YWqa8c7IBxHS8BVJZgK','2021-11-07');
-/*!40000 ALTER TABLE keys ENABLE KEYS */;
+/*!40000 ALTER TABLE client_keys ENABLE KEYS */;
 DROP TABLE IF EXISTS migration;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -89,4 +88,3 @@ CREATE TABLE orders (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
