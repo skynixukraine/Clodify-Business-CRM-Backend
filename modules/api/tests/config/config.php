@@ -8,7 +8,7 @@ return [
         'db' => [
             'dsn' => 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb',
             'username' => 'skynixcrm_testdb_user',
-            'password' => 'N2IyNTdjNGEzOTMwYmM4M2UwMWQ1YmM4'
+            'password' => 'YzhkNTk3Y2JiMzUxNWU2ZDcyNDYwOWM1'
         ],
         'mailer' => [
             'useFileTransport' => true,
