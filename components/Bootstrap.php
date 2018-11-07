@@ -19,6 +19,9 @@ class Bootstrap implements BootstrapInterface
     const DOMAIN_STAGING = 'staging.core.api.skynix.co';
     const DOMAIN_PRODUCT = 'core.api.skynix.co';
 
+    const DOMAIN_TEST_API   = 'test.skynix-llc.api.skynix.co';
+    const DOMAIN_TEST_CORE = 'test.core.api.skynix.co';
+
     //Bootstrap API for multidomain architecture
     public function bootstrap($app)
     {
@@ -26,6 +29,10 @@ class Bootstrap implements BootstrapInterface
        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
        switch ($host) {
 
+           case self::DOMAIN_TEST_API :
+           case self::DOMAIN_TEST_CORE :
+                //DO NOTHING FOR TESTS (uses databases from ymls)
+               break;
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
             case self::DOMAIN_PRODUCT :

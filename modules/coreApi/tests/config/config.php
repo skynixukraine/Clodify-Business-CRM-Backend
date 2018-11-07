@@ -5,8 +5,8 @@
 return [
     'language' => 'en-US',
     'components' => [
-        'db' => [
-            'dsn' => 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb',
+        'dbCore' => [
+            'dsn' => 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb_core',
             'username' => 'skynixcrm_testdb_user',
             'password' => 'N2IyNTdjNGEzOTMwYmM4M2UwMWQ1YmM4'
         ],

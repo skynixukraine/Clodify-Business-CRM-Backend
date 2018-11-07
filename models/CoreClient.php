@@ -33,6 +33,8 @@ class CoreClient extends ActiveRecord
 {
     const IS_ACTIVE = 1;
 
+    const SCENARIO_PRE_REGISTER_VALIDATION  = 'pre-register';
+    const SCENARIO_REGISTER_VALIDATION      = 'register';
     /**
      * @return string
      */
@@ -44,12 +46,28 @@ class CoreClient extends ActiveRecord
     public function rules()
     {
         return [
-            [['domain'], 'string', 'max' => 80],
-            [['name', 'email', 'first_name', 'last_name'], 'string', 'max' => 255],
-            [['mysql_user', 'mysql_password'], 'string', 'max' => 45],
-            [['name', 'domain', 'email', 'mysql_user', 'mysql_password'], 'required'],
-            [['is_active', 'is_confirmed'], 'boolean']
+            [['domain'], 'string', 'max' => 80, 'on' => [self::SCENARIO_PRE_REGISTER_VALIDATION, self::SCENARIO_REGISTER_VALIDATION]],
+            [['name', 'email', 'first_name', 'last_name'], 'string', 'max' => 255, 'on' => [self::SCENARIO_PRE_REGISTER_VALIDATION, self::SCENARIO_REGISTER_VALIDATION]],
+            [['mysql_user', 'mysql_password'], 'string', 'max' => 45, 'on' => [self::SCENARIO_REGISTER_VALIDATION]],
+            [['name', 'domain', 'email', 'mysql_user', 'mysql_password'], 'required', 'on' => [self::SCENARIO_REGISTER_VALIDATION]],
+            [['name', 'domain', 'email'], 'required', 'on' => [self::SCENARIO_PRE_REGISTER_VALIDATION]],
+            [['is_active', 'is_confirmed'], 'boolean'],
+            ['email', 'email'],
+            [['email'], 'unique', 'on'=> [self::SCENARIO_PRE_REGISTER_VALIDATION, self::SCENARIO_REGISTER_VALIDATION]],
+            ['domain', function () {
+                    if( CoreClient::find()->where(['domain' => $this->getConvertedDomain()])->one() ) {
+                        $this->addError('domain', Yii::t('app', 'Client with this domain already exists. If this belongs to you please contact administrator.'));
+                    }
+                },
+                'on'=> [self::SCENARIO_PRE_REGISTER_VALIDATION, self::SCENARIO_REGISTER_VALIDATION]
+            ],
+
         ];
+    }
+
+    public function getConvertedDomain()
+    {
+        return str_replace([' ', '-'], '_', $this->domain);
     }
 
     public static function getDb()
@@ -57,5 +75,68 @@ class CoreClient extends ActiveRecord
         return Yii::$app->dbCore;
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ( $insert === true ) {
+
+            $dbName = Yii::$app->params['databasePrefix'] . $this->domain;
+
+            $databases = Yii::$app->dbCore
+                ->createCommand('SHOW DATABASES;')
+                ->queryAll();
+
+            $skip = false;
+            foreach ( $databases as $db ) {
+
+                if ( $db['Database'] === $dbName ) {
+
+                    $skip = true;
+
+                }
+            }
+            if ( $skip === false ) {
+
+                Yii::$app->dbCore
+                    ->createCommand('CREATE DATABASE ' . $dbName . ';')
+                    ->execute();
+                Yii::$app->dbCore
+                    ->createCommand("CREATE USER '" . $this->mysql_user . "'@'%' IDENTIFIED BY '" . $this->mysql_password . "';")
+                    ->execute();
+                Yii::$app->dbCore
+                    ->createCommand("GRANT ALL PRIVILEGES ON " . $dbName . ".* TO '"  . $this->mysql_user . "'@'%' WITH GRANT OPTION;")
+                    ->execute();
+
+                Yii::$app->dbCore
+                    ->createCommand("use " . $dbName)
+                    ->execute();
+
+                Yii::$app->dbCore
+                    ->createCommand(file_get_contents( Yii::$app->basePath . '/modules/api/tests/_data/dump.sql' ))
+                    ->execute();
+
+                Yii::$app->dbCore
+                    ->createCommand('
+                    TRUNCATE `api_auth_access_tokens`;
+                    TRUNCATE `availability_logs`;
+                    TRUNCATE `busineses`;
+                    TRUNCATE `financial_reports`;
+                    TRUNCATE `operation_types`;
+                    TRUNCATE `payment_methods`;
+                    TRUNCATE `projects`;
+                    TRUNCATE `project_customers`;
+                    TRUNCATE `project_developers`;
+                    TRUNCATE `users`;')
+                    ->execute();
+            }
+
+            $clientKeys = new \app\models\CoreClientKey();
+            $clientKeys->client_id      = $this->id;
+            $clientKeys->valid_until    = date('Y-m-d', strtotime('now +1day'));
+            $clientKeys->access_key     = Yii::$app->security->generateRandomString( 45 );
+            $clientKeys->save();
+
+
+        }
+    }
 
 }

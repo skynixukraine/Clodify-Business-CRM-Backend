@@ -15,10 +15,10 @@ extensions:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb'
+            dsn: 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb_core'
             user: 'skynixcrm_testdb_user'
             password: 'N2IyNTdjNGEzOTMwYmM4M2UwMWQ1YmM4'
-            dump: 'tests/_data/dump.sql'
+            dump: 'tests/_data/core-dump.sql'
             populate: true
             cleanup: false
             reconnect: true
