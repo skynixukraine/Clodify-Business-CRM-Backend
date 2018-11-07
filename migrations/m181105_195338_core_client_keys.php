@@ -14,7 +14,7 @@ class m181105_195338_core_client_keys extends SkynixMigration
      */
     public function safeUp()
     {
-        $this->createTable('keys', [
+        $this->createTable('client_keys', [
             'id'            => 'pk',
             'client_id'     => $this->integer(11),
             'access_key'    => 'varchar(45)',

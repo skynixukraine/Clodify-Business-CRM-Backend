@@ -33,7 +33,7 @@ INSERT INTO clients VALUES (1,'skynix_llc','Skynix LLC','admin@skynix.co','Skyni
 DROP TABLE IF EXISTS keys;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `keys` (
+CREATE TABLE `client_keys` (
   id int(11) NOT NULL AUTO_INCREMENT,
   client_id int(11) DEFAULT NULL,
   access_key varchar(45) DEFAULT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `keys` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE keys DISABLE KEYS */;
-INSERT INTO keys VALUES (1,1,'XDGAC20m7IxrP5KuqXVDXBHU-3YWqa8c7IBxHS8BVJZgK','2021-11-07');
+INSERT INTO client_keys VALUES (1,1,'XDGAC20m7IxrP5KuqXVDXBHU-3YWqa8c7IBxHS8BVJZgK','2021-11-07');
 /*!40000 ALTER TABLE keys ENABLE KEYS */;
 DROP TABLE IF EXISTS migration;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

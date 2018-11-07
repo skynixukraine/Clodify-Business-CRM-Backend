@@ -12,7 +12,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "keys".
+ * This is the model class for table "client_keys".
  *
  * @property integer $id
  * @property string $client_id
@@ -30,7 +30,7 @@ class CoreClientKey extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys';
+        return 'client_keys';
     }
 
     public function rules()
