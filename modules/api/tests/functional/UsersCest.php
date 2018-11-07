@@ -507,51 +507,83 @@ class UsersCest
 
 
     /**
-     * @see    http://jira.skynix.company:8070/browse/SI-853
+     * @see    https://jira.skynix.co/browse/SCA-299
      * @param  FunctionalTester $I
      * @return void
      */
     public function testAdminCanLoginAsAnotherUser(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
+        $I->wantTo('test admin can login as another user');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
+        $oAuth->login($email, $pas);
 
-        $roles = [
-            ROLE,
-            ROLE_PM,
-            ROLE_SALES
-        ];
+        $I->sendPOST('/api/login-as-user/' . ValuesContainer::$userFin['id']);
 
-        $I->sendGET(ApiEndpoints::USERS, [
-            'limit'     => 100,
-            'roles'     => $roles
-        ]);
-        $I->seeResponseCodeIs(200);
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
         $I->seeResponseIsJson();
-
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'access_token' => 'string',
+                'user_id' => 'integer',
+                'role' => 'string',
+                'crowd_token' => 'null'
+            ],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
 
-        foreach( $response->data->users as $user ) {
+    }
 
-            if ( in_array( $user->role, $roles)) {
+    /**
+     * @see    https://jira.skynix.co/browse/SCA-299
+     * @param  FunctionalTester $I
+     * @return void
+     */
+    public function testNotAdminCannotLoginAsAnotherUser(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
 
-                foreach ( $roles as $k=>$v ) {
+        $roles = ['CLIENT', 'FIN', 'SALES', 'PM'];
 
-                    if ( $user->role == $v ) {
+        foreach($roles as $role) {
 
-                        unset($roles[$k]);
+            $I->wantTo('test ' . $role .' cannot login as another user');
+            $testUser = 'user' . ucfirst(strtolower($role));
+            $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::${$testUser}['id']));
+            $pas = ValuesContainer::${$testUser}['password'];
 
-                    }
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($email, $pas);
 
-                }
-
+            if(ValuesContainer::${$testUser}['id'] !== ValuesContainer::$userFin['id']) {
+                $I->sendPOST('/api/login-as-user/' . ValuesContainer::$userFin['id']);
+            } else {
+                $I->sendPOST('/api/login-as-user/' . ValuesContainer::$userClient['id']);
             }
 
+            \Helper\OAuthToken::$key = null;
+            $I->seeResponseCodeIs('200');
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse());
+            $I->assertNotEmpty($response->errors);
+            $I->assertEquals(false, $response->success);
+            $I->seeResponseContainsJson([
+                "data" => null,
+                "errors" => [
+                    "param" => "error",
+                    "message" => "You have no permission for this action"
+                ],
+                "success" => false
+            ]);
         }
-        $I->assertEquals(0, count($roles));
     }
+
+
 
 
 }
