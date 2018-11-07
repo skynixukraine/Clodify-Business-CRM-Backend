@@ -18,7 +18,7 @@ return [
             'password' => 'mysql_pass'
         ],
         'dbCore' => [
-            'dsn' => 'mysql:host=localhost;dbname=<core_db_name>',
+            'dsn' => 'mysql:host=<mysql_host_name>;dbname=<core_db_name>',
             'username' => '<core_db_username>',
             'password' => '<core_db_password>',
         ],
