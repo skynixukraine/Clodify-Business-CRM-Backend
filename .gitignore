@@ -7,3 +7,4 @@ modules/api/codeception.yml
 modules/api/codeception.yml.bak
 modules/api/tests/acceptance.suite.yml
 modules/api/tests/functional.suite.yml
+modules/coreApi/codeception.yml
