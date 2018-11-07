@@ -15,12 +15,14 @@ class Storage
     private $aws;
     private $s3;
     private $basket;
+    public static $folder;
 
     function __construct()
     {
         $this->aws = Yii::$app->awssdk->getAwsSdk();
         $this->s3 = $this->aws->createS3();
         $this->basket = Yii::$app->params['basketAwssdk'];
+
     }
 
     /**
@@ -34,7 +36,7 @@ class Storage
         try {
             $result = $this->s3->putObject(array(
                 'Bucket' => $this->basket,
-                'Key' => $keyname,
+                'Key' => self::$folder . "/" . $keyname,
                 'SourceFile' => $filepath,
                 'ContentType' => 'image',
                 'ACL' => 'bucket-owner-full-control',
@@ -61,7 +63,7 @@ class Storage
     {
         $result = $this->s3->putObject(array(
             'Bucket' => $this->basket,
-            'Key'    => $keyname,
+            'Key'    => self::$folder . "/" . $keyname,
             'Body'   => $file
         ));
         return $result;
@@ -78,7 +80,7 @@ class Storage
         try {
         $file = $this->s3->getObject([
             'Bucket' => $this->basket,
-            'Key' => $key,
+            'Key' => self::$folder . "/" . $key,
         ]);
         } catch (\Exception $e) {
             return null;
@@ -91,7 +93,7 @@ class Storage
 
         $result = $this->s3->getObject([
             'Bucket' => $this->basket,
-            'Key' => $key,
+            'Key' => self::$folder . "/" . $key,
             'SaveAs' => $pathToFile
         ]);
         return $result;
@@ -108,7 +110,7 @@ class Storage
         try {
             $file = $this->s3->listObjects([
                 'Bucket' => $this->basket,
-                'Prefix' => $prefix,
+                'Prefix' => self::$folder,
             ]);
         } catch (\Exception $e) {
             return null;
@@ -128,7 +130,7 @@ class Storage
         try {
             $upload = $this->s3->putObject(array(
                 'Bucket' => $this->basket,
-                'Key'    => $key,
+                'Key'    => self::$folder . "/" . $key,
                 'Body'   => $sourceFile
             ));
         } catch (Exception $e) {

@@ -8,6 +8,7 @@
 
 namespace app\components;
 
+use app\models\Storage;
 use Yii;
 use app\models\CoreClient;
 use yii\base\BootstrapInterface;
@@ -27,20 +28,24 @@ class Bootstrap implements BootstrapInterface
     {
 
        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
+       $s3Folder = "";
        switch ($host) {
 
            case self::DOMAIN_TEST_API :
            case self::DOMAIN_TEST_CORE :
                 //DO NOTHING FOR TESTS (uses databases from ymls)
+                $s3Folder = "test";
                break;
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
             case self::DOMAIN_PRODUCT :
                 //DO NOTHING FOR CORE
+                $s3Folder = "core";
                 break;
             default :
 
                 $clientDomain = str_replace("-", "_", str_replace(['.api.skynix.co', 'develop.', 'staging.'], '', $host));
+                $s3Folder = $clientDomain;
                 if ( !empty($clientDomain ) &&
                     ($client = CoreClient::find()->where(['domain' => $clientDomain])->one())) {
 
@@ -63,5 +68,6 @@ class Bootstrap implements BootstrapInterface
                 }
                 break;
         }
+        Storage::$folder = $s3Folder;
     }
 }
