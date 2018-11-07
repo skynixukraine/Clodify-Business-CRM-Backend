@@ -3,7 +3,7 @@ $API            = 'api';
 $API_CORE       = 'core-api/';
 $API_CORE_URL   = 'https://<environment:\w+>.core.api.skynix.co/' . $API_CORE;
 return [
-    'GET '      . $API_CORE_URL . 'client/credentials'                        => $API_CORE . 'client/credentials',
+    'POST '     . $API_CORE_URL . 'clients'                                   => $API_CORE . 'clients/index',
     'POST '     . $API . '/password'                                          => $API . '/password/reset',
     'PUT '      . $API . '/password'                                          => $API . '/password/change',
     'POST '     . $API . '/projects'                                          => $API . '/projects/create',

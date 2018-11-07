@@ -15,10 +15,10 @@ extensions:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=mysqldb_server;dbname=mysql_testdb'
-            user: 'mysql_testdb_user'
-            password: 'mysql_testdb_pass'
-            dump: 'tests/_data/dump.sql'
+            dsn: 'mysql:host=<core_testdb_host>;dbname=<core_test_dbname>'
+            user: '<core_test_dbuser>'
+            password: '<core_test_dbpass>'
+            dump: 'tests/_data/core-dump.sql'
             populate: true
             cleanup: false
             reconnect: true

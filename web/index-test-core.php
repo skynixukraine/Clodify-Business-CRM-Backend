@@ -6,10 +6,10 @@ defined('YII_ENV') or define('YII_ENV', 'test');
 require(__DIR__ . '/../vendor/autoload.php');
 require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
-$config = require(__DIR__ . '/../modules/api/tests/config/functional.php');
+$config = require(__DIR__ . '/../modules/coreApi/tests/config/functional.php');
 
-Yii::$classMap['app\components\CrowdComponent'] = '@app/modules/api/tests/_support/Helper/CrowdComponent.php';
-Yii::$classMap['app\models\Storage'] = '@app/modules/api/tests/_support/Helper/Storage.php';
+Yii::$classMap['app\components\CrowdComponent'] = '@app/modules/coreApi/tests/_support/Helper/CrowdComponent.php';
+Yii::$classMap['app\models\Storage'] = '@app/modules/coreApi/tests/_support/Helper/Storage.php';
 
 
 (new yii\web\Application($config))->run();

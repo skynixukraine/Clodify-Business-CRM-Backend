@@ -11,6 +11,6 @@ modules:
         - Db
         - \Helper\Functional
         - REST:
-            url: 'https://skynixcrm-web/index-test.php'  # url for testing
+            url: 'https://test.core.api.skynix.co/index-test-core.php/core-api/'  # url for testing
             depends: PhpBrowser
         - Asserts
