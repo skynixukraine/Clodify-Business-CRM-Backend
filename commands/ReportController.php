@@ -17,7 +17,7 @@ use app\models\AvailabilityLog;
 use app\models\ProjectDeveloper;
 use yii\log\Logger;
 
-class ReportController extends Controller
+class ReportController extends DefaultController
 {
     /**
      *
