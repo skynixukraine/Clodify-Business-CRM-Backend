@@ -10,6 +10,7 @@ namespace app\console\controllers;
 use app\models\CoreClient;
 use yii\console\ExitCode;
 use yii\db\Connection;
+use yii\db\Exception;
 use yii\di\Instance;
 use yii\helpers\Console;
 
@@ -52,30 +53,32 @@ class MigrateController extends \yii\console\controllers\MigrateController
             'dbname'        => explode('=', $dsnParts[1])[1]
         ];
         //Clients migrations history
-        $clients = $this->db->createCommand('SELECT * FROM clients')->queryAll();
+        try {
+            $clients = $this->db->createCommand('SELECT * FROM clients')->queryAll();
 
-        $dsn = $dsnParts[0] . ';name=<dbname>';
+            $dsn = $dsnParts[0] . ';name=<dbname>';
 
-        /** @var  $client CoreClient */
-        foreach ( $clients as $row ) {
+            /** @var  $client CoreClient */
+            foreach ($clients as $row) {
 
-            $dbName = "skynixcrm_db_" . $row['domain'];
-            $connection = new \yii\db\Connection([
-                'dsn' => str_replace('<dbname>', $dbName, $dsn),
-                'username' => $row['mysql_user'],
-                'password' =>  $row['mysql_password'],
-                'charset' => 'utf8',
-            ]);
-            $connection->open();
-            $connection->createCommand("use " . $dbName)->execute();
+                $dbName = \Yii::$app->params['databasePrefix'] . $row['domain'];
+                $connection = new \yii\db\Connection([
+                    'dsn' => str_replace('<dbname>', $dbName, $dsn),
+                    'username' => $row['mysql_user'],
+                    'password' => $row['mysql_password'],
+                    'charset' => 'utf8',
+                ]);
+                $connection->open();
+                $connection->createCommand("use " . $dbName)->execute();
 
-            $this->db = $connection;
-            $this->domainMigrations[ $row['domain'] ] = [
-                'migrations'    => $this->getNewMigrations(),
-                'connection'    => $connection,
-                'dbname'        => $dbName
-            ];
-        }
+                $this->db = $connection;
+                $this->domainMigrations[$row['domain']] = [
+                    'migrations' => $this->getNewMigrations(),
+                    'connection' => $connection,
+                    'dbname' => $dbName
+                ];
+            }
+        } catch (Exception $e) {}
         $totalMigrations = 0;
         foreach ($this->domainMigrations as $m ) {
 
@@ -152,7 +155,7 @@ class MigrateController extends \yii\console\controllers\MigrateController
         if ( ($migration->isCore === true && $this->domain !== self::CORE_DOMAIN ) ||
             ($migration->isCore === false && self::CORE_DOMAIN === $this->domain )) {
 
-            echo 'Skipped migration : ' . $class. " on " . (self::CORE_DOMAIN === $this->domain ? "core" : "client" ) . " db \n";
+            echo 'Skipped migration : ' . $class. ' on ' . (self::CORE_DOMAIN === $this->domain ? "core" : "client" ) . " db \n";
             $this->addMigrationHistory($class);
             return true;
 

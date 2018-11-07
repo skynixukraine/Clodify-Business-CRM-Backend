@@ -11,5 +11,6 @@ return [
     'invoice_cc_email'  => false,
     'version'           => '2.9.0',
     'contractorId'      => 1,
-    'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw'
+    'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
+    'databasePrefix'    => 'crm_'
 ];

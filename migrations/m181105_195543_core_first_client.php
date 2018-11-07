@@ -21,8 +21,8 @@ class m181105_195543_core_first_client extends SkynixMigration
         $client->last_name      = "Admin";
         $client->trial_expires  = date('Y-m-d', strtotime('now +3years'));
         $client->prepaid_for    = null;
-        $client->mysql_user     = "skynixcrm_db_user";
-        $client->mysql_password    = "V7nk5j49gT77kTPmfN8THGxB9_";
+        $client->mysql_user     = "develop_skynix";
+        $client->mysql_password    = "NGY0ODYzZWFjMGViMzA2OGYwMTlmMmY1";
         $client->is_active          = 1;
         $client->is_confirmed       = 1;
         $client->save();
