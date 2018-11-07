@@ -22,7 +22,7 @@ use yii\log\Logger;
  * Class AccountantController
  * @package app\commands
  */
-class AccountantController extends Controller
+class AccountantController extends DefaultController
 {
     /**
      * Calculate monthly amortization of fixed assets and creates proper operations

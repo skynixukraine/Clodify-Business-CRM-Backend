@@ -18,6 +18,8 @@ class Bootstrap implements BootstrapInterface
     const DOMAIN_DEVELOP = 'develop.core.api.skynix.co';
     const DOMAIN_STAGING = 'staging.core.api.skynix.co';
     const DOMAIN_PRODUCT = 'core.api.skynix.co';
+
+    //Bootstrap API for multidomain architecture
     public function bootstrap($app)
     {
 
@@ -27,7 +29,7 @@ class Bootstrap implements BootstrapInterface
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
             case self::DOMAIN_PRODUCT :
-
+                //DO NOTHING FOR CORE
                 break;
             default :
 

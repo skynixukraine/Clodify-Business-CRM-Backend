@@ -15,7 +15,7 @@ use app\models\User;
 use yii\console\Controller;
 use app\components\CrowdComponent;
 
-class UserController extends Controller
+class UserController extends DefaultController
 {
     /**
      * Sync crowd groups
