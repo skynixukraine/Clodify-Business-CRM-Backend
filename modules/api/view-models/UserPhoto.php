@@ -7,12 +7,8 @@
 
 namespace viewModel;
 
-use Yii;
-use yii\db\Exception;
-use yii\helpers\FileHelper;
-use yii\web\UploadedFile;
 use app\models\User;
-use app\models\Storage;
+
 
 /**
  * Class UserPhoto
@@ -33,18 +29,18 @@ class UserPhoto extends ViewModelAbstract
 
             if($oldImageWidth <= $oldImageHeight) {
                 $newImageWidth = 150;
-                $newImasgeHeight = ceil($oldImageHeight/$oldImageWidth*150);
+                $newImageHeight = ceil($oldImageHeight/$oldImageWidth*150);
             } else {
-                $newImasgeHeight = 150;
+                $newImageHeight = 150;
                 $newImageWidth = ceil($oldImageWidth/$oldImageHeight*150);
             }
 
-            $photo = $this->resizeImage($this->model->photo, $newImageWidth, $newImasgeHeight);
+            $photo = $this->resizeImage($this->model->photo, $newImageWidth, $newImageHeight);
             ob_start();
             imagejpeg($photo);
             $contents = ob_get_contents();
             ob_end_clean();
-            $dataUri = "data:image/jpeg;base64," . base64_encode($contents);
+            $dataUri = "data:image/jpeg ;base64," . base64_encode($contents);
             $photo = $dataUri;
         } else {
             $photo = $this->model->photo;
@@ -69,32 +65,34 @@ class UserPhoto extends ViewModelAbstract
             } else {
                 $height = ceil($height-($height*abs($r-$w/$h)));
             }
-            $newwidth = $w;
-            $newheight = $h;
+            $newWidth = $w;
+            $newHeight = $h;
         } else {
             if ($w/$h > $r) {
-                $newwidth = $h*$r;
-                $newheight = $h;
+                $newWidth = $h*$r;
+                $newHeight = $h;
             } else {
-                $newheight = $w/$r;
-                $newwidth = $w;
+                $newHeight = $w/$r;
+                $newWidth = $w;
             }
         }
 
-        $source_properties = getimagesize($file);
-        $image_type = $source_properties[2];
+        $sourceProperties = getimagesize($file);
+        $imageType = $sourceProperties[2];
 
-        if( $image_type == IMAGETYPE_JPEG ) {
+        if( $imageType == IMAGETYPE_JPEG ) {
             $src = imagecreatefromjpeg($file);
         }
-        elseif( $image_type == IMAGETYPE_GIF )  {
+        elseif( $imageType == IMAGETYPE_GIF )  {
             $src = imagecreatefromgif($file);  }
-        elseif( $image_type == IMAGETYPE_PNG ) {
+        elseif( $imageType == IMAGETYPE_PNG ) {
             $src = imagecreatefrompng($file);
+        } else {
+            return $file;
         }
 
-        $dst = imagecreatetruecolor($newwidth, $newheight);
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+        $dst = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
         return $dst;
     }
