@@ -6,3 +6,5 @@ web/pma
 modules/api/codeception.yml
 modules/api/codeception.yml.bak
 modules/coreApi/codeception.yml
+modules/api/tests/config/config.php
+modules/coreApi/tests/config/config.php

@@ -18,7 +18,7 @@ class ClientCest
         $I->sendPOST(ApiEndpoints::CLIENTS, json_encode(
             [
 
-                "domain"        => "synpass-test-agency",
+                "domain"        => "synpass-agency",
                 "name"          => "Synpass LLC Test Agency",
                 "first_name"    => "John",
                 "last_name"     => "Doe",
