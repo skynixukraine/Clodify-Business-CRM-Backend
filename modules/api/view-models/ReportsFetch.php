@@ -206,8 +206,8 @@ class ReportsFetch extends ViewModelAbstract
                     User::findOne($model->user_id)->last_name . ')'
                     : "" )
                 :
-                    User::findOne($model->user_id)->first_name . ' ' .
-                    User::findOne($model->user_id)->last_name);
+                User::findOne($model->user_id)->first_name . ' ' .
+                User::findOne($model->user_id)->last_name);
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
@@ -239,11 +239,15 @@ class ReportsFetch extends ViewModelAbstract
         $activeRecordInstance->limit(null)->offset(null);
         $totalHours = Yii::$app->Helper->timeLength( $activeRecordInstance->sum('hours') * 3600);
         $totalCost = $activeRecordInstance->sum('cost') ? $activeRecordInstance->sum('cost') : 0;
+        $approvedHours = Yii::$app->Helper->timeLength( $activeRecordInstance->where('is_approved=1')->sum('hours') * 3600 );
+        $approvedCost = $activeRecordInstance->sum('cost') ? $activeRecordInstance->sum('cost') : 0;
 
         $data = [
             "reports"            => $list,
             "total_records"      => DataTable::getInstance()->getTotal(),
             "total_hours"        => $totalHours,
+            "approved_hours"     => $approvedHours,
+            "approved_cost"      => $approvedCost,
             "total_cost"         => (float)$totalCost,
         ];
 
