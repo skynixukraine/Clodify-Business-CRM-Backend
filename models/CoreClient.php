@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\components\Bootstrap;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -79,7 +80,10 @@ class CoreClient extends ActiveRecord
     {
         if ( $insert === true ) {
 
-            $dbName = Yii::$app->params['databasePrefix'] . $this->domain;
+            $dbName = Bootstrap::$dbPrefix . $this->domain;
+
+            $dsnParts = explode(";", Yii::$app->dbCore->dsn);
+            $coreDbName = explode("=", $dsnParts[1])[1];
 
             $databases = Yii::$app->dbCore
                 ->createCommand('SHOW DATABASES;')
@@ -119,21 +123,21 @@ class CoreClient extends ActiveRecord
                 $tables = [
                     'api_auth_access_tokens',
                     'availability_logs',
+                    'payment_methods',
                     'busineses',
                     'financial_reports',
                     'operation_types',
-                    'payment_methods',
-                    'projects',
                     'project_customers',
                     'project_developers',
+                    'reports',
+                    'projects',
                     'users',
-                    'reports'
                 ];
 
                 foreach ( $tables as $table ) {
 
-                    Yii::$app->dbCore
-                        ->createCommand("TRUNCATE `" . $table . "`;")
+                    Yii::$app->db
+                        ->createCommand("SET FOREIGN_KEY_CHECKS=0; TRUNCATE `" . $table . "`; SET FOREIGN_KEY_CHECKS=1;")
                         ->execute();
 
                 }
@@ -149,11 +153,34 @@ class CoreClient extends ActiveRecord
                 $user->save();
             }
 
+            Yii::$app->dbCore
+                ->createCommand("use " . $coreDbName )
+                ->execute();
+
             $clientKeys = new \app\models\CoreClientKey();
             $clientKeys->client_id      = $this->id;
             $clientKeys->valid_until    = date('Y-m-d', strtotime('now +1day'));
             $clientKeys->access_key     = Yii::$app->security->generateRandomString( 45 );
             $clientKeys->save();
+
+            /** @var $setting Setting */
+            if ( ($setting = Setting::find()
+                ->where(['key' => Setting::CLIENT_ID])
+                ->one() )) {
+
+                $setting->value = $this->id;
+                $setting->save(false, ['value']);
+
+            }
+            /** @var $setting Setting */
+            if ( ($setting = Setting::find()
+                ->where(['key' => Setting::CLIENT_ACCESS_KEY])
+                ->one() )) {
+
+                $setting->value = $clientKeys->access_key;
+                $setting->save(false, ['value']);
+
+            }
             
         }
     }

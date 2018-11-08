@@ -5,8 +5,8 @@
 return [
     'language' => 'en-US',
     'components' => [
-        'db' => [
-            'dsn' => 'mysql:host=<testdb_host>;dbname=<testdb_name>',
+        'dbCore' => [
+            'dsn' => 'mysql:host=<testdb_host>;dbname=<testdb_core_name>',
             'username' => '<testdb_username>',
             'password' => '<testdb_password>'
         ],
