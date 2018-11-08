@@ -132,7 +132,7 @@ class CoreClient extends ActiveRecord
 
                 foreach ( $tables as $table ) {
 
-                    Yii::$app->dbCore
+                    Yii::$app->db
                         ->createCommand("TRUNCATE `" . $table . "`;")
                         ->execute();
 
