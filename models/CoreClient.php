@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\components\Bootstrap;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -79,7 +80,7 @@ class CoreClient extends ActiveRecord
     {
         if ( $insert === true ) {
 
-            $dbName = Yii::$app->params['databasePrefix'] . $this->domain;
+            $dbName = Bootstrap::$dbPrefix . $this->domain;
 
             $databases = Yii::$app->dbCore
                 ->createCommand('SHOW DATABASES;')

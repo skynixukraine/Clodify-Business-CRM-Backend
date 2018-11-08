@@ -38,7 +38,7 @@ class Bootstrap implements BootstrapInterface
            case self::DOMAIN_TEST_CORE :
                 //DO NOTHING FOR TESTS (uses databases from ymls)
                 $s3Folder = "test";
-                self::$dbPrefix = Yii::$app->params['databasePrefix'];
+                self::$dbPrefix = Yii::$app->params['testDatabasePrefix'];
                break;
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
