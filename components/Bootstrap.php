@@ -23,18 +23,22 @@ class Bootstrap implements BootstrapInterface
     const DOMAIN_TEST_API   = 'test.skynix-llc.api.skynix.co';
     const DOMAIN_TEST_CORE = 'test.core.api.skynix.co';
 
+    public static $dbPrefix;
+
     //Bootstrap API for multidomain architecture
     public function bootstrap($app)
     {
 
        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
        $s3Folder = "";
+       self::$dbPrefix = Yii::$app->params['databasePrefix'];
        switch ($host) {
 
            case self::DOMAIN_TEST_API :
            case self::DOMAIN_TEST_CORE :
                 //DO NOTHING FOR TESTS (uses databases from ymls)
                 $s3Folder = "test";
+                self::$dbPrefix = Yii::$app->params['databasePrefix'];
                break;
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
