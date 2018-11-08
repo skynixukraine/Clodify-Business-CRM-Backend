@@ -32,6 +32,7 @@ class InvoiceDownload extends ViewModelAbstract
     {
         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES]) ) {
 
+            ini_set("pcre.backtrack_limit", "5000000");
             /** @var $invoice Invoice */
             /** @var $business Business */
             /** @var $customer User */

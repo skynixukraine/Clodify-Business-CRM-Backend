@@ -78,10 +78,10 @@ class Storage
     public function download($key ='')
     {
         try {
-        $file = $this->s3->getObject([
-            'Bucket' => $this->basket,
-            'Key' => self::$folder . "/" . $key,
-        ]);
+            $file = $this->s3->getObject([
+                'Bucket' => $this->basket,
+                'Key' => self::$folder . "/" . $key,
+            ]);
         } catch (\Exception $e) {
             return null;
         }
