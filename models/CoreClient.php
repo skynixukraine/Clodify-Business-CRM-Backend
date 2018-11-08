@@ -154,6 +154,25 @@ class CoreClient extends ActiveRecord
             $clientKeys->valid_until    = date('Y-m-d', strtotime('now +1day'));
             $clientKeys->access_key     = Yii::$app->security->generateRandomString( 45 );
             $clientKeys->save();
+
+            /** @var $setting Setting */
+            if ( ($setting = Setting::find()
+                ->where(['key' => Setting::CLIENT_ID])
+                ->one() )) {
+
+                $setting->value = $this->id;
+                $setting->save(false, ['value']);
+
+            }
+            /** @var $setting Setting */
+            if ( ($setting = Setting::find()
+                ->where(['key' => Setting::CLIENT_ACCESS_KEY])
+                ->one() )) {
+
+                $setting->value = $clientKeys->access_key;
+                $setting->save(false, ['value']);
+
+            }
             
         }
     }
