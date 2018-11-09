@@ -9,6 +9,7 @@ namespace app\modules\coreApi\components\Api;
 use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
+use app\modules\api\models\ApiAccessToken;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;

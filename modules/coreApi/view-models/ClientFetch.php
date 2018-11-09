@@ -7,6 +7,10 @@
 
 namespace viewModel;
 
+use app\models\CoreClient;
+use Yii;
+use app\modules\api\components\Api\Processor;
+
 class ClientFetch extends ViewModelAbstract
 {
 
@@ -16,7 +20,7 @@ class ClientFetch extends ViewModelAbstract
 
         $clientId = Yii::$app->request->getQueryParam('client_id');
 
-        $client = Client::findOne($clientId);
+        $client = CoreClient::findOne($clientId);
 
         if(is_null($client)){
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'client was not found'));
