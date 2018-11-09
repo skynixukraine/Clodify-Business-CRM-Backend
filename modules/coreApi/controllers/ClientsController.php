@@ -22,4 +22,17 @@ class ClientsController extends DefaultController
             ->respond();
 
     }
+
+    public function actionFetch()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\Client')
+            ->set('viewModel\ViewModelInterface', 'viewModel\ClientFetch')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'        => [Processor::METHOD_GET],
+                'checkAccess' => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
