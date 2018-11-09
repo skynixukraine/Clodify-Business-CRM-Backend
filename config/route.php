@@ -114,7 +114,7 @@ return [
     'GET '      . $API . '/email-templates'                                   => $API . '/email-templates/fetch',
     'GET '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/fetch',
     'PUT '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/update',
-    'POST '     . $API . '/login-as-user/<user_id:\d+>'                      => $API . '/users/login-as-user',
+    'POST '     . $API . '/login-as-user/<user_id:\d+>'                       => $API . '/users/login-as-user',
 
 
 
