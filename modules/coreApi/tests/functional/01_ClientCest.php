@@ -33,7 +33,7 @@ class ClientCest
     }
 
     /**
-     * @see    https://jira-v2.skynix.company/browse/SCA-230
+     * @see    https://jira-v2.skynix.company/browse/SCA-276
      * @param FunctionalTester $I
      */
     public function fetchClientTest(FunctionalTester $I, \Codeception\Scenario $scenario)
@@ -42,7 +42,7 @@ class ClientCest
         $oAuth->login();
 
         $I->wantTo('Testing fetch counterparties data');
-        $I->sendGET(ApiEndpoints::BUSINESS);
+        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -51,14 +51,13 @@ class ClientCest
         $I->seeResponseMatchesJsonType([
             'data' => [[
                 'id' => 'integer',
-                'name' => 'string',
-                'address' => 'string',
-                'is_default' => 'integer|null',
-                'director' => [
-                    'id' => 'integer',
-                    'first_name' => 'string',
-                    'last_name' => 'string'
-                ]
+                'domain' => 'string',
+                'email' => 'string',
+                'first_name' => 'string',
+                'last_name' => 'string',
+                'trial_expires' => 'string|null',
+                'prepaid_for' => 'string|null',
+                'is_active' => 'integer'
 
             ]],
             'errors' => [],
@@ -68,7 +67,7 @@ class ClientCest
     }
 
     /**
-     * @see https://jira.skynix.co/browse/SCA-232
+     * @see https://jira.skynix.co/browse/SCA-276
      * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario
      * @return void
@@ -79,7 +78,7 @@ class ClientCest
         \Helper\OAuthToken::$key = null;
 
         $I->wantTo('test business create is forbidden for not authorized');
-        $I->sendGET(ApiEndpoints::BUSINESS);
+        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

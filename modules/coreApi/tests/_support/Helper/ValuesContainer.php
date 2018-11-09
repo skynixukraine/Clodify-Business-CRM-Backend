@@ -9,5 +9,5 @@ namespace Helper;
 
 class ValuesContainer
 {
-
+    public static $clientId = 2;
 }
