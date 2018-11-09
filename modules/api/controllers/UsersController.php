@@ -222,4 +222,17 @@ class UsersController extends DefaultController
             ->respond();
     }
 
+    public function actionLoginAsUser()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
+            ->set('viewModel\ViewModelInterface', 'viewModel\LoginAsUser')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
 }
