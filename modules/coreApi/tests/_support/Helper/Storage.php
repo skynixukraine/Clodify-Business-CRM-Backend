@@ -10,6 +10,7 @@ namespace app\models;
 
 class Storage
 {
+    public static $folder;
     /**
      * @param $key
      * @param $sourceFile

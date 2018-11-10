@@ -10,6 +10,11 @@ return [
             'username' => '<testdb_username>',
             'password' => '<testdb_password>'
         ],
+        'dbCore' => [
+            'dsn' => 'mysql:host=<testdb_host>;dbname=<testdb_core_name>',
+            'username' => '<testdb_username>',
+            'password' => '<testdb_password>'
+        ],
         'mailer' => [
             'useFileTransport' => true,
         ],

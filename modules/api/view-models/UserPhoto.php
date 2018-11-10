@@ -21,7 +21,6 @@ class UserPhoto extends ViewModelAbstract
     {
 
         $imageSize = @getimagesize($this->model->photo);
-
         if(is_array($imageSize) && count($imageSize) && ($imageSize[0] > 150 || $imageSize[1] > 150)) {
 
             $oldImageWidth = $imageSize[0];
@@ -40,7 +39,7 @@ class UserPhoto extends ViewModelAbstract
             imagejpeg($photo);
             $contents = ob_get_contents();
             ob_end_clean();
-            $dataUri = "data:image/jpeg ;base64," . base64_encode($contents);
+            $dataUri = "data:image/jpeg;base64," . base64_encode($contents);
             $photo = $dataUri;
         } else {
             $photo = $this->model->photo;

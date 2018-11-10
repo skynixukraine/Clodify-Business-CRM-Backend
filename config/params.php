@@ -12,5 +12,6 @@ return [
     'version'           => '2.9.0',
     'contractorId'      => 1,
     'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
-    'databasePrefix'    => 'crm_'
+    'databasePrefix'    => 'crm_',
+    'testDatabasePrefix'    => 'test_'
 ];

@@ -8,6 +8,7 @@
 
 namespace app\components;
 
+use app\models\Storage;
 use Yii;
 use app\models\CoreClient;
 use yii\base\BootstrapInterface;
@@ -19,21 +20,36 @@ class Bootstrap implements BootstrapInterface
     const DOMAIN_STAGING = 'staging.core.api.skynix.co';
     const DOMAIN_PRODUCT = 'core.api.skynix.co';
 
+    const DOMAIN_TEST_API   = 'test.skynix-llc.api.skynix.co';
+    const DOMAIN_TEST_CORE = 'test.core.api.skynix.co';
+
+    public static $dbPrefix;
+
     //Bootstrap API for multidomain architecture
     public function bootstrap($app)
     {
 
        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
+       $s3Folder = "";
+       self::$dbPrefix = Yii::$app->params['databasePrefix'];
        switch ($host) {
 
+           case self::DOMAIN_TEST_API :
+           case self::DOMAIN_TEST_CORE :
+                //DO NOTHING FOR TESTS (uses databases from ymls)
+                $s3Folder = "test";
+                self::$dbPrefix = Yii::$app->params['testDatabasePrefix'];
+               break;
             case self::DOMAIN_DEVELOP :
             case self::DOMAIN_STAGING :
             case self::DOMAIN_PRODUCT :
                 //DO NOTHING FOR CORE
+                $s3Folder = "core";
                 break;
             default :
 
                 $clientDomain = str_replace("-", "_", str_replace(['.api.skynix.co', 'develop.', 'staging.'], '', $host));
+                $s3Folder = $clientDomain;
                 if ( !empty($clientDomain ) &&
                     ($client = CoreClient::find()->where(['domain' => $clientDomain])->one())) {
 
@@ -56,5 +72,6 @@ class Bootstrap implements BootstrapInterface
                 }
                 break;
         }
+        Storage::$folder = $s3Folder;
     }
 }

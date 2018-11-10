@@ -1,6 +1,6 @@
 <?php
 namespace Helper;
-use app\modules\api\components\Processor;
+use app\modules\coreApi\components\Processor;
 
 class OAuthToken
 {

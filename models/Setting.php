@@ -23,9 +23,10 @@ class Setting extends \yii\db\ActiveRecord
     const CORP_EVENTS_FACTOR    = 'corp_events_percentage';
     const BONUSES_FACTOR        = 'bonuses_percentage';
     const LABOR_EXPENSES_RATIO  = 'LABOR_EXPENSES_RATIO';
-
     const SSO_COOKIE_COMAIN_NAME    = 'SSO_COOKIE_COMAIN_NAME';
 
+    const CLIENT_ID             = 'client_id';
+    const CLIENT_ACCESS_KEY     = 'access_key';
 
     /**
      * @inheritdoc
@@ -98,6 +99,28 @@ class Setting extends \yii\db\ActiveRecord
     {
         $settingRow = Setting::find()
             ->where(['key' => self::SSO_COOKIE_COMAIN_NAME])
+            ->one();
+        return (string)$settingRow->value;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getClientId()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::CLIENT_ID])
+            ->one();
+        return (int)$settingRow->value;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getClientAccessKey()
+    {
+        $settingRow = Setting::find()
+            ->where(['key' => self::CLIENT_ACCESS_KEY])
             ->one();
         return (string)$settingRow->value;
     }
