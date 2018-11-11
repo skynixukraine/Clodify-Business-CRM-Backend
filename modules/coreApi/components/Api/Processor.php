@@ -11,6 +11,7 @@ use app\modules\api\components\Message;
 use Yii;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
+use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;
 
 use yii\log\Logger;
