@@ -7,7 +7,6 @@
 
 namespace viewModel;
 
-use app\models\CoreOrder;
 use Yii;
 use app\modules\api\components\Api\Processor;
 
