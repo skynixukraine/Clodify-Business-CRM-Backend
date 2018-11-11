@@ -29,6 +29,7 @@ use yii\db\ActiveRecord;
  */
 class CoreOrder extends ActiveRecord
 {
+    const SCENARIO_CREATE_VALIDATION      = 'create';
     /**
      * @return string
      */
