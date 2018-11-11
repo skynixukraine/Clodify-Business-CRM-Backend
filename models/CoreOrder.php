@@ -68,8 +68,9 @@ class CoreOrder extends ActiveRecord
 
     public function beforeSave($insert)
     {
-
         if( $this->isNewRecord ){
+            $this->status = 'NEW';
+            $this->created = date('Y-m-d', strtotime('now'));
 
         }
 
