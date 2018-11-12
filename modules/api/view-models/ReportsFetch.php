@@ -206,8 +206,8 @@ class ReportsFetch extends ViewModelAbstract
                     User::findOne($model->user_id)->last_name . ')'
                     : "" )
                 :
-                User::findOne($model->user_id)->first_name . ' ' .
-                User::findOne($model->user_id)->last_name);
+                    User::findOne($model->user_id)->first_name . ' ' .
+                    User::findOne($model->user_id)->last_name);
 
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
