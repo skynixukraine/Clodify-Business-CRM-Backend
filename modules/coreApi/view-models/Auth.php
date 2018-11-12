@@ -9,8 +9,7 @@ namespace viewModel;
 
 use app\modules\api\models\ApiAccessToken;
 use Yii;
-use app\models\User;
-use app\modules\api\models\ApiLoginForm;
+use app\models\ApiLoginForm;
 use app\modules\api\components\Api\Processor;
 
 
@@ -23,24 +22,20 @@ class Auth extends ViewModelAbstract
 
     public function define()
     {
-        $this->model->scenario = 'api-login';
 
         if ($this->validate()) {
             $loginForm = new ApiLoginForm();
             $loginForm->email       = $this->model->email;
-            $loginForm->password    = $this->model->password;
             $this->model            = $loginForm;
 
             if ( $this->validate() ) {
 
-                /** @var $token ApiAccessToken */
-                if ( ( $token = $this->model->login() ) ) {
+                /** @var $token CoreClientKey */
+                if ( ( $clientKey = $this->model->login() ) ) {
 
                     $this->setData([
-                        'access_token'  => $token->access_token,
-                        'user_id'       => $token->user_id,
-                        'role'          => User::findOne( $token->user_id )->role,
-                        'crowd_token'   => $token->crowd_token
+                        'access_key'  => $clientKey->access_key,
+                        'user_id'       => $clientKey->client_id,
                     ]);
 
                 }

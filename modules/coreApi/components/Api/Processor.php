@@ -6,6 +6,7 @@
  */
 namespace app\modules\coreApi\components\Api;
 
+use app\models\CoreClient;
 use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
@@ -121,7 +122,7 @@ class Processor
             ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey ] ) ) ) {
 
             if ( $checkAccess === true &&
-                ( $client = User::findOne($this->client_id) ) &&
+                ( $client = CoreClient::findOne($this->accessKeyModel->client_id) ) &&
                 $client->is_active == User::ACTIVE_USERS ) {
 
                 Yii::$app->user->login($client);
@@ -129,40 +130,15 @@ class Processor
             }
 
 
-            if ( strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD ) ) {
+            if ( strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD  ) ) {
 
                 $this->accessKeyModel->valid_until = date("Y-m-d H:i:s");
-                $this->accessKeyModel->save(false, ['exp_date']);
+                $this->accessKeyModel->save(false, ['valid_until']);
 
             } elseif ( $checkAccess == true ) {
 
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
 
-            }
-            //Check crowd TOKEN if only this is a CROWD user
-            if ( $checkAccess == true &&
-                $client->auth_type === User::CROWD_AUTH
-            ) {
-
-                // crowd session code go here
-                if ( $this->accessKeyModel->crowd_exp_date > time() &&
-                    !empty($this->accessKeyModel->crowd_token) &&
-                    ( $response= Yii::$app->crowdComponent->validateCrowdSession($this->accessKeyModel->crowd_token) ) &&
-                    $response['success'] === true
-                ) {
-
-                    $this->accessKeyModel->crowd_exp_date = $response['expiryDate'];
-                    $this->accessKeyModel->save(false, ['crowd_exp_date']);
-
-                } else {
-                    if ( isset($response)) {
-
-                        Yii::getLogger()->log( "CROWD Error: " . var_export($response, 1), Logger::LEVEL_INFO);
-
-                    }
-                    $this->addError(Processor::CROWD_ERROR_PARAM, (isset($response['reason']) ? $response['reason'] : 'not authorized with crowd'));
-
-                }
             }
 
         } elseif ( $checkAccess == true ) {
@@ -206,9 +182,7 @@ class Processor
 
         $viewModel = $this->getViewModel();
         if ( $this->hasAccess( $this->access->getMethods(), $this->access->shouldCheckAccess() ) &&
-            $this->getAccessModelKey() ) {
-
-            $viewModel->setAccessKeyModel( $this->getAccessModelKey() );
+            $this->getAccessModelToken() ) {
 
         }
         $viewModel->setModel( $this->getModel() )
@@ -233,10 +207,12 @@ class Processor
         return $this->viewModel;
     }
 
+
+
     /**
      * @return mixed
      */
-    public function getAccessModelKey()
+    public function getAccessModelToken()
     {
         return $this->accessKeyModel;
     }
