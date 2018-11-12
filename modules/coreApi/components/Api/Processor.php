@@ -9,7 +9,7 @@ namespace app\modules\coreApi\components\Api;
 use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
-
+use app\models\CoreClientKey;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
@@ -42,11 +42,11 @@ class Processor
     const METHOD_PUT            = 'PUT';
     const METHOD_DELETE         = 'DELETE';
 
-    const HEADER_ACCESS_TOKEN   = 'skynix-access-token';
+    const HEADER_ACCESS_KEY   = 'skynix-access-key';
 
     private $response;
     private $errors = [];
-    private $accessTokenModel;
+    private $accessKeyModel;
 
     /**
      * @var AccessInterface
@@ -116,24 +116,23 @@ class Processor
 
 
         }
-        if ( ($accessToken = Yii::$app->request->headers->get(self::HEADER_ACCESS_TOKEN)) &&
+        if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
-            ( $this->accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] ) ) ) {
+            ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey ] ) ) ) {
 
             if ( $checkAccess === true &&
-                ( $user = User::findOne($this->accessTokenModel->user_id) ) &&
-                $user->is_active == User::ACTIVE_USERS &&
-                $user->is_delete != User::DELETED_USERS ) {
+                ( $client = User::findOne($this->client_id) ) &&
+                $client->is_active == User::ACTIVE_USERS ) {
 
-                Yii::$app->user->login($user);
+                Yii::$app->user->login($client);
 
             }
 
 
-            if ( strtotime( $this->accessTokenModel->exp_date ) > strtotime("now -" . ApiAccessToken::EXPIRATION_PERIOD ) ) {
+            if ( strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD ) ) {
 
-                $this->accessTokenModel->exp_date = date("Y-m-d H:i:s");
-                $this->accessTokenModel->save(false, ['exp_date']);
+                $this->accessKeyModel->valid_until = date("Y-m-d H:i:s");
+                $this->accessKeyModel->save(false, ['exp_date']);
 
             } elseif ( $checkAccess == true ) {
 
@@ -142,18 +141,18 @@ class Processor
             }
             //Check crowd TOKEN if only this is a CROWD user
             if ( $checkAccess == true &&
-                $user->auth_type === User::CROWD_AUTH
+                $client->auth_type === User::CROWD_AUTH
             ) {
 
                 // crowd session code go here
-                if ( $this->accessTokenModel->crowd_exp_date > time() &&
-                    !empty($this->accessTokenModel->crowd_token) &&
-                    ( $response= Yii::$app->crowdComponent->validateCrowdSession($this->accessTokenModel->crowd_token) ) &&
+                if ( $this->accessKeyModel->crowd_exp_date > time() &&
+                    !empty($this->accessKeyModel->crowd_token) &&
+                    ( $response= Yii::$app->crowdComponent->validateCrowdSession($this->accessKeyModel->crowd_token) ) &&
                     $response['success'] === true
                 ) {
 
-                    $this->accessTokenModel->crowd_exp_date = $response['expiryDate'];
-                    $this->accessTokenModel->save(false, ['crowd_exp_date']);
+                    $this->accessKeyModel->crowd_exp_date = $response['expiryDate'];
+                    $this->accessKeyModel->save(false, ['crowd_exp_date']);
 
                 } else {
                     if ( isset($response)) {
@@ -207,9 +206,9 @@ class Processor
 
         $viewModel = $this->getViewModel();
         if ( $this->hasAccess( $this->access->getMethods(), $this->access->shouldCheckAccess() ) &&
-            $this->getAccessModelToken() ) {
+            $this->getAccessModelKey() ) {
 
-            $viewModel->setAccessTokenModel( $this->getAccessModelToken() );
+            $viewModel->setAccessKeyModel( $this->getAccessModelKey() );
 
         }
         $viewModel->setModel( $this->getModel() )
@@ -237,9 +236,9 @@ class Processor
     /**
      * @return mixed
      */
-    public function getAccessModelToken()
+    public function getAccessModelKey()
     {
-        return $this->accessTokenModel;
+        return $this->accessKeyModel;
     }
 
 }
