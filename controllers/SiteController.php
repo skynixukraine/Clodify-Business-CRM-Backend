@@ -363,4 +363,9 @@ class SiteController extends Controller
         return $this->redirect( Yii::$app->params['url_crm_app'] . '/login' );
     }
 
+    public function actionTestorder()
+    {
+        return $this->render('testorder');
+    }
+
 }
