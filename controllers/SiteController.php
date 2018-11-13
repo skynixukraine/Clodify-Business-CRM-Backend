@@ -384,8 +384,9 @@ class SiteController extends Controller
 
             if ( ($sign = sha1 (md5($payment.Yii::$app->params['merchantPassword']))) === $signature ) {
 
-                $orderId = null;
-                $state   = null;
+                $orderId    = null;
+                $state      = null;
+                $ref        = null;
                 foreach (explode('&', $payment) as $chunk) {
                     $param = explode("=", $chunk);
 
@@ -397,6 +398,10 @@ class SiteController extends Controller
 
                         $state = $param[1];
 
+                    } else if ($param && $param[0] === "ref") {
+
+                        $ref = $param[1];
+
                     }
                 }
                 if ( $orderId > 0 ) {
@@ -405,19 +410,27 @@ class SiteController extends Controller
 
                         if ( $state === 1 || $state === "test") {
 
-                            $clientOrder->status = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->status    = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->paid      = date('Y-m-d');
 
                         } else {
 
-                            $clientOrder->status = CoreClientOrder::STATUS_CANCELED;
+                            $clientOrder->status    = CoreClientOrder::STATUS_CANCELED;
+
                         }
-                        $clientOrder->payment = $payment;
-                        $clientOrder->save(false, ['status', 'payment']);
+                        $clientOrder->ref       = $ref;
+                        $clientOrder->payment   = $payment;
+                        $clientOrder->save(false, ['status', 'payment', 'paid', 'ref']);
 
                         /** @var $client CoreClient */
                         if ( ($client = CoreClient::findOne($clientOrder->client_id))) {
 
-                            $domain = $client->getUnConvertedDomain();
+                            if ( $clientOrder->status === CoreClientOrder::STATUS_PAID ) {
+
+                                $client->prepaid_for = date('Y-m-d', strtotime('now +1 month'));
+                                $client->save(false, ['prepaid_for']);
+
+                            }
 
                         }
 
@@ -462,6 +475,7 @@ class SiteController extends Controller
 
                 $orderId = null;
                 $state   = null;
+                $ref     = null;
                 foreach (explode('&', $payment) as $chunk) {
                     $param = explode("=", $chunk);
 
@@ -473,6 +487,10 @@ class SiteController extends Controller
 
                         $state = $param[1];
 
+                    } else if ($param && $param[0] === "ref") {
+
+                        $ref = $param[1];
+
                     }
                 }
                 if ( $orderId > 0 ) {
@@ -481,19 +499,28 @@ class SiteController extends Controller
 
                         if ( $state === 1 || $state === "test") {
 
-                            $clientOrder->status = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->status    = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->paid      = date('Y-m-d');
 
                         } else {
 
-                            $clientOrder->status = CoreClientOrder::STATUS_CANCELED;
+                            $clientOrder->status    = CoreClientOrder::STATUS_CANCELED;
+
                         }
-                        $clientOrder->payment = $payment;
-                        $clientOrder->save(false, ['status', 'payment']);
+                        $clientOrder->ref       = $ref;
+                        $clientOrder->payment   = $payment;
+                        $clientOrder->save(false, ['status', 'payment', 'paid', 'ref']);
 
                         /** @var $client CoreClient */
                         if ( ($client = CoreClient::findOne($clientOrder->client_id))) {
 
                             $domain = $client->getUnConvertedDomain();
+                            if ( $clientOrder->status === CoreClientOrder::STATUS_PAID ) {
+
+                                $client->prepaid_for = date('Y-m-d', strtotime('now +1 month'));
+                                $client->save(false, ['prepaid_for']);
+
+                            }
 
                         }
 
