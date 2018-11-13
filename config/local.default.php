@@ -81,7 +81,8 @@ return [
             'from'          => 'InfoCentr',
             'user'          => '<smsServiceUser>',
             'password'      => '<smsServicePassword>',
-        ]
+        ],
+        'merchantPassword'  => '<bankMerchantPassword>'
 
     )
 ];

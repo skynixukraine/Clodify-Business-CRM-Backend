@@ -13,5 +13,7 @@ return [
     'contractorId'      => 1,
     'captchaSecret'     => '6Lf4bhsUAAAAAGZjWZEOxuvCzIEMZB1clVh5WhAw',
     'databasePrefix'    => 'crm_',
-    'testDatabasePrefix'    => 'test_'
+    'testDatabasePrefix'    => 'test_',
+    'merchantId'        => '140273',
+    'merchantPassword'  => ''
 ];

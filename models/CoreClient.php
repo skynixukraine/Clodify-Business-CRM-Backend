@@ -71,6 +71,11 @@ class CoreClient extends ActiveRecord
         return str_replace([' ', '-'], '_', $this->domain);
     }
 
+    public function getUnConvertedDomain()
+    {
+        return str_replace('_', '-', $this->domain);
+    }
+
     public static function getDb()
     {
         return Yii::$app->dbCore;

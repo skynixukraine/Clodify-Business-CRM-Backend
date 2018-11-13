@@ -7,7 +7,7 @@
  */
 ?>
 <form method="POST" action="https://api.privatbank.ua/p24api/ishop">
-    <input type="hidden" name="amt" value="1250"/>
+    <input type="hidden" name="amt" value="0.5"/>
     <input type="hidden" name="ccy" value="UAH"/>
     <input type="hidden" name="merchant" value="140273"/>
     <input type="hidden" name="order" value="042343"/>
