@@ -82,7 +82,8 @@ return [
             'user'          => '<smsServiceUser>',
             'password'      => '<smsServicePassword>',
         ],
-        'merchantPassword'  => '<bankMerchantPassword>'
+        'merchantPassword'  => '<bankMerchantPassword>',
+        'merchantTestMode'  => '<merchantMode>'
 
     )
 ];

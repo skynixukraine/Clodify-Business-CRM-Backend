@@ -15,5 +15,7 @@ return [
     'databasePrefix'    => 'crm_',
     'testDatabasePrefix'    => 'test_',
     'merchantId'        => '140273',
-    'merchantPassword'  => ''
+    'merchantPassword'  => '',
+    'merchantTestMode'  => 1,
+
 ];

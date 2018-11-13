@@ -10,6 +10,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\log\Logger;
 
 /**
  * This is the model class for table "orders".
@@ -58,5 +59,42 @@ class CoreClientOrder extends ActiveRecord
         return Yii::$app->dbCore;
     }
 
+
+    public function checkGateway()
+    {
+
+        $data = '<oper>cmt</oper>
+                <wait>0</wait>
+                <test>' . Yii::$app->params['merchantTestMode'] . '</test>
+                <payment>
+                <prop name="id" value="' . $this->id . '" />
+                <prop name="ref" value="' . $this->ref . '" />
+                </payment>';
+
+        $signature = sha1 (md5($data . Yii::$app->params['merchantPassword']));
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+            <request version="1.0">
+                <merchant>
+                    <id>' . Yii::$app->params['merchantId'] . '</id>
+                    <signature>' . $signature . '</signature>
+                </merchant>
+                <data>
+                    ' . $data . ' 
+                </data>
+            </request>';
+        $response = Yii::$app->privatbankApi->post('check_pay', $xml)->send()->content;
+        $response = new \SimpleXMLElement($response);
+        $responseData = (array)$response->data;
+        if ( isset($responseData['error'])) {
+
+            \Yii::getLogger()->log('Something went wrong with API ' . $responseData['error']->message, Logger::LEVEL_WARNING);
+
+        } else {
+
+            \Yii::getLogger()->log($responseData, Logger::LEVEL_INFO);
+            
+        }
+    }
 
 }

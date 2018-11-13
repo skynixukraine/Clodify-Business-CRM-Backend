@@ -372,7 +372,6 @@ class SiteController extends Controller
         return $this->render('testorder');
     }
 
-
     public function actionPaymentCallback()
     {
         Yii::getLogger()->log("PaymentCallback", Logger::LEVEL_INFO);

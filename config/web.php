@@ -127,6 +127,10 @@ $config = [
         'crowdComponent' => [
             'class' => 'app\components\CrowdComponent',
         ],
+        'privatbankApi' => [
+            'class' => 'yii\httpclient\Client',
+            'baseUrl' => 'https://api.privatbank.ua/p24api',
+        ],
     ],
     'params' => $params,
 ];
