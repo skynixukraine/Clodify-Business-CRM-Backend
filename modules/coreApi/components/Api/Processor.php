@@ -7,6 +7,7 @@
 namespace app\modules\coreApi\components\Api;
 
 use app\models\CoreClient;
+use app\models\Setting;
 use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
@@ -112,28 +113,26 @@ class Processor
         $checkAccess = true )
     {
         if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
-
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
-
-
         }
+
+
+
         if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
-            ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey ] ) ) ) {
+            (Setting::findOne(['key'=>'access_key', 'value' => $accessKey ]))&&
+            ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey]) )) {
 
-            if ( $checkAccess === true &&
-                ( $client = CoreClient::findOne($this->accessKeyModel->client_id) ) &&
-                $client->is_active == User::ACTIVE_USERS ) {
 
-                Yii::$app->user->login($client);
+            $clientId = Setting::findOne(['key' => 'client_id']);
+            $client = CoreClient::findOne($clientId->value);
 
+            if ( $client->is_active === false ) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
             }
-
 
             if ( strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD  ) ) {
 
-                $this->accessKeyModel->valid_until = date("Y-m-d H:i:s");
-                $this->accessKeyModel->save(false, ['valid_until']);
 
             } elseif ( $checkAccess == true ) {
 
