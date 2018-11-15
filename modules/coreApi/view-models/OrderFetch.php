@@ -54,7 +54,6 @@ class OrderFetch extends ViewModelAbstract{
         $list['recurrent_id'] = $model->recurrent_id;
         $list['created'] = $model->created;
         $list['paid'] = $model->paid;
-        $list['next_payment'] = $model->next_payment;
         $list['notes'] = $model->notes;
 
         return $list;
