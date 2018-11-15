@@ -41,24 +41,7 @@ class CoreOrder extends ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'number'],
-            [['client_id'], function (){
-
-                $coreOrder = CoreOrder::find()->where([
-                    'status' => 'PAID',
-                    'paid' => date('Y-m-d', strtotime('now-1month')),
-                ])->with(['clients' => function($query){
-                    $query->andWere(['prepaid_for' => date('Y-m-d', strtotime('now'))]);
-                }])->one();
-
-                //print_r($coreOrder);die;
-
-                if(!is_null($coreOrder)){
-                    $this->addError('your last order exists and paid, no need to create one');
-                }
-
-            }, 'on'=> [self::SCENARIO_CREATE_VALIDATION] ]
-        ];
+            [['id'], 'number']];
     }
 
 
