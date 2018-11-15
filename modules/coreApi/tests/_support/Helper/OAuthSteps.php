@@ -1,5 +1,6 @@
 <?php
 namespace Helper;
+use app\models\CoreClientKey;
 use app\models\Setting;
 use app\models\CoreClient;
 
@@ -12,17 +13,16 @@ class OAuthSteps extends \FunctionalTester
 {
 
     /**
-     * This class uses public Login method from http://confluence.skynix.co:8090/pages/viewpage.action?spaceKey=SKYN&title=Skynix+CRM+-+RESTful+API+Specification#SkynixCRM-RESTfulAPISpecification-1.1LoginMethod
-     *
+     * @param $clientId
      */
-    public function login()
+    public function login($clientId)
     {
 
         $I = $this;
 
-        $clientId = Setting::getClientId();
         $client = CoreClient::findOne($clientId);
-        $accessKey = Setting::getClientAccessKey();
+
+        $accessKey = CoreClientKey::findOne(['id' => $clientId]);
 
         codecept_debug("Logged In As " . $client->email);
 

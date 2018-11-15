@@ -120,12 +120,20 @@ class Processor
 
         if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
-            (Setting::findOne(['key'=>'access_key', 'value' => $accessKey ]))&&
+            (Setting::getClientAccessKey()) &&
             ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey]) )) {
 
 
-            $clientId = Setting::findOne(['key' => 'client_id']);
-            $client = CoreClient::findOne($clientId->value);
+            if(!$clientId = Setting::getClientId()) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
+            }
+
+            $client = CoreClient::findOne($clientId);
+
+            if($clientId !== $this->accessKeyModel->client_id) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
+            }
+
 
             if ( $client->is_active === false ) {
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));

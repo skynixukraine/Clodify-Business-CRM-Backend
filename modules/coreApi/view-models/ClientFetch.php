@@ -27,7 +27,7 @@ class ClientFetch extends ViewModelAbstract
         }
 
         if($client->is_active==0){
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'client was not found'));
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The account is suspended'));
         }
 
         $result = $this->defaultVal($client);
