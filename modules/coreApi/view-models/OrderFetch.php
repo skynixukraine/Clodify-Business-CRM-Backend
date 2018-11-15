@@ -23,20 +23,19 @@ class OrderFetch extends ViewModelAbstract{
 
         $clientId = Yii::$app->request->getQueryParam('client_id');
 
-        $coreOrder = CoreOrder::findOne($clientId);
-        $coreClient = CoreClient::findOne($clientId);
-
-        if(is_null($coreOrder)){
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'order was not found'));
-        }
-
-        if($coreClient->is_active==0){
+        if( ($coreClient = CoreClient::findOne($clientId) ) && ( $coreClient->is_active==0 )) {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The account is suspended'));
         }
 
-        $result = $this->defaultVal($coreOrder);
-
-        return $this->setData($result);
+        if($coreOrders = CoreOrder::find()->where(['client_id' => $clientId])->all()){
+            $result= [];
+            foreach ($coreOrders as $coreOrder) {
+                $result[] = $this->defaultVal($coreOrder);
+            }
+            return $this->setData($result);
+        } else{
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'order was not found'));
+        }
 
     }
 
