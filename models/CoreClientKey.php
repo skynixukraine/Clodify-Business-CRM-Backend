@@ -47,22 +47,4 @@ class CoreClientKey extends ActiveRecord
         return Yii::$app->dbCore;
     }
 
-    /**
-     * This function generates a new Access Token for a passed user
-     * @param \app\models\User $user
-     * @return CoreClientKey
-     */
-    public static function generateNewToken( \app\models\CoreClient $client)
-    {
-        $accessKey = CoreClientKey::find()->where(['client_id' => $client->id])->one();
-        if (!$accessKey) {
-            $accessKey = new CoreClientKey();
-            $accessKey->client_id       = $client->id;
-        }
-        $accessKey->access_key  = Yii::$app->security->generateRandomString( self::ACCESS_KEY_LENGTH );
-        $accessKey->valid_until   = date('Y-m-d H:i:s', strtotime("now +" . self::EXPIRATION_PERIOD ));
-        return $accessKey;
-    }
-
-
 }

@@ -39,7 +39,7 @@ class ClientCest
     public function fetchClientTest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
+        $oAuth->login(ValuesContainer::$clientId);
 
         $I->wantTo('Testing fetch counterparties data');
         $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);
@@ -72,10 +72,13 @@ class ClientCest
      * @param \Codeception\Scenario $scenario
      * @return void
      */
-    public function fetchClientForbiddenNotAuthorizedTest(FunctionalTester $I)
+    public function fetchClientForbiddenNotAuthorizedTest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
         \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$clientId);
 
         $I->wantTo('test business create is forbidden for not authorized');
         $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);

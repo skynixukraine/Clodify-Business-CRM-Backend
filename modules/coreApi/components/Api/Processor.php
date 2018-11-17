@@ -116,36 +116,20 @@ class Processor
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
         }
 
-
-
         if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
             (Setting::getClientAccessKey()) &&
             ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey]) )) {
 
 
-            if(!$clientId = Setting::getClientId()) {
-                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
-            }
-
-            $client = CoreClient::findOne($clientId);
-
-            if($clientId !== $this->accessKeyModel->client_id) {
-                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
-            }
-
-
-            if ( $client->is_active === false ) {
-                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED));
-            }
-
-            if ( strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD  ) ) {
-
-
-            } elseif ( $checkAccess == true ) {
-
+            if(( $clientId = intval(Yii::$app->request->getQueryParam('client_id'))) && !($client = CoreClient::findOne($clientId))){
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if($clientId !== $this->accessKeyModel->client_id) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if ( $client->is_active === false ) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if ( !(strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD  )) && $checkAccess == true ) {
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
-
             }
 
         } elseif ( $checkAccess == true ) {

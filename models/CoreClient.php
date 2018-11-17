@@ -31,13 +31,12 @@ use yii\db\ActiveRecord;
  *
  * @package app\models
  */
-class CoreClient extends ActiveRecord implements IdentityInterface
+class CoreClient extends ActiveRecord
 {
     const IS_ACTIVE = 1;
 
     const SCENARIO_PRE_REGISTER_VALIDATION  = 'pre-register';
     const SCENARIO_REGISTER_VALIDATION      = 'register';
-    private $auth_key = "XnM";
 
     /**
      * @return string
@@ -188,42 +187,4 @@ class CoreClient extends ActiveRecord implements IdentityInterface
         }
     }
 
-
-
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->auth_key;
-    }
-
-    public static function findIdentity($id)
-    {
-        return static::findOne($id);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    /* modified */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::findOne(['access_token' => $token]);
-    }
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAuthKey() === $authKey;
-    }
 }
