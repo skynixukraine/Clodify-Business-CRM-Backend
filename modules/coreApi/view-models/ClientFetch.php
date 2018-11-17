@@ -30,30 +30,10 @@ class ClientFetch extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The account is suspended'));
         }
 
-        $result = $this->defaultVal($client);
+        $result = $client->defaultVal();
 
         return $this->setData($result);
 
-    }
-
-
-    /**
-     * @param $model
-     * @return mixed
-     */
-    function defaultVal($model) : Array
-    {
-        $list['id'] = $model->id;
-        $list['domain'] = $model->domain;
-        $list['name'] = $model->name;
-        $list['email'] = $model->email;
-        $list['first_name'] = $model->first_name;
-        $list['last_name'] = $model->last_name;
-        $list['trial_expires'] = $model->trial_expires;
-        $list['prepaid_for'] = $model->prepaid_for;
-        $list['is_active'] = $model->is_active;
-
-        return $list;
     }
 
 }
