@@ -89,12 +89,15 @@ class CoreClientOrder extends ActiveRecord
         if ( isset($responseData['error'])) {
 
             \Yii::getLogger()->log('Something went wrong with API ' . $responseData['error']->message, Logger::LEVEL_WARNING);
+            $this->status = self::STATUS_CANCELED;
 
         } else {
 
             \Yii::getLogger()->log($responseData, Logger::LEVEL_INFO);
+            $this->status = self::STATUS_PAID;
             
         }
+        $this->save(false, ['status']);
     }
 
 }
