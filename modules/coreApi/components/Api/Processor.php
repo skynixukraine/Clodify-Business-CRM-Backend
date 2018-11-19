@@ -118,7 +118,6 @@ class Processor
 
         if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
-            (Setting::getClientAccessKey()) &&
             ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey]) )) {
 
 
