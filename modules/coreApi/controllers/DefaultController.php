@@ -86,7 +86,6 @@ class DefaultController extends Controller
                     'app\modules\coreApi\components\Api\Access');
 
         return parent::beforeAction($action);
-
     }
 
     public function actionError()

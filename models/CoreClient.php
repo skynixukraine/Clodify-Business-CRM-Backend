@@ -37,6 +37,7 @@ class CoreClient extends ActiveRecord
     const SCENARIO_PRE_REGISTER_VALIDATION  = 'pre-register';
     const SCENARIO_REGISTER_VALIDATION      = 'register';
     const SCENARIO_UPDATE_VALIDATION = 'update';
+
     /**
      * @return string
      */
@@ -72,6 +73,11 @@ class CoreClient extends ActiveRecord
     public function getConvertedDomain()
     {
         return str_replace([' ', '-'], '_', $this->domain);
+    }
+
+    public function getUnConvertedDomain()
+    {
+        return str_replace('_', '-', $this->domain);
     }
 
     public static function getDb()
@@ -186,6 +192,25 @@ class CoreClient extends ActiveRecord
             }
             
         }
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function defaultVal() : Array
+    {
+        $list['id'] = $this->id;
+        $list['domain'] = $this->domain;
+        $list['name'] = $this->name;
+        $list['email'] = $this->email;
+        $list['first_name'] = $this->first_name;
+        $list['last_name'] = $this->last_name;
+        $list['trial_expires'] = $this->trial_expires;
+        $list['prepaid_for'] = $this->prepaid_for;
+        $list['is_active'] = $this->is_active;
+
+        return $list;
     }
 
 }

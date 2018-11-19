@@ -40,7 +40,7 @@ class ClientCest
     public function updateClientTest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
+        $oAuth->login(ValuesContainer::$clientId);
 
         $I->wantTo('update client method test');
         $I->sendPUT(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId,json_encode(ValuesContainer::$userClient));
@@ -99,11 +99,10 @@ class ClientCest
      */
     public function testUpdateBusinessAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->wantTo('test update business  is successful for ADMIN');
-        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
-        $pas = ValuesContainer::$userAdmin['password'];
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, $pas);
+        $oAuth->login(ValuesContainer::$clientId);
+
+        $I->wantTo('test update business  is successful for ADMIN');
 
         $I->sendPUT('/api/businesses/' . ValuesContainer::$BusinessId, json_encode(ValuesContainer::$updateBusinessData));
 
@@ -154,6 +153,73 @@ class ClientCest
             ],
             "success" => false
         ]);
+
+    }
+
+    /**
+     * @see    https://jira-v2.skynix.company/browse/SCA-276
+     * @param FunctionalTester $I
+     */
+    public function fetchClientTest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$clientId);
+
+        $I->wantTo('Testing fetch counterparties data');
+        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $I->seeResponseMatchesJsonType([
+            'data' => [[
+                'id' => 'integer',
+                'domain' => 'string',
+                'email' => 'string',
+                'first_name' => 'string',
+                'last_name' => 'string',
+                'trial_expires' => 'string|null',
+                'prepaid_for' => 'string|null',
+                'is_active' => 'integer'
+
+            ]],
+            'errors' => [],
+            'success' => 'boolean'
+        ]);
+
+    }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-276
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     * @return void
+     */
+    public function fetchClientForbiddenNotAuthorizedTest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$clientId);
+
+        $I->wantTo('test business create is forbidden for not authorized');
+        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->seeResponseContainsJson([
+            "data" => null,
+            "errors" => [
+                "param" => "error",
+                "message" => "You are not authorized to access this action"
+            ],
+            "success" => false
+        ]);
+
 
     }
 }

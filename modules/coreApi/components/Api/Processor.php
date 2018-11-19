@@ -6,10 +6,12 @@
  */
 namespace app\modules\coreApi\components\Api;
 
+use app\models\CoreClient;
+use app\models\Setting;
 use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
-use app\modules\api\models\ApiAccessToken;
+use app\models\CoreClientKey;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
@@ -42,11 +44,11 @@ class Processor
     const METHOD_PUT            = 'PUT';
     const METHOD_DELETE         = 'DELETE';
 
-    const HEADER_ACCESS_TOKEN   = 'skynix-access-token';
+    const HEADER_ACCESS_KEY   = 'skynix-access-key';
 
     private $response;
     private $errors = [];
-    private $accessTokenModel;
+    private $accessKeyModel;
 
     /**
      * @var AccessInterface
@@ -111,59 +113,22 @@ class Processor
         $checkAccess = true )
     {
         if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
-
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_METHOD_NOT_ALLOWED)  );
-
-
         }
-        if ( ($accessToken = Yii::$app->request->headers->get(self::HEADER_ACCESS_TOKEN)) &&
+
+        if ( ($accessKey = Yii::$app->request->headers->get(self::HEADER_ACCESS_KEY)) &&
             count($this->getViewModel()->getErrors()) == 0 &&
-            ( $this->accessTokenModel = ApiAccessToken::findOne(['access_token' => $accessToken ] ) ) ) {
-
-            if ( $checkAccess === true &&
-                ( $user = User::findOne($this->accessTokenModel->user_id) ) &&
-                $user->is_active == User::ACTIVE_USERS &&
-                $user->is_delete != User::DELETED_USERS ) {
-
-                Yii::$app->user->login($user);
-
-            }
+            ( $this->accessKeyModel = CoreClientKey::findOne(['access_key' => $accessKey]) )) {
 
 
-            if ( strtotime( $this->accessTokenModel->exp_date ) > strtotime("now -" . ApiAccessToken::EXPIRATION_PERIOD ) ) {
-
-                $this->accessTokenModel->exp_date = date("Y-m-d H:i:s");
-                $this->accessTokenModel->save(false, ['exp_date']);
-
-            } elseif ( $checkAccess == true ) {
-
+            if(( $clientId = intval(Yii::$app->request->getQueryParam('client_id'))) && !($client = CoreClient::findOne($clientId))){
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if($clientId !== $this->accessKeyModel->client_id) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if ( $client->is_active === false ) {
+                $this->addError( self::ERROR_PARAM, Message::get(self::CODE_ACTION_RESTRICTED));
+            } else if ( !(strtotime( $this->accessKeyModel->valid_until ) > strtotime("now -" . CoreClientKey::EXPIRATION_PERIOD  )) && $checkAccess == true ) {
                 $this->addError( self::ERROR_PARAM, Message::get(self::CODE_TOKEN_EXPIRED) );
-
-            }
-            //Check crowd TOKEN if only this is a CROWD user
-            if ( $checkAccess == true &&
-                $user->auth_type === User::CROWD_AUTH
-            ) {
-
-                // crowd session code go here
-                if ( $this->accessTokenModel->crowd_exp_date > time() &&
-                    !empty($this->accessTokenModel->crowd_token) &&
-                    ( $response= Yii::$app->crowdComponent->validateCrowdSession($this->accessTokenModel->crowd_token) ) &&
-                    $response['success'] === true
-                ) {
-
-                    $this->accessTokenModel->crowd_exp_date = $response['expiryDate'];
-                    $this->accessTokenModel->save(false, ['crowd_exp_date']);
-
-                } else {
-                    if ( isset($response)) {
-
-                        Yii::getLogger()->log( "CROWD Error: " . var_export($response, 1), Logger::LEVEL_INFO);
-
-                    }
-                    $this->addError(Processor::CROWD_ERROR_PARAM, (isset($response['reason']) ? $response['reason'] : 'not authorized with crowd'));
-
-                }
             }
 
         } elseif ( $checkAccess == true ) {
@@ -209,8 +174,6 @@ class Processor
         if ( $this->hasAccess( $this->access->getMethods(), $this->access->shouldCheckAccess() ) &&
             $this->getAccessModelToken() ) {
 
-            $viewModel->setAccessTokenModel( $this->getAccessModelToken() );
-
         }
         $viewModel->setModel( $this->getModel() )
             ->render();
@@ -234,12 +197,14 @@ class Processor
         return $this->viewModel;
     }
 
+
+
     /**
      * @return mixed
      */
     public function getAccessModelToken()
     {
-        return $this->accessTokenModel;
+        return $this->accessKeyModel;
     }
 
 }

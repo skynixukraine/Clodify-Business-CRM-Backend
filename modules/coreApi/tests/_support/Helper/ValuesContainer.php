@@ -9,6 +9,8 @@ namespace Helper;
 
 class ValuesContainer
 {
+    public static $clientId = 1;
+
     public static $clientData = [
         'name' => 'Skynix LLC',
         'email' => 'admin@skynix.co',
