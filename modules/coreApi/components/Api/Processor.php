@@ -7,17 +7,13 @@
 namespace app\modules\coreApi\components\Api;
 
 use app\models\CoreClient;
-use app\models\Setting;
-use app\models\User;
 use app\modules\api\components\Message;
 use Yii;
 use app\models\CoreClientKey;
 use viewModel\ViewModelAbstract;
 use viewModel\ViewModelInterface;
-use app\modules\api\models\ApiAccessToken;
 use yii\db\ActiveRecordInterface;
 
-use yii\log\Logger;
 
 class Processor
 {
