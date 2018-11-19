@@ -22,7 +22,7 @@ class OrdersController extends DefaultController
             ->respond();
 
     }
-}
+
 
     public function actionUpdate()
     {
