@@ -7,12 +7,13 @@
 
 namespace viewModel;
 
+use app\models\CoreOrder;
 use Yii;
 use app\modules\api\components\Api\Processor;
 
 class OrderCreate extends ViewModelAbstract{
     /**
-     * @var CoreClient
+     * @var CoreOrder
      */
     protected $model;
 
