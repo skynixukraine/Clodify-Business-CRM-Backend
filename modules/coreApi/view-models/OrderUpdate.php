@@ -7,6 +7,7 @@
 
 namespace viewModel;
 
+use app\models\CoreClientOrder;
 use Yii;
 use app\modules\coreApi\components\Api\Processor;
 
@@ -15,16 +16,20 @@ class OrderUpdate extends ViewModelAbstract{
     public function define()
     {
 
-        //$clientId = Yii::$app->request->getQueryParam('client_id');
         $orderId = Yii::$app->request->getQueryParam('order_id');
 
-        $this->model = CoreOrder::find()->where(['order_id' => $orderId]);
+        if(!($this->model = CoreClientOrder::findOne(['id' => $orderId]))) {
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'order isn\'t found'));
+        }
 
+        $this->model->setScenario( CoreClientOrder::SCENARIO_UPDATE_VALIDATION );
+
+        $this->model->attributes = $this->postData;
 
         if($this->model->validate() && $this->model->save()) {
-            return $this->setData([]);
-        } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'the data is not valid'));
+            $this->setData([]);
+        } else{
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'the input data is not valid'));
         }
 
     }
