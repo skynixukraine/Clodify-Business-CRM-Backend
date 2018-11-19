@@ -8,6 +8,7 @@
 
 namespace app\commands;
 
+use app\models\CoreClientOrder;
 use app\models\Setting;
 use Yii;
 use yii\log\Logger;
@@ -45,5 +46,30 @@ class CoreController extends DefaultController
                 Logger::LEVEL_ERROR);
         }
 
+    }
+
+    public function actionProcessOrders()
+    {
+        Yii::getLogger()->log('actionProcessOrders running', Logger::LEVEL_INFO);
+
+        try {
+           if ( ($orders = CoreClientOrder::find()->where(['status' => CoreClientOrder::STATUS_ONREVIEW])->all())) {
+
+               /** @var  $order CoreClientOrder */
+               foreach ( $orders as $order ) {
+
+                    $order->checkGateway();
+
+               }
+
+           }
+
+        } catch (\Exception $e ) {
+
+            Yii::getLogger()->log('actionProcessOrders error ' .
+                $e->getMessage() .
+                $e->getTraceAsString(),
+                Logger::LEVEL_ERROR);
+        }
     }
 }
