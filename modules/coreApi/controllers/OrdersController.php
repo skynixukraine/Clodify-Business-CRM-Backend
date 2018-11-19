@@ -2,7 +2,7 @@
 
 namespace app\modules\coreApi\controllers;
 
-use app\models\CoreOrder;
+use app\models\CoreClientOrder;
 use app\modules\coreApi\components\Api\Processor;
 
 class OrdersController extends DefaultController
@@ -11,7 +11,7 @@ class OrdersController extends DefaultController
     {
 
         $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\models\CoreOrder')
+            ->set('yii\db\ActiveRecordInterface', 'app\models\CoreClientOrder')
             ->set('viewModel\ViewModelInterface', 'viewModel\OrderFetch')
             ->set('app\modules\coreApi\components\Api\Access', [
                 'methods'       => [ Processor::METHOD_GET ],
@@ -21,4 +21,21 @@ class OrdersController extends DefaultController
             ->respond();
 
     }
+
+    public function actionCreate()
+    {
+
+        $this->di
+            ->set('app\models\CoreOrder', ['scenario' => CoreOrder::SCENARIO_CREATE_VALIDATION])
+            ->set('yii\db\ActiveRecordInterface', 'app\models\CoreClientOrder')
+            ->set('viewModel\ViewModelInterface', 'viewModel\OrderCreate')
+            ->set('app\modules\coreApi\components\Api\Access', [
+                'methods'       => [ Processor::METHOD_POST ],
+                'checkAccess'   => false
+            ])
+            ->get('Processor')
+            ->respond();
+
+    }
+
 }
