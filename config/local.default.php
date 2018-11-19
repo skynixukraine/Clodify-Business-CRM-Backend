@@ -58,7 +58,7 @@ return [
                 'key' => '<aws_key>',
                 'secret' => '<aws_secret>',
             ],
-            'region' => 'us-east-1', //i.e.: 'us-east-1'
+            'region' => 'eu-central-1', //i.e.: 'us-east-1'
             'version' => 'latest', //i.e.: 'latest'
         ],
     ],
