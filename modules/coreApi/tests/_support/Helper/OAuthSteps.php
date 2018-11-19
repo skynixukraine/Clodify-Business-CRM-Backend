@@ -1,8 +1,10 @@
 <?php
 namespace Helper;
-use app\modules\coreApi\components\Processor;
+use app\models\CoreClientKey;
+use app\models\Setting;
+use app\models\CoreClient;
 
-class OAuthToken
+class OAuthKey
 {
     public static $key;
 }
@@ -11,34 +13,22 @@ class OAuthSteps extends \FunctionalTester
 {
 
     /**
-     * This class uses public Login method from http://confluence.skynix.co:8090/pages/viewpage.action?spaceKey=SKYN&title=Skynix+CRM+-+RESTful+API+Specification#SkynixCRM-RESTfulAPISpecification-1.1LoginMethod
-     *
-     * @param $email
-     * @param $password
+     * @param $clientId
      */
-    public function login($email = 'crm-admin@skynix.co', $password = 'B19E$d4n$yc@Lu6fQIO#1d')
+    public function login($clientId)
     {
+
         $I = $this;
-        //Request Access Token using simple auth
-        $I->sendPOST('/api/auth', json_encode([
-            'email'  => $email,
-            'password'  => $password
-        ]));
-        $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
-            'data' => [
-                'access_token'   => 'string',
-                'user_id'		 => 'integer',
-                'role'           => 'string'
-            ]
-        ]);
-        $response  = json_decode($I->grabResponse());
-        codecept_debug("Logged In As " . $email);
-        $accessToken = $response->data->access_token;
-        OAuthToken::$key = $accessToken;
+        $client = CoreClient::findOne($clientId);
 
-        $I->haveHttpHeader('skynix-access-token', OAuthToken::$key);
+        $accessKey = CoreClientKey::findOne(['id' => $clientId]);
+
+        codecept_debug("Logged In As " . $client->email);
+
+        OAuthKey::$key = $accessKey;
+
+        $I->haveHttpHeader('skynix-access-key', OAuthKey::$key);
     }
 
 }
