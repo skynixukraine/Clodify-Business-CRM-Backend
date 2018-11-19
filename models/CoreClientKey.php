@@ -24,6 +24,8 @@ use yii\db\ActiveRecord;
 class CoreClientKey extends ActiveRecord
 {
     const IS_ACTIVE = 1;
+    const ACCESS_KEY_LENGTH = 39;
+    const EXPIRATION_PERIOD = "30 days";
 
     /**
      * @return string
@@ -44,6 +46,5 @@ class CoreClientKey extends ActiveRecord
     {
         return Yii::$app->dbCore;
     }
-
 
 }

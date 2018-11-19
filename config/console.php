@@ -60,6 +60,10 @@ $config = [
                 'path' => '/',
             ]
         ],
+        'privatbankApi' => [
+            'class' => 'yii\httpclient\Client',
+            'baseUrl' => 'https://api.privatbank.ua/p24api',
+        ],
     ],
     'params' => $params,
 ];
