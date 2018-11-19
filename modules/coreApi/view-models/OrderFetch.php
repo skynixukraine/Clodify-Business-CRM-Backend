@@ -7,8 +7,7 @@
 
 namespace viewModel;
 
-use app\models\CoreOrder;
-use app\models\CoreClient;
+use app\models\CoreClientOrder;
 use Yii;
 use app\modules\api\components\Api\Processor;
 
@@ -23,14 +22,10 @@ class OrderFetch extends ViewModelAbstract{
 
         $clientId = Yii::$app->request->getQueryParam('client_id');
 
-        if( ($coreClient = CoreClient::findOne($clientId) ) && ( $coreClient->is_active==0 )) {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The account is suspended'));
-        }
-
-        if($coreOrders = CoreOrder::find()->where(['client_id' => $clientId])->all()){
+        if($coreClientOrders = CoreClientOrder::find()->where(['client_id' => $clientId])->all()){
             $result= [];
-            foreach ($coreOrders as $coreOrder) {
-                $result[] = $this->defaultVal($coreOrder);
+            foreach ($coreClientOrders as $coreClientOrder) {
+                $result[] = $coreClientOrder->defaultVal();
             }
             return $this->setData($result);
         } else{
@@ -38,25 +33,5 @@ class OrderFetch extends ViewModelAbstract{
         }
 
     }
-
-
-    /**
-     * @param $model
-     * @return mixed
-     */
-    function defaultVal($model) : Array
-    {
-        $list['id'] = $model->id;
-        $list['status'] = $model->status;
-        $list['amount'] = $model->amount;
-        $list['payment_id'] = $model->payment_id;
-        $list['recurrent_id'] = $model->recurrent_id;
-        $list['created'] = $model->created;
-        $list['paid'] = $model->paid;
-        $list['notes'] = $model->notes;
-
-        return $list;
-    }
-
 
 }

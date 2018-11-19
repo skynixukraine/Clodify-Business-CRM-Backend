@@ -106,7 +106,7 @@ class ClientCest
     public function fetchClientOrderTest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
-        $oAuth->login();
+        $oAuth->login(ValuesContainer::$clientId);
 
         $I->wantTo('Testing fetch counterparties data');
         $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId . '/orders');
