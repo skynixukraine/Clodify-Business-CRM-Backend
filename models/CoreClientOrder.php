@@ -104,4 +104,22 @@ class CoreClientOrder extends ActiveRecord
         $this->save(false, ['status']);
     }
 
+    /**
+     * @param $model
+     * @return mixed
+     */
+    function defaultVal() : Array
+    {
+        $list['id'] = $this->id;
+        $list['status'] = $this->status;
+        $list['amount'] = $this->amount;
+        $list['payment_id'] = $this->payment_id;
+        $list['recurrent_id'] = $this->recurrent_id;
+        $list['created'] = $this->created;
+        $list['paid'] = $this->paid;
+        $list['notes'] = $this->notes;
+
+        return $list;
+    }
+
 }
