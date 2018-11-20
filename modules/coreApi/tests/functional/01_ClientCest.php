@@ -32,6 +32,8 @@ class ClientCest
 
     }
 
+
+
     /**
      * @see    https://jira-v2.skynix.company/browse/SCA-276
      * @param FunctionalTester $I
@@ -99,51 +101,44 @@ class ClientCest
 
     }
 
+
     /**
-     * @see    https://jira-v2.skynix.company/browse/SCA-277
+     * @see    https://jira-v2.skynix.company/browse/SCA-283
      * @param FunctionalTester $I
      */
-    public function fetchClientOrderTest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function updateClientTest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login(ValuesContainer::$clientId);
 
-        $I->wantTo('Testing fetch counterparties data');
-        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId . '/orders');
+        $I->wantTo('update client method test');
+        $I->sendPUT(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId,json_encode(ValuesContainer::$clientData));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
         $I->seeResponseMatchesJsonType([
-            'data' => [[
-                'id' => 'integer',
-                'status' => 'string',
-                'amount' => 'number',
-                'payment_id' => 'number',
-                'recurrent_id' => 'number',
-                'created' => 'string|null',
-                'paid' => 'string|null',
-                'notes' => 'string'
-            ]],
+            'data' => [],
             'errors' => [],
             'success' => 'boolean'
         ]);
+
     }
 
     /**
-     * @see https://jira.skynix.co/browse/SCA-277
+     * @see https://jira.skynix.co/browse/SCA-283
      * @param FunctionalTester $I
      * @param \Codeception\Scenario $scenario
      * @return void
      */
-    public function fetchClientOrderForbiddenNotAuthorizedTest(FunctionalTester $I)
+    public function updateClientForbiddenNotAuthorizedTest(FunctionalTester $I)
     {
 
         \Helper\OAuthToken::$key = null;
 
-        $I->wantTo('test business create is forbidden for not authorized');
-        $I->sendGET(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId . '/orders');
+        $I->wantTo('update client forbidden for not authorized test');
+        $I->sendPUT(ApiEndpoints::CLIENTS . '/' . ValuesContainer::$clientId,json_encode(ValuesContainer::$clientData));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -157,9 +152,8 @@ class ClientCest
             ],
             "success" => false
         ]);
-
-
     }
+
 
 }
 

@@ -116,6 +116,7 @@ return [
     'PUT '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/update',
     'POST '     . $API . '/login-as-user/<user_id:\d+>'                       => $API . '/users/login-as-user',
     'GET '      . $API_CORE . 'client/<client_id:\d+>'                        => $API_CORE . 'clients/fetch',
+    'PUT '      . $API_CORE . 'client/<client_id:\d+>'                        => $API_CORE . 'clients/update',
     'GET '      . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/fetch',
     'POST '     . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/create',
     'PUT '      . $API_CORE . 'client/<client_id:\d+>/orders/<order_id:\d+>'  => $API_CORE . 'orders/update',

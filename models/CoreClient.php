@@ -10,7 +10,6 @@ namespace app\models;
 
 use app\components\Bootstrap;
 use Yii;
-use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
 
 /**
@@ -37,6 +36,7 @@ class CoreClient extends ActiveRecord
 
     const SCENARIO_PRE_REGISTER_VALIDATION  = 'pre-register';
     const SCENARIO_REGISTER_VALIDATION      = 'register';
+    const SCENARIO_UPDATE_VALIDATION = 'update';
 
     /**
      * @return string
@@ -54,6 +54,8 @@ class CoreClient extends ActiveRecord
             [['mysql_user', 'mysql_password'], 'string', 'max' => 45, 'on' => [self::SCENARIO_REGISTER_VALIDATION]],
             [['name', 'domain', 'email', 'mysql_user', 'mysql_password'], 'required', 'on' => [self::SCENARIO_REGISTER_VALIDATION]],
             [['name', 'domain', 'email'], 'required', 'on' => [self::SCENARIO_PRE_REGISTER_VALIDATION]],
+            [['name', 'email', 'first_name', 'last_name'], 'required', 'on' => [self::SCENARIO_UPDATE_VALIDATION]],
+            ['is_active', 'compare', 'compareValue' => 1, 'operator' => '==', 'type' => 'number', 'on' => [self::SCENARIO_UPDATE_VALIDATION]],
             [['is_active', 'is_confirmed'], 'boolean'],
             ['email', 'email'],
             [['email'], 'unique', 'on'=> [self::SCENARIO_PRE_REGISTER_VALIDATION, self::SCENARIO_REGISTER_VALIDATION]],
