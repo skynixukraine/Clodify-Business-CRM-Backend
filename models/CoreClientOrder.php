@@ -33,6 +33,7 @@ class CoreClientOrder extends ActiveRecord
     const STATUS_ONREVIEW   = 'ONREVIEW';
     const STATUS_PAID       = 'PAID';
     const STATUS_CANCELED   = 'CANCELED';
+    const SCENARIO_UPDATE_VALIDATION      = 'update';
 
     /**
      * @return string
@@ -46,11 +47,14 @@ class CoreClientOrder extends ActiveRecord
     {
         return [
             [['id', 'client_id'], 'integer'],
-            [['amount'], 'float'],
+            [['amount'], 'number'],
             [['client_id'], 'required'],
-            [['status', 'ref'], 'string', 'max' => 255],
-            [['payment', 'notes'], 'string', 'max' => 1000],
-            [['created', 'paid'], 'string', 'safe'],
+            [['status'], 'string', 'max' => 255],
+            [['notes'], 'string', 'max' => 1000],
+            [['payment_id', 'recurrent_id'], 'required', 'on' => [self::SCENARIO_UPDATE_VALIDATION]],
+            [['payment_id', 'recurrent_id'], 'integer', 'on' => [self::SCENARIO_UPDATE_VALIDATION]],
+            [['created', 'paid'], 'string'],
+            [['created', 'paid'], 'safe'],
         ];
     }
 
@@ -98,6 +102,24 @@ class CoreClientOrder extends ActiveRecord
             
         }
         $this->save(false, ['status']);
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    function defaultVal() : Array
+    {
+        $list['id'] = $this->id;
+        $list['status'] = $this->status;
+        $list['amount'] = $this->amount;
+        $list['payment_id'] = $this->payment_id;
+        $list['recurrent_id'] = $this->recurrent_id;
+        $list['created'] = $this->created;
+        $list['paid'] = $this->paid;
+        $list['notes'] = $this->notes;
+
+        return $list;
     }
 
 }
