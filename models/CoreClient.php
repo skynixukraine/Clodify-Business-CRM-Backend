@@ -87,19 +87,19 @@ class CoreClient extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
-        $env = '';
-        if (strpos($host, 'staging') !== false) {
-            $env = 'staging';
-        }
-
-        if (strpos($host, 'develop') !== false) {
-            $env = 'develop';
-        }
-
-        $link_to_crm = 'https://' . $env . '.' . $this->domain . '.skynix.co';
-
         if( $this->isNewRecord ){
+
+            $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
+            $env = '';
+            if (strpos($host, 'staging') !== false) {
+                $env = 'staging';
+            }
+
+            if (strpos($host, 'develop') !== false) {
+                $env = 'develop';
+            }
+
+            $link_to_crm = 'https://' . $env . '.' . $this->domain . '.skynix.co';
             $mail = Yii::$app->mailer->compose('clientRegistration', [
                 'first_name' => $this->first_name,
                 'link_to_crm' => $link_to_crm,
