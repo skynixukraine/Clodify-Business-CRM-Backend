@@ -43,5 +43,4 @@ class ClientRegistration extends ViewModelAbstract
         }
 
     }
-
 }
