@@ -13,7 +13,6 @@ use Yii;
 use app\models\User;
 use app\modules\api\models\ApiLoginForm;
 use app\modules\api\components\Api\Processor;
-use app\models\EmailTemplate;
 
 
 class ClientRegistration extends ViewModelAbstract
