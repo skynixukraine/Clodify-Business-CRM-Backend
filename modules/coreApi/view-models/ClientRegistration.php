@@ -36,25 +36,6 @@ class ClientRegistration extends ViewModelAbstract
 
             if ( $this->validate() && $this->model->save() ) {
 
-                $emailTemplate = EmailTemplate::findOne(['subject' => 'Skynix CRM configuration']);
-
-
-                $mail = Yii::$app->mailer->compose($emailTemplate, [
-                    'username' => $this->model->first_name,
-                    'link_to_crm' => '',
-                    'domain' => $this->model->domain,
-                    'email' => $this->model->email,
-                    'auto_generated_password' => $this->model->mysql_password,
-
-                ])
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($this->model->email)
-                    ->setSubject('Skynix CRM: client registration');
-
-                if (!$mail->send()) {
-                    $this->addError('email', "Skynix CRM configuration");
-                }
-
                 $this->setData([
                     'client_id' => $this->model->id
                 ]);
@@ -63,4 +44,5 @@ class ClientRegistration extends ViewModelAbstract
         }
 
     }
+
 }
