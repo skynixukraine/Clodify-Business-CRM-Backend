@@ -8,6 +8,7 @@
 
 namespace app\commands;
 
+use app\models\CoreClient;
 use app\models\CoreClientOrder;
 use app\models\Setting;
 use Yii;
@@ -72,4 +73,64 @@ class CoreController extends DefaultController
                 Logger::LEVEL_ERROR);
         }
     }
+
+    /**
+     *  Informs users by email when the subscription ends in 3 days
+     */
+    public function actionInformClientsSubscriptionEnding (){
+        Yii::getLogger()->log('actionInformClientsSubscriptionEnding running', Logger::LEVEL_INFO);
+
+        try {
+            if(($clients = CoreClient::find()->where(['prepaid_for'=>date('Y-m-d', strtotime('now +3days'))])->all())) {
+                foreach( $clients as $client) {
+                    $mail = Yii::$app->mailer->compose('subscriptionExpires')
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo($client->email)
+                        ->setSubject('The subscription expires in 3 days');
+
+                    if (!$mail->send()) {
+                        throw new Exception('an email haven\'t been sent');
+                    }
+                }
+            }
+
+        } catch(\Exception $e) {
+            Yii::getLogger()->log('actionInformClientsSubscriptionEnding error' .
+            $e->getMessage() .
+            $e->getTraceAsString(),
+            Logger::LEVEL_ERROR);
+        }
+    }
+
+
+    /**
+     *  Informs users by email when the subscription have expired
+     */
+    public function actionInformClientsSubscriptionEnded (){
+        Yii::getLogger()->log('actionInformClientsSubscriptionEnded running', Logger::LEVEL_INFO);
+
+        try {
+            if(($clients = CoreClient::find()->where(['prepaid_for'=>date('Y-m-d', strtotime('now'))])->all())) {
+                foreach( $clients as $client) {
+                    $mail = Yii::$app->mailer->compose('subscriptionExpired')
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setTo($client->email)
+                        ->setSubject('The subscription have expired');
+
+                    if (!$mail->send()) {
+                        throw new Exception('an email haven\'t been sent');
+                    }
+                }
+            }
+
+        } catch(\Exception $e) {
+            Yii::getLogger()->log('actionInformClientsSubscriptionEnded error' .
+                $e->getMessage() .
+                $e->getTraceAsString(),
+                Logger::LEVEL_ERROR);
+        }
+    }
+
+
+
 }
