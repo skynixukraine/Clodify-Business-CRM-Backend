@@ -549,27 +549,12 @@ class SiteController extends Controller
 
         }
 
-        $host = parse_url(\Yii::$app->request->getAbsoluteUrl(), PHP_URL_HOST);
+
         $baseDomain = str_replace('https://', '', Yii::$app->params['url_crm_app']);
-        switch ($host) {
-
-            case Bootstrap::DOMAIN_TEST_API :
-            case Bootstrap::DOMAIN_TEST_CORE :
-            case Bootstrap::DOMAIN_DEVELOP :
-                Yii::$app->response->redirect("https://develop" . ($domain ? "." . $domain : "") . "." . $baseDomain . "/payment-status");
-                break;
-            case Bootstrap::DOMAIN_STAGING :
-                Yii::$app->response->redirect("https://staging" . ($domain ? "." . $domain : "") . "." . $baseDomain . "/payment-status");
-                break;
-            case Bootstrap::DOMAIN_PRODUCT :
-
-                Yii::$app->response->redirect("https://" . ($domain ? $domain : "") . "." . $baseDomain . "/payment-status");
-                break;
-            default :
-
-                Yii::$app->response->redirect(Yii::$app->params['url_crm_app']);
-                break;
-        }
+        Yii::$app
+            ->response
+            ->redirect("https://" . Yii::$app->env->getEnv() .
+                (Yii::$app->env->getClientDomain() ? "." . Yii::$app->env->getClientDomain()  : "" ) . "." . $baseDomain . "/payment-status");
         Yii::$app->response->send();
     }
 
