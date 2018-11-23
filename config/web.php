@@ -122,6 +122,9 @@ $config = [
                 ],
             ],
         ],
+        'env'   => [
+            'class'     => 'app\components\ClientEnv'
+        ],
         'db' => require(__DIR__ . '/db.php'),
         'dbCore' => require(__DIR__ . '/db-core.php'),
         'crowdComponent' => [
