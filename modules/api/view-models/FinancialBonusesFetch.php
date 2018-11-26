@@ -40,7 +40,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                     $query->andWhere(['added_by_user_id' => Yii::$app->user->id]);
                 }
                 $query->orderBy(['project_id' => SORT_DESC]);
-                $query->groupBy('project_id');
+                $query->groupBy('project_id, id');
                 $query->select(['SUM(amount) AS sumAmount', 'project_id', 'added_by_user_id']);
                 $data = $query->all();
 
@@ -107,6 +107,9 @@ class FinancialBonusesFetch extends ViewModelAbstract
                     ])->select(['SUM(amount)'])->scalar();
                     $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $finReportRange->toDate);
 
+                    $bonuses = round( ($finIncome->sumAmount - $expenses - $deptExpenses) * 0.1 );
+                    $bonuses = $bonuses > 0 ? $bonuses : 0;
+
                     /** @var $project Project */
                     /** @var $u User */
                     $incomeItems[] = [
@@ -114,7 +117,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                         'income'    => round( $finIncome->sumAmount ),
                         'expenses'  => round( $expenses + $deptExpenses),
                         'project'   => $project,
-                        'bonuses'   => round( ($finIncome->sumAmount - $expenses - $deptExpenses) * 0.1 ),
+                        'bonuses'   => $bonuses,
                         'added_by'  => [
                             'id'    => $finIncome->added_by_user_id,
                             'name'  => ( $u = $finIncome->getAddedByUser()->one()) ? $u->first_name . ' ' . $u->last_name : "Unknown"
