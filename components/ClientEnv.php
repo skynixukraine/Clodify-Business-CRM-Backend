@@ -95,11 +95,10 @@ class ClientEnv
                     $this->clientDomain = str_replace(
                         "-",
                         "_",
-                        str_replace(['.api.skynix.co', $this->env],
+                        str_replace(['.api.skynix.co', (!empty($this->env) ? $this->env . "." : "")],
                             '',
                             $this->host)
                     );
-
 
                 break;
         }
