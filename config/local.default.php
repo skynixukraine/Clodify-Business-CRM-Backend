@@ -36,13 +36,13 @@ return [
         ],
         'user' => [
             'identityCookie' => [
-                'domain' => '.skynix.co',
+                'domain' => '.clodify.com',
             ]
         ],
         'session' => [
             'cookieParams' => [
                 'path' => '/',
-                'domain' => '.skynix.co'
+                'domain' => '.clodify.com'
             ],
         ],
         'reCaptcha' => [
