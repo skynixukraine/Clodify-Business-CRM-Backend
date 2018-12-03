@@ -141,6 +141,18 @@ class ReviewController extends DefaultController
                 $review->score_earnings = $this->correctValue($score_earnings);
 
                 $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
+
+                $notes = \Yii::$app->db->createCommand("
+                SELECT * FROM work_history
+                WHERE MONTH(work_history.date_start) =:search_month AND MONTH(work_history.date_end) =:search_month;", [
+                ':search_month'  => $month])->queryAll();
+
+                $notesInString = json_encode($notes);
+
+                $review->notes = $notesInString;
+
+                \Yii::getLogger()->log('notes' . $review->notes, Logger::LEVEL_ERROR);
+
                 \Yii::getLogger()->log($score_total, Logger::LEVEL_ERROR);
                 $review->score_total = $this->correctValue($score_total);
                 $review->save();
