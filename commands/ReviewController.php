@@ -136,10 +136,9 @@ class ReviewController extends DefaultController
                 //\Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
 
 
-                $score_earnings = (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100) - intval($fin_income['SUM(amount)'])) *0.1;
+                $score_earnings = 0.2 * intval($fin_income['SUM(amount)']) - (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100)); ;
 
-
-                \Yii::getLogger()->log($score_earnings, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log('score earnings ' . intval($fin_income['SUM(amount)']), Logger::LEVEL_ERROR);
                 $review->score_earnings = $this->correctValue($score_earnings);
 
                 $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
