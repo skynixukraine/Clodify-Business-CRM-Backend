@@ -26,7 +26,7 @@ class ReportController extends DefaultController
     {
         try {
             Yii::getLogger()->log('actionApproveToday: running', Logger::LEVEL_INFO);
-
+            Report::approveTodayReports();
             Yii::getLogger()->log('actionApproveToday: Weekday ' .  date('N'), Logger::LEVEL_INFO);
 
             if ( date('N') < 6 ) {

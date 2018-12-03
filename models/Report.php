@@ -436,6 +436,14 @@ class Report extends \yii\db\ActiveRecord
     }
 
     /**
+     *
+     */
+    public static function approveTodayReports()
+    {
+        self::updateAll(['is_approved' => 1], 'date_added=CURDATE() AND date_report=CURDATE() AND is_delete=0 AND is_approved=0');
+    }
+
+    /**
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function getAllTodayUsers()
