@@ -1,7 +1,7 @@
 <?php
 $API            = 'api';
 $API_CORE       = 'core-api/';
-$API_CORE_URL   = 'https://<environment:\w+>.core.api.skynix.co/' . $API_CORE;
+$API_CORE_URL   = 'https://<environment:\w+>.core.api.clodify.com/' . $API_CORE;
 return [
     'POST '     . $API_CORE_URL . 'clients'                                   => $API_CORE . 'clients/index',
     'POST '     . $API . '/password'                                          => $API . '/password/reset',
