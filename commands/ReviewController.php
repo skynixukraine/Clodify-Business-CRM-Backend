@@ -115,7 +115,9 @@ class ReviewController extends DefaultController
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
 //return;
-                $score_performance = 100 - intval($salaryReportListAndUser['non_approved_hours']) - (5 - intval($reportsPerformance['COUNT(*)']))*10 ;
+
+                $score_performance = 100 - (100/$monthReport['num_of_working_days'])*intval($salaryReportListAndUser['non_approved_hours']);
+
                 $review->score_performance = $this->correctValue($score_performance);
 
                 $laborExpensesRato = \Yii::$app->db->createCommand("
@@ -131,10 +133,10 @@ class ReviewController extends DefaultController
                     ])->queryOne();
                 //\Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
 
-                //return;
 
-                //( SalaryReportList→subtotal * (1 + Settings→LABOR_EXPENSES_RATIO / 100)  - (SELECT SUM(amount) FROM financial_income WHERE financial_report_id=? AND developer_user_id=?)  ) * 0.1
                 $score_earnings = (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100) - intval($fin_income['SUM(amount)'])) *0.1;
+
+
                 \Yii::getLogger()->log($score_earnings, Logger::LEVEL_ERROR);
                 $review->score_earnings = $this->correctValue($score_earnings);
 
