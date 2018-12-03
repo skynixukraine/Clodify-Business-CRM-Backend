@@ -45,13 +45,17 @@ class ReviewController extends DefaultController
             if(!$monthReport['is_locked'] == 1)
                 return;
 
+            // somehow salaryReport for 11 month returns 10 from MONTH(FROM_UNIXTIME(salary_reports.report_date))
+            // for 11 month in returns 'FROM_UNIXTIME(salary_reports.report_date)' => '2018-10-31 22:00:00'
+            // that is why search_month = $month-1
             $salaryReport = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_reports                     
                 WHERE MONTH(FROM_UNIXTIME(salary_reports.report_date)) =:search_month;", [
-                ':search_month'  => $month
+                ':search_month'  => $month-1
             ])->queryOne();
 
-            ///\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+
 
             $salaryReportListAndUsers = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_report_lists
@@ -101,22 +105,20 @@ class ReviewController extends DefaultController
                     $salaryReportListAndUser['worked_days'] = 1;
                 }
 
-                //return;
                 $score_loyalty = 100 - (intval($salaryReportListAndUser['day_off']) + intval($salaryReportListAndUser['hospital_days']))*
                     (100/$salaryReportListAndUser['worked_days']) - (intval($workHistoryFails['COUNT(*)']) - intval($workHistoryEffords['COUNT(*)']))*10;
 
 
-                //return;
                 $review->score_loyalty = $this->correctValue($score_loyalty);
 
-                //(SELECT COUNT(*) FROM reports WHERE date_report BETWEEN date_from AND date_to GROUP BY project_id
                 $reportsPerformance = \Yii::$app->db->createCommand("
                 SELECT COUNT(*) FROM reports WHERE date_report>=:date_from AND date_report<=:date_to GROUP BY project_id", [
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
-//return;
+
 
                 $score_performance = 100 - (100/$monthReport['num_of_working_days'])*intval($salaryReportListAndUser['non_approved_hours']);
+                \Yii::getLogger()->log($score_performance, Logger::LEVEL_ERROR);
 
                 $review->score_performance = $this->correctValue($score_performance);
 
