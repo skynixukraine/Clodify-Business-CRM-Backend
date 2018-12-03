@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160601_074725_add_key_support_users extends Migration
+use app\components\SkynixMigration;
+
+
+class m160601_074725_add_key_support_users extends SkynixMigration
 {
     public function up()
     {

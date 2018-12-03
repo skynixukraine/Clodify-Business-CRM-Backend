@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170203_104959_update_contract_template__deleted_border_bottom extends Migration
+class m170203_104959_update_contract_template__deleted_border_bottom extends SkynixMigration
 {
     public function up()
     {

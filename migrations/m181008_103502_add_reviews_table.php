@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m181008_103502_add_reviews_table
  */
-class m181008_103502_add_reviews_table extends Migration
+class m181008_103502_add_reviews_table extends SkynixMigration
 {
     /**
      * {@inheritdoc}

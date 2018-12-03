@@ -4,6 +4,7 @@ Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
 
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
+$dbCore = require(__DIR__ . '/db-core.php');
 
 $config = [
     'id' => 'basic-console',
@@ -14,6 +15,11 @@ $config = [
     'sourceLanguage' => 'en-US',
     'modules' => [
         'gii' => 'yii\gii\Module',
+    ],
+    'controllerMap' => [
+        'migrate' => [
+            'class'                 => 'app\console\controllers\MigrateController',
+        ],
     ],
     'components' => [
         'cache' => [
@@ -45,6 +51,7 @@ $config = [
             ],
         ],
         'db' => $db,
+        'dbCore' => $dbCore,
         'user' => [
             'class' => 'app\models\User',
             'identityCookie' => [
@@ -52,6 +59,10 @@ $config = [
                 'domain' => '.skynix.co',
                 'path' => '/',
             ]
+        ],
+        'privatbankApi' => [
+            'class' => 'yii\httpclient\Client',
+            'baseUrl' => 'https://api.privatbank.ua/p24api',
         ],
     ],
     'params' => $params,

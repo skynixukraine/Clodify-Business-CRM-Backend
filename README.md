@@ -8,3 +8,6 @@ And add backend/modules/api/tests/_data/dump.sql to your commit
 #Guide
 https://docs.skynix.co/display/SKB/Docker.+Skynix+Guide#Docker.SkynixGuide-runtests
 1
+
+#Testing
+Within each backend merge to the develop branch staging server renews database from the preuploaded SQL

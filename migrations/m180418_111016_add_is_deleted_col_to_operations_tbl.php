@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180418_111016_add_is_deleted_col_to_operations_tbl
  */
-class m180418_111016_add_is_deleted_col_to_operations_tbl extends Migration
+class m180418_111016_add_is_deleted_col_to_operations_tbl extends SkynixMigration
 {
     /**
      * {@inheritdoc}

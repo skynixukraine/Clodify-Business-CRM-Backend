@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160515_081552_survey_voter_option_id extends Migration
+use app\components\SkynixMigration;
+
+
+class m160515_081552_survey_voter_option_id extends SkynixMigration
 {
     public function up()
     {

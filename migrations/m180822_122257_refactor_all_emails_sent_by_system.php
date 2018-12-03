@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180822_122257_refactor_all_emails_sent_by_system
  */
-class m180822_122257_refactor_all_emails_sent_by_system extends Migration
+class m180822_122257_refactor_all_emails_sent_by_system extends SkynixMigration
 {
     /**
      * {@inheritdoc}

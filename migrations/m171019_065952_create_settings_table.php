@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `settings`.
  */
-class m171019_065952_create_settings_table extends Migration
+class m171019_065952_create_settings_table extends SkynixMigration
 {
     /**
      * @inheritdoc

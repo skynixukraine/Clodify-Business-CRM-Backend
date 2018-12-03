@@ -5,10 +5,10 @@
 return [
     'language' => 'en-US',
     'components' => [
-        'db' => [
-            'dsn' => 'mysql:host=skynixcrm-db;dbname=skynixcrm_testdb',
-            'username' => 'skynixcrm_testdb_user',
-            'password' => 'Wn5dPkqpmxuRM6swohYW4K62x_'
+        'dbCore' => [
+            'dsn' => 'mysql:host=<testdb_host>;dbname=<testdb_core_name>',
+            'username' => '<testdb_username>',
+            'password' => '<testdb_password>'
         ],
         'mailer' => [
             'useFileTransport' => true,

@@ -1,9 +1,11 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160712_135515_api_auth_access_tokens extends Migration
+
+use app\components\SkynixMigration;
+
+
+class m160712_135515_api_auth_access_tokens extends SkynixMigration
 {
     public function up()
     {

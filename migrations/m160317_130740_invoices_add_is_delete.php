@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160317_130740_invoices_add_is_delete extends Migration
+use app\components\SkynixMigration;
+
+
+class m160317_130740_invoices_add_is_delete extends SkynixMigration
 {
     public function up()
     {

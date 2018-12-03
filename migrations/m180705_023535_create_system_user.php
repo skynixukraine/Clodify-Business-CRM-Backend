@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180705_023535_create_system_user
  */
-class m180705_023535_create_system_user extends Migration
+class m180705_023535_create_system_user extends SkynixMigration
 {
     /**
      * {@inheritdoc}

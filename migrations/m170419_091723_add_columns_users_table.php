@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170419_091723_add_columns_users_table extends Migration
+class m170419_091723_add_columns_users_table extends SkynixMigration
 {
     public function safeUp()
     {

@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180821_133517_business_set_is_default
  */
-class m180821_133517_business_set_is_default extends Migration
+class m180821_133517_business_set_is_default extends SkynixMigration
 {
     /**
      * {@inheritdoc}

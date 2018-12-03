@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles adding num_of_working_days to table `financial_reports`.
  */
-class m170825_081149_add_num_of_working_days_column_to_financial_reports_table extends Migration
+class m170825_081149_add_num_of_working_days_column_to_financial_reports_table extends SkynixMigration
 {
     /**
      * @inheritdoc

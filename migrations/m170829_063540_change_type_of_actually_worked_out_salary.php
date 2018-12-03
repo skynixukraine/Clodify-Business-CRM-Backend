@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170829_063540_change_type_of_actually_worked_out_salary extends Migration
+class m170829_063540_change_type_of_actually_worked_out_salary extends SkynixMigration
 {
     public function up()
     {

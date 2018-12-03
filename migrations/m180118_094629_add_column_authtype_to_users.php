@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180118_094629_add_column_authtype_to_users extends Migration
+class m180118_094629_add_column_authtype_to_users extends SkynixMigration
 {
     public function up()
     {

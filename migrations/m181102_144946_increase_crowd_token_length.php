@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m181102_144946_increase_crowd_token_length
  */
-class m181102_144946_increase_crowd_token_length extends Migration
+class m181102_144946_increase_crowd_token_length extends SkynixMigration
 {
     /**
      * {@inheritdoc}

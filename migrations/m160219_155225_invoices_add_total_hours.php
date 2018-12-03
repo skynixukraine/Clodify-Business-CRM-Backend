@@ -1,9 +1,10 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
 
-class m160219_155225_invoices_add_total_hours extends Migration
+
+use app\components\SkynixMigration;
+
+class m160219_155225_invoices_add_total_hours extends SkynixMigration
 {
     public function up()
     {

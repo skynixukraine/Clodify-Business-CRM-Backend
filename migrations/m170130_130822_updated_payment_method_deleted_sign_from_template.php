@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170130_130822_updated_payment_method_deleted_sign_from_template extends Migration
+class m170130_130822_updated_payment_method_deleted_sign_from_template extends SkynixMigration
 {
     public function up()
     {

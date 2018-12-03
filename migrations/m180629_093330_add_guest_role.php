@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180629_093330_add_guest_role
  */
-class m180629_093330_add_guest_role extends Migration
+class m180629_093330_add_guest_role extends SkynixMigration
 {
     /**
      * {@inheritdoc}

@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m161130_082130_project_id_column_in_invoice_table extends Migration
+use app\components\SkynixMigration;
+
+
+class m161130_082130_project_id_column_in_invoice_table extends SkynixMigration
 {
     public function up()
     {

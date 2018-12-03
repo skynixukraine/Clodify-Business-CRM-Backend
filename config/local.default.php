@@ -13,9 +13,14 @@
 return [
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=in.skynix',
-            'username' => 'mysql_user',
-            'password' => 'mysql_pass'
+            'dsn' => 'mysql:host=<mysql_host_name>;dbname=<mysql_db_name>',
+            'username' => '<mysql_user>',
+            'password' => '<mysql_pass>'
+        ],
+        'dbCore' => [
+            'dsn' => 'mysql:host=<mysql_host_name>;dbname=<core_db_name>',
+            'username' => '<core_db_username>',
+            'password' => '<core_db_password>',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -53,7 +58,7 @@ return [
                 'key' => '<aws_key>',
                 'secret' => '<aws_secret>',
             ],
-            'region' => 'us-east-1', //i.e.: 'us-east-1'
+            'region' => 'eu-central-1', //i.e.: 'us-east-1'
             'version' => 'latest', //i.e.: 'latest'
         ],
     ],
@@ -76,7 +81,9 @@ return [
             'from'          => 'InfoCentr',
             'user'          => '<smsServiceUser>',
             'password'      => '<smsServicePassword>',
-        ]
+        ],
+        'merchantPassword'  => '<bankMerchantPassword>',
+        'merchantTestMode'  => '<merchantMode>'
 
     )
 ];

@@ -1,8 +1,11 @@
 <?php
 
-use yii\db\Migration;
 
-class m170107_074133_invoice_contract extends Migration
+
+use app\components\SkynixMigration;
+
+
+class m170107_074133_invoice_contract extends SkynixMigration
 {
     public function up()
     {

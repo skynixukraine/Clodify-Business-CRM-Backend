@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180405_124521_add_is_avaialble_to_users
  */
-class m180405_124521_add_is_avaialble_to_users extends Migration
+class m180405_124521_add_is_avaialble_to_users extends SkynixMigration
 {
     /**
      * {@inheritdoc}

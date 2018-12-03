@@ -10,10 +10,9 @@ namespace app\commands;
 use Yii;
 use app\models\Report;
 use app\models\Review;
-use yii\console\Controller;
 use yii\log\Logger;
 
-class ReviewController extends Controller
+class ReviewController extends DefaultController
 {
     /**
      *

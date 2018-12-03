@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Schema;
-use yii\db\Migration;
+use app\components\SkynixMigration;
 use app\models\User;
-class m160127_130244_users_role_add_fin extends Migration
+
+class m160127_130244_users_role_add_fin extends SkynixMigration
 {
     public function up()
     {

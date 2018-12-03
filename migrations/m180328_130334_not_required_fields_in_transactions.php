@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180328_130334_not_required_fields_in_transactions extends Migration
+class m180328_130334_not_required_fields_in_transactions extends SkynixMigration
 {
     public function up()
     {

@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `auth_types`.
  */
-class m180118_094617_create_auth_types_table extends Migration
+class m180118_094617_create_auth_types_table extends SkynixMigration
 {
     /**
      * @inheritdoc

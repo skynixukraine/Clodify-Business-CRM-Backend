@@ -1,10 +1,11 @@
 <?php
 
-use yii\db\Migration;
+
+use app\components\SkynixMigration;
 use app\models\Contract;
 use app\models\ContractTemplates;
 
-class m170112_092909_contract_template_id_column_in_Contracts_table extends Migration
+class m170112_092909_contract_template_id_column_in_Contracts_table extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170202_135748_update_contract_template_simply_edits extends Migration
+class m170202_135748_update_contract_template_simply_edits extends SkynixMigration
 {
     public function up()
     {

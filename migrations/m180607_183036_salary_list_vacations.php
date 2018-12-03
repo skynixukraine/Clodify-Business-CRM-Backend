@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180607_183036_salary_list_vacations
  */
-class m180607_183036_salary_list_vacations extends Migration
+class m180607_183036_salary_list_vacations extends SkynixMigration
 {
     /**
      * {@inheritdoc}

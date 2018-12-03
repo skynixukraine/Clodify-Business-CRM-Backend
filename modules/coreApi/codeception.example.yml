@@ -1,0 +1,24 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+modules:
+    config:
+        Db:
+            dsn: 'mysql:host=<core_testdb_host>;dbname=<core_test_dbname>'
+            user: '<core_test_dbuser>'
+            password: '<core_test_dbpass>'
+            dump: 'tests/_data/core-dump.sql'
+            populate: true
+            cleanup: false
+            reconnect: true

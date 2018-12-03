@@ -1,10 +1,13 @@
 <?php
 
-use yii\db\Migration;
+
+
+use app\components\SkynixMigration;
+
 use app\models\Contract;
 use app\models\PaymentMethod;
 
-class m170112_100123_new_column_contract_payment_method_id_in_contracts_table extends Migration
+class m170112_100123_new_column_contract_payment_method_id_in_contracts_table extends SkynixMigration
 {
     public function up()
     {

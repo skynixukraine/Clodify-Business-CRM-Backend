@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m171019_070303_insert_into_settings_corpevents_and_bonuses extends Migration
+class m171019_070303_insert_into_settings_corpevents_and_bonuses extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m180328_111012_create_fixed_assets_operations_tbl extends Migration
+class m180328_111012_create_fixed_assets_operations_tbl extends SkynixMigration
 {
     public function up()
     {

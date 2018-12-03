@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180405_125642_create_availability_logs_tbl
  */
-class m180405_125642_create_availability_logs_tbl extends Migration
+class m180405_125642_create_availability_logs_tbl extends SkynixMigration
 {
     /**
      * {@inheritdoc}

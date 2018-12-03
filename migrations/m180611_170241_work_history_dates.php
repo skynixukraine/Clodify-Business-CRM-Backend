@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180611_170241_work_history_dates
  */
-class m180611_170241_work_history_dates extends Migration
+class m180611_170241_work_history_dates extends SkynixMigration
 {
     /**
      * {@inheritdoc}

@@ -1,7 +1,9 @@
 <?php
-$API = 'api';
+$API            = 'api';
+$API_CORE       = 'core-api/';
+$API_CORE_URL   = 'https://<environment:\w+>.core.api.skynix.co/' . $API_CORE;
 return [
-
+    'POST '     . $API_CORE_URL . 'clients'                                   => $API_CORE . 'clients/index',
     'POST '     . $API . '/password'                                          => $API . '/password/reset',
     'PUT '      . $API . '/password'                                          => $API . '/password/change',
     'POST '     . $API . '/projects'                                          => $API . '/projects/create',
@@ -104,14 +106,20 @@ return [
     'GET '      . $API . '/reviews'                                           => $API . '/reviews/fetch',
     'GET '      . $API . '/reviews/<id:\d+>'                                  => $API . '/reviews/fetch',
     'POST '     . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/create',
-    'GET '      . $API . '/businesses/<id:\d+>/methods'                       => $API . '/payment-methods/fetch',
+    'GET '      . $API . '/businesses/<business_id:\d+>/methods'                       => $API . '/payment-methods/fetch',
+    'GET '      . $API . '/businesses/<business_id:\d+>/methods/<id:\d+>'     => $API . '/payment-methods/fetch',
     'PUT '      . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/update',
     'DELETE '   . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/delete',
     'POST '     . $API . '/businesses/<business_id:\d+>/methods/<payment_method_id:\d+>' => $API . '/payment-methods/set-default',
     'GET '      . $API . '/email-templates'                                   => $API . '/email-templates/fetch',
     'GET '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/fetch',
     'PUT '      . $API . '/email-templates/<id:\d+>'                          => $API . '/email-templates/update',
-
+    'POST '     . $API . '/login-as-user/<user_id:\d+>'                       => $API . '/users/login-as-user',
+    'GET '      . $API_CORE . 'client/<client_id:\d+>'                        => $API_CORE . 'clients/fetch',
+    'PUT '      . $API_CORE . 'client/<client_id:\d+>'                        => $API_CORE . 'clients/update',
+    'GET '      . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/fetch',
+    'POST '     . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/create',
+    'PUT '      . $API_CORE . 'client/<client_id:\d+>/orders/<order_id:\d+>'  => $API_CORE . 'orders/update',
 
 
     // General rules

@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Handles the creation of table `email_templates`.
  */
-class m180822_092951_create_email_templates_table extends Migration
+class m180822_092951_create_email_templates_table extends SkynixMigration
 {
     /**
      * {@inheritdoc}

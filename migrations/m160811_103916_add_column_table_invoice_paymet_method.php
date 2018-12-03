@@ -1,8 +1,10 @@
 <?php
 
-use yii\db\Migration;
 
-class m160811_103916_add_column_table_invoice_paymet_method extends Migration
+use app\components\SkynixMigration;
+
+
+class m160811_103916_add_column_table_invoice_paymet_method extends SkynixMigration
 {
     public function safeUp()
     {

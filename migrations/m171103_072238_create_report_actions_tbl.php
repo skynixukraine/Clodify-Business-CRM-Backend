@@ -6,9 +6,9 @@
  * Time: 10:25
  */
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m171103_072238_create_report_actions_tbl extends Migration
+class m171103_072238_create_report_actions_tbl extends SkynixMigration
 {
     public function up()
     {

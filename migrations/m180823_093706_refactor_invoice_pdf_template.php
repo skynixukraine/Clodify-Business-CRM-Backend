@@ -1,11 +1,11 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
 /**
  * Class m180823_093706_refactor_invoice_pdf_template
  */
-class m180823_093706_refactor_invoice_pdf_template extends Migration
+class m180823_093706_refactor_invoice_pdf_template extends SkynixMigration
 {
     /**
      * {@inheritdoc}

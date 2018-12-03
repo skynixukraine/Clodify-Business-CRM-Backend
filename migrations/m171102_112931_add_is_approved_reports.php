@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m171102_112931_add_is_approved_reports extends Migration
+class m171102_112931_add_is_approved_reports extends SkynixMigration
 {
     public function up()
     {

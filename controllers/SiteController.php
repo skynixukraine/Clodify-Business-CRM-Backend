@@ -2,11 +2,15 @@
 
 namespace app\controllers;
 
+use app\components\Bootstrap;
+use app\models\CoreClient;
+use app\models\CoreClientOrder;
 use app\models\Setting;
 use Yii;
 use app\models\SupportTicket;
 use app\models\Survey;
 use yii\filters\AccessControl;
+use yii\log\Logger;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -361,6 +365,197 @@ class SiteController extends Controller
 
         }
         return $this->redirect( Yii::$app->params['url_crm_app'] . '/login' );
+    }
+
+    public function actionTestorder()
+    {
+        return $this->render('testorder');
+    }
+
+    public function actionPaymentCallback()
+    {
+        Yii::getLogger()->log("PaymentCallback", Logger::LEVEL_INFO);
+        $domain = null;
+        if ( ( $payment = Yii::$app->request->post('payment') ) &&
+            ( $signature = Yii::$app->request->post('signature') ) ) {
+
+            Yii::getLogger()->log($payment, Logger::LEVEL_INFO);
+
+            if ( ($sign = sha1 (md5($payment.Yii::$app->params['merchantPassword']))) === $signature ) {
+
+                $orderId    = null;
+                $state      = null;
+                $ref        = null;
+                foreach (explode('&', $payment) as $chunk) {
+                    $param = explode("=", $chunk);
+
+                    if ($param && $param[0] === "order") {
+
+                        $orderId = $param[1];
+
+                    } else if ($param && $param[0] === "state") {
+
+                        $state = $param[1];
+
+                    } else if ($param && $param[0] === "ref") {
+
+                        $ref = $param[1];
+
+                    }
+                }
+                if ( $orderId > 0 ) {
+                    /** @var CoreClientOrder */
+                    if ( ($clientOrder = CoreClientOrder::findOne($orderId))) {
+
+                        if ( $state === 1 || $state === "test") {
+
+                            $clientOrder->status    = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->paid      = date('Y-m-d');
+
+                        } else {
+
+                            $clientOrder->status    = CoreClientOrder::STATUS_CANCELED;
+
+                        }
+                        $clientOrder->ref       = $ref;
+                        $clientOrder->payment   = $payment;
+                        $clientOrder->save(false, ['status', 'payment', 'paid', 'ref']);
+
+                        /** @var $client CoreClient */
+                        if ( ($client = CoreClient::findOne($clientOrder->client_id))) {
+
+                            if ( $clientOrder->status === CoreClientOrder::STATUS_PAID ) {
+
+                                $client->prepaid_for = date('Y-m-d', strtotime('now +1 month'));
+                                $client->save(false, ['prepaid_for']);
+
+                            }
+
+                        }
+
+                    } else {
+
+                        Yii::getLogger()->log("Merchant Order is not found !!!", Logger::LEVEL_WARNING);
+
+                    }
+
+                } else {
+
+                    Yii::getLogger()->log("Merchant Order ID is not present!!!", Logger::LEVEL_WARNING);
+
+                }
+
+            } else {
+
+                Yii::getLogger()->log("Merchant signature is wrong!!!", Logger::LEVEL_WARNING);
+                Yii::getLogger()->log($signature, Logger::LEVEL_WARNING);
+                Yii::getLogger()->log($sign, Logger::LEVEL_WARNING);
+
+            }
+
+        } else {
+
+            Yii::getLogger()->log("Merchant data is blank!!!! " . Yii::$app->request->getRawBody(), Logger::LEVEL_WARNING);
+
+        }
+
+    }
+
+    public function actionPaymentStatus()
+    {
+        Yii::getLogger()->log("PaymentStatus", Logger::LEVEL_INFO);
+        $domain = null;
+        if ( ( $payment = Yii::$app->request->post('payment') ) &&
+            ( $signature = Yii::$app->request->post('signature') ) ) {
+
+            Yii::getLogger()->log($payment, Logger::LEVEL_INFO);
+
+            if ( ($sign = sha1 (md5($payment.Yii::$app->params['merchantPassword']))) === $signature ) {
+
+                $orderId = null;
+                $state   = null;
+                $ref     = null;
+                foreach (explode('&', $payment) as $chunk) {
+                    $param = explode("=", $chunk);
+
+                    if ($param && $param[0] === "order") {
+
+                        $orderId = $param[1];
+
+                    } else if ($param && $param[0] === "state") {
+
+                        $state = $param[1];
+
+                    } else if ($param && $param[0] === "ref") {
+
+                        $ref = $param[1];
+
+                    }
+                }
+                if ( $orderId > 0 ) {
+                    /** @var CoreClientOrder */
+                    if ( ($clientOrder = CoreClientOrder::findOne($orderId))) {
+
+                        if ( $state === 1 || $state === "test") {
+
+                            $clientOrder->status    = CoreClientOrder::STATUS_PAID;
+                            $clientOrder->paid      = date('Y-m-d');
+
+                        } else {
+
+                            $clientOrder->status    = CoreClientOrder::STATUS_CANCELED;
+
+                        }
+                        $clientOrder->ref       = $ref;
+                        $clientOrder->payment   = $payment;
+                        $clientOrder->save(false, ['status', 'payment', 'paid', 'ref']);
+
+                        /** @var $client CoreClient */
+                        if ( ($client = CoreClient::findOne($clientOrder->client_id))) {
+
+                            $domain = $client->getUnConvertedDomain();
+                            if ( $clientOrder->status === CoreClientOrder::STATUS_PAID ) {
+
+                                $client->prepaid_for = date('Y-m-d', strtotime('now +1 month'));
+                                $client->save(false, ['prepaid_for']);
+
+                            }
+
+                        }
+
+                    } else {
+
+                        Yii::getLogger()->log("Merchant Order is not found !!!", Logger::LEVEL_WARNING);
+
+                    }
+
+                } else {
+
+                    Yii::getLogger()->log("Merchant Order ID is not present!!!", Logger::LEVEL_WARNING);
+
+                }
+
+            } else {
+
+                Yii::getLogger()->log("Merchant signature is wrong!!!", Logger::LEVEL_WARNING);
+                Yii::getLogger()->log($signature, Logger::LEVEL_WARNING);
+                Yii::getLogger()->log($sign, Logger::LEVEL_WARNING);
+
+            }
+
+        } else {
+
+            Yii::getLogger()->log("Merchant data is blank!!!! " . Yii::$app->request->getRawBody(), Logger::LEVEL_WARNING);
+
+        }
+
+
+        $baseDomain = str_replace('https://', '', Yii::$app->params['url_crm_app']);
+        Yii::$app
+            ->response
+            ->redirect("https://" . Yii::$app->env->getEnv() .
+                (Yii::$app->env->getClientDomain() ? "." . Yii::$app->env->getClientDomain()  : "" ) . "." . $baseDomain . "/payment-status");
+        Yii::$app->response->send();
     }
 
 }

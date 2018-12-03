@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m171109_135702_alter_column_code_in_reference_book extends Migration
+class m171109_135702_alter_column_code_in_reference_book extends SkynixMigration
 {
     public function up()
     {

@@ -1,8 +1,8 @@
 <?php
 
-use yii\db\Migration;
+ use app\components\SkynixMigration;
 
-class m170216_164829_alter_table_contract_total extends Migration
+class m170216_164829_alter_table_contract_total extends SkynixMigration
 {
     public function up()
     {
