@@ -13,12 +13,12 @@ use app\models\Storage;
 
 class ClientEnv
 {
-    const DOMAIN_DEVELOP = 'develop.core.api.skynix.co';
-    const DOMAIN_STAGING = 'staging.core.api.skynix.co';
-    const DOMAIN_PRODUCT = 'core.api.skynix.co';
+    const DOMAIN_DEVELOP = 'develop.core.api.clodify.com';
+    const DOMAIN_STAGING = 'staging.core.api.clodify.com';
+    const DOMAIN_PRODUCT = 'core.api.clodify.com';
 
-    const DOMAIN_TEST_API   = 'test.skynix-llc.api.skynix.co';
-    const DOMAIN_TEST_CORE = 'test.core.api.skynix.co';
+    const DOMAIN_TEST_API   = 'test.skynix-llc.api.clodify.com';
+    const DOMAIN_TEST_CORE = 'test.core.api.clodify.com';
 
     const ENV_TEST      = "test";
     const ENV_DEVELOP   = "develop";
@@ -95,7 +95,7 @@ class ClientEnv
                     $this->clientDomain = str_replace(
                         "-",
                         "_",
-                        str_replace(['.api.skynix.co', (!empty($this->env) ? $this->env . "." : "")],
+                        str_replace(['.api.clodify.com', (!empty($this->env) ? $this->env . "." : "")],
                             '',
                             $this->host)
                     );
