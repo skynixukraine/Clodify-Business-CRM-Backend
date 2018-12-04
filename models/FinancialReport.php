@@ -241,7 +241,7 @@ class FinancialReport extends \yii\db\ActiveRecord
         $financialReports = FinancialReport::find()->all();
 
         foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date)) == date('Y-m', strtotime( $date ))) {
+            if (date('Y-m', strtotime( $financialReport->report_date)) === date('Y-m', strtotime( $date ))) {
                 return false;
             }
         }
