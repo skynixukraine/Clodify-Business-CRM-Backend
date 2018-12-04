@@ -11,6 +11,6 @@ modules:
         - Db
         - \Helper\Functional
         - REST:
-            url: 'https://test.skynix-llc.api.skynix.co/index-test.php'  # url for testing
+            url: 'https://test.skynix-llc.api.clodify.com/index-test.php'  # url for testing
             depends: PhpBrowser
         - Asserts
