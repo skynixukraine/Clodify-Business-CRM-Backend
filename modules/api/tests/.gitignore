@@ -1,2 +1,4 @@
 _output
 _support/_generated
+functional.suite.yml
+acceptance.suite.yml
