@@ -238,12 +238,10 @@ class FinancialReport extends \yii\db\ActiveRecord
     public static function validateReportDate($date)
     {
 
-        $financialReports = FinancialReport::find()->all();
+        $financialReport = FinancialReport::findOne(['report_date' => $date]);
 
-        foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date)) === date('Y-m', strtotime( $date ))) {
+        if ($financialReport) {
                 return false;
-            }
         }
 
         return true;
