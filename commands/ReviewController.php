@@ -45,13 +45,10 @@ class ReviewController extends DefaultController
             if(!$monthReport['is_locked'] == 1)
                 return;
 
-            // somehow salaryReport for 11 month returns 10 from MONTH(FROM_UNIXTIME(salary_reports.report_date))
-            // for 11 month in returns 'FROM_UNIXTIME(salary_reports.report_date)' => '2018-10-31 22:00:00'
-            // that is why search_month = $month-1
             $salaryReport = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_reports                     
                 WHERE MONTH(FROM_UNIXTIME(salary_reports.report_date)) =:search_month;", [
-                ':search_month'  => $month-1
+                ':search_month'  => $month
             ])->queryOne();
 
             //\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
