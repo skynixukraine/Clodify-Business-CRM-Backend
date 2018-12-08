@@ -436,7 +436,7 @@ class Report extends \yii\db\ActiveRecord
     }
 
     /**
-     * 
+     *
      */
     public static function approveTodayReports()
     {

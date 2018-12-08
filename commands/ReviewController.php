@@ -23,7 +23,6 @@ class ReviewController extends DefaultController
         Yii::getLogger()->flush();
         try {
             Yii::getLogger()->log('actionApproveToday: running', Logger::LEVEL_INFO);
-            Report::approveTodayReports();
 
             $monthReport = \Yii::$app->db->createCommand("
                 SELECT * FROM financial_reports                     
