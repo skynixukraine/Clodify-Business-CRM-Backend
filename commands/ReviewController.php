@@ -50,7 +50,8 @@ class ReviewController extends DefaultController
                 ':search_month'  => $month
             ])->queryOne();
 
-            ///\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+            //\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+
 
             $salaryReportListAndUsers = \Yii::$app->db->createCommand("
                 SELECT * FROM salary_report_lists
@@ -100,21 +101,21 @@ class ReviewController extends DefaultController
                     $salaryReportListAndUser['worked_days'] = 1;
                 }
 
-                //return;
                 $score_loyalty = 100 - (intval($salaryReportListAndUser['day_off']) + intval($salaryReportListAndUser['hospital_days']))*
                     (100/$salaryReportListAndUser['worked_days']) - (intval($workHistoryFails['COUNT(*)']) - intval($workHistoryEffords['COUNT(*)']))*10;
 
 
-                //return;
                 $review->score_loyalty = $this->correctValue($score_loyalty);
 
-                //(SELECT COUNT(*) FROM reports WHERE date_report BETWEEN date_from AND date_to GROUP BY project_id
                 $reportsPerformance = \Yii::$app->db->createCommand("
                 SELECT COUNT(*) FROM reports WHERE date_report>=:date_from AND date_report<=:date_to GROUP BY project_id", [
                     ':date_from'  => $dateFrom, ':date_to' => $dateTo
                 ])->queryOne();
-//return;
-                $score_performance = 100 - intval($salaryReportListAndUser['non_approved_hours']) - (5 - intval($reportsPerformance['COUNT(*)']))*10 ;
+
+
+                $score_performance = 100 - (100/$monthReport['num_of_working_days'])*intval($salaryReportListAndUser['non_approved_hours']);
+                \Yii::getLogger()->log($score_performance, Logger::LEVEL_ERROR);
+
                 $review->score_performance = $this->correctValue($score_performance);
 
                 $laborExpensesRato = \Yii::$app->db->createCommand("
@@ -130,14 +131,24 @@ class ReviewController extends DefaultController
                     ])->queryOne();
                 //\Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
 
-                //return;
+                $score_earnings = 0.2 * intval($fin_income['SUM(amount)']) - (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100));
 
-                //( SalaryReportList→subtotal * (1 + Settings→LABOR_EXPENSES_RATIO / 100)  - (SELECT SUM(amount) FROM financial_income WHERE financial_report_id=? AND developer_user_id=?)  ) * 0.1
-                $score_earnings = (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100) - intval($fin_income['SUM(amount)'])) *0.1;
-                \Yii::getLogger()->log($score_earnings, Logger::LEVEL_ERROR);
+                //\Yii::getLogger()->log('score earnings ' . intval($fin_income['SUM(amount)']), Logger::LEVEL_ERROR);
                 $review->score_earnings = $this->correctValue($score_earnings);
 
                 $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
+
+                $notes = \Yii::$app->db->createCommand("
+                SELECT * FROM work_history
+                WHERE MONTH(work_history.date_start) =:search_month AND MONTH(work_history.date_end) =:search_month;", [
+                ':search_month'  => $month])->queryAll();
+
+                $notesInString = json_encode($notes);
+
+                $review->notes = $notesInString;
+
+                \Yii::getLogger()->log('notes' . $review->notes, Logger::LEVEL_ERROR);
+
                 \Yii::getLogger()->log($score_total, Logger::LEVEL_ERROR);
                 $review->score_total = $this->correctValue($score_total);
                 $review->save();
