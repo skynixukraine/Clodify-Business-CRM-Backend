@@ -670,10 +670,11 @@ CREATE TABLE reviews (
   PRIMARY KEY (id),
   KEY fk_user_id (user_id),
   CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES `users` (id) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE reviews DISABLE KEYS */;
+INSERT INTO reviews VALUES (1,1,'2018-11-01','2018-11-30',90,90,80,83,'Note'),(2,3,'2018-11-01','2018-11-30',50,80,80,76,NULL),(3,2,'2018-11-01','2018-11-30',60,80,90,78,NULL),(4,6,'2018-11-01','2018-11-30',100,90,100,99,NULL),(5,5,'2018-11-01','2018-11-30',100,90,90,98,NULL);
 /*!40000 ALTER TABLE reviews ENABLE KEYS */;
 DROP TABLE IF EXISTS salary_history;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
