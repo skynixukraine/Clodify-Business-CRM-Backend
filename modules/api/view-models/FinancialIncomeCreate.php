@@ -44,9 +44,11 @@ class FinancialIncomeCreate extends ViewModelAbstract
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Financial Report is locked any operations are forbidden'));
                 }
+
             } else {
                 return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to add income for not existent financial report'));
             }
+
         } else {
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
         }

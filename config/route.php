@@ -120,6 +120,8 @@ return [
     'GET '      . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/fetch',
     'POST '     . $API_CORE . 'client/<client_id:\d+>/orders'                 => $API_CORE . 'orders/create',
     'PUT '      . $API_CORE . 'client/<client_id:\d+>/orders/<order_id:\d+>'  => $API_CORE . 'orders/update',
+    'GET '      . $API . '/monthly-reviews'                                           => $API . '/monthly-reviews/fetch',
+    'GET '      . $API . '/monthly-reviews/<id:\d+>'                                  => $API . '/monthly-reviews/fetch',
 
 
     // General rules

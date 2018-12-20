@@ -44,6 +44,7 @@ class ApiEndpoints
     const SSO_CONFIG              = '/api/sso/config';
     const SSO_TOKEN_CHECK         = '/api/sso/check';
     const REVIEWS                 = '/api/reviews';
+    const MONTHLY_REVIEWS         = '/api/monthly-reviews';
     const FINANCIAL_REPORTS_INCOME= '/income';
     const FINANCIAL_REPORTS_BONUSES= '/bonuses';
 

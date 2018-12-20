@@ -56,4 +56,13 @@ class Review extends \yii\db\ActiveRecord
             'notes'          => 'Notes'
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
 }
