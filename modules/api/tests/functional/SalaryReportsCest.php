@@ -36,13 +36,13 @@ class SalaryReportsCest
         $I->wantTo('Testing create salary reports');
         $I->sendPOST(ApiEndpoints::SALARY_REPORTS, json_encode(
             [
-                'report_date' => ValuesContainer::$FinancialReportDate
+                'report_date'   => ValuesContainer::$FinancialReportDate,
+                'report_year'   => ValuesContainer::$FinancialReportYear
             ]
         ));
         $response = json_decode($I->grabResponse());
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
-        $this->salaryReportId = $response->data->report_id;
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
@@ -54,6 +54,7 @@ class SalaryReportsCest
                 'success' => 'boolean'
             ]
         );
+        $this->salaryReportId = $response->data->report_id;
     }
 
 
@@ -65,8 +66,8 @@ class SalaryReportsCest
     public function testFetchSalaryReportCest(FunctionalTester $I)
     {
         $I->haveInDatabase('salary_reports', array(
-            'id'                     => $this->salaryReportId + 1,
-            'report_date'            => 1437609600,
+            'id'                     => $this->salaryReportId + 2,
+            'report_date'            => date('Y-m-t'),
             'total_salary'           => 9000,
             'official_salary'        => 1500,
             'bonuses'                => 600,
@@ -104,8 +105,8 @@ class SalaryReportsCest
                         'currency_rate'          => 'float | integer',
                         'total_to_pay'           => 'float | integer',
                         'number_of_working_days' => 'integer',
-                        "total_reported_hours"   => 'integer',
-                        "total_approved_hours"   => 'integer',
+                        "total_reported_hours"   => 'float | integer',
+                        "total_approved_hours"   => 'float | integer',
                         'total_users'            => 'integer',
                         'total_lists'            => 'integer'
 

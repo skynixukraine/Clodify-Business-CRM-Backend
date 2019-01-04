@@ -37,7 +37,6 @@ class FinancialReportLock extends ViewModelAbstract
 
     public function define()
     {
-
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $id = Yii::$app->request->getQueryParam('id');
             $financialReport = FinancialReport::findOne($id);

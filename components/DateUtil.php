@@ -177,4 +177,26 @@ class DateUtil
         return $timestamp;
     }
 
+    /**
+     * @param $date //Y-m-d
+     * @return string //Y-m
+     */
+    public static function getMonthYearByDate($date)
+    {
+        $parts = explode("-", $date);
+        return $parts[0] . "-" . $parts[1];
+    }
+
+    /**
+     * This function outputs the last day date of the given month, e.g. 2018-12-31
+     * @param $month
+     * @return string
+     */
+    public static function getLastDayDateByMonth($month)
+    {
+        $date = date("Y-") . $month . '-01';
+        $lastDay = date("t", strtotime($date));
+        return date("Y-") . $month . "-" . $lastDay;
+    }
+
 }

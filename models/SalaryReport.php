@@ -8,13 +8,14 @@
 
 namespace app\models;
 
+use app\components\DateUtil;
 use Yii;
 
 /**
  * This is the model class for table "salary_reports".
  *
  * @property integer $id
- * @property integer $report_date
+ * @property string $report_date
  * @property double $total_salary
  * @property double $official_salary
  * @property double $bonuses
@@ -31,6 +32,7 @@ class SalaryReport extends \yii\db\ActiveRecord
 {
     const SCENARIO_SALARY_REPORT_CREATE = 'api-salary_report-create';
 
+    public $report_year;
     /**
      * @inheritdoc
      */
@@ -45,11 +47,12 @@ class SalaryReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_date'], 'integer',
+            [['report_date'], 'date', 'format' => 'php:Y-m-d',
                 'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
             [['number_of_working_days'], 'integer'],
+            [['report_year'], 'safe'],
             [['total_salary', 'official_salary', 'bonuses', 'hospital', 'day_off', 'overtime', 'other_surcharges', 'subtotal', 'currency_rate', 'total_to_pay'], 'number'],
         ];
     }
@@ -78,7 +81,7 @@ class SalaryReport extends \yii\db\ActiveRecord
 
     /**
      * Validate:
-     *     only one report per month can be created.
+     * only one report per month can be created.
      *
      * @param $reportDate
      * @return bool
@@ -86,15 +89,8 @@ class SalaryReport extends \yii\db\ActiveRecord
     public static function validateSalaryReportDate($date)
     {
 
-        $financialReports = SalaryReport::find()->all();
-
-        foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)) {
-                return false;
-            }
-        }
-
-        return true;
+        return self::find()->where(['report_date' => $date])->one() ?
+            false : true;
     }
 
     /**
@@ -103,12 +99,9 @@ class SalaryReport extends \yii\db\ActiveRecord
      */
     public static function findSalaryReport($financialReport)
     {
-        $salaryReports = SalaryReport::find()->all();
-        foreach ($salaryReports as $salaryReport) {
-            if (date('Y-m', $salaryReport->report_date) == date('Y-m', strtotime($financialReport->report_date))) {
-                return $salaryReport;
-            }
-        }
+        return self::find()
+            ->where(['report_date' => date('Y-m-t', strtotime($financialReport->report_date))])
+            ->one();
     }
 
     /**
@@ -117,12 +110,9 @@ class SalaryReport extends \yii\db\ActiveRecord
      */
     public static function getTotalReportedHours($salRep)
     {
-
-        $date = date('Y-m', $salRep->report_date);
-
         $sum = Report::find()
             ->andWhere(['is_delete' => Report::ACTIVE])
-            ->andWhere(['like', 'date_added', $date])
+            ->andWhere(['like', 'date_added', DateUtil::getMonthYearByDate($salRep->report_date)])
             ->sum(Report::tableName() . '.hours');
         return $sum ? $sum : 0;
     }
@@ -134,12 +124,10 @@ class SalaryReport extends \yii\db\ActiveRecord
     public static function getTotalApprovedHours($salRep)
     {
 
-        $date = date('Y-m', $salRep->report_date);
-
         $sum = Report::find()
             ->andWhere(['is_delete' => Report::ACTIVE])
             ->andWhere(['is_approved' => Report::APPROVED])
-            ->andWhere(['like', 'date_added', $date])
+            ->andWhere(['like', 'date_added', DateUtil::getMonthYearByDate($salRep->report_date)])
             ->sum(Report::tableName() . '.hours');
         return $sum ? $sum : 0;
     }

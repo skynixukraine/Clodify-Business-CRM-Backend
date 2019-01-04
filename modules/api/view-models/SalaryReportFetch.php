@@ -87,8 +87,8 @@ class SalaryReportFetch extends ViewModelAbstract
                         "currency_rate"          => $salRep->currency_rate,
                         "total_to_pay"           => $salRep->total_to_pay,
                         "number_of_working_days" => $salRep->number_of_working_days,
-                        "total_reported_hours"   => SalaryReport::getTotalReportedHours($salRep),
-                        "total_approved_hours"   => SalaryReport::getTotalApprovedHours($salRep),
+                        "total_reported_hours"   => (float)SalaryReport::getTotalReportedHours($salRep),
+                        "total_approved_hours"   => (float)SalaryReport::getTotalApprovedHours($salRep),
                         'total_users'            => (int)$totalUsers,
                         'total_lists'            => (int)SalaryReportList::find()
                             ->where([SalaryReportList::tableName() . '.salary_report_id' => $salRep->id])

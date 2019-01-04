@@ -115,14 +115,14 @@ class SalaryReportDownload extends ViewModelAbstract
                 $content = Yii::$app->controller->renderPartial('/salary-reports/SalaryReportTemplatePDF', [
                     'salaryReportData' => $salaryReportData,
                     'salaryReportListData' => $salaryReportListData ?: [],
-                    'salaryReportDate' => DateUtil::convertDateFromUnix($salaryReport->report_date, 'F Y'),
+                    'salaryReportDate' => DateUtil::convertDateFromUnix(strtotime( $salaryReport->report_date ), 'F Y'),
                     'completion' => count($salaryReportListData) . '(' . $this->countEmployedUsers() . ')'
                 ]);
                 $pdf = new Mpdf();
                 @$pdf->WriteHTML($content);
 
                 $name = 'SalaryReport_' . $salaryReport->id . '_' .
-                    DateUtil::convertDateFromUnix($salaryReport->report_date, 'Y_m') . '.pdf';
+                    DateUtil::convertDateFromUnix(strtotime( $salaryReport->report_date ), 'Y_m') . '.pdf';
 
                 $this->setData(
                     [

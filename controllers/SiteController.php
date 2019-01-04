@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\components\Bootstrap;
 use app\models\CoreClient;
 use app\models\CoreClientOrder;
+use app\models\SalaryReportList;
 use app\models\Setting;
 use Yii;
 use app\models\SupportTicket;
@@ -370,6 +371,12 @@ class SiteController extends Controller
     public function actionTestorder()
     {
         return $this->render('testorder');
+    }
+
+    public function actionTest()
+    {
+        echo SalaryReportList::getNumNonApprovedHoursInMonthDuringWorkingDays(10, 1541023200);
+        die();
     }
 
     public function actionPaymentCallback()

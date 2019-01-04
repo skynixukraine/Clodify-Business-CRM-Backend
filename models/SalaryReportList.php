@@ -297,16 +297,16 @@ class SalaryReportList extends \yii\db\ActiveRecord
 
     /**
      * @param $userId
-     * @param $date
+     * @param $date //Y-m-d
      * @return int
-     * take month and year from exp: '1389916800'
      * and return number of working days (Monday - Friday) with more than 6 reported hours
      */
     public static function numWorkedDaysInMonth($userId, $date)
     {
-        $m = date('m', $date);
-        $y = date('Y', $date);
-        $lastday = date("t",mktime(0,0,0,$m,1,$y));
+        $parts = explode("-", $date);
+        $m = $parts[1];
+        $y = $parts[0];
+        $lastday = $parts[2];
         $workdays=0;
         for($d=1;$d<=$lastday;$d++) {
             $wd = date("w",mktime(0,0,0,$m,$d,$y));
@@ -330,16 +330,17 @@ class SalaryReportList extends \yii\db\ActiveRecord
      */
     public static function getNumNonApprovedHoursInMonthDuringWorkingDays($userId, $date)
     {
-        $m = date('m', $date);
-        $y = date('Y', $date);
-        $lastday    = date("t",mktime(0,0,0,$m,1,$y));
+        $parts = explode("-", $date);
+        $m = $parts[1];
+        $y = $parts[0];
+        $lastday = $parts[2];
         $hours      = 0;
         for($d=1;$d<=$lastday;$d++) {
             $wd = date("w",mktime(0,0,0,$m,$d,$y));
             if($wd > 0 && $wd < 6) {
                 $datePointer = date('Y-m-d',mktime(0,0,0,$m,$d,$y));
                 if ( ($reportedHours = Report::sumHoursReportsOfThisDay($userId, $datePointer) ) >= 6 &&
-                    ($h = self::sumApprovedHoursReportsForDay($userId, $datePointer)) &&
+                    ($h = self::sumApprovedHoursReportsForDay($userId, $datePointer)) >= 0 &&
                     (6 - $h) > 0 ) {
 
                     $hours += (6 - $h);
@@ -357,11 +358,12 @@ class SalaryReportList extends \yii\db\ActiveRecord
      */
     public static function sumHoursReportsForMonth($userId, $dateReport)
     {
-        return Report::find()
+        $h = Report::find()
             ->andWhere(['user_id'       => $userId])
             ->andWhere(['date_report'   => $dateReport])
             ->andWhere(['is_delete'     => Report::ACTIVE])
             ->sum(Report::tableName() . '.hours');
+        return $h > 0 ? $h : 0;
     }
 
     /**
@@ -371,17 +373,18 @@ class SalaryReportList extends \yii\db\ActiveRecord
      */
     public static function sumApprovedHoursReportsForDay($userId, $dateReport)
     {
-        return Report::find()
+        $h = Report::find()
             ->andWhere(['user_id'       => $userId])
             ->andWhere(['date_report'   => $dateReport])
             ->andWhere(['is_approved'   => 1])
             ->andWhere(['is_delete'     => Report::ACTIVE])
             ->sum(Report::tableName() . '.hours');
+        return $h > 0 ? $h : 0;
     }
 
     /**
      * @param $userId
-     * @param $date
+     * @param $date //Y-m-d
      * @param $numWorkDays
      * @return int
      */
