@@ -47,7 +47,8 @@ class FinancialReportsCest
         $I->wantTo('Testing create financial reports');
         $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS, json_encode(
             [
-                'report_date' => ValuesContainer::$FinancialReportDate
+                'report_date'   => ValuesContainer::$FinancialReportDate,
+                'report_year'   => ValuesContainer::$FinancialReportYear
             ]
         ));
         $response = json_decode($I->grabResponse());
@@ -65,6 +66,7 @@ class FinancialReportsCest
                 'success' => 'boolean'
             ]
         );
+
     }
 
     /**
@@ -197,10 +199,30 @@ class FinancialReportsCest
 
     public function testFetchFinancilReportWithSearchQueryCest(FunctionalTester $I)
     {
-        $period = urlencode("01/" . (ValuesContainer::$FinancialReportDate - 1) . "/" . date("Y") . " ~ " .
-            "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" . date("Y"));
+        if ( ValuesContainer::$FinancialReportDate > 1 ) {
+
+            $period = "01/" .
+                (ValuesContainer::$FinancialReportDate - 1) . "/" .
+                ValuesContainer::$FinancialReportYear;
+
+        } else {
+
+            $period =  "01/12/" . ValuesContainer::$FinancialReportYear - 1;
+
+        }
+        $period .= " ~ ";
+        if ( ValuesContainer::$FinancialReportDate < 12 ) {
+
+            $period .= "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" .
+                ValuesContainer::$FinancialReportYear;
+        } else {
+
+            $period .= "01/01/" . (ValuesContainer::$FinancialReportYear + 1);
+
+        }
+
         $I->wantTo('Testing fetch financial report data with search_query e.g. d/m/Y ~ d/m/Y');
-        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . $period);
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . urlencode($period));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
@@ -234,9 +256,27 @@ class FinancialReportsCest
 
     public function testFetchFinancilReportBySALESCest(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $period = urlencode("01/" . (ValuesContainer::$FinancialReportDate - 1) . "/" . date("Y") . " ~ " .
-            "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" . date("Y"));
+        if ( ValuesContainer::$FinancialReportDate > 1 ) {
 
+            $period = "01/" .
+                (ValuesContainer::$FinancialReportDate - 1) . "/" .
+                ValuesContainer::$FinancialReportYear;
+
+        } else {
+
+            $period =  "01/12/" . ValuesContainer::$FinancialReportYear - 1;
+
+        }
+        $period .= " ~ ";
+        if ( ValuesContainer::$FinancialReportDate < 12 ) {
+
+            $period .= "01/" . (ValuesContainer::$FinancialReportDate + 1) . "/" .
+                ValuesContainer::$FinancialReportYear;
+        } else {
+
+            $period .= "01/01/" . (ValuesContainer::$FinancialReportYear + 1);
+
+        }
         $I->wantTo('Testing fetch financial report data by SALES with search_query e.g. d/m/Y ~ d/m/Y');
 
         $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
@@ -244,7 +284,7 @@ class FinancialReportsCest
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login($email, $pas);
-        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . $period);
+        $I->sendGET(ApiEndpoints::FETCH_FINANCIAL_REPORTS . '?search_query=' . urlencode($period));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());

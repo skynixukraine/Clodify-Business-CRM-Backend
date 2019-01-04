@@ -16,6 +16,7 @@ class ValuesContainer
     public static $contractId = 2;
     public static $FinancialReportId;
     public static $FinancialReportDate; //This value will be set during fin reports cest
+    public static $FinancialReportYear;
     public static $DelayedSalaryDate;
     public static $BusinessID = 1;
     public static $alternateBusinessID = 2;

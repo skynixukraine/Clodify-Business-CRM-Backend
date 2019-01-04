@@ -27,6 +27,7 @@ class FinancialReport extends \yii\db\ActiveRecord
     const SCENARIO_FINANCIAL_REPORT_CREATE = 'api-financial_report-create';
     const SCENARIO_FINANCIAL_REPORT_UPDATE = 'api-financial_report-update';
 
+    public $report_year;
 
     /**
      * @inheritdoc
@@ -52,7 +53,8 @@ class FinancialReport extends \yii\db\ActiveRecord
                 'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
             ['num_of_working_days', 'integer',
                 'min' => self::NUM_OF_WORKING_DAY_MIN, 'max' => self::NUM_OF_WORKING_DAY_MAX,
-                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE]
+                'on' => self::SCENARIO_FINANCIAL_REPORT_UPDATE],
+            ['report_year', 'safe']
         ];
     }
 
@@ -276,12 +278,14 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function validateReportForSalaryList($date)
     {
-        $financialReports = FinancialReport::find()->all();
-        foreach ($financialReports as $financialReport) {
-            if ((date('Y-m', strtotime($financialReport->report_date)) == date('Y-m', $date)) &&
-                $financialReport->num_of_working_days > 0 && $financialReport->currency > 0) {
-                return true;
-            }
+        $yearMonth = DateUtil::getMonthYearByDate($date);
+        if ( ( $financialReport = self::find()
+            ->where(['between', 'report_date', $yearMonth . '-01', $yearMonth . '-31' ])
+            ->one() ) &&
+            $financialReport->num_of_working_days > 0 && $financialReport->currency > 0 ) {
+
+            return true;
+
         }
         return false;
     }
@@ -294,11 +298,13 @@ class FinancialReport extends \yii\db\ActiveRecord
 
     public static function getCurrency($date)
     {
-        $financialReports = FinancialReport::find()->all();
-        foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
-                return $financialReport->currency;
-            }
+        $yearMonth = DateUtil::getMonthYearByDate($date);
+        if ( ( $financialReport = self::find()
+            ->where(['between', 'report_date', $yearMonth . '-01', $yearMonth . '-31' ])
+            ->one() ) ) {
+
+            return $financialReport->currency;
+
         }
     }
 
@@ -309,11 +315,13 @@ class FinancialReport extends \yii\db\ActiveRecord
      */
     public static function getNumOfWorkingDays($date)
     {
-        $financialReports = FinancialReport::find()->all();
-        foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
-                return $financialReport->num_of_working_days;
-            }
+        $yearMonth = DateUtil::getMonthYearByDate($date);
+        if ( ( $financialReport = self::find()
+            ->where(['between', 'report_date', $yearMonth . '-01', $yearMonth . '-31' ])
+            ->one() ) ) {
+
+            return $financialReport->num_of_working_days;
+
         }
     }
 
@@ -325,11 +333,10 @@ class FinancialReport extends \yii\db\ActiveRecord
 
     public static function isLock($date)
     {
-        $financialReports = FinancialReport::find()->all();
-        foreach ($financialReports as $financialReport) {
-            if (date('Y-m', strtotime( $financialReport->report_date )) == date('Y-m', $date)){
-                return $financialReport->is_locked;
-            }
-        }
+        $yearMonth = DateUtil::getMonthYearByDate($date);
+        return self::find()
+            ->where(['between', 'report_date', $yearMonth . '-01', $yearMonth . '-31' ])
+            ->andWhere(['is_locked' => 1])
+            ->one() ? true : false;
     }
 }

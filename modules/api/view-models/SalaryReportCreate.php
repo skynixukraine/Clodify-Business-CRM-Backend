@@ -29,12 +29,20 @@ class SalaryReportCreate extends ViewModelAbstract
         // TODO: Implement define() method.
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
-            $date = date("Y-") . $this->model->report_date . '-01';
 
-            $reportDate = DateUtil::convertDateToUnix($date);
+            if ($this->model->report_year) {
+
+                $reportDate = $this->model->report_year . '-' . $this->model->report_date . '-01';
+                $reportDate = $this->model->report_year . '-' . $this->model->report_date . '-' . date('t', strtotime($reportDate));
+
+            } else {
+
+                $reportDate = DateUtil::getLastDayDateByMonth($this->model->report_date);
+
+            }
 
             if (!SalaryReport::validateSalaryReportDate($reportDate)) {
-                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The report is already created or time for report invalid'));
+                return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'The salary report is already created for this month'));
             }
 
             $this->model->report_date = $reportDate;
