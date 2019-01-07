@@ -106,7 +106,7 @@ class CreateEditReport extends ViewModelAbstract
 
 
                             $expensesRatio = 1;
-                            if($project->type == 'FIXED_PRICE') {
+                            if($project->type === 'FIXED_PRICE') {
 
                                 if(($milestone = Milestone::find()
                                     ->where(['and', 'start_date<=NOW()', 'end_date>=NOW()'])

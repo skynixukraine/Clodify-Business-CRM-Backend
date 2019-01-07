@@ -486,6 +486,30 @@ class ProjectsCest
         $I->assertEmpty($response->errors);
         $I->assertEquals(true, $response->success);
 
+        $I->wantTo('test create a report as a dev user for a Fixed Price project without opened milestone');
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas    = ValuesContainer::$userDev['password'];
+
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendPOST(ApiEndpoints::REPORT, json_encode([
+            'project_id' => $this->fixedPriceProjectId,
+            'task' => TASK,
+            'hours' => HOURS,
+            'date_report' => date('Y-m-d', strtotime('now +1 day'))
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals( false, $response->success);
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
         $I->wantTo('Create another Milestone when all are CLOSED');
         $I->sendPOST(ApiEndpoints::PROJECT . '/' . $this->fixedPriceProjectId . '/milestones', json_encode([
             "name"          => "Milestone 2 - Theme coding",
