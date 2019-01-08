@@ -40,7 +40,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                     $query->andWhere(['added_by_user_id' => Yii::$app->user->id]);
                 }
                 $query->orderBy(['project_id' => SORT_DESC]);
-                $query->groupBy('project_id, id');
+                $query->groupBy('project_id');
                 $query->select(['SUM(amount) AS sumAmount', 'project_id', 'added_by_user_id']);
                 $data = $query->all();
 
