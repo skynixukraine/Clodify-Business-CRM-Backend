@@ -75,13 +75,20 @@ class Report extends \yii\db\ActiveRecord
                 // if a project_type=FIXED_PRICE and no any milestone with a status=NEW, do not let to post a report and output an error: The project does not have any active milestones, ask your manager to create one
                 /** @var $project Project */
                 if ( ( $project = $this->getProject()->one()) &&
-                    $project->type === Project::TYPE_FIXED_PRICE &&
-                    Milestone::find()->where([
+                    $project->type === Project::TYPE_FIXED_PRICE ) {
+
+                   $milestone =  Milestone::find()->where([
                         'project_id' => $project->id,
                         'status' => Milestone::STATUS_NEW
-                        ])->andWhere(['<=', 'start_date', date('Y-m-d')])->count() === 0 ) {
+                    ])
+                       ->andWhere(['<=', 'start_date', $this->date_report])
+                       ->one();
 
-                    $this->addError('project_id', Yii::t('app', 'This project does not have any active milestones.'));
+                   if ( !$milestone ) {
+
+                       $this->addError('project_id', Yii::t('app', 'The milestone is not set up for this project.'));
+
+                   }
 
                 }
             }]
