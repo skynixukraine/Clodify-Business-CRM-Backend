@@ -195,7 +195,7 @@ class ProjectFetch extends ViewModelAbstract
      * @param $customersNames
      * @return Array
      */
-    function specialVal($model, $developersNames, $customersNames) : Array
+    function specialVal($model, $developersNames, $customersNames) : array
     {
         $list = $this->defaultVal($model);
         $list['is_sales']       = isset($model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id : null;
@@ -205,9 +205,10 @@ class ProjectFetch extends ViewModelAbstract
         $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
 
         if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ]))) {
-            if( $model->getProjectDevelopers()->one()->status == 'ACTIVE' ) {
+            $projectDeveloper = $model->getProjectDevelopers()->where(['user_id' => Yii::$app->user->id])->one();
+            if( $projectDeveloper->status == 'ACTIVE' ) {
                 $list['is_subscribed']  = true;
-            } else if($model->getProjectDevelopers()->one()->status == 'INACTIVE') {
+            } else if( $projectDeveloper->status == 'INACTIVE') {
                 $list['is_subscribed']  = false;
             }
         }

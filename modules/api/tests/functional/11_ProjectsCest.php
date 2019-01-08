@@ -706,6 +706,37 @@ class ProjectsCest
 
     }
 
+
+    public function testSubscribeOnlyFilterOutputsSubscribedProjectsOnly(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test SubscribeOnly Filter');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userAdmin['id']));
+        $pas = ValuesContainer::$userAdmin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET('/api/projects?subscribedOnly=true&limit=1000');
+
+        \Helper\OAuthToken::$key = null;
+        $I->seeResponseCodeIs('200');
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), true);
+        $I->assertEmpty($response['errors']);
+        $I->assertEquals(true, $response['success']);
+        $exists = false;
+        foreach ( $response['data']['projects'] as $project ) {
+
+            if ( $project['id'] === ValuesContainer::$ProjectId ) {
+
+                $exists = true;
+
+            }
+
+        }
+        $I->assertEquals(false, $exists);
+
+    }
+
     /**
      * @see https://jira.skynix.co/browse/SCA-238
      * @param FunctionalTester $I
