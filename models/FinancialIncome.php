@@ -66,7 +66,9 @@ class FinancialIncome extends \yii\db\ActiveRecord
                         ->andWhere(['between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate])->one())) {
 
                         $this->addError('project_id',
-                            Yii::t('app', 'The project has no any CLOSEd milestones during ${s} ~ ${e}', [
+                            Yii::t('app', 'In order to add income to the project it should have a closed milestone during the period when the income is entered. '.
+                                'Entering income without having a closed milestone is prohibited. ' .
+                                'This project has no closed milestones during ${s} -  ${e}', [
                                 's'    => $finReportRange->fromDate,
                                 'e'    => $finReportRange->toDate
                             ]));
