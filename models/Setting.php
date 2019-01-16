@@ -20,13 +20,16 @@ use Yii;
  */
 class Setting extends \yii\db\ActiveRecord
 {
-    const CORP_EVENTS_FACTOR    = 'corp_events_percentage';
-    const BONUSES_FACTOR        = 'bonuses_percentage';
-    const LABOR_EXPENSES_RATIO  = 'LABOR_EXPENSES_RATIO';
-    const SSO_COOKIE_COMAIN_NAME    = 'SSO_COOKIE_COMAIN_NAME';
+    const CORP_EVENTS_FACTOR            = 'corp_events_percentage';
+    const BONUSES_FACTOR                = 'bonuses_percentage';
+    const LABOR_EXPENSES_RATIO          = 'LABOR_EXPENSES_RATIO';
+    const SSO_COOKIE_COMAIN_NAME        = 'SSO_COOKIE_COMAIN_NAME';
 
-    const CLIENT_ID             = 'client_id';
-    const CLIENT_ACCESS_KEY     = 'access_key';
+    const CLIENT_ID                     = 'client_id';
+    const CLIENT_ACCESS_KEY             = 'access_key';
+    const VACATION_DAYS                 = 'vacation_days';
+    const VACATION_DAYS_UPGRADE_YEARS   = 'vacation_days_upgrade_years';
+    const VACATION_DAYS_UPGRADED        = 'vacation_days_upgraded';
 
     /**
      * @inheritdoc
@@ -123,5 +126,38 @@ class Setting extends \yii\db\ActiveRecord
             ->where(['key' => self::CLIENT_ACCESS_KEY])
             ->one();
         return (string)$settingRow->value;
+    }
+    
+    /**
+     * @return int
+     */
+    public static function getVacationDays()
+    {
+        $settingRow = Setting::find()
+        ->where(['key' => self::VACATION_DAYS])
+        ->one();
+        return (int)$settingRow->value;
+    }
+    
+    /**
+     * @return int
+     */
+    public static function getVacationDaysUpgradeYears()
+    {
+        $settingRow = Setting::find()
+        ->where(['key' => self::VACATION_DAYS_UPGRADE_YEARS])
+        ->one();
+        return (int)$settingRow->value;
+    }
+    
+    /**
+     * @return int
+     */
+    public static function getVacationDaysUpgraded()
+    {
+        $settingRow = Setting::find()
+        ->where(['key' => self::VACATION_DAYS_UPGRADED])
+        ->one();
+        return (int)$settingRow->value;
     }
 }
