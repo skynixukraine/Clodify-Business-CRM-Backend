@@ -157,21 +157,23 @@ class UsersCest
             'data'  => ['users' =>
                 [
                     [
-                'id'               => 'integer',
-                'image'            => 'string',
-                'first_name'       => 'string',
-                'last_name'        => 'string',
-                'company'          => 'string|null',
-                'role'             => 'string',
-                'email'            => 'string',
-                'phone'            => 'string|null',
-                'last_login'       => 'string',
-                'joined'           => 'string',
-                'is_active'        => 'integer',
-                'salary'           => 'string',
-                'official_salary'  => 'integer|null',
-                'salary_up'        => 'string',
-                'delayed_salary'   => 'array|null',
+                'id'                        => 'integer',
+                'image'                     => 'string',
+                'first_name'                => 'string',
+                'last_name'                 => 'string',
+                'company'                   => 'string|null',
+                'role'                      => 'string',
+                'email'                     => 'string',
+                'phone'                     => 'string|null',
+                'last_login'                => 'string',
+                'joined'                    => 'string',
+                'is_active'                 => 'integer',
+                'salary'                    => 'string',
+                'official_salary'           => 'integer|null',
+                'salary_up'                 => 'string',
+                'delayed_salary'            => 'array|null',
+                'vacation_days'             => 'integer',
+                'vacation_days_available'   => 'integer',
                     ]
                 ]
             ],
@@ -226,6 +228,8 @@ class UsersCest
                 'joined'                => 'string',
                 'is_active'             => 'integer',
                 'salary'                => 'integer',
+                'vacation_days'                => 'integer',
+                'vacation_days_available'      => 'integer',
             ]
         ]);
     }
