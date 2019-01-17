@@ -35,12 +35,14 @@ class UserView extends ViewModelAbstract
             }
 
             $data = [
-                'first_name'   => $model->first_name,
-                'last_name'    => $model->last_name,
-                'middle_name'  => $model->middle_name,
-                'company'      => $model->company,
-                'tags'         => $model->tags,
-                'about'        => $model->about
+                'first_name'                => $model->first_name,
+                'last_name'                 => $model->last_name,
+                'middle_name'               => $model->middle_name,
+                'company'                   => $model->company,
+                'tags'                      => $model->tags,
+                'about'                     => $model->about,
+                'vacation_days'             => $model->vacation_days,
+                'vacation_days_available'   => $model->vacation_days_available
                 ];
 
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
@@ -73,9 +75,11 @@ class UserView extends ViewModelAbstract
             }
             if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
 
-                $data['salary']             = $model->salary;
-                $data['official_salary']    = $model->official_salary;
-                $data['salary_up']          = $model->date_salary_up ? DateUtil:: convertDateTimeWithoutHours($model->date_salary_up) : null;
+                $data['salary']                     = $model->salary;
+                $data['official_salary']            = $model->official_salary;
+                $data['salary_up']                  = $model->date_salary_up ? DateUtil:: convertDateTimeWithoutHours($model->date_salary_up) : null;
+                $data['vacation_days']              = $model->vacation_days;
+                $data['vacation_days_available']    = $model->vacation_days_available;
             }
 
             $this->setData($data);
