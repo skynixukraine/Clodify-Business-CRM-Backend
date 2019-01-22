@@ -15,13 +15,13 @@ class VacationHistoryItemsController extends DefaultController
     public function actionIndex()
     {
         $this->di
-            ->set('yii\db\ActiveRecordInterface', 'app\models\User')
-            ->set('viewModel\ViewModelInterface', 'viewModel\VacationHistoryItemsFetch')
-            ->set('app\modules\api\components\Api\Access', [
-                'methods' => [Processor::METHOD_GET],
-                'checkAccess' => true
-            ])
-            ->get('Processor')
-            ->respond();
+        ->set('yii\db\ActiveRecordInterface', 'app\models\VacationHistoryItem')
+        ->set('viewModel\ViewModelInterface', 'viewModel\VacationHistoryItemsFetch')
+        ->set('app\modules\api\components\Api\Access', [
+            'methods' => [Processor::METHOD_GET],
+            'checkAccess' => true
+        ])
+        ->get('Processor')
+        ->respond();
     }
 }

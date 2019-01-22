@@ -29,7 +29,6 @@ class VacationHistoryItem extends \yii\db\ActiveRecord
         return [
             [['user_id', 'days', 'days', 'date'], 'required'],
             [['user_id', 'days'], 'integer'],
-            [['notes'], 'string'],
             [['date'], 'date'],
         ];
     }

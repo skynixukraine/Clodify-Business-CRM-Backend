@@ -51,26 +51,26 @@ class VacationHistoryItemsFetch extends ViewModelAbstract
         $dataTable->setOrder(VacationHistoryItem::tableName() . '.id', 'desc');
         
         $vacationHistoryItems = $dataTable->getData();
-        $vacationHistoryItemsData = array();
-        
+
+        $vacationHistoryItemsData = null;
         if ($vacationHistoryItems) {
             foreach ($vacationHistoryItems as $vacationHistoryItem) {
-                $row = array();
-                $user = $this->model->findOne($vacationHistoryItem->user_id);
-                $row ['id'] = $vacationHistoryItem->id;
-                $row ['user'] = array (
-                    "id"         => $user->id,
-                    "first_name" => $user->first_name,
-                    "last_name"  => $user->last_name
-                );
-                $row ['days'] = $vacationHistoryItem->days;
-                $row ['month'] = date('M', strtotime($vacationHistoryItem->date));
-                $vacationHistoryItemsData[] = $row;
+                $user = User::findOne ($vacationHistoryItem->user_id);
+                $vacationHistoryItemsData [] = [
+                    'id' => $vacationHistoryItem->id,
+                    'user' => [
+                        "id"         => $user->id,
+                        "first_name" => $user->first_name,
+                        "last_name"  => $user->last_name
+                    ],
+                    'days' => $vacationHistoryItem->days,
+                    'month' => date('M', strtotime($vacationHistoryItem->date))
+                ];
             }
         } 
         $data = [
-            "vacationHistoryItems" => $vacationHistoryItemsData,
-            "total_records" => DataTable::getInstance()->getTotal(),
+            'vacationHistoryItems' => $vacationHistoryItemsData,
+            'total_records' => DataTable::getInstance()->getTotal(),
         ];
         $this->setData($data);
     }
