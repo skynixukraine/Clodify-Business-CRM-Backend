@@ -21,8 +21,15 @@ class VacationHistoryItemsFetch extends ViewModelAbstract
     {
         $start = Yii::$app->request->getQueryParam('start') ?: 0;
         $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
-        $year  = Yii::$app->request->getQueryParam('year') ?: date("Y");       
-        $userId = Yii::$app->request->getQueryParam('user_id') ?: 0;
+        $year  = Yii::$app->request->getQueryParam('year') ?: date("Y");
+        
+        if (User::hasPermission([User::ROLE_ADMIN])) {
+            $userId = Yii::$app->request->getQueryParam('user_id', Yii::$app->user->id);
+        } elseif (User::hasPermission([User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
+            $userId = Yii::$app->user->id;
+        } else {
+            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
+        }
         
         $query = VacationHistoryItem::find()
         ->where([
@@ -30,17 +37,8 @@ class VacationHistoryItemsFetch extends ViewModelAbstract
             'date',
             date('Y-m-d', strtotime($year . '-01-01')),
             date('Y-m-d', strtotime($year . '-12-31'))
-        ]);
-        
-        if (User::hasPermission([User::ROLE_ADMIN])) {         
-            if ($userId>0) {
-                $query->andWhere(['user_id' => $userId]);
-            }            
-        } elseif (User::hasPermission([User::ROLE_FIN, User::ROLE_DEV, User::ROLE_CLIENT, User::ROLE_SALES, User::ROLE_PM])) {
-            $query->andWhere(['user_id' => Yii::$app->user->id]);
-        } else {
-            return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You have no permission for this action'));
-        }
+        ])
+        ->andWhere(['user_id' => $userId]);
         
         $dataTable = DataTable::getInstance()
             ->setQuery($query)
@@ -55,7 +53,7 @@ class VacationHistoryItemsFetch extends ViewModelAbstract
         $vacationHistoryItemsData = array();
         if ($vacationHistoryItems) {
             foreach ($vacationHistoryItems as $vacationHistoryItem) {
-                $user = User::findOne ($vacationHistoryItem->user_id);
+                $user = $vacationHistoryItem->getUser()->one();
                 $vacationHistoryItemsData [] = [
                     'id' => $vacationHistoryItem->id,
                     'user' => [
