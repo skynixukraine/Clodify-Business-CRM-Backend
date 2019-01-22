@@ -52,22 +52,24 @@ class VacationHistoryItemsFetch extends ViewModelAbstract
         
         $vacationHistoryItems = $dataTable->getData();
 
-        $vacationHistoryItemsData = null;
+        $vacationHistoryItemsData = array();
         if ($vacationHistoryItems) {
             foreach ($vacationHistoryItems as $vacationHistoryItem) {
                 $user = User::findOne ($vacationHistoryItem->user_id);
                 $vacationHistoryItemsData [] = [
                     'id' => $vacationHistoryItem->id,
                     'user' => [
-                        "id"         => $user->id,
-                        "first_name" => $user->first_name,
-                        "last_name"  => $user->last_name
+                        'id'         => $user->id,
+                        'first_name' => $user->first_name,
+                        'last_name'  => $user->last_name
                     ],
                     'days' => $vacationHistoryItem->days,
                     'month' => date('M', strtotime($vacationHistoryItem->date))
                 ];
             }
-        } 
+        } else {
+            $vacationHistoryItemsData = array();
+        }
         $data = [
             'vacationHistoryItems' => $vacationHistoryItemsData,
             'total_records' => DataTable::getInstance()->getTotal(),
