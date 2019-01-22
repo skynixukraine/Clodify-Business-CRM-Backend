@@ -47,5 +47,6 @@ class ApiEndpoints
     const MONTHLY_REVIEWS         = '/api/monthly-reviews';
     const FINANCIAL_REPORTS_INCOME= '/income';
     const FINANCIAL_REPORTS_BONUSES= '/bonuses';
+    const VACATION_HISTORY_ITEM  = '/api/vacation-history-items';
 
 }
