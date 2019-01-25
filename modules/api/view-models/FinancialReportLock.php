@@ -26,7 +26,6 @@ use app\models\Setting;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use yii\log\Logger;
-use app\components\DataTable;
 
 /**
  * Class FinancialReportCreate
