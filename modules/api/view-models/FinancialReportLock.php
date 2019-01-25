@@ -21,9 +21,12 @@ use app\models\SalaryReport;
 use app\models\SalaryReportList;
 use app\models\User;
 use app\models\WorkHistory;
+use app\models\VacationHistoryItem;
+use app\models\Setting;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use yii\log\Logger;
+use app\components\DataTable;
 
 /**
  * Class FinancialReportCreate
@@ -306,8 +309,54 @@ class FinancialReportLock extends ViewModelAbstract
                         }
 
                     }
-
-
+                    
+                    /**
+                     * @see https://jira.skynix.co/browse/SCA-324
+                     * 4 Implement vacation calculations into a Locking Financial Report
+                     */
+                    Yii::getLogger()->log('Vacation calculations', Logger::LEVEL_INFO); 
+                    if ($salaryReport) {
+                        $users = User::find()
+                            ->where(['role'=>
+                                [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM],
+                                'is_active' => 1,
+                                'is_delete' => 0
+                            ])
+                            ->orderBy(['id'   => 'ASC'])
+                            ->all();
+                        if ($users) {
+                            foreach ( $users as $user ) {                  
+                                $salaryReportList = SalaryReportList::find()
+                                    ->where(['salary_report_id' => $salaryReport->id])
+                                    ->andWhere(['user_id' => $user->id])
+                                    ->one();
+                                if ($salaryReportList) {
+                                    $user->vacation_days_available = $user->vacation_days_available - $salaryReportList->vacation_days;                                 
+                                    if ($salaryReportList->vacation_days > 0) {
+                                        $vacationhistoryItem = new VacationHistoryItem();
+                                        $vacationhistoryItem->user_id = $user->id;
+                                        $vacationhistoryItem->days = $salaryReportList->vacation_days;
+                                        $vacationhistoryItem->date = $financialReport->report_date;
+                                        $vacationhistoryItem->save(false);
+                                    }
+                                    $vacationDaysUpgradeYears = Setting::find()
+                                        ->where(['key' => 'vacation_days_upgrade_years'])
+                                        ->one();
+                                    $vacationDaysUpgraded = Setting::find()
+                                        ->where(['key' => 'vacation_days_upgraded'])
+                                        ->one();
+                                    if ((date('n', strtotime($financialReport->report_date)))=='12'){
+                                        if (((date("Y") - date('Y', strtotime($user->date_signup)))  >= $vacationDaysUpgradeYears->value) &&
+                                            ($user->vacation_days !== $vacationDaysUpgraded->value)) {
+                                                $user->vacation_days = $vacationDaysUpgraded->value;
+                                        }
+                                        $user->vacation_days_available = $user->vacation_days_available + $user->vacation_days;
+                                    }                                   
+                                    $user->save();
+                                }
+                            }
+                        }
+                    }        
                 } else {
                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You are trying to add twise the same report'));
                 }
