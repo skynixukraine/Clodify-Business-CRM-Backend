@@ -75,7 +75,7 @@ class SalaryReportFetch extends ViewModelAbstract
                     }
                     $salaryReport[$key] = [
                         'id'                     => $salRep->id,
-                        "report_date"            => DateUtil::dateRangeForFetch($salRep->report_date),
+                        "report_date"            => DateUtil::getMonthYearByDate($salRep->report_date),
                         "total_salary"           => $salRep->total_salary,
                         "official_salary"        => $salRep->official_salary,
                         "bonuses"                => $salRep->bonuses,
