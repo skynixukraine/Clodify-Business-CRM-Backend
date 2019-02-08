@@ -941,4 +941,59 @@ class InvoicesCest
 
     }
 
+    /**
+     * @see https://jira.skynix.co/browse/SCA-325
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testEditReportWhenInvoiced(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id'       => ValuesContainer::$userAdmin['id'],
+            'project_id'    => ValuesContainer::$projectId,
+            'date_added'    => '2017-03-09',
+            'date_report'   => date('Y-m-d', strtotime('now -1 day')),
+            'task' => 'superhero task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => $this->invoiceId,
+            'is_approved' => 1
+        ));
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Edit previously created report with invoice');
+        $this->newTask = TASK . 'NEW';
+        $newHours = HOURS + 1;
+
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId, json_encode([
+            'task' => $this->newTask,
+            'hours' => $newHours
+        ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+
+
+        $I->seeResponseContainsJson([
+            'errors' => [
+                [
+                    "param"     => "project_id",
+                    "message"   => "You can not edit this report, because it was already invoiced."
+                ]/*,
+                [
+                    "param"     => "error",
+                    "message"   => "You can not change project/date because that billing period is closed, customer invoiced."
+                ]*/
+            ],
+            'success' => false
+        ]);
+
+    }
+
 }

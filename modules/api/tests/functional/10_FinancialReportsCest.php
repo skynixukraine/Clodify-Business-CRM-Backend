@@ -207,7 +207,7 @@ class FinancialReportsCest
 
         } else {
 
-            $period =  "01/12/" . ValuesContainer::$FinancialReportYear - 1;
+            $period =  "01/12/" . (ValuesContainer::$FinancialReportYear - 1);
 
         }
         $period .= " ~ ";
@@ -264,7 +264,7 @@ class FinancialReportsCest
 
         } else {
 
-            $period =  "01/12/" . ValuesContainer::$FinancialReportYear - 1;
+            $period =  "01/12/" . (ValuesContainer::$FinancialReportYear - 1);
 
         }
         $period .= " ~ ";
