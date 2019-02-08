@@ -34,6 +34,7 @@ class CreateEditReport extends ViewModelAbstract
         if( $reportId ) {
             $this->model = Report::findOne($reportId);
             $oldHours = $this->model->hours;
+            $this->model->setScenario(Report::SCENARIO_UPDATE_REPORT);
             $this->model->setAttributes($this->postData);
             $this->model->date_report = DateUtil::convertData($this->model->date_report);
             if (strpos($this->model->hours, ',')) {

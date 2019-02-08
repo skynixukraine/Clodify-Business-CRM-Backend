@@ -45,6 +45,8 @@ class Report extends \yii\db\ActiveRecord
     const ACTIVE            = 0;
     const APPROVED          = 1;
 
+    const SCENARIO_UPDATE_REPORT = 'api-update-report';
+
     /**
      * @inheritdoc
      */
@@ -64,6 +66,7 @@ class Report extends \yii\db\ActiveRecord
             [['task'], 'trim'],
             [['project_id', 'user_id', 'invoice_id', 'is_working_day', 'is_delete'], 'integer'],
             [['project_id'], 'validateProjectReport'],
+            [['project_id'], 'validateExitingProjectReport', 'on' => [self::SCENARIO_UPDATE_REPORT]],
             // 12 hours according to https://jira.skynix.co/browse/SCA-118
             [['hours'], 'double', 'min'=>0.1,'max'=>12.0],
             [['date_added', 'date_paid'], 'safe'],
@@ -149,6 +152,37 @@ class Report extends \yii\db\ActiveRecord
         if( $r && $r->project->is_delete == 1) {
             $this->addError($attribute, 'Sorry, but this project is deleted.');
         }
+    }
+
+    public function validateExitingProjectReport($attribute, $params)
+    {
+        $prevReport = self::findOne($this->id);
+        //1. If the report is_invoiced=true do not let edit it, output an error: You can not edit this report, because it was already invoiced.
+        if ($this->invoice_id > 0 ) {
+
+            $this->addError($attribute, 'You can not edit this report, because it was already invoiced.');
+
+        }
+        //2. If the project_id and/or date_report is changed, check if a new project_customers(where project_id=?)→customer_id->contracts→invoices→date_end < date_report,
+        // otherwise output an error: You can not change project/date because that billing period is closed, customer invoiced.
+        if ( $prevReport->project_id !== $this->project_id || $prevReport->date_report != $this->date_report ) {
+
+            /** @var $customer User */
+            /** @var  $project Project  */
+            /** @var $contract Contract */
+            /** @var $invoice Invoice */
+            if ( ( $project = $this->getProject()->one() ) &&
+                ($customer = $project->getProjectCustomers()->where(['receive_invoices' => 1])->one()) &&
+                ($contract = Contract::find()->where(['customer_id' => $customer->id])->orderBy('id DESC')->one()) &&
+                ($invoice = $contract->getValidInvoice()) &&
+                strtotime( $invoice->date_end ) >= strtotime($this->date_report) ) {
+
+                $this->addError($attribute, 'You can not change project/date because that billing period is closed, customer invoiced.');
+
+            }
+
+        }
+
     }
 
     public function getDatePeriods() {
