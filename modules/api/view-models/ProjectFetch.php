@@ -204,13 +204,16 @@ class ProjectFetch extends ViewModelAbstract
         $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
         $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
 
-        if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ]))) {
-            $projectDeveloper = $model->getProjectDevelopers()->where(['user_id' => Yii::$app->user->id])->one();
+        if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ])) &&
+            ($projectDeveloper = $model->getProjectDevelopers()->where(['user_id' => Yii::$app->user->id])->one())) {
             if( $projectDeveloper->status == 'ACTIVE' ) {
                 $list['is_subscribed']  = true;
             } else if( $projectDeveloper->status == 'INACTIVE') {
                 $list['is_subscribed']  = false;
             }
+        } else {
+
+            $list['is_subscribed']  = false;
         }
 
         $list['total_approved'] = $model->total_approved_hours ? $model->total_approved_hours : 0;
