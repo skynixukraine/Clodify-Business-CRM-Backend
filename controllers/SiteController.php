@@ -373,11 +373,28 @@ class SiteController extends Controller
         return $this->render('testorder');
     }
 
-    public function actionTest()
+    /*public function actionTest()
     {
-        echo SalaryReportList::getNumNonApprovedHoursInMonthDuringWorkingDays(10, 1541023200);
+       // echo SalaryReportList::getNumNonApprovedHoursInMonthDuringWorkingDays(10, 1541023200);
+        $r = Yii::$app->mail->send('review_report', [
+            'oleksii.skynix@gmail.com' => 'OLeksii'
+        ],[
+            'FirstName'     => 'Drisch',//User::findOne(Yii::$app->user->id)->first_name,
+            'ReportID'      => 123,
+            'SalesFirstName'=> 'SaleMan',
+            'OldReportDate' => '10/01/2019',
+            'OldReportProject' => 'Clodify CRM',
+            'OldReportText'     => 'Coded some bug fix',
+            'OldReportHours'    => 2,
+            'NewReportDate' => '10/01/2019',
+            'NewReportProject' => 'Clodify CRM',
+            'NewReportText'     => 'Coded some bug fix for styling',
+            'NewReportHours'    => 3,
+            'NewReportProjectID'=> 232
+        ]);
+        var_dump($r);
         die();
-    }
+    }*/
 
     public function actionPaymentCallback()
     {

@@ -75,6 +75,9 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'mail' => [
+            'class' => 'app\components\SkynixMail',
+        ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,

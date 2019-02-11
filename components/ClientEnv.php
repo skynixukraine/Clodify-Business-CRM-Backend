@@ -136,4 +136,9 @@ class ClientEnv
     {
         return $this->env;
     }
+
+    public function getAbsoluteAppUrl()
+    {
+        return "https://" . ($this->env ? $this->env . "." : "") . $this->getClientDomain() . '.clodify.com';
+    }
 }

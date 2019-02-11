@@ -1124,4 +1124,48 @@ class ReportsCest
 
 
     }
+
+    /**
+     * @see https://jira.skynix.co/browse/SCA-325
+     * @param FunctionalTester $I
+     * @param \Codeception\Scenario $scenario
+     */
+    public function testEditReportIsApprovedReset(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+
+
+        $repId = $I->haveInDatabase('reports', array(
+            'user_id'       => ValuesContainer::$userAdmin['id'],
+            'project_id'    => ValuesContainer::$nonPaidProjectId,
+            'date_added'    => '2017-03-09',
+            'date_report'   => date('Y-m-d'),
+            'task' => 'superhero task',
+            'hours' => 5,
+            'cost' => 35.5,
+            'invoice_id' => null,
+            'is_approved' => 1
+        ));
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->wantTo('Edit previously created report');
+        $this->newTask = TASK . 'NEW';
+        $newHours = HOURS + 1;
+
+        $I->sendPUT(ApiEndpoints::REPORT . '/' . $repId, json_encode([
+            'task'      => $this->newTask,
+            'hours'     => $newHours
+        ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->seeInDatabase('reports', ['id' => $repId, 'is_approved' => 0]);
+
+    }
 }
