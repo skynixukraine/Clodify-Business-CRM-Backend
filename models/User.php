@@ -1007,4 +1007,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    /**
+     * Get user's full name
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
 }

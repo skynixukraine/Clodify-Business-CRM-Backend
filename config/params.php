@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'fromEmail'        => 'apps@skynix.co',
     'adminEmail'        => 'admin@skynix.co',
     'applicationName'   => 'Skynix Ukraine',
     'url_crm'           => 'https://skynix.co',

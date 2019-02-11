@@ -75,7 +75,7 @@ use yii\helpers\Html;
         <td width = "29" style="padding: 0; margin: 0;"></td>
         <td colspan = "3"  height="13" style="padding: 15px 0 43px 0; margin: 0;
          font-family: 'HelveticaNeue UltraLight', sans-serif; font-size: 15px; font-weight: 100; text-align: center;">
-            Kind Regards, Skynix
+            Clodify.com &copy; All rights Reserved.
         </td>
         <td width = "29" style="padding: 0; margin: 0;"></td>
     </tr>
