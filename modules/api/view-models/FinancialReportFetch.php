@@ -43,6 +43,12 @@ class FinancialReportFetch extends ViewModelAbstract
                         ]);
 
 
+                } elseif (count($dates) === 1) {
+
+                    $query = FinancialReport::find()
+                        ->where(['between', 'report_date',
+                           trim($dates[0]) . '-01', trim($dates[0]) . '-28'
+                        ]);
                 }
 
             } else {
