@@ -401,8 +401,9 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function sumReportedHoursForMonthPerUser($salRepList)
     {
 
-        $dateFrom = date('Y-m-01', $salRepList->salaryReport->report_date);
-        $toDate     = date('Y-m-t', $salRepList->salaryReport->report_date);
+        $date = strtotime($salRepList->salaryReport->report_date);
+        $dateFrom = date('Y-m-01', $date);
+        $toDate     = date('Y-m-t', $date);
 
         $sum = Report::find()
             ->andWhere(['user_id' => $salRepList->user_id])
@@ -419,8 +420,9 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function sumApprovedHoursForMonthPerUser($salRepList)
     {
 
-        $dateFrom = date('Y-m-01', $salRepList->salaryReport->report_date);
-        $toDate     = date('Y-m-t', $salRepList->salaryReport->report_date);
+        $date = strtotime($salRepList->salaryReport->report_date);
+        $dateFrom = date('Y-m-01', $date);
+        $toDate     = date('Y-m-t', $date);
 
         $sum = Report::find()
             ->andWhere(['user_id' => $salRepList->user_id])
