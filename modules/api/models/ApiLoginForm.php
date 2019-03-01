@@ -22,6 +22,7 @@ class ApiLoginForm extends LoginForm
      */
     public function login()
     {
+        $this->flushUser();
         $user = $this->getUser();
         $user->date_login = date('Y-m-d H:i:s');
 
@@ -68,11 +69,7 @@ class ApiLoginForm extends LoginForm
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if ( !$user ) {
-
-                $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
-      
-            } elseif ( $user &&
+            if ( $user &&
                 ($user->auth_type === User::DATABASE_AUTH || $user->auth_type === User::CROWD_AUTH) &&
                 $user->is_system === 0 ) {
 
@@ -114,17 +111,11 @@ class ApiLoginForm extends LoginForm
                     $response['user']['active'] === true) {
 
                     //User does not exist in the database, but exists in crowd, creating it
-                    User::createASingleDevUser($response['user'], $this->password);
+                    $user = User::createASingleDevUser($response['user'], $this->password);
 
                 } else {
 
-                    if ( count($response['errors']) ) {
-
-                        $this->addError($attribute, implode(', ', $response['errors']));
-
-                    }
-                    $this->addError($attribute, Yii::t('app', 'There is no user with the passed credentials'));
-
+                    $this->addError($attribute, Yii::t('app', 'Username or password is wrong'));
                     Yii::getLogger()->log( "CROWD: does not exist " . var_export($response, 1), Logger::LEVEL_INFO);
 
 

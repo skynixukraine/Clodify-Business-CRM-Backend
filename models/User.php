@@ -44,6 +44,8 @@ use app\modules\api\models\AccessKey;
  * @property integer $auth_type
  * @property integer $is_available
  * @property integer $is_system
+ * @property integer $vacation_days
+ * @property integer $vacation_days_available
  * @property string $address
  * @property integer $pay_only_approved_hours
  * @property integer $official_salary
@@ -493,7 +495,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     ])
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setTo($this->email)
-                        ->setSubject('Welcome to Skynix CRM, Please activate your account')
+                        ->setSubject('Welcome to Clodify')
                         ->send();
                 }
 
@@ -512,7 +514,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                         ])
                             ->setFrom(Yii::$app->params['adminEmail'])
                             ->setTo($this->email)
-                            ->setSubject('Welcome to Skynix CRM, Please activate your account')
+                            ->setSubject('Welcome to Clodify')
                             ->send();
                     }
                 }
@@ -974,6 +976,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $newUser->password      = $password;
         $newUser->is_active     = self::ACTIVE_USERS;
         $newUser->auth_type     = self::CROWD_AUTH;
+        $newUser->vacation_days = $newUser->vacation_days_available = 10 - date("m");
         $r = $newUser->save();
         Yii::getLogger()->log( "createASingleDevUser: " . var_export($newUser->getErrors(), 1), Logger::LEVEL_INFO);
 

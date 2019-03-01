@@ -31,6 +31,7 @@ class UserCreate extends ViewModelAbstract
             if ($this->validate()) {
                 /** Create new user*/
                 $this->model->is_active = 1;
+                $this->model->vacation_days = $this->model->vacation_days_available = 10 - date("m");
                 $this->model->save();
                 $this->setData([
                     'user_id' => $this->model->id

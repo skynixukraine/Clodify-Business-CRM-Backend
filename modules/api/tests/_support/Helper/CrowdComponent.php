@@ -50,4 +50,9 @@ class CrowdComponent
         return $dataResponse;
     }
 
+    public function authenticateToCrowd($email, $password)
+    {
+
+        return false;
+    }
 }
