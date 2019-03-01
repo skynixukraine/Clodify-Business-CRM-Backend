@@ -401,7 +401,16 @@ class SalaryReportList extends \yii\db\ActiveRecord
     public static function sumReportedHoursForMonthPerUser($salRepList)
     {
 
-        $date = strtotime($salRepList->salaryReport->report_date);
+        $salaryReportDate = $salRepList->salaryReport->report_date;
+        if ( (int)$salaryReportDate > 0 ) {
+
+            $date = $salaryReportDate;
+
+        } else {
+
+            $date = strtotime($salRepList->salaryReport->report_date);
+        }
+
         $dateFrom = date('Y-m-01', $date);
         $toDate     = date('Y-m-t', $date);
 
