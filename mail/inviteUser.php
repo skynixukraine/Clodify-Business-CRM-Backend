@@ -36,7 +36,7 @@ use app\models\User;
     <td width = "29" style="padding: 0; margin: 0;"></td>
     <td colspan = "3"  height="16" style="padding: 19px 0 10px 0; margin: 0; font-family: 'HelveticaNeue Regular',
     sans-serif; font-size: 16px; font-weight: normal; text-align: center;">
-        <strong style=" font-family: 'HelveticaNeue Bold', sans-serif; font-size: 16px; font-weight: bold;"><h2>Welcome to Skynix company!</h2></strong></td>
+        <strong style=" font-family: 'HelveticaNeue Bold', sans-serif; font-size: 16px; font-weight: bold;"><h2>Welcome to Clodify!</h2></strong></td>
     <td width = "29" style="padding: 0; margin: 0;"></td>
 </tr>
 <tr>
@@ -64,19 +64,6 @@ use app\models\User;
     <td colspan = "5"  height="35" style="padding: 8px 0 5px 0; margin: 0; background-color: #a3d8f0;
         font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px; text-align: center; color: #fffefe;">
         THANK YOU FOR YOUR COLLABORATION WE APPRECIATE YOUR BUSINESS </td>
-</tr>
-<tr>
-    <td colspan = "2" width = "237" height="34" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
-
-    <td width = "96"  valign="top" style="padding:0; margin: 0; text-align: center; background-color: #a3d8f0;
-        vertical-align: middle;">
-        <a href=<?= Yii::$app->params['url_crm'] . Url::to(['/site/invite', 'hash' => $hash])?> title="CLICK HERE" target="_blank" style="text-align: center; text-decoration: none;">
-            <img src="http://cdn.skynix.co/skynix/btn-click.png" width="95" height = "34"  border="0"
-                 alt = "CLICK HERE" style="display: block; padding: 0px; margin: 0px; border: none;"/>
-        </a>
-    </td>
-
-    <td colspan = "2" width = "237" height="34" style="padding: 0; margin: 0; background-color: #a3d8f0;"></td>
 </tr>
 
 <tr>

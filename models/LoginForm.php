@@ -60,8 +60,11 @@ class LoginForm extends Model
         if($this->getUser()->auth_type == User::CROWD_AUTH){
           return  $this->enter();
         } elseif ($this->getUser()->auth_type == User::DATABASE_AUTH){
+            $this->_user = false;
             if ($this->validate() && $this->getUser()->is_delete == 0 && $this->getUser()->is_active == 1 ) {
-            return  $this->enter();
+
+                return  $this->enter();
+
             }
         } //elseif (other auth type){
 
@@ -92,5 +95,10 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function flushUser()
+    {
+        $this->_user = false;
     }
 }

@@ -206,7 +206,6 @@ class CrowdComponent extends Component
         );
 
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL             => Yii::$app->params['crowd_domain'] . self::CROWD_REQUEST . $email,
             CURLOPT_RETURNTRANSFER  => true,
