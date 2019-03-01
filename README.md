@@ -10,4 +10,4 @@ https://docs.skynix.co/display/SKB/Docker.+Skynix+Guide#Docker.SkynixGuide-runte
 1
 
 #Testing
-Within each backend merge to the develop branch staging server renews database from the preuploaded SQL
+Within each backend merge to the develop branch staging server renews database from the preuploaded SQL1
