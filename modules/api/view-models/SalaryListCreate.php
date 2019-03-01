@@ -99,7 +99,7 @@ class SalaryListCreate extends ViewModelAbstract
                         }
 
                     } else {
-                        return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, but you can create a list report for  DEV, SALES and FIN employees only'));
+                        return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'Sorry, but you can create a list report for ADMIN, PM, DEV, SALES and FIN employees only'));
                     }
 
                 } else {

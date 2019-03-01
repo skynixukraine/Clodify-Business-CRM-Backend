@@ -834,7 +834,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function validateRoleForSalaryList($id)
     {
         $user= User::findOne($id);
-        if($user->role == self::ROLE_DEV || $user->role == self::ROLE_FIN || $user->role == self::ROLE_SALES){
+        if($user->role == self::ROLE_ADMIN || $user->role == self::ROLE_PM || $user->role == self::ROLE_DEV || $user->role == self::ROLE_FIN || $user->role == self::ROLE_SALES){
             return true;
         } else {
             return false;
