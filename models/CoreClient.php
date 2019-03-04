@@ -38,6 +38,8 @@ class CoreClient extends ActiveRecord
     const SCENARIO_REGISTER_VALIDATION      = 'register';
     const SCENARIO_UPDATE_VALIDATION = 'update';
 
+    private $generatedPassword;
+
     /**
      * @return string
      */
@@ -99,21 +101,22 @@ class CoreClient extends ActiveRecord
                 $env = 'develop';
             }
 
-            $link_to_crm = 'https://' . $env . '.' . $this->domain . '.skynix.co';
+            $link_to_crm = 'https://' . ($env ? $env . "." : "") . $this->domain . '.clodify.com';
+            $this->generatedPassword = Yii::$app->security->generateRandomString( 12 );
             $mail = Yii::$app->mailer->compose('clientRegistration', [
                 'first_name' => $this->first_name,
                 'link_to_crm' => $link_to_crm,
                 'domain' => $this->domain,
                 'email' => $this->email,
-                'auto_generated_password' => $this->mysql_password,
+                'auto_generated_password' => $this->generatedPassword,
 
             ])
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($this->email)
-                ->setSubject('Skynix CRM: client registration');
+                ->setSubject('Clodify - new registration');
 
             if (!$mail->send()) {
-                $this->addError('email', "Skynix CRM configuration");
+                $this->addError('email', "Clodify error? no");
             }
         }
 
@@ -124,7 +127,7 @@ class CoreClient extends ActiveRecord
     {
         if ( $insert === true ) {
 
-            $dbName = Bootstrap::$dbPrefix . $this->domain;
+            $dbName = \Yii::$app->params['databasePrefix'] . $this->domain;
 
             $dsnParts = explode(";", Yii::$app->dbCore->dsn);
             $coreDbName = explode("=", $dsnParts[1])[1];
@@ -191,7 +194,7 @@ class CoreClient extends ActiveRecord
                 $user->first_name    = $this->first_name;
                 $user->last_name     = $this->last_name;
                 $user->email         = $this->email;
-                $user->password      = Yii::$app->security->generateRandomString( 12 );
+                $user->password      = $this->generatedPassword;
                 $user->is_active     = User::ACTIVE_USERS;
                 $user->auth_type     = User::DATABASE_AUTH;
                 $user->save();

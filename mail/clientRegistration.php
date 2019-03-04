@@ -50,7 +50,7 @@ use app\models\CoreClient;
     <td width = "29" style="padding: 0; margin: 0;"></td>
     <td colspan = "3"  height="15" style="padding: 10px 0 4px 0; margin: 0;
                      font-family: 'HelveticaNeue Regular', sans-serif; font-size: 15px;
-                     font-weight: normal; text-align: center;">CRM Link <?= $link_to_crm?> https://<?= $domain?>.skynix.co/confirm-email</br>
+                     font-weight: normal; text-align: center;">CRM Link <a href="<?= $link_to_crm?>/confirm-email"><?= $link_to_crm?>/confirm-email</a></br>
     </td>
     <td width = "29" style="padding: 0; margin: 0;"></td>
 </tr>
