@@ -26,26 +26,16 @@ class LoginAsUser extends ViewModelAbstract
         if (User::hasPermission([User::ROLE_ADMIN])) {
             $id = Yii::$app->request->getQueryParam('user_id');
 
-            if ($id && $this->model = $this->model->findOne($id)) {
-                $this->model->scenario = 'api-login';
+            if ($id && ($user = $this->model->findOne($id)) &&
+                ($accessToken = ApiAccessToken::generateNewToken($user)) ) {
 
-                $loginForm = new ApiLoginForm();
-                $loginForm->email       = $this->model->email;
-                $this->model            = $loginForm;
-
-                if ( $this->validate() ) {
-
-                    /** @var $token ApiAccessToken */
-                    if ( ( $token = $this->model->login() ) ) {
-
-                        $this->setData([
-                            'access_token'  => $token->access_token,
-                            'user_id'       => $token->user_id,
-                            'role'          => User::findOne( $token->user_id )->role,
-                            'crowd_token'   => $token->crowd_token
-                        ]);
-                    }
-                }
+                $accessToken->save(false);
+                $this->setData([
+                    'access_token'  => $accessToken->access_token,
+                    'user_id'       => $accessToken->user_id,
+                    'role'          => $user->role,
+                    'crowd_token'   => $accessToken->crowd_token
+                ]);
             }
             else{
                 return $this->addError(Processor::ERROR_PARAM, 'The user does not exist');
