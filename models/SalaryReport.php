@@ -51,7 +51,7 @@ class SalaryReport extends \yii\db\ActiveRecord
                 'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
             [['report_date'], 'required',
                 'on' => [self::SCENARIO_SALARY_REPORT_CREATE]],
-            [['number_of_working_days'], 'integer'],
+            [['number_of_working_days', 'total_employees'], 'integer'],
             [['report_year'], 'safe'],
             [['total_salary', 'official_salary', 'bonuses', 'hospital', 'day_off', 'overtime', 'other_surcharges', 'subtotal', 'currency_rate', 'total_to_pay'], 'number'],
         ];
@@ -76,6 +76,7 @@ class SalaryReport extends \yii\db\ActiveRecord
             'currency_rate' => 'Currency Rate',
             'total_to_pay' => 'Total To Pay',
             'number_of_working_days' => 'Number Of Working Days',
+            'total_employees' => 'Total Employees'
         ];
     }
 
