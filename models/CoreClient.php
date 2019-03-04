@@ -178,16 +178,20 @@ class CoreClient extends ActiveRecord
                     'project_developers',
                     'reports',
                     'projects',
+                    'contracts',
                     'users',
                 ];
 
                 foreach ( $tables as $table ) {
 
-                    Yii::$app->db
+                    Yii::$app->dbCore
                         ->createCommand("SET FOREIGN_KEY_CHECKS=0; TRUNCATE `" . $table . "`; SET FOREIGN_KEY_CHECKS=1;")
                         ->execute();
 
                 }
+                Yii::$app->db
+                    ->createCommand("use " . $dbName)
+                    ->execute();
                 //Create ADMIN user
                 $user = new User();
                 $user->role          = User::ROLE_ADMIN;
@@ -197,6 +201,7 @@ class CoreClient extends ActiveRecord
                 $user->password      = $this->generatedPassword;
                 $user->is_active     = User::ACTIVE_USERS;
                 $user->auth_type     = User::DATABASE_AUTH;
+                $user->vacation_days = $user->vacation_days_available = 10 - date("m");
                 $user->save();
             }
 
