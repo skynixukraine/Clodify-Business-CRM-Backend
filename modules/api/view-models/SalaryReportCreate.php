@@ -46,6 +46,13 @@ class SalaryReportCreate extends ViewModelAbstract
             }
 
             $this->model->report_date = $reportDate;
+            $totalUsers = User::find()
+                ->where(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_PM],
+                    'is_active' => 1,
+                    'is_delete' => 0,
+                    'is_system' => 0
+                ])->count('*');
+            $this->model->total_employees = $totalUsers;
 
             if ($this->validate() && $this->model->save()) {
 

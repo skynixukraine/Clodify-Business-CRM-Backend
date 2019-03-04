@@ -16,6 +16,7 @@ use app\components\DataTable;
 use app\models\SalaryReport;
 use app\models\User;
 use app\modules\api\components\Api\Processor;
+use app\models\FinancialReport;
 
 /**
  * Class FinancialReportFetch
@@ -92,7 +93,9 @@ class SalaryReportFetch extends ViewModelAbstract
                         'total_users'            => (int)$totalUsers,
                         'total_lists'            => (int)SalaryReportList::find()
                             ->where([SalaryReportList::tableName() . '.salary_report_id' => $salRep->id])
-                            ->count('*')
+                            ->count('*'),
+                        'is_locked'              => FinancialReport::isLock($salRep->report_date) ? 'Locked' : 'Unlocked',
+                        'total_employees'        => $salRep->total_employees
                     ];
                 }
 

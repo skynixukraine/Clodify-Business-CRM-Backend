@@ -78,7 +78,8 @@ class SalaryReportsCest
             'subtotal'               => 3232,
             'currency_rate'          => 26.5,
             'total_to_pay'           => 3200,
-            'number_of_working_days' => 20
+            'number_of_working_days' => 20,
+            'total_employees'        => 12
         ));
 
         $I->wantTo('Testing fetch salary report data');
@@ -108,7 +109,9 @@ class SalaryReportsCest
                         "total_reported_hours"   => 'float | integer',
                         "total_approved_hours"   => 'float | integer',
                         'total_users'            => 'integer',
-                        'total_lists'            => 'integer'
+                        'total_lists'            => 'integer',
+                        'is_locked'              => 'string',
+                        'total_employees'        => 'integer'
 
                     ]
                 ],
