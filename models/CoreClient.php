@@ -189,9 +189,15 @@ class CoreClient extends ActiveRecord
                         ->execute();
 
                 }
-                Yii::$app->db
-                    ->createCommand("use " . $dbName)
-                    ->execute();
+                $dsnParts = explode(";", Yii::$app->db->dsn);
+                $dsn = $dsnParts[0] . ';name=<dbname>';
+                Yii::$app->db->close();
+                Yii::$app->db->dsn      = str_replace('<dbname>', $dbName, $dsn);
+                Yii::$app->db->username = $this->mysql_user;
+                Yii::$app->db->password = $this->mysql_password;
+                Yii::$app->db->open();
+                Yii::$app->db->createCommand("use " . $dbName)->execute();
+
                 //Create ADMIN user
                 $user = new User();
                 $user->role          = User::ROLE_ADMIN;

@@ -26,8 +26,8 @@ class Bootstrap implements BootstrapInterface
            if ( Yii::$app->env->getClientDomain() &&
                ($client = CoreClient::find()->where(['domain' => Yii::$app->env->getClientDomain()])->one()) ) {
 
-               $dsnParts = explode(";", Yii::$app->db->dsn);
-               $dsn = $dsnParts[0] . ';name=<dbname>';
+                $dsnParts = explode(";", Yii::$app->db->dsn);
+                $dsn = $dsnParts[0] . ';name=<dbname>';
                 $dbName = \Yii::$app->params['databasePrefix'] . Yii::$app->env->getClientDomain();
 
                 Yii::$app->db->close();
