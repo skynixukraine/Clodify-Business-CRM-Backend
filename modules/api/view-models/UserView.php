@@ -13,6 +13,7 @@ use app\modules\api\components\Api\Processor;
 use Yii;
 use app\components\DateUtil;
 use yii\helpers\Url;
+use yii\log\Logger;
 
 /**
  * View single user data
@@ -26,7 +27,7 @@ class UserView extends ViewModelAbstract
 
     public function define()
     {
-        $userId = Yii::$app->request->getQueryParam('id');
+        $userId = (int)Yii::$app->request->getQueryParam('id');
 
         if (($model = $this->model->findOne($userId)) &&  self::hasPermission($userId)) {
 
@@ -43,7 +44,8 @@ class UserView extends ViewModelAbstract
                 'about'                     => $model->about
                 ];
 
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ||
+                (Yii::$app->user->id === $userId)) {
                 $data['month_logged_hours'] = $model->month_logged_hours;
                 $data['year_logged_hours']  = $model->year_logged_hours;
                 $data['total_logged_hours'] = $model->total_logged_hours;
@@ -71,17 +73,14 @@ class UserView extends ViewModelAbstract
                 $data['joined'] = DateUtil::convertDateTimeWithoutHours($model->date_signup);
                 $data['is_active'] = $model->is_active;
             }
-            
-            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
+
+            Yii::getLogger()->log('UserView RealID: ' . Yii::$app->user->id . ' PARAM: '.$userId, Logger::LEVEL_INFO);
+            if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN]) ||
+                (Yii::$app->user->id === $userId)) {
 
                 $data['salary']                     = $model->salary;
                 $data['official_salary']            = $model->official_salary;
                 $data['salary_up']                  = $model->date_salary_up ? DateUtil:: convertDateTimeWithoutHours($model->date_salary_up) : null;
-                $data['vacation_days']              = $model->vacation_days;
-                $data['vacation_days_available']    = $model->vacation_days_available;
-            } 
-            
-            if (Yii::$app->user->id === $userId) {
                 $data['vacation_days']              = $model->vacation_days;
                 $data['vacation_days_available']    = $model->vacation_days_available;
             }

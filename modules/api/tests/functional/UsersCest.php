@@ -245,6 +245,7 @@ class UsersCest
         define('salary', 150);
         define('phone', '12345678985');
         define('AUTH_TYPE_CROWD', 1);
+        define('AUTH_TYPE_DB', 2);
 
         $oAuth = new OAuthSteps($scenario);
         $oAuth->login();
@@ -275,6 +276,16 @@ class UsersCest
         $I->assertEquals( salary, $response->data->salary);
         $I->assertEquals(phone, $response->data->phone);
         $I->assertEquals(AUTH_TYPE_CROWD, $response->data->auth_type);
+
+        $I->sendPUT(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'], json_encode([
+            'auth_type'       => AUTH_TYPE_DB,
+        ]));
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
     }
 
     /**
@@ -585,6 +596,142 @@ class UsersCest
                 "success" => false
             ]);
         }
+    }
+
+    public function testViewOwnUserData(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wantTo('test view user data is available for FIN');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userFin['id']));
+        $pas = ValuesContainer::$userFin['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userFin['id']);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        // compare types of returned common fields for all roles
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'middle_name' => 'string|null',
+                'company'     => 'string',
+                'tags'        => 'string|null',
+                'about'       => 'string|null',
+                'photo'       => 'string',
+                'sign'        => 'string|null',
+                'bank_account_en' => 'string|null',
+                'bank_account_ua' => 'string|null',
+                'official_salary' => 'integer|null',
+                'email'       => 'string',
+                'phone'       => 'string',
+                'salary_up'   => 'string|null',
+                'month_logged_hours'    => 'integer',
+                'year_logged_hours'     => 'integer',
+                'total_logged_hours'    => 'integer',
+                'month_paid_hours'      => 'integer',
+                'year_paid_hours'       => 'integer',
+                'total_paid_hours'      => 'integer',
+                'auth_type'             => 'integer',
+                'role'                  => 'string',
+                'salary'                => 'integer',
+                'vacation_days'                => 'integer',
+                'vacation_days_available'      => 'integer',
+            ]
+        ]);
+
+
+
+        $I->wantTo('test view user data is available for SALES');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas = ValuesContainer::$userSales['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userSales['id']);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        // compare types of returned common fields for all roles
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'middle_name' => 'string|null',
+                'company'     => 'string',
+                'tags'        => 'string|null',
+                'about'       => 'string|null',
+                'photo'       => 'string',
+                'sign'        => 'string|null',
+                'bank_account_en' => 'string|null',
+                'bank_account_ua' => 'string|null',
+                'official_salary' => 'integer|null',
+                'email'       => 'string',
+                'phone'       => 'string',
+                'salary_up'   => 'string|null',
+                'month_logged_hours'    => 'integer',
+                'year_logged_hours'     => 'integer',
+                'total_logged_hours'    => 'integer',
+                'month_paid_hours'      => 'integer',
+                'year_paid_hours'       => 'integer',
+                'total_paid_hours'      => 'integer',
+                'auth_type'             => 'integer',
+                'role'                  => 'string',
+                'salary'                => 'integer',
+                'vacation_days'                => 'integer',
+                'vacation_days_available'      => 'integer',
+            ]
+        ]);
+
+        $I->wantTo('test view user data is available for DEV');
+        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userDev['id']));
+        $pas = ValuesContainer::$userDev['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+
+        $I->sendGET(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id']);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        // compare types of returned common fields for all roles
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'middle_name' => 'string|null',
+                'company'     => 'string',
+                'tags'        => 'string|null',
+                'about'       => 'string|null',
+                'photo'       => 'string',
+                'sign'        => 'string|null',
+                'bank_account_en' => 'string|null',
+                'bank_account_ua' => 'string|null',
+                'official_salary' => 'integer|null',
+                'email'       => 'string',
+                'phone'       => 'string',
+                'salary_up'   => 'string|null',
+                'month_logged_hours'    => 'integer',
+                'year_logged_hours'     => 'integer',
+                'total_logged_hours'    => 'integer',
+                'month_paid_hours'      => 'integer',
+                'year_paid_hours'       => 'integer',
+                'total_paid_hours'      => 'integer',
+                'auth_type'             => 'integer',
+                'salary'                => 'integer',
+                'vacation_days'                => 'integer',
+                'vacation_days_available'      => 'integer',
+            ]
+        ]);
     }
 
 

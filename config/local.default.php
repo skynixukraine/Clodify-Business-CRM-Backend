@@ -61,6 +61,20 @@ return [
             'region' => 'eu-central-1', //i.e.: 'us-east-1'
             'version' => 'latest', //i.e.: 'latest'
         ],
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning', 'info'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'logFile' => '@runtime/logs/profile.log',
+                    'categories' => ['yii\db\Command::query'],
+                    'levels' => ['error', 'warning', 'profile'],
+                ],
+            ],
+        ],
     ],
     'params' => array(
         'url_crm'           => 'https://skynix.co',
