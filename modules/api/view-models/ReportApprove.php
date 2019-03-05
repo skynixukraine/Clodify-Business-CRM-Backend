@@ -37,6 +37,7 @@ class ReportApprove extends ViewModelAbstract
 
                     if (User::hasPermission([User::ROLE_ADMIN])) {
                         $this->noteToActionTable($curReport);
+                        $this->sendEmailToReportOwner($curReport);
                     }
 
                     if (User::hasPermission([User::ROLE_SALES])) {
@@ -52,6 +53,7 @@ class ReportApprove extends ViewModelAbstract
                             if (in_array($curReport->project_id, $projectId)) {
                                 if ($curReport->user_id != $salesId) {
                                     $this->noteToActionTable($curReport);
+                                    $this->sendEmailToReportOwner($curReport);
                                 } else {
                                     return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role sales) can not approve own report'));
                                 }
@@ -66,6 +68,7 @@ class ReportApprove extends ViewModelAbstract
                         $finId = Yii::$app->user->id;
                         if ($curReport->user_id != $finId) {
                             $this->noteToActionTable($curReport);
+                            $this->sendEmailToReportOwner($curReport);
                         } else {
                             return $this->addError(Processor::ERROR_PARAM, Yii::t('app', 'You (role fin) can not approve own report'));
                         }
@@ -101,6 +104,33 @@ class ReportApprove extends ViewModelAbstract
 
         $curReport->is_approved = 1;
         $curReport->save(false);
+    }
+    
+    public function sendEmailToReportOwner ($curReport) 
+    {
+        $owner = User::findOne([
+            'is_delete' => 0,
+            'id' => $curReport->user_id,
+        ]);
+        $approver = User::findOne([
+            'is_delete' => 0,
+            'id' => Yii::$app->user->identity->getId()
+        ]);
+        if ($owner) {
+            Yii::$app->mail->send('approve_report', [
+                $owner->email
+            ], [
+                'FirstName' => $approver->first_name,
+                'LastName' => $approver->last_name,
+                'ReportID' => $curReport->id,
+                'OwnerFirstName' => $owner->first_name,
+                'ReportDate' => $curReport->date_report,
+                'ReportProject' => $curReport->getProject()->one()->name,
+                'ReportText' => $curReport->task,
+                'ReportHours' => $curReport->hours,
+                'ApproverEmail' => $approver->email               
+            ]);
+        }
     }
 
 }
