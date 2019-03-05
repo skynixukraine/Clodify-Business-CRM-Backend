@@ -46,9 +46,8 @@ class ReportController extends DefaultController
                 ])->queryAll();
 
                 Yii::getLogger()->log('actionApproveToday: Found ' .  count($itemsReported) . ' reported items', Logger::LEVEL_INFO);
-
                 foreach ( $itemsReported as $user ) {
-
+                    
                     $user['s'] = round($user['s']);
                     if ( $user['s'] > 8 ) {
 
@@ -121,12 +120,61 @@ class ReportController extends DefaultController
                     }
 
                 }
-
+                
+                $activeSalesProjects = \Yii::$app->db->createCommand("
+                    SELECT p.id, p.name, u.id AS manager_id , u.first_name, u.last_name, u.email FROM project_developers pd
+                    LEFT JOIN projects p ON pd.project_id=p.id
+                    LEFT JOIN users u ON pd.user_id=u.id
+                    WHERE pd.is_sales=1 AND p.status='INPROGRESS';")
+                ->queryAll();
+                
+                if ( count($activeSalesProjects) > 0 ) {
+                    $salesManagers = array();
+                    foreach ( $activeSalesProjects as $activeSalesProject ) {
+                        $reports = \Yii::$app->db->createCommand("
+                            SELECT r.*, u.first_name, u.last_name, u.email FROM reports r
+                            LEFT JOIN users u ON r.user_id=u.id
+                            WHERE r.date_added =:date_added AND r.project_id=:project_id
+                            ORDER BY u.id, r.id ASC", [
+                                ':date_added'  => date('Y-m-d'),
+                                ':project_id'  => $activeSalesProject['id']
+                        ])->queryAll();
+                        $salesManagers [$activeSalesProject['manager_id']][] = array (
+                            'project' => $activeSalesProject,
+                            'reports' => $reports
+                        );
+                    }
+                    
+                    foreach ( $salesManagers as $salesManagerProjects ) {
+                        if (count($salesManagerProjects) > 0) {
+                            $htmlBody = 'Hi ' .  $salesManagerProjects[0]['project']['first_name'] . '<br>';
+                            $htmlBody .= 'The summary regarding your projects on ' . date('Y-m-d') . ': <br>';
+                            $htmlBody .= '<ol>';
+                            foreach ($salesManagerProjects as $project) {
+                                if (count ($project['reports']) == 0) {
+                                    $htmlBody .= '<li>' . $project['project']['name'] . ':</li>' . '<ul><li>No reports</li></ul>';
+                                } else {
+                                    $htmlBody .= '<li>' . $project['project']['name'] . ':</li>';
+                                    $htmlBody .= '<ul>';
+                                    foreach ($project['reports'] as $report) {
+                                        $htmlBody .= '<li>' . $report['id'] . ' ' . $report['reporter_name'] . ' ' . $report['task'] . ' - ' . $report['hours'] . 'h </li>';
+                                    }
+                                    $htmlBody .= '</ul>';
+                                }
+                            }
+                            $htmlBody .= '</ol>';
+                            
+                            $mail = \Yii::$app->mailer->compose()
+                            ->setFrom(\Yii::$app->params['adminEmail'])
+                            ->setTo($salesManagerProjects[0]['project']['email'])
+                            ->setReplyTo(\Yii::$app->params['adminEmail'])
+                            ->setSubject(date('Y-m-d') . ' Reports Summary')
+                            ->setHtmlBody($htmlBody);                           
+                            $mail->send();
+                        }                  
+                    }
+                }  
             }
-
-
-
-
 
             echo 0;
         } catch (\Exception $e) {
