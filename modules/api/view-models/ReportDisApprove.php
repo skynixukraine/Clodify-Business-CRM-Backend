@@ -101,11 +101,13 @@ class ReportDisApprove extends ViewModelAbstract
             $clone->cost = $cloneCost;
             $clone->save();
             $this->noteToActionTableForDisapproving($clone);
+            $this->sendEmailToReportOwner($clone);
             $report->hours = $report->hours - $hoursToDisapprove;
             $report->cost = $report->cost - $cloneCost;
             $report->save(false);
         } else if($hoursToDisapprove == $report->hours || $hoursToDisapprove == 0) {
             $this->noteToActionTableForDisapproving($report);
+            $this->sendEmailToReportOwner($report);
         }
     }
 
@@ -128,6 +130,33 @@ class ReportDisApprove extends ViewModelAbstract
 
         $curReport->is_approved = 0;
         $curReport->save(false);
+    }
+    
+    public function sendEmailToReportOwner ($curReport)
+    {
+        $owner = User::findOne([
+            'is_delete' => 0,
+            'id' => $curReport->user_id,
+        ]);
+        $approver = User::findOne([
+            'is_delete' => 0,
+            'id' => Yii::$app->user->identity->getId()
+        ]);
+        if ($owner) {
+            Yii::$app->mail->send('disapprove_report', [
+                $owner->email => $owner->getFullName()
+            ], [
+                'FirstName' => $approver->first_name,
+                'LastName' => $approver->last_name,
+                'ReportID' => $curReport->id,
+                'OwnerFirstName' => $owner->first_name,
+                'ReportDate' => $curReport->date_report,
+                'ReportProject' => $curReport->getProject()->one()->name,
+                'ReportText' => $curReport->task,
+                'ReportHours' => $curReport->hours,
+                'ApproverEmail' => $approver->email,
+            ]);
+        }
     }
 
 }
