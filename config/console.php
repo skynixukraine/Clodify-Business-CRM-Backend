@@ -37,16 +37,11 @@ $config = [
             ],
         ],
         'log' => [
+            'traceLevel' => 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'logFile' => '@runtime/logs/profile.log',
-                    'categories' => ['yii\db\Command::query'],
-                    'levels' => ['error', 'warning', 'profile'],
+                    'levels' => ['error', 'warning'], //'info' 'profile' to debug database
                 ],
             ],
         ],

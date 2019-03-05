@@ -32,6 +32,8 @@ class ApiLoginForm extends LoginForm
             $accessToken = ApiAccessToken::generateNewToken( $user );
 
         }
+        Yii::getLogger()->log('UserAPI RealID: ' . $user->id . ' AUTH TYPE: '.$user->auth_type, Logger::LEVEL_INFO);
+
         if ( $user->auth_type === User::CROWD_AUTH ) {
 
             if ( $accessToken->crowd_token &&

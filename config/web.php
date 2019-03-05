@@ -83,11 +83,11 @@ $config = [
             ]),
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info'], //'info' 'profile' to debug database
+                    'levels' => ['error', 'warning'], //'info' 'profile' to debug database
                 ],
             ],
         ],
