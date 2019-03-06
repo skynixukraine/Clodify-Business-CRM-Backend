@@ -248,7 +248,7 @@ class ReportController extends DefaultController
         try {
             Yii::getLogger()->log('actionWeeklyReview: running', Logger::LEVEL_INFO);
             
-            $users = User::find()->where(['is_system' => 0, 'is_active' => 1, 'is_delete' => 0])->all();
+            $users = User::find()->where(['is_system' => 0, 'is_active' => 1, 'is_delete' => 0, 'role' => ['ADMIN', 'FIN', 'DEV', 'PM', 'SALES']])->all();
 
             foreach ($users as $user) {
                 $reports = \Yii::$app->db->createCommand("
