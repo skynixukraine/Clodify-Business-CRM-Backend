@@ -239,4 +239,84 @@ class ReportController extends DefaultController
             echo $e->getMessage();
         }
     }
+    
+    /**
+     *
+     */
+    public function actionWeeklyReview()
+    {
+        try {
+            Yii::getLogger()->log('actionWeeklyReview: running', Logger::LEVEL_INFO);
+            
+            $users = User::find()->where(['is_system' => 0, 'is_active' => 1, 'is_delete' => 0])->all();
+
+            foreach ($users as $user) {
+                $reports = \Yii::$app->db->createCommand("
+                    SELECT r.*, u.first_name, u.last_name, u.email, p.name AS project_name FROM reports r
+                    LEFT JOIN users u ON r.user_id=u.id
+                    LEFT JOIN projects p ON p.id=r.project_id
+                    WHERE r.date_report between :date_report_from AND :date_report_to AND u.id=:user_id
+                    ORDER BY u.id, r.date_report ASC", [
+                        ':date_report_from'  => date('Y-m-d',strtotime('monday this week')),
+                        ':date_report_to'  => date('Y-m-d'),
+                        ':user_id' => $user->id
+                ])->queryAll();
+
+                $htmlBody = 'Hi ' . $user->first_name . '<br>';
+                $htmlBody .= 'This week you have the following reports:<br>';
+                
+                $reportsDaysPrepareData = array();
+                
+                if ( count($reports) > 0 ) {                 
+                    foreach ($reports as $report) {
+                        $reportsDaysPrepareData [date('l', strtotime($report['date_report']))] [] = $report;
+                    }
+                }
+                
+                $reportsDaysData = array (
+                    'Monday'    => (!isset ($reportsDaysPrepareData['Monday'])) ? array() : $reportsDaysPrepareData['Monday'],
+                    'Tuesday'   => (!isset ($reportsDaysPrepareData['Tuesday'])) ? array() : $reportsDaysPrepareData['Tuesday'],
+                    'Wednesday' => (!isset ($reportsDaysPrepareData['Wednesday'])) ? array() : $reportsDaysPrepareData['Wednesday'],
+                    'Thursday'  => (!isset ($reportsDaysPrepareData['Thursday'])) ? array() : $reportsDaysPrepareData['Thursday'],
+                    'Friday'    => (!isset ($reportsDaysPrepareData['Friday'])) ? array() : $reportsDaysPrepareData['Friday'],
+                    'Saturday'  => (!isset ($reportsDaysPrepareData['Saturday'])) ? array() : $reportsDaysPrepareData['Saturday'],
+                    'Sunday'    => (!isset ($reportsDaysPrepareData['Sunday'])) ? array() : $reportsDaysPrepareData['Sunday']
+                );
+                
+                $htmlBody .= '<ol>';
+                if (count($reportsDaysData) > 0) {
+                    foreach ($reportsDaysData as $day => $reportsDayData) {
+                        $htmlBody .= '<li>' . $day . ': ' . date('Y-m-d',strtotime($day . ' this week')) . '</li>';
+                        if (count($reportsDayData) > 0) {
+                            foreach ($reportsDayData as $reportData) {
+                                $htmlBody .= '<ul>';
+                                $htmlBody .=  '<li>' . 'Project Name: ' . $reportData ['project_name'] . '; Report Task: ' . 
+                                    $reportData['task'] . ' - ' . $reportData ['hours'] . 'h - ' . 
+                                    (($reportData ['is_approved'] == 0)?'NOT APPROVED':'APPROVED') . '</li>';
+                                $htmlBody .= '</ul>';
+                            }
+                        } else {
+                            $htmlBody .=  '<ul><li> Day Off </li></ul>';
+                        }
+                    }
+                }               
+                $htmlBody .= '</ol>';                     
+                $htmlBody .= '* If you forgot to post any reports please kindly do this asap <br>';
+                $htmlBody .= '* If you have any questions feel free to contact your manager <br>';
+                
+                $mail = \Yii::$app->mailer->compose()
+                    ->setFrom(\Yii::$app->params['adminEmail'])
+                    ->setTo($user->email)
+                    ->setReplyTo(\Yii::$app->params['adminEmail'])
+                    ->setSubject(date('Y-m-d',strtotime('monday this week')) . ' ~ ' . date('Y-m-d') . ' Your Reports Summary')
+                    ->setHtmlBody($htmlBody);
+                $mail->send();
+            }
+            
+            echo 0;
+        } catch (\Exception $e) {
+            \Yii::error($e->getMessage());
+            echo $e->getMessage();
+        }
+    }
 }
