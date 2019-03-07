@@ -146,7 +146,22 @@ class SalaryReportList extends \yii\db\ActiveRecord
     {
         $result = null;
         if ($workingDays) {
-            $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->hospital_days / 2;
+            // @see SCA-345 Refactor hospital expenses
+
+            $user = $salaryListReport->getUser()->one();
+            $vacationDaysUpgradeYears = Setting::find()
+                ->where(['key' => 'vacation_days_upgrade_years'])
+                ->one();
+            if (((date("Y") - date('Y', strtotime($user->date_signup)))  >= $vacationDaysUpgradeYears->value)) {
+
+                $divider = 1;
+
+            } else {
+
+                $divider = 2;
+            }
+            $result = ($salaryListReport->salary / $workingDays) * $salaryListReport->hospital_days / $divider;
+
         }
         return $result;
     }
