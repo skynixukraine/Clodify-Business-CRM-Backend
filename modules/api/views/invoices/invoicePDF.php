@@ -197,6 +197,13 @@
             </a>
         </td>
     </tr>
+    <?php if ($notes) : ?>
+        <tr>
+            <td colspan = "2" width = "570" style="padding: 10px; margin: 0; margin-left: auto; margin-right: auto; background-color: #ffffff; color: #1e1e1e; text-align: left; padding-bottom: 20px; font-size: 10px;">
+                <?=$notes?>
+            </td>
+        </tr>
+    <?php endif;?>
     <tr>
         <td colspan = "2" width = "570" style="padding: 0; margin: 0;">
             All charges of correspondent banks are at the Customer’s expenses. / Усі комісії банків-кореспондентів сплачує Замовник.
