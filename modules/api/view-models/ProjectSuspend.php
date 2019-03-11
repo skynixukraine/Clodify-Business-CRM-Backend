@@ -20,6 +20,7 @@ class ProjectSuspend extends ViewModelAbstract
                 && $model->status != Project::STATUS_ONHOLD
             ) {
                 $model->status = Project::STATUS_ONHOLD;
+                $model->date_end = date('Y-m-d');
                 $model->save();
             }
         }

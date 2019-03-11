@@ -54,6 +54,40 @@ class ProjectsCest
         $projectId = $response->data->project_id;
         $this->projectId = $projectId;
         codecept_debug($projectId);
+        
+        
+        $email  = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
+        $pas    = ValuesContainer::$userSales['password'];
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($email, $pas);
+        
+        $I->sendPOST(ApiEndpoints::PROJECT, json_encode([
+            "name"          => "Project",
+            "jira_code"     => "SI-21",
+            "date_start"    => date('d/m/Y'),
+            "date_end"      => date('d/m/Y', strtotime('+1 year')),
+            "type"          => "HOURLY",
+            "developers"    => [
+                [
+                    'id' => ValuesContainer::$userDev['id']
+                ],
+                [
+                    'id' => ValuesContainer::$userSales['id']
+                ]
+            ],
+            "customers"         => [ValuesContainer::$userClient['id']],
+            "invoice_received"  => ValuesContainer::$userClient['id'],
+            "is_pm"             => ValuesContainer::$userDev['id'],
+            "is_sales"          => ValuesContainer::$userSales['id'],
+            "is_published"      => 1,
+            "status"            => "INPROGRESS"
+        ]));
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+        $projectId = $response->data->project_id;
+        $this->projectId = $projectId;
+        codecept_debug($projectId);
     }
 
     /**

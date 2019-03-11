@@ -31,6 +31,7 @@ class ProjectFetch extends ViewModelAbstract
         $start          = Yii::$app->request->getQueryParam('start', 0);
         $limit          = Yii::$app->request->getQueryParam('limit', SortHelper::DEFAULT_LIMIT);
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
+        $ongoingOnly    = Yii::$app->request->getQueryParam('ongoingOnly');
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
             $query = Project::find()
@@ -120,6 +121,12 @@ class ProjectFetch extends ViewModelAbstract
             }
         }
 
+        if ($ongoingOnly=='true') {
+           $dataTable->setFilter(Project::tableName() . '.status="' . Project::STATUS_INPROGRESS . '"  OR '
+               . Project::tableName() . '.status="' . Project::STATUS_DONE . '" AND ' . Project::tableName() . '.date_end>"' . date('Y-m-d') . '" OR '
+               . Project::tableName() . '.status="' . Project::STATUS_ONHOLD . '" AND ' . Project::tableName() . '.date_end>"' . date('Y-m-d') . '"');
+        }
+        
         $activeRecordsData = $dataTable->getData();
         $list = [];
 

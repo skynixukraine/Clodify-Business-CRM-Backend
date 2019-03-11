@@ -151,7 +151,6 @@ class Project extends \yii\db\ActiveRecord
             'date_start'        => 'Date Start',
             'date_end'          => 'Date End',
             'is_delete'         => 'Is Delete',
-            'alias_name'        => 'Alias',
             'cost'              => 'Cost'
         ];
     }
@@ -235,7 +234,7 @@ class Project extends \yii\db\ActiveRecord
 
         $connection = Yii::$app->db;
 
-        if(User::hasPermission([User::ROLE_ADMIN]) && $this->customers) {
+        if(User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES]) && $this->customers) {
 
             /* Delete from ProjectCustomers*/
             $connection->createCommand()
@@ -262,7 +261,7 @@ class Project extends \yii\db\ActiveRecord
 
         if ($this->developers) {
 
-            if( User::hasPermission([User::ROLE_ADMIN]) ) {
+            if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES]) ) {
                 /* Delete from ProjectCustomers*/
                 $connection->createCommand()
                     ->delete(ProjectDeveloper::tableName(), [
@@ -283,48 +282,50 @@ class Project extends \yii\db\ActiveRecord
 
                 }
 
-            } else if ( User::hasPermission([User::ROLE_SALES ]) ) {
-
-                $existingDevelopers = ProjectDeveloper::findAll(['project_id' => $this->id]);
-                //Deleting DELETED developers
-                //SALES can not delete sales or PM
-                /** @var  $dev ProjectDeveloper */
-                foreach ($existingDevelopers as $dev) {
-
-                    foreach ($this->developers as $developer) {
-
-                        $shouldDelete = true;
-                        if ($dev->user_id === $developer['id']) {
-
-                            $shouldDelete = false;
-                            break;
-
-                        }
-
-                    }
-                    if (!$dev->is_sales && !$dev->is_pm && $shouldDelete === true) {
-
-                        $dev->delete();
-
-                    }
-
-                }
-                /* Add to ProjectDevelopers*/
-                foreach ($this->developers as $developer) {
+            } 
+            if ($this->getScenario() == 'api-update-sales') {
+                if ( User::hasPermission([User::ROLE_SALES ]) ) {
+                    
+                    $existingDevelopers = ProjectDeveloper::findAll(['project_id' => $this->id]);
+                    
+                    //Deleting DELETED developers
+                    //SALES can not delete sales or PM
+                    /** @var  $dev ProjectDeveloper */
                     foreach ($existingDevelopers as $dev) {
-
-                        $shouldAdd = true;
-                        if ($dev->user_id === $developer['id']) {
-
-                            $shouldAdd = false;
-                            break;
-
+                        foreach ($this->developers as $developer) {
+                            
+                            $shouldDelete = true;
+                            if ($dev->user_id === $developer['id']) {
+                                
+                                $shouldDelete = false;
+                                break;
+                                
+                            }
+                            
                         }
-
-                    }
-                    if ($shouldAdd === true) {
-
-                        $connection->createCommand()
+                        if (!$dev->is_sales && !$dev->is_pm && $shouldDelete === true) {
+                            
+                            $dev->delete();
+                            
+                        }
+                        
+                    } 
+                    /* Add to ProjectDevelopers*/
+                    foreach ($this->developers as $developer) {
+                        foreach ($existingDevelopers as $dev) {
+                            
+                            $shouldAdd = true;
+                            if ($dev->user_id === $developer['id']) {
+                                
+                                $shouldAdd = false;
+                                break;
+                                
+                            }
+                            
+                        }
+                        if ($shouldAdd === true) {
+                            
+                            $connection->createCommand()
                             ->insert(ProjectDeveloper::tableName(), [
                                 'project_id'    => $this->id,
                                 'user_id'       => $developer['id'],
@@ -332,14 +333,11 @@ class Project extends \yii\db\ActiveRecord
                                 'is_pm'         => false,
                                 'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
                             ])->execute();
-
-                    }
-
-
+                            
+                        }                       
+                    }     
                 }
-
             }
-
         }
 
         parent::afterSave($insert, $changedAttributes); // TODO: Change the autogenerated stub
@@ -485,12 +483,6 @@ class Project extends \yii\db\ActiveRecord
             }
         }
         return false;
-    }
-
-    public function setAliasName($alias_name)
-    {
-        $this->alias_name = $alias_name;
-        return $this;
     }
 
 }
