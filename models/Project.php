@@ -260,18 +260,18 @@ class Project extends \yii\db\ActiveRecord
         }
 
         if ($this->developers) {
-
-            if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES]) ) {
-                /* Delete from ProjectCustomers*/
-                $connection->createCommand()
+            if ($this->getScenario() == self::SCENARIO_CREATE) {
+                if( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES]) ) {
+                    /* Delete from ProjectCustomers*/
+                    $connection->createCommand()
                     ->delete(ProjectDeveloper::tableName(), [
                         'project_id' => $this->id,
                     ])
                     ->execute();
-
-                /* Add to ProjectDevelopers*/
-                foreach ($this->developers as $developer) {
-                    $connection->createCommand()
+                    
+                    /* Add to ProjectDevelopers*/
+                    foreach ($this->developers as $developer) {
+                        $connection->createCommand()
                         ->insert(ProjectDeveloper::tableName(), [
                             'project_id' => $this->id,
                             'user_id' => $developer['id'],
@@ -279,11 +279,34 @@ class Project extends \yii\db\ActiveRecord
                             'is_pm' => ($this->is_pm == $developer['id']),
                             'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
                         ])->execute();
-
+                        
+                    }
+                    
                 }
-
-            } 
-            if ($this->getScenario() == 'api-update-sales') {
+            } elseif ($this->getScenario() == self::SCENARIO_UPDATE_ADMIN) {
+                if( User::hasPermission([User::ROLE_ADMIN]) ) {
+                    /* Delete from ProjectCustomers*/
+                    $connection->createCommand()
+                    ->delete(ProjectDeveloper::tableName(), [
+                        'project_id' => $this->id,
+                    ])
+                    ->execute();
+                    
+                    /* Add to ProjectDevelopers*/
+                    foreach ($this->developers as $developer) {
+                        $connection->createCommand()
+                        ->insert(ProjectDeveloper::tableName(), [
+                            'project_id' => $this->id,
+                            'user_id' => $developer['id'],
+                            'is_sales' => ($this->is_sales == $developer['id']),
+                            'is_pm' => ($this->is_pm == $developer['id']),
+                            'alias_user_id' => isset($developer['alias']) ? $developer['alias'] : null
+                        ])->execute();
+                        
+                    }
+                    
+                }
+            } elseif ($this->getScenario() == self::SCENARIO_UPDATE_SALES) {
                 if ( User::hasPermission([User::ROLE_SALES ]) ) {
                     
                     $existingDevelopers = ProjectDeveloper::findAll(['project_id' => $this->id]);
