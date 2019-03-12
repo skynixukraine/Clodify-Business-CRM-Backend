@@ -76,19 +76,18 @@ class ProjectCreate extends ViewModelAbstract
                     
                     if (count($adminUsers) > 0) {
                         foreach ($adminUsers as $admin) {
-                            $htmlBody = 'Hi ' . $admin['first_name'] . '<br>';
-                            $htmlBody .= $salesUser->first_name . ' has created a new project: ' . $this->model->name . '<br>';
-                            $htmlBody .= 'Start Date: ' . $this->model->date_start . '<br>';
-                            $htmlBody .= 'End Date: ' . $this->model->date_end . '<br>';
-                            $htmlBody .= 'Customers: ' . $customers . '<br>';
-                            $htmlBody .= 'Developers: ' . $developers . '<br>';
-                            $mail = \Yii::$app->mailer->compose()
-                            ->setFrom($salesUser->email)
-                            ->setTo(\Yii::$app->params['adminEmail'])
-                            ->setReplyTo($salesUser->email)
-                            ->setSubject($salesUser->first_name . ' created a new project')
-                            ->setHtmlBody($htmlBody);
-                            $mail->send();
+                            Yii::$app->mail->send('create_project', [
+                                $admin->email
+                            ], [
+                                'AdminFirstName' => $admin['first_name'],
+                                'SalesFirstName' => $salesUser->first_name,
+                                'ProjectName' => $this->model->name,
+                                'ProjectDateStart' => $this->model->date_start,
+                                'ProjectDateEnd' => $this->model->date_end,
+                                'ProjectCustomers' => $customers,
+                                'ProjectDevelopers' => $developers,
+                                'SalesEmail' => $salesUser->email
+                            ]);
                         }
                     }                  
                 }
