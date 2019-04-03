@@ -48,7 +48,8 @@ class ReportsFetch extends ViewModelAbstract
         $query = Report::find()
             ->leftJoin(User::tableName(), User::tableName() . '.id=' . Report::tableName() . '.user_id')
             ->leftJoin(Project::tableName(), Project::tableName() . '.id=' . Report::tableName() . '.project_id')
-            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id' )
+            ->leftJoin(ProjectDeveloper::tableName(), ProjectDeveloper::tableName() . '.project_id=' . Project::tableName() . '.id ' .
+                ' AND ' . Report::tableName() . '.user_id=' . ProjectDeveloper::tableName() . '.user_id' )
             ->andWhere(Project::tableName() . '.is_delete=0')
             ->groupBy(Report::tableName() . '.id');
 
@@ -78,7 +79,8 @@ class ReportsFetch extends ViewModelAbstract
         }
         if($usersId && $usersId != null){
 
-            $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId);
+            $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId . ' OR ' .
+                ProjectDeveloper::tableName() . '.alias_user_id=' . $usersId);
         }
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
