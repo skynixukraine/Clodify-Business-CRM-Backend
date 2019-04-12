@@ -178,22 +178,7 @@ class ReportsDownloadPdf extends ViewModelAbstract
         $totalHours = 0;
         /* @var $model \app\models\Report */
         foreach ( $activeRecordsData as $key=>$model ) {
-            $pD = ProjectDeveloper::findOne(['user_id' => $model->user_id,
-                'project_id' => $model->getProject()->one()->id ]);
-
-            $aliasUser = null;
-            if ( $pD && $pD->alias_user_id ) {
-
-                $aliasUser = User::findOne( $pD->alias_user_id );
-
-            }
-            if (!$aliasUser ) {
-                //This is in case if it is a simple user
-                $aliasUser = User::findOne($model->user_id);
-            }
-
-            $user = $aliasUser->first_name . ' ' . $aliasUser->last_name;
-
+           
             $date_report =  date("d/m/Y", strtotime($model->date_report));
             $hours = gmdate('H:i', floor($model->hours * 3600));
             $totalHours += floatval($model->hours);
@@ -210,7 +195,7 @@ class ReportsDownloadPdf extends ViewModelAbstract
                 'is_approved'   => $model->is_approved ? true : false,
                 'reporter'      => [
                     'id'   => $model->user_id,
-                    'name' => $user
+                    'name' => $model->reporter_name
                 ],
                 'reported_date' => $date_report,
                 'is_invoiced'   => $model->invoice_id ? 1 : 0

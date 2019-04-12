@@ -201,8 +201,7 @@ class ReportsFetch extends ViewModelAbstract
 
 
             $user = (($aliasUser != null) ?
-                $aliasUser->first_name . ' ' .
-                $aliasUser->last_name .
+                $model->reporter_name .
                 ( !User::hasPermission([User::ROLE_CLIENT]) ?
                     '(' . User::findOne($model->user_id)->first_name . ' ' .
                     User::findOne($model->user_id)->last_name . ')'
