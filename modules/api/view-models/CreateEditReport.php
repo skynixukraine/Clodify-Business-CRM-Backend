@@ -11,6 +11,7 @@ use app\components\DateUtil;
 use app\models\DelayedSalary;
 use app\models\Invoice;
 use app\models\Milestone;
+use app\models\ProjectDeveloper;
 use app\models\Report;
 use app\models\FinancialReport;
 use app\models\Setting;
@@ -170,7 +171,21 @@ class CreateEditReport extends ViewModelAbstract
                                 ($salary / $numberOfWorkingHoursInTheMonth) *
                                 ($expensesRatio > 0 ? $expensesRatio : 1);
 
-                            $this->model->reporter_name = $user->first_name . ' ' . $user->last_name;
+                            if ( ($pD = ProjectDeveloper::findOne(['user_id' => $user->id,
+                                'project_id' => $project->id ])) &&
+                                $pD->alias_user_id > 0 && $pD->alias_user_id !== $user->id &&
+                                ($aliasUser = User::findOne( $pD->alias_user_id ))) {
+
+                                ;
+                                $reporterName = $aliasUser->first_name . ' ' . $aliasUser->last_name;
+
+                            } else {
+
+                                $reporterName = $user->first_name . ' ' . $user->last_name;
+
+                            }
+
+                            $this->model->reporter_name = $reporterName;
                             $this->model->user_id = $user_id;
                             $result = $totalHoursOfThisDay - $oldHours + $this->model->hours;
                             if ($result <= 12) {
