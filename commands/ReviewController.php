@@ -7,8 +7,14 @@
 
 namespace app\commands;
 
+use app\models\FinancialIncome;
+use app\models\FinancialReport;
+use app\models\SalaryReport;
+use app\models\SalaryReportList;
+use app\models\WorkHistory;
 use Yii;
 use app\models\Report;
+use app\models\Setting;
 use app\models\Review;
 use yii\log\Logger;
 
@@ -19,144 +25,103 @@ class ReviewController extends DefaultController
      */
     public function actionMonthlyReview()
     {
-        Yii::getLogger()->log('actionApproveToday: running', Logger::LEVEL_INFO);
-        Yii::getLogger()->flush();
+        Yii::getLogger()->log('actionMonthlyReview', Logger::LEVEL_INFO);
         try {
-            Yii::getLogger()->log('actionApproveToday: running', Logger::LEVEL_INFO);
 
-            $monthReport = \Yii::$app->db->createCommand("
-                SELECT * FROM financial_reports                     
-                WHERE MONTH(financial_reports.report_date) =:past_month;", [
-                ':past_month'  => date('n', strtotime(date('Y-m')." -1 month"))
-            ])->queryOne();
+            /** @var FinancialReport $financialReport
+             * @var SalaryReport $salaryReport
+             */
+            if ( ( $financialReport = FinancialReport::find()
+                ->where(['is_locked' => 1 ])
+                ->orderBy(['report_date' => SORT_DESC])
+                ->one() ) &&
+                ($salaryReport = SalaryReport::findSalaryReport($financialReport))) {
 
+                Yii::getLogger()->log('Got a financial report #' . $financialReport->id, Logger::LEVEL_INFO);
+                Yii::getLogger()->log('Got a salary report #' . $salaryReport->id, Logger::LEVEL_INFO);
 
-            //\Yii::getLogger()->log($monthReport, Logger::LEVEL_ERROR);
-
-            //\Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
-            $month = date("n",strtotime($monthReport['report_date']));
-            //\Yii::getLogger()->log($month, Logger::LEVEL_ERROR);
-
-            //return;
-            if(is_null($monthReport))
-                return;
-
-            if(!$monthReport['is_locked'] == 1)
-                return;
-
-            $salaryReport = \Yii::$app->db->createCommand("
-                SELECT * FROM salary_reports                     
-                WHERE MONTH(FROM_UNIXTIME(salary_reports.report_date)) =:search_month;", [
-                ':search_month'  => $month
-            ])->queryOne();
-
-            //\Yii::getLogger()->log($salaryReport, Logger::LEVEL_ERROR);
+                $salaryReportListAndUsers = SalaryReportList::find()
+                    ->where([SalaryReportList::tableName() . '.salary_report_id' => $salaryReport->id])
+                    ->all();
 
 
-            $salaryReportListAndUsers = \Yii::$app->db->createCommand("
-                SELECT * FROM salary_report_lists
-                LEFT JOIN users ON salary_report_lists.user_id = users.id                                         
-                WHERE salary_report_lists.salary_report_id =:salary_report_id;", [
-                ':salary_report_id'  => $salaryReport['id']
-            ])->queryAll();
+                /** @var SalaryReportList $sList */
+                foreach($salaryReportListAndUsers as $sList) {
 
-            //\Yii::getLogger()->log($salaryReportListAndUsers, Logger::LEVEL_ERROR);
+                    $review = new Review;
+                    $dateFrom = date('Y-m-01', strtotime($salaryReport->report_date));
+                    $dateTo = date('Y-m-t', strtotime($salaryReport->report_date));
 
-            if(empty($salaryReportListAndUsers))
-                return;
+                    if ( Review::find()->where([
+                            'date_from' => $dateFrom,
+                            'date_to' => $dateTo,
+                            'user_id' => $sList->user_id])->count() == 0) {
+                        //The Review does not exist, generating a new one
 
-            foreach($salaryReportListAndUsers as $salaryReportListAndUser){
+                        Yii::getLogger()->log('A new Review for ' . $sList->user_id, Logger::LEVEL_INFO);
 
-                $review = new Review;
-                $dateFrom = date('Y-m-01', strtotime($monthReport['report_date']));
-                $dateTo = date('Y-m-t', strtotime($monthReport['report_date']));
-                \Yii::getLogger()->log($dateFrom, Logger::LEVEL_ERROR);
-                \Yii::getLogger()->log($dateTo, Logger::LEVEL_ERROR);
-                $review->user_id = $salaryReportListAndUser['user_id'];
-                $review->date_from = $dateFrom;
-                $review->date_to = $dateTo;
+                        $review = new Review();
 
-                ///\Yii::getLogger()->log($monthReport['report_date'], Logger::LEVEL_ERROR);
+                        $review->user_id    = $sList->user_id;
+                        $review->date_from  = $dateFrom;
+                        $review->date_to    = $dateTo;
 
-                //\Yii::getLogger()->log($dateFrom, Logger::LEVEL_ERROR);
+                        $workHistoryFails = WorkHistory::find()->where([
+                            'type'      => WorkHistory::TYPE_USER_FAILS,
+                            'user_id' => $sList->user_id])
+                            ->andWhere(['between', 'date_start', $dateFrom, $dateTo])->count();
 
-                //\Yii::getLogger()->log($dateTo, Logger::LEVEL_ERROR);
+                        $workHistoryEffords = WorkHistory::find()->where([
+                            'type'      => WorkHistory::TYPE_USER_EFFORTS,
+                            'user_id' => $sList->user_id])
+                            ->andWhere(['between', 'date_start', $dateFrom, $dateTo])->count();
 
-                $workHistoryFails = \Yii::$app->db->createCommand("
-                SELECT COUNT(*) FROM work_history WHERE work_history.type='fails' AND date_start >= :date_from AND  date_start <= :date_to", [
-                    ':date_from'  => $dateFrom, ':date_to' => $dateTo
-                ])->queryOne();
+                        $scoreLoyalty = 100 - (intval($sList->day_off) + intval($sList->hospital_days)) *
+                            (100/$sList->worked_days) - ($workHistoryFails - $workHistoryEffords)*10;
 
-                //\Yii::getLogger()->log($workHistoryFails, Logger::LEVEL_ERROR);
+                        $review->score_loyalty = $this->correctValue($scoreLoyalty);
 
-                //return;
+                        $scorePerformance = 100 - (100/$salaryReport->num_of_working_days) * $sList->non_approved_hours;
 
-                $workHistoryEffords = \Yii::$app->db->createCommand("
-                SELECT COUNT(*) FROM work_history WHERE work_history.type='efforts' AND date_start >= :date_from AND  date_start <= :date_to", [
-                    ':date_from'  => $dateFrom, ':date_to' => $dateTo
-                ])->queryOne();
+                        $review->score_performance = $this->correctValue($scorePerformance);
 
+                        $laborExpensesRato = Setting::getLaborExpensesRatio();
 
-                if(intval($salaryReportListAndUser['worked_days']) == 0) {
-                    $salaryReportListAndUser['worked_days'] = 1;
+                        $financialIncome = FinancialIncome::find()
+                            ->where(['developer_user_id' => $sList->user_id, 'financial_report_id' => $financialReport->id])
+                            ->sum('amount');
+
+                        $score_earnings = 0.2 * intval($financialIncome) - (intval($sList->subtotal) * $laborExpensesRato);
+
+                        $review->score_earnings = $this->correctValue($score_earnings);
+
+                        $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
+
+                        $notes              = [];
+                        $workHistoryItems = WorkHistory::find()->where([
+                            'user_id' => $sList->user_id])
+                            ->andWhere(['between', 'date_start', $dateFrom, $dateTo])->all();
+
+                        /** @var WorkHistory $item */
+                        foreach ( $workHistoryItems as $item ) {
+
+                            $notes[] = [
+                                'id'        => $item->id,
+                                'type'      => $item->type,
+                                'note'      => $item->title
+                            ];
+                        }
+                        $notesInString = json_encode($notes);
+
+                        $review->notes = $notesInString;
+                        $review->score_total = $this->correctValue($score_total);
+                        $review->save();
+
+                    }
+
                 }
 
-                $score_loyalty = 100 - (intval($salaryReportListAndUser['day_off']) + intval($salaryReportListAndUser['hospital_days']))*
-                    (100/$salaryReportListAndUser['worked_days']) - (intval($workHistoryFails['COUNT(*)']) - intval($workHistoryEffords['COUNT(*)']))*10;
-
-
-                $review->score_loyalty = $this->correctValue($score_loyalty);
-
-                $reportsPerformance = \Yii::$app->db->createCommand("
-                SELECT COUNT(*) FROM reports WHERE date_report>=:date_from AND date_report<=:date_to GROUP BY project_id", [
-                    ':date_from'  => $dateFrom, ':date_to' => $dateTo
-                ])->queryOne();
-
-
-                $score_performance = 100 - (100/$monthReport['num_of_working_days'])*intval($salaryReportListAndUser['non_approved_hours']);
-                \Yii::getLogger()->log($score_performance, Logger::LEVEL_ERROR);
-
-                $review->score_performance = $this->correctValue($score_performance);
-
-                $laborExpensesRato = \Yii::$app->db->createCommand("
-                SELECT * FROM settings WHERE settings.key='LABOR_EXPENSES_RATIO'")->queryOne();
-
-                //\Yii::getLogger()->log($laborExpensesRato, Logger::LEVEL_ERROR);
-                //return;
-                $fin_income = \Yii::$app->db->createCommand("
-                SELECT SUM(amount) FROM financial_income
-                WHERE financial_report_id=:financial_report_id AND developer_user_id=:developer_user_id", [
-                        ':financial_report_id'  => $monthReport['id'],
-                        ':developer_user_id' => $salaryReportListAndUser['user_id']
-                    ])->queryOne();
-                //\Yii::getLogger()->log($fin_income, Logger::LEVEL_ERROR);
-
-                $score_earnings = 0.2 * intval($fin_income['SUM(amount)']) - (intval($salaryReportListAndUser['subtotal']) * ( 1 + intval($laborExpensesRato['value'])/100));
-
-                //\Yii::getLogger()->log('score earnings ' . intval($fin_income['SUM(amount)']), Logger::LEVEL_ERROR);
-                $review->score_earnings = $this->correctValue($score_earnings);
-
-                $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
-
-                $notes = \Yii::$app->db->createCommand("
-                SELECT * FROM work_history
-                WHERE MONTH(work_history.date_start) =:search_month AND MONTH(work_history.date_end) =:search_month;", [
-                ':search_month'  => $month])->queryAll();
-
-                $notesInString = json_encode($notes);
-
-                $review->notes = $notesInString;
-
-                \Yii::getLogger()->log('notes' . $review->notes, Logger::LEVEL_ERROR);
-
-                \Yii::getLogger()->log($score_total, Logger::LEVEL_ERROR);
-                $review->score_total = $this->correctValue($score_total);
-                $review->save();
-                \Yii::getLogger()->log($review->getErrors(), Logger::LEVEL_ERROR);
-
             }
-
-            Yii::getLogger()->log('actionApproveToday: Weekday ' .  date('N'), Logger::LEVEL_INFO);
 
         } catch (\Exception $e) {
             \Yii::error($e->getMessage());
