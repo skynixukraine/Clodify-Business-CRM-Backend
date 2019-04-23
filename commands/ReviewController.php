@@ -81,7 +81,7 @@ class ReviewController extends DefaultController
 
                         $review->score_loyalty = $this->correctValue($scoreLoyalty);
 
-                        $scorePerformance = 100 - (100/$salaryReport->num_of_working_days) * $sList->non_approved_hours;
+                        $scorePerformance = 100 - (100/$salaryReport->number_of_working_days) * $sList->non_approved_hours;
 
                         $review->score_performance = $this->correctValue($scorePerformance);
 
