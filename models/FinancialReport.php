@@ -15,6 +15,7 @@ use yii\log\Logger;
  * @property string $expense_constant
  * @property double $expense_salary
  * @property string $investments
+ * @property integer $num_of_working_days
  */
 class FinancialReport extends \yii\db\ActiveRecord
 {

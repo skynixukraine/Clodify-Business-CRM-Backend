@@ -25,6 +25,7 @@ use app\models\VacationHistoryItem;
 use app\models\Setting;
 use app\modules\api\components\Api\Processor;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\log\Logger;
 
 /**
@@ -283,9 +284,47 @@ class FinancialReportLock extends ViewModelAbstract
                             'status'    => Project::STATUS_INPROGRESS,
                             'type'      => Project::TYPE_HOURLY
                         ])->all();
-                    $dateFrom           = $finReportRange->fromDate;
-                    $toDate             = $finReportRange->toDate;
                     foreach ( $allProjects as $project ) {
+
+                        $dateFrom           = $finReportRange->fromDate;
+                        $toDate             = $finReportRange->toDate;
+
+                        if ( $project->type === Project::TYPE_FIXED_PRICE ) {
+
+                            $milestonesList = Milestone::find()
+                                ->where([
+                                    'project_id'    => $project->id,
+                                    'status'        => Milestone::STATUS_CLOSED
+                                ])
+                                ->andWhere(['between', 'closed_date', $finReportRange->fromDate, $finReportRange->toDate])
+                                ->all();
+
+                            $milestones = ArrayHelper::toArray($milestonesList, [
+                                'app\models\Milestone' => [
+                                    'id',
+                                    'name',
+                                    'start_date',
+                                    'end_date',
+                                    'closed_date'
+                                ],
+                            ]);
+
+                            foreach ( $milestones as $milestone ) {
+
+                                if ( strtotime( $milestone['start_date'] ) < $finReportRange->from ) {
+
+                                    $dateFrom = $milestone['start_date'];
+
+                                }
+                                if ( strtotime($milestone['closed_date']) < $finReportRange->to ) {
+
+                                    $toDate = $milestone['closed_date'];
+
+                                }
+
+                            }
+
+                        }
 
                         $expenses = Report::getReportsCostByProjectAndDates($project->id, $dateFrom, $toDate);
 

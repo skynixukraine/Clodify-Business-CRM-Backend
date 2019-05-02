@@ -76,12 +76,21 @@ class ReviewController extends DefaultController
                             'user_id' => $sList->user_id])
                             ->andWhere(['between', 'date_start', $dateFrom, $dateTo])->count();
 
-                        $scoreLoyalty = 100 - (intval($sList->day_off) + intval($sList->hospital_days)) *
-                            (100/$sList->worked_days) - ($workHistoryFails - $workHistoryEffords)*10;
+                        $scoreLoyalty = 0;
+                        if ( $sList->worked_days > 0 ) {
 
+                            $scoreLoyalty = 100 - (intval($sList->day_off) + intval($sList->hospital_days)) *
+                                (100/$sList->worked_days) - ($workHistoryFails - $workHistoryEffords)*10;
+
+                        }
                         $review->score_loyalty = $this->correctValue($scoreLoyalty);
 
-                        $scorePerformance = 100 - (100/$salaryReport->number_of_working_days) * $sList->non_approved_hours;
+                        $scorePerformance = 0;
+                        if ( $financialReport->num_of_working_days > 0 ) {
+
+                            $scorePerformance = 100 - (100/($financialReport->num_of_working_days*8)) * $sList->non_approved_hours;
+
+                        }
 
                         $review->score_performance = $this->correctValue($scorePerformance);
 
@@ -91,9 +100,9 @@ class ReviewController extends DefaultController
                             ->where(['developer_user_id' => $sList->user_id, 'financial_report_id' => $financialReport->id])
                             ->sum('amount');
 
-                        $score_earnings = 0.2 * intval($financialIncome) - (intval($sList->subtotal) * $laborExpensesRato);
+                        $scoreEarnings = 0.2 * (floatval($financialIncome) - (floatval($sList->subtotal) * $laborExpensesRato));
 
-                        $review->score_earnings = $this->correctValue($score_earnings);
+                        $review->score_earnings = $this->correctValue($scoreEarnings);
 
                         $score_total = (50*$review->score_earnings+25*$review->score_loyalty+25*$review->score_performance)/100;
 
