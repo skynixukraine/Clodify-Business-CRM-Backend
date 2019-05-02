@@ -26,7 +26,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
     public function define()
     {
 
-        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES, User::ROLE_FIN])) {
 
             /** @var $financialReport FinancialReport */
             if ( ($id = Yii::$app->request->getQueryParam('id') ) &&
@@ -50,6 +50,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
 
                     $finReportRange = DateUtil::getUnixMonthDateRangesByDate($financialReport->report_date);
                     $dateFrom = $finReportRange->fromDate;
+                    $toDate   = $finReportRange->toDate;
                     /** @var $project Project */
                     if ( ($project = $finIncome->getProject()->one() ) ) {
 
@@ -105,7 +106,7 @@ class FinancialBonusesFetch extends ViewModelAbstract
                         'project_id'            => $finIncome->project_id,
                         'financial_report_id'   => $financialReport->id
                     ])->select(['SUM(amount)'])->scalar();
-                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $finReportRange->toDate);
+                    $expenses = Report::getReportsCostByProjectAndDates($finIncome->project_id, $dateFrom, $toDate);
 
                     $bonuses = round( ($finIncome->sumAmount - $expenses - $deptExpenses) * 0.1 );
                     $bonuses = $bonuses > 0 ? $bonuses : 0;
@@ -114,8 +115,8 @@ class FinancialBonusesFetch extends ViewModelAbstract
                     /** @var $u User */
                     $incomeItems[] = [
                         'id'        => $finIncome->project_id,
-                        'income'    => round( $finIncome->sumAmount ),
-                        'expenses'  => round( $expenses + $deptExpenses),
+                        'income'    => (User::hasPermission([User::ROLE_SALES, User::ROLE_ADMIN]) ? round( $finIncome->sumAmount ) : '-'),
+                        'expenses'  => (User::hasPermission([User::ROLE_SALES, User::ROLE_ADMIN]) ? round( $expenses + $deptExpenses) : '-'),
                         'project'   => $project,
                         'bonuses'   => $bonuses,
                         'added_by'  => [
