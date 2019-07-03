@@ -26,7 +26,11 @@ class ProjectCreate extends ViewModelAbstract
     public function define()
     {              
         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) {
-            $this->model->status = Project::STATUS_NEW;
+            if (empty($this->model->status)) {
+
+                $this->model->status = Project::STATUS_NEW;
+
+            }
             if($this->validate() &&  $this->model->save()) {
                 if ( User::hasPermission([User::ROLE_SALES ]) ) {
                     $salesUser = User::findOne([
