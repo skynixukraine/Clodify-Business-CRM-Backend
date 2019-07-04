@@ -27,10 +27,13 @@ class ProjectCreate extends ViewModelAbstract
     {              
         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) {
             if (empty($this->model->status)) {
-
                 $this->model->status = Project::STATUS_NEW;
-
             }
+
+            if (! $this->model->api_key) {
+                $this->model->setRandomApiKey();
+            }
+
             if($this->validate() &&  $this->model->save()) {
                 if ( User::hasPermission([User::ROLE_SALES ]) ) {
                     $salesUser = User::findOne([
@@ -38,16 +41,7 @@ class ProjectCreate extends ViewModelAbstract
                         'is_active' => 1,
                         'id' => Yii::$app->user->id
                     ]);
-                    
-                    $adminUsers = User::find()
-                    ->where([
-                        'role'=>[User::ROLE_ADMIN],
-                        'is_active' => 1,
-                        'is_delete' => 0
-                    ])
-                    ->orderBy(['id'   => 'ASC'])
-                    ->all();
-                    
+
                     $customers = \Yii::$app->db->createCommand("
                     SELECT u.first_name, u.last_name FROM " . ProjectCustomer::tableName() . " pc
                     LEFT JOIN " . User::tableName() . " u ON pc.user_id=u.id
@@ -77,7 +71,8 @@ class ProjectCreate extends ViewModelAbstract
                         }
                     }
                     $developers = (count($developerData)>0) ? implode(", ", $developerData) : '';
-                    
+                    $adminUsers = User::getAdmins();
+
                     if (count($adminUsers) > 0) {
                         foreach ($adminUsers as $admin) {
                             Yii::$app->mail->send('create_project', [
@@ -95,6 +90,28 @@ class ProjectCreate extends ViewModelAbstract
                         }
                     }                  
                 }
+
+                if (! count($this->model->projectEnvironments)) {
+                    $this->model->addMasterEnv();
+                    $this->model->addStagingEnv();
+
+                    $adminUsers = $adminUsers ?? User::getAdmins();
+                    if (count($adminUsers) > 0) {
+                        foreach ($adminUsers as $admin) {
+                            Yii::$app->mailer->compose()
+                                ->setFrom([Yii::$app->params['fromEmail'] => 'Clodify Notification'])
+                                ->setTo($admin->email)
+                                ->setSubject($this->model->name . ' environments set up')
+                                ->setHtmlBody(
+                                    '<p>Hi, ' . $admin->getFullName() . '</p>'
+                                    . '<p>The Project: [' . $this->model->id . '] '
+                                    . $this->model->name . ' Environments are ready to use</p>'
+                                    . '<p>API Key: ' . $this->model->api_key . '</p>')
+                                ->send();
+                        }
+                    }
+                }
+
                 $this->setData([
                     'project_id'=> $this->model->id
                 ]);
