@@ -39,10 +39,34 @@ class ProjectEdit extends ViewModelAbstract
 
                     }
                     $this->model->setAttributes($this->postData);
+                    if (! $this->model->api_key) {
+                        $this->model->setRandomApiKey();
+                    }
+
                     if ( $this->validate() ) {
 
                         $this->model->save();
 
+                        if (! count($this->model->projectEnvironments)) {
+                            $this->model->addMasterEnv();
+                            $this->model->addStagingEnv();
+
+                            $adminUsers = User::getAdmins();
+                            if (count($adminUsers) > 0) {
+                                foreach ($adminUsers as $admin) {
+                                    Yii::$app->mailer->compose()
+                                        ->setFrom([Yii::$app->params['fromEmail'] => 'Clodify Notification'])
+                                        ->setTo($admin->email)
+                                        ->setSubject($this->model->name . ' environments set up')
+                                        ->setHtmlBody(
+                                            '<p>Hi, ' . $admin->getFullName() . '</p>'
+                                            . '<p>The Project: [' . $this->model->id . '] '
+                                            . $this->model->name . ' Environments are ready to use</p>'
+                                            . '<p>API Key: ' . $this->model->api_key . '</p>')
+                                        ->send();
+                                }
+                            }
+                        }
                     }
                 }
             }
