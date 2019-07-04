@@ -26,7 +26,10 @@ class ProjectCreate extends ViewModelAbstract
     public function define()
     {              
         if ( User::hasPermission([User::ROLE_ADMIN, User::ROLE_SALES])) {
-            $this->model->status = Project::STATUS_NEW;
+            if (empty($this->model->status)) {
+                $this->model->status = Project::STATUS_NEW;
+            }
+
             if (! $this->model->api_key) {
                 $this->model->setRandomApiKey();
             }
@@ -38,7 +41,7 @@ class ProjectCreate extends ViewModelAbstract
                         'is_active' => 1,
                         'id' => Yii::$app->user->id
                     ]);
-                    
+
                     $customers = \Yii::$app->db->createCommand("
                     SELECT u.first_name, u.last_name FROM " . ProjectCustomer::tableName() . " pc
                     LEFT JOIN " . User::tableName() . " u ON pc.user_id=u.id
