@@ -75,7 +75,15 @@ class UsersFetch extends ViewModelAbstract
             $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
             $arrayWorkers = [];
             foreach($workers as $worker){
-                $arrayWorkers[] = $worker->user_id;
+                if (!$worker->alias_user_id ) {
+
+                    $arrayWorkers[] = $worker->user_id;
+
+                } else {
+
+                    $arrayWorkers[] = $worker->alias_user_id;
+
+                }
             }
             $devUser = '';
             if(!empty($arrayWorkers)) {

@@ -79,8 +79,16 @@ class ReportsFetch extends ViewModelAbstract
         }
         if($usersId && $usersId != null){
 
-            $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId . ' OR ' .
-                ProjectDeveloper::tableName() . '.alias_user_id=' . $usersId);
+            if (User::hasPermission([User::ROLE_CLIENT]) ) {
+
+                $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId . ' OR ' .
+                    ProjectDeveloper::tableName() . '.alias_user_id=' . $usersId);
+
+            } else {
+
+                $dataTable->setFilter(Report::tableName() . '.user_id=' . $usersId);
+
+            }
         }
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
