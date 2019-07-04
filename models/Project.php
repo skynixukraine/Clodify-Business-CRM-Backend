@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\DateUtil;
+use Faker\Factory as Faker;
 use Yii;
 use app\models\ProjectCustomer;
 use yii\filters\RateLimiter;
@@ -27,6 +28,7 @@ use yii\filters\RateLimiter;
  * @property ProjectDevelopers[] $projectDevelopers
  * @property Users[] $users0
  * @property Reports[] $reports
+ * @property string|null $api_key
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -508,4 +510,39 @@ class Project extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function setRandomApiKey()
+    {
+        $this->api_key = Faker::create()->regexify('[A-Za-z0-9]{32}');
+    }
+
+    public function getProjectEnvironments()
+    {
+        return $this->hasMany(ProjectEnvironment::class, ['project_id' => 'id']);
+    }
+
+    public function addMasterEnv(): void
+    {
+        if (! $this->id) {
+            return;
+        }
+
+        $masterEnv = new ProjectEnvironment();
+        $masterEnv->branch = 'master';
+        $masterEnv->access_roles = 'ADMIN';
+        $masterEnv->project_id = $this->id;
+        $masterEnv->save();
+    }
+
+    public function addStagingEnv(): void
+    {
+        if (! $this->id) {
+            return;
+        }
+
+        $stagingEnv = new ProjectEnvironment();
+        $stagingEnv->branch = 'staging';
+        $stagingEnv->access_roles = 'ADMIN, SALES, PM, DEV';
+        $stagingEnv->project_id = $this->id;
+        $stagingEnv->save();
+    }
 }
