@@ -1019,4 +1019,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    /**
+     * Get all active users with ADMIN role
+     * @return User[]
+     */
+    public static function getAdmins(): array
+    {
+        return self::find()
+            ->where([
+                'role' => [self::ROLE_ADMIN],
+                'is_active' => 1,
+                'is_delete' => 0,
+            ])
+            ->orderBy(['id' => 'ASC'])
+            ->all();
+    }
 }
