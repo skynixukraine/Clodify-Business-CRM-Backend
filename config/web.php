@@ -1,5 +1,7 @@
 <?php
 
+use nickcv\encrypter\components\Encrypter;
+
 $params = require(__DIR__ . '/params.php');
 $route = require(__DIR__ . '/route.php');
 
@@ -126,6 +128,13 @@ $config = [
             'class' => 'yii\httpclient\Client',
             'baseUrl' => 'https://api.privatbank.ua/p24api',
         ],
+        'encrypter' => [
+            'class'=> Encrypter::class,
+            'globalPassword'=>'YourPassword',
+            'iv'=>'04FjpDi7ee6XMZPu',
+            'useBase64Encoding'=>true,
+            'use256BitesEncoding'=>false,
+        ]
     ],
     'params' => $params,
 ];

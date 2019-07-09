@@ -9,12 +9,13 @@ $dbCore = require(__DIR__ . '/db-core.php');
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'gii'],
+    'bootstrap' => ['log', 'gii', 'encrypter'],
     'controllerNamespace' => 'app\commands',
     'language' => 'ua-UK',
     'sourceLanguage' => 'en-US',
     'modules' => [
         'gii' => 'yii\gii\Module',
+        'encrypter' => 'nickcv\encrypter\Module',
     ],
     'controllerMap' => [
         'migrate' => [
