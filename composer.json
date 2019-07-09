@@ -30,7 +30,9 @@
         "himiklab/yii2-recaptcha-widget" : "*",
         "fedemotta/yii2-aws-sdk": "*",
         "twilio/sdk": "^5.17",
-        "yiisoft/yii2-httpclient": "^2.0"
+        "yiisoft/yii2-httpclient": "^2.0",
+        "nickcv/yii2-encrypter": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

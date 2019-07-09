@@ -49,9 +49,21 @@ class ValuesContainer
         'password'  => 'Q3zvy#kc@RD'
     ];
 
+    public static $userFin2 = [
+        'id'        => 9,
+        'email'     => 'crm-fin2@skynix.co',
+        'password'  => 'Q3zvy#kc@RD'
+    ];
+
     public static $userDev = [
         'id'        => 3,
         'email'     => 'crm-dev@skynix.co',
+        'password'  => 'Q$zv#yk2cR4D'
+    ];
+
+    public static $userDev2 = [
+        'id'        => 10,
+        'email'     => 'crm-dev2@skynix.co',
         'password'  => 'Q$zv#yk2cR4D'
     ];
 
@@ -61,15 +73,33 @@ class ValuesContainer
         'password'  => 'Q$zR#yk2cR4D'
     ];
 
+    public static $userClient2 = [
+        'id'        => 8,
+        'email'     => 'crm-client2@skynix.co',
+        'password'  => 'Q$zR#yk2cR4D'
+    ];
+
     public static $userSales = [
         'id'        => 5,
         'email'     => 'crm-sales@skynix.co',
         'password'  => 'Q$zR#yk2c4R4D'
     ];
 
+    public static $userSales2 = [
+        'id'        => 11,
+        'email'     => 'crm-sales2@skynix.co',
+        'password'  => 'Q$zR#yk2c4R4D'
+    ];
+
     public static $userPm = [
         'id'        => 6,
         'email'     => 'crm-pm@skynix.co',
+        'password'  => 'Q$zR3yk2c4R4D'
+    ];
+
+    public static $userPm2 = [
+        'id'        => 12,
+        'email'     => 'crm-pm2@skynix.co',
         'password'  => 'Q$zR3yk2c4R4D'
     ];
 
@@ -122,5 +152,15 @@ class ValuesContainer
 
     public static $createBusinessUrlApi = '/api/businesses';
 
+    public static $projectWithEnvId = 2;
 
+    public static $projectEnvironments = [
+        'master' => 1,
+        'staging' => 2,
+    ];
+
+    public static $encryptedString = [
+        'origin' => 'hallo',
+        'encrypted' => 'yXVFq19Y67bqaMmp21cFNw=='
+    ];
  }
