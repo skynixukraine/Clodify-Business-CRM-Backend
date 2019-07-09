@@ -73,35 +73,21 @@ class ProjectEnvironmentVariableCreate extends ViewModelAbstract
             return true;
         }
 
-        if (! User::hasPermission(User::getRoles())) {
-            return false;
-        }
-
         $envRoles = array_map('trim', explode(',', $this->environment->access_roles));
         if (! User::hasPermission($envRoles)) {
             return false;
         }
 
         if (User::hasPermission([User::ROLE_CLIENT])) {
-            $customerExists = ProjectCustomer::find()->where([
+            return ProjectCustomer::find()->where([
                 'user_id' => Yii::$app->user->id,
                 'project_id' => $this->environment->project_id,
             ])->exists();
-
-            if (! $customerExists) {
-                return false;
-            }
-        } else {
-            $developerExists = ProjectDeveloper::find()->where([
-                'user_id' => Yii::$app->user->id,
-                'project_id' => $this->environment->project_id,
-            ])->exists();
-
-            if (! $developerExists) {
-                return false;
-            }
         }
 
-        return true;
+        return ProjectDeveloper::find()->where([
+            'user_id' => Yii::$app->user->id,
+            'project_id' => $this->environment->project_id,
+        ])->exists();
     }
 }
