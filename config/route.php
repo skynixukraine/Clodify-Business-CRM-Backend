@@ -17,6 +17,7 @@ return [
     'POST '     . $API . '/projects/<id:\d+>/subscription'                    => $API . '/projects/subscribe',
     'DELETE '   . $API . '/projects/<id:\d+>/subscription'                    => $API . '/projects/unsubscribe',
     'POST '     . $API . '/projects/<id:\d+>/env/<branch_name:\w+>'           => $API . '/project-environment-variables/create',
+    'GET '      . $API . '/projects/<id:\d+>/env/<branch_name:\w+>'           => $API . '/project-environment-variables/fetch',
     'DELETE '   . $API . '/reports/<id:\d+>'                                  => $API . '/reports/delete',
     'PUT '      . $API . '/reports/<id:\d+>'                                  => $API . '/reports/create-edit',
     'POST '     . $API . '/reports'                                           => $API . '/reports/create-edit',

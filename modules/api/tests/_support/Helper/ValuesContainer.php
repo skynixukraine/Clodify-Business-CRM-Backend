@@ -153,6 +153,7 @@ class ValuesContainer
     public static $createBusinessUrlApi = '/api/businesses';
 
     public static $projectWithEnvId = 2;
+    public static $projectWithEndApiKey = 'gz0dAtV6pzojiDhrzF6xN1DVmCrFuPXa';
 
     public static $projectEnvironments = [
         'master' => 1,
