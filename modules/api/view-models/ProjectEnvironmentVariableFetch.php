@@ -20,10 +20,10 @@ class ProjectEnvironmentVariableFetch extends ViewModelAbstract
     public function __construct()
     {
         $id = Yii::$app->request->getQueryParam('id', 0);
-        $envId = Yii::$app->request->getQueryParam('branch_name');
+        $envName = Yii::$app->request->getQueryParam('branch_name');
 
         $this->environment = ProjectEnvironment::findOne([
-            'branch' => $envId,
+            'branch' => $envName,
             'project_id' => $id,
         ]);
     }
