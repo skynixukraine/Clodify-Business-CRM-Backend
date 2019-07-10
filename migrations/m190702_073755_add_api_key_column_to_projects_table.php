@@ -7,8 +7,6 @@ use app\components\SkynixMigration;
  */
 class m190702_073755_add_api_key_column_to_projects_table extends SkynixMigration
 {
-    public $isCore = true;
-
     /**
      * {@inheritdoc}
      */
