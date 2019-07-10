@@ -1,6 +1,6 @@
 <?php
 
-use nickcv\encrypter\components\Encrypter;
+use app\components\Encrypter;
 
 $params = require(__DIR__ . '/params.php');
 $route = require(__DIR__ . '/route.php');
