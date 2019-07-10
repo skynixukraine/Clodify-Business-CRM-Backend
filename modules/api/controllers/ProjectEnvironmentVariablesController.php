@@ -5,6 +5,7 @@ namespace app\modules\api\controllers;
 use app\models\ProjectEnvironmentVariable;
 use app\modules\api\components\Api\Processor;
 use viewModel\ProjectEnvironmentVariableCreate;
+use viewModel\ProjectEnvironmentVariableDelete;
 use viewModel\ProjectEnvironmentVariableFetch;
 use viewModel\ViewModelInterface;
 use yii\db\ActiveRecordInterface;
@@ -34,6 +35,19 @@ class ProjectEnvironmentVariablesController extends DefaultController
                 'methods' => [Processor::METHOD_GET],
                 'checkAccess' => true,
                 'allowGuest' => true,
+            ])
+            ->get('Processor')
+            ->respond();
+    }
+
+    public function actionDelete(): void
+    {
+        $this->di
+            ->set(ActiveRecordInterface::class, ProjectEnvironmentVariable::class)
+            ->set(ViewModelInterface::class, ProjectEnvironmentVariableDelete::class)
+            ->set(Access::class, [
+                'methods' => [Processor::METHOD_DELETE],
+                'checkAccess' => true,
             ])
             ->get('Processor')
             ->respond();
