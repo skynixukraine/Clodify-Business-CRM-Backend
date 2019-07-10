@@ -59,7 +59,7 @@ class ProjectEnvironmentVariableCreate extends ViewModelAbstract
 
         $variable = new ProjectEnvironmentVariable();
         $variable->name = $key;
-        $variable->value = Yii::$app->encrypter->encrypt($value);
+        $variable->value = $value;
         $variable->project_environment_id = $this->environment->id;
         $variable->save();
 
