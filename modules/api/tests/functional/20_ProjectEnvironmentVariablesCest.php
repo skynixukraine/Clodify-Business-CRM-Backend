@@ -557,6 +557,289 @@ class ProjectEnvironmentVariablesCest
         $I->assertEquals(count($response->data), 1);
     }
 
+    public function deleteVariableFailedIfGuest(FunctionalTester $I, Scenario $scenario): void
+    {
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/2');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedIfEnvNotExists(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/develop/1');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedIfVarNotBelongToEnv(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/2');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedIfVarNotExists(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login();
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/555');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/4');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '4']);
+    }
+
+    public function deleteVariableFailedForClient(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userClient['email'], ValuesContainer::$userClient['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/10');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedForClientNotOwner(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userClient2['email'], ValuesContainer::$userClient2['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/5');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForClient(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userClient['email'], ValuesContainer::$userClient['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/5');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '5']);
+    }
+
+    public function deleteVariableFailedForFin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userFin['email'], ValuesContainer::$userFin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/11');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedForFinNotDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userFin2['email'], ValuesContainer::$userFin2['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/6');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForFin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userFin['email'], ValuesContainer::$userFin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/6');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '6']);
+    }
+
+    public function deleteVariableFailedForDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userDev['email'], ValuesContainer::$userDev['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/7');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedForDevNotDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userDev2['email'], ValuesContainer::$userDev2['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/12');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userDev['email'], ValuesContainer::$userDev['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/12');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '12']);
+    }
+
+    public function deleteVariableFailedForPm(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userPm['email'], ValuesContainer::$userPm['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/8');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedForPmNotDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userPm2['email'], ValuesContainer::$userPm2['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/13');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForPm(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userPm['email'], ValuesContainer::$userPm['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/13');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '13']);
+    }
+
+    public function deleteVariableFailedForSales(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userSales['email'], ValuesContainer::$userSales['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/master/9');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableFailedForSalesNotDev(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userSales2['email'], ValuesContainer::$userSales2['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/14');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteVariableSuccessForSales(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userSales['email'], ValuesContainer::$userSales['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/env/staging/14');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+        $I->assertEmpty($response->errors);
+        $I->dontSeeInDatabase('project_environment_variables', ['id' => '14']);
+    }
+
     public function createVariableFailedIfEnvNotExists(FunctionalTester $I, Scenario $scenario): void
     {
         $oAuth = new OAuthSteps($scenario);
