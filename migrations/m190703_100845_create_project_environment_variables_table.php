@@ -7,8 +7,6 @@ use app\components\SkynixMigration;
  */
 class m190703_100845_create_project_environment_variables_table extends SkynixMigration
 {
-    public $isCore = true;
-
     /**
      * {@inheritdoc}
      */

@@ -7,8 +7,6 @@ use app\components\SkynixMigration;
  */
 class m190703_102632_add_encryption_key_setting extends SkynixMigration
 {
-    public $isCore = true;
-
     /**
      * {@inheritdoc}
      */
