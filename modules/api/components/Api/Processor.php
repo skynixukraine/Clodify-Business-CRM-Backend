@@ -104,11 +104,13 @@ class Processor
     /**
      * This method checks if user is athorized or not according to the token in header
      * @param array $methods
+     * @param bool $checkAccess
+     * @param bool $allowGuest
      * @return bool
      */
     private function hasAccess(
         $methods = [ self::METHOD_GET, self::METHOD_POST , self::METHOD_PUT , self::METHOD_DELETE ],
-        $checkAccess = true )
+        $checkAccess = true, $allowGuest = false )
     {
         if ( !in_array( Yii::$app->request->getMethod(), $methods ) ) {
 
@@ -166,7 +168,7 @@ class Processor
                 }
             }
 
-        } elseif ( $checkAccess == true ) {
+        } elseif ( $checkAccess == true && ! $allowGuest ) {
 
             $this->addError( self::ERROR_PARAM, Message::get(self::CODE_NOT_ATHORIZED) );
             Yii::$app->response->statusCode = self::STATUS_CODE_UNAUTHORIZED;
@@ -204,14 +206,18 @@ class Processor
      */
     public function respond()
     {
-
         $viewModel = $this->getViewModel();
-        if ( $this->hasAccess( $this->access->getMethods(), $this->access->shouldCheckAccess() ) &&
-            $this->getAccessModelToken() ) {
 
+        $hasAccess = $this->hasAccess(
+            $this->access->getMethods(),
+            $this->access->shouldCheckAccess(),
+            $this->access->isAllowedGuest()
+        );
+
+        if ($hasAccess && $this->getAccessModelToken()) {
             $viewModel->setAccessTokenModel( $this->getAccessModelToken() );
-
         }
+
         $viewModel->setModel( $this->getModel() )
             ->render();
 

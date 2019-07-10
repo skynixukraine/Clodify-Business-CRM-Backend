@@ -11,4 +11,5 @@ interface AccessInterface
 {
     public function getMethods();
     public function shouldCheckAccess();
+    public function isAllowedGuest();
 }
