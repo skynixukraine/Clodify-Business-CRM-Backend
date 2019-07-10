@@ -56,6 +56,9 @@ class ProjectEnvironmentVariableFetch extends ViewModelAbstract
             $attributes['value'] = Yii::$app->encrypter->decrypt($attributes['value']);
             return $attributes;
         }, $query->all());
+
+        $this->environment->last_updated = date('Y-m-d H:i:s');
+        $this->environment->save();
     }
 
     private function checkPermission(): bool
