@@ -52,9 +52,7 @@ class ProjectEnvironmentVariableFetch extends ViewModelAbstract
         }
 
         $this->data = array_map(function (ProjectEnvironmentVariable $variable) {
-            $attributes = $variable->getAttributes();
-            $attributes['value'] = Yii::$app->encrypter->decrypt($attributes['value']);
-            return $attributes;
+            return $variable->getAttributes();
         }, $query->all());
 
         $this->environment->last_updated = date('Y-m-d H:i:s');
