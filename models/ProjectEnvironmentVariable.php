@@ -58,4 +58,16 @@ class ProjectEnvironmentVariable extends ActiveRecord
     {
         return $this->hasOne(ProjectEnvironment::class, ['id' => 'project_environment_id']);
     }
+
+    public function behaviors()
+    {
+        return [
+            'encryption' => [
+                'class' => '\nickcv\encrypter\behaviors\EncryptionBehavior',
+                'attributes' => [
+                    'value',
+                ],
+            ],
+        ];
+    }
 }

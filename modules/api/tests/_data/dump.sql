@@ -22,7 +22,7 @@ CREATE TABLE api_auth_access_tokens (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE api_auth_access_tokens DISABLE KEYS */;
-INSERT INTO api_auth_access_tokens VALUES (2,1,'GcfVWZzq6pYwnxSo6QzBdJrJFpQa5-Tn9Um5WSF','2019-07-08 13:22:49',NULL,NULL),(3,5,'rKtlhIR9d8yLClqTL7QbGcnTgORsFT4A23GG5HR','2019-03-12 15:08:47',NULL,NULL);
+INSERT INTO api_auth_access_tokens VALUES (2,1,'GcfVWZzq6pYwnxSo6QzBdJrJFpQa5-Tn9Um5WSF','2019-07-10 17:33:59',NULL,NULL),(3,5,'rKtlhIR9d8yLClqTL7QbGcnTgORsFT4A23GG5HR','2019-03-12 15:08:47',NULL,NULL);
 /*!40000 ALTER TABLE api_auth_access_tokens ENABLE KEYS */;
 DROP TABLE IF EXISTS auth_types;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -580,11 +580,11 @@ CREATE TABLE project_environment_variables (
   PRIMARY KEY (id),
   KEY `idx-project_environment_variables-project_environment_id` (project_environment_id),
   CONSTRAINT `fk-project_environment_variables-project_environment_id` FOREIGN KEY (project_environment_id) REFERENCES project_environments (id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE project_environment_variables DISABLE KEYS */;
-INSERT INTO project_environment_variables VALUES (1,1,'test','t10Z/snmsUhtbQdsJHDpgg=='),(2,2,'test','94fHu60d3bblFE1Li/RudA==');
+INSERT INTO project_environment_variables VALUES (1,1,'test','czu9lRu7F23PY+0IZjJI9g=='),(2,2,'test','czu9lRu7F23PY+0IZjJI9g=='),(3,1,'test variable','czu9lRu7F23PY+0IZjJI9g=='),(4,2,'test variable','czu9lRu7F23PY+0IZjJI9g=='),(5,1,'test variable2','czu9lRu7F23PY+0IZjJI9g=='),(6,1,'test variable3','czu9lRu7F23PY+0IZjJI9g=='),(7,1,'test variable4','czu9lRu7F23PY+0IZjJI9g=='),(8,1,'test variable5','czu9lRu7F23PY+0IZjJI9g=='),(9,1,'test variable6','czu9lRu7F23PY+0IZjJI9g=='),(10,2,'test variable2','czu9lRu7F23PY+0IZjJI9g=='),(11,2,'test variable3','czu9lRu7F23PY+0IZjJI9g=='),(12,2,'test variable4','czu9lRu7F23PY+0IZjJI9g=='),(13,2,'test variable5','czu9lRu7F23PY+0IZjJI9g=='),(14,2,'test variable6','czu9lRu7F23PY+0IZjJI9g=='),(15,2,'test variable7','czu9lRu7F23PY+0IZjJI9g==');
 /*!40000 ALTER TABLE project_environment_variables ENABLE KEYS */;
 DROP TABLE IF EXISTS project_environments;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -602,7 +602,7 @@ CREATE TABLE project_environments (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE project_environments DISABLE KEYS */;
-INSERT INTO project_environments VALUES (1,2,'master','FIN, ADMIN, CLIENT','2019-07-08 13:18:04'),(2,2,'staging','DEV, PM, SALES','2019-07-08 13:22:49');
+INSERT INTO project_environments VALUES (1,2,'master','FIN, ADMIN, CLIENT','2019-07-08 13:18:04'),(2,2,'staging','DEV, PM, SALES','2019-07-10 17:33:59');
 /*!40000 ALTER TABLE project_environments ENABLE KEYS */;
 DROP TABLE IF EXISTS projects;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -629,7 +629,7 @@ CREATE TABLE projects (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE projects DISABLE KEYS */;
-INSERT INTO projects VALUES (1,'Magento 2 Enterprise Edition - Theme Development','M2EET',1218,1200,'INPROGRESS','2018-05-01',NULL,0,3192.84,NULL,NULL,0,0,'HOURLY',NULL),(2,'Internal (Non Paid) Tasks',NULL,10054,120,'INPROGRESS','2016-04-04',NULL,0,33928.55,NULL,NULL,0,0,'HOURLY',NULL);
+INSERT INTO projects VALUES (1,'Magento 2 Enterprise Edition - Theme Development','M2EET',1218,1200,'INPROGRESS','2018-05-01',NULL,0,3192.84,NULL,NULL,0,0,'HOURLY',NULL),(2,'Internal (Non Paid) Tasks',NULL,10054,120,'INPROGRESS','2016-04-04',NULL,0,33928.55,NULL,NULL,0,0,'HOURLY','gz0dAtV6pzojiDhrzF6xN1DVmCrFuPXa');
 /*!40000 ALTER TABLE projects ENABLE KEYS */;
 DROP TABLE IF EXISTS reference_book;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

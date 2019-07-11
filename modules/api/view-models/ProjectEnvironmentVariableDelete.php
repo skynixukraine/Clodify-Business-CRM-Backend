@@ -10,22 +10,27 @@ use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
 
-class ProjectEnvironmentVariableCreate extends ViewModelAbstract
+class ProjectEnvironmentVariableDelete extends ViewModelAbstract
 {
     /**
      * @var ProjectEnvironment|null
      */
     private $environment;
 
+    private $variable;
+
     public function __construct()
     {
         $id = Yii::$app->request->getQueryParam('id', 0);
         $envName = Yii::$app->request->getQueryParam('branch_name');
+        $varId = Yii::$app->request->getQueryParam('var_id');
 
         $this->environment = ProjectEnvironment::findOne([
             'branch' => $envName,
             'project_id' => $id,
         ]);
+
+        $this->variable = ProjectEnvironmentVariable::findOne(['id' => $varId]);
     }
 
     /**
@@ -37,31 +42,19 @@ class ProjectEnvironmentVariableCreate extends ViewModelAbstract
             return $this->addError(Processor::ERROR_PARAM, 'Environment not found');
         }
 
+        if (! $this->variable) {
+            return $this->addError(Processor::ERROR_PARAM, 'Variable not found');
+        }
+
+        if (! $this->variable->projectEnvironment->equals($this->environment)) {
+            return $this->addError(Processor::ERROR_PARAM, 'Variable not belong to this environment');
+        }
+
         if (! $this->checkPermission()) {
             return $this->addError(Processor::STATUS_CODE_UNAUTHORIZED, 'Access is forbidden');
         }
 
-        if (! isset($this->postData['key'], $this->postData['value'])) {
-            return $this->addError(Processor::ERROR_PARAM, 'Key and value are required');
-        }
-
-        $key = $this->postData['key'];
-        $value = $this->postData['value'];
-
-        $variableExists = ProjectEnvironmentVariable::find()->where([
-            'name' => $key,
-            'project_environment_id' => $this->environment->id,
-        ])->exists();
-
-        if ($variableExists) {
-            return $this->addError(Processor::ERROR_PARAM, 'Variable with key ' . $key . ' already exists');
-        }
-
-        $variable = new ProjectEnvironmentVariable();
-        $variable->name = $key;
-        $variable->value = $value;
-        $variable->project_environment_id = $this->environment->id;
-        $variable->save();
+        $this->variable->delete();
 
         $this->environment->last_updated = date('Y-m-d H:i:s');
         $this->environment->save();

@@ -10,7 +10,7 @@ use app\models\User;
 use app\modules\api\components\Api\Processor;
 use Yii;
 
-class ProjectEnvironmentVariableCreate extends ViewModelAbstract
+class ProjectEnvironmentVariableFetch extends ViewModelAbstract
 {
     /**
      * @var ProjectEnvironment|null
@@ -41,27 +41,19 @@ class ProjectEnvironmentVariableCreate extends ViewModelAbstract
             return $this->addError(Processor::STATUS_CODE_UNAUTHORIZED, 'Access is forbidden');
         }
 
-        if (! isset($this->postData['key'], $this->postData['value'])) {
-            return $this->addError(Processor::ERROR_PARAM, 'Key and value are required');
-        }
-
-        $key = $this->postData['key'];
-        $value = $this->postData['value'];
-
-        $variableExists = ProjectEnvironmentVariable::find()->where([
-            'name' => $key,
+        $query = ProjectEnvironmentVariable::find()->where([
             'project_environment_id' => $this->environment->id,
-        ])->exists();
+        ]);
 
-        if ($variableExists) {
-            return $this->addError(Processor::ERROR_PARAM, 'Variable with key ' . $key . ' already exists');
+        $key = Yii::$app->request->getQueryParam('key');
+
+        if ($key) {
+            $query->where['name'] = $key;
         }
 
-        $variable = new ProjectEnvironmentVariable();
-        $variable->name = $key;
-        $variable->value = $value;
-        $variable->project_environment_id = $this->environment->id;
-        $variable->save();
+        $this->data = array_map(function (ProjectEnvironmentVariable $variable) {
+            return $variable->getAttributes();
+        }, $query->all());
 
         $this->environment->last_updated = date('Y-m-d H:i:s');
         $this->environment->save();
@@ -71,6 +63,11 @@ class ProjectEnvironmentVariableCreate extends ViewModelAbstract
     {
         if (User::hasPermission([User::ROLE_ADMIN])) {
             return true;
+        }
+
+        if (Yii::$app->user->isGuest) {
+            $apiKey = Yii::$app->request->getQueryParam('api_key');
+            return $apiKey && $apiKey === $this->environment->project->api_key;
         }
 
         $envRoles = array_map('trim', explode(',', $this->environment->access_roles));

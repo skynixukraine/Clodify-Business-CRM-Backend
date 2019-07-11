@@ -9,9 +9,9 @@ namespace app\modules\api\components\Api;
 
 class Access implements AccessInterface
 {
-
     public $methods;
     public $checkAccess;
+    public $allowGuest;
 
     public function __construct(){}
 
@@ -29,5 +29,13 @@ class Access implements AccessInterface
     public function shouldCheckAccess()
     {
         return $this->checkAccess;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isAllowedGuest()
+    {
+        return (bool) $this->allowGuest;
     }
 }
