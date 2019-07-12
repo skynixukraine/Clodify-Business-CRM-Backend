@@ -39,7 +39,7 @@ class SkynixController extends DefaultController
             ->orderBy('id ASC')
             ->all();
 
-        $client = new Client(['timeout' => 10.0]);
+        $client = new Client();
 
         foreach ($serviceQueues as $serviceQueue) {
             $service = $serviceQueue->service;
