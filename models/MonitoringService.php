@@ -21,6 +21,12 @@ use yii\db\ActiveRecord;
  */
 class MonitoringService extends ActiveRecord
 {
+    public const STATUS_NEW = 'new';
+
+    public const STATUS_READY = 'ready';
+
+    public const STATUS_FAILED = 'failed';
+
     /**
      * @inheritdoc
      */
@@ -39,7 +45,7 @@ class MonitoringService extends ActiveRecord
             [['status'], 'string'],
             [['notification_sent_date'], 'safe'],
             [['url', 'notification_emails'], 'string', 'max' => 250],
-            [['is_enabled'], 'string', 'max' => 1],
+            [['is_enabled'], 'boolean'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['project_id' => 'id']],
         ];
     }
