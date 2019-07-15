@@ -11,7 +11,7 @@ class MonitoringServicesCest
 {
     public function createServiceFailedForRolesExceptAdmin(FunctionalTester $I, Scenario $scenario): void
     {
-        function test(FunctionalTester $I, Scenario $scenario, array $user)
+        function testCreateService(FunctionalTester $I, Scenario $scenario, array $user)
         {
             $oAuth = new OAuthSteps($scenario);
             $oAuth->login($user['email'], $user['password']);
@@ -34,11 +34,11 @@ class MonitoringServicesCest
             ]);
         }
 
-        test($I, $scenario, ValuesContainer::$userClient);
-        test($I, $scenario, ValuesContainer::$userSales);
-        test($I, $scenario, ValuesContainer::$userDev);
-        test($I, $scenario, ValuesContainer::$userFin);
-        test($I, $scenario, ValuesContainer::$userPm);
+        testCreateService($I, $scenario, ValuesContainer::$userClient);
+        testCreateService($I, $scenario, ValuesContainer::$userSales);
+        testCreateService($I, $scenario, ValuesContainer::$userDev);
+        testCreateService($I, $scenario, ValuesContainer::$userFin);
+        testCreateService($I, $scenario, ValuesContainer::$userPm);
     }
 
     public function createServiceFailedIfWrongParams(FunctionalTester $I, Scenario $scenario): void
@@ -111,5 +111,80 @@ class MonitoringServicesCest
             'notification_emails' => 'test@gmail.com, qwerty@gmail.com',
             'project_id' => ValuesContainer::$projectWithEnvId,
         ]);
+    }
+
+    public function getServiceSuccessForAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendGET(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/monitoring-services');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals($response->success, true);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => [
+                [
+                    'id' => 'integer',
+                    'status' => 'string',
+                    'url' => 'string',
+                    'is_enabled' => 'integer',
+                    'notification_emails' => 'string',
+                    'project_id' => 'integer',
+                    'queue' => [
+                        [
+                            'id' => 'integer',
+                            'status' => 'string',
+                            'results' => 'string|null',
+                            'service_id' => 'integer',
+                        ],
+                    ],
+                ],
+            ],
+            'errors' => 'array',
+            'success' => 'boolean',
+        ]);
+
+        $I->assertEquals(count($response->data[0]->queue), 15);
+    }
+
+    public function getServiceFailedForAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendGET(ApiEndpoints::PROJECT . '/555/monitoring-services');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function getServiceFailedForRolesExceptAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        function testGetService(FunctionalTester $I, Scenario $scenario, array $user)
+        {
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($user['email'], $user['password']);
+
+            $I->sendGET(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/monitoring-services');
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseIsJson();
+            $response = json_decode($I->grabResponse(), false);
+            $I->assertNotEmpty($response->errors);
+            $I->assertEquals($response->success, false);
+            $I->assertEquals($response->data, null);
+        }
+
+        testGetService($I, $scenario, ValuesContainer::$userClient);
+        testGetService($I, $scenario, ValuesContainer::$userSales);
+        testGetService($I, $scenario, ValuesContainer::$userDev);
+        testGetService($I, $scenario, ValuesContainer::$userFin);
+        testGetService($I, $scenario, ValuesContainer::$userPm);
     }
 }
