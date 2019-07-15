@@ -329,4 +329,74 @@ class MonitoringServicesCest
             'is_enabled' => 0,
         ]);
     }
+
+    private function testFailDeleteServiceForUser(FunctionalTester $I, Scenario $scenario, array $user): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($user['email'], $user['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/monitoring-services/1');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+        $I->canSeeInDatabase('monitoring_services', ['id' => 1]);
+    }
+
+    public function deleteServiceFailedForRolesExceptAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $this->testFailDeleteServiceForUser($I, $scenario, ValuesContainer::$userClient);
+        $this->testFailDeleteServiceForUser($I, $scenario, ValuesContainer::$userSales);
+        $this->testFailDeleteServiceForUser($I, $scenario, ValuesContainer::$userDev);
+        $this->testFailDeleteServiceForUser($I, $scenario, ValuesContainer::$userFin);
+        $this->testFailDeleteServiceForUser($I, $scenario, ValuesContainer::$userPm);
+    }
+
+    public function deleteServiceFailedIfWrongProjectId(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/555/monitoring-services/1');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+
+        $I->canSeeInDatabase('monitoring_services', ['id' => 1]);
+    }
+
+    public function deleteServiceFailedIfWrongServiceId(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/monitoring-services/555');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals($response->success, false);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function deleteServiceSuccessForAdmin(FunctionalTester $I, Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendDELETE(ApiEndpoints::PROJECT . '/' . ValuesContainer::$projectWithEnvId . '/monitoring-services/1');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse(), false);
+        $I->assertEmpty($response->errors);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+
+        $I->cantSeeInDatabase('monitoring_services', ['id' => 1]);
+    }
 }
