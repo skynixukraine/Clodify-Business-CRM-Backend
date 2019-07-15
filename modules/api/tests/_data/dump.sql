@@ -22,7 +22,7 @@ CREATE TABLE api_auth_access_tokens (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE api_auth_access_tokens DISABLE KEYS */;
-INSERT INTO api_auth_access_tokens VALUES (2,1,'GcfVWZzq6pYwnxSo6QzBdJrJFpQa5-Tn9Um5WSF','2019-07-10 17:33:59',NULL,NULL),(3,5,'rKtlhIR9d8yLClqTL7QbGcnTgORsFT4A23GG5HR','2019-03-12 15:08:47',NULL,NULL);
+INSERT INTO api_auth_access_tokens VALUES (2,1,'GcfVWZzq6pYwnxSo6QzBdJrJFpQa5-Tn9Um5WSF','2019-07-12 17:39:16',NULL,NULL),(3,5,'rKtlhIR9d8yLClqTL7QbGcnTgORsFT4A23GG5HR','2019-03-12 15:08:47',NULL,NULL);
 /*!40000 ALTER TABLE api_auth_access_tokens ENABLE KEYS */;
 DROP TABLE IF EXISTS auth_types;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -442,10 +442,11 @@ CREATE TABLE monitoring_service_queue (
   PRIMARY KEY (id),
   KEY `fk-monitoring_service_queue-service_id` (service_id),
   CONSTRAINT `fk-monitoring_service_queue-service_id` FOREIGN KEY (service_id) REFERENCES monitoring_services (id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE monitoring_service_queue DISABLE KEYS */;
+INSERT INTO monitoring_service_queue VALUES (1,1,'new',NULL),(2,1,'new',NULL),(3,1,'new',NULL),(4,1,'new',NULL),(5,1,'new',NULL),(6,1,'new',NULL),(7,1,'new',NULL),(8,1,'new',NULL),(9,1,'new',NULL),(10,1,'new',NULL),(11,1,'new',NULL),(12,1,'new',NULL),(13,1,'new',NULL),(14,1,'new',NULL),(15,1,'new',NULL);
 /*!40000 ALTER TABLE monitoring_service_queue ENABLE KEYS */;
 DROP TABLE IF EXISTS monitoring_services;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -462,10 +463,11 @@ CREATE TABLE monitoring_services (
   KEY `idx-monitoring_services-project_id` (project_id),
   KEY `idx-monitoring_service_queue-service_id` (project_id),
   CONSTRAINT `fk-monitoring_services-project_id` FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE monitoring_services DISABLE KEYS */;
+INSERT INTO monitoring_services VALUES (1,2,'http://skynix.co',1,'new','test@gmail.com',NULL);
 /*!40000 ALTER TABLE monitoring_services ENABLE KEYS */;
 DROP TABLE IF EXISTS monthly_reports;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
