@@ -22,6 +22,7 @@ return [
     'POST '     . $API . '/projects/<id:\d+>/monitoring-services'             => $API . '/monitoring-service/create',
     'GET '      . $API . '/projects/<id:\d+>/monitoring-services'             => $API . '/monitoring-service/fetch',
     'PUT '      . $API . '/projects/<id:\d+>/monitoring-services/<service_id:\d+>' => $API . '/monitoring-service/update',
+    'DELETE '   . $API . '/projects/<id:\d+>/monitoring-services/<service_id:\d+>' => $API . '/monitoring-service/delete',
     'DELETE '   . $API . '/reports/<id:\d+>'                                  => $API . '/reports/delete',
     'PUT '      . $API . '/reports/<id:\d+>'                                  => $API . '/reports/create-edit',
     'POST '     . $API . '/reports'                                           => $API . '/reports/create-edit',
