@@ -8,6 +8,7 @@
 namespace viewModel;
 
 use app\components\DateUtil;
+use app\models\Report;
 use app\modules\api\components\Api\Processor;
 use Yii;
 use app\models\User;
@@ -32,6 +33,21 @@ class InvoiceView extends ViewModelAbstract
                 ->with('user')
                 ->one();
 
+            $reports = $invoiceModel->getReports()
+                ->select(['reports.user_id', 'CONCAT(first_name, " ",  last_name) as reporter_name', 'sum(hours) as hours'])
+                ->leftJoin('users', 'reports.user_id=users.id')
+                ->where(['is_approved' => 1, 'reports.status' => Report::STATUS_INVOICED])
+                ->groupBy('reports.user_id')
+                ->all();
+
+            $parties = array_map(static function (Report $report) {
+                return [
+                    'user_id' => $report->user_id,
+                    'name' => $report->reporter_name,
+                    'hours' => $report->hours
+                ];
+            }, $reports);
+
             if ($invoiceModel) {
                 $invoice[] = [
                     'id'            => $invoiceModel->id,
@@ -53,6 +69,8 @@ class InvoiceView extends ViewModelAbstract
                     "sent_date"    => $invoiceModel->date_sent,
                     "paid_date"    => $invoiceModel->date_paid,
                     "status"       => $invoiceModel->status,
+                    'is_withdrawn' => $invoiceModel->is_withdrawn,
+                    'parties'      => $parties,
                 ];
 
                 $this->setData($invoice);

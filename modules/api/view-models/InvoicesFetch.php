@@ -8,6 +8,7 @@
 namespace viewModel;
 
 use app\components\DateUtil;
+use app\models\Report;
 use Yii;
 use app\models\User;
 use app\models\Project;
@@ -27,6 +28,8 @@ class InvoicesFetch extends ViewModelAbstract
         $keyword = Yii::$app->request->getQueryParam("search_query") ?: null;
         $start = Yii::$app->request->getQueryParam('start') ?: 0;
         $limit = Yii::$app->request->getQueryParam('limit') ?: SortHelper::DEFAULT_LIMIT;
+        $isWithdrawn = Yii::$app->request->getQueryParam('is_withdrawn');
+
         $query = Invoice::find();
 //            ->leftJoin(User::tableName(), Invoice::tableName() . '.user_id=' . User::tableName() . '.id' )
 //            ->where(['contract_id' => $contractId]);
@@ -51,6 +54,18 @@ class InvoicesFetch extends ViewModelAbstract
         }
 
         $dataTable->setFilter(Invoice::tableName() . '.is_delete=0');
+
+        if ($isWithdrawn !== null) {
+            if (in_array($isWithdrawn, [1, '1', true, 'true'], true)) {
+                $isWithdrawn = 1;
+            }
+
+            if (in_array($isWithdrawn, [0, '0', false, 'false'], true)) {
+                $isWithdrawn = 0;
+            }
+
+            $dataTable->setFilter(Invoice::tableName() . '.is_withdrawn=' . $isWithdrawn);
+        }
 
         if(User::hasPermission([User::ROLE_CLIENT])) {
             $projects = Project::find()
@@ -136,6 +151,21 @@ class InvoicesFetch extends ViewModelAbstract
                 $id = $client->id;
             }
 
+            $reports = $model->getReports()
+                ->select(['reports.user_id', 'CONCAT(first_name, " ",  last_name) as reporter_name', 'sum(hours) as hours'])
+                ->leftJoin('users', 'reports.user_id=users.id')
+                ->where(['is_approved' => 1, 'reports.status' => Report::STATUS_INVOICED])
+                ->groupBy('reports.user_id')
+                ->all();
+
+            $parties = array_map(static function (Report $report) {
+                return [
+                    'user_id' => $report->user_id,
+                    'name' => $report->reporter_name,
+                    'hours' => $report->hours
+                ];
+            }, $reports);
+
             $list[] = [
                 'id' => $model->id,
                 'invoice_id'    => $model->invoice_id,
@@ -151,7 +181,9 @@ class InvoicesFetch extends ViewModelAbstract
                 'created_date' => $model->date_created,
                 'sent_date' => DateUtil::reConvertData( $model->date_sent ),
                 'paid_date' => DateUtil::reConvertData( $model->date_paid ),
-                'status' => $model->status
+                'status' => $model->status,
+                'is_withdrawn' => $model->is_withdrawn,
+                'parties' => $parties
             ];
 
         }
