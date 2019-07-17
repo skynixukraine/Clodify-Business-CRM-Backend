@@ -29,6 +29,7 @@ use yii\filters\RateLimiter;
  * @property Users[] $users0
  * @property Reports[] $reports
  * @property string|null $api_key
+ * @property MonitoringService[] monitoringServices
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -195,6 +196,14 @@ class Project extends \yii\db\ActiveRecord
     public function getReports()
     {
         return $this->hasMany(Report::className(), ['project_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMonitoringServices()
+    {
+        return $this->hasMany(MonitoringService::class, ['project_id' => 'id']);
     }
 
     /** Projects where role: DEV, user: current projects.is_delete = 0  */
