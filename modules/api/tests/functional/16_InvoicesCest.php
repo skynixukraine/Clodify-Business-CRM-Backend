@@ -196,6 +196,8 @@ class InvoicesCest
                             'sent_date'    => 'string|null',
                             'paid_date'    => 'string|null',
                             'status'       => 'string',
+                            'is_withdrawn' => 'integer',
+                            'parties'      => 'array'
                         ]
                     ],
                     'total_records' => 'string'
@@ -261,6 +263,8 @@ class InvoicesCest
                     "sent_date"    => 'string | null',
                     "paid_date"    => 'string | null',
                     "status"       => 'string',
+                    'is_withdrawn' => 'integer',
+                    'parties'      => 'array'
                 ]
             ],
             'errors' => 'array',
