@@ -721,6 +721,247 @@ class FinancialReportsCest
         $I->assertEquals(count($response->data), 0);
     }
 
+    private function testWithdrawInvoiceFailForUser(FunctionalTester $I, \Codeception\Scenario $scenario, $user = null)
+    {
+        if (is_array($user)) {
+            $oAuth = new OAuthSteps($scenario);
+            $oAuth->login($user['email'], $user['password']);
+        }
 
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . ValuesContainer::$invoiceId,
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
 
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailForRoles(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $this->testWithdrawInvoiceFailForUser($I, $scenario, ValuesContainer::$userDev);
+        $this->testWithdrawInvoiceFailForUser($I, $scenario, ValuesContainer::$userClient);
+        $this->testWithdrawInvoiceFailForUser($I, $scenario, ValuesContainer::$userPm);
+        $this->testWithdrawInvoiceFailForUser($I, $scenario);
+    }
+
+    public function withdrawInvoiceFailIfReportNotFound(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/555/withdraw-invoice/' . ValuesContainer::$invoiceId,
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailIfInvoiceNotFound(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/555',
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailIfInvoiceWithdrawn(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . ValuesContainer::$withdrawnInvoiceId,
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailIfWrongParams(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . ValuesContainer::$invoiceId, [
+            'parties' => 'qwerty'
+        ]);
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailIfWrongKeys(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . ValuesContainer::$invoiceId,
+            json_encode([
+                'parties' => [
+                    [
+                        'i2d' => 1,
+                        'amou2nt' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    public function withdrawInvoiceFailIfWrongAmount(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userAdmin['email'], ValuesContainer::$userAdmin['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . ValuesContainer::$invoiceId,
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 200,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertNotEmpty($response->errors);
+        $I->assertEquals(false, $response->success);
+        $I->assertEquals($response->data, null);
+    }
+
+    private function testWithdrawInvoiceSuccessForUser(FunctionalTester $I, \Codeception\Scenario $scenario, array $user): void
+    {
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login($user['email'], $user['password']);
+
+        $I->sendPOST(ApiEndpoints::FINANCIAL_REPORTS . '/' . ValuesContainer::$FinancialReportId . '/withdraw-invoice/' . (++ValuesContainer::$invoiceId),
+            json_encode([
+                'parties' => [
+                    [
+                        'id' => 1,
+                        'amount' => 300,
+                    ],
+                    [
+                        'id' => 3,
+                        'amount' => 200,
+                    ],
+                ],
+            ]));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals($response->success, true);
+        $I->assertEquals($response->data, null);
+
+        $I->seeInDatabase('financial_income', [
+            'invoice_id' => ValuesContainer::$invoiceId,
+            'financial_report_id' => ValuesContainer::$FinancialReportId,
+            'amount' => 300,
+            'added_by_user_id' => $user['id'],
+            'developer_user_id' => 1,
+        ]);
+
+        $I->seeInDatabase('financial_income', [
+            'invoice_id' => ValuesContainer::$invoiceId,
+            'financial_report_id' => ValuesContainer::$FinancialReportId,
+            'amount' => 200,
+            'added_by_user_id' => $user['id'],
+            'developer_user_id' => 3,
+        ]);
+
+        $I->seeInDatabase('invoices', [
+            'id' => ValuesContainer::$invoiceId,
+            'is_withdrawn' => 1,
+        ]);
+    }
+
+    public function withdrawInvoiceSuccessForRoles(FunctionalTester $I, \Codeception\Scenario $scenario): void
+    {
+        $this->testWithdrawInvoiceSuccessForUser($I, $scenario, ValuesContainer::$userAdmin);
+        $this->testWithdrawInvoiceSuccessForUser($I, $scenario, ValuesContainer::$userFin);
+        $this->testWithdrawInvoiceSuccessForUser($I, $scenario, ValuesContainer::$userSales);
+    }
 }
