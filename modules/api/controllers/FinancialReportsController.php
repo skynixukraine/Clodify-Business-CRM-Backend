@@ -163,4 +163,17 @@ class FinancialReportsController extends DefaultController
             ->get('Processor')
             ->respond();
     }
+
+    public function actionWithdrawInvoice()
+    {
+        $this->di
+            ->set('yii\db\ActiveRecordInterface', 'app\models\FinancialReport')
+            ->set('viewModel\ViewModelInterface', 'viewModel\FinancialReportWithdrawInvoice')
+            ->set('app\modules\api\components\Api\Access', [
+                'methods'       => [Processor::METHOD_POST],
+                'checkAccess'   => true
+            ])
+            ->get('Processor')
+            ->respond();
+    }
 }
