@@ -33,6 +33,7 @@ use app\components\DateUtil;
  * @property integer $created_by
  * @property integer $payment_method_id
  * @property integer $invoice_id
+ * @property boolean $is_withdrawn
 
  *
  * @property Report[] $reports
