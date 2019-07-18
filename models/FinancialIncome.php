@@ -18,9 +18,10 @@ use Yii;
  * @property int $added_by_user_id
  * @property int $developer_user_id
  * @property int $financial_report_id
+ * @property int invoice_id
  *
- * @property Projects $project
- * @property Users $addedByUser
+ * @property Project $project
+ * @property User $addedByUser
  */
 class FinancialIncome extends \yii\db\ActiveRecord
 {
@@ -49,6 +50,7 @@ class FinancialIncome extends \yii\db\ActiveRecord
             [['amount'], 'number'],
             [['description'], 'string'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
+            [['invoice_id'], 'exist', 'skipOnError' => true, 'targetClass' => Invoice::class, 'targetAttribute' => ['invoice_id' => 'id']],
             [['added_by_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['added_by_user_id' => 'id']],
             ['project_id', function () {
                 //if a project_type=FIXED_PRICE, check that the milestone is CLOSED, otherwise output an error: Please CLOSE the milestone to add financial income
