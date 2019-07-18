@@ -69,6 +69,7 @@ return [
     'DELETE '   . $API . '/financial-reports/<id:\d+>/income/<income_item_id:\d+>' => $API . '/financial-reports/income-delete',
     'GET '      . $API . '/financial-reports/<id:\d+>/bonuses'                => $API . '/financial-reports/bonuses-fetch',
     'GET '      . $API . '/financial-reports/yearly'                          => $API . '/financial-reports/yearly',
+    'POST '     . $API . '/financial-report/<id:\d+>/withdraw-invoice/<invoice_id:\d+>' => $API . '/financial-reports/withdraw-invoice',
     'GET '      . $API . '/salary-reports'                                    => $API . '/salary-reports/fetch',
     'POST '     . $API . '/salary-reports'                                    => $API . '/salary-reports/create',
     'POST '     . $API . '/salary-reports/<id:\d+>/lists'                     => $API . '/salary-reports/lists-create',
