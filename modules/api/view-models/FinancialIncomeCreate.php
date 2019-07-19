@@ -36,9 +36,33 @@ class FinancialIncomeCreate extends ViewModelAbstract
                     $this->model->financial_report_id   = $id;
                     $this->model->added_by_user_id      = Yii::$app->user->id;
                     if ( $this->validate() ) {
-
                         $this->model->save();
 
+                        if (User::hasPermission([User::ROLE_ADMIN])) {
+                            $admin = User::findOne(Yii::$app->user->identity->getId());
+
+                            if ($admin) {
+                                Yii::$app->mailer->compose()
+                                    ->setFrom([Yii::$app->params['fromEmail'] => 'Clodify Notification'])
+                                    ->setTo($admin->email)
+                                    ->setSubject('Financial income with ID ' . $this->model->id . ' has been created')
+                                    ->setHtmlBody(
+                                        '<p>Hi, ' . $admin->getFullName() . '</p>'
+                                        . '<p>The financial income has been created with attributes:</p>'
+                                        . '<ul><li>ID: ' . ($this->model->id ?? 'null') . '</li>'
+                                        . '<li>Amount: ' . ($this->model->amount ?? 'null') . '</li>'
+                                        . '<li>Description: ' . ($this->model->description ?? 'null') . '</li>'
+                                        . '<li>Project ID: ' . ($this->model->project_id ?? 'null') . '</li>'
+                                        . '<li>Added by user ID: ' . ($this->model->added_by_user_id ?? 'null') . '</li>'
+                                        . '<li>Developer user ID: ' . ($this->model->developer_user_id ?? 'null') . '</li>'
+                                        . '<li>Financial report ID: ' . ($this->model->financial_report_id ?? 'null') . '</li>'
+                                        . '<li>Date: ' . (date('d/m/Y', $this->model->date) ?? 'null') . '</li>'
+                                        . '<li>From date: ' . (date('d/m/Y', $this->model->from_date) ?? 'null') . '</li>'
+                                        . '<li>To date: ' . (date('d/m/Y', $this->model->to_date) ?? 'null') . '</li></ul>'
+                                    )
+                                    ->send();
+                            }
+                        }
                     }
 
                 } else {
