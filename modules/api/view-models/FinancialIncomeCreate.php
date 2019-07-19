@@ -38,10 +38,8 @@ class FinancialIncomeCreate extends ViewModelAbstract
                     if ( $this->validate() ) {
                         $this->model->save();
 
-                        if (User::hasPermission([User::ROLE_ADMIN])) {
-                            $admin = User::findOne(Yii::$app->user->identity->getId());
-
-                            if ($admin) {
+                        if (User::hasPermission([User::ROLE_SALES])) {
+                            foreach (User::getAdmins() as $admin) {
                                 Yii::$app->mailer->compose()
                                     ->setFrom([Yii::$app->params['fromEmail'] => 'Clodify Notification'])
                                     ->setTo($admin->email)
