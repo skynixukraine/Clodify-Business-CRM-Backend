@@ -505,6 +505,7 @@ class InvoicesCest
         ]);
 
         $I->seeInDatabase('invoices', ['id' => $this->invoiceId, 'is_delete' => 1]);
+        $I->dontSeeInDatabase('financial_income', ['invoice_id' => $this->invoiceId]);
     }
 
     /**
