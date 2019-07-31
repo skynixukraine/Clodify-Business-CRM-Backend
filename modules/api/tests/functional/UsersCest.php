@@ -258,7 +258,8 @@ class UsersCest
             'official_salary' => 8000,
             'auth_type'       => AUTH_TYPE_CROWD,
             'slug'            => 'crm-dev',
-            'is_published'    => true
+            'is_published'    => true,
+            'date_salary_up'  => date('Y-m-d'),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
