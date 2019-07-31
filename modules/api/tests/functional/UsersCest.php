@@ -259,7 +259,6 @@ class UsersCest
             'auth_type'       => AUTH_TYPE_CROWD,
             'slug'            => 'crm-dev',
             'is_published'    => true,
-            'date_salary_up'  => date('Y-m-d'),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -277,6 +276,7 @@ class UsersCest
         $I->assertEquals( salary, $response->data->salary);
         $I->assertEquals(phone, $response->data->phone);
         $I->assertEquals(AUTH_TYPE_CROWD, $response->data->auth_type);
+        $I->assertEquals(date('d/m/Y'), $response->data->salary_up);
 
         $I->sendPUT(ApiEndpoints::USERS . '/' . ValuesContainer::$userDev['id'], json_encode([
             'auth_type'       => AUTH_TYPE_DB,
