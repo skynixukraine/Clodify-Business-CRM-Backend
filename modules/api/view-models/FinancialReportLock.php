@@ -432,7 +432,7 @@ class FinancialReportLock extends ViewModelAbstract
                     Yii::getLogger()->log('DelayedSalary Applied : ' . $record->value, Logger::LEVEL_INFO);
 
                     $user->salary = $record->value;
-                    $user->save(false, ['salary']);
+                    $user->save(false, ['salary', 'date_salary_up']);
 
                 }
                 $record->is_applied = 1;
