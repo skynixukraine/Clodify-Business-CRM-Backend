@@ -87,7 +87,7 @@ class UsersFetch extends ViewModelAbstract
 
        // DEV has an access to all active users who are DEV, ADMIN or SALES
         // to the following columns: id, first_name, last_name, company, email, phone
-        if(User::hasPermission([User::ROLE_DEV])) {
+        if(User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
             $query = User::find()->where(['is_active' => 1])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN]]);
         }
