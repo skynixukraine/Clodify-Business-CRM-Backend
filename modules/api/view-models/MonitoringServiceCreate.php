@@ -45,6 +45,7 @@ class MonitoringServiceCreate extends ViewModelAbstract
         $monitoringService->url = $this->postData['url'];
         $monitoringService->notification_emails = $this->postData['notification_emails'];
         $monitoringService->project_id = $this->project->id;
+        $monitoringService->status = MonitoringService::STATUS_NEW;
 
         if (! $monitoringService->save()) {
             return $this->addError(Processor::ERROR_PARAM, 'Monitoring service can not be save.');
