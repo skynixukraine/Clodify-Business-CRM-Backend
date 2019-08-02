@@ -73,7 +73,7 @@ class UsersFetch extends ViewModelAbstract
         // and has an access to all columns except of salary, official_salary, salary_up, role, joined
         if(User::hasPermission([User::ROLE_CLIENT])) {
             $workers = array_map(static function ($worker) {
-                return $worker->alias_user_id ?? $worker->user_id;
+                return $worker->user_id;
             }, ProjectCustomer::allClientWorkers(Yii::$app->user->id));
 
             $devUser = empty($workers) ? 'null' : implode(', ' , $workers);
