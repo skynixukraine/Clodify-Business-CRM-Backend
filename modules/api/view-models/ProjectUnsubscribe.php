@@ -15,8 +15,12 @@ class ProjectUnsubscribe extends ViewModelAbstract
 {
     public function define(){
 
-        $projectDeveloperId = Yii::$app->request->getQueryParam('id');
-        $projectDeveloper = ProjectDeveloper::findOne(['project_id' => $projectDeveloperId]);
+        $projectDeveloper = ProjectDeveloper::find()
+            ->where([
+                'project_id' => Yii::$app->request->getQueryParam('id', 0),
+                'user_id' => Yii::$app->getUser()->identity->getId(),
+            ])
+            ->one();
 
         if(is_null($projectDeveloper)){
             return $this->addError(Processor::ERROR_PARAM, Yii::t('app','project is\'t found by Id'));

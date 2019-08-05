@@ -208,8 +208,11 @@ class ProjectFetch extends ViewModelAbstract
         $list['is_sales']       = isset($model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id : null;
         $list['is_pm']          = isset($model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id : null;
         $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
-        $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
-        $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
+
+        if (!User::hasPermission([User::ROLE_PM])) {
+            $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
+            $list['total_paid'] = $model->total_paid_hours ?: 0;
+        }
 
         if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ])) &&
             ($projectDeveloper = $model->getProjectDevelopers()->where(['user_id' => Yii::$app->user->id])->one())) {
