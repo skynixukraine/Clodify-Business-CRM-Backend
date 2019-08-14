@@ -7,6 +7,7 @@ namespace app\commands;
 use app\models\MonitoringService;
 use app\models\MonitoringServiceQueue;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Yii;
 use yii\db\Query;
 
@@ -39,7 +40,7 @@ class SkynixController extends DefaultController
             ->orderBy('id ASC')
             ->all();
 
-        $client = new Client();
+        $client = new Client(['http_errors' => false]);
 
         foreach ($serviceQueues as $serviceQueue) {
             $service = $serviceQueue->service;
@@ -49,10 +50,7 @@ class SkynixController extends DefaultController
             try {
                 $response = $client->get($service->url);
             } catch (\Exception $e) {
-                $serviceQueue->status = MonitoringServiceQueue::STATUS_FAILED;
-                $serviceQueue->results = 'Exception: ' . $e->getMessage() . PHP_EOL . 'Trace: ' . $e->getTraceAsString();
-                $serviceQueue->save();
-                continue;
+                $response = new Response(404, [], 'Exception: ' . $e->getMessage() . PHP_EOL . 'Trace: ' . $e->getTraceAsString());
             }
 
             $email = Yii::$app->mailer->compose()
