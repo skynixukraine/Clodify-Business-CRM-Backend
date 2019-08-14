@@ -22,7 +22,7 @@ class BusinessFetch extends ViewModelAbstract
 {
     public function define()
     {
-        if (User::hasPermission([User::ROLE_ADMIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
 
             $result = [];
             $businessId = Yii::$app->request->getQueryParam('id');
