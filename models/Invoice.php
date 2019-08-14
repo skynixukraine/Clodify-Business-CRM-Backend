@@ -19,6 +19,7 @@ use app\components\DateUtil;
  * @property string $discount
  * @property string $total
  * @property string $currency
+ * @property float $exchange_rate
  * @property string $date_start
  * @property string $date_end
  * @property string $date_created
@@ -73,7 +74,10 @@ class Invoice extends \yii\db\ActiveRecord
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
-            [['status', 'note', 'currency'], 'string']
+            [['status', 'note', 'currency'], 'string'],
+            ['exchange_rate', 'required', 'when' => function($invoice) {
+                return $invoice->currency !== 'USD';
+            }],
         ];
     }
 
