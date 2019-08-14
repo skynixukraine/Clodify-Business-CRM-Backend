@@ -50,7 +50,10 @@ class SkynixController extends DefaultController
             try {
                 $response = $client->get($service->url);
             } catch (\Exception $e) {
-                $response = new Response(404, [], 'Exception: ' . $e->getMessage() . PHP_EOL . 'Trace: ' . $e->getTraceAsString());
+                $serviceQueue->status = MonitoringServiceQueue::STATUS_FAILED;
+                $serviceQueue->results = 'Exception: ' . $e->getMessage() . PHP_EOL . 'Trace: ' . $e->getTraceAsString();
+                $serviceQueue->save();
+                continue;
             }
 
             $email = Yii::$app->mailer->compose()
