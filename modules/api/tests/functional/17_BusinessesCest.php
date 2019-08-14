@@ -120,7 +120,7 @@ class BusinessesCest
     public function testFetchBusinessForbiddenNotAdmin(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
 
-        $roles = ['CLIENT', 'DEV', 'FIN', 'SALES', 'PM'];
+        $roles = ['CLIENT', 'DEV', 'PM'];
 
 
         foreach($roles as $role) {
