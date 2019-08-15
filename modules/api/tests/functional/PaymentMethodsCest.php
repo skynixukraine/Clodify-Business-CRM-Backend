@@ -232,30 +232,6 @@ class PaymentMethodsCest
 
         \Helper\OAuthToken::$key = null;
 
-        $I->wantTo('test payment method fetch is forbidden for SALES role');
-        $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userSales['id']));
-        $pas = ValuesContainer::$userSales['password'];
-
-        $oAuth = new OAuthSteps($scenario);
-        $oAuth->login($email, $pas);
-
-        $I->sendGET('/api/businesses/' . ValuesContainer::$BusinessID . '/methods');
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseIsJson();
-
-        $response = json_decode($I->grabResponse());
-        $I->assertNotEmpty($response->errors);
-        $I->seeResponseContainsJson([
-            "data" => null,
-            "errors" => [
-                "param" => "error",
-                "message" => "You have no permission for this action"
-            ],
-            "success" => false
-        ]);
-
-        \Helper\OAuthToken::$key = null;
-
         $I->wantTo('test payment method fetch is forbidden for CLIENT role');
         $email = $I->grabFromDatabase('users', 'email', array('id' => ValuesContainer::$userClient['id']));
         $pas = ValuesContainer::$userClient['password'];
