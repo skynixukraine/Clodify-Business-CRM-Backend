@@ -22,6 +22,7 @@ use Yii;
  *
  * @property Project $project
  * @property User $addedByUser
+ * @property User $developerUser
  */
 class FinancialIncome extends \yii\db\ActiveRecord
 {
@@ -121,6 +122,14 @@ class FinancialIncome extends \yii\db\ActiveRecord
     public function getAddedByUser()
     {
         return $this->hasOne(User::className(), ['id' => 'added_by_user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDeveloperUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'developer_user_id']);
     }
 
     /** Save the  field’s value in the database if this is s new record */
