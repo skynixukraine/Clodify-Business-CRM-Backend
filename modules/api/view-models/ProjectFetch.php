@@ -32,6 +32,7 @@ class ProjectFetch extends ViewModelAbstract
         $limit          = Yii::$app->request->getQueryParam('limit', SortHelper::DEFAULT_LIMIT);
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
         $ongoingOnly    = Yii::$app->request->getQueryParam('ongoingOnly');
+        $customerId     = Yii::$app->request->getQueryParam('customer_id');
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
             $query = Project::find()
@@ -70,6 +71,13 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
+
+        if ($customerId && isset($query) && !User::hasPermission([User::ROLE_CLIENT])) {
+            $query->leftJoin(ProjectCustomer::tableName(),
+                Project::tableName() . '.id=' . ProjectCustomer::tableName() . '.project_id')
+                ->andWhere([ProjectCustomer::tableName() . '.user_id' => $customerId]);
+        }
+
         if ( $filterById > 0 ) {
 
             $query->andWhere([Project::tableName() . '.id' => $filterById]);
