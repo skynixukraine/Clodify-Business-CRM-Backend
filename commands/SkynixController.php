@@ -18,9 +18,9 @@ class SkynixController extends DefaultController
             ->select('ms.id')
             ->from('monitoring_services as ms')
             ->leftJoin('monitoring_service_queue as msq', 'ms.id = msq.service_id')
-            ->where('ms.is_enabled=1 AND (msq.status IN(\'new\', \'in progress\') OR `msq`.id IS NULL)')
+            ->where('ms.is_enabled=1')
             ->groupBy('ms.id')
-            ->having('count(msq.id) = 0')
+            ->having('sum(IF(msq.status = \'failed\' OR msq.status IS NULL, 0, 1)) = 0')
             ->all();
 
         foreach ($services as $service) {
