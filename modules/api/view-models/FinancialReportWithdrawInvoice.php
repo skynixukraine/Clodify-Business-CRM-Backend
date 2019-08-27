@@ -90,8 +90,23 @@ class FinancialReportWithdrawInvoice extends ViewModelAbstract
                 $income->amount = $part['amount'];
                 $income->added_by_user_id = Yii::$app->user->identity->getId();
                 $income->developer_user_id = $part['id'];
-                $income->from_date = strtotime($this->invoice->date_start);
-                $income->to_date = strtotime($this->invoice->date_end);
+                $income->from_date = date('d', strtotime($this->invoice->date_start));
+                $income->to_date = date('d', strtotime($this->invoice->date_end));
+                $income->description = 'According to Invoice #' . $this->invoice->id . ' For ' . $this->invoice->note;
+                $income->project_id = $this->invoice->project_id;
+                if (!$income->project_id) {
+                    $income->project_id = Yii::$app->db->createCommand('SELECT reports.project_id FROM reports '
+                        . 'JOIN projects ON projects.id = reports.project_id '
+                        . 'JOIN project_customers on projects.id = project_customers.project_id '
+                        . 'WHERE project_customers.user_id = :userId '
+                        . 'AND reports.date_report BETWEEN :startDate AND :endDate '
+                        . 'LIMIT 1;',
+                        [
+                            'userId' => $this->invoice->user_id,
+                            'startDate' => $this->invoice->date_start,
+                            'endDate' => $this->invoice->date_end,
+                        ])->execute();
+                }
 
                 if (! $income->save()) {
                     return $this->addError(Processor::ERROR_PARAM, $income->getErrors());
