@@ -133,21 +133,18 @@ class ReportsFetch extends ViewModelAbstract
             }
         }
 
-        if(User::hasPermission([User::ROLE_PM])) {
-            $pmid = Yii::$app->user->id;
+        if (User::hasPermission([User::ROLE_PM])) {
+            $pmId = Yii::$app->user->id;
 
-            if($pmid && $pmid != null && $pmid != $usersId){
+            if ($pmId && $pmId !== $usersId){
+                $projectIds = array_map(static function ($projectDeveloper) {
+                    return $projectDeveloper->project_id;
+                }, ProjectDeveloper::getReportsOfPm($pmId));
 
-                $projects = Project::ProjectsCurrentUser(Yii::$app->user->id);
-                $projectId = [];
-                foreach ($projects as $project) {
-                    $projectId[] = $project->id;
-                }
-                $projects = $projectId ? implode(', ', $projectId) : 0;
+                $projects = $projectIds ? implode(', ', $projectIds) : 0;
+
                 $dataTable->setFilter(Report::tableName() . '.project_id IN (' . $projects . ') ');
-
             }
-
         }
 
         if (User::hasPermission([User::ROLE_DEV])) {
@@ -240,7 +237,7 @@ class ReportsFetch extends ViewModelAbstract
                 'is_invoiced'   => $model->invoice_id ? 1 : 0
             ];
 
-            if(User::hasPermission([User::ROLE_CLIENT])) {
+            if (User::hasPermission([User::ROLE_CLIENT, User::ROLE_PM])) {
                 unset($list[$key]['cost']);
             }
         }
@@ -268,7 +265,7 @@ class ReportsFetch extends ViewModelAbstract
 
         ];
 
-        if(User::hasPermission([User::ROLE_CLIENT])) {
+        if(User::hasPermission([User::ROLE_CLIENT, User::ROLE_PM])) {
             unset($data['total_cost']);
         }
 
