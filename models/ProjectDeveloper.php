@@ -67,7 +67,7 @@ class ProjectDeveloper extends \yii\db\ActiveRecord
             ->all();
 
     }
-    public static function getReportsOfPm($pmId)
+    public static function findByPmId($pmId)
     {
         return self::find()
             ->where(ProjectDeveloper::tableName() . '.user_id=:pmId AND is_pm=1', [':pmId' => $pmId])
