@@ -183,6 +183,7 @@ class InvoicesFetch extends ViewModelAbstract
                 'paid_date' => DateUtil::reConvertData( $model->date_paid ),
                 'status' => $model->status,
                 'is_withdrawn' => $model->is_withdrawn,
+                'exchange_rate' => $model->exchange_rate,
                 'parties' => $parties
             ];
 
