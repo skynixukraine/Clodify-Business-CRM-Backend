@@ -19,6 +19,7 @@ use app\components\DateUtil;
  * @property string $discount
  * @property string $total
  * @property string $currency
+ * @property float $exchange_rate
  * @property string $date_start
  * @property string $date_end
  * @property string $date_created
@@ -33,6 +34,7 @@ use app\components\DateUtil;
  * @property integer $created_by
  * @property integer $payment_method_id
  * @property integer $invoice_id
+ * @property boolean $is_withdrawn
 
  *
  * @property Report[] $reports
@@ -72,7 +74,10 @@ class Invoice extends \yii\db\ActiveRecord
             [['subtotal', 'total', 'discount'], 'number'],
             [['total_hours'], 'double'],
             [['date_start', 'date_end', 'date_created', 'date_paid', 'date_sent', 'method'], 'safe'],
-            [['status', 'note', 'currency'], 'string']
+            [['status', 'note', 'currency'], 'string'],
+            ['exchange_rate', 'required', 'when' => function($invoice) {
+                return $invoice->currency !== 'USD';
+            }],
         ];
     }
 
@@ -241,8 +246,8 @@ class Invoice extends \yii\db\ActiveRecord
         $customersStr = implode(', ', $customers);
 
         return self::find()
-            ->where('(invoices.project_id=:projectID OR (invoices.project_id IS NULL AND invoices.user_id IN (:customers)) AND invoices.is_delete=0 '
-                . 'AND DATEDIFF(:date, invoices.date_start) > 0 AND DATEDIFF(invoices.date_end, :date) > 0)', [
+            ->where('(invoices.project_id=:projectID OR (invoices.project_id IS NULL AND invoices.user_id IN (:customers))) AND invoices.is_delete=0 '
+                . 'AND :date >= invoices.date_start AND :date <= invoices.date_end', [
                 ':projectID' => $project->id,
                 ':customers' => $customersStr,
                 ':date' => $date,

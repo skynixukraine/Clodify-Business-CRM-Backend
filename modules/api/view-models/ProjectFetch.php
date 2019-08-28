@@ -32,6 +32,7 @@ class ProjectFetch extends ViewModelAbstract
         $limit          = Yii::$app->request->getQueryParam('limit', SortHelper::DEFAULT_LIMIT);
         $subscribedOnly = Yii::$app->request->getQueryParam('subscribedOnly');
         $ongoingOnly    = Yii::$app->request->getQueryParam('ongoingOnly');
+        $customerId     = Yii::$app->request->getQueryParam('customer_id');
 
         if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN])) {
             $query = Project::find()
@@ -70,6 +71,13 @@ class ProjectFetch extends ViewModelAbstract
                     . Project::tableName() . ".id")
                 ->andWhere([ProjectDeveloper::tableName() . '.user_id' => Yii::$app->user->id]);
         }
+
+        if ($customerId && isset($query) && !User::hasPermission([User::ROLE_CLIENT])) {
+            $query->leftJoin(ProjectCustomer::tableName(),
+                Project::tableName() . '.id=' . ProjectCustomer::tableName() . '.project_id')
+                ->andWhere([ProjectCustomer::tableName() . '.user_id' => $customerId]);
+        }
+
         if ( $filterById > 0 ) {
 
             $query->andWhere([Project::tableName() . '.id' => $filterById]);
@@ -208,8 +216,11 @@ class ProjectFetch extends ViewModelAbstract
         $list['is_sales']       = isset($model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_sales'=> 1])->one()->user_id : null;
         $list['is_pm']          = isset($model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id) ? $model->getProjectDevelopers()->where(['is_pm'=> 1])->one()->user_id : null;
         $list['total_logged']   = $model->total_logged_hours ? $model->total_logged_hours : 0;
-        $list['cost']           = '$' . number_format($model->cost, 2, ',	', '.');
-        $list['total_paid']     = $model->total_paid_hours ? $model->total_paid_hours : 0;
+
+        if (!User::hasPermission([User::ROLE_PM])) {
+            $list['cost'] = '$' . number_format($model->cost, 2, ',	', '.');
+            $list['total_paid'] = $model->total_paid_hours ?: 0;
+        }
 
         if((User::hasPermission([User::ROLE_ADMIN, User::ROLE_DEV, User::ROLE_PM, User::ROLE_SALES, User::ROLE_FIN ])) &&
             ($projectDeveloper = $model->getProjectDevelopers()->where(['user_id' => Yii::$app->user->id])->one())) {

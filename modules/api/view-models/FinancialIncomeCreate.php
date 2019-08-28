@@ -36,9 +36,49 @@ class FinancialIncomeCreate extends ViewModelAbstract
                     $this->model->financial_report_id   = $id;
                     $this->model->added_by_user_id      = Yii::$app->user->id;
                     if ( $this->validate() ) {
-
                         $this->model->save();
 
+                        if (User::hasPermission([User::ROLE_SALES])) {
+                            setlocale(LC_MONETARY, 'en_US');
+                            $reportDate = strtotime($financialReport->report_date);
+                            $reportMonthYear = date('m/Y', $reportDate);
+
+                            foreach (User::getAdmins() as $admin) {
+                                $amount = money_format('$%.2n', $this->model->amount ?? 0.0);
+                                $projectName = $this->model->project ? $this->model->project->name : 'null';
+                                $addedByUser = ($addedByUser = $this->model->addedByUser)
+                                    ? ($addedByUser->first_name . ' ' . $addedByUser->last_name) : 'null';
+                                $developerUser = ($developerUser = $this->model->developerUser)
+                                    ? ($developerUser->first_name . ' ' . $developerUser->last_name) : 'null';
+                                $date =  date('d/m/Y', $this->model->date) ?? 'null';
+                                $fromDate = $this->model->from_date
+                                    ? ($this->model->from_date < 10 ? '0' . $this->model->from_date : $this->model->from_date)
+                                    . '/' . $reportMonthYear : 'null';
+                                $toDate = $this->model->to_date
+                                    ? ($this->model->to_date < 10 ? '0' . $this->model->to_date : $this->model->to_date)
+                                    . '/' . $reportMonthYear : 'null';
+
+                                Yii::$app->mailer->compose()
+                                    ->setFrom([Yii::$app->params['fromEmail'] => 'Clodify Notification'])
+                                    ->setTo($admin->email)
+                                    ->setSubject('Financial income with ID ' . $this->model->id . ' has been created')
+                                    ->setHtmlBody(
+                                        '<p>Hi, ' . $admin->getFullName() . '</p>'
+                                        . '<p>The financial income has been created with attributes:</p>'
+                                        . '<ul><li>ID: ' . ($this->model->id ?? 'null') . '</li>'
+                                        . '<li>Amount: ' . $amount . '</li>'
+                                        . '<li>Description: ' . ($this->model->description ?? 'null') . '</li>'
+                                        . '<li>Project: ' . $projectName . '</li>'
+                                        . '<li>Added by: ' . $addedByUser . '</li>'
+                                        . '<li>Developer user: ' . $developerUser . '</li>'
+                                        . '<li>Financial report ID: ' . ($this->model->financial_report_id ?? 'null') . '</li>'
+                                        . '<li>Date: ' . $date . '</li>'
+                                        . '<li>From date: ' . $fromDate . '</li>'
+                                        . '<li>To date: ' . $toDate . '</li></ul>'
+                                    )
+                                    ->send();
+                            }
+                        }
                     }
 
                 } else {

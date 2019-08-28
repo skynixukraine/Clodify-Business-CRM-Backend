@@ -116,17 +116,15 @@ class InvoicesFetch extends ViewModelAbstract
             } else {
                 $dataTable->setFilter(Invoice::tableName() . '.project_id IS NULL');
             }
-            //SALES can view, invoice & edit only own contracts
-//            $contracts = Contract::find()->where(['created_by'=>Yii::$app->user->id])->all();
-//            $contractsIDs = [];
-//            foreach ($contracts as $contract) {
-//                $contractsIDs[] = $contract->id;
-//            }
-//            if($contractsIDs) {
-//                $dataTable->setFilter(Invoice::tableName() . '.contract_id IN ('
-//                    . implode(",", $contractsIDs) . ')'
-//                ) ;
-//            }
+
+            /**
+             * If invoice was created for 'All projects' and invoiced customer has no common projects
+             * with current SALES user - go to the next record.
+             * Same logic when another SALES user creating invoice and has no common projects with us.
+             */
+            $dataTable->setFilter('IF(' . Invoice::tableName() . '.project_id IS NULL AND ('
+            . Invoice::tableName() . '.user_id NOT IN (' . implode(',', $customers) . ') OR '
+            . Invoice::tableName() . '.created_by NOT IN (' . implode(',', $sales) . ')), FALSE, TRUE)');
         }
         $activeRecordsData = $dataTable->getData();
         $list = [];
@@ -134,18 +132,6 @@ class InvoicesFetch extends ViewModelAbstract
         foreach ( $activeRecordsData as $model ) {
             $name = null;
             $id = null;
-            /**
-             * If invoice was created for 'All projects' and invoiced customer has no common projects
-             * with current SALES user - go to the next record.
-             * Same logic when another SALES user creating invoice and has no common projects with us.
-             */
-            if (User::hasPermission([User::ROLE_SALES])) {
-                if (!$model->project_id
-                    && ( !in_array($model->user_id, $customers)
-                        || !in_array($model->created_by, $sales))) {
-                    continue;
-                }
-            }
             if ($client = $model->getUser()->one()) {
                 $name = $client->first_name . ' ' . $client->last_name;
                 $id = $client->id;
@@ -191,7 +177,7 @@ class InvoicesFetch extends ViewModelAbstract
 
         $data = [
             'invoices' => $list,
-            'total_records' => DataTable::getInstance()->getTotal(),
+            'total_records' => $dataTable->getTotal(),
         ];
         $this->setData($data);
     }

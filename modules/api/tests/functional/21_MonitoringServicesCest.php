@@ -110,6 +110,7 @@ class MonitoringServicesCest
             'url' => 'http://google.com',
             'notification_emails' => 'test@gmail.com, qwerty@gmail.com',
             'project_id' => ValuesContainer::$projectWithEnvId,
+            'status' => 'new'
         ]);
     }
 

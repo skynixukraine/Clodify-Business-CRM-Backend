@@ -19,7 +19,7 @@ class PaymentMethodFetch extends ViewModelAbstract
     public function define()
     {
 
-        if (User::hasPermission([User::ROLE_ADMIN])) {
+        if (User::hasPermission([User::ROLE_ADMIN, User::ROLE_FIN, User::ROLE_SALES])) {
             $businessId = Yii::$app->request->getQueryParam('business_id');
             $id = Yii::$app->request->getQueryParam('id');
 

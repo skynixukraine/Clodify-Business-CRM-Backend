@@ -72,26 +72,11 @@ class UsersFetch extends ViewModelAbstract
         //CLIENT has an access to all active users who are DEV, ADMIN or SALES of their projects
         // and has an access to all columns except of salary, official_salary, salary_up, role, joined
         if(User::hasPermission([User::ROLE_CLIENT])) {
-            $workers = ProjectCustomer::allClientWorkers(Yii::$app->user->id);
-            $arrayWorkers = [];
-            foreach($workers as $worker){
-                if (!$worker->alias_user_id ) {
+            $workers = array_map(static function ($worker) {
+                return $worker->user_id;
+            }, ProjectCustomer::allClientWorkers(Yii::$app->user->id));
 
-                    $arrayWorkers[] = $worker->user_id;
-
-                } else {
-
-                    $arrayWorkers[] = $worker->alias_user_id;
-
-                }
-            }
-            $devUser = '';
-            if(!empty($arrayWorkers)) {
-                $devUser = implode(', ' , $arrayWorkers);
-            }
-            else{
-                $devUser = 'null';
-            }
+            $devUser = empty($workers) ? 'null' : implode(', ' , $workers);
 
             $query = User::find()
                 ->where(User::tableName() . '.id IN (' . $devUser . ')')
@@ -102,7 +87,7 @@ class UsersFetch extends ViewModelAbstract
 
        // DEV has an access to all active users who are DEV, ADMIN or SALES
         // to the following columns: id, first_name, last_name, company, email, phone
-        if(User::hasPermission([User::ROLE_DEV])) {
+        if(User::hasPermission([User::ROLE_DEV, User::ROLE_PM])) {
             $query = User::find()->where(['is_active' => 1])
                 ->andWhere(['role'=> [User::ROLE_DEV, User::ROLE_SALES, User::ROLE_PM, User::ROLE_FIN, User::ROLE_ADMIN]]);
         }
