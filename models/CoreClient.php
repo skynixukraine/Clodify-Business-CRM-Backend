@@ -180,6 +180,8 @@ class CoreClient extends ActiveRecord
                     'projects',
                     'contracts',
                     'users',
+                    'invoices',
+                    'salary_reports'
                 ];
 
                 foreach ( $tables as $table ) {
@@ -201,14 +203,20 @@ class CoreClient extends ActiveRecord
                 //Create ADMIN user
                 $user = new User();
                 $user->role          = User::ROLE_ADMIN;
-                $user->first_name    = $this->first_name;
-                $user->last_name     = $this->last_name;
+                $user->first_name    = $this->first_name ?? $this->name;
+                $user->last_name     = $this->last_name ?? '';
                 $user->email         = $this->email;
                 $user->password      = $this->generatedPassword;
                 $user->is_active     = User::ACTIVE_USERS;
                 $user->auth_type     = User::DATABASE_AUTH;
                 $user->vacation_days = $user->vacation_days_available = 10 - date("m");
-                $user->save();
+                $user->save(false);
+
+                $defaultProject = new Project();
+                $defaultProject->name = 'Internal (Non Paid) Tasks';
+                $defaultProject->date_start = date('Y-m-d');
+                $defaultProject->setRandomApiKey();
+                $defaultProject->save(false);
             }
 
             Yii::$app->dbCore
