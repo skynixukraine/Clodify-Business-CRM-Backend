@@ -70,6 +70,7 @@ class InvoiceView extends ViewModelAbstract
                     "paid_date"    => $invoiceModel->date_paid,
                     "status"       => $invoiceModel->status,
                     'is_withdrawn' => $invoiceModel->is_withdrawn,
+                    'exchange_rate' => $invoiceModel->exchange_rate,
                     'parties'      => $parties,
                 ];
 

@@ -197,6 +197,7 @@ class InvoicesCest
                             'paid_date'    => 'string|null',
                             'status'       => 'string',
                             'is_withdrawn' => 'integer',
+                            'exchange_rate' => 'float | null',
                             'parties'      => 'array'
                         ]
                     ],
@@ -264,6 +265,7 @@ class InvoicesCest
                     "paid_date"    => 'string | null',
                     "status"       => 'string',
                     'is_withdrawn' => 'integer',
+                    'exchange_rate' => 'float | null',
                     'parties'      => 'array'
                 ]
             ],
