@@ -139,7 +139,7 @@ class ReportsFetch extends ViewModelAbstract
             if ($pmId && $pmId !== $usersId){
                 $projectIds = array_map(static function ($projectDeveloper) {
                     return $projectDeveloper->project_id;
-                }, ProjectDeveloper::getReportsOfPm($pmId));
+                }, ProjectDeveloper::findByPmId($pmId));
 
                 $projects = $projectIds ? implode(', ', $projectIds) : 0;
 
