@@ -30,7 +30,7 @@ class ReportsFetch extends ViewModelAbstract
 {
     public function define()
     {
-        $usersId     = Yii::$app->request->getQueryParam('user_id');
+        $usersId     = (int) Yii::$app->request->getQueryParam('user_id');
         $date_period = Yii::$app->request->getQueryParam('date_period');
         $projectId   = Yii::$app->request->getQueryParam('project_id');
         $dateStart   = Yii::$app->request->getQueryParam('from_date');

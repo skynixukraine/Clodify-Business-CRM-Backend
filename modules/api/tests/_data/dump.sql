@@ -611,7 +611,7 @@ CREATE TABLE project_developers (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE project_developers DISABLE KEYS */;
-INSERT INTO project_developers VALUES (1,1,NULL,0,'ACTIVE',0),(1,2,NULL,0,'ACTIVE',0),(2,2,NULL,0,'ACTIVE',0),(3,1,NULL,0,'ACTIVE',0),(3,2,NULL,0,'ACTIVE',0),(5,1,NULL,0,'ACTIVE',1),(5,2,NULL,0,'ACTIVE',1),(6,1,NULL,1,'ACTIVE',0),(6,2,NULL,1,'ACTIVE',0);
+INSERT INTO project_developers VALUES (1,1,NULL,0,'ACTIVE',0),(1,2,NULL,0,'ACTIVE',0),(2,2,NULL,0,'ACTIVE',0),(3,1,NULL,0,'ACTIVE',0),(3,2,NULL,0,'ACTIVE',0),(5,1,NULL,0,'ACTIVE',1),(5,2,NULL,0,'ACTIVE',1),(6,1,NULL,1,'ACTIVE',0),(6,2,NULL,1,'ACTIVE',0),(6,4,NULL,0,'ACTIVE',0);
 /*!40000 ALTER TABLE project_developers ENABLE KEYS */;
 DROP TABLE IF EXISTS project_environment_variables;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -669,11 +669,11 @@ CREATE TABLE projects (
   `type` enum('HOURLY','FIXED_PRICE') COLLATE utf8_unicode_ci DEFAULT 'HOURLY',
   api_key varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE projects DISABLE KEYS */;
-INSERT INTO projects VALUES (1,'Magento 2 Enterprise Edition - Theme Development','M2EET',1218,1200,'INPROGRESS','2018-05-01',NULL,0,3192.84,NULL,NULL,0,0,'HOURLY',NULL),(2,'Internal (Non Paid) Tasks',NULL,10105,120,'INPROGRESS','2016-04-04',NULL,0,34839.28,NULL,NULL,0,0,'HOURLY','gz0dAtV6pzojiDhrzF6xN1DVmCrFuPXa');
+INSERT INTO projects VALUES (1,'Magento 2 Enterprise Edition - Theme Development','M2EET',1218,1200,'INPROGRESS','2018-05-01',NULL,0,3192.84,NULL,NULL,0,0,'HOURLY',NULL),(2,'Internal (Non Paid) Tasks',NULL,10105,120,'INPROGRESS','2016-04-04',NULL,0,34839.28,NULL,NULL,0,0,'HOURLY','gz0dAtV6pzojiDhrzF6xN1DVmCrFuPXa'),(4,'New test project','M3EET',1232,1000,'INPROGRESS','2019-08-30',NULL,0,3100.55,NULL,NULL,0,0,'HOURLY',NULL);
 /*!40000 ALTER TABLE projects ENABLE KEYS */;
 DROP TABLE IF EXISTS reference_book;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -730,11 +730,11 @@ CREATE TABLE reports (
   CONSTRAINT fk_reports_invoices1 FOREIGN KEY (invoice_id) REFERENCES invoices (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT fk_reports_projects1 FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT fk_reports_users1 FOREIGN KEY (user_id) REFERENCES `users` (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE reports DISABLE KEYS */;
-INSERT INTO reports VALUES (2,2,3,2,'Wess Wilson',5,'task description','2019-07-18',NULL,'2019-07-08','INVOICED',1,0,100.00,1),(3,2,3,2,'Wess Wilson',5,'some task description','2019-07-18',NULL,'2019-07-16','INVOICED',NULL,0,89.29,1),(4,2,2,2,'Vess Jonson',5,'some task description','2019-07-18',NULL,'2019-07-15','INVOICED',NULL,0,89.29,1),(5,2,2,2,'Vess Jonson',5,'some task description','2019-07-18',NULL,'2019-07-14','INVOICED',NULL,0,89.29,1),(6,2,10,2,'Wess Wilson',7,'some task description','2019-07-18',NULL,'2019-07-13','INVOICED',NULL,0,125.00,1),(7,2,10,2,'Wess Wilson',7,'some task description','2019-07-18',NULL,'2019-07-12','INVOICED',NULL,0,125.00,1),(8,2,1,2,'John Doe',7,'some task description','2019-07-18',NULL,'2019-07-11','INVOICED',NULL,0,125.00,1),(9,2,1,2,'John Doe',7,'some task description','2019-07-18',NULL,'2019-07-10','INVOICED',NULL,0,125.00,1),(10,2,1,2,'John Doe',8,'some task description','2019-07-18',NULL,'2019-07-09','INVOICED',NULL,0,142.86,0);
+INSERT INTO reports VALUES (2,2,3,2,'Wess Wilson',5,'task description','2019-07-18',NULL,'2019-07-08','INVOICED',1,0,100.00,1),(3,2,3,2,'Wess Wilson',5,'some task description','2019-07-18',NULL,'2019-07-16','INVOICED',NULL,0,89.29,1),(4,2,2,2,'Vess Jonson',5,'some task description','2019-07-18',NULL,'2019-07-15','INVOICED',NULL,0,89.29,1),(5,2,2,2,'Vess Jonson',5,'some task description','2019-07-18',NULL,'2019-07-14','INVOICED',NULL,0,89.29,1),(6,2,10,2,'Wess Wilson',7,'some task description','2019-07-18',NULL,'2019-07-13','INVOICED',NULL,0,125.00,1),(7,2,10,2,'Wess Wilson',7,'some task description','2019-07-18',NULL,'2019-07-12','INVOICED',NULL,0,125.00,1),(8,2,1,2,'John Doe',7,'some task description','2019-07-18',NULL,'2019-07-11','INVOICED',NULL,0,125.00,1),(9,2,1,2,'John Doe',7,'some task description','2019-07-18',NULL,'2019-07-10','INVOICED',NULL,0,125.00,1),(10,2,1,2,'John Doe',8,'some task description','2019-07-18',NULL,'2019-07-09','INVOICED',NULL,0,142.86,0),(12,4,6,2,'Gary Madison',NULL,'some task description','2019-07-18',NULL,'2019-07-09','INVOICED',NULL,0,142.86,1);
 /*!40000 ALTER TABLE reports ENABLE KEYS */;
 DROP TABLE IF EXISTS reviews;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -635,6 +635,28 @@ class ReportsCest
         ]);
     }
 
+    public function testFetchReportsForPm(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        \Helper\OAuthToken::$key = null;
+
+        $oAuth = new OAuthSteps($scenario);
+        $oAuth->login(ValuesContainer::$userPm['email'], ValuesContainer::$userPm['password']);
+
+        $I->sendGET(ApiEndpoints::REPORT . '?user_id=' . ValuesContainer::$userPm['id']);
+
+        \Helper\OAuthToken::$key = null;
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $response = json_decode($I->grabResponse());
+        $I->assertEmpty($response->errors);
+        $I->assertEquals(true, $response->success);
+
+        $I->assertEquals(1, count($response->data->reports));
+        $I->assertEquals(12, $response->data->reports[0]->report_id);
+    }
+
+
     /**
      * SALES can approve only reports of participants of their projects and  CAN NOT approve own reports
      * @param FunctionalTester $I
